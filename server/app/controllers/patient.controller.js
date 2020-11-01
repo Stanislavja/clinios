@@ -1147,6 +1147,66 @@ const getEncounters = async (req, res) => {
   }
 };
 
+const createEncounter = async (req, res) => {
+  const { patient_id } = req.params;
+  const { title } = req.body.data;
+  let { dt, type_id, notes, treatment, read_dt, lab_bill_to } = req.body.data;
+
+  if (typeof dt !== "undefined") {
+    dt = `'${moment(dt).format("YYYY-MM-DD HH:mm:ss")}'`;
+  } else {
+    dt = null;
+  }
+  if (typeof type_id !== "undefined") {
+    type_id = `'${type_id}'`;
+  } else {
+    type_id = null;
+  }
+  if (typeof notes !== "undefined") {
+    notes = `'${notes}'`;
+  } else {
+    notes = null;
+  }
+  if (typeof treatment !== "undefined") {
+    treatment = `'${treatment}'`;
+  } else {
+    treatment = null;
+  }
+  if (typeof read_dt !== "undefined") {
+    read_dt = `'${moment(read_dt).format("YYYY-MM-DD HH:mm:ss")}'`;
+  } else {
+    read_dt = null;
+  }
+  if (typeof lab_bill_to !== "undefined") {
+    lab_bill_to = `'${lab_bill_to}'`;
+  } else {
+    lab_bill_to = null;
+  }
+
+  const db = makeDb(configuration, res);
+  try {
+    const insertResponse = await db.query(
+      `insert into encounter (client_id, user_id, patient_id, dt, type_id, title, notes, treatment, read_dt, lab_bill_to, created, created_user_id) 
+      values (${req.client_id}, ${req.user_id}, ${patient_id}, ${dt}, ${type_id}, '${title}', ${notes}, ${treatment}, ${read_dt}, ${lab_bill_to}, now(), ${req.user_id})`
+    );
+
+    if (!insertResponse.affectedRows) {
+      removeFile(req.file);
+      errorMessage.error = "Insert not successful";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = insertResponse;
+    successMessage.message = "Insert successful";
+    return res.status(status.created).send(successMessage);
+  } catch (excepErr) {
+    errorMessage.error = "Insert not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const updateEncounter = async (req, res) => {
   const { patient_id, id } = req.params;
   const {
@@ -1863,6 +1923,7 @@ const appointmentTypes = {
   checkDocument,
   createDocuments,
   getEncounters,
+  createEncounter,
   updateEncounter,
   deleteEncounter,
   getMedicalNotesHistory,

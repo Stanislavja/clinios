@@ -132,6 +132,11 @@ router.get(
   [authJwt.verifyToken],
   Patient.getEncounters
 );
+router.post(
+  "/patient/:patient_id/encounters",
+  [authJwt.verifyToken],
+  Patient.createEncounter
+);
 router.put(
   "/patient/:patient_id/encounters/:id",
   [authJwt.verifyToken],
