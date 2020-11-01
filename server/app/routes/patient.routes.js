@@ -6,6 +6,11 @@ const validation = require("../helpers/validations/patient.js");
 const router = express.Router();
 
 router.get("/patient/:patient_id", [authJwt.verifyToken], Patient.getPatient);
+router.put(
+  "/patient/:patient_id",
+  [authJwt.verifyToken],
+  Patient.updatePatient
+);
 router.post(
   "/patient/:patient_id/search",
   [authJwt.verifyToken, validation.validate("search")],
