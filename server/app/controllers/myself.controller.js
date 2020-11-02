@@ -1,9 +1,8 @@
-"use strict";
 const { validationResult } = require("express-validator");
-const { configuration, makeDb } = require("../db/db.js");
-const { errorMessage, successMessage, status } = require("../helpers/status");
 const bcrypt = require("bcryptjs");
 const moment = require("moment");
+const { configuration, makeDb } = require("../db/db.js");
+const { errorMessage, successMessage, status } = require("../helpers/status");
 
 const getProfile = async (req, res) => {
   const db = makeDb(configuration, res);
@@ -15,7 +14,7 @@ const getProfile = async (req, res) => {
       `
     );
 
-    if (!dbResponse || dbResponse == 0) {
+    if (!dbResponse || dbResponse === 0) {
       errorMessage.error = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
@@ -37,7 +36,7 @@ const updateProfile = async (req, res) => {
   }
 
   const db = makeDb(configuration, res);
-  let data = req.body.data;
+  const { data } = req.body;
 
   data.updated = moment().format("YYYY-MM-DD HH:mm:ss");
   data.updated_user_id = req.params.userId;

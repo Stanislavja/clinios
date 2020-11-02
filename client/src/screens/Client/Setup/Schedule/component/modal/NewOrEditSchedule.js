@@ -316,8 +316,8 @@ const NewOrEditSchedule = ({
                   value={
                     schedule.time_start
                       ? moment(schedule.time_start, "HH:mm:ss").format(
-                          "YYYY-MM-DDTHH:mm:ss"
-                        )
+                        "YYYY-MM-DDTHH:mm:ss"
+                      )
                       : null
                   }
                   className={classes.textField}
@@ -352,8 +352,8 @@ const NewOrEditSchedule = ({
                   value={
                     schedule.time_end
                       ? moment(schedule.time_end, "HH:mm:ss").format(
-                          "YYYY-MM-DDTHH:mm:ss"
-                        )
+                        "YYYY-MM-DDTHH:mm:ss"
+                      )
                       : null
                   }
                   className={classes.textField}

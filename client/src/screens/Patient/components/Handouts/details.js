@@ -8,6 +8,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import Typography from "@material-ui/core/Typography";
 import DeleteIcon from "@material-ui/icons/Delete";
 import moment from "moment";
 import { useDispatch } from "react-redux";
@@ -67,7 +68,7 @@ const HandoutsDetails = (props) => {
   const classes = useStyles();
 
   const onItemDelete = (selectedItem) => {
-    const handoutId = selectedItem.id || 1;
+    const handoutId = selectedItem.handout_id;
     PatientService.deleteHandout(patientId, handoutId)
       .then((response) => {
         dispatch(setSuccess(`${response.data.message}`));
@@ -102,24 +103,34 @@ const HandoutsDetails = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row, index) => (
-            <StyledTableRow key={`${row.created}_${index}`}>
-              <TableCell component="th" scope="row">
-                {moment(row.created).format("MMM D YYYY")}
-              </TableCell>
-              <TableCell>{row.name || ""}</TableCell>
-              <TableCell>{row.filename}</TableCell>
+          {!!data && data.length ?
+            data.map((row, index) => (
+              <StyledTableRow key={`${row.created}_${index}`}>
+                <TableCell component="th" scope="row">
+                  {moment(row.created).format("MMM D YYYY")}
+                </TableCell>
+                <TableCell>{row.name || ""}</TableCell>
+                <TableCell>{row.filename}</TableCell>
 
-              <TableCell className={classes.actions}>
-                <IconButton
-                  className={classes.button}
-                  onClick={() => onItemDelete(row)}
-                >
-                  <DeleteIcon fontSize="small" />
-                </IconButton>
+                <TableCell className={classes.actions}>
+                  <IconButton
+                    className={classes.button}
+                    onClick={() => onItemDelete(row)}
+                  >
+                    <DeleteIcon fontSize="small" />
+                  </IconButton>
+                </TableCell>
+              </StyledTableRow>
+            ))
+            :
+            <StyledTableRow>
+              <TableCell colSpan={4}>
+                <Typography align="center" variant="body1">
+                  No Records Found...
+                </Typography>
               </TableCell>
             </StyledTableRow>
-          ))}
+          }
         </TableBody>
       </Table>
     </TableContainer>

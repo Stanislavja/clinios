@@ -14,10 +14,10 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexDirection: "column",
-    paddingTop: 64,
+    paddingTop: 60,
     height: "100%",
     [theme.breakpoints.up("sm")]: {
-      paddingTop: 70
+      paddingTop: 62
     }
   },
   shiftContent: {

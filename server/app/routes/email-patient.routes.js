@@ -1,8 +1,8 @@
-"use strict";
 const express = require("express");
 const { authJwt } = require("../middlewares");
 const validation = require("../helpers/validations/patient.js");
 const patientEmailController = require("../controllers/email-patient.controller.js");
+
 const router = express.Router();
 
 router.get(

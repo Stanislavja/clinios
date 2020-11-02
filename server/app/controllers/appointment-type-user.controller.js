@@ -1,5 +1,3 @@
-"use strict";
-const { validationResult } = require("express-validator");
 const { configuration, makeDb } = require("../db/db.js");
 const { errorMessage, successMessage, status } = require("../helpers/status");
 
@@ -7,13 +5,14 @@ const getAppointmentTypesUsers = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const userResponse = await db.query(
-      "select u.id, concat(u.firstname, ' ', u.lastname) name from user u where u.client_id=${req.client_id} and u.appointments=true order by name limit 100"
+      `select u.id, concat(u.firstname, ' ', u.lastname) name from user u where u.client_id=${req.client_id} and u.appointments=true order by name limit 100`
     );
     const apptTypeResponse = await db.query(
-      "select at.id, at.appointment_type from appointment_type at where at.client_id=${req.client_id} order by at.appointment_type limit 100"
+      `select at.id, at.appointment_type from appointment_type at where at.client_id=${req.client_id} order by at.appointment_type limit 100`
     );
     const dbResponse = await db.query(
-      "select atu.user_id, atu.appointment_type_id, atu.active, atu.amount from appointment_type_user atu where atu.client_id=${req.client_id} order by atu.user_id, atu.appointment_type_id limit 100"
+      `select atu.user_id, atu.appointment_type_id, atu.active, atu.amount from appointment_type_user atu where atu.client_id=${req.client_id} 
+      order by atu.user_id, atu.appointment_type_id limit 100`
     );
     const result = {
       user: userResponse,

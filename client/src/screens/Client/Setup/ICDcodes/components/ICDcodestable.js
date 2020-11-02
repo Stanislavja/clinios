@@ -10,7 +10,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  withStyles
+  withStyles,
+  FormControlLabel
 } from "@material-ui/core";
 import { green, grey } from "@material-ui/core/colors";
 import Alert from "@material-ui/lab/Alert";
@@ -19,7 +20,6 @@ import { useDispatch } from "react-redux";
 
 import icdcodesService from "../../../../../services/icdcodes.service";
 import { setSuccess } from "../../../../../store/common/actions";
-
 
 const useStyles = makeStyles((theme) => ({
   tableContainer: {
@@ -66,12 +66,16 @@ const StyledTableRow = withStyles((theme) => ({
 
 const GreenSwitch = withStyles({
   switchBase: {
-    color: grey[300],
+    color: grey[400],
     "&$checked": {
       color: green[500]
     },
     "&$checked + $track": {
-      backgroundColor: green[500]
+      backgroundColor: green[500],
+      // color: grey[500]
+      "&$checked": {
+        color: grey[500]
+      }
     }
   },
   checked: {},
@@ -157,16 +161,20 @@ const ICDcodestable = ({ user, result, fetchSearchIcdCodes }) => {
                 </TableCell>
                 <TableCell padding="checkbox">{code.name}</TableCell>
                 <TableCell padding="checkbox">
-                  <GreenSwitch
-                    size="small"
-                    checked={Boolean(code.favorite)}
-                    name="switchBox"
-                    onChange={(e) => {
-                      changeHandler(e, code.id);
-                      setTimeout(() => {
-                        fetchSearchIcdCodes();
-                      }, 200);
-                    }}
+                  <FormControlLabel
+                    control={
+                      <GreenSwitch
+                        size="small"
+                        checked={Boolean(code.favorite)}
+                        name="switchBox"
+                        onChange={(e) => {
+                          changeHandler(e, code.id);
+                          setTimeout(() => {
+                            fetchSearchIcdCodes();
+                          }, 200);
+                        }}
+                      />
+                    }
                   />
                 </TableCell>
                 <TableCell padding="checkbox">

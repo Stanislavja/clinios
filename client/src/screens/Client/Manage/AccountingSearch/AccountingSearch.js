@@ -17,7 +17,6 @@ import NumberFormat from "react-number-format";
 import Accounting from "../../../../services/accountingSearch.service";
 import AccountingSearchResults from "./components";
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -28,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 180
   },
   title: {
-    paddingBottom: theme.spacing(.5)
+    paddingBottom: theme.spacing(0.5)
   },
   form: {
     display: "flex",
@@ -121,7 +120,7 @@ export default function AccountingSearch() {
         setEmptyResult("None Found");
       }
     });
-  }; 
+  };
 
   useEffect(() => {
     Accounting.searchType().then((res) => setTypes(res.data.data));
@@ -222,7 +221,7 @@ export default function AccountingSearch() {
                   }}
                   format="yyyy/MM/dd"
                   inputVariant="outlined"
-                  variant="0outlined"
+                  variant="outlined"
                   id="date"
                   label="Date To"
                   value={dateTo}
@@ -252,7 +251,7 @@ export default function AccountingSearch() {
                     {types.map((type) => (
                       <option key={type.id} value={type.id}>
                         {type.name}
-                      </option>    
+                      </option>
                     ))}
                   </Select>
                 </FormControl>

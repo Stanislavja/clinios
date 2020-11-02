@@ -1,8 +1,8 @@
-"user strict";
 const mysql = require("mysql");
 const util = require("util");
 const config = require("../../config.js");
-const { errorMessage, successMessage, status } = require("./../helpers/status");
+const { errorMessage, status } = require("../helpers/status");
+
 const dbConfig = config.dbconfig;
 
 const configuration = {
@@ -26,11 +26,11 @@ async function withTransaction(db, callback) {
   }
 }
 
-function makeDb(configuration, res) {
-  const connection = mysql.createConnection(configuration);
+function makeDb(databaseConfig, res) {
+  const connection = mysql.createConnection(databaseConfig);
   connection.connect(function (error) {
     if (error) {
-      console.error("error connecting: " + error.stack);
+      console.error(`error connecting: ${error.stack}`);
 
       if (error.code === "ECONNREFUSED") {
         errorMessage.message =
@@ -40,16 +40,13 @@ function makeDb(configuration, res) {
       errorMessage.message = "Something went wrong with the database query";
       return res.status(status.error).send(errorMessage);
     }
-
-    //console.log("connected as id " + connection.threadId);
+    return false;
   });
   return {
     query(sql, args) {
       if (process.env.NODE_ENV === "development") {
-        //console.log("sql ", sql);
         console.log(sql);
         if (args) {
-          //console.log("args ", args);
           console.log(args);
         }
       }

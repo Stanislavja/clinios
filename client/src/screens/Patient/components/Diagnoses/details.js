@@ -8,6 +8,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import Typography from "@material-ui/core/Typography";
 import DeleteIcon from "@material-ui/icons/Delete";
 import moment from "moment";
 import { useDispatch } from "react-redux";
@@ -62,13 +63,13 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 
 const DiagnosesDetails = (props) => {
-  const { data, reloadData } = props;
+  const { data, patientId, reloadData } = props;
   const dispatch = useDispatch();
   const classes = useStyles();
 
   const onItemDelete = (selectedItem) => {
-    const documentId = selectedItem.id || 1;
-    PatientService.deleteDocument(documentId)
+    const icdId = selectedItem.icd_id;
+    PatientService.deleteDiagnoses(patientId, icdId)
       .then((response) => {
         dispatch(setSuccess(`${response.data.message}`));
         reloadData();
@@ -103,7 +104,7 @@ const DiagnosesDetails = (props) => {
         </TableHead>
         <TableBody>
           {!!data &&
-            data.length &&
+            data.length ?
             data.map((row, index) => (
               <StyledTableRow key={`${row.created}_${index}`}>
                 <TableCell component="th" scope="row">
@@ -121,7 +122,16 @@ const DiagnosesDetails = (props) => {
                   </IconButton>
                 </TableCell>
               </StyledTableRow>
-            ))}
+            ))
+            :
+            <StyledTableRow>
+              <TableCell colSpan={4}>
+                <Typography align="center" variant="body1">
+                  No Records Found...
+                </Typography>
+              </TableCell>
+            </StyledTableRow>
+          }
         </TableBody>
       </Table>
     </TableContainer>

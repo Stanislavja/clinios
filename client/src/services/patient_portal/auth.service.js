@@ -23,12 +23,26 @@ class PatientAuthService {
       .then((res) => res.data);
   }
 
+  upload(data) {
+    return axios.post(API_BASE + `/auth/patient/upload`, data);
+  }
+
   validate(data) {
     return axios.post(API_BASE + `/auth/field/validate`, data);
   }
 
   register(patient) {
     return axios.post(API_BASE + "/auth/patient/signup", patient);
+  }
+
+  passwordChangeRequest(email, data) {
+    return axios.post(API_BASE + `/auth/patient/reset_password/${email}`, data);
+  }
+
+  resetPassword(patientId, token, password) {
+    return axios.post(API_BASE + `/auth/patient/reset/${patientId}/${token}`, {
+      password: password
+    });
   }
 }
 

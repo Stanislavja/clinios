@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, withStyles } from "@material-ui/core";
+import { green } from "@material-ui/core/colors";
+import FormControl from "@material-ui/core/FormControl";
 import Grid from "@material-ui/core/Grid";
+import Switch from "@material-ui/core/Switch";
 import Typography from "@material-ui/core/Typography";
 import { useDispatch } from "react-redux";
 
@@ -27,8 +30,29 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     padding: "40px 0px"
+  },
+  formControl: {
+    display: "flex",
+    flexDirection: "row",
+    marginLeft: "60px",
+    marginTop: "5px",
+    fontSize: "15px"
   }
 }));
+
+const GreenSwitch = withStyles({
+  switchBase: {
+    color: green[400],
+    "&$checked": {
+      color: green[500]
+    },
+    "&$checked + $track": {
+      backgroundColor: green[500]
+    }
+  },
+  checked: {},
+  track: {}
+})(Switch);
 
 export default function Home() {
   const classes = useStyles();
@@ -136,7 +160,6 @@ export default function Home() {
       (error) => {
         setErrors(error.response.data.error);
       }
-    
     );
   };
 
@@ -246,14 +269,24 @@ export default function Home() {
 
   return (
     <div className={classes.root}>
-      <Typography
-        component="h1"
-        variant="h2"
-        color="textPrimary"
-        className={classes.pageTitle}
-      >
-        Home {selectedProvider && `- ${selectedProvider.name}`}
-      </Typography>
+      <div style={{ display: "flex" }}>
+        <Typography
+          component="h1"
+          variant="h2"
+          color="textPrimary"
+          className={classes.pageTitle}
+        >
+          Home {selectedProvider && `- ${selectedProvider.name}`}
+        </Typography>
+        <FormControl component="div" className={classes.formControl}>
+          <p className={classes.formHelperText}>Show canceled/rejected</p>
+          <GreenSwitch
+            size="small"
+            name="active"
+            inputProps={{ "aria-label": "primary checkbox" }}
+          />
+        </FormControl>
+      </div>
       <Grid container spacing={8}>
         <Grid item md={7} xs={12}>
           <Calendar
@@ -286,7 +319,7 @@ export default function Home() {
                 onReject={(payload) => handleEventCancellation(payload)}
               />
             </React.Fragment>
-          )} 
+          )}
         </Grid>
       </Grid>
       <NewOrEditEvent

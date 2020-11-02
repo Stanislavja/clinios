@@ -2,6 +2,10 @@ import React, { useState } from "react";
 
 import { TextField, Button, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import {
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
+import moment from "moment";
 import { useDispatch } from "react-redux";
 
 import PatientService from "../../../../services/patient.service";
@@ -16,6 +20,12 @@ const NewMessage = (props) => {
     subject: "",
     message: ""
   });
+  const [selectedDate, setSelectedDate] = React.useState(null);
+  const currentDate = new Date();
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
 
   const handleInputChange = (e) => {
     const { value, name } = e.target;
@@ -31,7 +41,7 @@ const NewMessage = (props) => {
       data: {
         message: formFields.message,
         subject: formFields.subject,
-        unread_notify_dt: "2020-10-10"
+        unread_notify_dt: moment(selectedDate).format("YYYY-MM-DD"),
       }
     };
     PatientService.createMessage(patientId, reqBody)
@@ -96,9 +106,26 @@ const NewMessage = (props) => {
           </Grid>
         </Grid>
 
-        <Typography variant="h5" color="textSecondary" gutterBottom>
-          Notify me if not read by Jan 1, 2020.
-        </Typography>
+        <Grid className={classes.dateInput}>
+          <KeyboardDatePicker
+            required
+            margin="dense"
+            id="date-picker-dialog"
+            label="Notification Date"
+            format="dd/MM/yyyy"
+            value={selectedDate}
+            onChange={handleDateChange}
+            minDate={currentDate}
+          />
+        </Grid>
+
+        {
+          !!selectedDate && (
+            <Typography variant="h6" color="textSecondary" gutterBottom>
+              Notify me if not read by {moment(selectedDate).format("MMM DD, YYYY")}
+            </Typography>
+          )
+        }
 
         <Grid
           className={classes.actionContainer}
@@ -106,7 +133,7 @@ const NewMessage = (props) => {
           justify="space-between"
         >
           <Button variant="outlined" type="submit">
-            Save
+            Send
           </Button>
           <Button variant="outlined" onClick={() => onClose()}>
             Cancel
@@ -123,6 +150,9 @@ const useStyles = makeStyles((theme) => ({
   },
   formInput: {
     marginBottom: theme.spacing(4)
+  },
+  dateInput: {
+    marginBottom: theme.spacing(2)
   },
   actionContainer: {
     marginTop: theme.spacing(4)

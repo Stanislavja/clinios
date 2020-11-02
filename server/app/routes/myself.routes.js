@@ -1,7 +1,7 @@
-"use strict";
 const express = require("express");
 const { authJwt } = require("../middlewares");
 const controller = require("../controllers/myself.controller");
+
 const router = express.Router();
 
 router.get(

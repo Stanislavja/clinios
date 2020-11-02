@@ -16,9 +16,9 @@ import TextField from "@material-ui/core/TextField";
 import Alert from "@material-ui/lab/Alert";
 import { useDispatch } from "react-redux";
 
-import AppointmentService from "./../../../../../../services/appointmentType.service";
-import { setSuccess } from "./../../../../../../store/common/actions";
-import { removeEmpty } from "./../../../../../../utils/helpers";
+import AppointmentService from "../../../../../../services/appointmentType.service";
+import { setSuccess } from "../../../../../../store/common/actions";
+import { removeEmpty } from "../../../../../../utils/helpers";
 
 const GreenSwitch = withStyles({
   switchBase: {
@@ -48,7 +48,6 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     display: "flex",
     flexDirection: "row",
-    // justifyContent: "space-between",
     alignItems: "center",
     color: theme.palette.text.secondary,
     "& .MuiSelect-select": {

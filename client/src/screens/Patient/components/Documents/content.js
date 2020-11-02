@@ -1,28 +1,37 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
-import { Typography } from "@material-ui/core";
+import { Typography, Grid } from "@material-ui/core";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-import Tab from "@material-ui/core/Tab";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Tabs from "@material-ui/core/Tabs";
 import DeleteIcon from "@material-ui/icons/Delete";
+import RestoreIcon from "@material-ui/icons/RestorePage";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 
+import Tooltip from "../../../../components/common/CustomTooltip";
 import PatientService from "./../../../../services/patient.service";
 import { setError, setSuccess } from "./../../../../store/common/actions";
 
 const useStyles = makeStyles((theme) => ({
-  button: {
-    padding: 9
+  tab: {
+    paddingBottom: 5,
+    margin: "5px 10px 5px 0",
+    fontSize: 12,
+    cursor: "pointer"
+  },
+  tabSelected: {
+    paddingBottom: 5,
+    margin: "5px 10px 5px 0",
+    fontSize: 12,
+    cursor: "pointer",
+    borderBottom: `2px solid ${theme.palette.primary.main}`
   },
   tableContainer: {
-    marginTop: theme.spacing(2),
     minWidth: 650
   },
   actions: {
@@ -32,16 +41,22 @@ const useStyles = makeStyles((theme) => ({
     "& button": {
       fontSize: "12px"
     }
+  },
+  overFlowControl: {
+    maxWidth: "30px",
+    textOverflow: "ellipsis",
+    overflow: "hidden",
+    whiteSpace: "nowrap"
+  },
+  resMessage: {
+    fontSize: 12
+  },
+  icon: {
+    cursor: "pointer"
   }
 }));
 
-const CapitalizedTab = withStyles(theme => ({
-  root: {
-    textTransform: "capitalize",
-  }
-}))(Tab)
-
-const StyledTableCell = withStyles(theme => ({
+const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.grey,
     color: theme.palette.grey,
@@ -75,15 +90,42 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 
 const DocumentsContent = (props) => {
-  const { data, reloadData } = props;
+  const { data, reloadData, patientId } = props;
   const dispatch = useDispatch();
   const classes = useStyles();
   const [tabValue, setTabValue] = useState(0);
+  const [tableData, setTableData] = useState([]);
 
-  const onItemDelete = (selectedItem) => {
-    const documentId = selectedItem.id || 1;
-    const tab = "Labs";
-    PatientService.deleteDocument(documentId, tab)
+  const fetchDocuments = useCallback((selectedTab) => {
+    if (selectedTab === 0) { //(All)
+      let allData = data.filter(x => x.status !== "D")
+      setTableData([...allData]);
+    } else if (selectedTab === 1) { //(Labs)
+      let labsData = data.filter(x => x.type === "L" && x.status !== "D")
+      setTableData([...labsData]);
+    } else if (selectedTab === 2) { //(Imaging)
+      let imagingData = data.filter(x => x.type === "I" && x.status !== "D")
+      setTableData([...imagingData]);
+    } else if (selectedTab === 3) { //(Un-Categorized)
+      let uncategorizedData = data.filter(x => (x.type !== "L" && x.type !== "M" && x.type !== "I" && x.status !== "D"))
+      setTableData([...uncategorizedData]);
+    } else if (selectedTab === 4) { //(Declined/Deleted)
+      let deletedData = data.filter(x => x.status === "D")
+      setTableData([...deletedData]);
+    }
+  }, [data])
+
+  useEffect(() => {
+    fetchDocuments(tabValue);
+  }, [data, tabValue, fetchDocuments]);
+
+  const updateDocumentStatusHandler = (selectedItemId, status) => {
+    const reqBody = {
+      data: {
+        type: status
+      }
+    }
+    PatientService.updateDocument(patientId, selectedItemId, reqBody)
       .then((response) => {
         dispatch(setSuccess(`${response.data.message}`));
         reloadData();
@@ -105,18 +147,52 @@ const DocumentsContent = (props) => {
       });
   };
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (newValue) => {
+    if (newValue !== tabValue) {
+      fetchDocuments(newValue);
+    }
     setTabValue(newValue);
   };
 
   return (
     <>
-      <Tabs value={tabValue} onChange={handleChange}>
-        <CapitalizedTab label="All Labs" />
-        <CapitalizedTab label="Imaging" />
-        <CapitalizedTab label="Uncategorized" />
-        <CapitalizedTab label="Deleted" />
-      </Tabs>
+      <Grid container>
+        <Typography
+          className={tabValue === 0 ? classes.tabSelected : classes.tab}
+          onClick={() => handleChange(0)}
+          component="span"
+        >
+          All
+        </Typography>
+        <Typography
+          className={tabValue === 1 ? classes.tabSelected : classes.tab}
+          onClick={() => handleChange(1)}
+          component="span"
+        >
+          Labs
+        </Typography>
+        <Typography
+          className={tabValue === 2 ? classes.tabSelected : classes.tab}
+          onClick={() => handleChange(2)}
+          component="span"
+        >
+          Imaging
+        </Typography>
+        <Typography
+          className={tabValue === 3 ? classes.tabSelected : classes.tab}
+          onClick={() => handleChange(3)}
+          component="span"
+        >
+          Uncategorized
+        </Typography>
+        <Typography
+          className={tabValue === 4 ? classes.tabSelected : classes.tab}
+          onClick={() => handleChange(4)}
+          component="span"
+        >
+          Deleted
+        </Typography>
+      </Grid>
       <TableContainer className={classes.tableContainer}>
         <Table size="small" className={classes.table}>
           <TableHead>
@@ -125,16 +201,17 @@ const DocumentsContent = (props) => {
               <StyledTableCell>Filename</StyledTableCell>
               <StyledTableCell>Type</StyledTableCell>
               <StyledTableCell>Lab Date</StyledTableCell>
-              <StyledTableCell>Physician</StyledTableCell>
-              <StyledTableCell align="center">Conventional Flag</StyledTableCell>
-              <StyledTableCell>Functional Flag</StyledTableCell>
+              <StyledTableCell align="center">
+                Conv Flag
+              </StyledTableCell>
+              <StyledTableCell>Func Flag</StyledTableCell>
               <StyledTableCell>Notes</StyledTableCell>
               <StyledTableCell align="center">Actions</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {tabValue === 0 ?
-              data.map((row, index) => (
+            {tableData.length ? (
+              tableData.map((row, index) => (
                 <StyledTableRow key={`${row.created}_${index}`}>
                   <TableCell component="th" scope="row">
                     {moment(row.created).format("MMM D YYYY")}
@@ -146,21 +223,47 @@ const DocumentsContent = (props) => {
                   </TableCell>
                   <TableCell>{row.physician}</TableCell>
                   <TableCell>{row.physician}</TableCell>
-                  <TableCell>{row.physician}</TableCell>
-                  <TableCell>{row.note}</TableCell>
-
+                  {
+                    !!row.note && row.note.length > 10
+                      ?
+                      <Tooltip title={row.note}>
+                        <TableCell
+                          className={classes.overFlowControl}
+                        >
+                          {row.note}
+                        </TableCell>
+                      </Tooltip>
+                      :
+                      <TableCell>{row.note}</TableCell>
+                  }
                   <TableCell className={classes.actions}>
-                    <DeleteIcon onClick={() => onItemDelete(row)} fontSize="small" />
+                    {row.status === "D"
+                      ? (
+                        <RestoreIcon
+                          className={classes.icon}
+                          onClick={() => updateDocumentStatusHandler(row.id, "A")}
+                          fontSize="small"
+                        />
+                      )
+                      : (
+                        <DeleteIcon
+                          className={classes.icon}
+                          onClick={() => updateDocumentStatusHandler(row.id, "D")}
+                          fontSize="small"
+                        />
+                      )}
                   </TableCell>
                 </StyledTableRow>
               ))
-              :
+            ) : (
               <StyledTableRow>
                 <TableCell colSpan={10}>
-                  <Typography align="center" variant="h6">No Documents Found...</Typography>
+                  <Typography className={classes.resMessage} align="center">
+                      No Documents Found...
+                  </Typography>
                 </TableCell>
               </StyledTableRow>
-            }
+            )}
           </TableBody>
         </Table>
       </TableContainer>

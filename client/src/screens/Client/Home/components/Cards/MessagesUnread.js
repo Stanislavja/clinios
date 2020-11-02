@@ -81,7 +81,7 @@ const MessagesUnread = ({
                 {moment(msg.created).format("ll")}, {msg.name}, {msg.subject},{" "}
                 {msg.message}
                 <div className={classes.unreadMsgActions}>
-                  <Link to={`/patient/${msg.patient_id}`}>Patient</Link>
+                  <Link to={`/patients/${msg.patient_id}`}>Patient</Link>
                   <Button onClick={(_) => onMessageEdit(_, msg)}>
                     Edit Message
                   </Button>

@@ -1,6 +1,8 @@
-"use strict";
 const { validationResult } = require("express-validator");
 const moment = require("moment");
+const sgMail = require("@sendgrid/mail");
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const { configuration, makeDb } = require("../db/db.js");
 const { errorMessage, successMessage, status } = require("../helpers/status");
 const {
@@ -107,7 +109,7 @@ const createAppointment = async (req, res) => {
       provider
     );
     if (process.env.NODE_ENV === "development") {
-      let info = await transporter.sendMail(emailTemplate);
+      const info = await transporter.sendMail(emailTemplate);
       console.info("Email for new appointment has bees sent!", info);
     } else {
       console.log("process.env.SENDGRID_API_KEY", process.env.SENDGRID_API_KEY);
@@ -161,7 +163,7 @@ const cancelAppointment = async (req, res) => {
       providerName
     );
     if (process.env.NODE_ENV === "development") {
-      let info = await transporter.sendMail(emailTemplate);
+      const info = await transporter.sendMail(emailTemplate);
       console.info("Email for cancel appointment has bees sent!", info);
     } else {
       console.log("process.env.SENDGRID_API_KEY", process.env.SENDGRID_API_KEY);
@@ -208,7 +210,6 @@ const updateAppointment = async (req, res) => {
     new_start_dt,
     new_end_dt,
     old_start_dt,
-    old_end_dt,
   } = req.body.data;
 
   const db = makeDb(configuration, res);
@@ -239,7 +240,7 @@ const updateAppointment = async (req, res) => {
     }
 
     if (process.env.NODE_ENV === "development") {
-      let info = await transporter.sendMail(emailTemplate);
+      const info = await transporter.sendMail(emailTemplate);
       console.info("Email for update appointment has bees sent!", info);
     } else {
       console.log("process.env.SENDGRID_API_KEY", process.env.SENDGRID_API_KEY);

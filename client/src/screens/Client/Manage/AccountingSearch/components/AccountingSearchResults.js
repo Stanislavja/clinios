@@ -86,13 +86,13 @@ const TotalTableRow = withStyles((theme) => ({
       backgroundColor: theme.palette.action.hover
     },
     "& th": {
-      fontSize: 12,
+      fontSize: 12
     },
     "& td": {
       fontSize: 12,
       fontWeight: "bold"
-    },
-  },
+    }
+  }
 }))(TableRow);
 
 export default function AccountingSearchResults(props) {
@@ -116,9 +116,7 @@ export default function AccountingSearchResults(props) {
               <StyledTableCell padding="checkbox">Encounter</StyledTableCell>
               <StyledTableCell padding="checkbox">CPT ID</StyledTableCell>
               <StyledTableCell padding="checkbox">CPT Name</StyledTableCell>
-              <StyledTableCell padding="checkbox" align="center">
-                Note
-              </StyledTableCell>
+              <StyledTableCell padding="checkbox">Note</StyledTableCell>
               <StyledTableCell padding="checkbox">Patient</StyledTableCell>
               <StyledTableCell padding="checkbox">Created</StyledTableCell>
             </TableRow>
@@ -126,13 +124,18 @@ export default function AccountingSearchResults(props) {
           <TableBody>
             {props.result.map((result, index) => (
               <StyledTableRow key={index}>
-                <TableCell padding="checkbox" component="th" scope="row">
+                <TableCell
+                  style={{ whiteSpace: "nowrap" }}
+                  padding="checkbox"
+                  component="th"
+                  scope="row"
+                >
                   {moment(result.dt).format("lll")}
                 </TableCell>
                 <TableCell padding="checkbox" component="th" scope="row">
                   {result.name}
                 </TableCell>
-                <TableCell padding="checkbox">{`$\u00A0\u00A0${result.amount}`}</TableCell>
+                <TableCell padding="checkbox">{`$${result.amount}`}</TableCell>
                 {result.encounter_title.length > 40 ? (
                   <LightTooltip title={result.encounter_title}>
                     <TableCell
@@ -150,8 +153,8 @@ export default function AccountingSearchResults(props) {
                     {result.encounter_title}
                   </TableCell>
                 )}
-                <TableCell align="center" padding="checkbox">
-                  {result.cpt_id ? result.cpt_id : "N/A"}
+                <TableCell padding="checkbox">
+                  {result.cpt_id ? result.cpt_id : ""}
                 </TableCell>
                 {result.cpt_name && result.cpt_name.length > 40 ? (
                   <LightTooltip title={result.cpt_name ? result.cpt_name : ""}>
@@ -159,7 +162,7 @@ export default function AccountingSearchResults(props) {
                       padding="checkbox"
                       className={classes.overFlowControl}
                     >
-                      {result.cpt_name ? result.cpt_name : "N/A"}
+                      {result.cpt_name ? result.cpt_name : ""}
                     </TableCell>
                   </LightTooltip>
                 ) : (
@@ -167,14 +170,13 @@ export default function AccountingSearchResults(props) {
                     padding="checkbox"
                     className={classes.overFlowControl}
                   >
-                    {result.cpt_name ? result.cpt_name : "N/A"}
+                    {result.cpt_name ? result.cpt_name : ""}
                   </TableCell>
                 )}
                 {result.note && result.note.length > 40 ? (
                   <LightTooltip title={result.note}>
                     <TableCell
                       padding="checkbox"
-                      align="center"
                       className={classes.overFlowControl}
                     >
                       {result.note || ""}
@@ -183,7 +185,6 @@ export default function AccountingSearchResults(props) {
                 ) : (
                   <TableCell
                     padding="checkbox"
-                    align="center"
                     className={classes.overFlowControl}
                   >
                     {result.note || ""}
@@ -191,7 +192,7 @@ export default function AccountingSearchResults(props) {
                 )}
                 <TableCell
                   padding="checkbox"
-                  onClick={() => history.push(`/patient/${result.patient_id}`)}
+                  onClick={() => history.push(`/patients/${result.patient_id}`)}
                   className={classes.patientLink}
                 >
                   {result.patient_name}
@@ -205,12 +206,8 @@ export default function AccountingSearchResults(props) {
               <TableCell padding="checkbox" colSpan={2} align="right">
                 Total
               </TableCell>
-              <TableCell
-                padding="checkbox"
-                // colSpan={1}
-                // align="left"
-              >
-                <div style={{marginLeft: "5px"}}>{`$\u00A0\u00A0${amount}`}</div>
+              <TableCell padding="checkbox">
+                <div>{`$${amount}`}</div>
               </TableCell>
             </TotalTableRow>
           </TableBody>

@@ -61,6 +61,10 @@ If you get an error "Client does not support authentication protocol requested b
 1. Login page for patients http://localhost:3000/login/ultrawellness
 2. Use email test@test.com password 12345678
 3. Use these credentials so you will see the correct demo data.
+    
+## Patient Signup
+
+1. Login page for patients http://localhost:3000/signup/ultrawellness
 
 ## Email
 

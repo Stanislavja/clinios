@@ -1,4 +1,3 @@
-"use strict";
 const nodemailer = require("nodemailer");
 
 let mailConfig;
@@ -25,7 +24,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 // create reusable transporter object using the default SMTP transport
-let transporter = nodemailer.createTransport(mailConfig);
+const transporter = nodemailer.createTransport(mailConfig);
 
 const signUpConfirmationTemplate = (user, url) => {
   const from = process.env.EMAIL_LOGIN;
@@ -46,8 +45,12 @@ const signUpConfirmationTemplate = (user, url) => {
 const getEmailVerificationURL = (user, token) =>
   `${process.env.CLIENT_URL}/email/confirmation/${user.id}/${token}`;
 
-const getPasswordResetURL = (user, token) =>
-  `${process.env.CLIENT_URL}/password/reset/${user.id}/${token}`;
+const getPasswordResetURL = (user, userType, token) => {
+  if (userType === "patient") {
+    return `${process.env.CLIENT_URL}/patient/password/reset/${user.id}/${token}`;
+  }
+  return `${process.env.CLIENT_URL}/password/reset/${user.id}/${token}`;
+};
 
 const resetPasswordTemplate = (user, url) => {
   const from = process.env.EMAIL_LOGIN;

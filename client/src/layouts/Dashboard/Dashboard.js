@@ -53,11 +53,6 @@ const Dashboard = (props) => {
             [classes.shiftContent]: isDesktop
           })}
         >
-          {/*        <Header
-            onSidebarOpen={handleSidebarOpen}
-            logout={logout}
-            user={user}
-          /> */}
           <Topbar
             onSidebarOpen={handleSidebarOpen}
             logout={logout}

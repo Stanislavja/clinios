@@ -9,22 +9,27 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
-import { useSelector, shallowEqual } from "react-redux";
+import { useSelector, shallowEqual, useDispatch } from "react-redux";
+
 
 import Card from "../../../components/common/Card";
 import {
   EncountersFormFields,
   EncountersCards
 } from "../../../static/encountersForm";
+import { resetEncounter } from "../../../store/patient/actions";
 
 const Form = (props) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const { onClose } = props;
   const [formFields, setFormFields] = useState({
     title: "",
     type: "",
     name: "",
-    date: ""
+    date: "",
+    notes: "",
+    treatment: ""
   });
   const encounter = useSelector(
     (state) => state.patient.selectedEncounter,
@@ -35,6 +40,7 @@ const Form = (props) => {
     if (!!encounter) {
       updateFields();
     }
+    return () => !!encounter && dispatch(resetEncounter());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [encounter]);
 
@@ -43,6 +49,8 @@ const Form = (props) => {
     formFields.type = encounter.encounter_type;
     formFields.name = encounter.name;
     formFields.date = moment(encounter.dt).format("YYYY-MM-DD");
+    formFields.notes = encounter.notes;
+    formFields.treatment = encounter.treatment;
     setFormFields({ ...formFields });
   };
 
@@ -120,6 +128,7 @@ const Form = (props) => {
                   id={"notes"}
                   type={"text"}
                   fullWidth
+                  value={formFields.notes}
                   onChange={(e) => handleInputChnage(e)}
                   multiline={true}
                   rows={5}
@@ -137,10 +146,11 @@ const Form = (props) => {
             <Grid item md={12}>
               <TextField
                 variant="outlined"
-                name={"notes"}
-                id={"notes"}
+                name={"treatment"}
+                id={"treatment"}
                 type={"text"}
                 fullWidth
+                value={formFields.treatment}
                 onChange={(e) => handleInputChnage(e)}
                 multiline={true}
                 rows={5}
@@ -159,6 +169,7 @@ const Form = (props) => {
               primaryButtonText={item.primaryButtonText}
               secondaryButtonText={item.secondaryButtonText}
               iconHandler={() => console.log(item.title)}
+              hasMinHeight={true}
             />
           ))}
 
@@ -171,7 +182,7 @@ const Form = (props) => {
             </Button>
           </Grid>
           <Typography gutterBottom>
-            Created {moment().format("MMM, D, YYYY")}
+            Created {moment().format("MMM D YYYY")}
           </Typography>
           <Typography gutterBottom>
             Created By {!!encounter && encounter.name}

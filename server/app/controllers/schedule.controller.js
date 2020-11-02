@@ -1,4 +1,3 @@
-"use strict";
 const { validationResult } = require("express-validator");
 const { configuration, makeDb } = require("../db/db.js");
 const { errorMessage, successMessage, status } = require("../helpers/status");
@@ -39,9 +38,9 @@ const search = async (req, res) => {
         left join user u3 on u3.id=us.updated_user_id
         where us.client_id=${req.client_id} \n`;
     if (userId) {
-      $sql = $sql + `and us.user_id=${userId} \n`;
+      $sql += `and us.user_id=${userId} \n`;
     }
-    $sql = $sql + `limit 500`;
+    $sql += `limit 500`;
 
     const dbResponse = await db.query($sql);
     if (!dbResponse) {
@@ -64,18 +63,17 @@ const createNewSchedule = async (req, res) => {
     return res.status(status.bad).send(errorMessage);
   }
   const db = makeDb(configuration, res);
-  let user_schedule = req.body;
-
-  (user_schedule.client_id = req.client_id),
-    (user_schedule.user_id = req.body.user_id || req.user_id),
-    (user_schedule.date_start = req.body.date_start),
-    (user_schedule.date_end = req.body.date_end),
-    (user_schedule.time_start = req.body.time_start),
-    (user_schedule.time_end = req.body.time_end),
-    (user_schedule.active = req.body.active),
-    (user_schedule.note = req.body.note),
-    (user_schedule.created = new Date()),
-    (user_schedule.created_user_id = req.body.user_id || req.user_id);
+  const user_schedule = req.body;
+  user_schedule.client_id = req.client_id;
+  user_schedule.user_id = req.body.user_id || req.user_id;
+  user_schedule.date_start = req.body.date_start;
+  user_schedule.date_end = req.body.date_end;
+  user_schedule.time_start = req.body.time_start;
+  user_schedule.time_end = req.body.time_end;
+  user_schedule.active = req.body.active;
+  user_schedule.note = req.body.note;
+  user_schedule.created = new Date();
+  user_schedule.created_user_id = req.body.user_id || req.user_id;
 
   try {
     const dbResponse = await db.query(
@@ -106,16 +104,16 @@ const updateSchedule = async (req, res) => {
   }
 
   const db = makeDb(configuration, res);
-  let user_schedule = req.body;
+  const user_schedule = req.body;
 
-  (user_schedule.user_id = req.body.user_id || req.user_id),
-    (user_schedule.date_start = req.body.date_start),
-    (user_schedule.date_end = req.body.date_end),
-    (user_schedule.time_start = req.body.time_start),
-    (user_schedule.time_end = req.body.time_end),
-    (user_schedule.active = req.body.active),
-    (user_schedule.note = req.body.note),
-    (user_schedule.updated = new Date());
+  user_schedule.user_id = req.body.user_id || req.user_id;
+  user_schedule.date_start = req.body.date_start;
+  user_schedule.date_end = req.body.date_end;
+  user_schedule.time_start = req.body.time_start;
+  user_schedule.time_end = req.body.time_end;
+  user_schedule.active = req.body.active;
+  user_schedule.note = req.body.note;
+  user_schedule.updated = new Date();
   user_schedule.updated_user_id = req.body.user_id || req.user_id;
 
   try {

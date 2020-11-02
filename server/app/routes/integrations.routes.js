@@ -1,7 +1,7 @@
-"use strict";
 const express = require("express");
 const { authJwt } = require("../middlewares");
 const Integrations = require("../controllers/integrations.controller.js");
+
 const router = express.Router();
 
 router.get(
@@ -9,10 +9,6 @@ router.get(
   [authJwt.verifyToken],
   Integrations.getIntegrations
 );
-router.put(
-  "/integrations/",
-  [authJwt.verifyToken],
-  Integrations.update
-);
+router.put("/integrations/", [authJwt.verifyToken], Integrations.update);
 
 module.exports = router;

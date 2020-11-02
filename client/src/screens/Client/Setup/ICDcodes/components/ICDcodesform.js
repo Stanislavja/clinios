@@ -2,11 +2,31 @@ import React from "react";
 
 import {
   Button,
-  Checkbox,
+  Switch,
   FormControlLabel,
   makeStyles,
-  TextField
+  TextField,
+  withStyles
 } from "@material-ui/core";
+import { green, grey } from "@material-ui/core/colors";
+
+const GreenSwitch = withStyles({
+  switchBase: {
+    color: grey[400],
+    "&$checked": {
+      color: green[500],
+    },
+    "&$checked + $track": {
+      backgroundColor: green[500],
+      // color: grey[500]
+      "&$checked": {
+        color: grey[500],
+      }
+    },
+  },
+  checked: {},
+  track: {},
+})(Switch);
 
 
 const useStyles = makeStyles((theme) => ({
@@ -27,6 +47,10 @@ const useStyles = makeStyles((theme) => ({
     padding: "4px 30px",
     fontSize: "1rem",
     maxWidth: "100px"
+  },
+  check: {
+    marginLeft: "7px",
+    marginTop: "5px"
   }
 }));
 
@@ -56,12 +80,13 @@ const ICDcodesform = ({
       />
       <FormControlLabel
         control={
-          <Checkbox
+          <GreenSwitch
             onChange={checkBoxChangeHandler}
             color="primary"
             onKeyUp={(event) => handleKeyUp(event)}
             name="favorite"
             size="small"
+            className={classes.check}
           />
         }
         label="Favorite"

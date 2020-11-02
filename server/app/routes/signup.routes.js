@@ -1,6 +1,6 @@
 const express = require("express");
 const controller = require("../controllers/signup.controller");
-const fieldValidation = require("./../helpers/fieldValidation");
+const fieldValidation = require("../helpers/fieldValidation");
 
 const router = express.Router();
 

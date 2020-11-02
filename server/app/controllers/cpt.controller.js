@@ -1,4 +1,3 @@
-"use strict";
 const { validationResult } = require("express-validator");
 const { configuration, makeDb } = require("../db/db.js");
 const { errorMessage, successMessage, status } = require("../helpers/status");
@@ -54,33 +53,31 @@ const search = async (req, res) => {
         left join client cl on cl.id=c.client_id
         where 1 \n`;
     if (cptId) {
-      $sql = $sql + `and c.id like '%${cptId}%' \n`;
+      $sql += `and c.id like '%${cptId}%' \n`;
     }
     if (cptDescription) {
-      $sql = $sql + `and c.name like '%${cptDescription}%' \n`;
+      $sql += `and c.name like '%${cptDescription}%' \n`;
     }
     if (labCompanyId) {
-      $sql = $sql + `and c.lab_company_id=${labCompanyId} \n`;
+      $sql += `and c.lab_company_id=${labCompanyId} \n`;
     }
     if (favorite) {
-      $sql = $sql + `and cc.favorite = true \n`;
+      $sql += `and cc.favorite = true \n`;
     }
     if (billable) {
-      $sql = $sql + `and cc.billable = true \n`;
+      $sql += `and cc.billable = true \n`;
     }
     if (self) {
-      $sql = $sql + `and c.client_id=${req.client_id} \n`;
+      $sql += `and c.client_id=${req.client_id} \n`;
     }
     if (group) {
-      $sql = $sql + `and c2.name is not null \n`;
+      $sql += `and c2.name is not null \n`;
     }
 
-    $sql =
-      $sql +
-      `group by c.id, lc.name, c.name, cc.favorite, cc.billable, cc.fee, cl.name
+    $sql += `group by c.id, lc.name, c.name, cc.favorite, cc.billable, cc.fee, cl.name
         , cc.updated, concat(u.firstname, ' ', u.lastname) \n`;
-    $sql = $sql + `order by c.name \n`;
-    $sql = $sql + `limit 50 \n`;
+    $sql += `order by c.name \n`;
+    $sql += `limit 50 \n`;
 
     const dbResponse = await db.query($sql);
     if (!dbResponse) {

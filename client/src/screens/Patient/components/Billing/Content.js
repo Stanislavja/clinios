@@ -11,8 +11,8 @@ export default function BillingContent(props) {
 
   return (
     <>
-      {data.map((item) => (
-        <Grid key={item.tran_type} container className={classes.inputRow}>
+      {data.map((item, index) => (
+        <Grid key={`${item.dt}_${index}`} container className={classes.inputRow}>
           <Grid item className={classes.block}>
             <Typography
               component="span"
@@ -28,7 +28,7 @@ export default function BillingContent(props) {
               className={classes.text12}
               color="textPrimary"
             >
-              $&nbsp;{item.amount}
+              ${item.amount}
             </Typography>
           </Grid>
           <Grid item className={classes.block}>

@@ -1,4 +1,3 @@
-
 /**
  * isValidEmail helper method
  * @param {string} email

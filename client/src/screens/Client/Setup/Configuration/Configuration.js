@@ -127,7 +127,7 @@ export default function Configuration(props) {
         clientId: data.id,
         clientCode: data.code,
         name: data.name,
-        patientPortal: `app.clinios.com/signup?c=${data.code}`,
+        patientPortal: `app.clinios.com/login/${data.code}`,
         address: data.address,
         clientWebsite: data.website,
         addressLineTwo: data.address2,
@@ -265,7 +265,7 @@ export default function Configuration(props) {
             Configuration
           </Typography>
           <Button
-            variant="contained"
+            variant="outlined"
             color="primary"
             component="span"
             onClick={() => _onOpenModalHistory()}
@@ -299,7 +299,7 @@ export default function Configuration(props) {
                     size="small"
                     disabled={true}
                     id="clientId"
-                    label="Client Id"
+                    label="Client ID"
                     name="clientId"
                     className={`${classes.textField} `}
                     autoComplete="clientId"
@@ -389,7 +389,7 @@ export default function Configuration(props) {
                 size="small"
                 id="patientPortal"
                 disabled={true}
-                label="Patient Portal"
+                label="Patient Portal Login"
                 className={`${classes.textField} `}
                 name="patientPortal"
                 autoComplete="patientPortal"
@@ -424,7 +424,7 @@ export default function Configuration(props) {
                 }}
                 size="small"
                 id="clientWebsite"
-                label="Client Website"
+                label="Website"
                 className={`${classes.textField} `}
                 name="clientWebsite"
                 autoComplete="clientWebsite"
@@ -441,7 +441,7 @@ export default function Configuration(props) {
                 }}
                 size="small"
                 id="addressLineTwo"
-                label="addressLineTwo"
+                label="Address Line 2"
                 className={`${classes.textField} `}
                 name="addressLineTwo"
                 autoComplete="addressLineTwo"

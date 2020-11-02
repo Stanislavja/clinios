@@ -1,10 +1,8 @@
-"use strict";
-
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const moment = require("moment");
 const { validationResult } = require("express-validator");
-const config = require("./../../config");
+const config = require("../../config");
 const { configuration, makeDb } = require("../db/db.js");
 const { errorMessage, successMessage, status } = require("../helpers/status");
 
@@ -44,7 +42,8 @@ exports.signin = async (req, res) => {
     errorMessage.message =
       "The password for this additional user can not be reset until user registration has first been completed.";
     delete user.password; // delete password from response
-    user.client = clientRows[0];
+    const clientResult = clientRows[0];
+    user.client = clientResult;
     errorMessage.user = user;
     return res.status(status.unauthorized).send(errorMessage);
   }
@@ -63,17 +62,16 @@ exports.signin = async (req, res) => {
     return res.status(status.unauthorized).send(errorMessage);
   }
 
-  //update user login_dt
+  // update user login_dt
   const now = moment().format("YYYY-MM-DD HH:mm:ss");
-  const userUpdate = await db.query(
-    `UPDATE user SET login_dt='${now}' WHERE id =${user.id}`
-  );
+  await db.query(`UPDATE user SET login_dt='${now}' WHERE id =${user.id}`);
+
   const token = jwt.sign(
     { id: user.id, client_id: user.client_id },
     config.authSecret,
     {
       expiresIn: 86400, // 24 hours
-      //expiresIn: 5 * 60, // 2minutes
+      // expiresIn: 5 * 60, // 2minutes
     }
   );
   user.accessToken = token;

@@ -1,4 +1,4 @@
-/*** Documentation:
+/** * Documentation:
 
  * To make this token a one-time-use token, I encourage you to
  * use the patient’s current password hash in conjunction with
@@ -13,14 +13,15 @@
  * has changed their password, it will generate a new password hash
  * invalidating the secret key that references the old password
  * Reference: https://www.smashingmagazine.com/2017/11/safe-password-resets-with-json-web-tokens/
- **/
-"use strict";
+ * */
+
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const moment = require("moment");
-const { configuration, makeDb } = require("../db/db.js");
 const { validationResult } = require("express-validator");
 const sgMail = require("@sendgrid/mail");
+const { configuration, makeDb } = require("../db/db.js");
+
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const { errorMessage, successMessage, status } = require("../helpers/status");
@@ -38,11 +39,53 @@ const {
 const usePasswordHashToMakeToken = (user) => {
   const passwordHash = user.password;
   const userId = user.id;
-  const secret = passwordHash + "-" + user.created;
+  const secret = `${passwordHash}-${user.created}`;
   const token = jwt.sign({ userId }, secret, {
     expiresIn: 3600, // 1 hour
   });
   return token;
+};
+
+/**
+ * Calling this function with a user will send email with URL
+ * @param {object} user
+ * @param {object} res
+ * @returns {object} response
+ */
+
+const sendRecoveryEmail = async (user, res) => {
+  const accesstToken = usePasswordHashToMakeToken(user);
+  const url = getPasswordResetURL(user, "user", accesstToken);
+  const emailTemplate = resetPasswordTemplate(user, url);
+
+  if (process.env.NODE_ENV === "development") {
+    const info = await transporter.sendMail(emailTemplate);
+    console.info("Sending email:", info);
+    successMessage.message =
+      "We have sent an email with instructions to reset your credentionals.";
+    return res.status(status.success).send(successMessage);
+  }
+  console.log("process.env.SENDGRID_API_KEY", process.env.SENDGRID_API_KEY);
+  sgMail.send(emailTemplate).then(
+    (info) => {
+      console.log(`** Email sent **`, info);
+      return res.status(200).json({
+        status: "success",
+        message:
+          "We have sent an email with instructions to reset your credentionals.",
+      });
+    },
+    (error) => {
+      console.error(error);
+      if (error.response) {
+        console.error("error.response.body:", error.response.body);
+      }
+      return res.status(500).json({
+        status: "error",
+        message: "Something went wrong while sending an reset email.",
+      });
+    }
+  );
 };
 
 /**
@@ -62,7 +105,7 @@ exports.sendPasswordResetEmail = async (req, res) => {
   }
 
   const db = makeDb(configuration, res);
-  //Check where user already signed up or not
+  // Check where user already signed up or not
   const { email } = req.params;
   const userRows = await db.query(
     "SELECT id, firstname, lastname, email, password, sign_dt, email_confirm_dt, created FROM user WHERE email = ? LIMIT 1",
@@ -119,48 +162,6 @@ exports.sendPasswordResetEmail = async (req, res) => {
 };
 
 /**
- * Calling this function with a user will send email with URL
- * @param {object} user
- * @param {object} res
- * @returns {object} response
- */
-
-const sendRecoveryEmail = async (user, res) => {
-  const accesstToken = usePasswordHashToMakeToken(user);
-  const url = getPasswordResetURL(user, accesstToken);
-  const emailTemplate = resetPasswordTemplate(user, url);
-
-  if (process.env.NODE_ENV === "development") {
-    let info = await transporter.sendMail(emailTemplate);
-    successMessage.message =
-      "We have sent an email with instructions to reset your credentionals.";
-    return res.status(status.success).send(successMessage);
-  } else {
-    console.log("process.env.SENDGRID_API_KEY", process.env.SENDGRID_API_KEY);
-    sgMail.send(emailTemplate).then(
-      (info) => {
-        console.log(`** Email sent **`, info);
-        return res.status(200).json({
-          status: "success",
-          message:
-            "We have sent an email with instructions to reset your credentionals.",
-        });
-      },
-      (error) => {
-        console.error(error);
-        if (error.response) {
-          console.error("error.response.body:", error.response.body);
-        }
-        return res.status(500).json({
-          status: "error",
-          message: "Something went wrong while sending an reset email.",
-        });
-      }
-    );
-  }
-};
-
-/**
  * Calling this function with correct url will let user to reset password
  * @param {object} user
  * @param {object} res
@@ -178,13 +179,13 @@ exports.receiveNewPassword = async (req, res) => {
   const { userId, token } = req.params;
   const { password } = req.body;
 
-  //find user with reset_password_token AND userId
-  //check token expires validity
+  // find user with reset_password_token AND userId
+  // check token expires validity
   const now = moment().format("YYYY-MM-DD HH:mm:ss");
   const userRows = await db.query(
     `SELECT id, email, reset_password_token, reset_password_expires FROM user WHERE id=${userId} AND reset_password_token='${token}' AND reset_password_expires > '${now}'`
   );
-  let user = userRows[0];
+  const user = userRows[0];
 
   if (!user) {
     errorMessage.message = "User not found";
@@ -192,7 +193,7 @@ exports.receiveNewPassword = async (req, res) => {
     return res.status(status.notfound).send(errorMessage);
   }
 
-  //if all set then accept new password
+  // if all set then accept new password
   const hashedPassword = bcrypt.hashSync(password, 8);
 
   const updateUserResponse = await db.query(

@@ -4,24 +4,12 @@ import { Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
 
+import Tooltip from "../../../../components/common/CustomTooltip";
+
 const useStyles = makeStyles((theme) => ({
   inputRow: {
     marginBottom: theme.spacing(0.5),
     flexWrap: "nowrap",
-  },
-  button: {
-    padding: 9
-  },
-  tableContainer: {
-      // minWidth: 650,
-  },
-  actions: {
-    textAlign: "center",
-    display: "flex",
-    border: "none",
-    "& button": {
-      fontSize: "12px"
-    }
   },
   block: {
     minWidth: 90,
@@ -52,7 +40,15 @@ const HandoutsContent = (props) => {
         data.map(item => (
           <Grid onClick={() => alert(item.filename)} key={item.created} container className={classes.inputRow}>
             <Typography component="span" className={`${classes.text12} ${classes.block}`} color="textPrimary">{moment(item.created).format("MMM D YYYY")}</Typography>
-            <Typography component="span" className={`${classes.text12} ${classes.fullWidth}`} color="textPrimary">{item.filename}</Typography>
+            {
+              !!item.filename && item.filename.length > 40
+                ?
+                <Tooltip title={item.filename}>
+                  <Typography component="span" className={`${classes.text12} ${classes.fullWidth}`} color="textPrimary">{item.filename}</Typography>
+                </Tooltip>
+                :
+                <Typography component="span" className={`${classes.text12} ${classes.fullWidth}`} color="textPrimary">{item.filename}</Typography>
+            }
           </Grid>
         ))}
     </>

@@ -1,4 +1,3 @@
-"use strict";
 const { configuration, makeDb } = require("../db/db.js");
 const { errorMessage, successMessage, status } = require("../helpers/status");
 
@@ -11,7 +10,7 @@ const getAgreement = async (req, res) => {
        where created = (
          select max(created)
          from contract
-         ) \n`
+         )`
     );
     const dbResponse = rows[0];
 

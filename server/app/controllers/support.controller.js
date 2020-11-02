@@ -1,4 +1,3 @@
-"use strict";
 const { configuration, makeDb } = require("../db/db.js");
 const { errorMessage, successMessage, status } = require("../helpers/status");
 
@@ -15,10 +14,10 @@ const getInit = async (req, res) => {
       left join user u on u.id=s.created_user_id
       where s.client_id=${req.client_id} \n`;
     if (cStatus) {
-      $sql = $sql + `and s.status_id='${cStatus}' \n`;
+      $sql += `and s.status_id='${cStatus}' \n`;
     }
-    $sql = $sql + `order by s.created desc \n`;
-    $sql = $sql + `limit 100 \n`;
+    $sql += `order by s.created desc \n`;
+    $sql += `limit 100 \n`;
 
     const dbResponse = await db.query($sql);
 

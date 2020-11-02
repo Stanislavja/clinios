@@ -1,10 +1,5 @@
-"use strict";
-
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const moment = require("moment");
 const { validationResult } = require("express-validator");
-const config = require("./../../config");
 const { configuration, makeDb } = require("../db/db.js");
 const { errorMessage, successMessage, status } = require("../helpers/status");
 const { signupPDF } = require("../helpers/signupPDF");

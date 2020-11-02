@@ -1,71 +1,99 @@
 import React, { useState, useEffect } from "react";
 
-import { TextField, Button, Grid, Typography } from "@material-ui/core";
+import {
+  Button,
+  Grid,
+  Typography,
+  List,
+  ListItem,
+  ListItemText
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import _ from "lodash";
+import { useDispatch } from "react-redux";
+import Select from "react-select";
+
 
 import PatientService from "../../../services/patient.service";
+import { setError, setSuccess } from "../../../store/common/actions";
+import SelectCustomStyles from "../../../styles/SelectCustomStyles";
 
 const Medications = (props) => {
   const classes = useStyles();
-  const { onClose } = props;
+  const dispatch = useDispatch();
+  const { onClose, patientId } = props;
   const [medications, setMedications] = useState([]);
+  const [selectedMedication, setSelectedMedication] = useState([])
 
   useEffect(() => {
     fetchMedications("");
   }, []);
 
-  const handleInputChnage = (e) => {
-    const { value } = e.target;
-    debouncedSearchMedications(value);
-  };
-
-  const debouncedSearchMedications = _.debounce((query) => {
-    fetchMedications(query);
-  }, 1000);
-
   const fetchMedications = (searchText) => {
-    const reqBody = {
-      data: {
-        text: searchText
-      }
-    };
-    PatientService.searchDiagnosis(reqBody).then((res) => {
+    PatientService.searchDrugs(searchText).then((res) => {
       setMedications(res.data);
     });
   };
 
+  const onFormSubmit = (e) => {
+    e.preventDefault();
+    const reqBody = {
+      data: {
+        drug_id: selectedMedication.id
+      }
+    };
+    PatientService.createMedication(patientId, reqBody)
+      .then((response) => {
+        dispatch(setSuccess(`${response.data.message}`));
+        onClose();
+      })
+      .catch((error) => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        let severity = "error";
+        dispatch(
+          setError({
+            severity: severity,
+            message: resMessage
+          })
+        );
+      });
+  };
+
   return (
     <>
-      <Grid className={classes.heading} container justify="space-between">
+      <Grid className={classes.heading}>
         <Typography variant="h3" color="textSecondary">
           Select Drug
         </Typography>
-        <Button variant="outlined" onClick={() => onClose()}>
-          Cancel
-        </Button>
       </Grid>
       <Grid container spacing={2}>
         <Grid item md={4}>
-          <TextField
-            label=""
-            placeholder="Search..."
-            name="search"
-            fullWidth
-            variant="outlined"
-            onChange={(e) => handleInputChnage(e)}
-            className={classes.inputHeading}
-            size="small"
+          <Select
+            value={selectedMedication}
+            options={medications.length ? medications : []}
+            getOptionLabel={(option) => option.name}
+            getOptionValue={(option) => option.id}
+            onChange={(value) => setSelectedMedication(value)}
+            styles={SelectCustomStyles}
+            isClearable={true}
           />
-          {medications.length
-            ? medications.map((item, index) => (
-              <Grid key={index}>
-                <Typography gutterBottom variant="body1">
-                    Exythromycine 25mcg Tablets
-                </Typography>
-              </Grid>
-            ))
-            : null}
+
+          <List component="ul">
+            {medications.map((medication) => (
+              <ListItem
+                onClick={() => setSelectedMedication(medication)}
+                key={medication.id}
+                disableGutters={true}
+                button
+              >
+                <ListItemText primary={medication.name} />
+              </ListItem>
+            ))}
+          </List>
         </Grid>
         <Grid item md={4}>
           <Grid className={classes.header}>
@@ -73,13 +101,18 @@ const Medications = (props) => {
               Recent
             </Typography>
           </Grid>
-          {[...Array(5)].map((item, index) => (
-            <Grid key={index}>
-              <Typography gutterBottom variant="body1" align="center">
-                Exythromycine 25mcg Tablets
-              </Typography>
-            </Grid>
-          ))}
+          {(!!medications && medications.length)
+            ?
+            medications.map((item, index) => (
+              <Grid key={index}>
+                <Typography gutterBottom variant="body1" align="center">
+                  {item.name}
+                </Typography>
+              </Grid>
+            ))
+            :
+            null
+          }
         </Grid>
         <Grid item md={4}>
           <Grid className={classes.header}>
@@ -95,6 +128,23 @@ const Medications = (props) => {
             </Grid>
           ))}
         </Grid>
+      </Grid>
+
+      <Grid
+        className={classes.actionContainer}
+        container
+        justify="space-between"
+      >
+        <Button
+          variant="outlined"
+          onClick={(e) => onFormSubmit(e)}
+          type="submit"
+        >
+          Save
+        </Button>
+        <Button variant="outlined" onClick={() => onClose()}>
+          Cancel
+        </Button>
       </Grid>
     </>
   );

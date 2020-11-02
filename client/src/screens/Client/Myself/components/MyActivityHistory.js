@@ -132,7 +132,9 @@ export default function MyActivityHistory(props) {
                       component="th"
                       scope="row"
                       className={classes.patientLink}
-                      onClick={() => history.push(`/patient/${row.patient_id}`)}
+                      onClick={() =>
+                        history.push(`/patients/${row.patient_id}`)
+                      }
                     >
                       {row.patient_id}
                     </TableCell>
@@ -140,7 +142,9 @@ export default function MyActivityHistory(props) {
                       component="th"
                       scope="row"
                       className={classes.patientLink}
-                      onClick={() => history.push(`/patient/${row.patient_id}`)}
+                      onClick={() =>
+                        history.push(`/patients/${row.patient_id}`)
+                      }
                     >
                       {row.patient}
                     </TableCell>

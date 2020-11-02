@@ -31,12 +31,12 @@ export default function EncountersContent(props) {
 
             <Grid className={classes.inputRow}>
               <Typography className={classes.text12} color="textPrimary">
-              Payment Plan:
+              Treatment Plan:
               </Typography>
               <Typography className={classes.text12} color="textPrimary">
-                {item.payment_plan
-                  ? item.payment_plan
-                  : "No payment plan found..."}
+                {item.treatment
+                  ? item.treatment
+                  : "No treatment found..."}
               </Typography>
             </Grid>
 

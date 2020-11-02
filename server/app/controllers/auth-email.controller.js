@@ -1,4 +1,4 @@
-/*** Documentation:
+/** * Documentation:
 
  * To make this token a one-time-use token, I encourage you to
  * use the patient’s current password hash in conjunction with
@@ -13,13 +13,14 @@
  * has changed their password, it will generate a new password hash
  * invalidating the secret key that references the old password
  * Reference: https://www.smashingmagazine.com/2017/11/safe-password-resets-with-json-web-tokens/
- **/
-"use strict";
+ * */
+
 const jwt = require("jsonwebtoken");
 const moment = require("moment");
-const { configuration, makeDb } = require("../db/db.js");
 const { validationResult } = require("express-validator");
 const sgMail = require("@sendgrid/mail");
+const { configuration, makeDb } = require("../db/db.js");
+
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const { errorMessage, successMessage, status } = require("../helpers/status");
@@ -38,7 +39,7 @@ const {
 const usePasswordHashToMakeToken = (user) => {
   const passwordHash = user.password;
   const userId = user.id;
-  const secret = passwordHash + "-" + user.created;
+  const secret = `${passwordHash}-${user.created}`;
   const token = jwt.sign({ userId }, secret, {
     expiresIn: 3600, // 1 hour
   });
@@ -61,15 +62,15 @@ exports.verifyConfirmation = async (req, res) => {
 
   const db = makeDb(configuration, res);
   try {
-    //Check if user is already verified
+    // Check if user is already verified
     const userRows = await db.query(
       "SELECT id, token, email_confirm_dt FROM user WHERE id = ?",
       [req.params.userId]
     );
 
-    let user = userRows[0];
+    const user = userRows[0];
     if (user) {
-      //Check if user is already confirmed his/her email
+      // Check if user is already confirmed his/her email
       if (user.email_confirm_dt && !user.token) {
         successMessage.message = "User is already verified!";
         successMessage.data = user;
@@ -77,20 +78,20 @@ exports.verifyConfirmation = async (req, res) => {
       }
       // update email_confirm_dt if it's null and remove token
       const now = moment().format("YYYY-MM-DD HH:mm:ss");
-      const userUpdate = await db.query(
+      await db.query(
         `UPDATE user SET email_confirm_dt='${now}', token=null WHERE id = ?`,
         [req.params.userId]
       );
+
       user.email_confirm_dt = now;
       successMessage.data = user;
       successMessage.message = "Your Email address successfully verified!";
       return res.status(status.success).send(successMessage);
-    } else {
-      // Couldn't find the record
-      errorMessage.message =
-        "Couldn't find the record. Validation link might be broken. Check your email address";
-      return res.status(status.notfound).send(errorMessage);
     }
+    // Couldn't find the record
+    errorMessage.message =
+      "Couldn't find the record. Validation link might be broken. Check your email address";
+    return res.status(status.notfound).send(errorMessage);
   } catch (error) {
     // handle the error
     errorMessage.error = error;
@@ -129,13 +130,13 @@ exports.sendSignupConfirmationEmail = async (req, res) => {
   const url = getEmailVerificationURL(user, accesstToken);
   const emailTemplate = signUpConfirmationTemplate(user, url);
 
-  //update token field on that user table
-  const userUpdate = await db.query(
+  // update token field on that user table
+  await db.query(
     `UPDATE user SET token='${accesstToken}' WHERE id =${user.id}`
   );
 
   // send mail with defined transport object
-  let info = await transporter.sendMail(emailTemplate);
+  const info = await transporter.sendMail(emailTemplate);
 
   console.log("Message sent: %s", info.messageId);
   // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
@@ -162,7 +163,7 @@ exports.resendSignupConfirmationEmail = async (req, res) => {
 
   const db = makeDb(configuration, res);
 
-  //Check where user already signed up or not
+  // Check where user already signed up or not
   const userRows = await db.query(
     "SELECT id, email, firstname, lastname, token, email_confirm_dt, created FROM user WHERE id = ?",
     [req.body.id]
@@ -178,15 +179,18 @@ exports.resendSignupConfirmationEmail = async (req, res) => {
     accesstToken = user.token;
   } else {
     accesstToken = usePasswordHashToMakeToken(user);
-    //update token field on that user table
-    const userUpdate = await db.query(
+    // update token field on that user table
+    await db.query(
       `UPDATE user SET token='${accesstToken}' WHERE id =${user.id}`
     );
   }
   const url = getEmailVerificationURL(user, accesstToken);
   const emailTemplate = signUpConfirmationTemplate(user, url);
   // send mail with defined transport object
-  let info = await transporter.sendMail(emailTemplate);
+  const info = await transporter.sendMail(emailTemplate);
+  if (info) {
+    console.info("Email sent:", info);
+  }
 
   successMessage.message =
     "We have email verification link on your email address!";

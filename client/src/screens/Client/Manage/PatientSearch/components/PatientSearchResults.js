@@ -121,7 +121,7 @@ export default function PatientSearchResults(props) {
                 <TableCell
                   padding="checkbox"
                   className={classes.patientLink}
-                  onClick={() => history.push(`/patient/${result.id}`)}
+                  onClick={() => history.push(`/patients/${result.id}`)}
                   align="center"
                   component="th"
                   scope="row"
@@ -132,7 +132,7 @@ export default function PatientSearchResults(props) {
                   padding="checkbox"
                   className={classes.patientLink}
                   align="center"
-                  onClick={() => history.push(`/patient/${result.id}`)}
+                  onClick={() => history.push(`/patients/${result.id}`)}
                 >
                   {result.firstname}
                 </TableCell>
@@ -140,7 +140,7 @@ export default function PatientSearchResults(props) {
                   padding="checkbox"
                   className={classes.patientLink}
                   align="center"
-                  onClick={() => history.push(`/patient/${result.id}`)}
+                  onClick={() => history.push(`/patients/${result.id}`)}
                 >
                   {result.middlename}
                 </TableCell>
@@ -148,7 +148,7 @@ export default function PatientSearchResults(props) {
                   padding="checkbox"
                   className={classes.patientLink}
                   align="center"
-                  onClick={() => history.push(`/patient/${result.id}`)}
+                  onClick={() => history.push(`/patients/${result.id}`)}
                 >
                   {result.lastname}
                 </TableCell>

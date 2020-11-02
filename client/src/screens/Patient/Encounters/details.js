@@ -8,13 +8,10 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 
-import PatientService from "../../../services/patient.service";
-import { setError, setSuccess } from "../../../store/common/actions";
 import { setEncounter } from "../../../store/patient/actions";
 
 const useStyles = makeStyles((theme) => ({
@@ -64,33 +61,9 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 
 const EncountersDetails = (props) => {
-  const { data, reloadData, toggleEncountersDialog } = props;
+  const { data, toggleEncountersDialog } = props;
   const dispatch = useDispatch();
   const classes = useStyles();
-
-  const onItemDelete = (selectedItem) => {
-    const documentId = selectedItem.id || 1;
-    PatientService.deleteDocument(documentId)
-      .then((response) => {
-        dispatch(setSuccess(`${response.data.message}`));
-        reloadData();
-      })
-      .catch((error) => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        let severity = "error";
-        dispatch(
-          setError({
-            severity: severity,
-            message: resMessage
-          })
-        );
-      });
-  };
 
   const onItemEdit = (selectedItem) => {
     dispatch(setEncounter(selectedItem));
@@ -129,12 +102,6 @@ const EncountersDetails = (props) => {
                   onClick={() => onItemEdit(row)}
                 >
                   <EditIcon fontSize="small" />
-                </IconButton>
-                <IconButton
-                  className={classes.button}
-                  onClick={() => onItemDelete(row)}
-                >
-                  <DeleteIcon fontSize="small" />
                 </IconButton>
               </TableCell>
             </StyledTableRow>

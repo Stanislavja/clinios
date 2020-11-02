@@ -191,7 +191,7 @@ const pages = [
       },
       {
         title: "CPT Codes",
-        href: "/setup/ctp"
+        href: "/setup/ctp-codes"
       },
       {
         title: "Drugs",
@@ -207,7 +207,7 @@ const pages = [
       },
       {
         title: "ICD Codes",
-        href: "/setup/icd"
+        href: "/setup/icd-codes"
       },
       {
         title: "Integrations",
@@ -254,6 +254,7 @@ const Topbar = (props) => {
   const [open, setOpen] = React.useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
+  const [nothingFound, setNothingFound] = useState(false);
   const handleClose = (event) => {
     setOpen(false);
     setSearchTerm("");
@@ -269,6 +270,9 @@ const Topbar = (props) => {
           (response) => {
             const { data } = response;
             setResults(data);
+            if (data.length < 1) {
+              setNothingFound(true);
+            }
           },
           (error) => {
             console.log("search error", error);
@@ -276,6 +280,7 @@ const Topbar = (props) => {
         );
       } else {
         setResults([]);
+        setNothingFound(false);
       }
     },
     // This is the useEffect input array
@@ -355,7 +360,7 @@ const Topbar = (props) => {
                   handleClose={handleClose}
                   results={results}
                   noContent={
-                    !!searchTerm && results.length < 1 && "Nothing found!"
+                    nothingFound && results.length < 1 && "Nothing found!"
                   }
                 />
               )}

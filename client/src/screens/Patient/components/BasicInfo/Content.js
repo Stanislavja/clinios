@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, Typography, Popover } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
 
@@ -11,13 +11,12 @@ import {
   DateDiff
 } from "./../../../../utils/helpers";
 
-
-//service
-
 export default function BasicInfoContent(props) {
   const classes = useStyles();
   const { data, patientId } = props;
   const [nextAppointment, setNextAppointment] = useState(null);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   useEffect(() => {
     const fetchNextAppointment = () => {
@@ -59,8 +58,44 @@ export default function BasicInfoContent(props) {
     return genderString;
   };
 
+  const isEllipsisActive = (event) => {
+    const e = event.target;
+    if (e.scrollWidth > e.clientWidth) {
+      setAnchorEl(e);
+      setShowTooltip(true)
+    }
+  }
+
+  const handleClose = () => {
+    if(showTooltip) {
+      setShowTooltip(false);
+      setAnchorEl(null);
+    }
+  };
+
   return (
     <>
+      <Popover
+        id={"tooltip"}
+        open={showTooltip}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+        classes={{
+          paper: classes.paper,
+        }}
+        className={classes.popover}
+        disableRestoreFocus
+      >
+        {!!showTooltip && (<Typography>{anchorEl.innerText}</Typography>)}
+      </Popover>
       <Grid container className={classes.inputRow}>
         <Typography
           variant="body1"
@@ -73,6 +108,8 @@ export default function BasicInfoContent(props) {
           variant="body1"
           className={`${classes.text12} ${classes.value}`}
           color="textPrimary"
+          onMouseOver={(e) => isEllipsisActive(e)}
+          onMouseOut={() => handleClose()}
         >
           {data.firstname} {data.lastname}
         </Typography>
@@ -90,6 +127,8 @@ export default function BasicInfoContent(props) {
           variant="body1"
           className={`${classes.text12} ${classes.value}`}
           color="textPrimary"
+          onMouseOver={(e) => isEllipsisActive(e)}
+          onMouseOut={() => handleClose()}
         >
           {mapGender(data.gender)}
         </Typography>
@@ -107,6 +146,8 @@ export default function BasicInfoContent(props) {
           variant="body1"
           className={`${classes.text12} ${classes.value}`}
           color="textPrimary"
+          onMouseOver={(e) => isEllipsisActive(e)}
+          onMouseOut={() => handleClose()}
         >
           {moment(data.dob).format("MMM D YYYY")} (Age:&nbsp;
           {calculateAge(data.dob)})
@@ -125,6 +166,8 @@ export default function BasicInfoContent(props) {
           variant="body1"
           className={`${classes.text12} ${classes.value}`}
           color="textPrimary"
+          onMouseOver={(e) => isEllipsisActive(e)}
+          onMouseOut={() => handleClose()}
         >
           {formatPhoneNumber(data.phone_home)}
         </Typography>
@@ -142,6 +185,8 @@ export default function BasicInfoContent(props) {
           variant="body1"
           className={`${classes.text12} ${classes.value}`}
           color="textPrimary"
+          onMouseOver={(e) => isEllipsisActive(e)}
+          onMouseOut={() => handleClose()}
         >
           {formatPhoneNumber(data.phone_cell)}
         </Typography>
@@ -159,6 +204,8 @@ export default function BasicInfoContent(props) {
           variant="body1"
           className={`${classes.text12} ${classes.value}`}
           color="textPrimary"
+          onMouseOver={(e) => isEllipsisActive(e)}
+          onMouseOut={() => handleClose()}
         >
           {data.provider}
         </Typography>
@@ -176,6 +223,8 @@ export default function BasicInfoContent(props) {
           variant="body1"
           className={`${classes.text12} ${classes.value}`}
           color="textPrimary"
+          onMouseOver={(e) => isEllipsisActive(e)}
+          onMouseOut={() => handleClose()}
         >
           {!!nextAppointment
             ? moment(nextAppointment).format("MMM D YYYY")
@@ -199,5 +248,17 @@ const useStyles = makeStyles((theme) => ({
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis"
+  },
+  paper: {
+    padding: theme.spacing(1),
+    maxWidth: 400,
+    wordWrap: "break-word",
+    backgroundColor: theme.palette.common.white,
+    color: "rgba(0, 0, 0, 0.87)",
+    boxShadow: theme.shadows[1],
+    fontSize: 13
+  },
+  popover: {
+    pointerEvents: "none",
   }
 }));

@@ -7,6 +7,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import Typography from "@material-ui/core/Typography";
 import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
@@ -59,7 +60,8 @@ const FormsDetails = (props) => {
         </TableHead>
         <TableBody>
           {!!data &&
-            data.length &&
+            data.length
+            ?
             data.map((row, index) => (
               <StyledTableRow key={`${row.created}_${index}`}>
                 <TableCell component="th" scope="row">
@@ -68,7 +70,16 @@ const FormsDetails = (props) => {
                 <TableCell>{row.form_id || ""}</TableCell>
                 <TableCell>{row.title || ""}</TableCell>
               </StyledTableRow>
-            ))}
+            ))
+            :
+            <StyledTableRow>
+              <TableCell colSpan={3}>
+                <Typography align="center" variant="body1">
+                  No Records Found...
+                </Typography>
+              </TableCell>
+            </StyledTableRow>
+          }
         </TableBody>
       </Table>
     </TableContainer>

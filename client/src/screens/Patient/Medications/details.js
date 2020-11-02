@@ -8,6 +8,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import Typography from "@material-ui/core/Typography";
 import DeleteIcon from "@material-ui/icons/Delete";
 import moment from "moment";
 import { useDispatch } from "react-redux";
@@ -62,13 +63,17 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 
 const MedicationsDetails = (props) => {
-  const { data, reloadData } = props;
+  const { data, patientId, reloadData } = props;
   const dispatch = useDispatch();
   const classes = useStyles();
 
   const onItemDelete = (selectedItem) => {
-    const documentId = selectedItem.id || 1;
-    PatientService.deleteDocument(documentId)
+    const reqBody = {
+      encounter_id: selectedItem.encounterId || 1,
+      drug_id: selectedItem.drugId || 1,
+      drug_strength_id: selectedItem.drugStrengthId || 1
+    }
+    PatientService.deleteMedications(patientId, reqBody)
       .then((response) => {
         dispatch(setSuccess(`${response.data.message}`));
         reloadData();
@@ -105,11 +110,11 @@ const MedicationsDetails = (props) => {
         </TableHead>
         <TableBody>
           {!!data &&
-            data.length &&
+            data.length ?
             data.map((row) => (
               <StyledTableRow key={row.start_dt}>
                 <TableCell component="th" scope="row">
-                  {moment(row.start_dt).format("MMM, D, YYYY")}
+                  {moment(row.start_dt).format("MMM D YYYY")}
                 </TableCell>
                 <TableCell>{row.name}</TableCell>
                 <TableCell>{row.expires}</TableCell>
@@ -125,7 +130,16 @@ const MedicationsDetails = (props) => {
                   </IconButton>
                 </TableCell>
               </StyledTableRow>
-            ))}
+            ))
+            :
+            <StyledTableRow>
+              <TableCell colSpan={6}>
+                <Typography align="center" variant="body1">
+                  No Records Found...
+                </Typography>
+              </TableCell>
+            </StyledTableRow>
+          }
         </TableBody>
       </Table>
     </TableContainer>

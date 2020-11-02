@@ -1,6 +1,7 @@
 const express = require("express");
 const { authJwt } = require("../middlewares");
 const CPTcodes = require("../controllers/cpt.controller");
+
 const router = express.Router();
 
 router.get("/cpt", [authJwt.verifyToken], CPTcodes.getLabCompnayList);

@@ -1,4 +1,3 @@
-"use strict";
 const { validationResult } = require("express-validator");
 const { configuration, makeDb } = require("../db/db.js");
 const { errorMessage, successMessage, status } = require("../helpers/status");
@@ -35,7 +34,7 @@ const update = async (req, res) => {
   }
 
   const db = makeDb(configuration, res);
-  let client = req.body.data;
+  const client = req.body.data;
 
   client.updated = new Date();
 
@@ -59,7 +58,6 @@ const update = async (req, res) => {
     await db.close();
   }
 };
-
 
 const integrations = {
   getIntegrations,

@@ -3,6 +3,7 @@ import React from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -49,6 +50,7 @@ const SearchResults = ({ open, results, noContent, handleClose }) => {
             paddingTop: "20px"
           }}
         >
+          {!noContent && results.length < 1 && <CircularProgress size={20} />}
           {noContent}
         </p>
         <List className={classes.list}>
@@ -57,7 +59,7 @@ const SearchResults = ({ open, results, noContent, handleClose }) => {
               <>
                 <ListItem
                   component={RouterLink}
-                  to={`/patient/${result.id}`}
+                  to={`/patients/${result.id}`}
                   button
                   key={result.id}
                   className={classes.listItem}

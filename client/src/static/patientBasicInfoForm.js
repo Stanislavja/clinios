@@ -1,23 +1,23 @@
 export const BasicInfoForm = {
   firstRow: [
     {
-      name: "firstName",
-      id: "firstName",
+      name: "firstname",
+      id: "firstname",
       label: "First Name",
       baseType: "input",
       type: "text",
       options: []
     },
     {
-      name: "middleName",
-      id: "middleName",
+      name: "middlename",
+      id: "middlename",
       label: "Middle Name",
       baseType: "input",
       type: "text",
       options: []
     },
     {
-      name: "lastName",
+      name: "lastname",
       id: "lastName",
       label: "Last Name",
       baseType: "input",
@@ -45,23 +45,14 @@ export const BasicInfoForm = {
       name: "provider",
       id: "provider",
       label: "Provider",
-      baseType: "select",
-      type: null,
-      options: [
-        {
-          label: "Active",
-          value: "active"
-        },
-        {
-          label: "In-Active",
-          value: "inActive"
-        }
-      ]
+      baseType: "input",
+      type: "text",
+      options: []
     }
   ],
   secondRow: [
     {
-      name: "homePhone",
+      name: "phone_home",
       id: "homePhone",
       label: "Home Phone",
       baseType: "input",
@@ -69,7 +60,7 @@ export const BasicInfoForm = {
       options: []
     },
     {
-      name: "cellPhone",
+      name: "phone_cell",
       id: "cellPhone",
       label: "Cell Phone",
       baseType: "input",
@@ -77,7 +68,7 @@ export const BasicInfoForm = {
       options: []
     },
     {
-      name: "workPhone",
+      name: "phone_work",
       id: "workPhone",
       label: "Work Phone",
       baseType: "input",
@@ -127,16 +118,16 @@ export const BasicInfoForm = {
       options: [
         {
           label: "Male",
-          value: "male"
+          value: "M"
         },
         {
           label: "Female",
-          value: "female"
+          value: "F"
         }
       ]
     },
     {
-      name: "socialSecurity",
+      name: "ssn",
       id: "socialSecurity",
       label: "Social Security",
       baseType: "input",
@@ -207,7 +198,7 @@ export const AddressForm = [
     options: []
   },
   {
-    name: "zip/postal",
+    name: "postal",
     id: "planName",
     label: "Plan Name",
     baseType: "input",

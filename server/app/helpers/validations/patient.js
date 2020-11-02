@@ -1,6 +1,4 @@
-"use strict";
-
-const { body, check, param } = require("express-validator");
+const { check, param } = require("express-validator");
 
 exports.validate = (method) => {
   switch (method) {
@@ -24,16 +22,6 @@ exports.validate = (method) => {
     }
     case "handoutDelete": {
       return [param("id").isInt().withMessage("Must be an integer!")];
-    }
-    case "CreatePatientHandouts": {
-      return [
-        check("data.patient_id")
-          .exists()
-          .withMessage("patient_id can not empty!"),
-        check("data.handout_id")
-          .exists()
-          .withMessage("handout_id can not empty!"),
-      ];
     }
     case "DeletePatientHandouts": {
       return [
@@ -67,5 +55,7 @@ exports.validate = (method) => {
           .withMessage("email status can not empty!"),
       ];
     }
+    default:
+      return false;
   }
 };

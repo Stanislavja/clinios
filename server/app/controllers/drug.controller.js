@@ -1,11 +1,10 @@
-"use strict";
 const { validationResult } = require("express-validator");
 const { configuration, makeDb } = require("../db/db.js");
 const { errorMessage, successMessage, status } = require("../helpers/status");
 
 const search = async (req, res) => {
   const db = makeDb(configuration, res);
-  let { searchTerm, checkBox } = req.body;
+  const { searchTerm, checkBox } = req.body;
   let $sql;
 
   try {
@@ -16,13 +15,13 @@ const search = async (req, res) => {
             left join user u on u.id=cd.updated_user_id
             where 1 \n`;
     if (searchTerm) {
-      $sql = $sql + `and d.name like '${searchTerm}%' \n`;
+      $sql += `and d.name like '${searchTerm}%' \n`;
     }
-    if (checkBox == true) {
-      $sql = $sql + `and cd.favorite = true \n`;
+    if (checkBox === true) {
+      $sql += `and cd.favorite = true \n`;
     }
-    $sql = $sql + `order by d.name \n`;
-    $sql = $sql + `limit 20 \n`;
+    $sql += `order by d.name \n`;
+    $sql += `limit 20 \n`;
 
     const dbResponse = await db.query($sql);
 
@@ -47,14 +46,13 @@ const addFavorite = async (req, res) => {
     return res.status(status.bad).send(errorMessage);
   }
   const db = makeDb(configuration, res);
-  let client_drug = req.body;
-
-  (client_drug.client_id = req.client_id),
-    (client_drug.drug_id = req.body.drug_id),
-    (client_drug.favorite = true),
-    (client_drug.created = new Date());
-  (client_drug.created_user_id = req.user_id),
-    (client_drug.updated = new Date());
+  const client_drug = req.body;
+  client_drug.client_id = req.client_id;
+  client_drug.drug_id = req.body.drug_id;
+  client_drug.favorite = true;
+  client_drug.created = new Date();
+  client_drug.created_user_id = req.user_id;
+  client_drug.updated = new Date();
   client_drug.updated_user_id = req.user_id;
 
   try {

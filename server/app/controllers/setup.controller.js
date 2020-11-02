@@ -1,4 +1,3 @@
-"use strict";
 const fs = require("fs");
 const { configuration, makeDb } = require("../db/db.js");
 const { errorMessage, successMessage, status } = require("../helpers/status");

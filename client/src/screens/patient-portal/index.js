@@ -1,5 +1,6 @@
 export { default as PatientSignUp } from "./auth/Signup";
 export { default as PatientLogin } from "./auth/Login";
+export { default as PatientForgotPassword } from "./auth/ForgotPassword";
 export { default as PatientHome } from "./Home/Home";
 export { default as PatientMessages } from "./Messages";
 export { default as PatientEncounters } from "./Encounters";

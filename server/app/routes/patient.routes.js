@@ -1,12 +1,16 @@
-"use strict";
-
 const express = require("express");
-const { authJwt } = require("../../app/middlewares");
+const { authJwt } = require("../middlewares");
 const Patient = require("../controllers/patient.controller.js");
-const validation = require("./../helpers/validations/patient.js");
+const validation = require("../helpers/validations/patient.js");
+
 const router = express.Router();
 
 router.get("/patient/:patient_id", [authJwt.verifyToken], Patient.getPatient);
+router.put(
+  "/patient/:patient_id",
+  [authJwt.verifyToken],
+  Patient.updatePatient
+);
 router.post(
   "/patient/:patient_id/search",
   [authJwt.verifyToken, validation.validate("search")],
@@ -60,7 +64,7 @@ router.delete(
 router.get("/patient-handout", [authJwt.verifyToken], Patient.patientHandouts);
 router.post(
   "/patient/:patient_id/patient-handout",
-  [authJwt.verifyToken, validation.validate("CreatePatientHandouts")],
+  [authJwt.verifyToken],
   Patient.CreatePatientHandouts
 );
 router.delete(
@@ -69,9 +73,19 @@ router.delete(
   Patient.DeletePatientHandouts
 );
 router.get(
+  "/patient/:patient_id/tran-types",
+  [authJwt.verifyToken],
+  Patient.getTranType
+);
+router.get(
   "/patient/:patient_id/billing",
   [authJwt.verifyToken],
   Patient.getBilling
+);
+router.post(
+  "/patient/:patient_id/billing",
+  [authJwt.verifyToken],
+  Patient.createBilling
 );
 router.get(
   "/patient/:patient_id/allergies",
@@ -118,6 +132,21 @@ router.get(
   [authJwt.verifyToken],
   Patient.getEncounters
 );
+router.post(
+  "/patient/:patient_id/encounters",
+  [authJwt.verifyToken],
+  Patient.createEncounter
+);
+router.put(
+  "/patient/:patient_id/encounters/:id",
+  [authJwt.verifyToken],
+  Patient.updateEncounter
+);
+router.delete(
+  "/patient/:patient_id/encounters/:id",
+  [authJwt.verifyToken],
+  Patient.deleteEncounter
+);
 router.get(
   "/patient/:patient_id/medical-notes/history",
   [authJwt.verifyToken],
@@ -154,12 +183,12 @@ router.get(
   Patient.getDiagnoses
 );
 router.put(
-  "/diagnoses/:encounter_id/:icd_id",
+  "/patient/:patient_id/diagnoses/:icd_id",
   [authJwt.verifyToken],
   Patient.updateDiagnose
 );
 router.delete(
-  "/diagnoses/:encounter_id/:icd_id",
+  "/patient/:patient_id/diagnoses/:icd_id",
   [authJwt.verifyToken],
   Patient.deleteDiagnose
 );
@@ -174,7 +203,7 @@ router.get(
   Patient.getMedications
 );
 router.delete(
-  "/medications/:encounter_id/:drug_id/:drug_strength_id",
+  "/patient/:patient_id/medications/",
   [authJwt.verifyToken],
   Patient.deleteMedications
 );
@@ -205,5 +234,14 @@ router.post(
   [authJwt.verifyToken],
   Patient.saveLayout
 );
+
+router.delete(
+  "/patient-layout/:user_id",
+  [authJwt.verifyToken],
+  Patient.deleteLayout
+);
+
+router.get("/drug/search", [authJwt.verifyToken], Patient.getDrugs);
+router.get("/icd/search", [authJwt.verifyToken], Patient.getIcds);
 
 module.exports = router;

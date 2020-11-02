@@ -1,39 +1,34 @@
 import React, { useState, useEffect } from "react";
 
-import { TextField, Grid, Typography, Button } from "@material-ui/core";
+import {
+  Grid,
+  Typography,
+  Button,
+  List,
+  ListItem,
+  ListItemText
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import _ from "lodash";
 import { useDispatch } from "react-redux";
+import Select from "react-select";
 
+import SelectCustomStyles from "../../../../styles/SelectCustomStyles";
 import PatientService from "./../../../../services/patient.service";
 import { setError, setSuccess } from "./../../../../store/common/actions";
 
 const Diagnoses = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { onClose, patientId } = props;
+  const { onClose, patientId, reloadData } = props;
   const [diagnosis, setDiagnosis] = useState([]);
+  const [selectedDiagnosis, setSelectedDiagnoses] = useState([])
 
   useEffect(() => {
     fetchDiagnosis("");
   }, []);
 
-  const handleInputChnage = (e) => {
-    const { value } = e.target;
-    debouncedSearchDiagnosis(value);
-  };
-
-  const debouncedSearchDiagnosis = _.debounce((query) => {
-    fetchDiagnosis(query);
-  }, 1000);
-
   const fetchDiagnosis = (searchText) => {
-    const reqBody = {
-      data: {
-        text: searchText
-      }
-    };
-    PatientService.searchDiagnosis(reqBody).then((res) => {
+    PatientService.searchICD(searchText).then((res) => {
       setDiagnosis(res.data);
     });
   };
@@ -42,19 +37,20 @@ const Diagnoses = (props) => {
     e.preventDefault();
     const reqBody = {
       data: {
-        patient_id: patientId
+        icd_id: selectedDiagnosis.id
       }
     };
-    PatientService.createDiagnoses(reqBody)
+    PatientService.createDiagnoses(patientId, reqBody)
       .then((response) => {
         dispatch(setSuccess(`${response.data.message}`));
+        reloadData();
         onClose();
       })
       .catch((error) => {
         const resMessage =
           (error.response &&
             error.response.data &&
-            error.response.data.message[0].msg) ||
+            error.response.data.message) ||
           error.message ||
           error.toString();
         let severity = "error";
@@ -78,25 +74,28 @@ const Diagnoses = (props) => {
       <Grid container spacing={1}>
         <Grid item lg={4}>
           <Grid className={`${classes.border} ${classes.height100}`}>
-            <TextField
-              label=""
-              placeholder="Search..."
-              name="search"
-              fullWidth
-              variant="outlined"
-              onChange={(e) => handleInputChnage(e)}
-              size="small"
-              className={classes.heading}
+            <Select
+              value={selectedDiagnosis}
+              options={diagnosis.length ? diagnosis : []}
+              getOptionLabel={(option) => option.name}
+              getOptionValue={(option) => option.id}
+              onChange={(value) => setSelectedDiagnoses(value)}
+              styles={SelectCustomStyles}
+              isClearable={true}
             />
-            {diagnosis.length
-              ? diagnosis.map((item, index) => (
-                <Grid key={index}>
-                  <Typography gutterBottom variant="body1">
-                      Chronic Fatigue (Un-specified)
-                  </Typography>
-                </Grid>
-              ))
-              : null}
+
+            <List component="ul">
+              {diagnosis.map((diagnose) => (
+                <ListItem
+                  onClick={() => setSelectedDiagnoses(diagnose)}
+                  key={diagnose.id}
+                  disableGutters={true}
+                  button
+                >
+                  <ListItemText primary={diagnose.name} />
+                </ListItem>
+              ))}
+            </List>
           </Grid>
         </Grid>
         <Grid item lg={8}>

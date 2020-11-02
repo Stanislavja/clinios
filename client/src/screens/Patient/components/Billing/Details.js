@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 
-import IconButton from "@material-ui/core/IconButton";
+import { Typography } from "@material-ui/core";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -8,12 +8,9 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import DeleteIcon from "@material-ui/icons/Delete";
 import moment from "moment";
-import { useDispatch } from "react-redux";
 
 import PatientService from "../../../../services/patient.service";
-import { setError, setSuccess } from "../../../../store/common/actions";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -21,15 +18,6 @@ const useStyles = makeStyles((theme) => ({
   },
   tableContainer: {
     minWidth: 650
-  },
-  actions: {
-    textAlign: "center",
-    display: "flex",
-    justifyContent: "center",
-    border: "none",
-    "& button": {
-      fontSize: "12px"
-    }
   }
 }));
 
@@ -62,44 +50,21 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 
 const BillingDetails = (props) => {
-  const { reloadData, patientId } = props;
-  const dispatch = useDispatch();
+  const { patientId } = props;
   const classes = useStyles();
   const [billings, setBillings] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchBillings = useCallback(() => {
     PatientService.getBillings(patientId).then((res) => {
       setBillings(res.data);
+      setIsLoading(false);
     });
   }, [patientId]);
 
   useEffect(() => {
     fetchBillings();
   }, [fetchBillings]);
-
-  const onItemDelete = (selectedItem) => {
-    const documentId = selectedItem.id || 1;
-    PatientService.deleteDocument(documentId)
-      .then((response) => {
-        dispatch(setSuccess(`${response.data.message}`));
-        reloadData();
-      })
-      .catch((error) => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        let severity = "error";
-        dispatch(
-          setError({
-            severity: severity,
-            message: resMessage
-          })
-        );
-      });
-  };
 
   return (
     <TableContainer className={classes.tableContainer}>
@@ -110,30 +75,31 @@ const BillingDetails = (props) => {
             <StyledTableCell>Transaction Type</StyledTableCell>
             <StyledTableCell>Encounter Title</StyledTableCell>
             <StyledTableCell>CPT Procedure</StyledTableCell>
-            <StyledTableCell align="center">Actions</StyledTableCell>
+            <StyledTableCell>Notes</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {billings.length &&
-            billings.map((row, index) => (
-              <StyledTableRow key={`${row.dt}_${index}`}>
-                <TableCell component="th" scope="row">
-                  {moment(row.dt).format("MMM, D, YYYY")}
+          {billings.length ?
+            billings.map((item, index) => (
+              <StyledTableRow key={`${item.dt}_${index}`}>
+                <TableCell component="th" scope="item">
+                  {moment(item.dt).format("MMM D YYYY")}
                 </TableCell>
-                <TableCell>{row.tran_type}</TableCell>
-                <TableCell>{row.encounter_title}</TableCell>
-                <TableCell>{row.cpt_procedure || ""}</TableCell>
-
-                <TableCell className={classes.actions}>
-                  <IconButton
-                    className={classes.button}
-                    onClick={() => onItemDelete(row)}
-                  >
-                    <DeleteIcon fontSize="small" />
-                  </IconButton>
-                </TableCell>
+                <TableCell>{item.tran_type}</TableCell>
+                <TableCell>{item.encounter_title}</TableCell>
+                <TableCell>{item.cpt_procedure || ""}</TableCell>
+                <TableCell>{item.note || ""}</TableCell>
               </StyledTableRow>
-            ))}
+            ))
+            :
+            <StyledTableRow>
+              <TableCell colSpan={5}>
+                <Typography align="center" variant="body1">
+                  {isLoading ? "Fetching Records" : "No Records Found..."}
+                </Typography>
+              </TableCell>
+            </StyledTableRow>
+          }
         </TableBody>
       </Table>
     </TableContainer>

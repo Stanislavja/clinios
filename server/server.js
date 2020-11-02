@@ -1,7 +1,7 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const cors = require("cors");
 const config = require("./config.js");
+
 const app = express();
 
 // Add middleware for parsing URL encoded bodies (which are usually sent by browser)
@@ -9,6 +9,7 @@ app.use(cors());
 // Add middleware for parsing JSON and urlencoded data and populating `req.body`
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use("/static", express.static("app"));
 app.set("trust proxy", true);
 
 app.get("/", (req, res) => {
@@ -50,11 +51,16 @@ app.use(baseAPIPath, require("./app/routes/icd.routes"));
 app.use(baseAPIPath, require("./app/routes/message-to-patient.routes"));
 app.use("/api/v1", require("./app/routes/cpt.routes"));
 app.use("/api/v1", require("./app/routes/schedule.routes"));
+app.use(baseAPIPath, require("./app/routes/users.routes"));
+app.use(baseAPIPath, require("./app/routes/accounting-types.routes"));
+app.use(baseAPIPath, require("./app/routes/report-finance-detail.routes"));
+app.use(baseAPIPath, require("./app/routes/patient-portal-header.routes"));
 
-//Patient Portal
+// Patient Portal
 app.use(baseAPIPath, require("./app/routes/patient/signup.routes"));
 app.use(baseAPIPath, require("./app/routes/patient/login.routes"));
 app.use(baseAPIPath, require("./app/routes/patient/home.routes"));
+app.use(baseAPIPath, require("./app/routes/patient/password-reset.routes"));
 
 app.use(baseAPIPath, require("./app/routes/myself.routes"));
 

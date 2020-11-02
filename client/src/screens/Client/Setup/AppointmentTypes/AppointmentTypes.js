@@ -11,8 +11,8 @@ import _ from "lodash";
 import { AuthConsumer } from "./../../../../providers/AuthProvider";
 import AppointmentService from "./../../../../services/appointmentType.service";
 import { Appointments } from "./components";
-import DeleteAppointmentModal from "./components/modal/DeleteAppointment";
-import NewOrEditAppointment from "./components/modal/NewOrEditAppointment";
+import DeleteAppointmentModal from "./components/modal/DeleteAppointmentType";
+import NewOrEditAppointment from "./components/modal/NewOrEditAppointmentType";
 //import Video from "./../../../../components/videos/Video";
 
 const useStyles = makeStyles((theme) => ({
@@ -65,7 +65,7 @@ export default function AppointmentTypes(props) {
     const appointmentById = appointments.filter(
       (appointment) => appointment.id === id
     );
-    if(!!appointmentById) {
+    if (!!appointmentById) {
       setSelectedAppointment(_.head(appointmentById));
     }
   };
@@ -112,7 +112,7 @@ export default function AppointmentTypes(props) {
               </Button>
             </div>
             <Grid container justify="center" spacing={2}>
-              <Grid item md={12} xs={12}> 
+              <Grid item md={12} xs={12}>
                 <Typography component="p" variant="body2" color="textPrimary">
                   This page is used to manage appointment types that are offered
                   to patients

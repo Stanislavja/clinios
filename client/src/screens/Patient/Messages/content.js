@@ -14,7 +14,7 @@ export default function MessagesContent(props) {
       {data.map((item, index) => (
         <Grid key={item.id}>
           <Grid container spacing={1}>
-            <Grid item md={3}>
+            <Grid item md={!!item.user_to_from ? 3 : 4}>
               <Typography
                 component="span"
                 variant="body1"
@@ -32,43 +32,51 @@ export default function MessagesContent(props) {
                 {moment(item.created).format("MMM D YYYY")}
               </Typography>
             </Grid>
-            <Grid item md={3}>
-              <Typography
-                component="span"
-                variant="body1"
-                className={`${classes.text12} ${classes.label}`}
-                color="textPrimary"
-              >
-                From: &nbsp;
-              </Typography>
-              <Typography
-                component="span"
-                variant="body1"
-                className={classes.text12}
-                color="textPrimary"
-              >
-                {item.user_to_from || ""}
-              </Typography>
-            </Grid>
-            <Grid item md={3}>
-              <Typography
-                component="span"
-                variant="body1"
-                className={`${classes.text12} ${classes.label}`}
-                color="textPrimary"
-              >
-                To: &nbsp;
-              </Typography>
-              <Typography
-                component="span"
-                variant="body1"
-                className={classes.text12}
-                color="textPrimary"
-              >
-                {item.user_to_name || ""}
-              </Typography>
-            </Grid>
-            <Grid item md={3}>
+            {
+              !!item.user_to_from && (
+                <Grid item md={!!item.user_to_name ? 3 : 4}>
+                  <Typography
+                    component="span"
+                    variant="body1"
+                    className={`${classes.text12} ${classes.label}`}
+                    color="textPrimary"
+                  >
+                    From: &nbsp;
+                  </Typography>
+                  <Typography
+                    component="span"
+                    variant="body1"
+                    className={classes.text12}
+                    color="textPrimary"
+                  >
+                    {item.user_to_from || ""}
+                  </Typography>
+                </Grid>
+              )
+            }
+            {
+              !!item.user_to_name && (
+                <Grid item md={!!item.user_to_from ? 3 : 4}>
+                  <Typography
+                    component="span"
+                    variant="body1"
+                    className={`${classes.text12} ${classes.label}`}
+                    color="textPrimary"
+                  >
+                    To: &nbsp;
+                  </Typography>
+                  <Typography
+                    component="span"
+                    variant="body1"
+                    className={classes.text12}
+                    color="textPrimary"
+                  >
+                    {item.user_to_name || ""}
+                  </Typography>
+                </Grid>
+              )
+            }
+            <Grid item>
               <Typography
                 component="span"
                 variant="body1"

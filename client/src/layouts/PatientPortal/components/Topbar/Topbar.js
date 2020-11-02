@@ -6,8 +6,6 @@ import Toolbar from "@material-ui/core/Toolbar";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 
-import Logo from "./../../../../assets/client/c1_logo.png";
-
 const useStyles = makeStyles((theme) => ({
   root: {
     boxShadow: "none",
@@ -25,14 +23,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Topbar = (props) => {
-  const { className, onSidebarOpen, ...rest } = props;
+  const { className, onSidebarOpen, user, ...rest } = props;
   const classes = useStyles();
 
   return (
     <AppBar {...rest} className={clsx(classes.root, className)}>
       <Toolbar className={classes.toolbar}>
         <div className={classes.LogoWrapper}>
-          <img src={Logo} alt="Client portal logo" />
+          <img
+            src={
+              process.env.REACT_APP_API_URL +
+              `static/client/c${user.client_id}_logo.png`
+            }
+            alt="Client portal logo"
+          />
         </div>
       </Toolbar>
     </AppBar>

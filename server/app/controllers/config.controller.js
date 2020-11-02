@@ -1,9 +1,9 @@
-"use strict";
-const { configuration, makeDb } = require("../db/db.js");
-const { errorMessage, successMessage, status } = require("../helpers/status");
 const { validationResult } = require("express-validator");
 const multer = require("multer");
 const fs = require("fs");
+const { errorMessage, successMessage, status } = require("../helpers/status");
+const { configuration, makeDb } = require("../db/db.js");
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     console.log("req:", req.body);
@@ -11,21 +11,20 @@ const storage = multer.diskStorage({
     fs.access(dest, function (error) {
       if (error) {
         console.log("Directory does not exist.");
-        return fs.mkdir(dest, (error) => cb(error, dest));
-      } else {
-        console.log("Directory exists.");
-        return cb(null, dest);
+        return fs.mkdir(dest, (err) => cb(err, dest));
       }
+      console.log("Directory exists.");
+      return cb(null, dest);
     });
   },
   filename: (req, file, cb) => {
-    const fileName = "c" + req.params.userId + "_" + "logo" + "." + "png";
+    const fileName = `c${req.params.userId}_logo.png`;
     cb(null, fileName);
   },
 });
 
 const upload = multer({
-  storage: storage,
+  storage,
   limits: { fileSize: 5000000 },
   fileFilter: (req, file, cb) => {
     if (file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
@@ -133,7 +132,7 @@ const update = async (req, res) => {
   }
 
   const db = makeDb(configuration, res);
-  let client = req.body;
+  const client = req.body;
 
   client.updated = new Date();
   client.updated_user_id = req.params.clientId;

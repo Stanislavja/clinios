@@ -7,6 +7,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import Typography from "@material-ui/core/Typography";
 import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
@@ -71,32 +72,42 @@ const TestsContent = (props) => {
             <StyledTableCell>Test</StyledTableCell>
             <StyledTableCell>Last Date</StyledTableCell>
             <StyledTableCell>Last Result</StyledTableCell>
-            <StyledTableCell align="center">Conventional Range</StyledTableCell>
-            <StyledTableCell align="center">Conventional Flag</StyledTableCell>
-            <StyledTableCell>Functional Range</StyledTableCell>
-            <StyledTableCell>Functional Flag</StyledTableCell>
+            <StyledTableCell>Conv Range</StyledTableCell>
+            <StyledTableCell>Conv Flag</StyledTableCell>
+            <StyledTableCell>Func Range</StyledTableCell>
+            <StyledTableCell>Func Flag</StyledTableCell>
             <StyledTableCell>Units</StyledTableCell>
             <StyledTableCell>Count</StyledTableCell>
             <StyledTableCell>Detail</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row) => (
-            <StyledTableRow key={row.name}>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>
-                {row.lab_dt ? moment(row.lab_dt).format("MMM, D, YYYY") : ""}
+          {!!data && data.length ?
+            data.map((row) => (
+              <StyledTableRow key={row.name}>
+                <TableCell>{row.name}</TableCell>
+                <TableCell>
+                  {row.lab_dt ? moment(row.lab_dt).format("MMM D YYYY") : ""}
+                </TableCell>
+                <TableCell>{row.value}</TableCell>
+                <TableCell>{row.physician}</TableCell>
+                <TableCell>{row.physician}</TableCell>
+                <TableCell>{row.physician}</TableCell>
+                <TableCell>{row.physician}</TableCell>
+                <TableCell>{row.unit}</TableCell>
+                <TableCell>{row.count}</TableCell>
+                <TableCell>{row.detail}</TableCell>
+              </StyledTableRow>
+            ))
+            :
+            <StyledTableRow>
+              <TableCell colSpan={10}>
+                <Typography align="center" variant="body1">
+                No Records Found...
+                </Typography>
               </TableCell>
-              <TableCell>{row.value}</TableCell>
-              <TableCell>{row.physician}</TableCell>
-              <TableCell>{row.physician}</TableCell>
-              <TableCell>{row.physician}</TableCell>
-              <TableCell>{row.physician}</TableCell>
-              <TableCell>{row.unit}</TableCell>
-              <TableCell>{row.count}</TableCell>
-              <TableCell>{row.detail}</TableCell>
             </StyledTableRow>
-          ))}
+          }
         </TableBody>
       </Table>
     </TableContainer>

@@ -8,6 +8,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import Typography from "@material-ui/core/Typography";
 import DeleteIcon from "@material-ui/icons/Delete";
 import moment from "moment";
 import { useDispatch } from "react-redux";
@@ -105,27 +106,37 @@ const MessagesDetails = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row, index) => (
-            <StyledTableRow key={`${row.created}_${index}`}>
-              <TableCell component="th" scope="row">
-                {moment(row.created).format("MMM D YYYY")}
-              </TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.subject}</TableCell>
-              <TableCell>{row.message}</TableCell>
-              <TableCell>{row.user_to_from || ""}</TableCell>
-              <TableCell>{row.user_to_name || ""}</TableCell>
+          {!!data && data.length ?
+            data.map((row, index) => (
+              <StyledTableRow key={`${row.created}_${index}`}>
+                <TableCell component="th" scope="row">
+                  {moment(row.created).format("MMM D YYYY")}
+                </TableCell>
+                <TableCell>{row.name}</TableCell>
+                <TableCell>{row.subject}</TableCell>
+                <TableCell>{row.message}</TableCell>
+                <TableCell>{row.user_to_from || ""}</TableCell>
+                <TableCell>{row.user_to_name || ""}</TableCell>
 
-              <TableCell className={classes.actions}>
-                <IconButton
-                  className={classes.button}
-                  onClick={() => onItemDelete(row)}
-                >
-                  <DeleteIcon fontSize="small" />
-                </IconButton>
+                <TableCell className={classes.actions}>
+                  <IconButton
+                    className={classes.button}
+                    onClick={() => onItemDelete(row)}
+                  >
+                    <DeleteIcon fontSize="small" />
+                  </IconButton>
+                </TableCell>
+              </StyledTableRow>
+            ))
+            :
+            <StyledTableRow>
+              <TableCell colSpan={7}>
+                <Typography align="center" variant="body1">
+                No Records Found...
+                </Typography>
               </TableCell>
             </StyledTableRow>
-          ))}
+          }
         </TableBody>
       </Table>
     </TableContainer>

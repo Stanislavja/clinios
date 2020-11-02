@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Grid,
@@ -14,7 +14,9 @@ import {
   TableCell
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import moment from "moment";
 
+import { calculateAge } from "../../../../utils/helpers";
 import CountrySelect from "./../../../../components/common/CountrySelect";
 import RegionSelect from "./../../../../components/common/RegionSelect";
 import {
@@ -24,8 +26,9 @@ import {
   PaymentData
 } from "./../../../../static/patientBasicInfoForm";
 
-export default function BasicInfo() {
+export default function BasicInfo(props) {
   const classes = useStyles();
+  const { formData } = props;
   const FirstRow = BasicInfoForm.firstRow;
   const SecondRow = BasicInfoForm.secondRow;
   const ThirdRow = BasicInfoForm.thirdRow;
@@ -33,24 +36,31 @@ export default function BasicInfo() {
   const [country, setCountry] = useState("");
   const [region, setRegion] = useState("");
   const [basicInfo, setBasicInfo] = useState({
-    firstName: "",
-    middleName: "",
-    lastName: "",
-    status: "",
+    firstname: "",
+    middlename: "",
+    lastname: "",
+    status: "active",
     provider: "",
-    homePhone: "",
-    cellPhone: "",
-    workPhone: "",
+    phone_home: "",
+    phone_cell: "",
+    phone_work: "",
     email: "",
     dob: "",
     otherPhone: "",
     phoneNotes: "",
     gender: "",
-    socialSecurity: "",
+    ssn: "",
     password: "",
+    postal: "",
+    address: "",
+    address2: "",
     city: "",
-    zipPostal: ""
+
   });
+
+  useEffect(() => {
+    setBasicInfo({...formData})
+  }, [formData])
 
   const handleInputChnage = (e) => {
     const { value, name } = e.target;
@@ -86,6 +96,7 @@ export default function BasicInfo() {
                       <TextField
                         label={item.label}
                         name={item.name}
+                        value={basicInfo[item.name]}
                         id={item.id}
                         type={item.type}
                         fullWidth
@@ -93,7 +104,6 @@ export default function BasicInfo() {
                       />
                     ) : (
                       <TextField
-                        // className={classes.select}
                         select
                         placeholder={item.label}
                         label={item.label}
@@ -127,6 +137,7 @@ export default function BasicInfo() {
                       <TextField
                         label={item.label}
                         name={item.name}
+                        value={item.type === "date" ? moment(basicInfo[item.name]).format("YYYY-MM-DD") : basicInfo[item.name]}
                         id={item.id}
                         type={item.type}
                         fullWidth
@@ -134,7 +145,6 @@ export default function BasicInfo() {
                       />
                     ) : (
                       <TextField
-                        // className={classes.select}
                         select
                         placeholder={item.label}
                         label={item.label}
@@ -156,7 +166,7 @@ export default function BasicInfo() {
                   </Grid>
                 ))}
                 <Grid item md={2}>
-                  <Typography>&nbsp;&nbsp;Age: {`22 Years`}</Typography>
+                  <Typography>&nbsp;&nbsp;Age: {calculateAge(basicInfo.dob)}</Typography>
                 </Grid>
               </Grid>
               <Grid container spacing={1} className={classes.inputRow}>
@@ -166,6 +176,7 @@ export default function BasicInfo() {
                       <TextField
                         label={item.label}
                         name={item.name}
+                        value={basicInfo[item.name]}
                         id={item.id}
                         type={item.type}
                         fullWidth
@@ -173,7 +184,6 @@ export default function BasicInfo() {
                       />
                     ) : (
                       <TextField
-                        // className={classes.select}
                         select
                         placeholder={item.label}
                         label={item.label}
@@ -230,6 +240,7 @@ export default function BasicInfo() {
                   <TextField
                     label="Address"
                     name={"address"}
+                    value={basicInfo.address}
                     fullWidth
                     onChange={(e) => handleInputChnage(e)}
                   />
@@ -238,6 +249,7 @@ export default function BasicInfo() {
                   <TextField
                     label="Address Line 2"
                     name={"address2"}
+                    value={basicInfo.address2}
                     fullWidth
                     onChange={(e) => handleInputChnage(e)}
                   />
@@ -246,6 +258,7 @@ export default function BasicInfo() {
                   <TextField
                     label="City"
                     name={"city"}
+                    value={basicInfo.city}
                     fullWidth
                     onChange={(e) => handleInputChnage(e)}
                   />
@@ -254,6 +267,7 @@ export default function BasicInfo() {
                   <TextField
                     label="Zip/Postal"
                     name={"zipPostal"}
+                    value={basicInfo.postal}
                     fullWidth
                     onChange={(e) => handleInputChnage(e)}
                   />

@@ -53,7 +53,7 @@ const WithLeftSidebar = (props) => {
             [classes.shiftContent]: isDesktop
           })}
         >
-          <Topbar onSidebarOpen={handleSidebarOpen} />
+          <Topbar onSidebarOpen={handleSidebarOpen} user={user} />
           <Sidebar
             onClose={handleSidebarClose}
             open={shouldOpenSidebar}

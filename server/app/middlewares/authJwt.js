@@ -1,10 +1,10 @@
-//https://bezkoder.com/node-js-mongodb-auth-jwt/
+// https://bezkoder.com/node-js-mongodb-auth-jwt/
 
 const jwt = require("jsonwebtoken");
-const config = require("./../../config");
+const config = require("../../config");
 
-verifyToken = (req, res, next) => {
-  let token = req.headers["x-access-token"];
+const verifyToken = (req, res, next) => {
+  const token = req.headers["x-access-token"];
 
   if (!token) {
     return res.status(403).send({ message: "No token provided!" });

@@ -8,25 +8,25 @@ import {
   MenuItem
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import moment from "moment";
+import { useDispatch } from "react-redux";
 
 import { TransactionFormFields } from "../../../../static/transactionForm";
+import PatientService from "./../../../../services/patient.service";
+import { setError, setSuccess } from "./../../../../store/common/actions";
 
 const NewTransactionForm = (props) => {
   const classes = useStyles();
-  const { onClose } = props;
+  const dispatch = useDispatch();
+  const { onClose, patientId, reloadData } = props;
 
   const [formFields, setFormFields] = useState({
-    firstName: "",
-    middleName: "",
-    lastName: "",
+    date: "",
     type: "",
     paymentType: "",
-    address1: "",
-    address2: "",
-    country: "",
-    state: "",
-    city: "",
-    zipPostal: ""
+    amount: "",
+    accountNum: "",
+    notes: "",
   });
 
   const handleInputChnage = (e) => {
@@ -36,6 +36,42 @@ const NewTransactionForm = (props) => {
       [name]: value
     });
   };
+
+  const onFormSubmit = (e) => {
+    e.preventDefault();
+    const reqBody = {
+      data: {
+        dt: moment(formFields.date).format("YYYY-MM-DD hh:mm"),
+        type_id: formFields.type,
+        payment_type: formFields.paymentType,
+        amount: formFields.amount,
+        note: formFields.notes
+      }
+    };
+    PatientService.createBilling(patientId, reqBody)
+      .then((response) => {
+        dispatch(setSuccess(`${response.data.message}`));
+        reloadData();
+        onClose();
+      })
+      .catch((error) => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        let severity = "error";
+        dispatch(
+          setError({
+            severity: severity,
+            message: resMessage
+          })
+        );
+      });
+  };
+
+  console.log("######## formFields", formFields)
 
   return (
     <>
@@ -47,7 +83,7 @@ const NewTransactionForm = (props) => {
           Close
         </Button>
       </Grid>
-      <form>
+      <form onSubmit={onFormSubmit}>
         <Grid className={classes.inputRow}>
           {TransactionFormFields.map((item, index) => (
             <Grid
@@ -68,7 +104,9 @@ const NewTransactionForm = (props) => {
                     name={item.name}
                     id={item.id}
                     type={item.type}
+                    required
                     fullWidth
+                    value={formFields[item.name]}
                     onChange={(e) => handleInputChnage(e)}
                   />
                 ) : (
@@ -78,6 +116,7 @@ const NewTransactionForm = (props) => {
                     id={item.id}
                     name={item.name}
                     value={formFields[item.name]}
+                    required
                     fullWidth
                     onChange={(e) => handleInputChnage(e)}
                   >
@@ -93,10 +132,10 @@ const NewTransactionForm = (props) => {
               </Grid>
             </Grid>
           ))}
-          <Grid item lg={2}>
-            <Typography gutterBottom variant="body1" color="textPrimary">
+          <Grid className={classes.formInput} item lg={2}>
+            <label variant="h4" color="textSecondary">
               Notes
-            </Typography>
+            </label>
           </Grid>
           <Grid item md={12}>
             <TextField
@@ -104,7 +143,9 @@ const NewTransactionForm = (props) => {
               name={"notes"}
               id={"notes"}
               type={"text"}
+              required
               fullWidth
+              value={formFields["notes"]}
               onChange={(e) => handleInputChnage(e)}
               multiline={true}
               rows={5}
@@ -113,7 +154,7 @@ const NewTransactionForm = (props) => {
         </Grid>
 
         <Grid container justify="space-between">
-          <Button variant="outlined" onClick={() => onClose()}>
+          <Button variant="outlined" type="submit">
             Save
           </Button>
           <Button variant="outlined" onClick={() => onClose()}>

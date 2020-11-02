@@ -153,7 +153,11 @@ export default function ReportFinance(props) {
               </Button>
               <Grid container justify="center" spacing={2}>
                 <Grid item md={12} xs={12}>
-                  <Reports reports={reports} />
+                  <Reports
+                    reports={reports}
+                    dateFrom={dateFrom}
+                    dateTo={dateTo}
+                  />
                 </Grid>
               </Grid>
             </Container>

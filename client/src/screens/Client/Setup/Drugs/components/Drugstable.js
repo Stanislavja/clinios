@@ -10,7 +10,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  withStyles
+  withStyles,
+  FormControlLabel
 } from "@material-ui/core";
 import { green, grey } from "@material-ui/core/colors";
 import Alert from "@material-ui/lab/Alert";
@@ -19,7 +20,6 @@ import { useDispatch } from "react-redux";
 
 import DrugsService from "../../../../../services/drugs.service";
 import { setSuccess } from "../../../../../store/common/actions";
-
 
 const useStyles = makeStyles((theme) => ({
   tableContainer: {
@@ -155,16 +155,20 @@ const Drugstable = ({ user, result, fetchSearchDrugs }) => {
                   {drug.name}
                 </TableCell>
                 <TableCell padding="checkbox">
-                  <GreenSwitch
-                    size="small"
-                    checked={Boolean(drug.favorite)}
-                    name="switchBox"
-                    onChange={(e) => {
-                      changeHandler(e, drug.id);
-                      setTimeout(() => {
-                        fetchSearchDrugs();
-                      }, 200);
-                    }}
+                  <FormControlLabel
+                    control={
+                      <GreenSwitch
+                        size="small"
+                        checked={Boolean(drug.favorite)}
+                        name="switchBox"
+                        onChange={(e) => {
+                          changeHandler(e, drug.id);
+                          setTimeout(() => {
+                            fetchSearchDrugs();
+                          }, 200);
+                        }}
+                      />
+                    }
                   />
                 </TableCell>
                 <TableCell padding="checkbox">

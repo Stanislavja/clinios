@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 import {
-  TextField,
   Button,
   Grid,
   Typography,
@@ -10,9 +9,10 @@ import {
   ListItemText
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import _ from "lodash";
 import { useDispatch } from "react-redux";
+import Select from "react-select";
 
+import SelectCustomStyles from "../../../../styles/SelectCustomStyles";
 import PatientService from "./../../../../services/patient.service";
 import { setError, setSuccess } from "./../../../../store/common/actions";
 
@@ -20,21 +20,13 @@ import { setError, setSuccess } from "./../../../../store/common/actions";
 const Allergies = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { onClose, patientId } = props;
+  const { onClose, patientId, reloadData } = props;
   const [allergies, setAllergies] = useState([]);
+  const [selectedAllergy, setSelectedAllergy] = useState(null);
 
   useEffect(() => {
     fetchAllergies("");
   }, []);
-
-  const handleInputChange = (e) => {
-    const { value } = e.target;
-    debouncedSearchAllergies(value);
-  };
-
-  const debouncedSearchAllergies = _.debounce((query) => {
-    fetchAllergies(query);
-  }, 1000);
 
   const fetchAllergies = (searchText) => {
     const reqBody = {
@@ -47,16 +39,17 @@ const Allergies = (props) => {
     });
   };
 
-  const createAllergy = () => {
+  const onFormSubmit = (e) => {
+    e.preventDefault();
     const reqBody = {
       data: {
-        patient_id: patientId,
-        drug_id: "1"
+        drug_id: selectedAllergy.id
       }
     };
-    PatientService.createAllergy(reqBody)
+    PatientService.createAllergy(patientId, reqBody)
       .then((response) => {
         dispatch(setSuccess(`${response.data.message}`));
+        reloadData();
         onClose();
       })
       .catch((error) => {
@@ -87,27 +80,45 @@ const Allergies = (props) => {
         </Button>
       </Grid>
       <Grid item lg={4}>
-        <TextField
-          label=""
-          placeholder="Search..."
-          name="search"
-          fullWidth
-          variant="outlined"
-          onChange={(e) => handleInputChange(e)}
-          size="small"
+        <Select
+          value={selectedAllergy}
+          options={allergies.length ? allergies : []}
+          getOptionLabel={(option) => option.name}
+          getOptionValue={(option) => option.id}
+          onChange={(value) => setSelectedAllergy(value)}
+          styles={SelectCustomStyles}
+          isClearable={true}
         />
-
-        <Button variant="outlined" onClick={() => createAllergy()}>
-          Create
-        </Button>
 
         <List component="ul">
           {allergies.map((allergy) => (
-            <ListItem key={allergy.id} button>
+            <ListItem
+              onClick={() => setSelectedAllergy(allergy)}
+              key={allergy.id}
+              disableGutters={true}
+              button
+            >
               <ListItemText primary={allergy.name} />
             </ListItem>
           ))}
         </List>
+      </Grid>
+
+      <Grid
+        className={classes.actionContainer}
+        container
+        justify="space-between"
+      >
+        <Button
+          variant="outlined"
+          onClick={(e) => onFormSubmit(e)}
+          type="submit"
+        >
+          Save
+        </Button>
+        <Button variant="outlined" onClick={() => onClose()}>
+          Cancel
+        </Button>
       </Grid>
     </>
   );

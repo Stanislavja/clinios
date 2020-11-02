@@ -1,18 +1,17 @@
-"use strict";
 const { configuration, makeDb } = require("../db/db.js");
 const { errorMessage, successMessage, status } = require("../helpers/status");
 
-//TODO:: Incomplete code.
+// TODO:: Incomplete code.
 const getAll = async (req, res) => {
   const db = makeDb(configuration, res);
-  let user_id = null;
-  user_id = req.body.data && req.body.data.user_id;
+
+  const user_id = (req.body.data && req.body.data.user_id) || null;
 
   try {
     const dbResponse = await db.query(
       `select functional_range
         from client
-        where id=1
+        where id=${user_id}
       `
     );
 

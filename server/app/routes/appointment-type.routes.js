@@ -1,8 +1,8 @@
-"use strict";
 const express = require("express");
 const { authJwt } = require("../middlewares");
 const AppointmentTypes = require("../controllers/appointment-type.controller.js");
 const fieldValidation = require("../helpers/fieldValidation");
+
 const router = express.Router();
 
 router.get(

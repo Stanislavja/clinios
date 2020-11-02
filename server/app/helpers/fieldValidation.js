@@ -1,5 +1,3 @@
-"use strict";
-
 const { body, check, param } = require("express-validator");
 
 exports.validate = (method) => {
@@ -125,5 +123,7 @@ exports.validate = (method) => {
           .withMessage("Sort order can not empty!"),
       ];
     }
+    default:
+      return false;
   }
 };

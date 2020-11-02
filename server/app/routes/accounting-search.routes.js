@@ -1,7 +1,7 @@
-"use strict";
 const express = require("express");
-const { authJwt } = require("../../app/middlewares");
+const { authJwt } = require("../middlewares");
 const Client = require("../controllers/accounting-search.controller.js");
+
 const router = express.Router();
 
 router.get("/client/accounting", [authJwt.verifyToken], Client.getAll);

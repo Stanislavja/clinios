@@ -1,4 +1,3 @@
-"use strict";
 const { validationResult } = require("express-validator");
 const { configuration, makeDb } = require("../db/db.js");
 const { errorMessage, successMessage, status } = require("../helpers/status");
@@ -15,14 +14,14 @@ const search = async (req, res) => {
             left join user u on u.id=ci.updated_user_id
             where 1 \n`;
     if (searchTerm) {
-      $sql = $sql + `and i.name like '${searchTerm}%' \n`;
+      $sql += `and i.name like '${searchTerm}%' \n`;
     }
-    if (checkBox == true) {
-      $sql = $sql + `and ci.favorite = true \n`;
+    if (checkBox === true) {
+      $sql += `and ci.favorite = true \n`;
     }
 
-    $sql = $sql + `order by i.name \n`;
-    $sql = $sql + `limit 100 \n`;
+    $sql += `order by i.name \n`;
+    $sql += `limit 100 \n`;
 
     const dbResponse = await db.query($sql);
 
@@ -47,13 +46,13 @@ const addFavorite = async (req, res) => {
     return res.status(status.bad).send(errorMessage);
   }
   const db = makeDb(configuration, res);
-  let client_icd = req.body;
-
-  (client_icd.client_id = req.client_id),
-    (client_icd.icd_id = req.body.icd_id),
-    (client_icd.favorite = true),
-    (client_icd.created = new Date());
-  (client_icd.created_user_id = req.user_id), (client_icd.updated = new Date());
+  const client_icd = req.body;
+  client_icd.client_id = req.client_id;
+  client_icd.icd_id = req.body.icd_id;
+  client_icd.favorite = true;
+  client_icd.created = new Date();
+  client_icd.created_user_id = req.user_id;
+  client_icd.updated = new Date();
   client_icd.updated_user_id = req.user_id;
 
   try {

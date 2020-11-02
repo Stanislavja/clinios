@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import { Button, Grid, Typography, Checkbox } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -18,49 +18,62 @@ const HandoutsForm = (props) => {
   const dispatch = useDispatch();
   const { onClose, reloadData, patientId } = props;
   const [allHandouts, setAllHandouts] = useState([]);
+  const [selectedHandout, setSelectedHandout] = useState(null);
+
+  const fetchAllHandouts = useCallback(() => {
+    PatientService.getAllHandouts().then((res) => {
+      setAllHandouts(res.data);
+    });
+  }, []);
 
   useEffect(() => {
     fetchAllHandouts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const fetchAllHandouts = () => {
-    PatientService.getAllHandouts(patientId).then((res) => {
-      setAllHandouts(res.data);
-    });
-  };
+  }, [fetchAllHandouts]);
 
   const createPatientHandoutHandler = () => {
-    const reqBody = {
-      data: {
-        patient_id: patientId,
-        handout_id: 1
-      }
-    };
-    // TODO:: static for the time being - discussion required
-
-    PatientService.createPatientHandout(patientId, reqBody)
-      .then((response) => {
-        dispatch(setSuccess(`${response.data.message}`));
-        reloadData();
-        onClose();
-      })
-      .catch((error) => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        let severity = "error";
-        dispatch(
-          setError({
-            severity: severity,
-            message: resMessage
-          })
-        );
-      });
+    if (!!selectedHandout) {
+      // we don't have the selected row id, so calculating the row id
+      let userSelection = allHandouts.filter(x => x.filename === selectedHandout)
+      const reqBody = {
+        data: {
+          handout_id: userSelection[0].id
+        }
+      };
+      PatientService.createPatientHandout(patientId, reqBody)
+        .then((response) => {
+          dispatch(setSuccess(`${response.data.message}`));
+          reloadData();
+          onClose();
+        })
+        .catch((error) => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          let severity = "error";
+          dispatch(
+            setError({
+              severity: severity,
+              message: resMessage
+            })
+          );
+        });
+    } else {
+      dispatch(
+        setError({
+          severity: "error",
+          message: "Checkbox selection is required"
+        })
+      );
+    }
   };
+
+  const onCheckboxClick = (e) => {
+    const { name } = e.target;
+    setSelectedHandout(name);
+  }
 
   return (
     <>
@@ -75,14 +88,13 @@ const HandoutsForm = (props) => {
               <TableRow key={`${row.created}_${index}`}>
                 <TableCell padding="checkbox">
                   <Checkbox
-                  // indeterminate={numSelected > 0 && numSelected < rowCount}
-                  // checked={rowCount > 0 && numSelected === rowCount}
-                  // onChange={onSelectAllClick}
-                  // inputProps={{ 'aria-label': 'select all desserts' }}
+                    name={row.filename}
+                    checked={selectedHandout === row.filename}
+                    onChange={onCheckboxClick}
                   />
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {moment(row.created).format("MMM, D, YYYY")}
+                  {moment(row.created).format("MMM D YYYY")}
                 </TableCell>
                 <TableCell>{row.filename}</TableCell>
               </TableRow>

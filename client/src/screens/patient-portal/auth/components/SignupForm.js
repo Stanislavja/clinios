@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
+import CheckIcon from "@material-ui/icons/Check";
 import RotateLeftTwoToneIcon from "@material-ui/icons/RotateLeftTwoTone";
 import Alert from "@material-ui/lab/Alert";
 import _ from "lodash";
@@ -37,6 +38,9 @@ const SignupForm = (props) => {
 
   const [termsChecked, setTermsChecked] = useState(true);
   const [signatureRef, setSignatureRef] = useState(null);
+  const [signature, setSignature] = useState(null);
+  console.log("signatureRef:", signatureRef);
+  console.log("signature:", signature);
   const [formFields, setFormFields] = useState({
     firstname: "",
     middlename: "",
@@ -83,6 +87,48 @@ const SignupForm = (props) => {
     signatureRef.clear();
   };
 
+  const dataURItoBlob = (dataURI) => {
+    // convert base64/URLEncoded data component to raw binary data held in a string
+    let byteString;
+    if (dataURI.split(",")[0].indexOf("base64") >= 0)
+      byteString = atob(dataURI.split(",")[1]);
+    else byteString = unescape(dataURI.split(",")[1]);
+
+    // separate out the mime component
+    let mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+
+    // write the bytes of the string to a typed array
+    let ia = new Uint8Array(byteString.length);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+
+    return new Blob([ia], { type: mimeString });
+  };
+
+  const saveSignaturePad = () => {
+    setSignature(signatureRef.getTrimmedCanvas().toDataURL("image/png"));
+
+    const blob = dataURItoBlob(
+      signatureRef.getTrimmedCanvas().toDataURL("image/png")
+    );
+
+    const formData = new FormData();
+    formData.append("canvasImage", blob);
+
+    PatientAuthService.upload({
+      data: {
+        imgBase64: signatureRef.getTrimmedCanvas().toDataURL("image/png")
+      }
+    }).then(
+      (response) => {
+        console.log("response:", response);
+      },
+      (error) => {
+        console.log("error:", error);
+      }
+    );
+  };
   const patientErrors =
     props.errors && props.errors.filter((err) => err.param.includes("patient"));
 
@@ -210,7 +256,8 @@ const SignupForm = (props) => {
         referred_by: formFields.referred_by,
         height: formFields.height,
         waist: formFields.waist,
-        weight: formFields.weigh
+        weight: formFields.weigh,
+        imgBase64: signatureRef.getTrimmedCanvas().toDataURL("image/png")
       }
     };
     onFormSubmit(formData);
@@ -245,7 +292,7 @@ const SignupForm = (props) => {
                   />
                 ) : (
                   <TextField
-                    // className={classes.select}
+                      // className={classes.select}
                     size="small"
                     variant="outlined"
                     select
@@ -357,7 +404,7 @@ const SignupForm = (props) => {
                   <TextField
                     size="small"
                     variant="outlined"
-                    // className={classes.select}
+                      // className={classes.select}
                     select
                     placeholder={item.label}
                     label={item.label}
@@ -538,12 +585,17 @@ const SignupForm = (props) => {
               >
                 <RotateLeftTwoToneIcon />
               </IconButton>
+              <IconButton
+                aria-label="delete"
+                onClick={() => saveSignaturePad()}
+                className={classes.sigCanvasSave}
+              >
+                <CheckIcon />
+              </IconButton>
             </Grid>
-            <Grid item className={classes.sigCanvasActions}>
-              <Button variant="outlined" onClick={() => clearSignaturePad()}>
-                Clear
-              </Button>
-            </Grid>
+            {signature ? (
+              <img alt="signature" className={classes.sigImage} src={signature} />
+            ) : null}
           </Grid>
           <Grid container justify="flex-end" className={classes.signupActions}>
             <Button
@@ -573,9 +625,16 @@ const useStyles = makeStyles((theme) => ({
     background: "#f3f3f3",
     top: "-20px"
   },
-  sigCanvasActions: {
-    padding: "0 15px",
-    display: "none"
+  sigCanvasSave: {
+    position: "absolute",
+    background: "#f3f3f3",
+    top: "30px"
+  },
+  sigImage: {
+    backgroundSize: "200px 50px",
+    width: "200px",
+    height: "50px",
+    backgroundColor: "white"
   },
   signupActions: {
     marginTop: theme.spacing(1),

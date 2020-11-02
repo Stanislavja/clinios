@@ -1,4 +1,3 @@
-"use strict";
 const { validationResult } = require("express-validator");
 const { configuration, makeDb } = require("../db/db.js");
 const { errorMessage, successMessage, status } = require("../helpers/status");
@@ -42,11 +41,10 @@ const create = async (req, res) => {
     return res.status(status.bad).send(errorMessage);
   }
   const db = makeDb(configuration, res);
-  let appointment_type = req.body.data;
-
-  (appointment_type.created_user_id = req.user_id),
-    (appointment_type.client_id = req.client_id),
-    (appointment_type.created = new Date());
+  const appointment_type = req.body.data;
+  appointment_type.created_user_id = req.user_id;
+  appointment_type.client_id = req.client_id;
+  appointment_type.created = new Date();
 
   try {
     const dbResponse = await db.query(
@@ -78,7 +76,7 @@ const update = async (req, res) => {
   }
 
   const db = makeDb(configuration, res);
-  let appointment_type = req.body.data;
+  const appointment_type = req.body.data;
 
   appointment_type.updated = new Date();
   appointment_type.updated_user_id = req.params.userId;

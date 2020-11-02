@@ -8,6 +8,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import Typography from "@material-ui/core/Typography";
 import DeleteIcon from "@material-ui/icons/Delete";
 import moment from "moment";
 import { useDispatch } from "react-redux";
@@ -104,14 +105,14 @@ const RequisitionsDetails = (props) => {
         </TableHead>
         <TableBody>
           {!!data &&
-            data.length &&
+            data.length ?
             data.map((row, index) => (
               <StyledTableRow key={`${row.created}_${index}`}>
                 <TableCell component="th" scope="row">
-                  {moment(row.created).format("MMM, D, YYYY")}
+                  {moment(row.created).format("MMM D YYYY")}
                 </TableCell>
                 <TableCell>{row.id}</TableCell>
-                <TableCell>{row.name || ""}</TableCell>
+                <TableCell>{row.cpt_name || ""}</TableCell>
 
                 <TableCell className={classes.actions}>
                   <IconButton
@@ -122,7 +123,16 @@ const RequisitionsDetails = (props) => {
                   </IconButton>
                 </TableCell>
               </StyledTableRow>
-            ))}
+            ))
+            :
+            <StyledTableRow>
+              <TableCell colSpan={7}>
+                <Typography align="center" variant="body1">
+                No Records Found...
+                </Typography>
+              </TableCell>
+            </StyledTableRow>
+          }
         </TableBody>
       </Table>
     </TableContainer>

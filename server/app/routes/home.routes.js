@@ -1,8 +1,7 @@
-"use strict";
 const express = require("express");
 const { authJwt } = require("../middlewares");
 const homeController = require("../controllers/home.controller.js");
-const fieldValidation = require("../helpers/fieldValidation");
+
 const router = express.Router();
 
 router.get("/appointments", [authJwt.verifyToken], homeController.getAll);

@@ -50,6 +50,7 @@ import Patient from "../screens/Patient";
 import {
   PatientSignUp,
   PatientLogin,
+  PatientForgotPassword,
   PatientHome,
   PatientMessages,
   PatientEncounters,
@@ -65,12 +66,14 @@ import {
   PatientProfile,
   PatientForms
 } from "../screens/patient-portal";
+import PatientResetPassword from "../screens/patient-portal/ResetPassword";
 import ProcessLab from "../screens/ProcessLab";
 import ProcessMessage from "../screens/ProcessMessage";
 import ResetPassword from "../screens/ResetPassword";
 // import UserSignUp from "../screens/Auth/UserSignUp";
 import PrivateRouteWithLayout from "./PrivateRouteWithLayout";
 import RouteWithLayout from "./RouteWithLayout";
+import ReportFinanceDetail from "../screens/Client/Setup/ReportFinanceDetail/index";
 
 const history = createBrowserHistory();
 
@@ -199,6 +202,12 @@ class AppRouter extends Component {
             />
             <PrivateRouteWithLayout
               layout={Dashboard}
+              path="/reports/report-finance-detail/:dateFrom/:dateTo"
+              component={ReportFinanceDetail}
+              exact
+            />
+            <PrivateRouteWithLayout
+              layout={Dashboard}
               path="/setup/integrations"
               component={Integrations}
               exact
@@ -223,7 +232,7 @@ class AppRouter extends Component {
             />
             <PrivateRouteWithLayout
               layout={Dashboard}
-              path="/setup/ctp"
+              path="/setup/ctp-codes"
               component={CTPcodes}
               exact
             />
@@ -247,7 +256,7 @@ class AppRouter extends Component {
             />
             <PrivateRouteWithLayout
               layout={Dashboard}
-              path="/setup/icd"
+              path="/setup/icd-codes"
               component={ICDcodes}
               exact
             />
@@ -315,6 +324,17 @@ class AppRouter extends Component {
               layout={PlainPatientPortal}
               path="/login/:clientCode"
               component={PatientLogin}
+            />
+            <RouteWithLayout
+              layout={PlainPatientPortal}
+              path="/forgot/:clientCode"
+              component={PatientForgotPassword}
+            />
+            <RouteWithLayout
+              layout={PlainPatientPortal}
+              path="/patient/password/reset/:patientId/:token"
+              component={PatientResetPassword}
+              exact
             />
             <PrivateRouteWithLayout
               layout={WithLeftSidebar}

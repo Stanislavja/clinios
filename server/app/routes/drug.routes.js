@@ -1,7 +1,7 @@
-"use strict";
 const express = require("express");
 const { authJwt } = require("../middlewares");
 const Drug = require("../controllers/drug.controller.js");
+
 const router = express.Router();
 
 router.post("/drug", [authJwt.verifyToken], Drug.search);
