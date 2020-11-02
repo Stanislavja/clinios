@@ -77,44 +77,46 @@ const Appointments = ({ appointments, onEdit, onDelete, ...props }) => {
       <Table size="small" className={classes.table} aria-label="a dense table">
         <TableHead>
           <TableRow>
-            <StyledTableCell padding="default">
+            <StyledTableCell padding="checkbox">
               Appointment Type
             </StyledTableCell>
-            <StyledTableCell padding="default">Portal Name</StyledTableCell>
-            <StyledTableCell padding="default">Minutes</StyledTableCell>
-            <StyledTableCell padding="default">
+            <StyledTableCell padding="checkbox">Portal Name</StyledTableCell>
+            <StyledTableCell padding="checkbox">Minutes</StyledTableCell>
+            <StyledTableCell padding="checkbox">
               Patient Schedule
             </StyledTableCell>
-            <StyledTableCell padding="default">Order</StyledTableCell>
-            <StyledTableCell padding="default" align="center">
+            <StyledTableCell padding="checkbox">Order</StyledTableCell>
+            <StyledTableCell padding="checkbox" align="center">
               Note
             </StyledTableCell>
-            <StyledTableCell padding="default">Status</StyledTableCell>
-            <StyledTableCell padding="default">Created</StyledTableCell>
-            <StyledTableCell padding="default">Created By</StyledTableCell>
-            <StyledTableCell padding="default">Updated</StyledTableCell>
-            <StyledTableCell padding="default">Updated By</StyledTableCell>
-            <StyledTableCell /*align="center"*/>Actions</StyledTableCell>
+            <StyledTableCell padding="checkbox">Status</StyledTableCell>
+            <StyledTableCell padding="checkbox">Created</StyledTableCell>
+            <StyledTableCell padding="checkbox">Created By</StyledTableCell>
+            <StyledTableCell padding="checkbox">Updated</StyledTableCell>
+            <StyledTableCell padding="checkbox">Updated By</StyledTableCell>
+            <StyledTableCell /*align="center"*/ padding="checkbox">
+              Actions
+            </StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {appointments.map((appointment) => (
             <StyledTableRow key={appointment.id}>
-              <TableCell padding="default" component="th" scope="row">
+              <TableCell padding="checkbox" component="th" scope="row">
                 {appointment.appointment_type}
               </TableCell>
-              <TableCell padding="default">
+              <TableCell padding="checkbox">
                 {appointment.appointment_name_portal}
               </TableCell>
-              <TableCell padding="default">{appointment.length}</TableCell>
-              <TableCell padding="default">
+              <TableCell padding="checkbox">{appointment.length}</TableCell>
+              <TableCell padding="checkbox">
                 {appointment.allow_patients_schedule ? "Yes" : "No"}
               </TableCell>
-              <TableCell padding="default">{appointment.sort_order}</TableCell>
+              <TableCell padding="checkbox">{appointment.sort_order}</TableCell>
               {appointment.note && appointment.note.length > 0 ? (
                 <LightTooltip title={appointment.note}>
                   <TableCell
-                    padding="default"
+                    padding="checkbox"
                     className={classes.overflowControl}
                     align="center"
                   >
@@ -123,31 +125,31 @@ const Appointments = ({ appointments, onEdit, onDelete, ...props }) => {
                 </LightTooltip>
               ) : (
                 <TableCell
-                  padding="default"
+                  padding="checkbox"
                   className={classes.overflowControl}
                   align="center"
                 >
                   {appointment.note || ""}
                 </TableCell>
               )}
-              <TableCell padding="default">
+              <TableCell padding="checkbox">
                 {appointment.active ? "Active" : "-"}
               </TableCell>
-              <TableCell padding="default">
+              <TableCell padding="checkbox">
                 {moment(appointment.created).format("lll")}
               </TableCell>
-              <TableCell padding="default">
+              <TableCell padding="checkbox">
                 {appointment.created_user}
               </TableCell>
-              <TableCell padding="default">
+              <TableCell padding="checkbox">
                 {appointment.updated
                   ? moment(appointment.updated).format("lll")
                   : "-"}
               </TableCell>
-              <TableCell padding="default">
+              <TableCell padding="checkbox">
                 {appointment.updated_user || "-"}
               </TableCell>
-              <TableCell padding="default" className={classes.actions}>
+              <TableCell padding="checkbox" className={classes.actions}>
                 <IconButton
                   aria-label="edit"
                   className={classes.margin}

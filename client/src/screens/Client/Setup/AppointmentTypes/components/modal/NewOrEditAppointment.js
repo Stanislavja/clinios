@@ -201,7 +201,7 @@ const NewOrEditAppointment = ({
 
   return (
     <div>
-      <Dialog 
+      <Dialog
         open={isOpen}
         onClose={onClose}
         aria-labelledby="alert-dialog-title"
@@ -339,9 +339,6 @@ const NewOrEditAppointment = ({
               component="div"
               className={`${classes.formControl} ${classes.textArea}`}
             >
-              {/* <FormLabel component="p" className={classes.formLabel}>
-                Note
-              </FormLabel> */}
               <TextField
                 fullWidth
                 variant="outlined"
