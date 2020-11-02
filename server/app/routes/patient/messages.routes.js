@@ -9,6 +9,11 @@ router.get(
   [authJwt.verifyToken],
   messagesController.getAllMessages
 );
+router.post(
+  "/client-portal/messages",
+  [authJwt.verifyToken],
+  messagesController.createMessage
+);
 router.put(
   "/client-portal/messages/:messageId",
   [authJwt.verifyToken],

@@ -37,18 +37,45 @@ const getAllMessages = async (req, res) => {
   }
 };
 
+const createMessage = async (req, res) => {
+  const { user_id_to } = req.body.data;
+  const db = makeDb(configuration, res);
+  try {
+    const insertResponse = await db.query(
+      `insert into message (client_id, user_id_to, patient_id_from, status, created) values (${req.client_id}, ${user_id_to}, ${req.user_id}, 'O', now())`
+    );
+    if (!insertResponse.affectedRows) {
+      errorMessage.error = "Insert not successful";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = insertResponse;
+    successMessage.message = "Insert successful";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.error = "Insert not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const updateMessage = async (req, res) => {
   const { messageId } = req.params;
+  let { msgStatus } = req.body.data;
+  const { user_id_to, subject, message } = req.body.data;
 
   const db = makeDb(configuration, res);
 
+  if (typeof msgStatus !== "undefined") {
+    msgStatus = `'${msgStatus}'`;
+  } else {
+    msgStatus = null;
+  }
+
   try {
-    let $sql = `update message
-      set read_dt=now()
-      where client_id=${req.client_id}
-      and patient_id_to=${req.user_id}
-      and read_dt is null 
-      and id=${messageId}`;
+    $sql = `update message set user_id_to=${user_id_to}, subject='${subject}', message='${message}', status=${msgStatus}, read_dt=now() `;
+    $sql += `, updated=now(), updated_user_id=${req.user_id} where id=${messageId}`;
 
     const updateResponse = await db.query($sql);
 
@@ -95,6 +122,7 @@ const getSingelMessage = async (req, res) => {
 
 const Support = {
   getAllMessages,
+  createMessage,
   updateMessage,
   getSingelMessage,
 };
