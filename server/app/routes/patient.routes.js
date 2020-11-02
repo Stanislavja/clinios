@@ -6,6 +6,11 @@ const validation = require("../helpers/validations/patient.js");
 const router = express.Router();
 
 router.get("/patient/:patient_id", [authJwt.verifyToken], Patient.getPatient);
+router.put(
+  "/patient/:patient_id",
+  [authJwt.verifyToken],
+  Patient.updatePatient
+);
 router.post(
   "/patient/:patient_id/search",
   [authJwt.verifyToken, validation.validate("search")],
@@ -126,6 +131,11 @@ router.get(
   "/patient/:patient_id/encounters",
   [authJwt.verifyToken],
   Patient.getEncounters
+);
+router.post(
+  "/patient/:patient_id/encounters",
+  [authJwt.verifyToken],
+  Patient.createEncounter
 );
 router.put(
   "/patient/:patient_id/encounters/:id",
