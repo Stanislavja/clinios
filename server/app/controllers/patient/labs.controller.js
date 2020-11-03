@@ -1,12 +1,12 @@
-const { configuration, makeDb } = require("./../../db/db.js");
+const { configuration, makeDb } = require("../../db/db.js");
 const {
   errorMessage,
   successMessage,
   status,
-} = require("./../../helpers/status");
+} = require("../../helpers/status");
 
 const getAlllabs = async (req, res) => {
-  let { tab } = req.query;
+  const { tab } = req.query;
   const db = makeDb(configuration, res);
 
   let $sql;
@@ -47,14 +47,8 @@ const getAlllabs = async (req, res) => {
   }
 };
 
-const updateLab = async (req, res) => {
-  successMessage.data = dbResponse;
-  return res.status(status.created).send(successMessage);
-};
-
 const Handouts = {
   getAlllabs,
-  updateLab,
 };
 
 module.exports = Handouts;

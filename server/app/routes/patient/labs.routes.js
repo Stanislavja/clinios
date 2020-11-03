@@ -10,10 +10,4 @@ router.get(
   lanbsController.getAlllabs
 );
 
-router.put(
-  "/client-portal/labs/:labId",
-  [authJwt.verifyToken],
-  lanbsController.updateLab
-);
-
 module.exports = router;
