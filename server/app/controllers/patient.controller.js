@@ -1694,11 +1694,12 @@ const getRequisitions = async (req, res) => {
 
 const createRequisitions = async (req, res) => {
   const { patient_id } = req.params;
-  const { cpt_id } = req.body.data;
+  const { cpt_id, encounter_id } = req.body.data;
   const db = makeDb(configuration, res);
   try {
     const insertResponse = await db.query(
-      `insert into patient_cpt (client_id, patient_id, cpt_id, created, created_user_id) values (${req.client_id}, ${patient_id}, '${cpt_id}', now(), ${req.user_id})`
+      `insert into patient_cpt (encounter_id, cpt_id, client_id, patient_id, created, created_user_id) 
+      values ('${encounter_id}', '${cpt_id}', ${req.client_id}, ${patient_id}, now(), ${req.user_id})`
     );
 
     if (!insertResponse.affectedRows) {
