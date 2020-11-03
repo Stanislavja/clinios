@@ -9,6 +9,7 @@ router.get(
   [authJwt.verifyToken],
   lanbsController.getAlllabs
 );
+
 router.put(
   "/client-portal/labs/:labId",
   [authJwt.verifyToken],
