@@ -941,8 +941,6 @@ const getDocuments = async (req, res) => {
   const { patient_id } = req.params;
   const { tab } = req.query;
 
-  console.log("tab:", tab);
-  console.log('tab == "Imaging"', tab === "Imaging");
   try {
     let $sql;
 
