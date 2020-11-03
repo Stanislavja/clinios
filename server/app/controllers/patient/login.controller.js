@@ -1,9 +1,7 @@
-"use strict";
-
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const moment = require("moment");
-const config = require("./../../../config");
+const config = require("../../../config");
 const { configuration, makeDb } = require("../../db/db.js");
 const {
   errorMessage,
@@ -42,7 +40,7 @@ exports.signin = async (req, res) => {
     return res.status(status.unauthorized).send(errorMessage);
   }
 
-  //TODO:: if password not correct, and more than 20 times, then lock for 5 minutes, and print message "Account locked for 5 minutes"
+  // TODO:: if password not correct, and more than 20 times, then lock for 5 minutes, and print message "Account locked for 5 minutes"
   if (patient.status !== "A") {
     errorMessage.message = "Patient portal status is not active";
     return res.status(status.error).send(errorMessage);
@@ -58,7 +56,7 @@ exports.signin = async (req, res) => {
     config.authSecret,
     {
       expiresIn: 86400, // 24 hours
-      //expiresIn: 5 * 60, // 2minutes
+      // expiresIn: 5 * 60, // 2minutes
     }
   );
 

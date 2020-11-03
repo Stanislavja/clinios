@@ -1,10 +1,9 @@
-"use strict";
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const moment = require("moment");
-const { configuration, makeDb } = require("../../db/db.js");
 const { validationResult } = require("express-validator");
 const sgMail = require("@sendgrid/mail");
+const { configuration, makeDb } = require("../../db/db.js");
+
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const {
@@ -29,7 +28,7 @@ const { usePasswordHashToMakeToken } = require("../../helpers/password-helper");
  */
 exports.sendPasswordResetEmail = async (req, res) => {
   const db = makeDb(configuration, res);
-  //Check where user already signed up or not
+  // Check where user already signed up or not
   const { email } = req.params;
   const data = req.body.patient;
 
@@ -79,33 +78,32 @@ const sendRecoveryEmail = async (user, res) => {
   const emailTemplate = resetPasswordTemplate(user, url);
 
   if (process.env.NODE_ENV === "development") {
-    let info = await transporter.sendMail(emailTemplate);
+    const info = await transporter.sendMail(emailTemplate);
     successMessage.message =
       "We have sent an email with instructions to reset your credentionals.";
     return res.status(status.success).send(successMessage);
-  } else {
-    console.log("process.env.SENDGRID_API_KEY", process.env.SENDGRID_API_KEY);
-    sgMail.send(emailTemplate).then(
-      (info) => {
-        console.log(`** Email sent **`, info);
-        return res.status(200).json({
-          status: "success",
-          message:
-            "We have sent an email with instructions to reset your credentionals.",
-        });
-      },
-      (error) => {
-        console.error(error);
-        if (error.response) {
-          console.error("error.response.body:", error.response.body);
-        }
-        return res.status(500).json({
-          status: "error",
-          message: "Something went wrong while sending an reset email.",
-        });
-      }
-    );
   }
+  console.log("process.env.SENDGRID_API_KEY", process.env.SENDGRID_API_KEY);
+  sgMail.send(emailTemplate).then(
+    (info) => {
+      console.log(`** Email sent **`, info);
+      return res.status(200).json({
+        status: "success",
+        message:
+          "We have sent an email with instructions to reset your credentionals.",
+      });
+    },
+    (error) => {
+      console.error(error);
+      if (error.response) {
+        console.error("error.response.body:", error.response.body);
+      }
+      return res.status(500).json({
+        status: "error",
+        message: "Something went wrong while sending an reset email.",
+      });
+    }
+  );
 };
 
 /**
@@ -126,13 +124,13 @@ exports.receiveNewPassword = async (req, res) => {
   const { patientId, token } = req.params;
   const { password } = req.body;
 
-  //find patient with reset_password_token AND patientId
-  //check token expires validity
+  // find patient with reset_password_token AND patientId
+  // check token expires validity
   const now = moment().format("YYYY-MM-DD HH:mm:ss");
   const patientRows = await db.query(
     `SELECT id, email, client_id, reset_password_token, reset_password_expires FROM patient WHERE id=${patientId} AND reset_password_token='${token}' AND reset_password_expires > '${now}'`
   );
-  let patient = patientRows[0];
+  const patient = patientRows[0];
 
   if (!patient) {
     errorMessage.message = "Patient not found";
@@ -143,7 +141,7 @@ exports.receiveNewPassword = async (req, res) => {
   const client = await db.query(
     `SELECT id, name, code from client WHERE id=${patient.client_id}`
   );
-  //if all set then accept new password
+  // if all set then accept new password
   const hashedPassword = bcrypt.hashSync(password, 8);
 
   const updatePatientResponse = await db.query(

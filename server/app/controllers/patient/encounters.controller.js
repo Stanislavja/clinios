@@ -1,9 +1,9 @@
-const { configuration, makeDb } = require("./../../db/db.js");
+const { configuration, makeDb } = require("../../db/db.js");
 const {
   errorMessage,
   successMessage,
   status,
-} = require("./../../helpers/status");
+} = require("../../helpers/status");
 
 const getAllencounters = async (req, res) => {
   const db = makeDb(configuration, res);
@@ -39,7 +39,7 @@ const updateEncounter = async (req, res) => {
   const db = makeDb(configuration, res);
 
   try {
-    $sql = `update encounter
+    const $sql = `update encounter
     set read_dt=now(), updated=now(), updated_user_id=${req.user_id}
     where client_id=${req.client_id}
     and patient_id=${req.user_id}

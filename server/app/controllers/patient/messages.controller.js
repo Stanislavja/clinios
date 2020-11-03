@@ -1,9 +1,9 @@
-const { configuration, makeDb } = require("./../../db/db.js");
+const { configuration, makeDb } = require("../../db/db.js");
 const {
   errorMessage,
   successMessage,
   status,
-} = require("./../../helpers/status");
+} = require("../../helpers/status");
 
 const getAllMessages = async (req, res) => {
   const db = makeDb(configuration, res);
@@ -74,7 +74,7 @@ const updateMessage = async (req, res) => {
   }
 
   try {
-    $sql = `update message set user_id_to=${user_id_to}, subject='${subject}', message='${message}', status=${msgStatus}, read_dt=now() `;
+    let $sql = `update message set user_id_to=${user_id_to}, subject='${subject}', message='${message}', status=${msgStatus}, read_dt=now() `;
     $sql += `, updated=now(), updated_user_id=${req.user_id} where id=${messageId}`;
 
     const updateResponse = await db.query($sql);
