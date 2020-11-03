@@ -47,9 +47,7 @@ exports.signin = async (req, res) => {
   }
 
   const now = moment().format("YYYY-MM-DD HH:mm:ss");
-  const patientUpdate = await db.query(
-    `update patient set login_dt='${now}' where id=${patient.id}`
-  );
+  await db.query(`update patient set login_dt='${now}' where id=${patient.id}`);
 
   const token = jwt.sign(
     { id: patient.id, client_id: patient.client_id },

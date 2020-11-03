@@ -20,6 +20,55 @@ const {
 const { usePasswordHashToMakeToken } = require("../../helpers/password-helper");
 
 /**
+ * Calling this function with a user will send email with URL
+ * @param {object} user
+ * @param {object} res
+ * @returns {object} response
+ */
+
+const sendRecoveryEmail = async (user, res) => {
+  const accesstToken = usePasswordHashToMakeToken(user);
+  const url = getPasswordResetURL(user, "patient", accesstToken);
+  const emailTemplate = resetPasswordTemplate(user, url);
+
+  if (process.env.NODE_ENV === "development") {
+    transporter.sendMail(emailTemplate, (err, info) => {
+      if (err) {
+        console.log(`Error occurred. ${err.message}`);
+        errorMessage.error = err.message;
+        return res.status(status.error).send(errorMessage);
+      }
+
+      successMessage.message =
+        "We have sent an email with instructions to reset your credentionals.";
+      successMessage.data = info;
+      return res.status(status.success).send(successMessage);
+    });
+  } else {
+    sgMail.send(emailTemplate).then(
+      (info) => {
+        console.log(`** Email sent **`, info);
+        return res.status(200).json({
+          status: "success",
+          message:
+            "We have sent an email with instructions to reset your credentionals.",
+        });
+      },
+      (error) => {
+        console.error(error);
+        if (error.response) {
+          console.error("error.response.body:", error.response.body);
+        }
+        return res.status(500).json({
+          status: "error",
+          message: "Something went wrong while sending an reset email.",
+        });
+      }
+    );
+  }
+};
+
+/**
  * Send password reset email
  * Calling this function with a user's email sends an email URL to reset password
  * @param {object} req
@@ -63,47 +112,6 @@ exports.sendPasswordResetEmail = async (req, res) => {
       sendRecoveryEmail(patient, res);
     }
   }
-};
-
-/**
- * Calling this function with a user will send email with URL
- * @param {object} user
- * @param {object} res
- * @returns {object} response
- */
-
-const sendRecoveryEmail = async (user, res) => {
-  const accesstToken = usePasswordHashToMakeToken(user);
-  const url = getPasswordResetURL(user, "patient", accesstToken);
-  const emailTemplate = resetPasswordTemplate(user, url);
-
-  if (process.env.NODE_ENV === "development") {
-    const info = await transporter.sendMail(emailTemplate);
-    successMessage.message =
-      "We have sent an email with instructions to reset your credentionals.";
-    return res.status(status.success).send(successMessage);
-  }
-  console.log("process.env.SENDGRID_API_KEY", process.env.SENDGRID_API_KEY);
-  sgMail.send(emailTemplate).then(
-    (info) => {
-      console.log(`** Email sent **`, info);
-      return res.status(200).json({
-        status: "success",
-        message:
-          "We have sent an email with instructions to reset your credentionals.",
-      });
-    },
-    (error) => {
-      console.error(error);
-      if (error.response) {
-        console.error("error.response.body:", error.response.body);
-      }
-      return res.status(500).json({
-        status: "error",
-        message: "Something went wrong while sending an reset email.",
-      });
-    }
-  );
 };
 
 /**
