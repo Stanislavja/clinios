@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { Grid, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
 
 import PatientService from "../../../services/patient.service";
 import { setError, setSuccess } from "../../../store/common/actions";
@@ -11,6 +11,10 @@ import { setEditorText, resetEditorText } from "../../../store/patient/actions";
 const MedicalNotes = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const currentEditorText = useSelector(
+    (state) => state.patient.editorText,
+    shallowEqual
+  );
   const { onClose, reloadData, patientId } = props;
   const [oldMedicalNote, setOldMedicalNote] = useState("");
   const [medicalNote, setMedicalNote] = useState("");
@@ -68,9 +72,9 @@ const MedicalNotes = (props) => {
             type="text"
             fullWidth
             onChange={(e) => {
-              dispatch(setEditorText(e.target.value));
               setMedicalNote(e.target.value);
             }}
+            onBlur={() => currentEditorText !== medicalNote && dispatch(setEditorText(medicalNote))}
             multiline={true}
             rows={6}
             autoFocus={true}

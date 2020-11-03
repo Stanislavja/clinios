@@ -70,7 +70,7 @@ const AllergiesDetails = (props) => {
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  const onItemDelete = (selectedItem) => {
+  const deleteItemHandler = (selectedItem) => {
     const allergyId = selectedItem.drug_id;
     PatientService.deleteAllergy(patientId, allergyId)
       .then((response) => {
@@ -118,7 +118,7 @@ const AllergiesDetails = (props) => {
                 <TableCell className={classes.actions}>
                   <IconButton
                     className={classes.button}
-                    onClick={() => onItemDelete(row)}
+                    onClick={() => deleteItemHandler(row)}
                   >
                     <DeleteIcon fontSize="small" />
                   </IconButton>
