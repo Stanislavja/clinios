@@ -264,6 +264,12 @@ class Patient {
     });
   }
 
+  createEncounter(patient_id, data) {
+    return axios.post(API_BASE + `/patient/${patient_id}/encounters`, data, {
+      headers: authHeader()
+    });
+  }
+
   //delete methods
   deleteMessages(patient_id, id) {
     return axios.delete(API_BASE + `/patient/${patient_id}/messages/${id}`, {
