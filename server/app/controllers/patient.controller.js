@@ -218,8 +218,9 @@ const updatePatient = async (req, res) => {
     }
     $sql += `, updated='${moment().format(
       "YYYY-MM-DD HH:mm:ss"
-    )}', updated_user_id=${req.user_id} where user_id=${req.user_id
-      } and id=${patient_id}`;
+    )}', updated_user_id=${req.user_id} where user_id=${
+      req.user_id
+    } and id=${patient_id}`;
 
     const updateResponse = await db.query($sql);
     if (!updateResponse.affectedRows) {
@@ -1240,8 +1241,9 @@ const updateEncounter = async (req, res) => {
 
     $sql += `, updated='${moment().format(
       "YYYY-MM-DD HH:mm:ss"
-    )}', updated_user_id=${req.user_id
-      } where patient_id=${patient_id} and id=${id}`;
+    )}', updated_user_id=${
+      req.user_id
+    } where patient_id=${patient_id} and id=${id}`;
 
     const updateResponse = await db.query($sql);
     if (!updateResponse.affectedRows) {
@@ -1719,12 +1721,9 @@ const deleteRequisitions = async (req, res) => {
   const { encounter_id, cpt_id } = req.params;
   const db = makeDb(configuration, res);
   try {
-    const deleteResponse = await db.query(`
-       delete from
-        patient_cpt
-        where encounter_id=${encounter_id}
-        and cpt_id=${cpt_id}
-    `);
+    const deleteResponse = await db.query(
+      `delete from patient_cpt where encounter_id=${encounter_id} and cpt_id='${cpt_id}'`
+    );
 
     if (!deleteResponse.affectedRows) {
       errorMessage.error = "Deletion not successful";
