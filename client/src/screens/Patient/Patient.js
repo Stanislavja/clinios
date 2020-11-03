@@ -1111,6 +1111,7 @@ export default function Patient() {
               data={encounters}
               onClose={toggleEncountersExpandDialog}
               toggleEncountersDialog={toggleEncountersDialog}
+              reloadData={fetchEncounters}
             />
           }
           applyForm={() => toggleEncountersExpandDialog()}
