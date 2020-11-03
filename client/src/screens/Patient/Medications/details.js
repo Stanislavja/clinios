@@ -67,7 +67,7 @@ const MedicationsDetails = (props) => {
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  const onItemDelete = (selectedItem) => {
+  const deleteItemHandler = (selectedItem) => {
     const reqBody = {
       encounter_id: selectedItem.encounterId || 1,
       drug_id: selectedItem.drugId || 1,
@@ -124,7 +124,7 @@ const MedicationsDetails = (props) => {
                 <TableCell className={classes.actions}>
                   <IconButton
                     className={classes.button}
-                    onClick={() => onItemDelete(row)}
+                    onClick={() => deleteItemHandler(row)}
                   >
                     <DeleteIcon fontSize="small" />
                   </IconButton>

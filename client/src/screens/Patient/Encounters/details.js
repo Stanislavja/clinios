@@ -73,7 +73,7 @@ const EncountersDetails = (props) => {
     toggleEncountersDialog();
   };
 
-  const onItemDelete = (selectedItem) => {
+  const deleteItemHandler = (selectedItem) => {
     const encounterId = selectedItem.id;
     PatientService.deleteEncounter(patientId, encounterId)
       .then((response) => {
@@ -132,7 +132,7 @@ const EncountersDetails = (props) => {
                 </IconButton>
                 <IconButton
                   className={classes.button}
-                  onClick={() => onItemDelete(row)}
+                  onClick={() => deleteItemHandler(row)}
                 >
                   <DeleteIcon fontSize="small" />
                 </IconButton>
