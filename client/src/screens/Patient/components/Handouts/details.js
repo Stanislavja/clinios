@@ -67,7 +67,7 @@ const HandoutsDetails = (props) => {
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  const onItemDelete = (selectedItem) => {
+  const deleteItemHandler = (selectedItem) => {
     const handoutId = selectedItem.handout_id;
     PatientService.deleteHandout(patientId, handoutId)
       .then((response) => {
@@ -115,7 +115,7 @@ const HandoutsDetails = (props) => {
                 <TableCell className={classes.actions}>
                   <IconButton
                     className={classes.button}
-                    onClick={() => onItemDelete(row)}
+                    onClick={() => deleteItemHandler(row)}
                   >
                     <DeleteIcon fontSize="small" />
                   </IconButton>

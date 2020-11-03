@@ -218,9 +218,8 @@ const updatePatient = async (req, res) => {
     }
     $sql += `, updated='${moment().format(
       "YYYY-MM-DD HH:mm:ss"
-    )}', updated_user_id=${req.user_id} where user_id=${
-      req.user_id
-    } and id=${patient_id}`;
+    )}', updated_user_id=${req.user_id} where user_id=${req.user_id
+      } and id=${patient_id}`;
 
     const updateResponse = await db.query($sql);
     if (!updateResponse.affectedRows) {
@@ -1123,7 +1122,7 @@ const getEncounters = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select e.dt, e.title, et.name encounter_type, concat(u.firstname, ' ', u.lastname) name, notes, treatment
+      `select e.dt, e.id, e.title, et.name encounter_type, concat(u.firstname, ' ', u.lastname) name, notes, treatment
       from encounter e 
       left join encounter_type et on et.id=e.type_id
       left join user u on u.id=e.user_id
@@ -1229,7 +1228,7 @@ const updateEncounter = async (req, res) => {
       $sql += `, dt='${moment(dt).format("YYYY-MM-DD HH:mm:ss")}'`;
     }
     if (typeof type_id !== "undefined") {
-      $sql += `, type_id=${type_id}`;
+      $sql += `, type_id='${type_id}'`;
     }
     if (typeof read_dt !== "undefined") {
       $sql += `, read_dt='${moment(read_dt).format("YYYY-MM-DD HH:mm:ss")}'`;
@@ -1241,9 +1240,8 @@ const updateEncounter = async (req, res) => {
 
     $sql += `, updated='${moment().format(
       "YYYY-MM-DD HH:mm:ss"
-    )}', updated_user_id=${
-      req.user_id
-    } where patient_id=${patient_id} and id=${id}`;
+    )}', updated_user_id=${req.user_id
+      } where patient_id=${patient_id} and id=${id}`;
 
     const updateResponse = await db.query($sql);
     if (!updateResponse.affectedRows) {

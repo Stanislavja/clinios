@@ -67,7 +67,7 @@ const DiagnosesDetails = (props) => {
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  const onItemDelete = (selectedItem) => {
+  const deleteItemHandler = (selectedItem) => {
     const icdId = selectedItem.icd_id;
     PatientService.deleteDiagnoses(patientId, icdId)
       .then((response) => {
@@ -116,7 +116,7 @@ const DiagnosesDetails = (props) => {
                 <TableCell className={classes.actions}>
                   <IconButton
                     className={classes.button}
-                    onClick={() => onItemDelete(row)}
+                    onClick={() => deleteItemHandler(row)}
                   >
                     <DeleteIcon fontSize="small" />
                   </IconButton>
