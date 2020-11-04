@@ -8,6 +8,7 @@
     "simple-import-sort", "import"
   ],
   "extends": [
+    "airbnb",
     "airbnb/hooks",
     "plugin:mdx/recommended"
   ],
@@ -68,6 +69,7 @@
         "allowTemplateLiterals": true
       }
     ],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "no-console": 1
   }
 }
