@@ -270,6 +270,12 @@ class Patient {
     });
   }
 
+  createRequisition(patient_id, data) {
+    return axios.post(API_BASE + `/patient/${patient_id}/requisitions`, data, {
+      headers: authHeader()
+    });
+  }
+
   //delete methods
   deleteMessages(patient_id, id) {
     return axios.delete(API_BASE + `/patient/${patient_id}/messages/${id}`, {
@@ -343,7 +349,7 @@ class Patient {
 
   deleteRequisitions(encounter_id, cpt_id) {
     return axios.delete(
-      API_BASE + `/patient/requisitions/${encounter_id}/${cpt_id}`,
+      API_BASE + `/requisitions/${encounter_id}/${cpt_id}`,
       {
         headers: authHeader()
       }

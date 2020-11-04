@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import {
-  TextField,
   Button,
   Grid,
   Typography,
@@ -10,27 +9,42 @@ import {
   Radio,
   FormControl,
   FormControlLabel,
-  FormLabel
+  FormLabel,
+  List,
+  ListItem,
+  ListItemText
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { useDispatch } from "react-redux";
+import Select from "react-select";
 
+import PatientService from "../../../services/patient.service";
 import {
   BillSelectionFields,
   LabortoriesSelectionFields,
   FavoritesSelectionFields
 } from "../../../static/requisitionform";
+import { setError, setSuccess } from "../../../store/common/actions";
+import SelectCustomStyles from "../../../styles/SelectCustomStyles";
 
 const Requisitions = (props) => {
   const classes = useStyles();
-  const { onClose } = props;
-  const [searchText, setSearchText] = useState("");
+  const dispatch = useDispatch();
+  const { onClose, patientId, reloadData } = props;
   const [billSelection, setBillSelection] = useState("physician");
   const [labsSelection, setLabsSelection] = useState("");
+  const [tests, setTests] = useState([]);
+  const [selectedTest, setSelectedTest] = useState([])
 
-  const handleSearchInputChnage = (e) => {
-    const { value } = e.target;
-    setSearchText(value);
-  };
+  const fetchTests = useCallback(() => {
+    PatientService.getTests(patientId).then((res) => {
+      setTests(res.data);
+    });
+  }, [patientId]);
+
+  useEffect(() => {
+    fetchTests();
+  }, [fetchTests]);
 
   const handleBillSelection = (e) => {
     setBillSelection(e.target.value);
@@ -38,6 +52,36 @@ const Requisitions = (props) => {
 
   const handleLabortoriesSelection = (e) => {
     setLabsSelection(e.target.checked);
+  };
+
+  const onFormSubmit = () => {
+    const reqBody = {
+      data: {
+        cpt_id: selectedTest.cpt_id,
+        encounter_id: 1 //hard coded for the time being: discussion required
+      }
+    };
+    PatientService.createRequisition(patientId, reqBody)
+      .then((response) => {
+        dispatch(setSuccess(`${response.data.message}`));
+        reloadData();
+        onClose();
+      })
+      .catch((error) => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        let severity = "error";
+        dispatch(
+          setError({
+            severity: severity,
+            message: resMessage
+          })
+        );
+      });
   };
 
   return (
@@ -99,27 +143,31 @@ const Requisitions = (props) => {
         </Grid>
         <Grid item lg={3}>
           <Grid item lg={8} className={classes.heading}>
-            <TextField
-              label=""
-              placeholder="Search..."
-              name="search"
-              fullWidth
-              variant="outlined"
-              value={searchText}
-              onChange={(e) => handleSearchInputChnage(e)}
-              size="small"
+            <Select
+              value={selectedTest}
+              options={tests.length ? tests : []}
+              getOptionLabel={(option) => option.name}
+              getOptionValue={(option) => option.id}
+              onChange={(value) => setSelectedTest(value)}
+              styles={SelectCustomStyles}
+              isClearable={true}
+              isLoading={!tests.length}
             />
           </Grid>
-          <Typography gutterBottom variant="h4" color="textSecondary">
-            Recommended
-          </Typography>
-          {[...Array(5)].map((item, index) => (
-            <Grid key={index}>
-              <Typography gutterBottom variant="body1">
-                Exythromycine 25mcg Tablets
-              </Typography>
-            </Grid>
-          ))}
+
+          <List component="ul">
+            {tests.map((medication) => (
+              <ListItem
+                onClick={() => setSelectedTest(medication)}
+                key={medication.id}
+                disableGutters={true}
+                button
+              >
+                <ListItemText primary={medication.name} />
+              </ListItem>
+            ))}
+          </List>
+
         </Grid>
         <Grid item lg={6}>
           <Grid className={`${classes.border} ${classes.height100}`}>
@@ -173,11 +221,11 @@ const Requisitions = (props) => {
           <Button
             variant="outlined"
             className={classes.mr2}
-            onClick={() => onClose()}
+            onClick={() => onFormSubmit()}
           >
             Complete
           </Button>
-          <Button variant="outlined" onClick={() => onClose()}>
+          <Button variant="outlined" onClick={() => onFormSubmit()}>
             Complete and Fax
           </Button>
         </Grid>

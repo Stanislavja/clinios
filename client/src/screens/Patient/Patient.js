@@ -1247,7 +1247,13 @@ export default function Patient() {
         <Dialog
           open={showRequisitionDialog}
           title={" "}
-          message={<RequisitionsForm onClose={toggleRequisitionDialog} />}
+          message={
+            <RequisitionsForm
+              onClose={toggleRequisitionDialog}
+              reloadData={fetchRequisitions}
+              patientId={patient_id}
+            />
+          }
           applyForm={() => toggleRequisitionDialog()}
           cancelForm={() => toggleRequisitionDialog()}
           hideActions={true}
@@ -1264,6 +1270,7 @@ export default function Patient() {
               data={requisitions}
               onClose={toggleRequisitionExpandDialog}
               patientId={patient_id}
+              reloadData={fetchRequisitions}
             />
           }
           applyForm={() => toggleRequisitionExpandDialog()}
