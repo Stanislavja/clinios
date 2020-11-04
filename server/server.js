@@ -66,6 +66,7 @@ app.use(baseAPIPath, require("./app/routes/patient/encounters.routes"));
 app.use(baseAPIPath, require("./app/routes/patient/handouts.routes"));
 app.use(baseAPIPath, require("./app/routes/patient/labs.routes"));
 app.use(baseAPIPath, require("./app/routes/patient/profile.routes"));
+app.use(baseAPIPath, require("./app/routes/patient/pharmacy.routes"));
 
 app.use(baseAPIPath, require("./app/routes/myself.routes"));
 
