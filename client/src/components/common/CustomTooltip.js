@@ -11,4 +11,4 @@ const CustomTooltip = withStyles((theme) => ({
 }))(Tooltip);
 
 
-export default CustomTooltip
+export default CustomTooltip;
