@@ -47,8 +47,8 @@ const getAlllabs = async (req, res) => {
   }
 };
 
-const Handouts = {
+const Labs = {
   getAlllabs,
 };
 
-module.exports = Handouts;
+module.exports = Labs;

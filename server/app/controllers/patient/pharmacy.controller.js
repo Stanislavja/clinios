@@ -64,9 +64,9 @@ const searchPharmacy = async (req, res) => {
   }
 };
 
-const Encounter = {
+const Pharmacy = {
   getPharmacy,
   searchPharmacy,
 };
 
-module.exports = Encounter;
+module.exports = Pharmacy;

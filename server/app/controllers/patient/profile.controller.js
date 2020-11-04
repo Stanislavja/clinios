@@ -191,11 +191,8 @@ const updatePatient = async (req, res) => {
     patientData.created = new Date();
     patientData.created_user_id = req.user_id;
 
-    const logIntoPatientHistory = await db.query(
-      "insert into patient_history set ?",
-      patientData
-    );
-    console.log("logIntoPatientHistory info:", logIntoPatientHistory);
+    // Log into patient_history
+    await db.query("insert into patient_history set ?", patientData);
 
     successMessage.data = updateResponse;
     successMessage.message = "Update successful";

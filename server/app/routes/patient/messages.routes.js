@@ -22,7 +22,7 @@ router.put(
 router.get(
   "/client-portal/messages/:messageId",
   [authJwt.verifyToken],
-  messagesController.getSingelMessage
+  messagesController.getSingleMessage
 );
 
 module.exports = router;

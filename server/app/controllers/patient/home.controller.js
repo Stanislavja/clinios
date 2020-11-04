@@ -89,10 +89,10 @@ const getUpcomingAppointments = async (req, res) => {
   }
 };
 
-const Support = {
+const Home = {
   getClientPortalHeader,
   getClientPortalForms,
   getUpcomingAppointments,
 };
 
-module.exports = Support;
+module.exports = Home;

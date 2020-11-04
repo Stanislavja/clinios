@@ -5,18 +5,15 @@ const {
   status,
 } = require("../../helpers/status");
 
-const getAllergy = async (req, res) => {
+const getPaymentMethods = async (req, res) => {
   const db = makeDb(configuration, res);
 
   let $sql;
   try {
-    $sql = `select pa.created, d.name
-    from patient_allergy pa
-    left join drug d on d.id=pa.drug_id
-    where pa.client_id=${req.client_id}
-    and pa.patient_id=${req.user_id}
-    order by d.name
-    limit 100`;
+    $sql = `select * ?
+    from patient_card
+    where patient_id=${req.user_id}
+    order by id`;
 
     const dbResponse = await db.query($sql);
 
@@ -34,8 +31,8 @@ const getAllergy = async (req, res) => {
   }
 };
 
-const Allergy = {
-  getAllergy,
+const PaymentMethod = {
+  getPaymentMethods,
 };
 
-module.exports = Allergy;
+module.exports = PaymentMethod;
