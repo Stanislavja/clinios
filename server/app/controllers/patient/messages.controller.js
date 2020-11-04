@@ -96,7 +96,7 @@ const updateMessage = async (req, res) => {
   }
 };
 
-const getSingelMessage = async (req, res) => {
+const getSingleMessage = async (req, res) => {
   const db = makeDb(configuration, res);
   let $sql;
   try {
@@ -120,11 +120,11 @@ const getSingelMessage = async (req, res) => {
   }
 };
 
-const Support = {
+const Messages = {
   getAllMessages,
   createMessage,
   updateMessage,
-  getSingelMessage,
+  getSingleMessage,
 };
 
-module.exports = Support;
+module.exports = Messages;
