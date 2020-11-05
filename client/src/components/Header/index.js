@@ -12,9 +12,9 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { useDispatch } from "react-redux";
 import { Link as RouterLink } from "react-router-dom";
 
+import Logo from "../../assets/img/Logo.png";
+import { AuthConsumer } from "../../providers/AuthProvider";
 import { logOut } from "../../store/auth/actions";
-import Logo from "./../../assets/img/Logo.png";
-import { AuthConsumer } from "./../../providers/AuthProvider";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -22,35 +22,35 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#ffffff",
     "& button": {
       color: orange[800],
-      backgroundColor: grey[200]
-    }
+      backgroundColor: grey[200],
+    },
   },
   toolbar: {
     flexWrap: "wrap",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   toolbarTitle: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   Logo: {
-    maxWidth: "180px"
+    maxWidth: "180px",
   },
   navItems: {
     listStyle: "none",
     textDecoration: "none",
     "& a": {
       textDecoration: "none",
-      color: "#1d1d1d"
-    }
+      color: "#1d1d1d",
+    },
   },
   link: {
     marginRight: theme.spacing(2),
     textDecoration: "none",
-    fontSize: "16px"
+    fontSize: "16px",
   },
   signOutButton: {
-    marginLeft: theme.spacing(1)
-  }
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 const Header = ({ ...props }) => {
@@ -79,7 +79,7 @@ const Header = ({ ...props }) => {
             <Hidden mdDown>
               <div className={classes.navItems}>
                 {isAuth ? (
-                  <React.Fragment>
+                  <>
                     <IconButton
                       className={classes.signOutButton}
                       color="inherit"
@@ -87,16 +87,16 @@ const Header = ({ ...props }) => {
                     >
                       <InputIcon />
                     </IconButton>
-                  </React.Fragment>
+                  </>
                 ) : (
-                  <React.Fragment>
+                  <>
                     <RouterLink to="/signup_client" className={classes.link}>
                       Sign Up
                     </RouterLink>
                     <RouterLink to="/login_client" className={classes.link}>
                       Login
                     </RouterLink>
-                  </React.Fragment>
+                  </>
                 )}
               </div>
             </Hidden>
