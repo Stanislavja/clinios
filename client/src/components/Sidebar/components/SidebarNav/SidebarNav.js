@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   item: {
     display: "flex",
     paddingTop: 0,
-    paddingBottom: 0,
+    paddingBottom: 0
   },
   button: {
     color: blueGrey[800],
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     textTransform: "none",
     letterSpacing: 0,
     width: "100%",
-    fontWeight: theme.typography.fontWeightMedium,
+    fontWeight: theme.typography.fontWeightMedium
   },
   icon: {
     color: theme.palette.icon,
@@ -31,15 +31,15 @@ const useStyles = makeStyles((theme) => ({
     height: 24,
     display: "flex",
     alignItems: "center",
-    marginRight: theme.spacing(1),
+    marginRight: theme.spacing(1)
   },
   active: {
     color: theme.palette.primary.main,
     fontWeight: theme.typography.fontWeightMedium,
     "& $icon": {
-      color: theme.palette.primary.main,
-    },
-  },
+      color: theme.palette.primary.main
+    }
+  }
 }));
 
 const CustomRouterLink = forwardRef((props, ref) => (
@@ -80,9 +80,9 @@ SidebarNav.propTypes = {
     PropTypes.shape({
       title: PropTypes.string,
       href: PropTypes.string,
-      icon: PropTypes.string,
-    }),
-  ).isRequired,
+      icon: PropTypes.string
+    })
+  ).isRequired
 };
 
 export default SidebarNav;

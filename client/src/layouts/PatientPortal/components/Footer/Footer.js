@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#fafafa",
     [theme.breakpoints.up("sm")]: {
       paddingTop: theme.spacing(1),
-      paddingBottom: theme.spacing(1)
-    }
+      paddingBottom: theme.spacing(1),
+    },
   },
   footerText: {
     color: theme.palette.secondary.main,
@@ -28,9 +28,9 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
     "& p": {
-      color: theme.palette.secondary.main
-    }
-  }
+      color: theme.palette.secondary.main,
+    },
+  },
 }));
 
 export default function Footer() {
@@ -39,7 +39,9 @@ export default function Footer() {
     <Container component="footer" maxWidth={false} className={classes.footer}>
       <Box mt={5} className={classes.footerText}>
         <Typography variant="body2" color="textPrimary" align="center">
-          {"Copyright © "} {new Date().getFullYear()}
+          {"Copyright © "}
+          {" "}
+          {new Date().getFullYear()}
           {" Clinios"}
         </Typography>
       </Box>

@@ -6,10 +6,10 @@ import Toolbar from "@material-ui/core/Toolbar";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     boxShadow: "none",
-    backgroundColor: "#FFFFFF"
+    backgroundColor: "#FFFFFF",
   },
   LogoWrapper: {
     display: "block",
@@ -17,13 +17,15 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     "& img": {
       width: "auto",
-      height: "65px"
-    }
-  }
+      height: "65px",
+    },
+  },
 }));
 
 const Topbar = (props) => {
-  const { className, onSidebarOpen, user, ...rest } = props;
+  const {
+    className, onSidebarOpen, user, ...rest
+  } = props;
   const classes = useStyles();
 
   return (
@@ -31,10 +33,7 @@ const Topbar = (props) => {
       <Toolbar className={classes.toolbar}>
         <div className={classes.LogoWrapper}>
           <img
-            src={
-              process.env.REACT_APP_API_URL +
-              `static/client/c${user.client_id}_logo.png`
-            }
+            src={`${process.env.REACT_APP_API_URL}static/client/c${user.client_id}_logo.png`}
             alt="Client portal logo"
           />
         </div>
@@ -43,9 +42,15 @@ const Topbar = (props) => {
   );
 };
 
+Topbar.defaultProps = {
+  className: null,
+  onSidebarOpen: () => {},
+};
+
 Topbar.propTypes = {
   className: PropTypes.string,
-  onSidebarOpen: PropTypes.func
+  onSidebarOpen: PropTypes.func,
+  user: PropTypes.objectOf(PropTypes.object).isRequired,
 };
 
 export default Topbar;
