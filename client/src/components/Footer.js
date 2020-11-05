@@ -15,9 +15,9 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(1),
     [theme.breakpoints.up("sm")]: {
       paddingTop: theme.spacing(1),
-      paddingBottom: theme.spacing(1)
-    }
-  }
+      paddingBottom: theme.spacing(1),
+    },
+  },
 }));
 
 export default function Footer() {
@@ -26,7 +26,9 @@ export default function Footer() {
     <Container component="footer" maxWidth={false} className={classes.footer}>
       <Box mt={5}>
         <Typography variant="body2" color="textSecondary" align="center">
-          {"Copyright © "} {new Date().getFullYear()}
+          {"Copyright © "}
+          {" "}
+          {new Date().getFullYear()}
           {" Clinios"}
         </Typography>
       </Box>
