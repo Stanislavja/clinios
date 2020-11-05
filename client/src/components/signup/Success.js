@@ -9,7 +9,7 @@ import { useSelector, useDispatch, shallowEqual } from "react-redux";
 
 import EmailService from "../../services/email.service";
 import { setSuccess } from "../../store/common/actions";
-import Dimmer from "./../common/Dimmer";
+import Dimmer from "../common/Dimmer";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -18,9 +18,9 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     "& p": {
       fontSize: "16px",
-      lineHeight: "24px"
-    }
-  }
+      lineHeight: "24px",
+    },
+  },
 }));
 
 const Success = () => {
@@ -41,7 +41,7 @@ const Success = () => {
       (error) => {
         setErrors(error.response);
         console.log("error.response", error.response);
-      }
+      },
     );
   };
 
