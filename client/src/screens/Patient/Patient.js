@@ -1087,7 +1087,13 @@ export default function Patient() {
         <Dialog
           open={showEncountersDialog}
           title={" "}
-          message={<EncountersForm onClose={toggleEncountersDialog} />}
+          message={
+            <EncountersForm
+              patientId={patient_id}
+              reloadData={fetchEncounters}
+              onClose={toggleEncountersDialog}
+            />
+          }
           applyForm={() => toggleEncountersDialog()}
           cancelForm={() => toggleEncountersDialog()}
           hideActions={true}
@@ -1101,9 +1107,11 @@ export default function Patient() {
           title={" "}
           message={
             <EncountersDetails
+              patientId={patient_id}
               data={encounters}
               onClose={toggleEncountersExpandDialog}
               toggleEncountersDialog={toggleEncountersDialog}
+              reloadData={fetchEncounters}
             />
           }
           applyForm={() => toggleEncountersExpandDialog()}

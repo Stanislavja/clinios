@@ -67,7 +67,7 @@ const MessagesDetails = (props) => {
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  const onItemDelete = (selectedItem) => {
+  const deleteItemHandler = (selectedItem) => {
     const messageId = selectedItem.id;
     PatientService.deleteMessages(patientId, messageId)
       .then((response) => {
@@ -121,7 +121,7 @@ const MessagesDetails = (props) => {
                 <TableCell className={classes.actions}>
                   <IconButton
                     className={classes.button}
-                    onClick={() => onItemDelete(row)}
+                    onClick={() => deleteItemHandler(row)}
                   >
                     <DeleteIcon fontSize="small" />
                   </IconButton>
@@ -132,7 +132,7 @@ const MessagesDetails = (props) => {
             <StyledTableRow>
               <TableCell colSpan={7}>
                 <Typography align="center" variant="body1">
-                No Records Found...
+                  No Records Found...
                 </Typography>
               </TableCell>
             </StyledTableRow>

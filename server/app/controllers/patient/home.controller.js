@@ -1,10 +1,9 @@
-"use strict";
-const { configuration, makeDb } = require("./../../db/db.js");
+const { configuration, makeDb } = require("../../db/db.js");
 const {
   errorMessage,
   successMessage,
   status,
-} = require("./../../helpers/status");
+} = require("../../helpers/status");
 
 const getClientPortalHeader = async (req, res) => {
   const db = makeDb(configuration, res);
@@ -90,10 +89,10 @@ const getUpcomingAppointments = async (req, res) => {
   }
 };
 
-const Support = {
+const Home = {
   getClientPortalHeader,
   getClientPortalForms,
   getUpcomingAppointments,
 };
 
-module.exports = Support;
+module.exports = Home;

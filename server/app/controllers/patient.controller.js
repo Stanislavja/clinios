@@ -941,8 +941,6 @@ const getDocuments = async (req, res) => {
   const { patient_id } = req.params;
   const { tab } = req.query;
 
-  console.log("tab:", tab);
-  console.log('tab == "Imaging"', tab === "Imaging");
   try {
     let $sql;
 
@@ -1123,7 +1121,7 @@ const getEncounters = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select e.dt, e.title, et.name encounter_type, concat(u.firstname, ' ', u.lastname) name, notes, treatment
+      `select e.dt, e.id, e.title, et.name encounter_type, concat(u.firstname, ' ', u.lastname) name, notes, treatment
       from encounter e 
       left join encounter_type et on et.id=e.type_id
       left join user u on u.id=e.user_id
@@ -1229,7 +1227,7 @@ const updateEncounter = async (req, res) => {
       $sql += `, dt='${moment(dt).format("YYYY-MM-DD HH:mm:ss")}'`;
     }
     if (typeof type_id !== "undefined") {
-      $sql += `, type_id=${type_id}`;
+      $sql += `, type_id='${type_id}'`;
     }
     if (typeof read_dt !== "undefined") {
       $sql += `, read_dt='${moment(read_dt).format("YYYY-MM-DD HH:mm:ss")}'`;
@@ -1663,7 +1661,7 @@ const deleteMedications = async (req, res) => {
 };
 const getRequisitions = async (req, res) => {
   const db = makeDb(configuration, res);
-  const { encounter_id } = req.params;
+  const { encounter_id } = req.query;
 
   try {
     const dbResponse = await db.query(
@@ -1694,11 +1692,12 @@ const getRequisitions = async (req, res) => {
 
 const createRequisitions = async (req, res) => {
   const { patient_id } = req.params;
-  const { cpt_id } = req.body.data;
+  const { cpt_id, encounter_id } = req.body.data;
   const db = makeDb(configuration, res);
   try {
     const insertResponse = await db.query(
-      `insert into patient_cpt (client_id, patient_id, cpt_id, created, created_user_id) values (${req.client_id}, ${patient_id}, '${cpt_id}', now(), ${req.user_id})`
+      `insert into patient_cpt (encounter_id, cpt_id, client_id, patient_id, created, created_user_id) 
+      values ('${encounter_id}', '${cpt_id}', ${req.client_id}, ${patient_id}, now(), ${req.user_id})`
     );
 
     if (!insertResponse.affectedRows) {
@@ -1718,15 +1717,12 @@ const createRequisitions = async (req, res) => {
 };
 
 const deleteRequisitions = async (req, res) => {
-  const { encounter_id, cpt_id } = req.params;
+  const { cpt_id, encounter_id } = req.body.data;
   const db = makeDb(configuration, res);
   try {
-    const deleteResponse = await db.query(`
-       delete from
-        patient_cpt
-        where encounter_id=${encounter_id}
-        and cpt_id=${cpt_id}
-    `);
+    const deleteResponse = await db.query(
+      `delete from patient_cpt where encounter_id=${encounter_id} and cpt_id='${cpt_id}'`
+    );
 
     if (!deleteResponse.affectedRows) {
       errorMessage.error = "Deletion not successful";

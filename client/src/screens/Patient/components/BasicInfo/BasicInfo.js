@@ -39,7 +39,7 @@ export default function BasicInfo(props) {
     firstname: "",
     middlename: "",
     lastname: "",
-    status: "active",
+    status: "",
     provider: "",
     phone_home: "",
     phone_cell: "",
@@ -59,7 +59,8 @@ export default function BasicInfo(props) {
   });
 
   useEffect(() => {
-    setBasicInfo({...formData})
+    formData.status = !!formData.status ? formData.status : "active";
+    setBasicInfo({ ...formData })
   }, [formData])
 
   const handleInputChnage = (e) => {

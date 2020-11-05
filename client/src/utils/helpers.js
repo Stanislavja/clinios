@@ -125,3 +125,37 @@ export const statusToColorCode = (status) => {
       return "#2196f3";
   }
 };
+
+export const encounterTypeToLetterConversion = (encounter) => {
+  switch (encounter) {
+    case "Office Visit":
+      return "O";
+    case "Email":
+      return "E";
+    case "Admin Note":
+      return "A";
+    case "Phone Call":
+      return "P";
+    case "Refill":
+      return "R";
+    default:
+      return "";
+  }
+};
+
+export const encounterLetterToTypeConversion = (encounter) => {
+  switch (encounter) {
+    case "O":
+      return "Office Visit";
+    case "E":
+      return "Email";
+    case "A":
+      return "Admin Note";
+    case "P":
+      return "Phone Call";
+    case "R":
+      return "Refill";
+    default:
+      return "";
+  }
+};

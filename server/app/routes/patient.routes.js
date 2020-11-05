@@ -208,7 +208,7 @@ router.delete(
   Patient.deleteMedications
 );
 router.get(
-  "/requisitions/:encounter_id",
+  "/patient/:patient_id/requisitions",
   [authJwt.verifyToken],
   Patient.getRequisitions
 );
@@ -218,7 +218,7 @@ router.post(
   Patient.createRequisitions
 );
 router.delete(
-  "/requisitions/:encounter_id/:cpt_id",
+  "/patient/:patient_id/requisitions/",
   [authJwt.verifyToken],
   Patient.deleteRequisitions
 );

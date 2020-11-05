@@ -8,19 +8,31 @@ export const EncountersFormFields = [
     options: []
   },
   {
-    name: "type",
-    id: "type",
+    name: "encounter_type",
+    id: "encounter_type",
     label: "Type",
     baseType: "select",
     type: null,
     options: [
       {
         label: "Office Visit",
-        value: "Office Visit"
+        value: "O"
       },
       {
-        label: "Advance",
-        value: "advance"
+        label: "Email",
+        value: "E"
+      },
+      {
+        label: "Admin Note",
+        value: "A"
+      },
+      {
+        label: "Phone Call",
+        value: "P"
+      },
+      {
+        label: "Refill",
+        value: "R"
       }
     ]
   },

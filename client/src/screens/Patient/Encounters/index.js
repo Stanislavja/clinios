@@ -11,21 +11,23 @@ import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
 import { useSelector, shallowEqual, useDispatch } from "react-redux";
 
-
 import Card from "../../../components/common/Card";
+import PatientService from "../../../services/patient.service";
 import {
   EncountersFormFields,
   EncountersCards
 } from "../../../static/encountersForm";
+import { setError, setSuccess } from "../../../store/common/actions";
 import { resetEncounter } from "../../../store/patient/actions";
+import { encounterTypeToLetterConversion, encounterLetterToTypeConversion } from "../../../utils/helpers";
 
 const Form = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { onClose } = props;
+  const { onClose, patientId, reloadData } = props;
   const [formFields, setFormFields] = useState({
     title: "",
-    type: "",
+    encounter_type: "",
     name: "",
     date: "",
     notes: "",
@@ -46,7 +48,7 @@ const Form = (props) => {
 
   const updateFields = () => {
     formFields.title = encounter.title;
-    formFields.type = encounter.encounter_type;
+    formFields.encounter_type = encounterTypeToLetterConversion(encounter.encounter_type);
     formFields.name = encounter.name;
     formFields.date = moment(encounter.dt).format("YYYY-MM-DD");
     formFields.notes = encounter.notes;
@@ -62,133 +64,210 @@ const Form = (props) => {
     });
   };
 
+  const onFormSubmit = (e) => {
+    e.preventDefault();
+    if (!!encounter) {
+      let encounterId = encounter.id;
+      const reqBody = {
+        data: {
+          dt: formFields.date,
+          title: formFields.title,
+          encounter_type: encounterLetterToTypeConversion(formFields.encounter_type),
+          type_id: formFields.encounter_type,
+          name: formFields.name,
+          notes: formFields.notes,
+          treatment: formFields.treatment,
+        }
+      };
+      PatientService.updateEncounters(patientId, encounterId, reqBody)
+        .then((response) => {
+          dispatch(setSuccess(`${response.data.message}`));
+          reloadData();
+          onClose();
+        })
+        .catch((error) => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          let severity = "error";
+          dispatch(
+            setError({
+              severity: severity,
+              message: resMessage
+            })
+          );
+        });
+    } else {
+      const reqBody = {
+        data: {
+          dt: formFields.date,
+          title: formFields.title,
+          type_id: formFields.encounter_type,
+          name: formFields.name,
+          notes: formFields.notes,
+          treatment: formFields.treatment,
+        }
+      };
+      PatientService.createEncounter(patientId, reqBody)
+        .then((response) => {
+          dispatch(setSuccess(`${response.data.message}`));
+          reloadData();
+          onClose();
+        })
+        .catch((error) => {
+          const resMessage =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          let severity = "error";
+          dispatch(
+            setError({
+              severity: severity,
+              message: resMessage
+            })
+          );
+        });
+    }
+  };
+
   return (
     <>
       <Typography variant="h3" color="textSecondary">
         Encounters Form
       </Typography>
-      <Grid container>
-        <Grid item md={8}>
-          <Grid className={classes.inputRow}>
-            {EncountersFormFields.map((item, index) => (
-              <Grid
-                key={index}
-                container
-                alignItems="center"
-                className={classes.formInput}
-              >
-                <Grid item lg={2}>
-                  <label variant="h4" color="textSecondary">
-                    {item.label}
-                  </label>
+      <form onSubmit={onFormSubmit}>
+        <Grid container>
+          <Grid item md={8}>
+            <Grid className={classes.inputRow}>
+              {EncountersFormFields.map((item, index) => (
+                <Grid
+                  key={index}
+                  container
+                  alignItems="center"
+                  className={classes.formInput}
+                >
+                  <Grid item lg={2}>
+                    <label variant="h4" color="textSecondary">
+                      {item.label}
+                    </label>
+                  </Grid>
+                  <Grid item md={4}>
+                    {item.baseType === "input" ? (
+                      <TextField
+                        variant={"standard"}
+                        name={item.name}
+                        id={item.id}
+                        type={item.type}
+                        value={formFields[item.name]}
+                        fullWidth
+                        onChange={(e) => handleInputChnage(e)}
+                        required
+                      />
+                    ) : (
+                      <TextField
+                        select
+                        placeholder={item.label}
+                        id={item.id}
+                        name={item.name}
+                        value={formFields[item.name]}
+                        fullWidth
+                        onChange={(e) => handleInputChnage(e)}
+                        required
+                      >
+                        {item.options.map((option, index) => {
+                          return (
+                            <MenuItem key={index} value={option.value}>
+                              {option.label}
+                            </MenuItem>
+                          );
+                        })}
+                      </TextField>
+                    )}
+                  </Grid>
                 </Grid>
-                <Grid item md={4}>
-                  {item.baseType === "input" ? (
-                    <TextField
-                      variant={"standard"}
-                      name={item.name}
-                      id={item.id}
-                      type={item.type}
-                      value={formFields[item.name]}
-                      fullWidth
-                      onChange={(e) => handleInputChnage(e)}
-                    />
-                  ) : (
-                    <TextField
-                      select
-                      placeholder={item.label}
-                      id={item.id}
-                      name={item.name}
-                      value={formFields[item.name]}
-                      fullWidth
-                      onChange={(e) => handleInputChnage(e)}
-                    >
-                      {item.options.map((option, index) => {
-                        return (
-                          <MenuItem key={index} value={option.value}>
-                            {option.label}
-                          </MenuItem>
-                        );
-                      })}
-                    </TextField>
-                  )}
+              ))}
+              <Grid className={classes.formInput}>
+                <Grid item lg={6}>
+                  <Typography gutterBottom variant="h5" color="textPrimary">
+                    Internal Notes (Not Visible to Patients)
+                  </Typography>
+                </Grid>
+                <Grid item md={12}>
+                  <TextField
+                    variant="outlined"
+                    name={"notes"}
+                    id={"notes"}
+                    type={"text"}
+                    fullWidth
+                    value={formFields.notes}
+                    onChange={(e) => handleInputChnage(e)}
+                    multiline={true}
+                    rows={5}
+                    required
+                  />
                 </Grid>
               </Grid>
-            ))}
+            </Grid>
+
             <Grid className={classes.formInput}>
               <Grid item lg={6}>
                 <Typography gutterBottom variant="h5" color="textPrimary">
-                  Internal Notes (Not Visible to Patients)
+                  Treatment Plan (Not Visible to Patients)
                 </Typography>
               </Grid>
               <Grid item md={12}>
                 <TextField
                   variant="outlined"
-                  name={"notes"}
-                  id={"notes"}
+                  name={"treatment"}
+                  id={"treatment"}
                   type={"text"}
                   fullWidth
-                  value={formFields.notes}
+                  value={formFields.treatment}
                   onChange={(e) => handleInputChnage(e)}
                   multiline={true}
                   rows={5}
+                  required
                 />
               </Grid>
             </Grid>
           </Grid>
-
-          <Grid className={classes.formInput}>
-            <Grid item lg={6}>
-              <Typography gutterBottom variant="h5" color="textPrimary">
-                Treatment Plan (Not Visible to Patients)
-              </Typography>
-            </Grid>
-            <Grid item md={12}>
-              <TextField
-                variant="outlined"
-                name={"treatment"}
-                id={"treatment"}
-                type={"text"}
-                fullWidth
-                value={formFields.treatment}
-                onChange={(e) => handleInputChnage(e)}
-                multiline={true}
-                rows={5}
+          <Grid item md={4} className={classes.cardsContainer}>
+            {EncountersCards.map((item, index) => (
+              <Card
+                key={index}
+                title={item.title}
+                showActions={item.showActions}
+                showSearch={item.showSearch}
+                icon={item.icon}
+                primaryButtonText={item.primaryButtonText}
+                secondaryButtonText={item.secondaryButtonText}
+                iconHandler={() => console.log(item.title)}
+                hasMinHeight={true}
               />
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item md={4} className={classes.cardsContainer}>
-          {EncountersCards.map((item, index) => (
-            <Card
-              key={index}
-              title={item.title}
-              showActions={item.showActions}
-              showSearch={item.showSearch}
-              icon={item.icon}
-              primaryButtonText={item.primaryButtonText}
-              secondaryButtonText={item.secondaryButtonText}
-              iconHandler={() => console.log(item.title)}
-              hasMinHeight={true}
-            />
-          ))}
+            ))}
 
-          <Grid className={classes.formInput} container justify="space-between">
-            <Button variant="outlined" onClick={() => onClose()}>
-              Save
-            </Button>
-            <Button variant="outlined" onClick={() => onClose()}>
-              Exit
-            </Button>
+            <Grid className={classes.formInput} container justify="space-between">
+              <Button variant="outlined" type="submit">
+                Save
+              </Button>
+              <Button variant="outlined" onClick={() => onClose()}>
+                Exit
+              </Button>
+            </Grid>
+            <Typography gutterBottom>
+              Created {moment().format("MMM D YYYY")}
+            </Typography>
+            <Typography gutterBottom>
+              Created By {!!encounter && encounter.name}
+            </Typography>
           </Grid>
-          <Typography gutterBottom>
-            Created {moment().format("MMM D YYYY")}
-          </Typography>
-          <Typography gutterBottom>
-            Created By {!!encounter && encounter.name}
-          </Typography>
         </Grid>
-      </Grid>
+      </form>
     </>
   );
 };

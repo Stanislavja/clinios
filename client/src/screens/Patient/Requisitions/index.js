@@ -25,7 +25,7 @@ const Requisitions = (props) => {
   const { onClose } = props;
   const [searchText, setSearchText] = useState("");
   const [billSelection, setBillSelection] = useState("physician");
-  const [setLabsSelection] = useState("");
+  const [labsSelection, setLabsSelection] = useState("");
 
   const handleSearchInputChnage = (e) => {
     const { value } = e.target;

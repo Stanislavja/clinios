@@ -186,10 +186,20 @@ class Patient {
       headers: authHeader()
     });
   }
-  // /patient/1/medical-notes/history
+
   updateMedicalNotes(patient_id, data) {
     return axios.put(
       API_BASE + `/patient/${patient_id}/medical-notes/history`,
+      data,
+      {
+        headers: authHeader()
+      }
+    );
+  }
+
+  updateEncounters(patient_id, encounter_id, data) {
+    return axios.put(
+      API_BASE + `/patient/${patient_id}/encounters/${encounter_id}`,
       data,
       {
         headers: authHeader()
@@ -254,6 +264,12 @@ class Patient {
     });
   }
 
+  createEncounter(patient_id, data) {
+    return axios.post(API_BASE + `/patient/${patient_id}/encounters`, data, {
+      headers: authHeader()
+    });
+  }
+
   //delete methods
   deleteMessages(patient_id, id) {
     return axios.delete(API_BASE + `/patient/${patient_id}/messages/${id}`, {
@@ -264,6 +280,15 @@ class Patient {
   deleteAllergy(patient_id, drug_id) {
     return axios.delete(
       API_BASE + `/patient/${patient_id}/allergies/${drug_id}`,
+      {
+        headers: authHeader()
+      }
+    );
+  }
+
+  deleteEncounter(patient_id, encounterId) {
+    return axios.delete(
+      API_BASE + `/patient/${patient_id}/encounters/${encounterId}`,
       {
         headers: authHeader()
       }

@@ -1,4 +1,3 @@
-"use strict";
 const fs = require("fs");
 const bcrypt = require("bcryptjs");
 const moment = require("moment");
@@ -44,7 +43,7 @@ exports.getClientByCode = async (req, res) => {
  */
 exports.patientSignup = async (req, res) => {
   const db = makeDb(configuration, res);
-  let patient = req.body.patient;
+  const { patient } = req.body;
   patient.dob = moment(patient.dob).format("YYYY-MM-DD");
   patient.created = new Date();
 
@@ -52,7 +51,7 @@ exports.patientSignup = async (req, res) => {
 
   const signature = patient.imgBase64;
 
-  delete patient["imgBase64"];
+  delete patient.imgBase64;
 
   const existingPatientRows = db.query(
     `SELECT 1 FROM patient WHERE client_id='${patient.client_id}' and  (email='${patient.email}' or ssn='${patient.ssn}') LIMIT 1`
@@ -81,15 +80,12 @@ exports.patientSignup = async (req, res) => {
     }
 
     if (patientResponse.insertId) {
-      //TODO:: Check signature and upload
+      // TODO:: Check signature and upload
       if (signature) {
         const base64Data = signature.replace(/^data:image\/png;base64,/, "");
         const dest =
-          process.env.SIGNATURE_UPLOAD_DIR +
-          "/" +
-          "signature_" +
-          patientResponse.insertId +
-          ".png";
+          `${process.env.SIGNATURE_UPLOAD_DIR}/` +
+          `signature_${patientResponse.insertId}.png`;
         fs.writeFile(dest, base64Data, "base64", async function (err) {
           if (err) {
             errorMessage.error = err.message;
