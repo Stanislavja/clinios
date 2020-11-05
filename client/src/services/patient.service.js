@@ -142,9 +142,9 @@ class Patient {
       .then((res) => res.data);
   }
 
-  getRequisitions(patientId) {
+  getRequisitions(patientId, encounterId) {
     return axios
-      .get(`${API_BASE}/requisitions/${patientId}`, {
+      .get(`${API_BASE}/patient/${patientId}/requisitions/?encounter_id=${encounterId}`, {
         headers: authHeader(),
       })
       .then((res) => res.data);
@@ -366,13 +366,13 @@ class Patient {
     });
   }
 
-  deleteRequisitions(encounterId, cptId) {
-    return axios.delete(
-      `${API_BASE}/requisitions/${encounterId}/${cptId}`,
-      {
-        headers: authHeader(),
+  deleteRequisitions(patientId, reqBody) {
+    return axios.delete(`${API_BASE}/patient/${patientId}/requisitions`, {
+      headers: authHeader(),
+      data: {
+        data: reqBody,
       },
-    );
+    });
   }
 }
 
