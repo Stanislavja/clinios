@@ -5,30 +5,18 @@ const {
   status,
 } = require("../../helpers/status");
 
-const getAlllabs = async (req, res) => {
-  const { tab } = req.query;
+const getAllergy = async (req, res) => {
   const db = makeDb(configuration, res);
 
   let $sql;
-
   try {
-    $sql = `select l.created, l.filename
-    from lab l
-    where l.patient_id=${req.user_id} `;
-
-    if (typeof tab !== "undefined" && tab !== "All") {
-      if (tab === "Lab") {
-        $sql += `and l.type='l' `;
-      } else if (tab === "Imaging") {
-        $sql += `and l.type='I' `;
-      } else if (tab === "Misc") {
-        $sql += `and l.type='M' `;
-      } else if (tab === "Uncategorized") {
-        $sql += `and l.type is null `;
-      }
-    }
-
-    $sql += `order by l.created desc limit 200`;
+    $sql = `select pa.created, d.name
+    from patient_allergy pa
+    left join drug d on d.id=pa.drug_id
+    where pa.client_id=${req.client_id}
+    and pa.patient_id=${req.user_id}
+    order by d.name
+    limit 100`;
 
     const dbResponse = await db.query($sql);
 
@@ -39,7 +27,6 @@ const getAlllabs = async (req, res) => {
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
-    console.info("err:", err);
     errorMessage.error = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
@@ -47,8 +34,8 @@ const getAlllabs = async (req, res) => {
   }
 };
 
-const Labs = {
-  getAlllabs,
+const Allergy = {
+  getAllergy,
 };
 
-module.exports = Labs;
+module.exports = Allergy;
