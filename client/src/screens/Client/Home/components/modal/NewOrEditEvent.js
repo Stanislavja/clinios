@@ -105,6 +105,13 @@ const useStyles = makeStyles((theme) => ({
   patientLink: {
     cursor: "pointer",
     color: theme.palette.text.link
+  },
+  appointmentLength: {
+    maxWidth: "150px",
+    // margin: "0 5px"
+    marginLeft: "5px",
+    marginRight: "5px",
+    marginTop: "15px"
   }
 }));
 
@@ -113,7 +120,7 @@ const NewOrEditEvent = ({
   onClose,
   selectedDate,
   selectedProvider,
-  user,
+  // user,
   onEventUpdate,
   onSave,
   isNewEvent,
@@ -123,7 +130,6 @@ const NewOrEditEvent = ({
   const classes = useStyles();
   const history = useHistory();
   const { providers, errors } = props;
-  const [provider, setProvider] = React.useState("");
   const [patients, setPatients] = React.useState([]);
   const [selectedPatient, setSelectedPatient] = React.useState("");
   const [patientSearchTerm, setPatientSearchTerm] = useState("");
@@ -134,6 +140,9 @@ const NewOrEditEvent = ({
     patient: "",
     error: ""
   });
+  const user = JSON.parse(localStorage.getItem("user"));
+  const index = providers.findIndex((provider) => provider.id === user.id);
+  const [provider, setProvider] = React.useState(providers[index]);
 
   useEffect(() => {
     if (isNewEvent) {
@@ -197,7 +206,8 @@ const NewOrEditEvent = ({
         const payload = {
           data: {
             title: calEvent.title,
-            provider: provider,
+            provider:
+              provider === "selectedProvider" ? providers[index] : provider,
             patient: selectedPatient,
             ApptStatus: calEvent.status,
             notes: calEvent.notes,
@@ -240,7 +250,6 @@ const NewOrEditEvent = ({
       // eslint-disable-next-line
       .map((appointment) => calEvent.start_dt == appointment.start_dt)
       .includes(true);
-    console.log(calEvent.title, calEvent.patient_id);
     if (!calEvent.title || selectedPatient.length === 0) {
       if (!calEvent.title && selectedPatient.length === 0) {
         setErrorText({
@@ -366,6 +375,7 @@ const NewOrEditEvent = ({
                   "aria-label": "change date"
                 }}
               />
+              {console.log(moment(calEvent.start_dt).format("HH.mm"))}
               <KeyboardDateTimePicker
                 clearable
                 className={classes.startdatePicker}
@@ -396,20 +406,46 @@ const NewOrEditEvent = ({
                   "aria-label": "change date"
                 }}
               />
-              <TextField
-                value={appointmentLength}
-                variant="outlined"
-                margin="dense"
-                className={classes.appointmentLength}
-                size="small"
-                id="appointmentLength"
-                label="Appointment Length"
-                name="appointmentLength"
-                autoComplete="appointmentLength"
-                onChange={(event) => handleOnChange(event)}
-                disabled
-              />
             </div>
+            <TextField
+              value={appointmentLength}
+              variant="outlined"
+              margin="dense"
+              className={classes.appointmentLength}
+              size="small"
+              id="appointmentLength"
+              label="Length days"
+              name="appointmentLength"
+              autoComplete="appointmentLength"
+              onChange={(event) => handleOnChange(event)}
+              disabled
+            />
+            <TextField
+              value={appointmentLength}
+              variant="outlined"
+              margin="dense"
+              className={classes.appointmentLength}
+              size="small"
+              id="appointmentLength"
+              label="Length minutes"
+              name="appointmentLength"
+              autoComplete="appointmentLength"
+              onChange={(event) => handleOnChange(event)}
+              disabled
+            />
+            <TextField
+              value={appointmentLength}
+              variant="outlined"
+              margin="dense"
+              className={classes.appointmentLength}
+              size="small"
+              id="appointmentLength"
+              label="In days"
+              name="appointmentLength"
+              autoComplete="appointmentLength"
+              onChange={(event) => handleOnChange(event)}
+              disabled
+            />
             <FormControl className={classes.statuses}>
               <FormLabel component="legend">Status</FormLabel>
               <RadioGroup
@@ -450,10 +486,12 @@ const NewOrEditEvent = ({
                 value={!!provider && provider.id}
                 onChange={handleProviderChange}
                 label="Provider"
+                defaultValue={providers[index]?.id}
               >
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
+                {console.log(provider, providers)}
                 {providers.map((provider) => (
                   <MenuItem key={provider.id} value={provider.id}>
                     {provider.name}

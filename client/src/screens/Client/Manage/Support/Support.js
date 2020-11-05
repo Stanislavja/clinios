@@ -19,14 +19,13 @@ import moment from "moment";
 
 import SupportAPI from "../../../../services/supportStatus.service";
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     padding: "25px 0px"
   },
   title: {
-    paddingBottom: theme.spacing(.5)
+    paddingBottom: theme.spacing(0.5)
   },
 
   tableContainer: {
@@ -183,22 +182,22 @@ export default function Support() {
           >
             <TableHead>
               <TableRow>
-                <StyledTableCell padding="default">Case ID</StyledTableCell>
-                <StyledTableCell padding="default">Client</StyledTableCell>
-                <StyledTableCell padding="default">Subject</StyledTableCell>
-                <StyledTableCell padding="default">Status</StyledTableCell>
-                <StyledTableCell padding="default">Created</StyledTableCell>
-                <StyledTableCell padding="default">Created By</StyledTableCell>
-                <StyledTableCell padding="default">Updated</StyledTableCell>
+                <StyledTableCell padding="checkbox">Case ID</StyledTableCell>
+                <StyledTableCell padding="checkbox">Client</StyledTableCell>
+                <StyledTableCell padding="checkbox">Subject</StyledTableCell>
+                <StyledTableCell padding="checkbox">Status</StyledTableCell>
+                <StyledTableCell padding="checkbox">Created</StyledTableCell>
+                <StyledTableCell padding="checkbox">Created By</StyledTableCell>
+                <StyledTableCell padding="checkbox">Updated</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {searchResults.map((result) => (
                 <StyledTableRow key={result.id}>
-                  <TableCell padding="default" component="th" scope="row">
+                  <TableCell padding="checkbox" component="th" scope="row">
                     {result.id}
                   </TableCell>
-                  <TableCell padding="default" component="th" scope="row">
+                  <TableCell padding="checkbox" component="th" scope="row">
                     {result.client_name}
                   </TableCell>
                   {result.subject.length > 40 ? (
@@ -206,13 +205,13 @@ export default function Support() {
                       className={classes.overFlowControl}
                       title={result.subject}
                     >
-                      <TableCell padding="default" component="th" scope="row">
+                      <TableCell padding="checkbox" component="th" scope="row">
                         {result.subject}
                       </TableCell>
                     </LightTooltip>
                   ) : (
                     <TableCell
-                      padding="default"
+                      padding="checkbox"
                       className={classes.overFlowControl}
                       component="th"
                       scope="row"
@@ -220,16 +219,16 @@ export default function Support() {
                       {result.subject}
                     </TableCell>
                   )}
-                  <TableCell padding="default" component="th" scope="row">
+                  <TableCell padding="checkbox" component="th" scope="row">
                     {result.case_status}
                   </TableCell>
-                  <TableCell padding="default" component="th" scope="row">
+                  <TableCell padding="checkbox" component="th" scope="row">
                     {moment(result.created).format("lll")}
                   </TableCell>
-                  <TableCell padding="default" component="th" scope="row">
+                  <TableCell padding="checkbox" component="th" scope="row">
                     {result.created_user}
                   </TableCell>
-                  <TableCell padding="default" component="th" scope="row">
+                  <TableCell padding="checkbox" component="th" scope="row">
                     {moment(result.updated).format("lll")}
                   </TableCell>
                 </StyledTableRow>

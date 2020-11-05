@@ -133,10 +133,14 @@ export default function PatientSearchResults(props) {
                   className={classes.patientLink}
                   align="center"
                   onClick={() => history.push(`/patients/${result.id}`)}
+                  component="th"
+                  scope="row"
                 >
                   {result.firstname}
                 </TableCell>
                 <TableCell
+                  component="th"
+                  scope="row"
                   padding="checkbox"
                   className={classes.patientLink}
                   align="center"
@@ -145,6 +149,8 @@ export default function PatientSearchResults(props) {
                   {result.middlename}
                 </TableCell>
                 <TableCell
+                  component="th"
+                  scope="row"
                   padding="checkbox"
                   className={classes.patientLink}
                   align="center"
@@ -152,31 +158,76 @@ export default function PatientSearchResults(props) {
                 >
                   {result.lastname}
                 </TableCell>
-                <TableCell padding="checkbox" align="center">
+                <TableCell
+                  component="th"
+                  scope="row"
+                  padding="checkbox"
+                  align="center"
+                >
                   {result.city}
                 </TableCell>
-                <TableCell padding="checkbox" align="center">
+                <TableCell
+                  component="th"
+                  scope="row"
+                  padding="checkbox"
+                  align="center"
+                >
                   {result.state}
                 </TableCell>
-                <TableCell padding="checkbox" align="center">
+                <TableCell
+                  component="th"
+                  scope="row"
+                  padding="checkbox"
+                  align="center"
+                >
                   {result.postal}
                 </TableCell>
-                <TableCell padding="checkbox" align="center">
+                <TableCell
+                  component="th"
+                  scope="row"
+                  padding="checkbox"
+                  align="center"
+                >
                   {result.country}
                 </TableCell>
-                <TableCell padding="checkbox" align="center">
+                <TableCell
+                  component="th"
+                  scope="row"
+                  padding="checkbox"
+                  align="center"
+                >
                   {result.phone_cell}
                 </TableCell>
-                <TableCell padding="checkbox" align="center">
+                <TableCell
+                  component="th"
+                  scope="row"
+                  padding="checkbox"
+                  align="center"
+                >
                   {result.phone_home}
                 </TableCell>
-                <TableCell padding="checkbox" align="center">
+                <TableCell
+                  component="th"
+                  scope="row"
+                  padding="checkbox"
+                  align="center"
+                >
                   {result.email}
                 </TableCell>
-                <TableCell padding="checkbox" align="center">
+                <TableCell
+                  component="th"
+                  scope="row"
+                  padding="checkbox"
+                  align="center"
+                >
                   {result.gender}
                 </TableCell>
-                <TableCell padding="checkbox" align="center">
+                <TableCell
+                  component="th"
+                  scope="row"
+                  padding="checkbox"
+                  align="center"
+                >
                   {moment(result.created).format("lll")}
                 </TableCell>
               </StyledTableRow>
