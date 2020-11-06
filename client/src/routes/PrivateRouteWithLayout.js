@@ -12,20 +12,18 @@ const PrivateRouteWithLayout = ({
   <AuthConsumer>
     {({ isAuth }) => (
       <Route
-        render={(props) =>
-          isAuth ? (
-            <Layout>
-              <Component {...props} />
-            </Layout>
-          ) : (
-            <Redirect
-              to={{
-                pathname: "/login_client",
-                state: { from: props.location }
-              }}
-            />
-          )
-        }
+        render={(props) => (isAuth ? (
+          <Layout>
+            <Component {...props} />
+          </Layout>
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/login_client",
+              state: { from: props.location },
+            }}
+          />
+        ))}
         {...rest}
       />
     )}
