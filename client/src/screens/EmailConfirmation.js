@@ -5,10 +5,10 @@ import CardContent from "@material-ui/core/CardContent";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 
+import Dimmer from "../components/common/Dimmer";
 import VerificationMessage from "../components/email/VerificationMessage";
 import VerificationSuccess from "../components/email/VerificationSuccess";
-import Dimmer from "./../components/common/Dimmer";
-import { verificationEmail } from "./../store/email/actions";
+import { verificationEmail } from "../store/email/actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,37 +16,37 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     "& p": {
       fontSize: "16px",
-      lineHeight: "24px"
-    }
-  }
+      lineHeight: "24px",
+    },
+  },
 }));
 
 const EmailConfirmation = ({ ...props }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const {
-    match: { params }
+    match: { params },
   } = props;
 
   const success = useSelector(
     (state) => state.email.success || false,
-    shallowEqual
+    shallowEqual,
   );
   const loading = useSelector(
     (state) => state.email.loading || false,
-    shallowEqual
+    shallowEqual,
   );
   const error = useSelector(
     (state) => state.email.error || false,
-    shallowEqual
+    shallowEqual,
   );
   const isEmailVerified = useSelector(
     (state) => state.email.isEmailVerified || false,
-    shallowEqual
+    shallowEqual,
   );
   const message = useSelector(
     (state) => state.email.message || false,
-    shallowEqual
+    shallowEqual,
   );
 
   const initFetch = useCallback(() => {
@@ -65,7 +65,7 @@ const EmailConfirmation = ({ ...props }) => {
     severity = "info";
   }
   return (
-    <React.Fragment>
+    <>
       <Card className={classes.root} variant="outlined">
         <CardContent>
           {(error || isEmailVerified) && (
@@ -76,7 +76,7 @@ const EmailConfirmation = ({ ...props }) => {
       </Card>
 
       <Dimmer isOpen={loading} />
-    </React.Fragment>
+    </>
   );
 };
 

@@ -11,35 +11,35 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { useParams } from "react-router-dom";
 
-import Error from "./../components/common/Error";
-import Success from "./../screens/ForgetPassword/Success";
-import AuthService from "./../services/auth.service";
-import { setSuccess } from "./../store/common/actions";
+import Error from "../components/common/Error";
+import AuthService from "../services/auth.service";
+import { setSuccess } from "../store/common/actions";
+import Success from "./ForgetPassword/Success";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginTop: theme.spacing(8)
+    marginTop: theme.spacing(8),
   },
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   pageTitle: {
-    marginBottom: theme.spacing(3)
+    marginBottom: theme.spacing(3),
   },
   resetPasswordFormSentWrapper: {},
   resetPasswordFormWrapper: {},
   submit: {
-    margin: theme.spacing(3, 0, 2)
-  }
+    margin: theme.spacing(3, 0, 2),
+  },
 }));
 
 const ResetPassword = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  let { userId, token } = useParams();
+  const { userId, token } = useParams();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [fieldErrors, setFieldErrors] = useState([]);
@@ -63,7 +63,7 @@ const ResetPassword = () => {
         } else {
           setFieldErrors([]);
         }
-      }
+      },
     );
     setPassword("");
     setConfirmPassword("");
@@ -75,8 +75,8 @@ const ResetPassword = () => {
         {
           value: event.target.value,
           msg: "Too Weak. Must be atleast 8 Characters",
-          param: "user.password"
-        }
+          param: "user.password",
+        },
       ]);
     } else {
       setFieldErrors([]);
@@ -87,8 +87,8 @@ const ResetPassword = () => {
       setFieldErrors([
         {
           value: `password: ${password} confirmPassword ${confirmPassword}`,
-          msg: "Password and ConfirmPassword must be same!"
-        }
+          msg: "Password and ConfirmPassword must be same!",
+        },
       ]);
     }
     if (confirmPassword === password) {
