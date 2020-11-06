@@ -15,40 +15,37 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 
+import Error from "../../components/common/Error";
+import { AuthConsumer } from "../../providers/AuthProvider";
+import AuthService from "../../services/auth.service";
 import EmailService from "../../services/email.service";
-import Error from "./../../components/common/Error";
-import { AuthConsumer } from "./../../providers/AuthProvider";
-import AuthService from "./../../services/auth.service";
-import {
-  partialLoginComplete,
-  loginComplete
-} from "./../../store/auth/actions";
+import { partialLoginComplete, loginComplete } from "../../store/auth/actions";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: "transparent",
-    color: theme.palette.text.secondary
+    color: theme.palette.text.secondary,
   },
   lockIcon: {
-    fontSize: "40px"
+    fontSize: "40px",
   },
   pageTitle: {
-    marginBottom: theme.spacing(3)
+    marginBottom: theme.spacing(3),
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
-  }
+    margin: theme.spacing(3, 0, 2),
+  },
 }));
 
 const Login = () => {
@@ -70,7 +67,7 @@ const Login = () => {
 
     AuthService.login({
       email: email.trim(),
-      password: password.trim()
+      password: password.trim(),
     }).then(
       (res) => {
         setErrors([]);
@@ -90,31 +87,31 @@ const Login = () => {
         }
 
         if (data && data.user && data.user.sign_dt === null) {
-          setTimeout(function () {
+          setTimeout(() => {
             setIsRedirect(true);
           }, 3000);
 
-          //set user info to Redux to re-use on user_registration.png
+          // set user info to Redux to re-use on user_registration.png
           dispatch(partialLoginComplete(error.response.data.user));
         }
         if (data && data.user && data.user.email_confirm_dt === null) {
-          //Send email verification link
+          // Send email verification link
           EmailService.resendEmailVerification(error.response.data.user).then(
             (response) => {
               console.info(
                 "resendEmailVerification response",
-                response.response
+                response.response,
               );
             },
-            (error) => {
+            (err) => {
               console.error(
                 "resendEmailVerification error.response",
-                error.response
+                err.response,
               );
-            }
+            },
           );
         }
-      }
+      },
     );
   };
 
@@ -191,14 +188,14 @@ const Login = () => {
                   }`}
                 />
                 <FormControlLabel
-                  control={
+                  control={(
                     <Checkbox
                       value="remember"
                       color="primary"
                       checked={isChecked}
                       onChange={(event) => setIsChecked(event.target.checked)}
                     />
-                  }
+                  )}
                   label="Remember me"
                 />
                 <Button
@@ -219,7 +216,7 @@ const Login = () => {
                   </Grid>
                   <Grid item>
                     <Link href="/signup_client" variant="body2">
-                      {"Don't have an account? Sign Up"}
+                      Don't have an account? Sign Up
                     </Link>
                   </Grid>
                 </Grid>
