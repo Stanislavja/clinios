@@ -11,35 +11,35 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { useParams } from "react-router-dom";
 
-import Error from "./../../components/common/Error";
-import Success from "./../../screens/patient-portal/auth/ForgotPassword/Success";
-import AuthService from "./../../services/patient_portal/auth.service";
-import { setSuccess } from "./../../store/common/actions";
+import Error from "../../components/common/Error";
+import AuthService from "../../services/patient_portal/auth.service";
+import { setSuccess } from "../../store/common/actions";
+import Success from "./auth/ForgotPassword/Success";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginTop: theme.spacing(8)
+    marginTop: theme.spacing(8),
   },
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   pageTitle: {
-    marginBottom: theme.spacing(3)
+    marginBottom: theme.spacing(3),
   },
   resetPasswordFormSentWrapper: {},
   resetPasswordFormWrapper: {},
   submit: {
-    margin: theme.spacing(3, 0, 2)
-  }
+    margin: theme.spacing(3, 0, 2),
+  },
 }));
 
 const PatientResetPassword = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  let { patientId, token } = useParams();
+  const { patientId, token } = useParams();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [client, setClient] = useState("");
@@ -64,7 +64,7 @@ const PatientResetPassword = () => {
         } else {
           setFieldErrors([]);
         }
-      }
+      },
     );
     setPassword("");
     setConfirmPassword("");
@@ -76,8 +76,8 @@ const PatientResetPassword = () => {
         {
           value: event.target.value,
           msg: "Too Weak. Must be atleast 8 Characters",
-          param: "user.password"
-        }
+          param: "user.password",
+        },
       ]);
     } else {
       setFieldErrors([]);
@@ -88,8 +88,8 @@ const PatientResetPassword = () => {
       setFieldErrors([
         {
           value: `password: ${password} confirmPassword ${confirmPassword}`,
-          msg: "Password and ConfirmPassword must be same!"
-        }
+          msg: "Password and ConfirmPassword must be same!",
+        },
       ]);
     }
     if (confirmPassword === password) {

@@ -11,8 +11,8 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3),
     textAlign: "center",
     fontSize: "15px",
-    lineHeight: "24px"
-  }
+    lineHeight: "24px",
+  },
 }));
 
 const Success = ({ header, loginText, client }) => {
@@ -21,7 +21,9 @@ const Success = ({ header, loginText, client }) => {
     <Card className={classes.root} variant="outlined">
       <CardContent>
         <p>
-          {header} <Link href={`/login/${client.code}`}>{loginText}</Link>
+          {header}
+          {" "}
+          <Link href={`/login/${client.code}`}>{loginText}</Link>
         </p>
       </CardContent>
     </Card>
@@ -35,9 +37,9 @@ Success.propTypes = {
     PropTypes.shape({
       client_id: PropTypes.string,
       name: PropTypes.string,
-      code: PropTypes.string.isRequired
-    })
-  )
+      code: PropTypes.string.isRequired,
+    }),
+  ),
 };
 
 export default Success;

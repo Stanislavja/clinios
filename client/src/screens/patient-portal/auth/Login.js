@@ -14,51 +14,51 @@ import clsx from "clsx";
 import { useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 
-import Error from "./../../../components/common/Error";
-import { AuthConsumer } from "./../../../providers/AuthProvider";
-import AuthService from "./../../../services/patient_portal/auth.service";
-import { loginComplete } from "./../../../store/auth/actions";
+import Error from "../../../components/common/Error";
+import { AuthConsumer } from "../../../providers/AuthProvider";
+import AuthService from "../../../services/patient_portal/auth.service";
+import { loginComplete } from "../../../store/auth/actions";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   Logo: {
-    backgroundColor: "grey"
+    backgroundColor: "grey",
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: "transparent",
-    color: theme.palette.text.secondary
+    color: theme.palette.text.secondary,
   },
   lockIcon: {
-    fontSize: "40px"
+    fontSize: "40px",
   },
   pageTitle: {
-    marginBottom: theme.spacing(3)
+    marginBottom: theme.spacing(3),
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   withErrors: {
-    opacity: 0.9
+    opacity: 0.9,
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
+    margin: theme.spacing(3, 0, 2),
   },
   meta: {
     "& a": {
       color: theme.palette.text.secondary,
-      fontSize: "12px"
-    }
+      fontSize: "12px",
+    },
   },
   forgotPass: {
-    textAlign: "right"
-  }
+    textAlign: "right",
+  },
 }));
 
 const PatientLogin = () => {
@@ -87,13 +87,13 @@ const PatientLogin = () => {
         if (status === 400) {
           setErrors([
             {
-              msg: data.message
-            }
+              msg: data.message,
+            },
           ]);
         } else {
           setErrors([]);
         }
-      }
+      },
     );
   }, [clientCode]);
 
@@ -106,7 +106,7 @@ const PatientLogin = () => {
     AuthService.login({
       client_id: clientId,
       email: email.trim(),
-      password: password.trim()
+      password: password.trim(),
     }).then(
       (res) => {
         setErrors([]);
@@ -122,13 +122,13 @@ const PatientLogin = () => {
         if (status === 400) {
           setErrors([
             {
-              msg: data.message
-            }
+              msg: data.message,
+            },
           ]);
         } else {
           setErrors([]);
         }
-      }
+      },
     );
   };
 
@@ -151,8 +151,8 @@ const PatientLogin = () => {
             <div className={classes.Logo}>
               <img
                 src={
-                  process.env.REACT_APP_API_URL +
-                  `static/client/c${clientId}_logo.png`
+                  `${process.env.REACT_APP_API_URL
+                  }static/client/c${clientId}_logo.png`
                 }
                 alt="Client logo"
               />
@@ -173,8 +173,8 @@ const PatientLogin = () => {
 
               <form
                 className={clsx({
-                  [classes.form]: true, //always apply
-                  [classes.withErrors]: errors.length > 0 //only when isLoading === true
+                  [classes.form]: true, // always apply
+                  [classes.withErrors]: errors.length > 0, // only when isLoading === true
                 })}
                 noValidate
               >
