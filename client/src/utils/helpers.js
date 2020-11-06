@@ -7,11 +7,14 @@ export const getAcronym = (str) => {
 };
 
 export const removeEmpty = (obj) => {
-  Object.keys(obj).forEach((key) => {
-    if (obj[key] && typeof obj[key] === "object") removeEmpty(obj[key]);
-    else if (obj[key] === "" || obj[key] === null) delete obj[key];
+  const newObj = {};
+  Object.keys(obj).forEach((prop) => {
+    if (obj[prop] && typeof obj[prop] === "object") removeEmpty(obj[prop]);
+    if (obj[prop]) {
+      newObj[prop] = obj[prop];
+    }
   });
-  return obj;
+  return newObj;
 };
 
 function getFullDate(x) {
@@ -90,14 +93,14 @@ export const dateDiffInDays = (d1, d2) => {
   const t2 = d2.getTime();
   const t1 = d1.getTime();
 
-  return parseInt((t2 - t1) / (24 * 3600 * 1000));
+  return parseInt((t2 - t1) / (24 * 3600 * 1000), 10);
 };
 
 export const dateDiffInWeeks = (d1, d2) => {
   const t2 = d2.getTime();
   const t1 = d1.getTime();
 
-  return parseInt((t2 - t1) / (24 * 3600 * 1000 * 7));
+  return parseInt((t2 - t1) / (24 * 3600 * 1000 * 7), 10);
 };
 
 export const dateDiffInMonths = (d1, d2) => {

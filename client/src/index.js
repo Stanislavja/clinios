@@ -15,13 +15,13 @@ NetworkService.setupInterceptors(store);
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <React.Fragment>
+      <>
         <App />
         <CustomSnackbar />
-      </React.Fragment>
+      </>
     </Provider>
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById("root"),
 );
 
 // If you want your app to work offline and load faster, you can change
