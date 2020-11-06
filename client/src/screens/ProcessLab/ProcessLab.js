@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 const ProcessLab = () => {
   const classes = useStyles();
-  let { user_id } = useParams();
+  let { userId } = useParams();
   return (
     <div className={classes.root}>
       <Typography
@@ -24,7 +24,7 @@ const ProcessLab = () => {
         color="textPrimary"
         className={classes.title}
       >
-        Process Lab - ID: {user_id}
+        Process Lab - ID: {userId}
       </Typography>
       <Grid container justify="center" spacing={8}>
         <Grid item md={6} xs={12}></Grid>

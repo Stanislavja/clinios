@@ -20,7 +20,7 @@ import {
   MergePatient,
   DeletePatient,
   PatientSearch,
-  Support,
+  Support
 } from "../screens/Client/Manage";
 import {
   AccountingTypes,
@@ -38,7 +38,7 @@ import {
   LabRanges,
   PortalHeader,
   Schedule,
-  Users,
+  Users
 } from "../screens/Client/Setup";
 import ReportFinanceDetail from "../screens/Client/Setup/ReportFinanceDetail/index";
 import Contact from "../screens/Contact";
@@ -65,7 +65,7 @@ import {
   Pharmacies,
   PatientAppointments,
   PatientProfile,
-  PatientForms,
+  PatientForms
 } from "../screens/patient-portal";
 import PatientResetPassword from "../screens/patient-portal/ResetPassword";
 import ProcessLab from "../screens/ProcessLab";
@@ -87,11 +87,7 @@ const AppRouter = () => (
           path="/agreement"
           component={Agreement}
         />
-        <RouteWithLayout
-          layout={Main}
-          path="/contact"
-          component={Contact}
-        />
+        <RouteWithLayout layout={Main} path="/contact" component={Contact} />
         <RouteWithLayout
           layout={Main}
           path="/forgot-password"
@@ -120,11 +116,7 @@ const AppRouter = () => (
               path="/signup"
               component={UserSignUp}
             /> */}
-        <RouteWithLayout
-          layout={Main}
-          path="/login_client"
-          component={Login}
-        />
+        <RouteWithLayout layout={Main} path="/login_client" component={Login} />
         <PrivateRouteWithLayout
           layout={Dashboard}
           path="/dashboard"
@@ -302,13 +294,13 @@ const AppRouter = () => (
         />
         <PrivateRouteWithLayout
           layout={Dashboard}
-          path="/process-lab/:user_id"
+          path="/process-lab/:userId"
           component={ProcessLab}
           exact
         />
         <PrivateRouteWithLayout
           layout={Dashboard}
-          path="/process-message/:user_id"
+          path="/process-message/:userId"
           component={ProcessMessage}
           exact
         />
