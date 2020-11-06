@@ -1,13 +1,13 @@
 export const getAcronym = (str) => {
-  if (!str || typeof str === undefined) {
-    return;
+  if (!str || typeof str === "undefined") {
+    return false;
   }
   const matches = str.match(/\b(\w)/g);
   return matches.join("");
 };
 
 export const removeEmpty = (obj) => {
-  Object.keys(obj).forEach(function (key) {
+  Object.keys(obj).forEach((key) => {
     if (obj[key] && typeof obj[key] === "object") removeEmpty(obj[key]);
     else if (obj[key] === "" || obj[key] === null) delete obj[key];
   });
@@ -46,74 +46,70 @@ function getFullDate(x) {
 }
 
 export const calculateAge = (date) => {
-  let now = new Date();
-  let dob = new Date(date);
+  const now = new Date();
+  const dob = new Date(date);
   let year = now.getYear() - dob.getYear();
   let month = now.getMonth() - dob.getMonth();
   if (month < 0) {
     month = now.getMonth() + 12 - dob.getMonth();
-    year = year - 1;
+    year -= 1;
   }
   let day = now.getDate() - dob.getDate();
   if (day < 0) {
-    let monthNumber = dob.getMonth();
-    let fullDate = getFullDate(monthNumber);
+    const monthNumber = dob.getMonth();
+    const fullDate = getFullDate(monthNumber);
     day = now.getDate() + fullDate - dob.getDate();
-    month = month - 1;
+    month -= 1;
   }
 
-  return year > 0 ? year + " yrs" : month + " mo";
+  return year > 0 ? `${year} yrs` : `${month} mo`;
 };
 
 export const formatPhoneNumber = (phoneNumber) => {
-  let cleaned = ("" + phoneNumber).replace(/\D/g, "");
-  let match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
+  const cleaned = `${phoneNumber}`.replace(/\D/g, "");
+  const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
   if (match) {
-    return match[1] + " " + match[2] + " " + match[3];
+    return `${match[1]} ${match[2]} ${match[3]}`;
   }
   return null;
 };
 
 export const formatDate = (date) => {
-  let d = new Date(date),
-      month = "" + (d.getMonth() + 1),
-      day = "" + d.getDate(),
-      year = d.getFullYear();
+  const d = new Date(date);
+  let month = `${d.getMonth() + 1}`;
+  let day = `${d.getDate()}`;
+  const year = d.getFullYear();
 
-  if (month.length < 2) month = "0" + month;
-  if (day.length < 2) day = "0" + day;
+  if (month.length < 2) month = `0${month}`;
+  if (day.length < 2) day = `0${day}`;
 
   return [year, month, day].join("-");
 };
 
-export const DateDiff = {
-  inDays: function (d1, d2) {
-    let t2 = d2.getTime();
-    let t1 = d1.getTime();
+export const dateDiffInDays = (d1, d2) => {
+  const t2 = d2.getTime();
+  const t1 = d1.getTime();
 
-    return parseInt((t2 - t1) / (24 * 3600 * 1000));
-  },
-
-  inWeeks: function (d1, d2) {
-    const t2 = d2.getTime();
-    const t1 = d1.getTime();
-
-    return parseInt((t2 - t1) / (24 * 3600 * 1000 * 7));
-  },
-
-  inMonths: function (d1, d2) {
-    let d1Y = d1.getFullYear();
-    let d2Y = d2.getFullYear();
-    let d1M = d1.getMonth();
-    let d2M = d2.getMonth();
-
-    return d2M + 12 * d2Y - (d1M + 12 * d1Y);
-  },
-
-  inYears: function (d1, d2) {
-    return d2.getFullYear() - d1.getFullYear();
-  }
+  return parseInt((t2 - t1) / (24 * 3600 * 1000));
 };
+
+export const dateDiffInWeeks = (d1, d2) => {
+  const t2 = d2.getTime();
+  const t1 = d1.getTime();
+
+  return parseInt((t2 - t1) / (24 * 3600 * 1000 * 7));
+};
+
+export const dateDiffInMonths = (d1, d2) => {
+  const d1Y = d1.getFullYear();
+  const d2Y = d2.getFullYear();
+  const d1M = d1.getMonth();
+  const d2M = d2.getMonth();
+
+  return d2M + 12 * d2Y - (d1M + 12 * d1Y);
+};
+
+export const dateDiffInYears = (d1, d2) => d2.getFullYear() - d1.getFullYear();
 
 export const statusToColorCode = (status) => {
   switch (status) {
