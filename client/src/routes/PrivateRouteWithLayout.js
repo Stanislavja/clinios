@@ -1,5 +1,6 @@
 import React from "react";
 
+import PropTypes from "prop-types";
 import { Route, Redirect } from "react-router-dom";
 
 import { AuthConsumer } from "../providers/AuthProvider";
@@ -29,5 +30,15 @@ const PrivateRouteWithLayout = ({
     )}
   </AuthConsumer>
 );
+
+PrivateRouteWithLayout.defaultProps = {
+  location: null,
+};
+
+PrivateRouteWithLayout.propTypes = {
+  layout: PropTypes.node.isRequired,
+  component: PropTypes.node.isRequired,
+  location: PropTypes.string,
+};
 
 export default PrivateRouteWithLayout;
