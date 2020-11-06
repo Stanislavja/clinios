@@ -18,15 +18,15 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: 60,
     height: "100%",
     [theme.breakpoints.up("sm")]: {
-      paddingTop: 62
-    }
+      paddingTop: 62,
+    },
   },
   shiftContent: {
-    paddingLeft: 0
+    paddingLeft: 0,
   },
   content: {
-    height: "100%"
-  }
+    height: "100%",
+  },
 }));
 
 const Plain = ({ children }) => {
@@ -34,7 +34,7 @@ const Plain = ({ children }) => {
   const theme = useTheme();
 
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"), {
-    defaultMatches: true
+    defaultMatches: true,
   });
   const [openSidebar, setOpenSidebar] = useState(false);
 
@@ -52,7 +52,7 @@ const Plain = ({ children }) => {
         <div
           className={clsx({
             [classes.root]: true,
-            [classes.shiftContent]: isDesktop
+            [classes.shiftContent]: isDesktop,
           })}
         >
           <Topbar
@@ -78,11 +78,11 @@ const Plain = ({ children }) => {
 };
 
 Plain.defaultProps = {
-  children: null
+  children: null,
 };
 
 Plain.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default Plain;

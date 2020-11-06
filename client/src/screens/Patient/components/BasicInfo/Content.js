@@ -8,7 +8,9 @@ import PatientService from "../../../../services/patient.service";
 import {
   calculateAge,
   formatPhoneNumber,
-  DateDiff
+  dateDiffInDays,
+  dateDiffInMonths,
+  dateDiffInYears
 } from "./../../../../utils/helpers";
 
 export default function BasicInfoContent(props) {
@@ -33,9 +35,9 @@ export default function BasicInfoContent(props) {
     let d1 = new Date();
     let d2 = new Date(nextAppointment);
 
-    let daysDiff = DateDiff.inDays(d1, d2);
-    let monthsDiff = DateDiff.inMonths(d1, d2);
-    let yearsDiff = DateDiff.inYears(d1, d2);
+    let daysDiff = dateDiffInDays(d1, d2);
+    let monthsDiff = dateDiffInMonths(d1, d2);
+    let yearsDiff = dateDiffInYears(d1, d2);
 
     if (yearsDiff > 0) {
       return yearsDiff > 1 ? `${yearsDiff} years` : `${yearsDiff} year`;
@@ -62,12 +64,12 @@ export default function BasicInfoContent(props) {
     const e = event.target;
     if (e.scrollWidth > e.clientWidth) {
       setAnchorEl(e);
-      setShowTooltip(true)
+      setShowTooltip(true);
     }
-  }
+  };
 
   const handleClose = () => {
-    if(showTooltip) {
+    if (showTooltip) {
       setShowTooltip(false);
       setAnchorEl(null);
     }
@@ -82,19 +84,19 @@ export default function BasicInfoContent(props) {
         onClose={handleClose}
         anchorOrigin={{
           vertical: "bottom",
-          horizontal: "center",
+          horizontal: "center"
         }}
         transformOrigin={{
           vertical: "top",
-          horizontal: "center",
+          horizontal: "center"
         }}
         classes={{
-          paper: classes.paper,
+          paper: classes.paper
         }}
         className={classes.popover}
         disableRestoreFocus
       >
-        {!!showTooltip && (<Typography>{anchorEl.innerText}</Typography>)}
+        {!!showTooltip && <Typography>{anchorEl.innerText}</Typography>}
       </Popover>
       <Grid container className={classes.inputRow}>
         <Typography
@@ -259,6 +261,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 13
   },
   popover: {
-    pointerEvents: "none",
+    pointerEvents: "none"
   }
 }));
