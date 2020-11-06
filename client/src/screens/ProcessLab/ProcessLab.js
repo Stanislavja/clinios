@@ -5,17 +5,17 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { useParams } from "react-router-dom";
 
-import Video from "./../../components/videos/Video";
+import Video from "../../components/videos/Video";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
-    padding: "40px 0px"
-  }
+    padding: "40px 0px",
+  },
 }));
 const ProcessLab = () => {
   const classes = useStyles();
-  let { userId } = useParams();
+  const { userId } = useParams();
   return (
     <div className={classes.root}>
       <Typography
@@ -24,10 +24,12 @@ const ProcessLab = () => {
         color="textPrimary"
         className={classes.title}
       >
-        Process Lab - ID: {userId}
+        Process Lab - ID:
+        {" "}
+        {userId}
       </Typography>
       <Grid container justify="center" spacing={8}>
-        <Grid item md={6} xs={12}></Grid>
+        <Grid item md={6} xs={12} />
         <Grid item md={6} xs={12}>
           <Video url="https://www.youtube.com/watch?v=ysz5S6PUM-U" />
         </Grid>
