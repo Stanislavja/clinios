@@ -30,6 +30,10 @@ const Success = ({ header, loginText, client }) => {
   );
 };
 
+Success.defaultProps = {
+  client: null,
+};
+
 Success.propTypes = {
   loginText: PropTypes.string.isRequired,
   header: PropTypes.string.isRequired,

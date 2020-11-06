@@ -123,7 +123,7 @@ const Home = () => {
             <p>
               Please fill out the following forms:
               {" "}
-              <Link to="#">{clientForms.title}</Link>
+              <Link to="/">{clientForms.title}</Link>
             </p>
           </Box>
         )}

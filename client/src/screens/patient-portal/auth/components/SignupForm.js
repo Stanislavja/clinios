@@ -16,6 +16,7 @@ import CheckIcon from "@material-ui/icons/Check";
 import RotateLeftTwoToneIcon from "@material-ui/icons/RotateLeftTwoTone";
 import Alert from "@material-ui/lab/Alert";
 import _ from "lodash";
+import PropTypes from "prop-types";
 import SignatureCanvas from "react-signature-canvas";
 
 import CountrySelect from "../../../../components/common/CountrySelect";
@@ -24,9 +25,42 @@ import RegionSelect from "../../../../components/common/RegionSelect";
 import PatientAuthService from "../../../../services/patient_portal/auth.service";
 import { FormFields } from "../../../../static/expandForm";
 
+const useStyles = makeStyles((theme) => ({
+  inputRow: {
+    margin: theme.spacing(3, 0),
+  },
+  sigCanvas: {
+    border: "1px solid grey",
+  },
+  sigCanvasClear: {
+    position: "absolute",
+    background: "#f3f3f3",
+    top: "-20px",
+  },
+  sigCanvasSave: {
+    position: "absolute",
+    background: "#f3f3f3",
+    top: "30px",
+  },
+  sigImage: {
+    backgroundSize: "200px 50px",
+    width: "200px",
+    height: "50px",
+    backgroundColor: "white",
+  },
+  signupActions: {
+    marginTop: theme.spacing(1),
+    maxWidth: "506px",
+    marginLeft: "auto",
+    marginRight: "auto",
+    textAlign: "right",
+    display: "block",
+  },
+}));
+
 const SignupForm = (props) => {
   const classes = useStyles();
-  const { onFormSubmit } = props;
+  const { errors, onFormSubmit } = props;
 
   const BasicInfo = FormFields.basicInfo;
   const AddressDetails = FormFields.addressDetails;
@@ -71,10 +105,10 @@ const SignupForm = (props) => {
         [identifier]: value,
       });
     } else if (identifier === "region") {
-      const identifier = "state";
+      const ident = "state";
       setFormFields({
         ...formFields,
-        [identifier]: value,
+        [ident]: value,
       });
     }
   };
@@ -98,7 +132,7 @@ const SignupForm = (props) => {
 
     // write the bytes of the string to a typed array
     const ia = new Uint8Array(byteString.length);
-    for (let i = 0; i < byteString.length; i++) {
+    for (let i = 0; i < byteString.length; i += 1) {
       ia[i] = byteString.charCodeAt(i);
     }
 
@@ -128,7 +162,7 @@ const SignupForm = (props) => {
       },
     );
   };
-  const patientErrors = props.errors && props.errors.filter((err) => err.param.includes("patient"));
+  const patientErrors = errors && errors.filter((err) => err.param.includes("patient"));
 
   const getFieldError = (target, fieldName) => {
     let value = `client.${fieldName}`;
@@ -142,14 +176,11 @@ const SignupForm = (props) => {
     if (!event.target) {
       return;
     }
-    if (!target) {
-      target = "patient";
-    }
 
     PatientAuthService.validate({
       fieldName: event.target.name,
       value: event.target.value,
-      target,
+      target: target || "patient",
     })
       .then(
         (response) => {
@@ -267,6 +298,7 @@ const SignupForm = (props) => {
         <Grid className={classes.inputRow}>
           {patientErrors
             && patientErrors.map((error, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <Alert severity="error" variant="filled" key={index}>
                 {error.msg}
               </Alert>
@@ -276,6 +308,7 @@ const SignupForm = (props) => {
           </Typography>
           <Grid container spacing={1}>
             {BasicInfo.map((item, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={4}>
                 {item.baseType === "input" ? (
                   <TextField
@@ -290,7 +323,7 @@ const SignupForm = (props) => {
                   />
                 ) : (
                   <TextField
-                      // className={classes.select}
+                    // className={classes.select}
                     size="small"
                     variant="outlined"
                     select
@@ -302,8 +335,9 @@ const SignupForm = (props) => {
                     fullWidth
                     onChange={(e) => handleInputChange(e)}
                   >
-                    {item.options.map((option, index) => (
-                      <MenuItem key={index} value={option.value}>
+                    {item.options.map((option, i) => (
+                      // eslint-disable-next-line react/no-array-index-key
+                      <MenuItem key={i} value={option.value}>
                         {option.label}
                       </MenuItem>
                     ))}
@@ -322,6 +356,7 @@ const SignupForm = (props) => {
           </Typography>
           <Grid container spacing={1}>
             {AddressDetails.map((item, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={4}>
                 <TextField
                   size="small"
@@ -373,6 +408,7 @@ const SignupForm = (props) => {
           </Typography>
           <Grid container spacing={1} alignItems="flex-end">
             {ContactInfo.map((item, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={4}>
                 {item.baseType === "input" ? (
                   <>
@@ -394,7 +430,7 @@ const SignupForm = (props) => {
                   <TextField
                     size="small"
                     variant="outlined"
-                      // className={classes.select}
+                    // className={classes.select}
                     select
                     placeholder={item.label}
                     label={item.label}
@@ -404,8 +440,9 @@ const SignupForm = (props) => {
                     fullWidth
                     onChange={(e) => handleInputChange(e)}
                   >
-                    {item.options.map((option, index) => (
-                      <MenuItem key={index} value={option.value}>
+                    {item.options.map((option, i) => (
+                      // eslint-disable-next-line react/no-array-index-key
+                      <MenuItem key={i} value={option.value}>
                         {option.label}
                       </MenuItem>
                     ))}
@@ -424,6 +461,7 @@ const SignupForm = (props) => {
           </Typography>
           <Grid container spacing={1}>
             {EmergencyInfo.map((item, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={4}>
                 <TextField
                   size="small"
@@ -449,6 +487,7 @@ const SignupForm = (props) => {
           </Typography>
           <Grid container spacing={1}>
             {InsuranceInfo.map((item, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={4}>
                 <TextField
                   size="small"
@@ -473,6 +512,7 @@ const SignupForm = (props) => {
           </Typography>
           <Grid container spacing={1}>
             {MedicalInfo.slice(0, 2).map((item, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={6}>
                 <TextField
                   size="small"
@@ -487,6 +527,7 @@ const SignupForm = (props) => {
               </Grid>
             ))}
             {MedicalInfo.slice(2, 3).map((item, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={12}>
                 <TextField
                   size="small"
@@ -511,6 +552,7 @@ const SignupForm = (props) => {
           </Typography>
           <Grid container spacing={1}>
             {UserNamePasswordInfo.map((item, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={4}>
                 <TextField
                   size="small"
@@ -578,7 +620,11 @@ const SignupForm = (props) => {
               </IconButton>
             </Grid>
             {signature ? (
-              <img alt="signature" className={classes.sigImage} src={signature} />
+              <img
+                alt="signature"
+                className={classes.sigImage}
+                src={signature}
+              />
             ) : null}
           </Grid>
           <Grid container justify="flex-end" className={classes.signupActions}>
@@ -597,37 +643,18 @@ const SignupForm = (props) => {
   );
 };
 
-const useStyles = makeStyles((theme) => ({
-  inputRow: {
-    margin: theme.spacing(3, 0),
-  },
-  sigCanvas: {
-    border: "1px solid grey",
-  },
-  sigCanvasClear: {
-    position: "absolute",
-    background: "#f3f3f3",
-    top: "-20px",
-  },
-  sigCanvasSave: {
-    position: "absolute",
-    background: "#f3f3f3",
-    top: "30px",
-  },
-  sigImage: {
-    backgroundSize: "200px 50px",
-    width: "200px",
-    height: "50px",
-    backgroundColor: "white",
-  },
-  signupActions: {
-    marginTop: theme.spacing(1),
-    maxWidth: "506px",
-    marginLeft: "auto",
-    marginRight: "auto",
-    textAlign: "right",
-    display: "block",
-  },
-}));
+SignupForm.defaultProps = {
+  errors: null,
+  onFormSubmit: () => {},
+};
+
+SignupForm.propTypes = {
+  errors: PropTypes.arrayOf(
+    PropTypes.shape({
+      msg: PropTypes.string.isRequired,
+    }),
+  ),
+  onFormSubmit: PropTypes.func,
+};
 
 export default SignupForm;

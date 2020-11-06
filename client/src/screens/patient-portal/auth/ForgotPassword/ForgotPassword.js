@@ -144,10 +144,10 @@ const ForgotPassword = () => {
                   response.response,
                 );
               },
-              (error) => {
+              (err) => {
                 console.error(
-                  "resendEmailVerification error.response",
-                  error.response,
+                  "resendEmailVerification err.response",
+                  err.response,
                 );
               },
             );
@@ -175,7 +175,8 @@ const ForgotPassword = () => {
         </Error>
         {success && (
           <Success
-            header="If that account in our system then we have sent an email with instructions to reset your password!"
+            header="If that account in our system then we have sent an email with instructions
+              to reset your password!"
             loginText="Sign back in"
             client={client}
           />

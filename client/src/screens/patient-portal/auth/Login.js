@@ -150,10 +150,7 @@ const PatientLogin = () => {
             <CssBaseline />
             <div className={classes.Logo}>
               <img
-                src={
-                  `${process.env.REACT_APP_API_URL
-                  }static/client/c${clientId}_logo.png`
-                }
+                src={`${process.env.REACT_APP_API_URL}static/client/c${clientId}_logo.png`}
                 alt="Client logo"
               />
             </div>
