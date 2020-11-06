@@ -10,63 +10,63 @@ import { KeyboardDatePicker } from "@material-ui/pickers";
 import moment from "moment";
 
 import { AuthConsumer } from "../../../../providers/AuthProvider";
-import ReportFinanceService from "./../../../../services/reportFinance.service";
+import ReportFinanceService from "../../../../services/reportFinance.service";
 import { Reports } from "./components";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    padding: "25px 0px"
+    padding: "25px 0px",
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 180
+    minWidth: 180,
   },
   title: {
-    paddingBottom: theme.spacing(.5)
+    paddingBottom: theme.spacing(0.5),
   },
   form: {
     display: "flex",
     flexDirection: "column",
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   formElments: {
     display: "flex",
     flexDirection: "column",
-    maxWidth: "500px"
+    maxWidth: "500px",
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
     marginTop: "20px",
-    maxWidth: "440px"
+    maxWidth: "440px",
   },
   customSelect: {
-    width: "200px"
+    width: "200px",
   },
   type: {
-    marginTop: "20px"
+    marginTop: "20px",
   },
   paper: {
-    maxWidth: "456px"
+    maxWidth: "456px",
   },
   textField: {
-    width: "200px"
+    width: "200px",
   },
   amount: {
-    marginTop: "18px"
+    marginTop: "18px",
   },
   datePicker: {
     display: "flex",
     flexDirection: "column",
     marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(3)
-  }
+    marginBottom: theme.spacing(3),
+  },
 }));
 
 export default function ReportFinance(props) {
   const classes = useStyles();
   const [dateFrom, setDateFrom] = useState(
-    moment().subtract(3, "months").format("YYYY-MM-DD")
+    moment().subtract(3, "months").format("YYYY-MM-DD"),
   );
   const [dateTo, setDateTo] = useState(moment().format("YYYY-MM-DD"));
   const [reports, setReports] = useState([]);
@@ -110,7 +110,7 @@ export default function ReportFinance(props) {
                       <KeyboardDatePicker
                         clearable
                         KeyboardButtonProps={{
-                          "aria-label": "change date"
+                          "aria-label": "change date",
                         }}
                         format="dd/MM/yyyy"
                         inputVariant="outlined"
@@ -127,7 +127,7 @@ export default function ReportFinance(props) {
                       <KeyboardDatePicker
                         clearable
                         KeyboardButtonProps={{
-                          "aria-label": "change date"
+                          "aria-label": "change date",
                         }}
                         format="dd/MM/yyyy"
                         inputVariant="outlined"

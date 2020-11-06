@@ -23,63 +23,63 @@ const useStyles = makeStyles((theme) => ({
   title: {
     backgroundColor: theme.palette.primary.light,
     "& h2": {
-      color: "#fff"
-    }
+      color: "#fff",
+    },
   },
   closeButton: {
     position: "absolute",
     right: theme.spacing(1 / 2),
     top: theme.spacing(1 / 2),
-    color: "#ffffff"
+    color: "#ffffff",
   },
   content: {
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
     fontSize: "18px",
-    minWidth: "600px"
+    minWidth: "600px",
   },
   subject: {
-    width: "280px"
+    width: "280px",
   },
   textArea: {
     height: "100px !important",
     width: "100%",
-    padding: "5px"
+    padding: "5px",
   },
   patientListCard: {
     position: "absolute",
     width: "100%",
-    top: "54px"
+    top: "54px",
   },
   modalConentBelow: { opacity: "1" },
   contentWithLoading: {
-    opacity: "0.5"
+    opacity: "0.5",
   },
   patientListContent: {
     padding: 0,
     "&:last-child": {
-      padding: 0
-    }
+      padding: 0,
+    },
   },
   NotifyInfo: {
     display: "flex",
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   datePicker: {
     lineHeight: "21px",
     border: "none !important",
     "& > div": {
       "&:before": {
-        display: "none"
-      }
+        display: "none",
+      },
     },
 
     "& input": {
-      display: "none"
+      display: "none",
     },
     "& button": {
-      paddingBottom: 0
-    }
+      paddingBottom: 0,
+    },
   },
   ListOfButtons: {
     display: "flex",
@@ -88,8 +88,8 @@ const useStyles = makeStyles((theme) => ({
     "& button": {
       padding: "5px",
       fontSize: "11px",
-      minWidth: "48px"
-    }
+      minWidth: "48px",
+    },
   },
   modalAction: {
     borderTop: `1px solid ${theme.palette.background.default}`,
@@ -98,8 +98,8 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
     paddingLeft: theme.spacing(3),
-    paddingRight: theme.spacing(3)
-  }
+    paddingRight: theme.spacing(3),
+  },
 }));
 
 const MessageToPatient = ({
@@ -127,7 +127,7 @@ const MessageToPatient = ({
   const handleOnChange = (event) => {
     setMessage({
       ...message,
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   };
 
@@ -155,7 +155,7 @@ const MessageToPatient = ({
         {isLoading && (
           <div
             style={{
-              textAlign: "center"
+              textAlign: "center",
             }}
           >
             <CircularProgress />
@@ -163,15 +163,15 @@ const MessageToPatient = ({
         )}
         <div
           className={clsx({
-            [classes.modalConentBelow]: true, //always apply
-            [classes.contentWithLoading]: isLoading //only when isLoading === true
+            [classes.modalConentBelow]: true, // always apply
+            [classes.contentWithLoading]: isLoading, // only when isLoading === true
           })}
         >
           <DialogContentText id="alert-dialog-description">
             Send a secure message
           </DialogContentText>
-          {errors &&
-            errors.map((error, index) => (
+          {errors
+            && errors.map((error, index) => (
               <Alert severity="error" key={index}>
                 {error.msg}
               </Alert>
@@ -208,11 +208,12 @@ const MessageToPatient = ({
           </div>
           <div className={classes.NotifyInfo}>
             <Typography component="p" variant="body2" color="textPrimary">
-              Notify me if not read by:{" "}
+              Notify me if not read by:
+              {" "}
               <b>
-                {(message.unread_notify_dt &&
-                  moment(message.unread_notify_dt).format("ll")) ||
-                  null}
+                {(message.unread_notify_dt
+                  && moment(message.unread_notify_dt).format("ll"))
+                  || null}
               </b>
             </Typography>
             <KeyboardDatePicker
@@ -225,64 +226,52 @@ const MessageToPatient = ({
               name="unread_notify_dt"
               onError={console.log}
               format="MM/dd/yyyy"
-              onChange={(date) =>
-                setMessage({
-                  ...message,
-                  unread_notify_dt: date
-                })
-              }
+              onChange={(date) => setMessage({
+                ...message,
+                unread_notify_dt: date,
+              })}
               KeyboardButtonProps={{
-                "aria-label": "change date"
+                "aria-label": "change date",
               }}
             />
             <div className={classes.ListOfButtons}>
               <Button
-                onClick={() =>
-                  setMessage({
-                    ...message,
-                    [unread_notify_dt]: null
-                  })
-                }
+                onClick={() => setMessage({
+                  ...message,
+                  [unread_notify_dt]: null,
+                })}
               >
                 clear
               </Button>
               <Button
-                onClick={() =>
-                  setMessage({
-                    ...message,
-                    [unread_notify_dt]: moment().add(7, "days")
-                  })
-                }
+                onClick={() => setMessage({
+                  ...message,
+                  [unread_notify_dt]: moment().add(7, "days"),
+                })}
               >
                 1 week
               </Button>
               <Button
-                onClick={() =>
-                  setMessage({
-                    ...message,
-                    [unread_notify_dt]: moment().add(14, "days")
-                  })
-                }
+                onClick={() => setMessage({
+                  ...message,
+                  [unread_notify_dt]: moment().add(14, "days"),
+                })}
               >
                 2 weeks
               </Button>
               <Button
-                onClick={() =>
-                  setMessage({
-                    ...message,
-                    [unread_notify_dt]: moment().add(21, "days")
-                  })
-                }
+                onClick={() => setMessage({
+                  ...message,
+                  [unread_notify_dt]: moment().add(21, "days"),
+                })}
               >
                 3 weeks
               </Button>
               <Button
-                onClick={() =>
-                  setMessage({
-                    ...message,
-                    [unread_notify_dt]: moment().add(28, "days")
-                  })
-                }
+                onClick={() => setMessage({
+                  ...message,
+                  [unread_notify_dt]: moment().add(28, "days"),
+                })}
               >
                 4 weeks
               </Button>

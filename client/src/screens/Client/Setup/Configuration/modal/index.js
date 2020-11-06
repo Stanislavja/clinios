@@ -1,6 +1,6 @@
 import React from "react";
 
-import { makeStyles, withStyles , colors } from "@material-ui/core";
+import { makeStyles, withStyles, colors } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -13,20 +13,21 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
+
 const useStyles = makeStyles((theme) => ({
   modal: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   paper: {
-    padding: theme.spacing(2, 4, 3)
+    padding: theme.spacing(2, 4, 3),
   },
   modalAction: {
     borderTop: `1px solid ${theme.palette.background.default}`,
     display: "flex",
-    justifyContent: "space-between"
-  }
+    justifyContent: "space-between",
+  },
 }));
 
 const StyledTableCell = withStyles((theme) => ({
@@ -34,26 +35,26 @@ const StyledTableCell = withStyles((theme) => ({
     backgroundColor: theme.palette.grey,
     color: theme.palette.grey,
     fontSize: "12px",
-    fontWeight: 700
+    fontWeight: 700,
   },
   body: {
-    fontSize: 14
-  }
+    fontSize: 14,
+  },
 }))(TableCell);
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
     fontSize: 14,
     "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover
+      backgroundColor: theme.palette.action.hover,
     },
     "& th": {
-      fontSize: 12
+      fontSize: 12,
     },
     "& td": {
-      fontSize: 12
-    }
-  }
+      fontSize: 12,
+    },
+  },
 }))(TableRow);
 
 // const GetConfigTime = ({ timeStart, timeEnd }) => {
@@ -80,14 +81,14 @@ export default function ConfigModal({ modal, setModal }) {
       onClose={() => setModal({ ...modal, isOpen: false })}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
-      maxWidth={`lg`}
+      maxWidth="lg"
     >
       <div className={classes.paper}>
         <div
           style={{
             marginBottom: "20px",
             display: "flex",
-            justifyContent: "space-between"
+            justifyContent: "space-between",
           }}
         >
           <Typography
@@ -106,7 +107,7 @@ export default function ConfigModal({ modal, setModal }) {
                 onClick={() => setModal({ ...modal, isOpen: false })}
                 style={{
                   borderColor: colors.orange[600],
-                  color: colors.orange[600]
+                  color: colors.orange[600],
                 }}
               >
                 Cancel

@@ -24,26 +24,26 @@ const GreenSwitch = withStyles({
   switchBase: {
     color: green[400],
     "&$checked": {
-      color: green[500]
+      color: green[500],
     },
     "&$checked + $track": {
-      backgroundColor: green[500]
-    }
+      backgroundColor: green[500],
+    },
   },
   checked: {},
-  track: {}
+  track: {},
 })(Switch);
 const useStyles = makeStyles((theme) => ({
   title: {
     backgroundColor: theme.palette.primary.light,
     "& h2": {
-      color: "#fff"
-    }
+      color: "#fff",
+    },
   },
   content: {
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
-    fontSize: "18px"
+    fontSize: "18px",
   },
   formControl: {
     display: "flex",
@@ -51,21 +51,21 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     color: theme.palette.text.secondary,
     "& .MuiSelect-select": {
-      minWidth: 120
-    }
+      minWidth: 120,
+    },
   },
   formLabel: {
     fontSize: "14px",
     fontWeight: "600",
-    width: "220px"
+    width: "220px",
   },
   formHelperText: {
     // width: "230px",
     fontSize: "12px",
-    paddingLeft: "16px"
+    paddingLeft: "16px",
   },
   formField: {
-    flex: 1
+    flex: 1,
   },
   modalAction: {
     borderTop: `1px solid ${theme.palette.background.default}`,
@@ -74,20 +74,20 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
     paddingLeft: theme.spacing(3),
-    paddingRight: theme.spacing(3)
+    paddingRight: theme.spacing(3),
   },
   formFieldLarge: {
     maxWidth: "270px",
     flex: 1,
-    width: "300px"
+    width: "300px",
   },
   formFieldSmall: {
     maxWidth: "100px",
-    flex: 1
+    flex: 1,
   },
   textArea: {
-    marginTop: "12px"
-  }
+    marginTop: "12px",
+  },
 }));
 
 const NewOrEditAppointment = ({
@@ -110,7 +110,7 @@ const NewOrEditAppointment = ({
       length: 20,
       sort_order: 1,
       allow_patients_schedule: true,
-      active: true
+      active: true,
     };
     setAppointment(appt);
   }, [props.appointment]);
@@ -119,31 +119,27 @@ const NewOrEditAppointment = ({
     console.log(
       appointment.appointment_name_portal,
       props.savedAppointments,
-      appointment.appointment_type
+      appointment.appointment_type,
     );
-    //Duplicate Name
+    // Duplicate Name
     const duplicateName = props.savedAppointments
-      .map((x) =>
-        appointment.appointment_name_portal.includes(x.appointment_name_portal)
-      )
+      .map((x) => appointment.appointment_name_portal.includes(x.appointment_name_portal))
       .includes(true);
-    //Duplicate Type
+    // Duplicate Type
     const duplicateType = props.savedAppointments
       .map((x) => appointment.appointment_type.includes(x.appointment_type))
       .includes(true);
-    //Validation Start Here
+    // Validation Start Here
     if (duplicateName || duplicateType) {
       if (duplicateName && duplicateType) {
         setNameError(true);
         setTypeError(true);
+      } else if (duplicateName) {
+        setNameError(true);
+        setTypeError(false);
       } else {
-        if (duplicateName) {
-          setNameError(true);
-          setTypeError(false);
-        } else {
-          setTypeError(true);
-          setNameError(false);
-        }
+        setTypeError(true);
+        setNameError(false);
       }
     } else {
       const formedData = {
@@ -156,8 +152,8 @@ const NewOrEditAppointment = ({
           note: appointment.note,
           active: appointment.active ? 1 : 0,
           created_user_id: user.id,
-          client_id: user.client_id
-        })
+          client_id: user.client_id,
+        }),
       };
       if (isNewAppointment) {
         createNewAppointment(formedData);
@@ -169,7 +165,7 @@ const NewOrEditAppointment = ({
         AppointmentService.update(
           formedData,
           user.id,
-          props.appointment.id
+          props.appointment.id,
         ).then((response) => {
           dispatch(setSuccess(`${response.data.message}`));
           onClose();
@@ -186,14 +182,14 @@ const NewOrEditAppointment = ({
       },
       (error) => {
         setErrors(error.response.data.error);
-      }
+      },
     );
   };
 
   const handleOnChange = (event) => {
     setAppointment({
       ...appointment,
-      [event.target.name]: event.target.value.trim()
+      [event.target.name]: event.target.value.trim(),
     });
   };
   console.log("appointment", appointment);
@@ -215,8 +211,8 @@ const NewOrEditAppointment = ({
               ? "This page is used to create a new appointment type"
               : "This page is used to update an appointment type"}
           </DialogContentText>
-          {errors &&
-            errors.map((error, index) => (
+          {errors
+            && errors.map((error, index) => (
               <Alert severity="error" key={index}>
                 {error.msg}
               </Alert>
@@ -285,12 +281,10 @@ const NewOrEditAppointment = ({
               <GreenSwitch
                 size="small"
                 checked={appointment.allow_patients_schedule}
-                onChange={(event) =>
-                  setAppointment({
-                    ...appointment,
-                    [event.target.name]: !appointment.allow_patients_schedule
-                  })
-                }
+                onChange={(event) => setAppointment({
+                  ...appointment,
+                  [event.target.name]: !appointment.allow_patients_schedule,
+                })}
                 name="allow_patients_schedule"
                 inputProps={{ "aria-label": "primary checkbox" }}
               />
@@ -321,12 +315,10 @@ const NewOrEditAppointment = ({
               <GreenSwitch
                 size="small"
                 checked={appointment.active}
-                onChange={(event) =>
-                  setAppointment({
-                    ...appointment,
-                    [event.target.name]: !appointment.active
-                  })
-                }
+                onChange={(event) => setAppointment({
+                  ...appointment,
+                  [event.target.name]: !appointment.active,
+                })}
                 name="active"
                 inputProps={{ "aria-label": "primary checkbox" }}
               />
@@ -350,7 +342,7 @@ const NewOrEditAppointment = ({
                 InputProps={{
                   classes: classes.normalOutline,
                   inputComponent: TextareaAutosize,
-                  rows: 8
+                  rows: 8,
                 }}
                 value={appointment.note}
                 onChange={(event) => handleOnChange(event)}
@@ -365,7 +357,7 @@ const NewOrEditAppointment = ({
             onClick={() => onClose()}
             style={{
               borderColor: colors.orange[600],
-              color: colors.orange[600]
+              color: colors.orange[600],
             }}
           >
             Cancel

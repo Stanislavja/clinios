@@ -14,7 +14,7 @@ import {
   makeStyles,
   Switch,
   TextField,
-  withStyles
+  withStyles,
 } from "@material-ui/core";
 import { green, grey } from "@material-ui/core/colors";
 import Alert from "@material-ui/lab/Alert";
@@ -23,25 +23,25 @@ import moment from "moment";
 import { useDispatch } from "react-redux";
 
 import ScheduleService from "../../../../../../services/schedule.service";
-import { setSuccess } from "./../../../../../../store/common/actions";
+import { setSuccess } from "../../../../../../store/common/actions";
 
 const useStyles = makeStyles((theme) => ({
   gridMargin: {
-    margin: "8px 0px"
+    margin: "8px 0px",
   },
   noteMargin: {
-    margin: "15px 0px"
+    margin: "15px 0px",
   },
   title: {
     backgroundColor: theme.palette.primary.light,
     "& h2": {
-      color: "#fff"
-    }
+      color: "#fff",
+    },
   },
   content: {
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
-    fontSize: "18px"
+    fontSize: "18px",
   },
   formControl: {
     display: "flex",
@@ -49,23 +49,23 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     color: theme.palette.text.secondary,
     "& .MuiSelect-select": {
-      minWidth: 120
-    }
+      minWidth: 120,
+    },
   },
   root: {
     paddingLeft: "5px",
     "& .MuiTypography-root": {
-      marginLeft: "5px"
-    }
+      marginLeft: "5px",
+    },
   },
   formHelperText: {
     width: "220px",
     fontSize: "12px",
-    paddingLeft: "10px"
+    paddingLeft: "10px",
   },
   statusText: {
     width: "220px",
-    fontSize: "14px"
+    fontSize: "14px",
   },
   modalAction: {
     borderTop: `1px solid ${theme.palette.background.default}`,
@@ -74,22 +74,22 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
     paddingLeft: theme.spacing(3),
-    paddingRight: theme.spacing(3)
-  }
+    paddingRight: theme.spacing(3),
+  },
 }));
 const GreenSwitch = withStyles({
   switchBase: {
     color: grey[300],
     "&$checked": {
-      color: green[500]
+      color: green[500],
     },
     "&$checked + $track": {
-      backgroundColor: green[500]
-    }
+      backgroundColor: green[500],
+    },
   },
 
   checked: {},
-  track: {}
+  track: {},
 })(Switch);
 
 const NewOrEditSchedule = ({
@@ -111,7 +111,7 @@ const NewOrEditSchedule = ({
 
   useEffect(() => {
     const tempSchedule = {
-      ...props.schedule
+      ...props.schedule,
     };
     setSchedule(tempSchedule);
   }, [props.schedule]);
@@ -133,7 +133,7 @@ const NewOrEditSchedule = ({
     time_start: moment(schedule.time_start, "HH:mm:ss").format("HH:mm:ss"),
     time_end: moment(schedule.time_end, "HH:mm:ss").format("HH:mm:ss"),
     active: schedule.active,
-    note: schedule.note ? schedule.note : ""
+    note: schedule.note ? schedule.note : "",
   };
 
   const handleCreateNewOrEditSchedule = () => {
@@ -148,7 +148,7 @@ const NewOrEditSchedule = ({
           setTimeout(() => {
             setErrors(error.response.error);
           }, 300);
-        }
+        },
       );
     } else {
       ScheduleService.updateSchedule(user.id, schedule.id, payload).then(
@@ -161,7 +161,7 @@ const NewOrEditSchedule = ({
           setTimeout(() => {
             setErrors(error.response.error);
           }, 300);
-        }
+        },
       );
     }
     handleOnClose();
@@ -180,7 +180,7 @@ const NewOrEditSchedule = ({
     <div>
       <Dialog
         maxWidth="sm"
-        fullWidth={true}
+        fullWidth
         open={isOpen}
         onClose={handleOnClose}
         aria-labelledby="alert-dialog-title"
@@ -195,8 +195,8 @@ const NewOrEditSchedule = ({
               ? "This page is used to create a new schedule entry"
               : "This page is used to Edit existing schedule entry"}
           </DialogContentText>
-          {errors &&
-            errors.map((error, index) => (
+          {errors
+            && errors.map((error, index) => (
               <Alert severity="error" key={index}>
                 {error.msg}
               </Alert>
@@ -205,7 +205,7 @@ const NewOrEditSchedule = ({
             <FormControl component="div" className={classes.formControl}>
               <Grid item xs={12} md={6} className={classes.gridMargin}>
                 <TextField
-                  fullWidth={true}
+                  fullWidth
                   autoFocus
                   required
                   id="user_id"
@@ -213,21 +213,19 @@ const NewOrEditSchedule = ({
                   select
                   label="User"
                   value={schedule.user_id}
-                  onChange={(e) =>
-                    setSchedule({ ...schedule, user_id: e.target.value })
-                  }
+                  onChange={(e) => setSchedule({ ...schedule, user_id: e.target.value })}
                   variant="outlined"
                   size="small"
                   InputLabelProps={{
-                    shrink: true
+                    shrink: true,
                   }}
                   SelectProps={{
-                    native: true
+                    native: true,
                   }}
                 >
                   {userList.map((user) => (
                     <option key={user.id} value={user.id}>
-                      {user.firstname + " " + user.lastname}
+                      {`${user.firstname} ${user.lastname}`}
                     </option>
                   ))}
                 </TextField>
@@ -243,10 +241,10 @@ const NewOrEditSchedule = ({
                   clearable
                   autoOk
                   KeyboardButtonProps={{
-                    "aria-label": "change date"
+                    "aria-label": "change date",
                   }}
                   InputLabelProps={{
-                    shrink: true
+                    shrink: true,
                   }}
                   format="yyyy/MM/dd"
                   inputVariant="outlined"
@@ -257,9 +255,7 @@ const NewOrEditSchedule = ({
                   size="small"
                   name="date_start"
                   value={schedule.date_start}
-                  onChange={(date) =>
-                    setSchedule({ ...schedule, date_start: date })
-                  }
+                  onChange={(date) => setSchedule({ ...schedule, date_start: date })}
                   onKeyUp={handleKeyUp}
                   maxDate={schedule.date_end}
                   maxDateMessage="Date start should not be after date end"
@@ -276,7 +272,7 @@ const NewOrEditSchedule = ({
                   clearable
                   autoOk
                   KeyboardButtonProps={{
-                    "aria-label": "change date"
+                    "aria-label": "change date",
                   }}
                   format="yyyy/MM/dd"
                   inputVariant="outlined"
@@ -287,12 +283,10 @@ const NewOrEditSchedule = ({
                   size="small"
                   name="date_end"
                   value={schedule.date_end}
-                  onChange={(date) =>
-                    setSchedule({ ...schedule, date_end: date })
-                  }
+                  onChange={(date) => setSchedule({ ...schedule, date_end: date })}
                   onKeyUp={handleKeyUp}
                   InputLabelProps={{
-                    shrink: true
+                    shrink: true,
                   }}
                   minDate={schedule.date_start}
                   minDateMessage="Date end should not be before date start"
@@ -308,27 +302,25 @@ const NewOrEditSchedule = ({
                   required
                   inputVariant="outlined"
                   KeyboardButtonProps={{
-                    "aria-label": "change time"
+                    "aria-label": "change time",
                   }}
                   id="time_start"
-                  name={`time_start`}
+                  name="time_start"
                   label="Time Start"
                   value={
                     schedule.time_start
                       ? moment(schedule.time_start, "HH:mm:ss").format(
-                        "YYYY-MM-DDTHH:mm:ss"
+                        "YYYY-MM-DDTHH:mm:ss",
                       )
                       : null
                   }
                   className={classes.textField}
-                  onChange={(date) =>
-                    setSchedule({ ...schedule, time_start: date })
-                  }
+                  onChange={(date) => setSchedule({ ...schedule, time_start: date })}
                   size="small"
                   autoOk
                   mask="__:__ _M"
                   InputLabelProps={{
-                    shrink: true
+                    shrink: true,
                   }}
                   maxDate={schedule.time_end}
                   maxDateMessage="Time start should not be after time end"
@@ -344,27 +336,25 @@ const NewOrEditSchedule = ({
                   required
                   inputVariant="outlined"
                   KeyboardButtonProps={{
-                    "aria-label": "change time"
+                    "aria-label": "change time",
                   }}
                   id="time_end"
-                  name={`time_end`}
+                  name="time_end"
                   label="Time End"
                   value={
                     schedule.time_end
                       ? moment(schedule.time_end, "HH:mm:ss").format(
-                        "YYYY-MM-DDTHH:mm:ss"
+                        "YYYY-MM-DDTHH:mm:ss",
                       )
                       : null
                   }
                   className={classes.textField}
-                  onChange={(date) =>
-                    setSchedule({ ...schedule, time_end: date })
-                  }
+                  onChange={(date) => setSchedule({ ...schedule, time_end: date })}
                   size="small"
                   autoOk
                   mask="__:__ _M"
                   InputLabelProps={{
-                    shrink: true
+                    shrink: true,
                   }}
                   minDate={schedule.time_start}
                   minDateMessage="Date end should not be before date start"
@@ -375,22 +365,22 @@ const NewOrEditSchedule = ({
               </p>
             </FormControl>
             <FormControlLabel
-              control={
+              control={(
                 <GreenSwitch
                   checked={Boolean(schedule.active)}
                   size="small"
                   name="active"
-                  onChange={(e) =>
-                    setSchedule({ ...schedule, active: e.target.checked })
-                  }
+                  onChange={(e) => setSchedule({ ...schedule, active: e.target.checked })}
                   onKeyUp={handleKeyUp}
                 />
-              }
+              )}
               label="Active / Inactive"
               className={classes.root}
             />
             <p className={classes.statusText}>
-              <span style={{ fontWeight: "500" }}>Status:</span> {status}
+              <span style={{ fontWeight: "500" }}>Status:</span>
+              {" "}
+              {status}
             </p>
 
             <FormControl component="div" className={classes.formControl}>
@@ -402,20 +392,18 @@ const NewOrEditSchedule = ({
                 name="note"
                 label="Notes"
                 InputLabelProps={{
-                  shrink: true
+                  shrink: true,
                 }}
                 InputProps={{
-                  rows: 6
+                  rows: 6,
                 }}
                 value={schedule.note}
-                onChange={(e) =>
-                  setSchedule({ ...schedule, note: e.target.value })
-                }
+                onChange={(e) => setSchedule({ ...schedule, note: e.target.value })}
                 onKeyUp={handleKeyUp}
                 error={String(schedule.note).length > 1000}
                 helperText={
-                  String(schedule.note).length > 1000 &&
-                  "Note can't be grater than 1000 Chars"
+                  String(schedule.note).length > 1000
+                  && "Note can't be grater than 1000 Chars"
                 }
               />
             </FormControl>
@@ -428,7 +416,7 @@ const NewOrEditSchedule = ({
             onClick={handleOnClose}
             style={{
               borderColor: colors.orange[600],
-              color: colors.orange[600]
+              color: colors.orange[600],
             }}
           >
             Cancel
