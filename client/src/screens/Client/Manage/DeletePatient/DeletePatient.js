@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { makeStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-//import Video from "./../../../../components/videos/Video";
+// import Video from "./../../../../components/videos/Video";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
@@ -10,19 +10,19 @@ import Typography from "@material-ui/core/Typography";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    padding: "25px 0px"
+    padding: "25px 0px",
   },
   title: {
-    paddingBottom: theme.spacing(.5)
+    paddingBottom: theme.spacing(0.5),
   },
   deleteFields: {
     maxWidth: "500px",
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   delete: {
-    maxWidth: "100px"
-  }
+    maxWidth: "100px",
+  },
 }));
 
 export default function DeletePatient() {

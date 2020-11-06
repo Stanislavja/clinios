@@ -7,7 +7,7 @@ import {
   FormControlLabel,
   makeStyles,
   Switch,
-  withStyles
+  withStyles,
 } from "@material-ui/core";
 import { green, grey } from "@material-ui/core/colors";
 import Grid from "@material-ui/core/Grid";
@@ -22,7 +22,7 @@ import UsersTable from "./component/UsersTable";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    padding: "40px 0px"
+    padding: "40px 0px",
   },
   uploadButtons: {
     display: "flex",
@@ -32,23 +32,23 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
     "& h1": {
       [theme.breakpoints.up("md")]: {
-        marginRight: theme.spacing(4)
-      }
-    }
-  }
+        marginRight: theme.spacing(4),
+      },
+    },
+  },
 }));
 const GreenSwitch = withStyles({
   switchBase: {
     color: grey[300],
     "&$checked": {
-      color: green[500]
+      color: green[500],
     },
     "&$checked + $track": {
-      backgroundColor: green[500]
-    }
+      backgroundColor: green[500],
+    },
   },
   checked: {},
-  track: {}
+  track: {},
 })(Switch);
 
 const Users = () => {
@@ -65,7 +65,7 @@ const Users = () => {
       const users = res.data.data;
       setAllUsers(users);
       if (isShowDeleted === false) {
-        let tempUsers = users.filter((user) => user.status !== "D");
+        const tempUsers = users.filter((user) => user.status !== "D");
         setAllUsers(tempUsers);
       } else {
         setAllUsers(users);
@@ -78,9 +78,7 @@ const Users = () => {
   }, [isShowDeleted, fetchAllUsers]);
 
   const fetchForwardEmailList = () => {
-    UsersService.getForwardEmailList().then((res) =>
-      setForwardEmailList(res.data.data)
-    );
+    UsersService.getForwardEmailList().then((res) => setForwardEmailList(res.data.data));
   };
 
   useEffect(() => {
@@ -95,7 +93,7 @@ const Users = () => {
       status: "A",
       schedule: "F",
       type: "",
-      appointments: true
+      appointments: true,
     });
   };
 
@@ -109,7 +107,7 @@ const Users = () => {
   return (
     <AuthConsumer>
       {({ user }) => (
-        <React.Fragment>
+        <>
           <CssBaseline />
           <Container maxWidth={false} className={classes.root}>
             <div className={classes.uploadButtons}>
@@ -117,14 +115,14 @@ const Users = () => {
                 Users
               </Typography>
               <FormControlLabel
-                control={
+                control={(
                   <GreenSwitch
                     checked={isShowDeleted}
                     size="small"
                     name="active"
                     onChange={() => setIsShowDeleted(!isShowDeleted)}
                   />
-                }
+                )}
                 label="Show deleted users"
                 labelPlacement="start"
               />
@@ -159,7 +157,7 @@ const Users = () => {
               allUsers={allUsers}
             />
           </Container>
-        </React.Fragment>
+        </>
       )}
     </AuthConsumer>
   );

@@ -16,13 +16,13 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "600",
     fontSize: "1em",
     "& h2": {
-      color: "#fff"
-    }
+      color: "#fff",
+    },
   },
   titleContainer: {
     padding: "0 0 0 1em",
     borderBottom: `1px solid ${Colors.border}`,
-    minHeight: 47
+    minHeight: 47,
   },
   messageToPatientsUnread: {
     marginTop: theme.spacing(8),
@@ -30,8 +30,8 @@ const useStyles = makeStyles((theme) => ({
       fontSize: "13px",
       listStyle: "none",
       lineHeight: "19px",
-      marginBottom: theme.spacing(1.5)
-    }
+      marginBottom: theme.spacing(1.5),
+    },
   },
   unreadMsgActions: {
     display: "flex",
@@ -44,20 +44,20 @@ const useStyles = makeStyles((theme) => ({
     "& a": {
       textDecoration: "none",
       fontSize: "13px",
-      color: theme.palette.text.primary
+      color: theme.palette.text.primary,
     },
     "& button": {
       border: "none",
       padding: 0,
-      fontSize: "13px"
-    }
-  }
+      fontSize: "13px",
+    },
+  },
 }));
 
 const MessagesUnread = ({
   appointmentRequests,
   messagesUnread,
-  onMessageEdit
+  onMessageEdit,
 }) => {
   const classes = useStyles();
 
@@ -78,7 +78,13 @@ const MessagesUnread = ({
           {appointmentRequests.length > 0 ? (
             messagesUnread.map((msg) => (
               <li key={msg.id}>
-                {moment(msg.created).format("ll")}, {msg.name}, {msg.subject},{" "}
+                {moment(msg.created).format("ll")}
+                ,
+                {msg.name}
+                ,
+                {msg.subject}
+                ,
+                {" "}
                 {msg.message}
                 <div className={classes.unreadMsgActions}>
                   <Link to={`/patients/${msg.patient_id}`}>Patient</Link>

@@ -17,60 +17,62 @@ import moment from "moment";
 const useStyles = makeStyles((theme) => ({
   tableContainer: {
     minWidth: 650,
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
   },
   actions: {
     textAlign: "center",
     display: "flex",
     border: "none",
     "& button": {
-      fontSize: "12px"
-    }
+      fontSize: "12px",
+    },
   },
   overflowControl: {
     maxWidth: "130px",
     textOverflow: "ellipsis",
     overflow: "hidden",
-    whiteSpace: "nowrap"
-  }
+    whiteSpace: "nowrap",
+  },
 }));
 const LightTooltip = withStyles((theme) => ({
   tooltip: {
     backgroundColor: theme.palette.common.white,
     color: "rgba(0,0,0,0.87)",
     boxShadow: theme.shadows[1],
-    fontSizw: 13
-  }
+    fontSizw: 13,
+  },
 }))(Tooltip);
 const StyledTableCell = withStyles((theme) => ({
   head: {
     backgroundColor: theme.palette.grey,
     color: theme.palette.grey,
     fontSize: "12px",
-    fontWeight: 700
+    fontWeight: 700,
   },
   body: {
-    fontSize: 14
-  }
+    fontSize: 14,
+  },
 }))(TableCell);
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
     fontSize: 14,
     "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover
+      backgroundColor: theme.palette.action.hover,
     },
     "& th": {
-      fontSize: 12
+      fontSize: 12,
     },
     "& td": {
       fontSize: 12,
-      height: "50px"
-    }
-  }
+      height: "50px",
+    },
+  },
 }))(TableRow);
 
-const Appointments = ({ appointments, onEdit, onDelete, ...props }) => {
+const Appointments = ({
+  appointments, onEdit, onDelete, ...props
+}) => {
   const classes = useStyles();
   return (
     <TableContainer component={Paper} className={classes.tableContainer}>
@@ -94,7 +96,7 @@ const Appointments = ({ appointments, onEdit, onDelete, ...props }) => {
             <StyledTableCell padding="default">Created By</StyledTableCell>
             <StyledTableCell padding="default">Updated</StyledTableCell>
             <StyledTableCell padding="default">Updated By</StyledTableCell>
-            <StyledTableCell /*align="center"*/>Actions</StyledTableCell>
+            <StyledTableCell>Actions</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>

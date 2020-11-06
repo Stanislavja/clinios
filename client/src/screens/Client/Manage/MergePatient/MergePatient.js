@@ -8,19 +8,19 @@ import Typography from "@material-ui/core/Typography";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    padding: "25px 0px"
+    padding: "25px 0px",
   },
   title: {
-    paddingBottom: theme.spacing(.5)
+    paddingBottom: theme.spacing(0.5),
   },
   mergeItems: {
     maxWidth: "500px",
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   submit: {
-    maxWidth: "100px"
-  }
+    maxWidth: "100px",
+  },
 }));
 
 export default function MergePatient() {

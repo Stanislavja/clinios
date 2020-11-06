@@ -32,66 +32,66 @@ import clsx from "clsx";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
 
-import useDebounce from "./../../../../../hooks/useDebounce";
-import * as API from "./../../../../../utils/API";
+import useDebounce from "../../../../../hooks/useDebounce";
+import * as API from "../../../../../utils/API";
 
 const useStyles = makeStyles((theme) => ({
   title: {
     backgroundColor: theme.palette.primary.light,
     "& h2": {
-      color: "#fff"
-    }
+      color: "#fff",
+    },
   },
   closeButton: {
     position: "absolute",
     right: theme.spacing(1 / 2),
     top: theme.spacing(1 / 2),
-    color: "#ffffff"
+    color: "#ffffff",
   },
   content: {
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
-    fontSize: "18px"
+    fontSize: "18px",
   },
   formControl: {
     width: "100%",
     color: theme.palette.text.secondary,
     "& .MuiSelect-select": {
-      minWidth: 220
-    }
+      minWidth: 220,
+    },
   },
   datePickers: {
     display: "flex",
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
   },
   startdatePicker: {
-    marginRight: theme.spacing(4)
+    marginRight: theme.spacing(4),
   },
   statuses: {
     marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(2),
   },
   statusList: {
-    flexDirection: "row"
+    flexDirection: "row",
   },
   textArea: {
     height: "100px !important",
     width: "100%",
-    padding: "5px"
+    padding: "5px",
   },
   patientListCard: {
     position: "absolute",
     width: "100%",
-    top: "54px"
+    top: "54px",
   },
   contentWithLoading: {
-    opacity: "0.5"
+    opacity: "0.5",
   },
   patientListContent: {
     padding: 0,
     "&:last-child": {
-      padding: 0
-    }
+      padding: 0,
+    },
   },
   modalAction: {
     borderTop: `1px solid ${theme.palette.background.default}`,
@@ -100,12 +100,12 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
     paddingLeft: theme.spacing(3),
-    paddingRight: theme.spacing(3)
+    paddingRight: theme.spacing(3),
   },
   patientLink: {
     cursor: "pointer",
-    color: theme.palette.text.link
-  }
+    color: theme.palette.text.link,
+  },
 }));
 
 const NewOrEditEvent = ({
@@ -132,7 +132,7 @@ const NewOrEditEvent = ({
   const [errorText, setErrorText] = useState({
     title: "",
     patient: "",
-    error: ""
+    error: "",
   });
 
   useEffect(() => {
@@ -151,7 +151,7 @@ const NewOrEditEvent = ({
   const handleOnChange = (event) => {
     setCalEvent({
       ...calEvent,
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   };
 
@@ -167,7 +167,7 @@ const NewOrEditEvent = ({
           },
           (error) => {
             console.log("search error", error);
-          }
+          },
         );
       } else {
         setPatients([]);
@@ -178,7 +178,7 @@ const NewOrEditEvent = ({
     // Our useEffect function will only execute if this value changes ...
     // ... and thanks to our hook it will only change if the original ...
     // value (searchTerm) hasn't changed for more than 500ms.
-    [debouncedSearchTerm]
+    [debouncedSearchTerm],
   );
 
   const handlePatientChange = (_, patient) => {
@@ -197,13 +197,13 @@ const NewOrEditEvent = ({
         const payload = {
           data: {
             title: calEvent.title,
-            provider: provider,
+            provider,
             patient: selectedPatient,
             ApptStatus: calEvent.status,
             notes: calEvent.notes,
             start_dt: calEvent.start_dt,
-            end_dt: calEvent.end_dt
-          }
+            end_dt: calEvent.end_dt,
+          },
         };
         onSave(payload);
       } else {
@@ -212,23 +212,21 @@ const NewOrEditEvent = ({
             id: props.event.id,
             title: calEvent.title,
             providerName: calEvent.provider_name,
-            provider: provider,
-            patient: selectedPatient
-              ? selectedPatient
-              : {
-                id: props.event.patient_id,
-                firstname: props.event.firstname,
-                email: props.event.email
-              },
+            provider,
+            patient: selectedPatient || {
+              id: props.event.patient_id,
+              firstname: props.event.firstname,
+              email: props.event.email,
+            },
             ApptStatus: calEvent.status,
             notes: calEvent.notes,
             old_start_dt: moment(props.event.start_dt).format(
-              "YYYY-MM-DD HH:mm"
+              "YYYY-MM-DD HH:mm",
             ),
             old_end_dt: moment(props.event.end_dt).format("YYYY-MM-DD HH:mm"),
             new_start_dt: moment(calEvent.start_dt).format("YYYY-MM-DD HH:mm"),
-            new_end_dt: moment(calEvent.end_dt).format("YYYY-MM-DD HH:mm")
-          }
+            new_end_dt: moment(calEvent.end_dt).format("YYYY-MM-DD HH:mm"),
+          },
         };
         onEventUpdate(payload);
       }
@@ -246,34 +244,32 @@ const NewOrEditEvent = ({
         setErrorText({
           ...errorText,
           title: "Enter your title",
-          patient: "Please select from here"
+          patient: "Please select from here",
         });
       } else {
         if (!calEvent.title) {
           setErrorText({
             ...errorText,
             title: "Enter your title",
-            patient: ""
+            patient: "",
           });
         }
         if (selectedPatient.length === 0) {
           setErrorText({
             ...errorText,
             patient: "Please select from here",
-            title: ""
+            title: "",
           });
         }
       }
-    } else {
-      if (existPatientID) {
-        if (startTimeExist) {
-          setErrorText({ ...errorText, error: "This time is not available" });
-        } else {
-          submitData();
-        }
+    } else if (existPatientID) {
+      if (startTimeExist) {
+        setErrorText({ ...errorText, error: "This time is not available" });
       } else {
         submitData();
       }
+    } else {
+      submitData();
     }
   };
 
@@ -302,7 +298,7 @@ const NewOrEditEvent = ({
         {isLoading && (
           <div
             style={{
-              textAlign: "center"
+              textAlign: "center",
             }}
           >
             <CircularProgress />
@@ -310,15 +306,15 @@ const NewOrEditEvent = ({
         )}
         <div
           className={clsx({
-            [classes.modalConentBelow]: true, //always apply
-            [classes.contentWithLoading]: isLoading //only when isLoading === true
+            [classes.modalConentBelow]: true, // always apply
+            [classes.contentWithLoading]: isLoading, // only when isLoading === true
           })}
         >
           <DialogContentText id="alert-dialog-description">
             This page is used to create a new appointment
           </DialogContentText>
-          {errors &&
-            errors.map((error, index) => (
+          {errors
+            && errors.map((error, index) => (
               <Alert severity="error" key={index}>
                 {error.msg}
               </Alert>
@@ -352,10 +348,10 @@ const NewOrEditEvent = ({
                 value={calEvent.start_dt}
                 placeholder="2020/10/10 10:00"
                 onChange={(date) => {
-                  let property = "start_dt";
+                  const property = "start_dt";
                   setCalEvent({
                     ...calEvent,
-                    [property]: date
+                    [property]: date,
                   });
                 }}
                 minDate={new Date()}
@@ -363,7 +359,7 @@ const NewOrEditEvent = ({
                 disablePast
                 format="yyyy/MM/dd HH:mm"
                 KeyboardButtonProps={{
-                  "aria-label": "change date"
+                  "aria-label": "change date",
                 }}
               />
               <KeyboardDateTimePicker
@@ -376,14 +372,14 @@ const NewOrEditEvent = ({
                 value={calEvent.end_dt}
                 placeholder="2020/10/10 11:00"
                 onChange={(date) => {
-                  let property = "end_dt";
+                  const property = "end_dt";
                   setCalEvent({
                     ...calEvent,
-                    [property]: date
+                    [property]: date,
                   });
                   const length = moment(date).diff(
                     calEvent.start_dt,
-                    "minutes"
+                    "minutes",
                   );
                   setAppointmentLeangth(length);
                 }}
@@ -393,7 +389,7 @@ const NewOrEditEvent = ({
                 disablePast
                 format="yyyy/MM/dd HH:mm"
                 KeyboardButtonProps={{
-                  "aria-label": "change date"
+                  "aria-label": "change date",
                 }}
               />
               <TextField
@@ -484,9 +480,7 @@ const NewOrEditEvent = ({
                       {patients.map((patient) => (
                         <ListItem
                           button
-                          onClick={(event) =>
-                            handlePatientChange(event, patient)
-                          }
+                          onClick={(event) => handlePatientChange(event, patient)}
                           key={patient.id}
                         >
                           <ListItemText

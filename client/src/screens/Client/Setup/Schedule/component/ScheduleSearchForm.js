@@ -1,30 +1,32 @@
 import React from "react";
 
-import { Button, Grid, makeStyles, TextField } from "@material-ui/core";
+import {
+  Button, Grid, makeStyles, TextField,
+} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   gridMargin: {
-    marginTop: "15px"
+    marginTop: "15px",
   },
   submit: {
     paddingLeft: "30px",
     paddingRight: "30px",
-    marginTop: "10px"
-  }
+    marginTop: "10px",
+  },
 }));
 
 const ScheduleSearchForm = ({
   userList,
   userId,
   handleChangeOfUserId,
-  fetchScheduleSearch
+  fetchScheduleSearch,
 }) => {
   const classes = useStyles();
 
   return (
     <Grid item xs={12} md={2} className={classes.gridMargin}>
       <TextField
-        fullWidth={true}
+        fullWidth
         autoFocus
         id="outlined-select-currency"
         select
@@ -34,16 +36,16 @@ const ScheduleSearchForm = ({
         variant="outlined"
         size="small"
         InputLabelProps={{
-          shrink: true
+          shrink: true,
         }}
         SelectProps={{
-          native: true
+          native: true,
         }}
       >
         <option aria-label="None" value="" />
         {userList.map((user) => (
           <option key={user.id} value={user.id}>
-            {user.firstname + " " + user.lastname}
+            {`${user.firstname} ${user.lastname}`}
           </option>
         ))}
       </TextField>

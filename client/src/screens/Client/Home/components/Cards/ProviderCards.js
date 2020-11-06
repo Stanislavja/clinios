@@ -11,19 +11,19 @@ import Colors from "../../../../../theme/colors";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginBottom: theme.spacing(1)
+    marginBottom: theme.spacing(1),
   },
   title: {
     fontWeight: "600",
     fontSize: "1em",
     "& h2": {
-      color: "#fff"
-    }
+      color: "#fff",
+    },
   },
   titleContainer: {
     padding: "0 0 0 1em",
     borderBottom: `1px solid ${Colors.border}`,
-    minHeight: 47
+    minHeight: 47,
   },
   providers: {
     display: "block",
@@ -37,11 +37,11 @@ const useStyles = makeStyles((theme) => ({
       padding: "3px 0px",
       cursor: "pointer",
       "&:hover": {
-        background: "#fafafa"
+        background: "#fafafa",
       },
       "& div": {
-        flex: 2
-      }
+        flex: 2,
+      },
     },
     "& a": {
       fontSize: "13px",
@@ -54,21 +54,21 @@ const useStyles = makeStyles((theme) => ({
       width: "100%",
       color: theme.palette.text.primary,
       "&:hover": {
-        background: "#fafafa"
+        background: "#fafafa",
       },
       "& div": {
-        flex: 2
-      }
-    }
+        flex: 2,
+      },
+    },
   },
   providersLabel: {
     fontWeight: 600,
-    marginBottom: theme.spacing(1)
+    marginBottom: theme.spacing(1),
   },
   count: {
     width: "30px",
-    flex: "1 !important"
-  }
+    flex: "1 !important",
+  },
 }));
 
 const ProviderCards = ({ providers, handleProviderClick }) => {
@@ -92,19 +92,21 @@ const ProviderCards = ({ providers, handleProviderClick }) => {
             <div className={classes.count}>Count</div>
             <div>Since</div>
           </li>
-          {providers &&
-            providers.map((provider) => (
+          {providers
+            && providers.map((provider) => (
               <li
                 key={provider.id}
                 onClick={() => handleProviderClick(provider)}
               >
                 <div>{provider.name}</div>
                 <div className={classes.count}>{provider.count}</div>
-                <div>{`${moment(provider.dt).format("ll")} (${moment(
-                  provider.dt
-                )
-                  .startOf("day")
-                  .fromNow()})`}</div>
+                <div>
+                  {`${moment(provider.dt).format("ll")} (${moment(
+                    provider.dt,
+                  )
+                    .startOf("day")
+                    .fromNow()})`}
+                </div>
               </li>
             ))}
         </ul>

@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from "react";
+
+import {
+  Container, CssBaseline, Grid, makeStyles,
+} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-import { Container, CssBaseline, Grid, makeStyles } from "@material-ui/core";
+
 import { AuthConsumer } from "../../../../providers/AuthProvider";
-import AccountingTypesTable from "./component/AccountingTypesTable";
 import AccountingTypesService from "../../../../services/accountingTypes.service";
+import AccountingTypesTable from "./component/AccountingTypesTable";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    padding: "40px 0px"
+    padding: "40px 0px",
   },
   title: {
-    paddingBottom: theme.spacing(1)
-  }
+    paddingBottom: theme.spacing(1),
+  },
 }));
 
 export default function AccountingTypes() {
@@ -20,9 +24,7 @@ export default function AccountingTypes() {
   const [accountingTypes, setAccountingTypes] = useState([]);
 
   const getAccountingTypes = () => {
-    AccountingTypesService.getAccountingTypes().then((res) =>
-      setAccountingTypes(res.data.data)
-    );
+    AccountingTypesService.getAccountingTypes().then((res) => setAccountingTypes(res.data.data));
   };
 
   useEffect(() => {
@@ -32,7 +34,7 @@ export default function AccountingTypes() {
   return (
     <AuthConsumer>
       {({ user }) => (
-        <React.Fragment>
+        <>
           <CssBaseline />
           <Container maxWidth={false} className={classes.root}>
             <Grid container justify="center" spacing={2}>
@@ -52,7 +54,7 @@ export default function AccountingTypes() {
               </Grid>
             </Grid>
           </Container>
-        </React.Fragment>
+        </>
       )}
     </AuthConsumer>
   );

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-import { Button, Container, CssBaseline, makeStyles } from "@material-ui/core";
+import {
+  Button, Container, CssBaseline, makeStyles,
+} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import _ from "lodash";
@@ -16,7 +18,7 @@ import ScheduleSearchResultTable from "./component/ScheduleSearchResultTable";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    padding: "25px 0px"
+    padding: "25px 0px",
   },
   uploadButtons: {
     display: "flex",
@@ -25,16 +27,16 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "480px",
     "& h1": {
       [theme.breakpoints.up("md")]: {
-        marginRight: theme.spacing(1)
-      }
-    }
+        marginRight: theme.spacing(1),
+      },
+    },
   },
   card: {
     minHeight: 300,
     display: "flex",
     alignItems: "center",
-    justifyContent: "center"
-  }
+    justifyContent: "center",
+  },
 }));
 
 const Schedule = () => {
@@ -51,7 +53,7 @@ const Schedule = () => {
 
   const [searchResult, setSearchResult] = useState([]);
   const payload = {
-    userId
+    userId,
   };
 
   const getUserList = () => {
@@ -83,14 +85,14 @@ const Schedule = () => {
       time_start: "09:00:00",
       time_end: "15:00:00",
       active: true,
-      note: ""
+      note: "",
     });
   };
   const handleOnEditClick = (id) => {
     setIsOpen(true);
     setIsNewSchedule(false);
     const scheduleById = searchResult.filter((result) => result.id === id);
-    if (!!scheduleById) {
+    if (scheduleById) {
       setSelectedScheduleValues(_.head(scheduleById));
     }
   };
@@ -103,7 +105,7 @@ const Schedule = () => {
   return (
     <AuthConsumer>
       {({ user }) => (
-        <React.Fragment>
+        <>
           <CssBaseline>
             <Container maxWidth={false} className={classes.root}>
               <div className={classes.uploadButtons}>
@@ -160,7 +162,7 @@ const Schedule = () => {
               />
             </Container>
           </CssBaseline>
-        </React.Fragment>
+        </>
       )}
     </AuthConsumer>
   );

@@ -6,7 +6,7 @@ import {
   FormControlLabel,
   makeStyles,
   TextField,
-  withStyles
+  withStyles,
 } from "@material-ui/core";
 import { green, grey } from "@material-ui/core/colors";
 
@@ -21,7 +21,7 @@ const GreenSwitch = withStyles({
       // color: grey[500]
       "&$checked": {
         color: grey[500],
-      }
+      },
     },
   },
   checked: {},
@@ -33,31 +33,31 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexDirection: "column",
-    margin: "10px 0"
+    margin: "10px 0",
   },
   controlLabel: {
     marginLeft: "0px",
-    marginRight: "0px"
+    marginRight: "0px",
   },
   textField: {
-    width: "250px"
+    width: "250px",
   },
   submit: {
     marginTop: theme.spacing(1),
     padding: "4px 30px",
     fontSize: "1rem",
-    maxWidth: "100px"
+    maxWidth: "100px",
   },
   check: {
     marginLeft: "7px",
-    marginTop: "5px"
-  }
+    marginTop: "5px",
+  },
 }));
 
 const ICDcodesform = ({
   fetchSearchIcdCodes,
   textChangeHandler,
-  checkBoxChangeHandler
+  checkBoxChangeHandler,
 }) => {
   const classes = useStyles();
   const handleKeyUp = (event) => {
@@ -79,7 +79,7 @@ const ICDcodesform = ({
         onKeyUp={(event) => handleKeyUp(event)}
       />
       <FormControlLabel
-        control={
+        control={(
           <GreenSwitch
             onChange={checkBoxChangeHandler}
             color="primary"
@@ -88,7 +88,7 @@ const ICDcodesform = ({
             size="small"
             className={classes.check}
           />
-        }
+        )}
         label="Favorite"
       />
 

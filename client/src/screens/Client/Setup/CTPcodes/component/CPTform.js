@@ -6,34 +6,34 @@ import {
   FormControlLabel,
   Grid,
   makeStyles,
-  TextField
+  TextField,
 } from "@material-ui/core";
 
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
-    minWidth: "100%"
+    minWidth: "100%",
   },
   controlLabel: {
     marginLeft: "0px",
-    marginRight: "15px"
+    marginRight: "15px",
   },
   input: {
-    padding: "10.5px"
+    padding: "10.5px",
   },
   formStyle: {
-    display: "flex"
+    display: "flex",
   },
   gridMargin: {
     marginRight: "10px",
-    marginBottom: "8px"
+    marginBottom: "8px",
   },
   submit: {
     paddingLeft: "30px",
     paddingRight: "30px",
     // fontSize: "1rem",
-    marginTop: "8px"
-  }
+    marginTop: "8px",
+  },
 }));
 
 const CPTform = ({
@@ -46,7 +46,7 @@ const CPTform = ({
   handleChangeOfFavorite,
   handleChangeOfBillable,
   handleChangeOfSelf,
-  handleChangeOfGroup
+  handleChangeOfGroup,
 }) => {
   const classes = useStyles();
 
@@ -61,13 +61,13 @@ const CPTform = ({
       <Grid className={classes.formStyle}>
         <Grid item xs={12} md={1} className={classes.gridMargin}>
           <TextField
-            fullWidth={true}
-            autoFocus={true}
+            fullWidth
+            autoFocus
             label="CPT ID"
             variant="outlined"
             size="small"
             InputLabelProps={{
-              shrink: true
+              shrink: true,
             }}
             onChange={handleChangeOfCptId}
             onKeyUp={handleKeyUp}
@@ -75,12 +75,12 @@ const CPTform = ({
         </Grid>
         <Grid item xs={12} md={3} className={classes.gridMargin}>
           <TextField
-            fullWidth={true}
+            fullWidth
             label="CPT Description"
             variant="outlined"
             size="small"
             InputLabelProps={{
-              shrink: true
+              shrink: true,
             }}
             onChange={handleChangeOfCptDescription}
             onKeyUp={handleKeyUp}
@@ -88,7 +88,7 @@ const CPTform = ({
         </Grid>
         <Grid item xs={12} md={2} className={classes.gridMargin}>
           <TextField
-            fullWidth={true}
+            fullWidth
             id="outlined-select-currency"
             select
             label="Lab Company"
@@ -97,10 +97,10 @@ const CPTform = ({
             variant="outlined"
             size="small"
             InputLabelProps={{
-              shrink: true
+              shrink: true,
             }}
             SelectProps={{
-              native: true
+              native: true,
             }}
           >
             <option aria-label="None" value="" />
@@ -113,7 +113,7 @@ const CPTform = ({
         </Grid>
       </Grid>
       <FormControlLabel
-        control={
+        control={(
           <Checkbox
             name="favorite"
             onChange={handleChangeOfFavorite}
@@ -121,13 +121,13 @@ const CPTform = ({
             color="primary"
             size="small"
           />
-        }
+        )}
         label="Favorites"
         labelPlacement="start"
         className={classes.controlLabel}
       />
       <FormControlLabel
-        control={
+        control={(
           <Checkbox
             onChange={handleChangeOfBillable}
             onKeyUp={handleKeyUp}
@@ -135,13 +135,13 @@ const CPTform = ({
             color="primary"
             size="small"
           />
-        }
+        )}
         label="Billable"
         labelPlacement="start"
         className={classes.controlLabel}
       />
       <FormControlLabel
-        control={
+        control={(
           <Checkbox
             onChange={handleChangeOfSelf}
             onKeyUp={handleKeyUp}
@@ -149,13 +149,13 @@ const CPTform = ({
             color="primary"
             size="small"
           />
-        }
+        )}
         label="Self"
         labelPlacement="start"
         className={classes.controlLabel}
       />
       <FormControlLabel
-        control={
+        control={(
           <Checkbox
             onChange={handleChangeOfGroup}
             onKeyUp={handleKeyUp}
@@ -163,7 +163,7 @@ const CPTform = ({
             color="primary"
             size="small"
           />
-        }
+        )}
         label="Group"
         labelPlacement="start"
         className={classes.controlLabel}

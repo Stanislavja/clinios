@@ -11,11 +11,11 @@ import CPTtable from "./component/CPTtable";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    padding: "25px 0px"
+    padding: "25px 0px",
   },
   title: {
-    paddingBottom: theme.spacing(.5)
-  }
+    paddingBottom: theme.spacing(0.5),
+  },
 }));
 
 export default function CTPcodes() {
@@ -36,7 +36,7 @@ export default function CTPcodes() {
     favorite,
     billable,
     self,
-    group
+    group,
   };
 
   const fetchLabCompanyList = () => {
@@ -80,7 +80,7 @@ export default function CTPcodes() {
   return (
     <AuthConsumer>
       {({ user }) => (
-        <React.Fragment>
+        <>
           <CssBaseline />
           <div className={classes.root}>
             <Typography
@@ -114,7 +114,7 @@ export default function CTPcodes() {
               />
             )}
           </div>
-        </React.Fragment>
+        </>
       )}
     </AuthConsumer>
   );

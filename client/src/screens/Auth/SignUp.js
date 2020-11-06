@@ -10,32 +10,32 @@ import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { useHistory } from "react-router-dom";
 
 import PracticeForm from "../../components/signup/PracticeForm";
-import Success from "./../../components/signup/Success";
-import { AuthConsumer } from "./../../providers/AuthProvider";
-import AuthService from "./../../services/auth.service";
-import { signupComplete } from "./../../store/auth/actions";
-import { setSuccess } from "./../../store/common/actions";
-import { sendVerificationEmail } from "./../../store/email/actions";
+import Success from "../../components/signup/Success";
+import { AuthConsumer } from "../../providers/AuthProvider";
+import AuthService from "../../services/auth.service";
+import { signupComplete } from "../../store/auth/actions";
+import { setSuccess } from "../../store/common/actions";
+import { sendVerificationEmail } from "../../store/email/actions";
 
 
 const useStyles = makeStyles((theme) => ({
   pageTitle: {
-    marginBottom: theme.spacing(3)
+    marginBottom: theme.spacing(3),
   },
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: "transparent",
-    color: theme.palette.text.secondary
+    color: theme.palette.text.secondary,
   },
   lockIcon: {
-    fontSize: "40px"
-  }
+    fontSize: "40px",
+  },
 }));
 
 const SignUp = () => {
@@ -45,7 +45,7 @@ const SignUp = () => {
   const [errors, setErrors] = useState([]);
   const success = useSelector(
     (state) => state.auth.success || false,
-    shallowEqual
+    shallowEqual,
   );
 
   const handleFormSubmit = (data) => {
@@ -61,7 +61,7 @@ const SignUp = () => {
         if (error.response) {
           setErrors(error.response.data);
         }
-      }
+      },
     );
   };
 

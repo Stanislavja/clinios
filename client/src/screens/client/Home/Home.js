@@ -8,11 +8,11 @@ import Switch from "@material-ui/core/Switch";
 import Typography from "@material-ui/core/Typography";
 import { useDispatch } from "react-redux";
 
+import Appointments from "../../../services/appointments.service";
 import DashboardHome from "../../../services/DashboardHome.service";
 import Messages from "../../../services/message-to-patient.service";
-import Appointments from "./../../../services/appointments.service";
-import { setSuccess } from "./../../../store/common/actions";
-import { statusToColorCode } from "./../../../utils/helpers";
+import { setSuccess } from "../../../store/common/actions";
+import { statusToColorCode } from "../../../utils/helpers";
 import {
   AppointmentRequests,
   Calendar,
@@ -20,38 +20,38 @@ import {
   MessageToPatient,
   NewOrEditEvent,
   ProviderCards,
-  ProviderDetailsCard
+  ProviderDetailsCard,
 } from "./components";
 
 const useStyles = makeStyles((theme) => ({
   pageTitle: {
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(2),
   },
   root: {
     flexGrow: 1,
-    padding: "40px 0px"
+    padding: "40px 0px",
   },
   formControl: {
     display: "flex",
     flexDirection: "row",
     marginLeft: "60px",
     marginTop: "5px",
-    fontSize: "15px"
-  }
+    fontSize: "15px",
+  },
 }));
 
 const GreenSwitch = withStyles({
   switchBase: {
     color: green[400],
     "&$checked": {
-      color: green[500]
+      color: green[500],
     },
     "&$checked + $track": {
-      backgroundColor: green[500]
-    }
+      backgroundColor: green[500],
+    },
   },
   checked: {},
-  track: {}
+  track: {},
 })(Switch);
 
 export default function Home() {
@@ -77,18 +77,16 @@ export default function Home() {
   const [isMessageToPatientOpen, setIsMessageToPatientOpen] = useState(false);
 
   const getMapFromArray = (data) => {
-    const formedData = data.reduce((acc, item) => {
-      return [
-        ...acc,
-        {
-          ...item,
-          title: item.title ? item.title : item.firstname,
-          start: item.start_dt,
-          end: item.end_dt,
-          backgroundColor: statusToColorCode(item.status)
-        }
-      ];
-    }, []);
+    const formedData = data.reduce((acc, item) => [
+      ...acc,
+      {
+        ...item,
+        title: item.title ? item.title : item.firstname,
+        start: item.start_dt,
+        end: item.end_dt,
+        backgroundColor: statusToColorCode(item.status),
+      },
+    ], []);
 
     return formedData;
   };
@@ -159,14 +157,14 @@ export default function Home() {
       },
       (error) => {
         setErrors(error.response.data.error);
-      }
+      },
     );
   };
 
   const handleEventClick = (calEvent) => {
     setIsNewEvent(false);
     const eventClicked = events.filter(
-      (event) => event.id === parseInt(calEvent.event.id)
+      (event) => event.id === parseInt(calEvent.event.id),
     );
     setSelectedEvent(eventClicked[0]);
     setIsOpen(true);
@@ -184,7 +182,7 @@ export default function Home() {
       },
       (error) => {
         setErrors(error.response.data.error);
-      }
+      },
     );
   };
 
@@ -199,7 +197,7 @@ export default function Home() {
       },
       (error) => {
         setErrors(error.response.data.error);
-      }
+      },
     );
   };
 
@@ -215,9 +213,8 @@ export default function Home() {
     setSelectedMsg(msg);
   };
 
-  const fetchSingleMessage = () =>
-    !isNewMessage &&
-    Messages.getMessageByID(selectedMsg.id).then(
+  const fetchSingleMessage = () => !isNewMessage
+    && Messages.getMessageByID(selectedMsg.id).then(
       (response) => {
         const { data } = response;
         setSelectedMsg(data[0]);
@@ -226,7 +223,7 @@ export default function Home() {
         if (error.response) {
           setErrors(error.response.data);
         }
-      }
+      },
     );
 
   const handleMessageToPatientFormSubmit = (_, message, isNewMessage) => {
@@ -235,11 +232,11 @@ export default function Home() {
       data: {
         ...message,
         user_id_from: selectedProvider.id,
-        patient_id_to: patient_id_to
-      }
+        patient_id_to,
+      },
     };
     if (isNewMessage) {
-      //Create new message
+      // Create new message
       Messages.create(payload).then(
         (response) => {
           setIsLoading(false);
@@ -249,10 +246,10 @@ export default function Home() {
         (errors) => {
           setIsLoading(false);
           setIsMessageToPatientOpen(false);
-        }
+        },
       );
     } else {
-      //Update message
+      // Update message
       Messages.update(payload).then(
         (response) => {
           setIsLoading(false);
@@ -262,7 +259,7 @@ export default function Home() {
         (errors) => {
           setIsLoading(false);
           setIsMessageToPatientOpen(false);
-        }
+        },
       );
     }
   };
@@ -276,7 +273,9 @@ export default function Home() {
           color="textPrimary"
           className={classes.pageTitle}
         >
-          Home {selectedProvider && `- ${selectedProvider.name}`}
+          Home
+          {" "}
+          {selectedProvider && `- ${selectedProvider.name}`}
         </Typography>
         <FormControl component="div" className={classes.formControl}>
           <p className={classes.formHelperText}>Show canceled/rejected</p>
@@ -305,7 +304,7 @@ export default function Home() {
             providerDetails={providerDetails}
           />
           {!!selectedProvider && (
-            <React.Fragment>
+            <>
               <MessagesUnread
                 appointmentRequests={appointmentRequests}
                 messagesUnread={messagesUnread}
@@ -318,7 +317,7 @@ export default function Home() {
                 onAccept={(payload) => handleEventCreation(payload)}
                 onReject={(payload) => handleEventCancellation(payload)}
               />
-            </React.Fragment>
+            </>
           )}
         </Grid>
       </Grid>
