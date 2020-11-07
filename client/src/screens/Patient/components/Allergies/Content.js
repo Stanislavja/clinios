@@ -2,8 +2,18 @@ import React from "react";
 
 import { Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
 
-export default function AllergiesContent(props) {
+const useStyles = makeStyles((theme) => ({
+  inputRow: {
+    marginBottom: theme.spacing(0.5),
+  },
+  text12: {
+    fontSize: 12,
+  },
+}));
+
+const AllergiesContent = (props) => {
   const classes = useStyles();
   const { data /* reloadData */ } = props;
 
@@ -16,13 +26,10 @@ export default function AllergiesContent(props) {
       ))}
     </>
   );
-}
+};
 
-const useStyles = makeStyles((theme) => ({
-  inputRow: {
-    marginBottom: theme.spacing(0.5)
-  },
-  text12: {
-    fontSize: 12
-  }
-}));
+AllergiesContent.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
+
+export default AllergiesContent;
