@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 
-import { Button, Grid, Typography, Checkbox } from "@material-ui/core";
+import {
+  Button, Grid, Typography, Checkbox,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -8,10 +10,29 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
 import moment from "moment";
+import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 
 import PatientService from "../../../../services/patient.service";
 import { setError, setSuccess } from "../../../../store/common/actions";
+
+const useStyles = makeStyles((theme) => ({
+  inputRow: {
+    margin: theme.spacing(3, 0),
+  },
+  processPaymentButton: {
+    margin: theme.spacing(3, 0),
+  },
+  amountContainer: {
+    marginLeft: "0px !important",
+  },
+  formInput: {
+    marginBottom: theme.spacing(1),
+  },
+  actionContainer: {
+    marginTop: theme.spacing(4),
+  },
+}));
 
 const HandoutsForm = (props) => {
   const classes = useStyles();
@@ -31,13 +52,13 @@ const HandoutsForm = (props) => {
   }, [fetchAllHandouts]);
 
   const createPatientHandoutHandler = () => {
-    if (!!selectedHandout) {
+    if (selectedHandout) {
       // we don't have the selected row id, so calculating the row id
-      let userSelection = allHandouts.filter(x => x.filename === selectedHandout)
+      const userSelection = allHandouts.filter((x) => x.filename === selectedHandout);
       const reqBody = {
         data: {
-          handout_id: userSelection[0].id
-        }
+          handout_id: userSelection[0].id,
+        },
       };
       PatientService.createPatientHandout(patientId, reqBody)
         .then((response) => {
@@ -46,26 +67,25 @@ const HandoutsForm = (props) => {
           onClose();
         })
         .catch((error) => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          let severity = "error";
+          const resMessage = (error.response
+              && error.response.data
+              && error.response.data.message)
+            || error.message
+            || error.toString();
+          const severity = "error";
           dispatch(
             setError({
-              severity: severity,
-              message: resMessage
-            })
+              severity,
+              message: resMessage,
+            }),
           );
         });
     } else {
       dispatch(
         setError({
           severity: "error",
-          message: "Checkbox selection is required"
-        })
+          message: "Checkbox selection is required",
+        }),
       );
     }
   };
@@ -73,7 +93,7 @@ const HandoutsForm = (props) => {
   const onCheckboxClick = (e) => {
     const { name } = e.target;
     setSelectedHandout(name);
-  }
+  };
 
   return (
     <>
@@ -84,8 +104,8 @@ const HandoutsForm = (props) => {
       <TableContainer className={classes.tableContainer}>
         <Table size="small" className={classes.table}>
           <TableBody>
-            {allHandouts.map((row, index) => (
-              <TableRow key={`${row.created}_${index}`}>
+            {allHandouts.map((row) => (
+              <TableRow key={row.created}>
                 <TableCell padding="checkbox">
                   <Checkbox
                     name={row.filename}
@@ -123,22 +143,10 @@ const HandoutsForm = (props) => {
   );
 };
 
-const useStyles = makeStyles((theme) => ({
-  inputRow: {
-    margin: theme.spacing(3, 0)
-  },
-  processPaymentButton: {
-    margin: theme.spacing(3, 0)
-  },
-  amountContainer: {
-    marginLeft: "0px !important"
-  },
-  formInput: {
-    marginBottom: theme.spacing(1)
-  },
-  actionContainer: {
-    marginTop: theme.spacing(4)
-  }
-}));
+HandoutsForm.propTypes = {
+  patientId: PropTypes.string.isRequired,
+  reloadData: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
 
 export default HandoutsForm;
