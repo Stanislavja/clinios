@@ -197,8 +197,8 @@ export default function Patient() {
   const fetchCardsLayout = () => {
     PatientService.getCardsLayout(userId).then((res) => {
       const layoutResponse = res.data.length
-          && res.data[0].layout
-          && res.data[0].layout !== "undefined"
+        && res.data[0].layout
+        && res.data[0].layout !== "undefined"
         ? JSON.parse(res.data[0].layout)
         : null;
       if (layoutResponse) {
@@ -576,130 +576,197 @@ export default function Patient() {
   };
 
   const mapPrimaryButtonHandlers = (value) => {
-    if (value === "Patient") {
-      return togglePatientHistoryDialog;
-    } if (value === "Admin Notes") {
-      return toggleAdminHistoryDialog;
-    } if (value === "Forms") {
-      return toggleFormsViewDialog;
-    } if (value === "Handouts") {
-      return toggleHandoutsDialog;
-    } if (value === "Billing") {
-      return toggleNewTransactionDialog;
-    } if (value === "Allergies") {
-      return toggleAllergyDialog;
-    } if (value === "Medical Notes") {
-      return toggleMedicalNotesDialog;
-    } if (value === "Messages") {
-      return toggleMessageDialog;
-    } if (value === "Medications") {
-      return toggleMedicationDialog;
-    } if (value === "Diagnoses") {
-      return toggleDiagnosesDialog;
-    } if (value === "Requisitions") {
-      return toggleRequisitionDialog;
+    switch (value) {
+      case "Patient":
+        return togglePatientHistoryDialog;
+      case "Admin Notes":
+        return toggleAdminHistoryDialog;
+      case "Forms":
+        return toggleFormsViewDialog;
+      case "Handouts":
+        return toggleHandoutsDialog;
+      case "Billing":
+        return toggleNewTransactionDialog;
+      case "Allergies":
+        return toggleAllergyDialog;
+      case "Medical Notes":
+        return toggleMedicalNotesDialog;
+      case "Messages":
+        return toggleMessageDialog;
+      case "Medications":
+        return toggleMedicationExpandDialog;
+      case "Diagnoses":
+        return toggleDiagnosesDialog;
+      case "Requisitions":
+        return toggleRequisitionDialog;
+      default:
+        return () => { };
     }
-    return true;
   };
 
   const mapSecondaryButtonHandlers = (value) => {
-    if (value === "Patient") {
-      return togglePatientInfoDialog;
-    } if (value === "Admin Notes") {
-      return toggleAdminFormDialog;
-    } if (value === "Forms") {
-      return toggleFormsExpandDialog;
-    } if (value === "Handouts") {
-      return toggleHandoutsExpandDialog;
-    } if (value === "Billing") {
-      return toggleBillngExpandDialog;
-    } if (value === "Allergies") {
-      return toggleAllergyExpandDialog;
-    } if (value === "Medical Notes") {
-      return toggleMedicalNotesFormDialog;
-    } if (value === "Messages") {
-      return toggleMessageExpandDialog;
-    } if (value === "Diagnoses") {
-      return toggleDiagnosesExpandDialog;
-    } if (value === "Medications") {
-      return toggleMedicationExpandDialog;
-    } if (value === "Requisitions") {
-      return toggleRequisitionExpandDialog;
+    switch (value) {
+      case "Patient":
+        return togglePatientInfoDialog;
+      case "Admin Notes":
+        return toggleAdminFormDialog;
+      case "Forms":
+        return toggleFormsExpandDialog;
+      case "Handouts":
+        return toggleHandoutsExpandDialog;
+      case "Billing":
+        return toggleBillngExpandDialog;
+      case "Allergies":
+        return toggleAllergyExpandDialog;
+      case "Medical Notes":
+        return toggleMedicalNotesFormDialog;
+      case "Messages":
+        return toggleMessageExpandDialog;
+      case "Medications":
+        return toggleMedicationExpandDialog;
+      case "Diagnoses":
+        return toggleDiagnosesExpandDialog;
+      case "Requisitions":
+        return toggleRequisitionExpandDialog;
+      default:
+        return () => { };
     }
-    return true;
   };
 
   const mapCardContentDataHandlers = (value) => {
-    if (value === "Patient") {
-      return (
-        !!patientData && (
-          <PatientCardContent data={patientData} patientId={patientId} />
-        )
-      );
-    } if (value === "Admin Notes") {
-      if (patientData) {
-        return showAdminFormDialog ? (
-          <AdminNotesForm
-            patientId={patientId}
-            oldAdminNote={patientData && patientData.admin_note}
-            onClose={toggleAdminFormDialog}
-            reloadData={() => {
-              fetchPatientData();
-              fetchAdminNotesHistory();
-            }}
-          />
-        ) : (
-          <AdminNotesCardContent data={patientData.admin_note} />
-        );
-      }
-    } else if (value === "Forms") {
-      return !!forms && <FormCardContent data={forms} />;
-    } else if (value === "Billing") {
-      return !!billings && <BillingCardContent data={billings} />;
-    } else if (value === "Allergies") {
-      return (
-        !!allergies && (
+    switch (value) {
+      case "Patient":
+        return <PatientCardContent data={patientData} patientId={patientId} />;
+      case "Admin Notes":
+        if (showAdminFormDialog) {
+          return (
+            <AdminNotesForm
+              patientId={patientId}
+              oldAdminNote={patientData && patientData.admin_note}
+              onClose={toggleAdminFormDialog}
+              reloadData={() => {
+                fetchPatientData();
+                fetchAdminNotesHistory();
+              }}
+            />
+          );
+        }
+        return <AdminNotesCardContent data={patientData.admin_note} />;
+
+      case "Forms":
+        return <FormCardContent data={forms} />;
+      case "Billing":
+        return <BillingCardContent data={billings} />;
+      case "Allergies":
+        return (
           <AllergiesCardContent
             data={allergies}
             reloadData={() => fetchAllergies()}
           />
-        )
-      );
-    } else if (value === "Medical Notes") {
-      if (patientData) {
-        return showMedicalNotesFormDialog ? (
-          <MedicalNotesForm
-            patientId={patientId}
-            onClose={toggleMedicalNotesFormDialog}
-            oldMedicalNote={patientData && patientData.medical_note}
-            reloadData={() => {
-              fetchPatientData();
-              fetchMedicalNotes();
-            }}
-          />
-        ) : (
-          <MedicalNotesCardContent data={patientData.medical_note} />
         );
-      }
-    } else if (value === "Handouts") {
-      return !!medicalNotes && <HandoutsCardContent data={handouts} />;
-    } else if (value === "Messages") {
-      return (
-        !!messages && (
+      case "Medical Notes":
+        if (showMedicalNotesFormDialog) {
+          return (
+            <MedicalNotesForm
+              patientId={patientId}
+              onClose={toggleMedicalNotesFormDialog}
+              oldMedicalNote={patientData && patientData.medical_note}
+              reloadData={() => {
+                fetchPatientData();
+                fetchMedicalNotes();
+              }}
+            />
+          );
+        }
+        return <MedicalNotesCardContent data={patientData.medical_note} />;
+
+      case "Handouts":
+        return <HandoutsCardContent data={handouts} />;
+      case "Messages":
+        return (
           <MessagesCardContent
             data={messages}
             reloadData={() => fetchMessages()}
           />
-        )
-      );
-    } else if (value === "Medications") {
-      return !!medications && <MedicationsCardContent data={medications} />;
-    } else if (value === "Diagnoses") {
-      return !!diagnoses && <DiagnosesCardContent data={diagnoses} />;
-    } else if (value === "Requisitions") {
-      return !!requisitions && <RequisitionsCardContent data={requisitions} />;
+        );
+      case "Medications":
+        return <MedicationsCardContent data={medications} />;
+      case "Diagnoses":
+        return <DiagnosesCardContent data={diagnoses} />;
+      case "Requisitions":
+        return <RequisitionsCardContent data={requisitions} />;
+      default:
+        return <div />;
     }
-    return true;
+    // if (value === "Patient") {
+    //   return (
+    //     !!patientData && (
+    //       <PatientCardContent data={patientData} patientId={patientId} />
+    //     )
+    //   );
+    // } if (value === "Admin Notes") {
+    //   if (patientData) {
+    //     return showAdminFormDialog ? (
+    //       <AdminNotesForm
+    //         patientId={patientId}
+    //         oldAdminNote={patientData && patientData.admin_note}
+    //         onClose={toggleAdminFormDialog}
+    //         reloadData={() => {
+    //           fetchPatientData();
+    //           fetchAdminNotesHistory();
+    //         }}
+    //       />
+    //     ) : (
+    //         <AdminNotesCardContent data={patientData.admin_note} />
+    //       );
+    //   }
+    // } else if (value === "Forms") {
+    //   return !!forms && <FormCardContent data={forms} />;
+    // } else if (value === "Billing") {
+    //   return !!billings && <BillingCardContent data={billings} />;
+    // } else if (value === "Allergies") {
+    //   return (
+    //     !!allergies && (
+    //       <AllergiesCardContent
+    //         data={allergies}
+    //         reloadData={() => fetchAllergies()}
+    //       />
+    //     )
+    //   );
+    // } else if (value === "Medical Notes") {
+    //   if (patientData) {
+    //     return showMedicalNotesFormDialog ? (
+    //       <MedicalNotesForm
+    //         patientId={patientId}
+    //         onClose={toggleMedicalNotesFormDialog}
+    //         oldMedicalNote={patientData && patientData.medical_note}
+    //         reloadData={() => {
+    //           fetchPatientData();
+    //           fetchMedicalNotes();
+    //         }}
+    //       />
+    //     ) : (
+    //         <MedicalNotesCardContent data={patientData.medical_note} />
+    //       );
+    //   }
+    // } else if (value === "Handouts") {
+    //   return !!medicalNotes && <HandoutsCardContent data={handouts} />;
+    // } else if (value === "Messages") {
+    //   return (
+    //     !!messages && (
+    //       <MessagesCardContent
+    //         data={messages}
+    //         reloadData={() => fetchMessages()}
+    //       />
+    //     )
+    //   );
+    // } else if (value === "Medications") {
+    //   return !!medications && <MedicationsCardContent data={medications} />;
+    // } else if (value === "Diagnoses") {
+    //   return !!diagnoses && <DiagnosesCardContent data={diagnoses} />;
+    // } else if (value === "Requisitions") {
+    //   return !!requisitions && <RequisitionsCardContent data={requisitions} />;
+    // }
   };
 
   const redirectToPatientPortal = () => {
@@ -712,12 +779,14 @@ export default function Patient() {
   };
 
   const mapIconHandlers = (value) => {
-    if (value === "Patient") {
-      return redirectToPatientPortal;
-    } if (value === "Billing") {
-      return togglePaymentDialog;
+    switch (value) {
+      case "Patient":
+        return redirectToPatientPortal;
+      case "Billing":
+        return togglePaymentDialog;
+      default:
+        return () => { };
     }
-    return true;
   };
 
   const onFilePickerClick = () => {
@@ -733,8 +802,8 @@ export default function Patient() {
       })
       .catch((error) => {
         const resMessage = (error.response
-            && error.response.data
-            && error.response.data.message)
+          && error.response.data
+          && error.response.data.message)
           || error.message
           || error.toString();
         const severity = "error";
@@ -779,8 +848,8 @@ export default function Patient() {
         })
         .catch((error) => {
           const resMessage = (error.response
-              && error.response.data
-              && error.response.data.message[0].msg)
+            && error.response.data
+            && error.response.data.message[0].msg)
             || error.message
             || error.toString();
           const severity = "error";
@@ -816,8 +885,8 @@ export default function Patient() {
         })
         .catch((error) => {
           const resMessage = (error.response
-              && error.response.data
-              && error.response.data.message)
+            && error.response.data
+            && error.response.data.message)
             || error.message
             || error.toString();
           const severity = "error";
@@ -834,18 +903,24 @@ export default function Patient() {
   };
 
   const mapEditorCancelHandler = (value) => {
-    if (value === "Admin Notes") {
-      toggleAdminFormDialog();
-    } else if (value === "Medical Notes") {
-      toggleMedicalNotesFormDialog();
+    switch (value) {
+      case "Admin Notes":
+        return toggleAdminFormDialog();
+      case "Medical Notes":
+        return toggleMedicalNotesFormDialog();
+      default:
+        return () => { };
     }
   };
 
   const mapEditorSaveHandler = (value) => {
-    if (value === "Admin Notes") {
-      updateAdminNotes();
-    } else if (value === "Medical Notes") {
-      updateMedicalNotes();
+    switch (value) {
+      case "Admin Notes":
+        return updateAdminNotes();
+      case "Medical Notes":
+        return updateMedicalNotes();
+      default:
+        return () => { };
     }
   };
 
@@ -910,7 +985,14 @@ export default function Patient() {
         <Dialog
           open={showPatientInfoDialog}
           title={" "}
-          message={<BasicInfo formData={patientData} />}
+          message={(
+            <BasicInfo
+              formData={patientData}
+              patientId={patientId}
+              reloadData={fetchPatientData}
+              onClose={togglePatientInfoDialog}
+            />
+          )}
           applyForm={() => togglePatientInfoDialog()}
           cancelForm={() => togglePatientInfoDialog()}
           hideActions
