@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 
 import {
-  Button, Grid, Typography, Checkbox,
+  Button,
+  Grid,
+  Typography,
+  Checkbox,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -68,8 +71,8 @@ const HandoutsForm = (props) => {
         })
         .catch((error) => {
           const resMessage = (error.response
-              && error.response.data
-              && error.response.data.message)
+            && error.response.data
+            && error.response.data.message)
             || error.message
             || error.toString();
           const severity = "error";
