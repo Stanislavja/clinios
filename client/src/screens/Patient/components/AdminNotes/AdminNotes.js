@@ -2,57 +2,77 @@ import React, { useEffect, useState } from "react";
 
 import { TextField, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
 import { useDispatch, useSelector, shallowEqual } from "react-redux";
 
-import PatientService from "./../../../../services/patient.service";
-import { setError, setSuccess } from "./../../../../store/common/actions";
+import PatientService from "../../../../services/patient.service";
+import { setError, setSuccess } from "../../../../store/common/actions";
 import {
   setEditorText,
-  resetEditorText
-} from "./../../../../store/patient/actions";
+  resetEditorText,
+} from "../../../../store/patient/actions";
+
+const useStyles = makeStyles((theme) => ({
+  inputRow: {
+    margin: theme.spacing(3, 0),
+  },
+  formInput: {
+    marginBottom: theme.spacing(1),
+
+    "& .MuiOutlinedInput-multiline": {
+      padding: 5,
+      fontSize: 12,
+    },
+  },
+  actionContainer: {
+    marginTop: theme.spacing(1),
+  },
+}));
 
 const AdminNotes = (props) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const currentEditorText = useSelector(
     (state) => state.patient.editorText,
-    shallowEqual
+    shallowEqual,
   );
-  const { onClose, reloadData, patientId } = props;
-  const [oldAdminNote, setOldAdminNote] = useState("");
+  const {
+    onClose, reloadData, patientId, oldAdminNote,
+  } = props;
+  const [oldAdminNoteState, setOldAdminNoteState] = useState("");
   const [formFields, setFormFields] = useState({
-    notes: ""
+    notes: "",
   });
 
   const handleInputChange = (e) => {
     const { value, name } = e.target;
     setFormFields({
       ...formFields,
-      [name]: value
+      [name]: value,
     });
   };
 
   useEffect(() => {
-    setOldAdminNote(props.oldAdminNote);
-    let fieldName = "notes";
+    setOldAdminNoteState(oldAdminNote);
+    const fieldName = "notes";
     setFormFields({
       ...formFields,
-      [fieldName]: props.oldAdminNote
+      [fieldName]: oldAdminNote,
     });
-    dispatch(setEditorText(props.oldAdminNote));
+    dispatch(setEditorText(oldAdminNote));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.oldAdminNote]);
+  }, [oldAdminNote]);
 
   const onFormSubmit = (e) => {
     e.preventDefault();
     const reqBody = {
       data: {
         admin_note: formFields.notes,
-        old_admin_note: oldAdminNote
-      }
+        old_admin_note: oldAdminNoteState,
+      },
     };
     // TODO:: static for the time being - discussion required
-    let noteId = 1;
+    const noteId = 1;
     PatientService.updateAdminNotes(patientId, reqBody, noteId)
       .then((response) => {
         dispatch(setSuccess(`${response.data.message}`));
@@ -60,18 +80,17 @@ const AdminNotes = (props) => {
         onClose();
       })
       .catch((error) => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message[0].msg) ||
-          error.message ||
-          error.toString();
-        let severity = "error";
+        const resMessage = (error.response
+            && error.response.data
+            && error.response.data.message[0].msg)
+          || error.message
+          || error.toString();
+        const severity = "error";
         dispatch(
           setError({
-            severity: severity,
-            message: resMessage
-          })
+            severity,
+            message: resMessage,
+          }),
         );
       });
   };
@@ -89,9 +108,9 @@ const AdminNotes = (props) => {
             fullWidth
             onChange={(e) => handleInputChange(e)}
             onBlur={() => currentEditorText !== formFields.notes && dispatch(setEditorText(formFields.notes))}
-            multiline={true}
+            multiline
             rows={5}
-            autoFocus={true}
+            autoFocus
             onKeyDown={(event) => {
               if (event.key === "Escape") {
                 onClose();
@@ -105,21 +124,11 @@ const AdminNotes = (props) => {
   );
 };
 
-const useStyles = makeStyles((theme) => ({
-  inputRow: {
-    margin: theme.spacing(3, 0)
-  },
-  formInput: {
-    marginBottom: theme.spacing(1),
-
-    "& .MuiOutlinedInput-multiline": {
-      padding: 5,
-      fontSize: 12
-    }
-  },
-  actionContainer: {
-    marginTop: theme.spacing(1)
-  }
-}));
+AdminNotes.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  patientId: PropTypes.string.isRequired,
+  reloadData: PropTypes.func.isRequired,
+  oldAdminNote: PropTypes.string.isRequired,
+};
 
 export default AdminNotes;
