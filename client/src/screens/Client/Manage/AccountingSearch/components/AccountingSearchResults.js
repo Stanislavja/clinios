@@ -15,32 +15,32 @@ import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    padding: "0"
+    padding: "0",
   },
   paper: {
-    padding: "5px"
+    padding: "5px",
   },
   tableContainer: {
     minWidth: 650,
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
   },
   patientLink: {
     color: theme.palette.text.link,
-    cursor: "pointer"
+    cursor: "pointer",
   },
   placeholderText: {
     textAlign: "center",
     padding: "100px",
     fontWeight: "500",
     fontSize: "30px",
-    opacity: "20%"
+    opacity: "20%",
   },
   overFlowControl: {
     maxWidth: "130px",
     textOverflow: "ellipsis",
     overflow: "hidden",
-    whiteSpace: "nowrap"
-  }
+    whiteSpace: "nowrap",
+  },
 }));
 
 const LightTooltip = withStyles((theme) => ({
@@ -48,8 +48,8 @@ const LightTooltip = withStyles((theme) => ({
     backgroundColor: theme.palette.common.white,
     color: "rgba(0, 0, 0, 0.87)",
     boxShadow: theme.shadows[1],
-    fontSize: 13
-  }
+    fontSize: 13,
+  },
 }))(Tooltip);
 
 const StyledTableCell = withStyles((theme) => ({
@@ -57,42 +57,42 @@ const StyledTableCell = withStyles((theme) => ({
     backgroundColor: theme.palette.grey,
     color: theme.palette.grey,
     fontSize: "12px",
-    fontWeight: 700
+    fontWeight: 700,
   },
   body: {
-    fontSize: 14
-  }
+    fontSize: 14,
+  },
 }))(TableCell);
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
     fontSize: 14,
     "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover
+      backgroundColor: theme.palette.action.hover,
     },
     "& th": {
-      fontSize: 12
+      fontSize: 12,
     },
     "& td": {
-      fontSize: 12
-    }
-  }
+      fontSize: 12,
+    },
+  },
 }))(TableRow);
 
 const TotalTableRow = withStyles((theme) => ({
   root: {
     fontSize: 14,
     "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover
+      backgroundColor: theme.palette.action.hover,
     },
     "& th": {
-      fontSize: 12
+      fontSize: 12,
     },
     "& td": {
       fontSize: 12,
-      fontWeight: "bold"
-    }
-  }
+      fontWeight: "bold",
+    },
+  },
 }))(TableRow);
 
 export default function AccountingSearchResults(props) {
@@ -229,7 +229,7 @@ AccountingSearchResults.propTypes = {
       name: PropTypes.string.isRequired,
       note: PropTypes.string,
       patient_id: PropTypes.number.isRequired,
-      patient_name: PropTypes.string.isRequired
-    })
-  ).isRequired
+      patient_name: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
 };

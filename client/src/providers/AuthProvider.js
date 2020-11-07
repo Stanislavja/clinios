@@ -1,19 +1,19 @@
 import React from "react";
 
+import PropTypes from "prop-types";
+
 import AuthService from "../services/auth.service";
 
 const AuthContext = React.createContext();
 
 class AuthProvider extends React.Component {
-  state = { isAuth: false };
-
   constructor() {
     super();
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
     const isAuthenticated = AuthService.checkAuth();
     this.state = {
-      isAuth: isAuthenticated
+      isAuth: isAuthenticated || false,
     };
   }
 
@@ -27,20 +27,30 @@ class AuthProvider extends React.Component {
   }
 
   render() {
+    const { isAuth } = this.state;
+    const { children } = this.props;
     return (
       <AuthContext.Provider
         value={{
-          isAuth: this.state.isAuth,
+          isAuth,
           login: this.login,
           logout: this.logout,
-          user: JSON.parse(localStorage.getItem("user"))
+          user: JSON.parse(localStorage.getItem("user")),
         }}
       >
-        {this.props.children}
+        {children}
       </AuthContext.Provider>
     );
   }
 }
+
+AuthProvider.defaultProps = {
+  children: null,
+};
+
+AuthProvider.propTypes = {
+  children: PropTypes.node,
+};
 
 const AuthConsumer = AuthContext.Consumer;
 

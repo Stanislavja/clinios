@@ -1,20 +1,22 @@
 import React, { forwardRef } from "react";
 
-import { List, ListItem, Button, colors } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+import {
+  List, ListItem, Button, colors,
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { NavLink as RouterLink } from "react-router-dom";
 
-import { logOut } from "./../../../../../../store/auth/actions";
+import { logOut } from "../../../../../../store/auth/actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
   item: {
     display: "flex",
     paddingTop: 0,
-    paddingBottom: 0
+    paddingBottom: 0,
   },
   button: {
     color: colors.blueGrey[800],
@@ -23,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     textTransform: "none",
     letterSpacing: 0,
     width: "100%",
-    fontWeight: theme.typography.fontWeightMedium
+    fontWeight: theme.typography.fontWeightMedium,
   },
   icon: {
     color: theme.palette.icon,
@@ -31,25 +33,28 @@ const useStyles = makeStyles((theme) => ({
     height: 24,
     display: "flex",
     alignItems: "center",
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(1),
   },
   active: {
     color: theme.palette.primary.main,
     fontWeight: theme.typography.fontWeightMedium,
     "& $icon": {
-      color: theme.palette.primary.main
-    }
-  }
+      color: theme.palette.primary.main,
+    },
+  },
 }));
 
 const CustomRouterLink = forwardRef((props, ref) => (
   <div ref={ref} style={{ flexGrow: 1 }}>
+    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
     <RouterLink {...props} />
   </div>
 ));
 
 const SidebarNav = (props) => {
-  const { pages, className, logout, ...rest } = props;
+  const {
+    pages, className, logout, ...rest
+  } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -61,6 +66,7 @@ const SidebarNav = (props) => {
   };
 
   return (
+    // eslint-disable-next-line react/jsx-props-no-spreading
     <List {...rest} className={clsx(classes.root, className)}>
       {pages.map((page) => (
         <ListItem className={classes.item} disableGutters key={page.title}>
@@ -80,9 +86,21 @@ const SidebarNav = (props) => {
   );
 };
 
+SidebarNav.defaultProps = {
+  className: null,
+  logout: () => {},
+};
+
 SidebarNav.propTypes = {
   className: PropTypes.string,
-  pages: PropTypes.array.isRequired
+  pages: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string,
+      href: PropTypes.string,
+      icon: PropTypes.string,
+    }),
+  ).isRequired,
+  logout: PropTypes.func,
 };
 
 export default SidebarNav;

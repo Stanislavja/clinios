@@ -11,6 +11,46 @@ import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import CloseIcon from "@material-ui/icons/Close";
 import PropTypes from "prop-types";
 
+const useStyles = makeStyles((theme) => createStyles({
+  title: {
+    textAlign: "center",
+    borderBottom: "1px solid #ddd",
+    fontWeight: 600,
+    fontSize: "1.5em",
+    minHeight: 53,
+  },
+  content: {
+    padding: "1rem 2rem",
+  },
+  buttonClose: {
+    position: "absolute",
+    right: 0,
+    top: 0,
+  },
+  iconButton: {
+    padding: theme.spacing(1),
+  },
+  buttonSkip: {
+    display: "flex",
+    justifyContent: "space-between",
+    position: "absolute",
+    width: "100%",
+    right: 0,
+  },
+  skipText: {
+    fontWeight: 600,
+    fontSize: "1rem",
+  },
+  save: {
+    background: theme.palette.success,
+    minWidth: 100,
+  },
+  cancel: {
+    background: theme.palette.error,
+    minWidth: 100,
+  },
+}));
+
 const DialogForm = ({
   title,
   open,
@@ -22,7 +62,7 @@ const DialogForm = ({
   continueNext,
   applyButtonText,
   cancelButtonText,
-  size
+  size,
 }) => {
   const classes = useStyles();
   return (
@@ -30,7 +70,7 @@ const DialogForm = ({
       <Dialog
         open={open}
         onClose={cancelForm}
-        fullWidth={true}
+        fullWidth
         maxWidth={size}
         disableBackdropClick
       >
@@ -104,51 +144,8 @@ const DialogForm = ({
   );
 };
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    title: {
-      textAlign: "center",
-      borderBottom: "1px solid #ddd",
-      fontWeight: 600,
-      fontSize: "1.5em",
-      minHeight: 53
-    },
-    content: {
-      padding: "1rem 2rem"
-    },
-    buttonClose: {
-      position: "absolute",
-      right: 0,
-      top: 0
-    },
-    iconButton: {
-      padding: theme.spacing(1)
-    },
-    buttonSkip: {
-      display: "flex",
-      justifyContent: "space-between",
-      position: "absolute",
-      width: "100%",
-      right: 0
-    },
-    skipText: {
-      fontWeight: 600,
-      fontSize: "1rem"
-    },
-    save: {
-      background: theme.palette.success,
-      minWidth: 100
-    },
-    cancel: {
-      background: theme.palette.error,
-      minWidth: 100
-    }
-  })
-);
-
 DialogForm.defaultProps = {
   title: "Title",
-  open: true,
   message: null,
   applyForm: () => {},
   cancelForm: () => {},
@@ -157,21 +154,21 @@ DialogForm.defaultProps = {
   continueNext: null,
   applyButtonText: "Continue",
   cancelButtonText: "Cancel",
-  size: "lg"
+  size: "lg",
 };
 
 DialogForm.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   open: PropTypes.bool.isRequired,
-  message: PropTypes.node.isRequired,
+  message: PropTypes.node,
   applyForm: PropTypes.func,
   cancelForm: PropTypes.func,
-  hideActions: PropTypes.bool.isRequired,
+  hideActions: PropTypes.bool,
   backAction: PropTypes.func,
   continueNext: PropTypes.func,
   applyButtonText: PropTypes.string,
   cancelButtonText: PropTypes.string,
-  size: PropTypes.string
+  size: PropTypes.string,
 };
 
 export default DialogForm;

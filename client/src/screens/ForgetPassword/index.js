@@ -12,12 +12,12 @@ import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 
+import Dimmer from "../../components/common/Dimmer";
+import Error from "../../components/common/Error";
+import AuthService from "../../services/auth.service";
 import EmailService from "../../services/email.service";
-import Dimmer from "./../../components/common/Dimmer";
-import Error from "./../../components/common/Error";
-import AuthService from "./../../services/auth.service";
-import { resetPasswordSuccess } from "./../../store/auth/actions";
-import { setSuccess } from "./../../store/common/actions";
+import { resetPasswordSuccess } from "../../store/auth/actions";
+import { setSuccess } from "../../store/common/actions";
 import Success from "./Success";
 
 const useStyles = makeStyles((theme) => ({
@@ -25,35 +25,35 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: "transparent",
-    color: theme.palette.text.secondary
+    color: theme.palette.text.secondary,
   },
   lockIcon: {
-    fontSize: "40px"
+    fontSize: "40px",
   },
   pageTitle: {
-    marginBottom: theme.spacing(3)
+    marginBottom: theme.spacing(3),
   },
   Error: {
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
+    margin: theme.spacing(3, 0, 2),
   },
   meta: {
     textAlign: "right",
     "& a": {
-      color: theme.palette.text.secondary
-    }
-  }
+      color: theme.palette.text.secondary,
+    },
+  },
 }));
 
 const ForgetPassword = () => {
@@ -90,24 +90,24 @@ const ForgetPassword = () => {
 
           if (data && data.user && data.user.email_confirm_dt === null) {
             setRegistrationLink(false);
-            //Send email verification link
+            // Send email verification link
             EmailService.resendEmailVerification(error.response.data.user).then(
               (response) => {
                 console.info(
                   "resendEmailVerification response",
-                  response.response
+                  response.response,
                 );
               },
-              (error) => {
+              (err) => {
                 console.error(
                   "resendEmailVerification error.response",
-                  error.response
+                  err.response,
                 );
-              }
+              },
             );
           }
         }
-      }
+      },
     );
     setEmail("");
   };
@@ -129,12 +129,13 @@ const ForgetPassword = () => {
         </Error>
         {success && (
           <Success
-            header="If that account in our system then we have sent an email with instructions to reset your password!"
+            header="If that account in our system then we have sent an email with instructions
+              to reset your password!"
             loginText="Sign back in"
           />
         )}
         {!success && (
-          <React.Fragment>
+          <>
             <p>
               It happens to the best of us. Enter your email and we'll send you
               reset instructions.
@@ -180,7 +181,7 @@ const ForgetPassword = () => {
                 </Grid>
               </Grid>
             </form>
-          </React.Fragment>
+          </>
         )}
       </div>
       <Dimmer isOpen={isLoading} />

@@ -6,13 +6,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme) => ({
-  root: { paddingTop: theme.spacing(3), minHeight: 500 }
+  root: { paddingTop: theme.spacing(3), minHeight: 500 },
 }));
 
 const Home = () => {
   const classes = useStyles();
   return (
-    <React.Fragment>
+    <>
       <CssBaseline />
       <Container maxWidth="lg" className={classes.root}>
         <Typography
@@ -24,7 +24,7 @@ const Home = () => {
           Home
         </Typography>
       </Container>
-    </React.Fragment>
+    </>
   );
 };
 

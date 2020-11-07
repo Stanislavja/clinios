@@ -10,33 +10,33 @@ import Alert from "@material-ui/lab/Alert";
 import { useDispatch } from "react-redux";
 import { Link, useHistory, useParams } from "react-router-dom";
 
-import Error from "./../../../components/common/Error";
-import { AuthConsumer } from "./../../../providers/AuthProvider";
-import AuthService from "./../../../services/patient_portal/auth.service";
-import { setSuccess } from "./../../../store/common/actions";
+import Error from "../../../components/common/Error";
+import { AuthConsumer } from "../../../providers/AuthProvider";
+import AuthService from "../../../services/patient_portal/auth.service";
+import { setSuccess } from "../../../store/common/actions";
 import { SignupForm } from "./components";
 
 const useStyles = makeStyles((theme) => ({
   pageTitle: {
-    marginBottom: theme.spacing(3)
+    marginBottom: theme.spacing(3),
   },
   paper: {
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   ErrorSection: {
-    minHeight: "300px"
+    minHeight: "300px",
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: "transparent",
-    color: theme.palette.text.secondary
+    color: theme.palette.text.secondary,
   },
   lockIcon: {
-    fontSize: "40px"
-  }
+    fontSize: "40px",
+  },
 }));
 
 const PatientSignUp = () => {
@@ -62,21 +62,21 @@ const PatientSignUp = () => {
         if (status === 400) {
           setClientError([
             {
-              msg: data.message
-            }
+              msg: data.message,
+            },
           ]);
         } else {
           setErrors([]);
         }
-      }
+      },
     );
   }, [clientCode]);
 
   const handleFormSubmit = (data) => {
-    let formData = data;
+    const formData = data;
     formData.patient = {
       ...formData.patient,
-      client_id: client.client_id
+      client_id: client.client_id,
     };
     AuthService.register(formData).then(
       (response) => {
@@ -87,7 +87,7 @@ const PatientSignUp = () => {
         if (error.response) {
           setErrors(error.response.data);
         }
-      }
+      },
     );
   };
 
@@ -104,7 +104,9 @@ const PatientSignUp = () => {
               <div className={`${classes.paper} ${classes.ErrorSection}`}>
                 <Error errors={clientError} variant="filled" />
                 <Alert icon={false} severity="info">
-                  Go back to <Link to="/">Home page</Link>
+                  Go back to
+                  {" "}
+                  <Link to="/">Home page</Link>
                 </Alert>
               </div>
             ) : (
@@ -118,7 +120,9 @@ const PatientSignUp = () => {
                     variant="h2"
                     className={classes.pageTitle}
                   >
-                    Register with {client && client.name}
+                    Register with
+                    {" "}
+                    {client && client.name}
                   </Typography>
                   <Typography variant="body2" gutterBottom>
                     To register as a new patient, please enter your infromation
@@ -131,7 +135,9 @@ const PatientSignUp = () => {
                   </Typography>
                   <Typography variant="body2" gutterBottom>
                     If you are already a registered patient with online access,
-                    you can log in <Link to={`/login/${clientCode}`}>here</Link>
+                    you can log in
+                    {" "}
+                    <Link to={`/login/${clientCode}`}>here</Link>
                   </Typography>
                 </div>
                 <SignupForm

@@ -1,4 +1,4 @@
-//Todo: Have to add validation
+// Todo: Have to add validation
 import React, { useEffect, useState } from "react";
 
 import { makeStyles } from "@material-ui/core";
@@ -9,50 +9,50 @@ import Typography from "@material-ui/core/Typography";
 import { useDispatch } from "react-redux";
 
 import IntegrationsService from "../../../../services/integrations.service";
-import { setSuccess } from "./../../../../store/common/actions";
+import { setSuccess } from "../../../../store/common/actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    padding: "25px 0px"
+    padding: "25px 0px",
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 180
+    minWidth: 180,
   },
   title: {
-    paddingBottom: theme.spacing(.5)
+    paddingBottom: theme.spacing(0.5),
   },
   form: {
     display: "flex",
     flexDirection: "column",
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   formElments: {
     display: "flex",
     flexDirection: "column",
-    maxWidth: "500px"
+    maxWidth: "500px",
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
     marginTop: "20px",
-    maxWidth: "440px"
+    maxWidth: "440px",
   },
   customSelect: {
-    width: "200px"
+    width: "200px",
   },
   type: {
-    marginTop: "20px"
+    marginTop: "20px",
   },
   paper: {
-    maxWidth: "456px"
+    maxWidth: "456px",
   },
   textField: {
-    width: "200px"
+    width: "200px",
   },
   amount: {
-    marginTop: "18px"
-  }
+    marginTop: "18px",
+  },
 }));
 
 export default function Integrations() {
@@ -72,8 +72,8 @@ export default function Integrations() {
         quest_api_key: questKey,
         doctors_data_username: doctorsDataId,
         doctors_data_password: doctorsDataPw,
-        stripe_api_key: stripeKey
-      }
+        stripe_api_key: stripeKey,
+      },
     };
     IntegrationsService.update(payload).then((res) => {
       dispatch(setSuccess(`${res.data.message}`));
@@ -115,7 +115,7 @@ export default function Integrations() {
               <Grid item xs={6} sm={12}>
                 <TextField
                   autoFocus
-                  //required
+                  // required
                   variant="outlined"
                   label="Labcorp Key"
                   value={labcorpKey}
@@ -127,7 +127,7 @@ export default function Integrations() {
               </Grid>
               <Grid item xs={6} sm={12}>
                 <TextField
-                  //required
+                  // required
                   variant="outlined"
                   label="Quest Key"
                   value={questKey}
@@ -139,7 +139,7 @@ export default function Integrations() {
               </Grid>
               <Grid item xs={6} sm={12}>
                 <TextField
-                  //required
+                  // required
                   variant="outlined"
                   label="Doctors Data ID"
                   value={doctorsDataId}
@@ -151,7 +151,7 @@ export default function Integrations() {
               </Grid>
               <Grid item xs={6} sm={12}>
                 <TextField
-                  //required
+                  // required
                   variant="outlined"
                   label="Doctors Data PW"
                   value={doctorsDataPw}
@@ -163,7 +163,7 @@ export default function Integrations() {
               </Grid>
               <Grid item xs={6} sm={12}>
                 <TextField
-                  //required
+                  // required
                   variant="outlined"
                   label="Stripe Key"
                   value={stripeKey}

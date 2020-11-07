@@ -5,7 +5,7 @@ import {
   CssBaseline,
   Grid,
   makeStyles,
-  Typography
+  Typography,
 } from "@material-ui/core";
 
 import { AuthConsumer } from "../../../../providers/AuthProvider";
@@ -15,11 +15,11 @@ import FinanceDetailTable from "./component/FinanceDetailTable";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    padding: "40px 0px"
+    padding: "40px 0px",
   },
   title: {
-    paddingBottom: theme.spacing(1)
-  }
+    paddingBottom: theme.spacing(1),
+  },
 }));
 
 export default function ReportFinanceDetail(props) {
@@ -30,7 +30,7 @@ export default function ReportFinanceDetail(props) {
   const getReportFinanceDetails = useCallback(() => {
     ReportFinanceDetailService.getReportFinanceDetail(
       dateFrom,
-      dateTo
+      dateTo,
     ).then((res) => setFinanceDetail(res.data.data));
   }, [dateFrom, dateTo]);
 
@@ -41,7 +41,7 @@ export default function ReportFinanceDetail(props) {
   return (
     <AuthConsumer>
       {({ user }) => (
-        <React.Fragment>
+        <>
           <CssBaseline />
           <Container maxWidth={false} className={classes.root}>
             <Grid container justify="center" spacing={2}>
@@ -61,7 +61,7 @@ export default function ReportFinanceDetail(props) {
               </Grid>
             </Grid>
           </Container>
-        </React.Fragment>
+        </>
       )}
     </AuthConsumer>
   );

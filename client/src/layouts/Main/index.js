@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 
 import Container from "@material-ui/core/Container";
+import PropTypes from "prop-types";
 
-import Footer from "./../../components/Footer";
-import Header from "./../../components/Header";
-import Sidebar from "./../../components/Sidebar";
-import { AuthConsumer } from "./../../providers/AuthProvider";
+import Footer from "../../components/Footer";
+import Header from "../../components/Header";
+import Sidebar from "../../components/Sidebar";
+import { AuthConsumer } from "../../providers/AuthProvider";
 
 const Main = ({ children }) => {
   const [openSidebar, setOpenSidebar] = useState(false);
@@ -24,7 +25,7 @@ const Main = ({ children }) => {
           <Sidebar
             onClose={handleSidebarClose}
             open={openSidebar}
-            variant={"temporary"}
+            variant="temporary"
             isAuth={isAuth}
           />
 
@@ -34,6 +35,14 @@ const Main = ({ children }) => {
       )}
     </AuthConsumer>
   );
+};
+
+Main.defaultProps = {
+  children: null,
+};
+
+Main.propTypes = {
+  children: PropTypes.node,
 };
 
 export default Main;

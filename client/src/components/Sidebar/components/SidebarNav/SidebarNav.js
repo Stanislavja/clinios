@@ -44,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
 
 const CustomRouterLink = forwardRef((props, ref) => (
   <div ref={ref} style={{ flexGrow: 1 }}>
+    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
     <RouterLink {...props} />
   </div>
 ));
@@ -54,6 +55,7 @@ const SidebarNav = (props) => {
   const classes = useStyles();
 
   return (
+    // eslint-disable-next-line react/jsx-props-no-spreading
     <List {...rest} className={clsx(classes.root, className)}>
       {pages.map((page) => (
         <ListItem className={classes.item} disableGutters key={page.title}>
@@ -73,8 +75,14 @@ const SidebarNav = (props) => {
 };
 
 SidebarNav.propTypes = {
-  className: PropTypes.string,
-  pages: PropTypes.array.isRequired
+  className: PropTypes.string.isRequired,
+  pages: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string,
+      href: PropTypes.string,
+      icon: PropTypes.string
+    })
+  ).isRequired
 };
 
 export default SidebarNav;

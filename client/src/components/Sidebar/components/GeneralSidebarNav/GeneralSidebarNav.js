@@ -11,12 +11,12 @@ import { NavLink as RouterLink } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex"
+    display: "flex",
   },
   item: {
     display: "flex",
     paddingTop: 0,
-    paddingBottom: 0
+    paddingBottom: 0,
   },
   button: {
     color: blueGrey[800],
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     textTransform: "none",
     letterSpacing: 0,
     width: "100%",
-    fontWeight: theme.typography.fontWeightMedium
+    fontWeight: theme.typography.fontWeightMedium,
   },
   icon: {
     color: theme.palette.icon,
@@ -33,19 +33,20 @@ const useStyles = makeStyles((theme) => ({
     height: 24,
     display: "flex",
     alignItems: "center",
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(1),
   },
   active: {
     color: theme.palette.primary.main,
     fontWeight: theme.typography.fontWeightMedium,
     "& $icon": {
-      color: theme.palette.primary.main
-    }
-  }
+      color: theme.palette.primary.main,
+    },
+  },
 }));
 
 const CustomRouterLink = forwardRef((props, ref) => (
   <div ref={ref} style={{ flexGrow: 1 }}>
+    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
     <RouterLink {...props} />
   </div>
 ));
@@ -54,8 +55,8 @@ const GeneralSidebarNav = (props) => {
   const { pages, className, ...rest } = props;
 
   const classes = useStyles();
-
   return (
+    // eslint-disable-next-line react/jsx-props-no-spreading
     <List {...rest} className={clsx(classes.root, className)}>
       {pages.map((page) => (
         <ListItem className={classes.item} disableGutters key={page.title}>
@@ -75,8 +76,14 @@ const GeneralSidebarNav = (props) => {
 };
 
 GeneralSidebarNav.propTypes = {
-  className: PropTypes.string,
-  pages: PropTypes.array.isRequired
+  className: PropTypes.string.isRequired,
+  pages: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string,
+      href: PropTypes.string,
+      icon: PropTypes.string,
+    }),
+  ).isRequired,
 };
 
 export default GeneralSidebarNav;

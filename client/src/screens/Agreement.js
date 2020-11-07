@@ -5,10 +5,10 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 
-import * as API from "./../utils/API";
+import * as API from "../utils/API";
 
 const useStyles = makeStyles((theme) => ({
-  root: { paddingTop: theme.spacing(3), minHeight: 500 }
+  root: { paddingTop: theme.spacing(3), minHeight: 500 },
 }));
 const Agreement = () => {
   const classes = useStyles();
@@ -20,7 +20,7 @@ const Agreement = () => {
     });
   }, []);
   return (
-    <React.Fragment>
+    <>
       <CssBaseline />
       <Container maxWidth="lg" className={classes.root}>
         <Typography
@@ -33,7 +33,7 @@ const Agreement = () => {
         </Typography>
         <p>{agreement.contract}</p>
       </Container>
-    </React.Fragment>
+    </>
   );
 };
 

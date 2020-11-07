@@ -4,7 +4,7 @@ import { makeStyles, Container, CssBaseline } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
-//simport Video from "./../../../../components/videos/Video";
+// simport Video from "./../../../../components/videos/Video";
 import { AuthConsumer } from "../../../../providers/AuthProvider";
 import DrugsService from "../../../../services/drugs.service";
 import Drugsform from "./components/Drugsform";
@@ -13,22 +13,22 @@ import Drugstable from "./components/Drugstable";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    padding: "25px 0px"
+    padding: "25px 0px",
   },
   title: {
-    paddingBottom: theme.spacing(.5)
+    paddingBottom: theme.spacing(0.5),
   },
   action: {
     textTransform: "none",
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
   },
 
   card: {
     minHeight: 300,
     display: "flex",
     alignItems: "center",
-    justifyContent: "center"
-  }
+    justifyContent: "center",
+  },
 }));
 
 export default function Drugs() {
@@ -39,7 +39,7 @@ export default function Drugs() {
   const [searchResult, setSearchResult] = useState([]);
   const payload = {
     searchTerm,
-    checkBox: favorite
+    checkBox: favorite,
   };
 
   const fetchSearchDrugs = () => {
@@ -58,7 +58,7 @@ export default function Drugs() {
   return (
     <AuthConsumer>
       {({ user }) => (
-        <React.Fragment>
+        <>
           <CssBaseline>
             <Container maxWidth={false} className={classes.root}>
               <Grid container justify="center" spacing={2}>
@@ -87,7 +87,7 @@ export default function Drugs() {
                     />
                   )}
                 </Grid>
-                {/*}
+                {/* }
                 <Grid item md={12} xs={12}>
                   <Card className={classes.card}>
                     <CardContent>
@@ -101,7 +101,7 @@ export default function Drugs() {
               </Grid>
             </Container>
           </CssBaseline>
-        </React.Fragment>
+        </>
       )}
     </AuthConsumer>
   );

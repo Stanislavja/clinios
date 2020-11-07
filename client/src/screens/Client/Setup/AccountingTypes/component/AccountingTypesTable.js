@@ -1,3 +1,5 @@
+import React from "react";
+
 import {
   makeStyles,
   Paper,
@@ -7,17 +9,16 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  withStyles
+  withStyles,
 } from "@material-ui/core";
-import React from "react";
 import moment from "moment";
 import NumberFormat from "react-number-format";
 
 const useStyles = makeStyles((theme) => ({
   tableContainer: {
     minWidth: 650,
-    marginTop: theme.spacing(2)
-  }
+    marginTop: theme.spacing(2),
+  },
 }));
 
 const StyledTableCell = withStyles((theme) => ({
@@ -25,26 +26,26 @@ const StyledTableCell = withStyles((theme) => ({
     backgroundColor: theme.palette.grey,
     color: theme.palette.grey,
     fontSize: "12px",
-    fontWeight: 700
+    fontWeight: 700,
   },
   body: {
-    fontSize: 14
-  }
+    fontSize: 14,
+  },
 }))(TableCell);
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
     fontSize: 14,
     "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover
+      backgroundColor: theme.palette.action.hover,
     },
     "& th": {
-      fontSize: 12
+      fontSize: 12,
     },
     "& td": {
-      fontSize: 12
-    }
-  }
+      fontSize: 12,
+    },
+  },
 }))(TableRow);
 
 const AccountingTypesTable = ({ result }) => {
@@ -79,19 +80,19 @@ const AccountingTypesTable = ({ result }) => {
                 <TableCell padding="checkbox">
                   <NumberFormat
                     value={type.amount}
-                    displayType={"text"}
-                    thousandSeparator={true}
-                    prefix={"$"}
+                    displayType="text"
+                    thousandSeparator
+                    prefix="$"
                   />
                 </TableCell>
                 <TableCell padding="checkbox">
                   {type.status === "A"
                     ? "Active"
                     : type.status === "I"
-                    ? "Inactive"
-                    : type.status === "D"
-                    ? "Deleted"
-                    : ""}
+                      ? "Inactive"
+                      : type.status === "D"
+                        ? "Deleted"
+                        : ""}
                 </TableCell>
                 <TableCell padding="checkbox">{type.note || ""}</TableCell>
                 <TableCell>

@@ -14,11 +14,11 @@ import { MyActivityHistory, MyLogins, MyProfile } from "./components";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    padding: "10px 0px"
+    padding: "10px 0px",
   },
   tabs: {
     height: "25px",
-    minHeight: "25px"
+    minHeight: "25px",
   },
   tabItem: {
     padding: 0,
@@ -27,20 +27,22 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: "5px",
     textTransform: "none",
     "& span": {
-      textColor: "white"
-    }
+      textColor: "white",
+    },
   },
   tabItems: {
     marginTop: "5px",
-    marginBottom: "10px"
+    marginBottom: "10px",
   },
   paper: {
-    width: "500px"
-  }
+    width: "500px",
+  },
 }));
 
 function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+  const {
+    children, value, index, ...other
+  } = props;
 
   return (
     <div
@@ -62,7 +64,7 @@ function TabPanel(props) {
 TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired
+  value: PropTypes.any.isRequired,
 };
 
 const Myself = () => {

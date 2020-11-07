@@ -1,8 +1,8 @@
 import React from "react";
 
 import { Divider, Drawer } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import SettingsIcon from "@material-ui/icons/Settings";
-import { makeStyles } from "@material-ui/styles";
 import { mdiChartBox, mdiAccount, mdiAccountSupervisor } from "@mdi/js";
 import Icon from "@mdi/react";
 import clsx from "clsx";
@@ -15,22 +15,22 @@ const useStyles = makeStyles((theme) => ({
     width: 240,
     [theme.breakpoints.up("lg")]: {
       marginTop: 64,
-      height: "calc(100% - 64px)"
-    }
+      height: "calc(100% - 64px)",
+    },
   },
   root: {
     backgroundColor: theme.palette.white,
     display: "flex",
     flexDirection: "column",
     height: "100%",
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
   },
   divider: {
-    margin: theme.spacing(2, 0)
+    margin: theme.spacing(2, 0),
   },
   nav: {
-    marginBottom: theme.spacing(2)
-  }
+    marginBottom: theme.spacing(2),
+  },
 }));
 
 const Sidebar = (props) => {
@@ -50,7 +50,7 @@ const Sidebar = (props) => {
     {
       title: "Home",
       href: "/dashboard/appoinment-types",
-      icon: <Icon path={mdiAccount} size={1} horizontal vertical rotate={180} />
+      icon: <Icon path={mdiAccount} size={1} horizontal vertical rotate={180} />,
     },
     {
       title: "Manage",
@@ -63,25 +63,25 @@ const Sidebar = (props) => {
           vertical
           rotate={180}
         />
-      )
+      ),
     },
     {
       title: "Setup",
       href: "/setup/accounting-types",
-      icon: <SettingsIcon />
+      icon: <SettingsIcon />,
     },
     {
       title: "Reports",
       href: "/reports",
       icon: (
         <Icon path={mdiChartBox} size={1} horizontal vertical rotate={180} />
-      )
+      ),
     },
     {
       title: "Myself",
       href: "/myself",
-      icon: <Icon path={mdiAccount} size={1} horizontal vertical rotate={180} />
-    }
+      icon: <Icon path={mdiAccount} size={1} horizontal vertical rotate={180} />,
+    },
   ];
 
   return (
@@ -102,12 +102,20 @@ const Sidebar = (props) => {
   );
 };
 
+Sidebar.defaultProps = {
+  className: null,
+  logout: () => {},
+  onClose: () => {},
+};
+
 Sidebar.propTypes = {
   className: PropTypes.string,
   onClose: PropTypes.func,
   open: PropTypes.bool.isRequired,
   variant: PropTypes.string.isRequired,
-  user: PropTypes.object.isRequired
+  user: PropTypes.objectOf(PropTypes.object).isRequired,
+  isAuth: PropTypes.bool.isRequired,
+  logout: PropTypes.func,
 };
 
 export default Sidebar;

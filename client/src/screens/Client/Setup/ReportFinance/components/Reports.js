@@ -14,20 +14,20 @@ import { useHistory } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   tableContainer: {
     minWidth: 1000,
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
   },
   actions: {
     textAlign: "center",
     display: "flex",
     border: "none",
     "& button": {
-      fontSize: "12px"
-    }
+      fontSize: "12px",
+    },
   },
   detailLink: {
     color: theme.palette.text.link,
-    cursor: "pointer"
-  }
+    cursor: "pointer",
+  },
 }));
 
 const StyledTableCell = withStyles((theme) => ({
@@ -35,41 +35,41 @@ const StyledTableCell = withStyles((theme) => ({
     backgroundColor: theme.palette.grey,
     color: theme.palette.grey,
     fontSize: "12px",
-    fontWeight: 700
+    fontWeight: 700,
   },
   body: {
-    fontSize: 14
-  }
+    fontSize: 14,
+  },
 }))(TableCell);
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
     fontSize: 14,
     "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover
+      backgroundColor: theme.palette.action.hover,
     },
     "& th": {
-      fontSize: 12
+      fontSize: 12,
     },
     "& td": {
-      fontSize: 12
-    }
-  }
+      fontSize: 12,
+    },
+  },
 }))(TableRow);
 const TotalTableRow = withStyles((theme) => ({
   root: {
     fontSize: 14,
     "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover
+      backgroundColor: theme.palette.action.hover,
     },
     "& th": {
-      fontSize: 12
+      fontSize: 12,
     },
     "& td": {
       fontSize: 12,
-      fontWeight: "bold"
-    }
-  }
+      fontWeight: "bold",
+    },
+  },
 }))(TableRow);
 
 const Reports = ({ reports, ...props }) => {
@@ -109,11 +109,9 @@ const Reports = ({ reports, ...props }) => {
               <TableCell padding="checkbox">{`$${report.Refund}`}</TableCell>
               <TableCell
                 className={classes.detailLink}
-                onClick={() =>
-                  history.push(
-                    `/reports/report-finance-detail/${props.dateFrom}/${props.dateTo}`
-                  )
-                }
+                onClick={() => history.push(
+                  `/reports/report-finance-detail/${props.dateFrom}/${props.dateTo}`,
+                )}
                 padding="checkbox"
               >
                 Detail
@@ -137,10 +135,12 @@ const Reports = ({ reports, ...props }) => {
               {`$${reports.reduce((a, b) => a + b.Payment, 0)}`}
             </TableCell>
             <TableCell padding="checkbox" colSpan={1} align="left">
-              <div style={{ marginLeft: "5px" }}>{`$${reports.reduce(
-                (a, b) => a + b.Refund,
-                0
-              )}`}</div>
+              <div style={{ marginLeft: "5px" }}>
+                {`$${reports.reduce(
+                  (a, b) => a + b.Refund,
+                  0,
+                )}`}
+              </div>
             </TableCell>
           </TotalTableRow>
         </TableBody>

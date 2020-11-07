@@ -4,7 +4,7 @@ import { CssBaseline, makeStyles } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
-//simport Video from "./../../../../components/videos/Video";
+// simport Video from "./../../../../components/videos/Video";
 import { AuthConsumer } from "../../../../providers/AuthProvider";
 import icdcodesService from "../../../../services/icdcodes.service";
 import ICDcodesform from "./components/ICDcodesform";
@@ -13,17 +13,17 @@ import ICDcodestable from "./components/ICDcodestable";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    padding: "25px 0px"
+    padding: "25px 0px",
   },
   card: {
     minHeight: 300,
     display: "flex",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   title: {
-    paddingBottom: theme.spacing(.5)
-  }
+    paddingBottom: theme.spacing(0.5),
+  },
 }));
 
 const ICDcodes = () => {
@@ -34,7 +34,7 @@ const ICDcodes = () => {
   const [searchResult, setSearchResult] = useState([]);
   const payload = {
     searchTerm,
-    checkBox: favorite
+    checkBox: favorite,
   };
   const fetchSearchIcdCodes = () => {
     icdcodesService.search(payload).then((res) => {
@@ -52,7 +52,7 @@ const ICDcodes = () => {
   return (
     <AuthConsumer>
       {({ user }) => (
-        <React.Fragment>
+        <>
           <CssBaseline>
             <div className={classes.root}>
               <Typography
@@ -81,7 +81,7 @@ const ICDcodes = () => {
                     />
                   )}
                 </Grid>
-                {/*}
+                {/* }
                 <Grid item md={12} xs={12}>
                   <Card className={classes.card}>
                     <CardContent>
@@ -95,7 +95,7 @@ const ICDcodes = () => {
               </Grid>
             </div>
           </CssBaseline>
-        </React.Fragment>
+        </>
       )}
     </AuthConsumer>
   );

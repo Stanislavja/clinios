@@ -19,30 +19,30 @@ import PatientSearchResults from "./components";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    padding: "20px 0px"
+    padding: "20px 0px",
   },
   title: {
-    paddingBottom: theme.spacing(0.5)
+    paddingBottom: theme.spacing(0.5),
   },
   submit: {
     maxWidth: "200px",
-    marginTop: "15px"
+    marginTop: "15px",
   },
   paper: {
-    maxWidth: "900px"
+    maxWidth: "900px",
   },
   textField: {
-    width: "200px"
+    width: "200px",
   },
   customSelect: {
-    width: "200px"
+    width: "200px",
   },
   inputGroup: {
-    marginTop: "14px"
+    marginTop: "14px",
   },
   form: {
-    marginTop: theme.spacing(1)
-  }
+    marginTop: theme.spacing(1),
+  },
 }));
 
 function NumberFormatCustom(props) {
@@ -56,8 +56,8 @@ function NumberFormatCustom(props) {
         onChange({
           target: {
             name: props.name,
-            value: values.value
-          }
+            value: values.value,
+          },
         });
       }}
       isNumericString
@@ -67,7 +67,7 @@ function NumberFormatCustom(props) {
 NumberFormatCustom.propTypes = {
   inputRef: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
 };
 
 export default function PatientSearch() {
@@ -113,8 +113,8 @@ export default function PatientSearch() {
         paymentFrom,
         paymentTo,
         id: patientId,
-        patientStatus: selectStatus
-      }
+        patientStatus: selectStatus,
+      },
     };
     SearchPatient.search(payload).then((res) => {
       setSearchResults(res.data.data);
@@ -172,7 +172,7 @@ export default function PatientSearch() {
                   <KeyboardDatePicker
                     clearable
                     KeyboardButtonProps={{
-                      "aria-label": "change date"
+                      "aria-label": "change date",
                     }}
                     format="yyyy/MM/dd"
                     inputVariant="outlined"
@@ -190,7 +190,7 @@ export default function PatientSearch() {
                     clearable
                     autoOk
                     KeyboardButtonProps={{
-                      "aria-label": "change date"
+                      "aria-label": "change date",
                     }}
                     format="yyyy/MM/dd"
                     inputVariant="outlined"
@@ -236,7 +236,7 @@ export default function PatientSearch() {
                     clearable
                     autoOk
                     KeyboardButtonProps={{
-                      "aria-label": "change date"
+                      "aria-label": "change date",
                     }}
                     format="yyyy/MM/dd"
                     inputVariant="outlined"
@@ -255,7 +255,7 @@ export default function PatientSearch() {
                   <KeyboardDatePicker
                     clearable
                     KeyboardButtonProps={{
-                      "aria-label": "change date"
+                      "aria-label": "change date",
                     }}
                     autoOk
                     format="yyyy/MM/dd"
@@ -283,16 +283,16 @@ export default function PatientSearch() {
                     id="patientId"
                     autoComplete="patientId"
                     InputProps={{
-                      inputComponent: NumberFormatCustom
+                      inputComponent: NumberFormatCustom,
                     }}
                     inputProps={{
-                      maxLength: 16
+                      maxLength: 16,
                     }}
                     error={patientId.length >= 13}
                     helperText={
-                      patientId &&
-                      patientId.length >= 13 &&
-                      "Enter between 12 digit"
+                      patientId
+                      && patientId.length >= 13
+                      && "Enter between 12 digit"
                     }
                     onChange={(event) => setPatientId(event.target.value)}
                   />
@@ -310,7 +310,7 @@ export default function PatientSearch() {
                       onChange={handleChange}
                       inputProps={{
                         name: "type",
-                        id: "age-native-simple"
+                        id: "age-native-simple",
                       }}
                       label="Status"
                     >
@@ -332,16 +332,16 @@ export default function PatientSearch() {
                     autoComplete="paymentFrom"
                     onChange={(event) => setPaymentFrom(event.target.value)}
                     InputProps={{
-                      inputComponent: NumberFormatCustom
+                      inputComponent: NumberFormatCustom,
                     }}
                     inputProps={{
-                      maxLength: 16
+                      maxLength: 16,
                     }}
                     error={paymentFrom.length >= 13}
                     helperText={
-                      paymentFrom &&
-                      paymentFrom.length >= 13 &&
-                      "Enter between 12 digit"
+                      paymentFrom
+                      && paymentFrom.length >= 13
+                      && "Enter between 12 digit"
                     }
                   />
                 </Grid>
@@ -358,16 +358,16 @@ export default function PatientSearch() {
                     autoComplete="paymentTo"
                     onChange={(event) => setPaymentTo(event.target.value)}
                     InputProps={{
-                      inputComponent: NumberFormatCustom
+                      inputComponent: NumberFormatCustom,
                     }}
                     inputProps={{
-                      maxLength: 16
+                      maxLength: 16,
                     }}
                     error={paymentTo.length >= 13}
                     helperText={
-                      paymentTo &&
-                      paymentTo.length >= 13 &&
-                      "Enter between 12 digit"
+                      paymentTo
+                      && paymentTo.length >= 13
+                      && "Enter between 12 digit"
                     }
                   />
                 </Grid>
