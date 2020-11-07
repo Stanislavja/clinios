@@ -12,9 +12,10 @@ import {
   FormLabel,
   List,
   ListItem,
-  ListItemText
+  ListItemText,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import Select from "react-select";
 
@@ -22,19 +23,44 @@ import PatientService from "../../../services/patient.service";
 import {
   BillSelectionFields,
   LabortoriesSelectionFields,
-  FavoritesSelectionFields
+  FavoritesSelectionFields,
 } from "../../../static/requisitionform";
 import { setError, setSuccess } from "../../../store/common/actions";
 import SelectCustomStyles from "../../../styles/SelectCustomStyles";
+
+const useStyles = makeStyles((theme) => ({
+  inputRow: {
+    margin: theme.spacing(3, 0),
+  },
+  section: {
+    marginBottom: theme.spacing(2),
+  },
+  heading: {
+    marginBottom: theme.spacing(2),
+  },
+  border: {
+    border: "1px solid grey",
+    padding: 10,
+  },
+  height100: {
+    height: "100%",
+  },
+  actionContainer: {
+    marginTop: theme.spacing(2),
+  },
+  mr2: {
+    marginRight: theme.spacing(2),
+  },
+}));
 
 const Requisitions = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { onClose, patientId, reloadData } = props;
   const [billSelection, setBillSelection] = useState("physician");
-  const [labsSelection, setLabsSelection] = useState("");
   const [tests, setTests] = useState([]);
-  const [selectedTest, setSelectedTest] = useState([])
+  const [diagnoses, setDiagnoses] = useState([]);
+  const [selectedTest, setSelectedTest] = useState([]);
 
   const fetchTests = useCallback(() => {
     PatientService.getTests(patientId).then((res) => {
@@ -42,24 +68,27 @@ const Requisitions = (props) => {
     });
   }, [patientId]);
 
+  const fetchDiagnoses = useCallback(() => {
+    PatientService.getDiagnoses(patientId, true).then((res) => {
+      setDiagnoses(res.data);
+    });
+  }, [patientId]);
+
   useEffect(() => {
     fetchTests();
-  }, [fetchTests]);
+    fetchDiagnoses();
+  }, [fetchTests, fetchDiagnoses]);
 
   const handleBillSelection = (e) => {
     setBillSelection(e.target.value);
-  };
-
-  const handleLabortoriesSelection = (e) => {
-    setLabsSelection(e.target.checked);
   };
 
   const onFormSubmit = () => {
     const reqBody = {
       data: {
         cpt_id: selectedTest.cpt_id,
-        encounter_id: 1 //hard coded for the time being: discussion required
-      }
+        encounter_id: 1, // hard coded for the time being: discussion required
+      },
     };
     PatientService.createRequisition(patientId, reqBody)
       .then((response) => {
@@ -68,18 +97,17 @@ const Requisitions = (props) => {
         onClose();
       })
       .catch((error) => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        let severity = "error";
+        const resMessage = (error.response
+            && error.response.data
+            && error.response.data.message)
+          || error.message
+          || error.toString();
+        const severity = "error";
         dispatch(
           setError({
-            severity: severity,
-            message: resMessage
-          })
+            severity,
+            message: resMessage,
+          }),
         );
       });
   };
@@ -102,9 +130,9 @@ const Requisitions = (props) => {
               name="position"
               defaultValue="top"
             >
-              {BillSelectionFields.map((item, index) => (
+              {BillSelectionFields.map((item) => (
                 <FormControlLabel
-                  key={index}
+                  key={`${item.label}_${item.value}`}
                   value={item.value}
                   label={item.label}
                   control={<Radio color="primary" />}
@@ -116,26 +144,35 @@ const Requisitions = (props) => {
             <Typography gutterBottom variant="h4" color="textSecondary">
               Recommended
             </Typography>
-            {[...Array(3)].map((item, index) => (
-              <Grid container alignItems="center" direction="row" key={index}>
+            {diagnoses.map((item) => (
+              <Grid
+                container
+                alignItems="center"
+                direction="row"
+                key={item.icd_id}
+              >
                 <Typography variant="body1">
-                  Chronic Fatigue (Un-specified)&nbsp;&nbsp;
+                  {item.name}
+&nbsp;&nbsp;
                 </Typography>
                 <Button>[Remove]</Button>
               </Grid>
             ))}
           </Grid>
           <Grid item lg={9} className={classes.border}>
-            <Typography gutterBottom variant="h5" color="textPrimary">
+            <Typography
+              gutterBottom
+              variant="h5"
+              color="textPrimary"
+            >
               Labortories
             </Typography>
-            {LabortoriesSelectionFields.map((item, index) => (
-              <Grid key={index}>
+            {LabortoriesSelectionFields.map((item) => (
+              <Grid key={`${item.label}_${item.value}`}>
                 <FormControlLabel
-                  value={item.vlaue}
+                  value={item.value}
                   label={item.label}
                   control={<Checkbox color="primary" />}
-                  onChange={handleLabortoriesSelection}
                 />
               </Grid>
             ))}
@@ -150,7 +187,7 @@ const Requisitions = (props) => {
               getOptionValue={(option) => option.id}
               onChange={(value) => setSelectedTest(value)}
               styles={SelectCustomStyles}
-              isClearable={true}
+              isClearable
               isLoading={!tests.length}
             />
           </Grid>
@@ -159,8 +196,8 @@ const Requisitions = (props) => {
             {tests.map((medication) => (
               <ListItem
                 onClick={() => setSelectedTest(medication)}
-                key={medication.id}
-                disableGutters={true}
+                key={medication.cpt_id}
+                disableGutters
                 button
               >
                 <ListItemText primary={medication.name} />
@@ -176,10 +213,10 @@ const Requisitions = (props) => {
             </Typography>
             <Grid container spacing={1}>
               <Grid item lg={4}>
-                {FavoritesSelectionFields.map((item, index) => (
-                  <Grid key={index}>
+                {FavoritesSelectionFields.map((item) => (
+                  <Grid key={`${item.label}_${item.value}`}>
                     <FormControlLabel
-                      value={item.vlaue}
+                      value={item.value}
                       label={item.label}
                       control={<Checkbox color="primary" />}
                     />
@@ -187,10 +224,10 @@ const Requisitions = (props) => {
                 ))}
               </Grid>
               <Grid item lg={4}>
-                {FavoritesSelectionFields.map((item, index) => (
-                  <Grid key={index}>
+                {FavoritesSelectionFields.map((item) => (
+                  <Grid key={`${item.label}_${item.value}`}>
                     <FormControlLabel
-                      value={item.vlaue}
+                      value={item.value}
                       label={item.label}
                       control={<Checkbox color="primary" />}
                     />
@@ -198,8 +235,8 @@ const Requisitions = (props) => {
                 ))}
               </Grid>
               <Grid item lg={4}>
-                {FavoritesSelectionFields.map((item, index) => (
-                  <Grid key={index}>
+                {FavoritesSelectionFields.map((item) => (
+                  <Grid key={`${item.label}_${item.value}`}>
                     <FormControlLabel
                       value={item.vlaue}
                       label={item.label}
@@ -237,29 +274,10 @@ const Requisitions = (props) => {
   );
 };
 
-const useStyles = makeStyles((theme) => ({
-  inputRow: {
-    margin: theme.spacing(3, 0)
-  },
-  section: {
-    marginBottom: theme.spacing(2)
-  },
-  heading: {
-    marginBottom: theme.spacing(2)
-  },
-  border: {
-    border: "1px solid grey",
-    padding: 10
-  },
-  height100: {
-    height: "100%"
-  },
-  actionContainer: {
-    marginTop: theme.spacing(2)
-  },
-  mr2: {
-    marginRight: theme.spacing(2)
-  }
-}));
+Requisitions.propTypes = {
+  patientId: PropTypes.string.isRequired,
+  reloadData: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
 
 export default Requisitions;

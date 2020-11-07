@@ -81,8 +81,8 @@ const RequisitionsDetails = (props) => {
       })
       .catch((error) => {
         const resMessage = (error.response
-            && error.response.data
-            && error.response.data.message)
+          && error.response.data
+          && error.response.data.message)
           || error.message
           || error.toString();
         const severity = "error";
@@ -143,7 +143,7 @@ const RequisitionsDetails = (props) => {
 };
 
 RequisitionsDetails.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.array).isRequired,
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
   patientId: PropTypes.string.isRequired,
   reloadData: PropTypes.func.isRequired,
 };
