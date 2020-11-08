@@ -6,16 +6,25 @@ import {
   Typography,
   List,
   ListItem,
-  ListItemText
+  ListItemText,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import Select from "react-select";
 
+import PatientService from "../../../../services/patient.service";
+import { setError, setSuccess } from "../../../../store/common/actions";
 import SelectCustomStyles from "../../../../styles/SelectCustomStyles";
-import PatientService from "./../../../../services/patient.service";
-import { setError, setSuccess } from "./../../../../store/common/actions";
 
+const useStyles = makeStyles((theme) => ({
+  inputRow: {
+    margin: theme.spacing(3, 0),
+  },
+  heading: {
+    marginBottom: theme.spacing(2),
+  },
+}));
 
 const Allergies = (props) => {
   const classes = useStyles();
@@ -24,27 +33,27 @@ const Allergies = (props) => {
   const [allergies, setAllergies] = useState([]);
   const [selectedAllergy, setSelectedAllergy] = useState(null);
 
-  useEffect(() => {
-    fetchAllergies("");
-  }, []);
-
   const fetchAllergies = (searchText) => {
     const reqBody = {
       data: {
-        text: searchText
-      }
+        text: searchText,
+      },
     };
     PatientService.searchAllergies(reqBody).then((res) => {
       setAllergies(res.data);
     });
   };
 
+  useEffect(() => {
+    fetchAllergies("");
+  }, []);
+
   const onFormSubmit = (e) => {
     e.preventDefault();
     const reqBody = {
       data: {
-        drug_id: selectedAllergy.id
-      }
+        drug_id: selectedAllergy.id,
+      },
     };
     PatientService.createAllergy(patientId, reqBody)
       .then((response) => {
@@ -53,18 +62,17 @@ const Allergies = (props) => {
         onClose();
       })
       .catch((error) => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        let severity = "error";
+        const resMessage = (error.response
+            && error.response.data
+            && error.response.data.message)
+          || error.message
+          || error.toString();
+        const severity = "error";
         dispatch(
           setError({
-            severity: severity,
-            message: resMessage
-          })
+            severity,
+            message: resMessage,
+          }),
         );
       });
   };
@@ -87,7 +95,7 @@ const Allergies = (props) => {
           getOptionValue={(option) => option.id}
           onChange={(value) => setSelectedAllergy(value)}
           styles={SelectCustomStyles}
-          isClearable={true}
+          isClearable
         />
 
         <List component="ul">
@@ -95,7 +103,7 @@ const Allergies = (props) => {
             <ListItem
               onClick={() => setSelectedAllergy(allergy)}
               key={allergy.id}
-              disableGutters={true}
+              disableGutters
               button
             >
               <ListItemText primary={allergy.name} />
@@ -124,13 +132,10 @@ const Allergies = (props) => {
   );
 };
 
-const useStyles = makeStyles((theme) => ({
-  inputRow: {
-    margin: theme.spacing(3, 0)
-  },
-  heading: {
-    marginBottom: theme.spacing(2)
-  }
-}));
+Allergies.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  patientId: PropTypes.string.isRequired,
+  reloadData: PropTypes.func.isRequired,
+};
 
 export default Allergies;

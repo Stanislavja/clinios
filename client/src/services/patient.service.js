@@ -184,6 +184,14 @@ class Patient {
   }
 
   // update methods
+  updatePatient(patientId, data) {
+    return axios
+      .put(`${API_BASE}/patient/${patientId}`, data, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
   updateCardsLayout(userId, layout) {
     return axios
       .post(`${API_BASE}/patient-layout/${userId}`, layout, {

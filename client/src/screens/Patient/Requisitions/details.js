@@ -81,8 +81,8 @@ const RequisitionsDetails = (props) => {
       })
       .catch((error) => {
         const resMessage = (error.response
-            && error.response.data
-            && error.response.data.message)
+          && error.response.data
+          && error.response.data.message)
           || error.message
           || error.toString();
         const severity = "error";
@@ -110,7 +110,7 @@ const RequisitionsDetails = (props) => {
           {!!data
             && data.length
             ? data.map((row) => (
-              <StyledTableRow key={row.created}>
+              <StyledTableRow key={`${row.created}_${row.id}`}>
                 <TableCell component="th" scope="row">
                   {moment(row.created).format("MMM D YYYY")}
                 </TableCell>
@@ -143,7 +143,7 @@ const RequisitionsDetails = (props) => {
 };
 
 RequisitionsDetails.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.array).isRequired,
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
   patientId: PropTypes.string.isRequired,
   reloadData: PropTypes.func.isRequired,
 };

@@ -3,6 +3,7 @@ import React from "react";
 import { Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
+import PropTypes from "prop-types";
 
 import Tooltip from "../../../../components/common/CustomTooltip";
 
@@ -17,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",
-    padding: theme.spacing(0, 0.5, 0, 0)
+    padding: theme.spacing(0, 0.5, 0, 0),
   },
   fullWidth: {
     whiteSpace: "nowrap",
@@ -26,8 +27,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(0, 0.5, 0, 0),
   },
   text12: {
-    fontSize: 12
-  }
+    fontSize: 12,
+  },
 }));
 
 const HandoutsContent = (props) => {
@@ -37,22 +38,51 @@ const HandoutsContent = (props) => {
   return (
     <>
       {
-        data.map(item => (
-          <Grid onClick={() => alert(item.filename)} key={item.created} container className={classes.inputRow}>
-            <Typography component="span" className={`${classes.text12} ${classes.block}`} color="textPrimary">{moment(item.created).format("MMM D YYYY")}</Typography>
+        data.map((item) => (
+          <Grid
+            key={item.created}
+            container
+            className={classes.inputRow}
+          >
+            <Typography
+              component="span"
+              className={`${classes.text12} ${classes.block}`}
+              color="textPrimary"
+            >
+              {moment(item.created).format("MMM D YYYY")}
+            </Typography>
             {
               !!item.filename && item.filename.length > 40
-                ?
-                <Tooltip title={item.filename}>
-                  <Typography component="span" className={`${classes.text12} ${classes.fullWidth}`} color="textPrimary">{item.filename}</Typography>
-                </Tooltip>
-                :
-                <Typography component="span" className={`${classes.text12} ${classes.fullWidth}`} color="textPrimary">{item.filename}</Typography>
+                ? (
+                  <Tooltip title={item.filename}>
+                    <Typography
+                      component="span"
+                      className={`${classes.text12} ${classes.fullWidth}`}
+                      color="textPrimary"
+                    >
+                      {item.filename}
+                    </Typography>
+                  </Tooltip>
+                )
+                : (
+                  <Typography
+                    component="span"
+                    className={`${classes.text12} ${classes.fullWidth}`}
+                    color="textPrimary"
+                  >
+                    {item.filename}
+                  </Typography>
+                )
             }
           </Grid>
-        ))}
+        ))
+      }
     </>
   );
+};
+
+HandoutsContent.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default HandoutsContent;

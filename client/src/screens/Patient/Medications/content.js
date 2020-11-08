@@ -3,8 +3,22 @@ import React from "react";
 import { Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
+import PropTypes from "prop-types";
 
-export default function MedicationsContent(props) {
+const useStyles = makeStyles((theme) => ({
+  text12: {
+    fontSize: 12,
+  },
+  block: {
+    width: 90,
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    padding: theme.spacing(0, 0.5, 0, 0),
+  },
+}));
+
+const MedicationsContent = (props) => {
   const classes = useStyles();
   const { data } = props;
 
@@ -43,17 +57,10 @@ export default function MedicationsContent(props) {
       ))}
     </>
   );
-}
+};
 
-const useStyles = makeStyles((theme) => ({
-  text12: {
-    fontSize: 12
-  },
-  block: {
-    width: 90,
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    padding: theme.spacing(0, 0.5, 0, 0)
-  }
-}));
+MedicationsContent.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
+
+export default MedicationsContent;

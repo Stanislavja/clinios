@@ -1,92 +1,44 @@
 export const BillSelectionFields = [
   {
     label: "Physician",
-    value: "physician"
+    value: "physician Bill",
   },
   {
     label: "Patient",
-    value: "patient"
+    value: "patient Bill",
   },
   {
     label: "Insurance",
-    value: "insurance"
-  }
+    value: "insurance Bill",
+  },
 ];
 
 export const LabortoriesSelectionFields = [
   {
     label: "Physician",
-    value: "physician"
+    value: "physician Labortories",
   },
   {
     label: "Patient",
-    value: "patient"
+    value: "patient Labortories",
   },
   {
     label: "Insurance",
-    value: "insurance"
+    value: "insurance Labortories",
   },
-  {
-    label: "Physician",
-    value: "physician"
-  },
-  {
-    label: "Patient",
-    value: "patient"
-  },
-  {
-    label: "Insurance",
-    value: "insurance"
-  },
-  {
-    label: "Physician",
-    value: "physician"
-  },
-  {
-    label: "Patient",
-    value: "patient"
-  },
-  {
-    label: "Insurance",
-    value: "insurance"
-  }
 ];
 
 export const FavoritesSelectionFields = [
   {
     label: "Physician",
-    value: "physician"
+    value: "physician Favorites",
   },
   {
     label: "Patient",
-    value: "patient"
+    value: "patient Favorites",
   },
   {
     label: "Insurance",
-    value: "insurance"
+    value: "insurance Favorites",
   },
-  {
-    label: "Physician",
-    value: "physician"
-  },
-  {
-    label: "Patient",
-    value: "patient"
-  },
-  {
-    label: "Insurance",
-    value: "insurance"
-  },
-  {
-    label: "Physician",
-    value: "physician"
-  },
-  {
-    label: "Patient",
-    value: "patient"
-  },
-  {
-    label: "Insurance",
-    value: "insurance"
-  }
 ];

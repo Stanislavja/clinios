@@ -6,26 +6,42 @@ import {
   Button,
   List,
   ListItem,
-  ListItemText
+  ListItemText,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import Select from "react-select";
 
+import PatientService from "../../../../services/patient.service";
+import { setError, setSuccess } from "../../../../store/common/actions";
 import SelectCustomStyles from "../../../../styles/SelectCustomStyles";
-import PatientService from "./../../../../services/patient.service";
-import { setError, setSuccess } from "./../../../../store/common/actions";
+
+const useStyles = makeStyles((theme) => ({
+  inputRow: {
+    margin: theme.spacing(3, 0),
+  },
+  heading: {
+    marginBottom: theme.spacing(2),
+  },
+  border: {
+    border: "1px solid grey",
+    padding: 10,
+  },
+  height100: {
+    height: "100%",
+  },
+  actionContainer: {
+    paddingTop: theme.spacing(2),
+  },
+}));
 
 const Diagnoses = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { onClose, patientId, reloadData } = props;
   const [diagnosis, setDiagnosis] = useState([]);
-  const [selectedDiagnosis, setSelectedDiagnoses] = useState([])
-
-  useEffect(() => {
-    fetchDiagnosis("");
-  }, []);
+  const [selectedDiagnosis, setSelectedDiagnoses] = useState([]);
 
   const fetchDiagnosis = (searchText) => {
     PatientService.searchICD(searchText).then((res) => {
@@ -33,12 +49,16 @@ const Diagnoses = (props) => {
     });
   };
 
+  useEffect(() => {
+    fetchDiagnosis("");
+  }, []);
+
   const onFormSubmit = (e) => {
     e.preventDefault();
     const reqBody = {
       data: {
-        icd_id: selectedDiagnosis.id
-      }
+        icd_id: selectedDiagnosis.id,
+      },
     };
     PatientService.createDiagnoses(patientId, reqBody)
       .then((response) => {
@@ -47,18 +67,17 @@ const Diagnoses = (props) => {
         onClose();
       })
       .catch((error) => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        let severity = "error";
+        const resMessage = (error.response
+            && error.response.data
+            && error.response.data.message)
+          || error.message
+          || error.toString();
+        const severity = "error";
         dispatch(
           setError({
-            severity: severity,
-            message: resMessage
-          })
+            severity,
+            message: resMessage,
+          }),
         );
       });
   };
@@ -81,7 +100,7 @@ const Diagnoses = (props) => {
               getOptionValue={(option) => option.id}
               onChange={(value) => setSelectedDiagnoses(value)}
               styles={SelectCustomStyles}
-              isClearable={true}
+              isClearable
             />
 
             <List component="ul">
@@ -89,7 +108,7 @@ const Diagnoses = (props) => {
                 <ListItem
                   onClick={() => setSelectedDiagnoses(diagnose)}
                   key={diagnose.id}
-                  disableGutters={true}
+                  disableGutters
                   button
                 >
                   <ListItemText primary={diagnose.name} />
@@ -105,8 +124,8 @@ const Diagnoses = (props) => {
                 <Typography variant="h4" color="textPrimary" gutterBottom>
                   Recent ICDs
                 </Typography>
-                {[...Array(5)].map((item, index) => (
-                  <Grid key={index}>
+                {[1, 2, 3, 4, 5].map((item) => (
+                  <Grid key={item}>
                     <Typography gutterBottom variant="body1">
                       Chronic Fatigue (Un-specified)
                     </Typography>
@@ -117,8 +136,8 @@ const Diagnoses = (props) => {
                 <Typography variant="h4" color="textPrimary" gutterBottom>
                   Recommended ICDs
                 </Typography>
-                {[...Array(5)].map((item, index) => (
-                  <Grid key={index}>
+                {[1, 2, 3, 4, 5].map((item) => (
+                  <Grid key={item}>
                     <Typography gutterBottom variant="body1">
                       Chronic Fatigue (Un-specified)
                     </Typography>
@@ -150,23 +169,10 @@ const Diagnoses = (props) => {
   );
 };
 
-const useStyles = makeStyles((theme) => ({
-  inputRow: {
-    margin: theme.spacing(3, 0)
-  },
-  heading: {
-    marginBottom: theme.spacing(2)
-  },
-  border: {
-    border: "1px solid grey",
-    padding: 10
-  },
-  height100: {
-    height: "100%"
-  },
-  actionContainer: {
-    paddingTop: theme.spacing(2)
-  }
-}));
+Diagnoses.propTypes = {
+  patientId: PropTypes.string.isRequired,
+  reloadData: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
 
 export default Diagnoses;

@@ -2,8 +2,19 @@ import React from "react";
 
 import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
 
-export default function MedicalNotesContent(props) {
+const useStyles = makeStyles((theme) => ({
+  inputRow: {
+    marginBottom: theme.spacing(1),
+  },
+  text12: {
+    fontSize: 12,
+    whiteSpace: "pre-line",
+  },
+}));
+
+const MedicalNotesContent = (props) => {
   const classes = useStyles();
   const { data } = props;
 
@@ -12,14 +23,10 @@ export default function MedicalNotesContent(props) {
       {data}
     </Typography>
   );
-}
+};
 
-const useStyles = makeStyles((theme) => ({
-  inputRow: {
-    marginBottom: theme.spacing(1)
-  },
-  text12: {
-    fontSize: 12,
-    whiteSpace: "pre-line"
-  }
-}));
+MedicalNotesContent.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
+
+export default MedicalNotesContent;

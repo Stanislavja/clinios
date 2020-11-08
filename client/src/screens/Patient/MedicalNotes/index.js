@@ -2,39 +2,59 @@ import React, { useState, useEffect } from "react";
 
 import { Grid, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
 import { useDispatch, useSelector, shallowEqual } from "react-redux";
 
 import PatientService from "../../../services/patient.service";
 import { setError, setSuccess } from "../../../store/common/actions";
 import { setEditorText, resetEditorText } from "../../../store/patient/actions";
 
+const useStyles = makeStyles((theme) => ({
+  inputRow: {
+    margin: theme.spacing(3, 0),
+  },
+  formInput: {
+    marginBottom: theme.spacing(1),
+
+    "& .MuiOutlinedInput-multiline": {
+      padding: 5,
+      fontSize: 12,
+    },
+  },
+  actionContainer: {
+    marginTop: theme.spacing(1),
+  },
+}));
+
 const MedicalNotes = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const currentEditorText = useSelector(
     (state) => state.patient.editorText,
-    shallowEqual
+    shallowEqual,
   );
-  const { onClose, reloadData, patientId } = props;
-  const [oldMedicalNote, setOldMedicalNote] = useState("");
+  const {
+    onClose, reloadData, patientId, oldMedicalNote,
+  } = props;
+  const [oldMedicalNoteState, setOldMedicalNoteState] = useState("");
   const [medicalNote, setMedicalNote] = useState("");
 
   useEffect(() => {
-    setOldMedicalNote(props.oldMedicalNote);
-    setMedicalNote(props.oldMedicalNote);
-    dispatch(setEditorText(props.oldMedicalNote));
+    setOldMedicalNoteState(oldMedicalNote);
+    setMedicalNote(oldMedicalNote);
+    dispatch(setEditorText(oldMedicalNote));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.oldMedicalNote]);
+  }, [oldMedicalNote]);
 
   const onFormSubmit = (e) => {
     e.preventDefault();
     // TODO:: static for the time being - discussion required
-    let noteId = 1;
+    const noteId = 1;
     const reqBody = {
       data: {
-        old_medical_note: oldMedicalNote,
-        medical_note: medicalNote
-      }
+        old_medical_note: oldMedicalNoteState,
+        medical_note: medicalNote,
+      },
     };
     PatientService.updateMedicalNotes(patientId, reqBody, noteId)
       .then((response) => {
@@ -43,18 +63,17 @@ const MedicalNotes = (props) => {
         onClose();
       })
       .catch((error) => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        let severity = "error";
+        const resMessage = (error.response
+            && error.response.data
+            && error.response.data.message)
+          || error.message
+          || error.toString();
+        const severity = "error";
         dispatch(
           setError({
-            severity: severity,
-            message: resMessage
-          })
+            severity,
+            message: resMessage,
+          }),
         );
       });
   };
@@ -75,9 +94,9 @@ const MedicalNotes = (props) => {
               setMedicalNote(e.target.value);
             }}
             onBlur={() => currentEditorText !== medicalNote && dispatch(setEditorText(medicalNote))}
-            multiline={true}
+            multiline
             rows={6}
-            autoFocus={true}
+            autoFocus
             onKeyDown={(event) => {
               if (event.key === "Escape") {
                 onClose();
@@ -91,21 +110,11 @@ const MedicalNotes = (props) => {
   );
 };
 
-const useStyles = makeStyles((theme) => ({
-  inputRow: {
-    margin: theme.spacing(3, 0)
-  },
-  formInput: {
-    marginBottom: theme.spacing(1),
-
-    "& .MuiOutlinedInput-multiline": {
-      padding: 5,
-      fontSize: 12
-    }
-  },
-  actionContainer: {
-    marginTop: theme.spacing(1)
-  }
-}));
+MedicalNotes.propTypes = {
+  oldMedicalNote: PropTypes.string.isRequired,
+  patientId: PropTypes.string.isRequired,
+  reloadData: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
 
 export default MedicalNotes;
