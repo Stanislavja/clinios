@@ -107,5 +107,5 @@ export default function DropdownItems({ parentItem, menuItems }) {
 // For additional type checking
 DropdownItems.propTypes = {
   parentItem: PropTypes.string.isRequired,
-  menuItems: PropTypes.arrayOf(PropTypes.array).isRequired,
+  menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
 };

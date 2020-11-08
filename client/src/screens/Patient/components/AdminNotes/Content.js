@@ -32,7 +32,7 @@ const AdminNotesContent = (props) => {
 };
 
 AdminNotesContent.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  data: PropTypes.string.isRequired,
 };
 
 export default AdminNotesContent;

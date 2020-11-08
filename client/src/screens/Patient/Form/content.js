@@ -38,7 +38,7 @@ const FormContent = (props) => {
     <>
       {
         data.map((item) => (
-          <Grid key={item.created} container className={classes.inputRow}>
+          <Grid key={`${item.created}_${item.title}`} container className={classes.inputRow}>
             <Typography
               component="span"
               className={`${classes.text12} ${classes.block}`}

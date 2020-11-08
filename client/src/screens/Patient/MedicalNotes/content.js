@@ -26,7 +26,7 @@ const MedicalNotesContent = (props) => {
 };
 
 MedicalNotesContent.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  data: PropTypes.string.isRequired,
 };
 
 export default MedicalNotesContent;
