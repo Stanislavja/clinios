@@ -225,7 +225,7 @@ const updatePatient = async (req, res) => {
     const updateResponse = await db.query($sql);
     if (!updateResponse.affectedRows) {
       errorMessage.error = "Update not successful";
-      return res.status(status.notfound).send(errorMessage);
+      return res.status(status.error).send(errorMessage);
     }
 
     successMessage.data = updateResponse;
