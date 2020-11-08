@@ -999,7 +999,10 @@ export default function Patient() {
             <NewTransactionForm
               onClose={toggleNewTransactionDialog}
               patientId={patientId}
-              reloadData={fetchBillings}
+              reloadData={() => {
+                fetchBillings();
+                fetchPatientBalance();
+              }}
             />
           )}
           applyForm={() => toggleNewTransactionDialog()}
