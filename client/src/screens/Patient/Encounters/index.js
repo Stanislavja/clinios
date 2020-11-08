@@ -100,8 +100,8 @@ const Encounters = (props) => {
         })
         .catch((error) => {
           const resMessage = (error.response
-              && error.response.data
-              && error.response.data.message)
+            && error.response.data
+            && error.response.data.message)
             || error.message
             || error.toString();
           const severity = "error";
@@ -131,8 +131,8 @@ const Encounters = (props) => {
         })
         .catch((error) => {
           const resMessage = (error.response
-              && error.response.data
-              && error.response.data.message)
+            && error.response.data
+            && error.response.data.message)
             || error.message
             || error.toString();
           const severity = "error";
@@ -255,7 +255,6 @@ const Encounters = (props) => {
                 icon={item.icon}
                 primaryButtonText={item.primaryButtonText}
                 secondaryButtonText={item.secondaryButtonText}
-                iconHandler={() => { }}
                 hasMinHeight
               />
             ))}
