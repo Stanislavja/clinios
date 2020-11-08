@@ -98,8 +98,8 @@ const Requisitions = (props) => {
       })
       .catch((error) => {
         const resMessage = (error.response
-            && error.response.data
-            && error.response.data.message)
+          && error.response.data
+          && error.response.data.message)
           || error.message
           || error.toString();
         const severity = "error";
@@ -153,7 +153,7 @@ const Requisitions = (props) => {
               >
                 <Typography variant="body1">
                   {item.name}
-&nbsp;&nbsp;
+&nbsp;
                 </Typography>
                 <Button>[Remove]</Button>
               </Grid>

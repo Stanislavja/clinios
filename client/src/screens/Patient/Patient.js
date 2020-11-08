@@ -68,9 +68,9 @@ import MedicalNotesDetails from "./MedicalNotes/details";
 import MedicationsForm from "./Medications";
 import MedicationsCardContent from "./Medications/content";
 import MedicationsDetails from "./Medications/details";
+import NewMessageForm from "./Messages";
 import MessagesCardContent from "./Messages/content";
 import MessagesDetails from "./Messages/details";
-import NewMessageForm from "./Messages/NewMessage";
 import RequisitionsForm from "./Requisitions";
 import RequisitionsCardContent from "./Requisitions/content";
 import RequisitionsDetails from "./Requisitions/details";
@@ -594,7 +594,7 @@ export default function Patient() {
       case "Messages":
         return toggleMessageDialog;
       case "Medications":
-        return toggleMedicationExpandDialog;
+        return toggleMedicationDialog;
       case "Diagnoses":
         return toggleDiagnosesDialog;
       case "Requisitions":
@@ -698,75 +698,6 @@ export default function Patient() {
       default:
         return <div />;
     }
-    // if (value === "Patient") {
-    //   return (
-    //     !!patientData && (
-    //       <PatientCardContent data={patientData} patientId={patientId} />
-    //     )
-    //   );
-    // } if (value === "Admin Notes") {
-    //   if (patientData) {
-    //     return showAdminFormDialog ? (
-    //       <AdminNotesForm
-    //         patientId={patientId}
-    //         oldAdminNote={patientData && patientData.admin_note}
-    //         onClose={toggleAdminFormDialog}
-    //         reloadData={() => {
-    //           fetchPatientData();
-    //           fetchAdminNotesHistory();
-    //         }}
-    //       />
-    //     ) : (
-    //         <AdminNotesCardContent data={patientData.admin_note} />
-    //       );
-    //   }
-    // } else if (value === "Forms") {
-    //   return !!forms && <FormCardContent data={forms} />;
-    // } else if (value === "Billing") {
-    //   return !!billings && <BillingCardContent data={billings} />;
-    // } else if (value === "Allergies") {
-    //   return (
-    //     !!allergies && (
-    //       <AllergiesCardContent
-    //         data={allergies}
-    //         reloadData={() => fetchAllergies()}
-    //       />
-    //     )
-    //   );
-    // } else if (value === "Medical Notes") {
-    //   if (patientData) {
-    //     return showMedicalNotesFormDialog ? (
-    //       <MedicalNotesForm
-    //         patientId={patientId}
-    //         onClose={toggleMedicalNotesFormDialog}
-    //         oldMedicalNote={patientData && patientData.medical_note}
-    //         reloadData={() => {
-    //           fetchPatientData();
-    //           fetchMedicalNotes();
-    //         }}
-    //       />
-    //     ) : (
-    //         <MedicalNotesCardContent data={patientData.medical_note} />
-    //       );
-    //   }
-    // } else if (value === "Handouts") {
-    //   return !!medicalNotes && <HandoutsCardContent data={handouts} />;
-    // } else if (value === "Messages") {
-    //   return (
-    //     !!messages && (
-    //       <MessagesCardContent
-    //         data={messages}
-    //         reloadData={() => fetchMessages()}
-    //       />
-    //     )
-    //   );
-    // } else if (value === "Medications") {
-    //   return !!medications && <MedicationsCardContent data={medications} />;
-    // } else if (value === "Diagnoses") {
-    //   return !!diagnoses && <DiagnosesCardContent data={diagnoses} />;
-    // } else if (value === "Requisitions") {
-    //   return !!requisitions && <RequisitionsCardContent data={requisitions} />;
-    // }
   };
 
   const redirectToPatientPortal = () => {
@@ -1314,6 +1245,7 @@ export default function Patient() {
             <MedicationsForm
               patientId={patientId}
               onClose={toggleMedicationDialog}
+              reloadData={fetchMedications}
             />
           )}
           applyForm={() => toggleMedicationDialog()}
