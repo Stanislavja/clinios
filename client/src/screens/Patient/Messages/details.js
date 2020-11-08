@@ -77,8 +77,8 @@ const MessagesDetails = (props) => {
       })
       .catch((error) => {
         const resMessage = (error.response
-            && error.response.data
-            && error.response.data.message)
+          && error.response.data
+          && error.response.data.message)
           || error.message
           || error.toString();
         const severity = "error";
@@ -108,7 +108,7 @@ const MessagesDetails = (props) => {
         <TableBody>
           {!!data && data.length
             ? data.map((row) => (
-              <StyledTableRow key={row.created}>
+              <StyledTableRow key={`${row.created}_${row.name}`}>
                 <TableCell component="th" scope="row">
                   {moment(row.created).format("MMM D YYYY")}
                 </TableCell>

@@ -109,7 +109,7 @@ const DocumentsContent = (props) => {
       setTableData([...imagingData]);
     } else if (selectedTab === 3) { // (Un-Categorized)
       const uncategorizedData = data.filter((x) => (x.type !== "L" && x.type !== "M"
-          && x.type !== "I" && x.status !== "D"));
+        && x.type !== "I" && x.status !== "D"));
       setTableData([...uncategorizedData]);
     } else if (selectedTab === 4) { // (Declined/Deleted)
       const deletedData = data.filter((x) => x.status === "D");
@@ -213,7 +213,7 @@ const DocumentsContent = (props) => {
           <TableBody>
             {tableData.length ? (
               tableData.map((row) => (
-                <StyledTableRow key={row.created}>
+                <StyledTableRow key={`${row.created}_${row.filename}`}>
                   <TableCell component="th" scope="row">
                     {moment(row.created).format("MMM D YYYY")}
                   </TableCell>

@@ -108,7 +108,7 @@ const HandoutsForm = (props) => {
         <Table size="small" className={classes.table}>
           <TableBody>
             {allHandouts.map((row) => (
-              <TableRow key={row.created}>
+              <TableRow key={`${row.created}_${row.filename}`}>
                 <TableCell padding="checkbox">
                   <Checkbox
                     name={row.filename}

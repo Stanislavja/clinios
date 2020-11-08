@@ -77,8 +77,8 @@ const DiagnosesDetails = (props) => {
       })
       .catch((error) => {
         const resMessage = (error.response
-            && error.response.data
-            && error.response.data.message)
+          && error.response.data
+          && error.response.data.message)
           || error.message
           || error.toString();
         const severity = "error";
@@ -106,7 +106,7 @@ const DiagnosesDetails = (props) => {
           {!!data
             && data.length
             ? data.map((row) => (
-              <StyledTableRow key={row.created}>
+              <StyledTableRow key={`${row.created}_${row.icd_id}`}>
                 <TableCell component="th" scope="row">
                   {moment(row.created).format("MMM D YYYY")}
                 </TableCell>

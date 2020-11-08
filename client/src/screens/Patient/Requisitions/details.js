@@ -110,7 +110,7 @@ const RequisitionsDetails = (props) => {
           {!!data
             && data.length
             ? data.map((row) => (
-              <StyledTableRow key={row.created}>
+              <StyledTableRow key={`${row.created}_${row.id}`}>
                 <TableCell component="th" scope="row">
                   {moment(row.created).format("MMM D YYYY")}
                 </TableCell>
