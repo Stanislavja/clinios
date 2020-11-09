@@ -7,16 +7,16 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import {
-  makeStyles 
+  makeStyles,
 } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import {
-  useDispatch 
+  useDispatch,
 } from "react-redux";
 
 import ScheduleService from "../../../../../../services/schedule.service";
 import {
-  setSuccess 
+  setSuccess,
 } from "../../../../../../store/common/actions";
 
 const useStyles = makeStyles((theme) => ({
@@ -36,7 +36,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DeleteSchedule = ({ id, isDeleteModalOpen, onClose, fetchScheduleSearch }) => {
+const DeleteSchedule = ({
+  id, isDeleteModalOpen, onClose, fetchScheduleSearch,
+}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
