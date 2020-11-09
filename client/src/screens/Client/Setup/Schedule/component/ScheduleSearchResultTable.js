@@ -10,11 +10,12 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  withStyles 
+  withStyles,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import moment from "moment";
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
   tableContainer: {
@@ -55,7 +56,6 @@ const StyledTableRow = withStyles((theme) => ({
 const ScheduleSearchResultTable = ({
   handleOnEditClick,
   searchResult,
-  fetchScheduleSearch,
   handleDeleteSchedule,
 }) => {
   const classes = useStyles();
@@ -144,6 +144,14 @@ const ScheduleSearchResultTable = ({
       </TableContainer>
     </div>
   );
+};
+
+ScheduleSearchResultTable.propTypes = {
+  handleOnEditClick: PropTypes.func.isRequired,
+  handleDeleteSchedule: PropTypes.func.isRequired,
+  searchResult: PropTypes.arrayOf(
+    PropTypes.arrayOf({}),
+  ).isRequired,
 };
 
 export default ScheduleSearchResultTable;
