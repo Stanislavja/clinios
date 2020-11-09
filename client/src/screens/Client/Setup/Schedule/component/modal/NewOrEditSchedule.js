@@ -447,7 +447,9 @@ const NewOrEditSchedule = ({
 
 NewOrEditSchedule.propTypes = {
   user: PropTypes.arrayOf(
-    PropTypes.shapeOf({}),
+    PropTypes.arrayOf({
+      id: PropTypes.string,
+    }),
   ).isRequired,
   userId: PropTypes.bool.isRequired,
   isNewSchedule: PropTypes.bool.isRequired,
@@ -456,7 +458,7 @@ NewOrEditSchedule.propTypes = {
   fetchScheduleSearch: PropTypes.func.isRequired,
   handleChangeOfUserId: PropTypes.func.isRequired,
   userList: PropTypes.arrayOf(
-    PropTypes.shapeOf({}),
+    PropTypes.arrayOf(),
   ).isRequired,
 };
 

@@ -150,7 +150,7 @@ ScheduleSearchResultTable.propTypes = {
   handleOnEditClick: PropTypes.func.isRequired,
   handleDeleteSchedule: PropTypes.func.isRequired,
   searchResult: PropTypes.arrayOf(
-    PropTypes.shapeOf({}),
+    PropTypes.arrayOf({}),
   ).isRequired,
 };
 
