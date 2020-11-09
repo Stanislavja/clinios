@@ -20,8 +20,8 @@ import { green, grey } from "@material-ui/core/colors";
 import Alert from "@material-ui/lab/Alert";
 import { KeyboardDatePicker, KeyboardTimePicker } from "@material-ui/pickers";
 import moment from "moment";
+import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
-import PropTypes from 'prop-types';
 
 import ScheduleService from "../../../../../../services/schedule.service";
 import { setSuccess } from "../../../../../../store/common/actions";
@@ -110,12 +110,15 @@ const NewOrEditSchedule = ({
   const [status, setStatus] = useState("");
   const [errors, setErrors] = useState([]);
 
+  /* eslint-disable */
   useEffect(() => {
     const tempSchedule = {
       ...props.schedule,
     };
     setSchedule(tempSchedule);
   }, [props.schedule]);
+
+  /* eslint-enable */
 
   useEffect(() => {
     if (moment(schedule.date_start) > moment()) {
@@ -149,7 +152,7 @@ const NewOrEditSchedule = ({
           setTimeout(() => {
             setErrors(error.response.error);
           }, 300);
-        }
+        },
       );
     } else {
       ScheduleService.updateSchedule(user.id, schedule.id, payload).then(
@@ -162,7 +165,7 @@ const NewOrEditSchedule = ({
           setTimeout(() => {
             setErrors(error.response.error);
           }, 300);
-        }
+        },
       );
     }
     handleOnClose();
@@ -196,8 +199,9 @@ const NewOrEditSchedule = ({
               ? "This page is used to create a new schedule entry"
               : "This page is used to Edit existing schedule entry"}
           </DialogContentText>
-          {errors &&
-            errors.map((error, index) => (
+          {errors
+            && errors.map((error, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <Alert severity="error" key={index}>
                 {error.msg}
               </Alert>
@@ -214,11 +218,10 @@ const NewOrEditSchedule = ({
                   select
                   label="User"
                   value={schedule.user_id}
-                  onChange={(e) =>
-                    setSchedule({
-                      ...schedule,
-                      user_id: e.target.value,
-                    })}
+                  onChange={(e) => setSchedule({
+                    ...schedule,
+                    user_id: e.target.value,
+                  })}
                   variant="outlined"
                   size="small"
                   InputLabelProps={{
@@ -228,9 +231,9 @@ const NewOrEditSchedule = ({
                     native: true,
                   }}
                 >
-                  {userList.map((user) => (
-                    <option key={user.id} value={user.id}>
-                      {`${user.firstname} ${user.lastname}`}
+                  {userList.map((u) => (
+                    <option key={u.id} value={u.id}>
+                      {`${u.firstname} ${u.lastname}`}
                     </option>
                   ))}
                 </TextField>
@@ -258,11 +261,10 @@ const NewOrEditSchedule = ({
                   size="small"
                   name="date_start"
                   value={schedule.date_start}
-                  onChange={(date) =>
-                    setSchedule({
-                      ...schedule,
-                      date_start: date,
-                    })}
+                  onChange={(date) => setSchedule({
+                    ...schedule,
+                    date_start: date,
+                  })}
                   onKeyUp={handleKeyUp}
                   maxDate={schedule.date_end}
                   maxDateMessage="Date start should not be after date end"
@@ -288,11 +290,10 @@ const NewOrEditSchedule = ({
                   size="small"
                   name="date_end"
                   value={schedule.date_end}
-                  onChange={(date) =>
-                    setSchedule({
-                      ...schedule,
-                      date_end: date,
-                    })}
+                  onChange={(date) => setSchedule({
+                    ...schedule,
+                    date_end: date,
+                  })}
                   onKeyUp={handleKeyUp}
                   InputLabelProps={{
                     shrink: true,
@@ -320,11 +321,10 @@ const NewOrEditSchedule = ({
                       : null
                   }
                   className={classes.textField}
-                  onChange={(date) =>
-                    setSchedule({
-                      ...schedule,
-                      time_start: date,
-                    })}
+                  onChange={(date) => setSchedule({
+                    ...schedule,
+                    time_start: date,
+                  })}
                   size="small"
                   autoOk
                   mask="__:__ _M"
@@ -354,11 +354,10 @@ const NewOrEditSchedule = ({
                       : null
                   }
                   className={classes.textField}
-                  onChange={(date) =>
-                    setSchedule({
-                      ...schedule,
-                      time_end: date,
-                    })}
+                  onChange={(date) => setSchedule({
+                    ...schedule,
+                    time_end: date,
+                  })}
                   size="small"
                   autoOk
                   mask="__:__ _M"
@@ -377,11 +376,10 @@ const NewOrEditSchedule = ({
                   checked={Boolean(schedule.active)}
                   size="small"
                   name="active"
-                  onChange={(e) =>
-                    setSchedule({
-                      ...schedule,
-                      active: e.target.checked,
-                    })}
+                  onChange={(e) => setSchedule({
+                    ...schedule,
+                    active: e.target.checked,
+                  })}
                   onKeyUp={handleKeyUp}
                 />
               )}
@@ -415,11 +413,10 @@ const NewOrEditSchedule = ({
                   rows: 6,
                 }}
                 value={schedule.note}
-                onChange={(e) =>
-                  setSchedule({
-                    ...schedule,
-                    note: e.target.value,
-                  })}
+                onChange={(e) => setSchedule({
+                  ...schedule,
+                  note: e.target.value,
+                })}
                 onKeyUp={handleKeyUp}
                 error={String(schedule.note).length > 1000}
                 helperText={String(schedule.note).length > 1000 && "Note can't be grater than 1000 Chars"}
@@ -449,10 +446,18 @@ const NewOrEditSchedule = ({
 };
 
 NewOrEditSchedule.propTypes = {
-  id: PropTypes.string.isRequired,
-  isDeleteModalOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
+  user: PropTypes.arrayOf(
+    PropTypes.shapeOf({}),
+  ).isRequired,
+  userId: PropTypes.bool.isRequired,
+  isNewSchedule: PropTypes.bool.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  handleOnClose: PropTypes.func.isRequired,
   fetchScheduleSearch: PropTypes.func.isRequired,
+  handleChangeOfUserId: PropTypes.func.isRequired,
+  userList: PropTypes.arrayOf(
+    PropTypes.shapeOf({}),
+  ).isRequired,
 };
 
 export default NewOrEditSchedule;
