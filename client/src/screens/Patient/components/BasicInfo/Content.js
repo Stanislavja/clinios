@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Grid, Typography, Popover } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
+import PropTypes from "prop-types";
 
 import PatientService from "../../../../services/patient.service";
 import {
@@ -10,10 +11,37 @@ import {
   formatPhoneNumber,
   dateDiffInDays,
   dateDiffInMonths,
-  dateDiffInYears
-} from "./../../../../utils/helpers";
+  dateDiffInYears,
+} from "../../../../utils/helpers";
 
-export default function BasicInfoContent(props) {
+const useStyles = makeStyles((theme) => ({
+  inputRow: {
+    marginBottom: theme.spacing(0.5),
+    flexWrap: "nowrap",
+  },
+  text12: {
+    fontSize: 12,
+  },
+  value: {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  },
+  paper: {
+    padding: theme.spacing(1),
+    maxWidth: 400,
+    wordWrap: "break-word",
+    backgroundColor: theme.palette.common.white,
+    color: "rgba(0, 0, 0, 0.87)",
+    boxShadow: theme.shadows[1],
+    fontSize: 13,
+  },
+  popover: {
+    pointerEvents: "none",
+  },
+}));
+
+const BasicInfoContent = (props) => {
   const classes = useStyles();
   const { data, patientId } = props;
   const [nextAppointment, setNextAppointment] = useState(null);
@@ -24,7 +52,7 @@ export default function BasicInfoContent(props) {
     const fetchNextAppointment = () => {
       PatientService.getNextAppointment(patientId).then((res) => {
         setNextAppointment(
-          res.data && res.data.length ? res.data[0].start_dt : ""
+          res.data && res.data.length ? res.data[0].start_dt : "",
         );
       });
     };
@@ -32,20 +60,19 @@ export default function BasicInfoContent(props) {
   }, [patientId]);
 
   const calculateDateDifference = () => {
-    let d1 = new Date();
-    let d2 = new Date(nextAppointment);
+    const d1 = new Date();
+    const d2 = new Date(nextAppointment);
 
-    let daysDiff = dateDiffInDays(d1, d2);
-    let monthsDiff = dateDiffInMonths(d1, d2);
-    let yearsDiff = dateDiffInYears(d1, d2);
+    const daysDiff = dateDiffInDays(d1, d2);
+    const monthsDiff = dateDiffInMonths(d1, d2);
+    const yearsDiff = dateDiffInYears(d1, d2);
 
     if (yearsDiff > 0) {
       return yearsDiff > 1 ? `${yearsDiff} years` : `${yearsDiff} year`;
-    } else if (monthsDiff > 0) {
+    } if (monthsDiff > 0) {
       return monthsDiff > 1 ? `${monthsDiff} months` : `${monthsDiff} month`;
-    } else {
-      return daysDiff > 1 ? `${daysDiff} days` : `${daysDiff} day`;
     }
+    return daysDiff > 1 ? `${daysDiff} days` : `${daysDiff} day`;
   };
 
   const mapGender = (value) => {
@@ -78,20 +105,20 @@ export default function BasicInfoContent(props) {
   return (
     <>
       <Popover
-        id={"tooltip"}
+        id="tooltip"
         open={showTooltip}
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
           vertical: "bottom",
-          horizontal: "center"
+          horizontal: "center",
         }}
         transformOrigin={{
           vertical: "top",
-          horizontal: "center"
+          horizontal: "center",
         }}
         classes={{
-          paper: classes.paper
+          paper: classes.paper,
         }}
         className={classes.popover}
         disableRestoreFocus
@@ -112,8 +139,12 @@ export default function BasicInfoContent(props) {
           color="textPrimary"
           onMouseOver={(e) => isEllipsisActive(e)}
           onMouseOut={() => handleClose()}
+          onFocus={() => { }} // for onMouseOver
+          onBlur={() => { }} // for onMouseOut
         >
-          {data.firstname} {data.lastname}
+          {data.firstname}
+          {" "}
+          {data.lastname}
         </Typography>
       </Grid>
 
@@ -131,6 +162,8 @@ export default function BasicInfoContent(props) {
           color="textPrimary"
           onMouseOver={(e) => isEllipsisActive(e)}
           onMouseOut={() => handleClose()}
+          onFocus={() => { }} // for onMouseOver
+          onBlur={() => { }} // for onMouseOut
         >
           {mapGender(data.gender)}
         </Typography>
@@ -150,9 +183,14 @@ export default function BasicInfoContent(props) {
           color="textPrimary"
           onMouseOver={(e) => isEllipsisActive(e)}
           onMouseOut={() => handleClose()}
+          onFocus={() => { }} // for onMouseOver
+          onBlur={() => { }} // for onMouseOut
         >
-          {moment(data.dob).format("MMM D YYYY")} (Age:&nbsp;
-          {calculateAge(data.dob)})
+          {moment(data.dob).format("MMM D YYYY")}
+          {" "}
+          (Age:&nbsp;
+          {calculateAge(data.dob)}
+          )
         </Typography>
       </Grid>
 
@@ -170,6 +208,8 @@ export default function BasicInfoContent(props) {
           color="textPrimary"
           onMouseOver={(e) => isEllipsisActive(e)}
           onMouseOut={() => handleClose()}
+          onFocus={() => { }} // for onMouseOver
+          onBlur={() => { }} // for onMouseOut
         >
           {formatPhoneNumber(data.phone_home)}
         </Typography>
@@ -189,6 +229,8 @@ export default function BasicInfoContent(props) {
           color="textPrimary"
           onMouseOver={(e) => isEllipsisActive(e)}
           onMouseOut={() => handleClose()}
+          onFocus={() => { }} // for onMouseOver
+          onBlur={() => { }} // for onMouseOut
         >
           {formatPhoneNumber(data.phone_cell)}
         </Typography>
@@ -208,6 +250,8 @@ export default function BasicInfoContent(props) {
           color="textPrimary"
           onMouseOver={(e) => isEllipsisActive(e)}
           onMouseOut={() => handleClose()}
+          onFocus={() => { }} // for onMouseOver
+          onBlur={() => { }} // for onMouseOut
         >
           {data.provider}
         </Typography>
@@ -227,40 +271,24 @@ export default function BasicInfoContent(props) {
           color="textPrimary"
           onMouseOver={(e) => isEllipsisActive(e)}
           onMouseOut={() => handleClose()}
+          onFocus={() => { }} // for onMouseOver
+          onBlur={() => { }} // for onMouseOut
         >
-          {!!nextAppointment
+          {nextAppointment
             ? moment(nextAppointment).format("MMM D YYYY")
-            : ""}{" "}
+            : ""}
+          {" "}
           {!!nextAppointment && `(In ${calculateDateDifference()})`}
         </Typography>
       </Grid>
     </>
   );
-}
+};
 
-const useStyles = makeStyles((theme) => ({
-  inputRow: {
-    marginBottom: theme.spacing(0.5),
-    flexWrap: "nowrap"
-  },
-  text12: {
-    fontSize: 12
-  },
-  value: {
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis"
-  },
-  paper: {
-    padding: theme.spacing(1),
-    maxWidth: 400,
-    wordWrap: "break-word",
-    backgroundColor: theme.palette.common.white,
-    color: "rgba(0, 0, 0, 0.87)",
-    boxShadow: theme.shadows[1],
-    fontSize: 13
-  },
-  popover: {
-    pointerEvents: "none"
-  }
-}));
+BasicInfoContent.propTypes = {
+  patientId: PropTypes.string.isRequired,
+  data: PropTypes.objectOf(PropTypes.any).isRequired,
+};
+
+
+export default BasicInfoContent;

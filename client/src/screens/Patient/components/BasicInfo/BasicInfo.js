@@ -11,24 +11,58 @@ import {
   TableHead,
   TableBody,
   TableRow,
-  TableCell
+  TableCell,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
+import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
 
-import { calculateAge } from "../../../../utils/helpers";
-import CountrySelect from "./../../../../components/common/CountrySelect";
-import RegionSelect from "./../../../../components/common/RegionSelect";
+import CountrySelect from "../../../../components/common/CountrySelect";
+import RegionSelect from "../../../../components/common/RegionSelect";
+import PatientService from "../../../../services/patient.service";
 import {
   BasicInfoForm,
   InsuranceForm,
   Pharmacies,
-  PaymentData
-} from "./../../../../static/patientBasicInfoForm";
+  PaymentData,
+} from "../../../../static/patientBasicInfoForm";
+import { setError, setSuccess } from "../../../../store/common/actions";
+import { calculateAge } from "../../../../utils/helpers";
+
+const useStyles = makeStyles((theme) => ({
+  inputRow: {
+    marginBottom: theme.spacing(1),
+  },
+  sectionCard: {
+    padding: theme.spacing(1.5, 1),
+  },
+  halfSectionCard: {
+    padding: theme.spacing(1.5, 1),
+    minHeight: 198,
+  },
+  root: {
+    border: "1px solid",
+    margin: theme.spacing(0, 0, 1, 0),
+    borderRadius: 0,
+  },
+  inputTextRow: {
+    marginBottom: theme.spacing(3),
+  },
+  select: {
+    lineHeight: "2.30em",
+  },
+  table: {
+    background: "white",
+  },
+}));
 
 export default function BasicInfo(props) {
   const classes = useStyles();
-  const { formData } = props;
+  const dispatch = useDispatch();
+  const {
+    formData, reloadData, patientId, onClose,
+  } = props;
   const FirstRow = BasicInfoForm.firstRow;
   const SecondRow = BasicInfoForm.secondRow;
   const ThirdRow = BasicInfoForm.thirdRow;
@@ -59,15 +93,15 @@ export default function BasicInfo(props) {
   });
 
   useEffect(() => {
-    formData.status = !!formData.status ? formData.status : "active";
-    setBasicInfo({ ...formData })
-  }, [formData])
+    formData.status = formData.status ? formData.status : "active";
+    setBasicInfo({ ...formData });
+  }, [formData]);
 
   const handleInputChnage = (e) => {
     const { value, name } = e.target;
     setBasicInfo({
       ...basicInfo,
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -79,7 +113,33 @@ export default function BasicInfo(props) {
     }
   };
 
-  console.log("basic", basicInfo);
+  const onFormSubmit = () => {
+    const reqBody = {
+      data: {
+        ...formData,
+      },
+    };
+    PatientService.updatePatient(patientId, reqBody)
+      .then((response) => {
+        dispatch(setSuccess(`${response.data.message}`));
+        reloadData();
+        onClose();
+      })
+      .catch((error) => {
+        const resMessage = (error.response
+          && error.response.data
+          && error.response.data.message)
+          || error.message
+          || error.toString();
+        const severity = "error";
+        dispatch(
+          setError({
+            severity,
+            message: resMessage,
+          }),
+        );
+      });
+  };
 
   return (
     <>
@@ -91,8 +151,8 @@ export default function BasicInfo(props) {
                 Basic Information
               </Typography>
               <Grid container spacing={1} className={classes.inputRow}>
-                {FirstRow.map((item, index) => (
-                  <Grid key={index} item md={2}>
+                {FirstRow.map((item) => (
+                  <Grid key={item.name} item md={2}>
                     {item.baseType === "input" ? (
                       <TextField
                         label={item.label}
@@ -114,13 +174,11 @@ export default function BasicInfo(props) {
                         fullWidth
                         onChange={(e) => handleInputChnage(e)}
                       >
-                        {item.options.map((option, index) => {
-                          return (
-                            <MenuItem key={index} value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                          );
-                        })}
+                        {item.options.map((option) => (
+                          <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                          </MenuItem>
+                        ))}
                       </TextField>
                     )}
                   </Grid>
@@ -132,13 +190,17 @@ export default function BasicInfo(props) {
                 className={classes.inputRow}
                 alignItems="flex-end"
               >
-                {SecondRow.map((item, index) => (
-                  <Grid key={index} item md={2}>
+                {SecondRow.map((item) => (
+                  <Grid key={item.name} item md={2}>
                     {item.baseType === "input" ? (
                       <TextField
                         label={item.label}
                         name={item.name}
-                        value={item.type === "date" ? moment(basicInfo[item.name]).format("YYYY-MM-DD") : basicInfo[item.name]}
+                        value={
+                          item.type === "date"
+                            ? moment(basicInfo[item.name]).format("YYYY-MM-DD")
+                            : basicInfo[item.name]
+                        }
                         id={item.id}
                         type={item.type}
                         fullWidth
@@ -155,24 +217,25 @@ export default function BasicInfo(props) {
                         fullWidth
                         onChange={(e) => handleInputChnage(e)}
                       >
-                        {item.options.map((option, index) => {
-                          return (
-                            <MenuItem key={index} value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                          );
-                        })}
+                        {item.options.map((option) => (
+                          <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                          </MenuItem>
+                        ))}
                       </TextField>
                     )}
                   </Grid>
                 ))}
                 <Grid item md={2}>
-                  <Typography>&nbsp;&nbsp;Age: {calculateAge(basicInfo.dob)}</Typography>
+                  <Typography>
+                    &nbsp;&nbsp;Age:
+                    {calculateAge(basicInfo.dob)}
+                  </Typography>
                 </Grid>
               </Grid>
               <Grid container spacing={1} className={classes.inputRow}>
-                {ThirdRow.map((item, index) => (
-                  <Grid key={index} item md={2}>
+                {ThirdRow.map((item) => (
+                  <Grid key={item.name} item md={2}>
                     {item.baseType === "input" ? (
                       <TextField
                         label={item.label}
@@ -194,13 +257,11 @@ export default function BasicInfo(props) {
                         fullWidth
                         onChange={(e) => handleInputChnage(e)}
                       >
-                        {item.options.map((option, index) => {
-                          return (
-                            <MenuItem key={index} value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                          );
-                        })}
+                        {item.options.map((option) => (
+                          <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                          </MenuItem>
+                        ))}
                       </TextField>
                     )}
                   </Grid>
@@ -208,14 +269,17 @@ export default function BasicInfo(props) {
               </Grid>
               <Grid container spacing={1} alignItems="flex-end">
                 <Grid item md={2}>
-                  <Typography>Last Login: {`Jan 1, 2020`}</Typography>
+                  <Typography>
+                    Last Login:
+                    Jan 1, 2020
+                  </Typography>
                 </Grid>
                 <Grid item md={2}>
                   <TextField
-                    label={"Password"}
-                    name={"password"}
-                    id={"password"}
-                    type={"password"}
+                    label="Password"
+                    name="password"
+                    id="password"
+                    type="password"
                     fullWidth
                     onChange={(e) => handleInputChnage(e)}
                   />
@@ -240,7 +304,7 @@ export default function BasicInfo(props) {
                 <Grid item lg={12}>
                   <TextField
                     label="Address"
-                    name={"address"}
+                    name="address"
                     value={basicInfo.address}
                     fullWidth
                     onChange={(e) => handleInputChnage(e)}
@@ -249,7 +313,7 @@ export default function BasicInfo(props) {
                 <Grid item lg={12}>
                   <TextField
                     label="Address Line 2"
-                    name={"address2"}
+                    name="address2"
                     value={basicInfo.address2}
                     fullWidth
                     onChange={(e) => handleInputChnage(e)}
@@ -258,7 +322,7 @@ export default function BasicInfo(props) {
                 <Grid item lg={3}>
                   <TextField
                     label="City"
-                    name={"city"}
+                    name="city"
                     value={basicInfo.city}
                     fullWidth
                     onChange={(e) => handleInputChnage(e)}
@@ -267,7 +331,7 @@ export default function BasicInfo(props) {
                 <Grid item lg={3}>
                   <TextField
                     label="Zip/Postal"
-                    name={"zipPostal"}
+                    name="zipPostal"
                     value={basicInfo.postal}
                     fullWidth
                     onChange={(e) => handleInputChnage(e)}
@@ -275,27 +339,23 @@ export default function BasicInfo(props) {
                 </Grid>
                 <Grid item lg={3}>
                   <CountrySelect
-                    id={"country-select"}
+                    id="country-select"
                     error={null}
-                    name={"country-select"}
-                    helperText={""}
-                    label={"Country"}
-                    handleChange={(identifier, value) =>
-                      handleCountryRegion(identifier, value)
-                    }
+                    name="country-select"
+                    helperText=""
+                    label="Country"
+                    handleChange={(identifier, value) => handleCountryRegion(identifier, value)}
                     country={country}
                   />
                 </Grid>
                 <Grid item lg={3}>
                   <RegionSelect
-                    id={"state-select"}
+                    id="state-select"
                     error={null}
-                    name={"state-select"}
-                    helperText={""}
-                    label={"State"}
-                    handleChange={(identifier, value) =>
-                      handleCountryRegion(identifier, value)
-                    }
+                    name="state-select"
+                    helperText=""
+                    label="State"
+                    handleChange={(identifier, value) => handleCountryRegion(identifier, value)}
                     country={country}
                     region={region}
                   />
@@ -311,8 +371,8 @@ export default function BasicInfo(props) {
                 Pharmacy
               </Typography>
               <Grid container spacing={1}>
-                {Pharmacies.map((pharmacy, index) => (
-                  <Grid key={index} item md={4}>
+                {Pharmacies.map((pharmacy) => (
+                  <Grid key={pharmacy.name} item md={4}>
                     <TextField
                       label={pharmacy.name}
                       className={classes.inputTextRow}
@@ -336,8 +396,8 @@ export default function BasicInfo(props) {
                 Insurance
               </Typography>
               <Grid container spacing={1} className={classes.inputRow}>
-                {InsuranceForm.map((item, index) => (
-                  <Grid key={index} item md={2}>
+                {InsuranceForm.map((item) => (
+                  <Grid key={item.name} item md={2}>
                     <TextField
                       label={item.label}
                       name={item.name}
@@ -401,36 +461,16 @@ export default function BasicInfo(props) {
       </Grid>
 
       <Grid container justify="space-between">
-        <Button variant="outlined">Save</Button>
-        <Button variant="outlined">Cancel</Button>
+        <Button onClick={() => onFormSubmit()} variant="outlined">Save</Button>
+        <Button onClick={() => onClose()} variant="outlined">Cancel</Button>
       </Grid>
     </>
   );
 }
 
-const useStyles = makeStyles((theme) => ({
-  inputRow: {
-    marginBottom: theme.spacing(1)
-  },
-  sectionCard: {
-    padding: theme.spacing(1.5, 1)
-  },
-  halfSectionCard: {
-    padding: theme.spacing(1.5, 1),
-    minHeight: 198
-  },
-  root: {
-    border: "1px solid",
-    margin: theme.spacing(0, 0, 1, 0),
-    borderRadius: 0
-  },
-  inputTextRow: {
-    marginBottom: theme.spacing(3)
-  },
-  select: {
-    lineHeight: "2.30em"
-  },
-  table: {
-    background: "white"
-  }
-}));
+BasicInfo.propTypes = {
+  formData: PropTypes.objectOf(PropTypes.string).isRequired,
+  patientId: PropTypes.string.isRequired,
+  reloadData: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
