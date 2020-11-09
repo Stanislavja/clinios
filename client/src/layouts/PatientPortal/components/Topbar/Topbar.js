@@ -44,13 +44,13 @@ const Topbar = (props) => {
 
 Topbar.defaultProps = {
   className: null,
-  onSidebarOpen: () => {},
+  onSidebarOpen: () => { },
 };
 
 Topbar.propTypes = {
   className: PropTypes.string,
   onSidebarOpen: PropTypes.func,
-  user: PropTypes.objectOf(PropTypes.object).isRequired,
+  user: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default Topbar;

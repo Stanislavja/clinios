@@ -87,12 +87,12 @@ const Profile = (props) => {
 
 Profile.defaultProps = {
   className: null,
-  logout: () => {},
+  logout: () => { },
 };
 
 Profile.propTypes = {
   className: PropTypes.string,
-  user: PropTypes.objectOf(PropTypes.object).isRequired,
+  user: PropTypes.objectOf(PropTypes.any).isRequired,
   isAuth: PropTypes.bool.isRequired,
   logout: PropTypes.func,
 };

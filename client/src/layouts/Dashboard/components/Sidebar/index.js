@@ -104,8 +104,8 @@ const Sidebar = (props) => {
 
 Sidebar.defaultProps = {
   className: null,
-  logout: () => {},
-  onClose: () => {},
+  logout: () => { },
+  onClose: () => { },
 };
 
 Sidebar.propTypes = {
@@ -113,7 +113,7 @@ Sidebar.propTypes = {
   onClose: PropTypes.func,
   open: PropTypes.bool.isRequired,
   variant: PropTypes.string.isRequired,
-  user: PropTypes.objectOf(PropTypes.object).isRequired,
+  user: PropTypes.objectOf(PropTypes.any).isRequired,
   isAuth: PropTypes.bool.isRequired,
   logout: PropTypes.func,
 };

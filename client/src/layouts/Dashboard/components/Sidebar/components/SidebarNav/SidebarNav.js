@@ -81,7 +81,7 @@ SidebarNav.propTypes = {
     PropTypes.shape({
       title: PropTypes.string,
       href: PropTypes.string,
-      icon: PropTypes.string,
+      icon: PropTypes.node,
     }),
   ).isRequired,
 };
