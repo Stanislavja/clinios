@@ -18,6 +18,7 @@ import {
 import { green, grey } from "@material-ui/core/colors";
 import Alert from "@material-ui/lab/Alert";
 import moment from "moment";
+import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 
 import UserService from "../../../../../../services/users.service";
@@ -87,7 +88,11 @@ const GreenSwitch = withStyles({
 })(Switch);
 
 const errorsInitialState = {
-  one: "", two: "", three: "", four: "", five: "",
+  one: "",
+  two: "",
+  three: "",
+  four: "",
+  five: "",
 };
 
 const NewOrEditUserModal = ({
@@ -142,6 +147,7 @@ const NewOrEditUserModal = ({
   }; */
 
   const isValid = () => {
+    // eslint-disable-next-line max-len
     const checkEmailIsValid = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!user.firstname) {
       setErrorChecking({ ...errorChecking, one: "Firstname can't be blank !" });
@@ -183,6 +189,7 @@ const NewOrEditUserModal = ({
       ...props.user,
     };
     setUser(tempUser);
+    // eslint-disable-next-line react/destructuring-assignment
   }, [props.user]);
 
   const payload = {
@@ -268,6 +275,7 @@ const NewOrEditUserModal = ({
         <DialogContent className={classes.content}>
           {errors
             && errors.map((error, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <Alert severity="error" key={index}>
                 {error.msg}
               </Alert>
@@ -658,6 +666,22 @@ const NewOrEditUserModal = ({
       </Dialog>
     </div>
   );
+};
+
+NewOrEditUserModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  handleOnClose: PropTypes.func.isRequired,
+  isNewUser: PropTypes.bool.isRequired,
+  forwardEmailList: PropTypes.arrayOf(
+    PropTypes.objectOf({
+      id: PropTypes.string,
+      name: PropTypes.string,
+    }),
+  ).isRequired,
+  allUsers: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  authUser: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  user: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  fetchAllUsers: PropTypes.func.isRequired,
 };
 
 export default NewOrEditUserModal;

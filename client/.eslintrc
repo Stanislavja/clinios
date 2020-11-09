@@ -75,6 +75,7 @@
     "max-len": ["error", { "code": 110, "ignoreComments": true }],
     "react/jsx-props-no-spreading": "off",
     "camelcase": [0],
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "no-nested-ternary": "off"
   }
 }
