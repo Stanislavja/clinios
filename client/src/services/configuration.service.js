@@ -1,22 +1,24 @@
 import axios from "axios";
 
-import { API_BASE } from "./../utils/API_BASE";
+import { API_BASE } from "../utils/API_BASE";
 import authHeader from "./auth-header";
 
 class Configuration {
-  getConfig(data) {
-    return axios.get(API_BASE + `/config`, {
-      headers: authHeader()
+  getConfig() {
+    return axios.get(`${API_BASE}/config`, {
+      headers: authHeader(),
     });
   }
-  getConfigHistory(data) {
-    return axios.get(API_BASE + `/config/history`, {
-      headers: authHeader()
+
+  getConfigHistory() {
+    return axios.get(`${API_BASE}/config/history`, {
+      headers: authHeader(),
     });
   }
+
   updateConfig(id, data) {
     return axios.put(`${API_BASE}/config/${id}`, data, {
-      headers: authHeader()
+      headers: authHeader(),
     });
   }
 }
