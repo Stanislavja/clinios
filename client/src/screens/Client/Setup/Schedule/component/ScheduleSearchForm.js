@@ -76,4 +76,5 @@ ScheduleSearchForm.propTypes = {
   handleChangeOfUserId: PropTypes.func.isRequired,
   fetchScheduleSearch: PropTypes.func.isRequired,
 };
+
 export default ScheduleSearchForm;
