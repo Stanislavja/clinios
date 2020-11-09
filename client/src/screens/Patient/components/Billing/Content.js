@@ -26,7 +26,7 @@ const BillingContent = (props) => {
   return (
     <>
       {data.map((item) => (
-        <Grid key={item.dt} container className={classes.inputRow}>
+        <Grid key={`${item.dt}_${item.amount}`} container className={classes.inputRow}>
           <Grid item className={classes.block}>
             <Typography
               component="span"

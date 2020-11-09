@@ -218,9 +218,8 @@ const updatePatient = async (req, res) => {
     }
     $sql += `, updated='${moment().format(
       "YYYY-MM-DD HH:mm:ss"
-    )}', updated_user_id=${req.user_id} where user_id=${
-      req.user_id
-    } and id=${patient_id}`;
+    )}', updated_user_id=${req.user_id} where user_id=${req.user_id
+      } and id=${patient_id}`;
 
     const updateResponse = await db.query($sql);
     if (!updateResponse.affectedRows) {
@@ -1239,9 +1238,8 @@ const updateEncounter = async (req, res) => {
 
     $sql += `, updated='${moment().format(
       "YYYY-MM-DD HH:mm:ss"
-    )}', updated_user_id=${
-      req.user_id
-    } where patient_id=${patient_id} and id=${id}`;
+    )}', updated_user_id=${req.user_id
+      } where patient_id=${patient_id} and id=${id}`;
 
     const updateResponse = await db.query($sql);
     if (!updateResponse.affectedRows) {
@@ -1420,7 +1418,7 @@ const deleteMessage = async (req, res) => {
   try {
     // Call DB query without assigning into a variable
     await db.query(`
-      delete from message_history where message_id=${id}
+      delete from message_history where id=${id}
     `);
     const deleteMsgResponse = await db.query(`
        delete from message where id=${id}
