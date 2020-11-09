@@ -10,7 +10,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  withStyles,
+  withStyles 
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
@@ -120,7 +120,10 @@ const ScheduleSearchResultTable = ({
                   {result.updated ? moment(result.updated).format("lll") : ""}
                 </TableCell>
                 <TableCell>{result.updated_name}</TableCell>
-                <TableCell style={{ minWidth: "120px" }}>
+                <TableCell style={{
+                  minWidth: "120px",
+                }}
+                >
                   <IconButton
                     aria-label="edit"
                     onClick={() => handleOnEditClick(result.id)}

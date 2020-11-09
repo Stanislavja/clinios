@@ -1,31 +1,34 @@
 import axios from "axios";
 
-import { API_BASE } from "./../utils/API_BASE";
+import { API_BASE } from "../utils/API_BASE";
 import authHeader from "./auth-header";
 
 class AppointmentService {
   getAll() {
     return axios
-      .get(API_BASE + `/appointment-types`, { headers: authHeader() })
+      .get(`${API_BASE}/appointment-types`, { headers: authHeader() })
       .then((res) => res.data);
   }
+
   create(data) {
-    return axios.post(API_BASE + `/appointment-types`, data, {
-      headers: authHeader()
+    return axios.post(`${API_BASE}/appointment-types`, data, {
+      headers: authHeader(),
     });
   }
+
   update(data, userId, appointmentId) {
     return axios.put(
-      API_BASE + `/appointment-types/${userId}/${appointmentId}`,
+      `${API_BASE}/appointment-types/${userId}/${appointmentId}`,
       data,
       {
-        headers: authHeader()
-      }
+        headers: authHeader(),
+      },
     );
   }
+
   deleteById(id) {
-    return axios.delete(API_BASE + `/appointment-types/${id}`, {
-      headers: authHeader()
+    return axios.delete(`${API_BASE}/appointment-types/${id}`, {
+      headers: authHeader(),
     });
   }
 }

@@ -6,11 +6,18 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { makeStyles } from "@material-ui/core/styles";
-import { useDispatch } from "react-redux";
+import {
+  makeStyles 
+} from "@material-ui/core/styles";
+import PropTypes from "prop-types";
+import {
+  useDispatch 
+} from "react-redux";
 
 import ScheduleService from "../../../../../../services/schedule.service";
-import { setSuccess } from "../../../../../../store/common/actions";
+import {
+  setSuccess 
+} from "../../../../../../store/common/actions";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -29,12 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DeleteSchedule = ({
-  id,
-  isDeleteModalOpen,
-  onClose,
-  fetchScheduleSearch,
-}) => {
+const DeleteSchedule = ({ id, isDeleteModalOpen, onClose, fetchScheduleSearch }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -62,8 +64,8 @@ const DeleteSchedule = ({
         </DialogTitle>
         <DialogContent className={classes.content}>
           <DialogContentText id="alert-dialog-description">
-            Your this schedule entry will be deleted forever from our system and
-            you won't be able to access it anymore.
+            Your this schedule entry will be deleted forever from our system and you won't be able to access
+            it anymore.
           </DialogContentText>
         </DialogContent>
         <DialogActions className={classes.modalAction}>
@@ -77,6 +79,13 @@ const DeleteSchedule = ({
       </Dialog>
     </div>
   );
+};
+
+DeleteSchedule.propTypes = {
+  id: PropTypes.string.isRequired,
+  isDeleteModalOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  fetchScheduleSearch: PropTypes.func.isRequired,
 };
 
 export default DeleteSchedule;
