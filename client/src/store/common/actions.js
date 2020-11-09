@@ -7,40 +7,28 @@ import {
   SET_SUCCESS,
 } from "./types";
 
-export const startFetching = () => {
-  return {
-    type: START_FETCHING,
-  };
-};
+export const startFetching = () => ({
+  type: START_FETCHING,
+});
 
-export const fetchingCompleted = () => {
-  return {
-    type: FETCHING_COMPLETED,
-  };
-};
+export const fetchingCompleted = () => ({
+  type: FETCHING_COMPLETED,
+});
 
-export const setError = (error) => {
-  return {
-    type: SET_ERROR,
-    error: error,
-  };
-};
+export const setError = (error) => ({
+  type: SET_ERROR,
+  error,
+});
 
-export const setSuccess = (message) => {
-  return {
-    type: SET_SUCCESS,
-    message: message,
-  };
-};
+export const setSuccess = (message) => ({
+  type: SET_SUCCESS,
+  message,
+});
 
-export const hideError = () => {
-  return {
-    type: HIDE_ERROR,
-  };
-};
+export const hideError = () => ({
+  type: HIDE_ERROR,
+});
 
-export const closeSnackbar = () => {
-  return {
-    type: CLOSE_SNACKBAR,
-  };
-};
+export const closeSnackbar = () => ({
+  type: CLOSE_SNACKBAR,
+});

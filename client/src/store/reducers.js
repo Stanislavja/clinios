@@ -9,7 +9,7 @@ const appReducer = combineReducers({
   auth: authReducer,
   common: commonReducer,
   email: emailReducer,
-  patient: patientReducer
+  patient: patientReducer,
 });
 
 const reducer = (state, action) => {
