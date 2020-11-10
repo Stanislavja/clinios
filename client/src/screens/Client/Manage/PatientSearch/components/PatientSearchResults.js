@@ -63,7 +63,7 @@ const StyledTableRow = withStyles((theme) => ({
 export default function PatientSearchResults(props) {
   const classes = useStyles();
   const history = useHistory();
-
+  const { results } = props;
   return (
     <div className={classes.root}>
       <TableContainer component={Paper} className={classes.tableContainer}>
@@ -116,7 +116,8 @@ export default function PatientSearchResults(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {props.result.map((result, index) => (
+            {results.map((result, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <StyledTableRow key={index}>
                 <TableCell
                   padding="checkbox"
@@ -205,5 +206,5 @@ PatientSearchResults.propTypes = {
       gender: PropTypes.string.isRequired,
       created: PropTypes.string.isRequired,
     }),
-  ),
+  ).isRequired,
 };

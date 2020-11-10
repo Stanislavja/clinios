@@ -74,7 +74,7 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-export default function MyActivityHistory(props) {
+export default function MyActivityHistory() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -124,6 +124,7 @@ export default function MyActivityHistory(props) {
               </TableHead>
               <TableBody>
                 {activityHistory.map((row, index) => (
+                  // eslint-disable-next-line react/no-array-index-key
                   <StyledTableRow key={index}>
                     <TableCell component="th" scope="row">
                       {moment(row.dt).format("lll")}

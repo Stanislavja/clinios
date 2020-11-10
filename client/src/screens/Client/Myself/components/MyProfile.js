@@ -115,15 +115,15 @@ export default function MyProfile() {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-    const userId = user.id;
-    setUserId(userId);
+    const user_Id = user.id;
+    setUserId(user_Id);
 
-    if (userId != null) {
-      MySelfService.getForwardEmail(userId).then((res) => {
+    if (user_Id != null) {
+      MySelfService.getForwardEmail(user_Id).then((res) => {
         setForwardEmails(res.data);
       });
 
-      MySelfService.getProfile(userId).then((res) => {
+      MySelfService.getProfile(user_Id).then((res) => {
         const profile = res.data;
         setName(`${profile.firstname} ${profile.lastname}`);
         setEmail(profile.email);
@@ -239,8 +239,7 @@ export default function MyProfile() {
               value={phone}
               className={classes.formElment}
               onChange={(event) => {
-                event.target.value = event.target.value.slice(0, 25);
-                setPhone(event.target.value);
+                setPhone(event.target.value.slice(0, 25));
               }}
               size="small"
             />

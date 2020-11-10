@@ -11,7 +11,7 @@ import PropTypes from "prop-types";
 
 import { MyActivityHistory, MyLogins, MyProfile } from "./components";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
     padding: "10px 0px",
@@ -61,10 +61,14 @@ function TabPanel(props) {
   );
 }
 
+TabPanel.defaultProps = {
+  children: null,
+};
+
 TabPanel.propTypes = {
   children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.string.isRequired,
 };
 
 const Myself = () => {

@@ -98,7 +98,8 @@ const TotalTableRow = withStyles((theme) => ({
 export default function AccountingSearchResults(props) {
   const classes = useStyles();
   const history = useHistory();
-  const amount = props.result.reduce((a, b) => a + b.amount, 0);
+  const { results } = props;
+  const amount = results.reduce((a, b) => a + b.amount, 0);
   return (
     <div className={classes.root}>
       {console.log(amount)}
@@ -122,7 +123,8 @@ export default function AccountingSearchResults(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {props.result.map((result, index) => (
+            {results.map((result, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <StyledTableRow key={index}>
                 <TableCell
                   style={{ whiteSpace: "nowrap" }}
