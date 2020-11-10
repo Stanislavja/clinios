@@ -13,6 +13,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -142,6 +143,7 @@ export default function ConfigModal({ modal, setModal }) {
             </TableHead>
             <TableBody>
               {modal.data.map((result, index) => (
+                // eslint-disable-next-line react/no-array-index-key
                 <StyledTableRow key={index}>
                   <TableCell component="th" scope="row">
                     {moment(result.dt).format("lll")}
@@ -209,3 +211,15 @@ export default function ConfigModal({ modal, setModal }) {
     </Dialog>
   );
 }
+
+ConfigModal.propTypes = {
+  modal: PropTypes.shape({
+    isOpen: PropTypes.bool.isRequired,
+    data: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+      }),
+    ),
+  }).isRequired,
+  setModal: PropTypes.func.isRequired,
+};

@@ -113,6 +113,7 @@
       0
     ],
     "import/prefer-default-export": "off",
-    "no-nested-ternary": "off"
+    "no-nested-ternary": "off",
+    "no-underscore-dangle": "off"
   }
 }
