@@ -15,6 +15,7 @@ import {
 import EditIcon from "@material-ui/icons/Edit";
 import Alert from "@material-ui/lab/Alert";
 import moment from "moment";
+import Proptypes from "prop-types";
 import NumberFormat from "react-number-format";
 import { useDispatch } from "react-redux";
 
@@ -156,6 +157,7 @@ const CPTtable = ({ searchResult, user, fetchCptCodeSearch }) => {
     <div>
       {errors
         && errors.map((error, index) => (
+           // eslint-disable-next-line react/no-array-index-key
           <Alert severity="error" key={index}>
             {error.msg}
           </Alert>
@@ -251,6 +253,29 @@ const CPTtable = ({ searchResult, user, fetchCptCodeSearch }) => {
       />
     </div>
   );
+};
+
+CPTtable.propTypes = {
+  user: Proptypes.arrayOf(
+    Proptypes.arrayOf({
+      id: Proptypes.string,
+    }),
+  ).isRequired,
+  searchResult: Proptypes.arrayOf(
+    Proptypes.shape({
+      id: Proptypes.string,
+      cpt: Proptypes.string,
+      lab_company: Proptypes.string,
+      favorite: Proptypes.bool,
+      billable: Proptypes.bool,
+      fee: Proptypes.number,
+      client_name: Proptypes.string,
+      cpt_group: Proptypes.string,
+      updated: Proptypes.string,
+      updated_name: Proptypes.string,
+    }),
+  ).isRequired,
+  fetchCptCodeSearch: Proptypes.func.isRequired,
 };
 
 export default CPTtable;
