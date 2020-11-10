@@ -16,6 +16,7 @@ import {
 import { green, grey } from "@material-ui/core/colors";
 import Alert from "@material-ui/lab/Alert";
 import moment from "moment";
+import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 
 import icdcodesService from "../../../../../services/icdcodes.service";
@@ -96,6 +97,7 @@ const ICDcodestable = ({ user, result, fetchSearchIcdCodes }) => {
     setState(
       result.map((item) => {
         if (icdcode_id === item.id) {
+          // eslint-disable-next-line no-param-reassign
           item.favorite = checked;
         }
         return state;
@@ -134,6 +136,7 @@ const ICDcodestable = ({ user, result, fetchSearchIcdCodes }) => {
     <div>
       {errors
         && errors.map((error, index) => (
+          // eslint-disable-next-line react/no-array-index-key
           <Alert severity="error" key={index}>
             {error.msg}
           </Alert>
@@ -188,6 +191,22 @@ const ICDcodestable = ({ user, result, fetchSearchIcdCodes }) => {
       </TableContainer>
     </div>
   );
+};
+
+ICDcodestable.propTypes = {
+  user: PropTypes.shape(
+    { id: PropTypes.string },
+  ).isRequired,
+  result: PropTypes.arrayOf(
+    PropTypes.arrayOf({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      favorite: PropTypes.string,
+      updated: PropTypes.string,
+      updated_name: PropTypes.string,
+    }),
+  ).isRequired,
+  fetchSearchIcdCodes: PropTypes.func.isRequired,
 };
 
 export default ICDcodestable;
