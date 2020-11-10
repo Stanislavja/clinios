@@ -76,7 +76,6 @@ const GreenSwitch = withStyles({
       backgroundColor: green[500],
     },
   },
-
   checked: {},
   track: {},
 })(Switch);
@@ -278,4 +277,19 @@ const EditCptCodeModal = ({
   );
 };
 
+EditCptCodeModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  hendleOnClose: PropTypes.func.isRequired,
+  cpt_id: PropTypes.string.isRequired,
+  cpt_description: PropTypes.string.isRequired,
+  cpt_fee: PropTypes.string.isRequired,
+  cpt_favorite: PropTypes.string.isRequired,
+  cpt_billable: PropTypes.string.isRequired,
+  cpt_notes: PropTypes.string.isRequired,
+  handleChangeFee: PropTypes.func.isRequired,
+  handleChangeFavorite: PropTypes.func.isRequired,
+  handleChangeBillable: PropTypes.func.isRequired,
+  handleChangeNotes: PropTypes.func.isRequired,
+  handleEditCptCode: PropTypes.func.isRequired,
+};
 export default EditCptCodeModal;

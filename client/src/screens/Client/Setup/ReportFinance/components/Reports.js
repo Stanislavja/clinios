@@ -9,6 +9,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import moment from "moment";
+import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -73,6 +74,7 @@ const TotalTableRow = withStyles((theme) => ({
 }))(TableRow);
 
 const Reports = ({ reports, ...props }) => {
+  const { dateFrom, dateTo } = props;
   const classes = useStyles();
   const history = useHistory();
   return (
@@ -110,7 +112,7 @@ const Reports = ({ reports, ...props }) => {
               <TableCell
                 className={classes.detailLink}
                 onClick={() => history.push(
-                  `/reports/report-finance-detail/${props.dateFrom}/${props.dateTo}`,
+                  `/reports/report-finance-detail/${dateFrom}/${dateTo}`,
                 )}
                 padding="checkbox"
               >
@@ -147,6 +149,21 @@ const Reports = ({ reports, ...props }) => {
       </Table>
     </TableContainer>
   );
+};
+
+Reports.propTypes = {
+  reports: PropTypes.arrayOf(
+    PropTypes.arrayOf({
+      month: PropTypes.string.isRequired,
+      Total: PropTypes.number.isRequired,
+      Service: PropTypes.string.isRequired,
+      Credit: PropTypes.string.isRequired,
+      Payment: PropTypes.string.isRequired,
+      Refund: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
+  dateFrom: PropTypes.string.isRequired,
+  dateTo: PropTypes.string.isRequired,
 };
 
 export default Reports;

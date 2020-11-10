@@ -13,6 +13,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import moment from "moment";
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
   tableContainer: {
@@ -71,7 +72,7 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 
 const Appointments = ({
-  appointments, onEdit, onDelete, ...props
+  appointments, onEdit, onDelete,
 }) => {
   const classes = useStyles();
   return (
@@ -171,6 +172,26 @@ const Appointments = ({
       </Table>
     </TableContainer>
   );
+};
+
+Appointments.propTypes = {
+  appointments: PropTypes.arrayOf(
+    PropTypes.arrayOf({
+      id: PropTypes.string,
+      appointment_type: PropTypes.string,
+      appointment_name_portal: PropTypes.string,
+      length: PropTypes.string,
+      allow_patients_schedule: PropTypes.bool,
+      sort_order: PropTypes.number,
+      note: PropTypes.string,
+      created: PropTypes.string,
+      created_user: PropTypes.string,
+      updated: PropTypes.string,
+      updated_user: PropTypes.string,
+    }),
+  ).isRequired,
+  onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default Appointments;

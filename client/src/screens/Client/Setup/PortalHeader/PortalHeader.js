@@ -8,7 +8,6 @@ import Typography from "@material-ui/core/Typography";
 import moment from "moment";
 import ReactHtmlParser from "react-html-parser";
 
-import { AuthConsumer } from "../../../../providers/AuthProvider";
 import PatientPortalHeaderService from "../../../../services/patientPortalHeader.service";
 
 const useStyles = makeStyles((theme) => ({
@@ -102,85 +101,81 @@ const PortalHeader = () => {
   };
 
   return (
-    <AuthConsumer>
-      {({ user }) => (
-        <>
-          <CssBaseline />
-          <Container maxWidth={false} className={classes.root}>
-            <div className={classes.uploadButtons}>
-              <Typography
-                component="h1"
-                variant="h2"
-                color="textPrimary"
-                className={classes.title}
-              >
-                Portal Header
-              </Typography>
-              <Button
-                variant="contained"
-                color="primary"
-                component="span"
-                onClick={handleOnSaveClick}
-              >
-                Save
-              </Button>
-            </div>
+    <>
+      <CssBaseline />
+      <Container maxWidth={false} className={classes.root}>
+        <div className={classes.uploadButtons}>
+          <Typography
+            component="h1"
+            variant="h2"
+            color="textPrimary"
+            className={classes.title}
+          >
+            Portal Header
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            component="span"
+            onClick={handleOnSaveClick}
+          >
+            Save
+          </Button>
+        </div>
+        <Grid container justify="center" spacing={2}>
+          <Grid item md={12} xs={12}>
+            <Typography component="p" variant="body2" color="textPrimary">
+              This page is used to set the patient portal header
+            </Typography>
             <Grid container justify="center" spacing={2}>
-              <Grid item md={12} xs={12}>
-                <Typography component="p" variant="body2" color="textPrimary">
-                  This page is used to set the patient portal header
-                </Typography>
-                <Grid container justify="center" spacing={2}>
-                  <Grid item md={5} xs={12}>
-                    <div className={classes.portal}>
-                      {isInEditMode ? (
-                        <textarea
-                          className={classes.textField}
-                          onChange={(e) => setEditedHeader(e.target.value)}
-                          onKeyUp={handleKeyUp}
-                        >
-                          {header}
-                        </textarea>
-                      ) : (
-                        <Typography
-                          component="p"
-                          variant="body2"
-                          color="textPrimary"
-                          onDoubleClick={handleDoubleClick}
-                        >
-                          {ReactHtmlParser(header)}
-                        </Typography>
-                      )}
-                    </div>
+              <Grid item md={5} xs={12}>
+                <div className={classes.portal}>
+                  {isInEditMode ? (
+                    <textarea
+                      className={classes.textField}
+                      onChange={(e) => setEditedHeader(e.target.value)}
+                      onKeyUp={handleKeyUp}
+                    >
+                      {header}
+                    </textarea>
+                  ) : (
                     <Typography
                       component="p"
                       variant="body2"
                       color="textPrimary"
+                      onDoubleClick={handleDoubleClick}
                     >
-                      Updated:
-                      {" "}
-                      {`${updated} ${updatedUser}`}
+                      {ReactHtmlParser(header)}
                     </Typography>
-                  </Grid>
-                  <Grid item md={7} xs={12}>
-                    <div className={classes.portal}>
-                      <Typography
-                        component="p"
-                        variant="body2"
-                        color="textPrimary"
-                        onDoubleClick={handleDoubleClick}
-                      >
-                        {ReactHtmlParser(header)}
-                      </Typography>
-                    </div>
-                  </Grid>
-                </Grid>
+                  )}
+                </div>
+                <Typography
+                  component="p"
+                  variant="body2"
+                  color="textPrimary"
+                >
+                  Updated:
+                  {" "}
+                  {`${updated} ${updatedUser}`}
+                </Typography>
+              </Grid>
+              <Grid item md={7} xs={12}>
+                <div className={classes.portal}>
+                  <Typography
+                    component="p"
+                    variant="body2"
+                    color="textPrimary"
+                    onDoubleClick={handleDoubleClick}
+                  >
+                    {ReactHtmlParser(header)}
+                  </Typography>
+                </div>
               </Grid>
             </Grid>
-          </Container>
-        </>
-      )}
-    </AuthConsumer>
+          </Grid>
+        </Grid>
+      </Container>
+    </>
   );
 };
 

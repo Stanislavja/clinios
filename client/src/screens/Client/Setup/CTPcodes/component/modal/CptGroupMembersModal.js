@@ -16,6 +16,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
+import Proptypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -129,6 +130,18 @@ const CptGroupMembersModal = ({ isOpen, hendleOnClose, groups }) => {
       </Dialog>
     </div>
   );
+};
+
+CptGroupMembersModal.propTypes = {
+  isOpen: Proptypes.bool.isRequired,
+  hendleOnClose: Proptypes.func.isRequired,
+  groups: Proptypes.arrayOf(
+    Proptypes.shape({
+      id: Proptypes.string,
+      description: Proptypes.string,
+      leb: Proptypes.string,
+    }),
+  ).isRequired,
 };
 
 export default CptGroupMembersModal;

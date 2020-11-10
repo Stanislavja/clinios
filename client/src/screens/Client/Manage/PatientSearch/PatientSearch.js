@@ -284,8 +284,6 @@ export default function PatientSearch() {
                     autoComplete="patientId"
                     InputProps={{
                       inputComponent: NumberFormatCustom,
-                    }}
-                    inputProps={{
                       maxLength: 16,
                     }}
                     error={patientId.length >= 13}
@@ -333,8 +331,6 @@ export default function PatientSearch() {
                     onChange={(event) => setPaymentFrom(event.target.value)}
                     InputProps={{
                       inputComponent: NumberFormatCustom,
-                    }}
-                    inputProps={{
                       maxLength: 16,
                     }}
                     error={paymentFrom.length >= 13}
@@ -359,8 +355,6 @@ export default function PatientSearch() {
                     onChange={(event) => setPaymentTo(event.target.value)}
                     InputProps={{
                       inputComponent: NumberFormatCustom,
-                    }}
-                    inputProps={{
                       maxLength: 16,
                     }}
                     error={paymentTo.length >= 13}
@@ -390,7 +384,7 @@ export default function PatientSearch() {
       </div>
       <div className={classes.serachResults}>
         {searchResults.length > 0 && (
-          <PatientSearchResults result={searchResults} />
+          <PatientSearchResults results={searchResults} />
         )}
       </div>
     </div>

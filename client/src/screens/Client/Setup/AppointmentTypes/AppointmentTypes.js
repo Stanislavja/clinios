@@ -13,7 +13,6 @@ import AppointmentService from "../../../../services/appointmentType.service";
 import { Appointments } from "./components";
 import DeleteAppointmentModal from "./components/modal/DeleteAppointmentType";
 import NewOrEditAppointment from "./components/modal/NewOrEditAppointmentType";
-// import Video from "./../../../../components/videos/Video";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AppointmentTypes(props) {
+export default function AppointmentTypes() {
   const classes = useStyles();
   const [selectedAppointmentId, setSelectedAppointmentId] = useState("");
   const [selectedappointment, setSelectedAppointment] = useState("");

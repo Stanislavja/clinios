@@ -5,7 +5,6 @@ import {
 } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 
-import { AuthConsumer } from "../../../../providers/AuthProvider";
 import AccountingTypesService from "../../../../services/accountingTypes.service";
 import AccountingTypesTable from "./component/AccountingTypesTable";
 
@@ -32,30 +31,26 @@ export default function AccountingTypes() {
   }, []);
 
   return (
-    <AuthConsumer>
-      {({ user }) => (
-        <>
-          <CssBaseline />
-          <Container maxWidth={false} className={classes.root}>
-            <Grid container justify="center" spacing={2}>
-              <Grid item md={12} xs={12}>
-                <Typography
-                  component="h1"
-                  variant="h2"
-                  color="textPrimary"
-                  className={classes.title}
-                >
-                  Transaction types
-                </Typography>
-                <Typography component="p" variant="body2" color="textPrimary">
-                  This page is to manage transaction types
-                </Typography>
-                <AccountingTypesTable result={accountingTypes} />
-              </Grid>
-            </Grid>
-          </Container>
-        </>
-      )}
-    </AuthConsumer>
+    <>
+      <CssBaseline />
+      <Container maxWidth={false} className={classes.root}>
+        <Grid container justify="center" spacing={2}>
+          <Grid item md={12} xs={12}>
+            <Typography
+              component="h1"
+              variant="h2"
+              color="textPrimary"
+              className={classes.title}
+            >
+              Transaction types
+            </Typography>
+            <Typography component="p" variant="body2" color="textPrimary">
+              This page is to manage transaction types
+            </Typography>
+            <AccountingTypesTable result={accountingTypes} />
+          </Grid>
+        </Grid>
+      </Container>
+    </>
   );
 }

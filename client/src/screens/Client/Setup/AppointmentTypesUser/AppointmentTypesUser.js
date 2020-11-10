@@ -9,8 +9,6 @@ import Switch from "@material-ui/core/Switch";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 
-import { AuthConsumer } from "../../../../providers/AuthProvider";
-
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -59,114 +57,110 @@ const GreenSwitch = withStyles({
   track: {},
 })(Switch);
 
-export default function AppointmentTypesUser(props) {
+export default function AppointmentTypesUser() {
   const classes = useStyles();
 
   return (
-    <AuthConsumer>
-      {({ user }) => (
-        <>
-          <CssBaseline />
-          <Container maxWidth={false} className={classes.root}>
-            <Typography
-              component="h1"
-              variant="h2"
-              color="textPrimary"
-              className={classes.title}
-            >
-              Appointment Types User Assignment
-            </Typography>
-            <Typography component="p" variant="body2" color="textPrimary">
-              This page is used to select which appointment types are used by
-              which providers
-            </Typography>
-            <Grid container spacing={3}>
-              <Grid item xs={3} className={classes.gridLabels}>
-                <p>-</p>
-                <p>Initial appointment 1/2 hour</p>
-                <p>Initial appointment 1 hour</p>
-                <p>Initial appointment 2 hour</p>
-              </Grid>
+    <>
+      <CssBaseline />
+      <Container maxWidth={false} className={classes.root}>
+        <Typography
+          component="h1"
+          variant="h2"
+          color="textPrimary"
+          className={classes.title}
+        >
+          Appointment Types User Assignment
+        </Typography>
+        <Typography component="p" variant="body2" color="textPrimary">
+          This page is used to select which appointment types are used by
+          which providers
+        </Typography>
+        <Grid container spacing={3}>
+          <Grid item xs={3} className={classes.gridLabels}>
+            <p>-</p>
+            <p>Initial appointment 1/2 hour</p>
+            <p>Initial appointment 1 hour</p>
+            <p>Initial appointment 2 hour</p>
+          </Grid>
 
-              <Grid item xs={3}>
-                <p>John Doe</p>
-                <div className={classes.forms}>
-                  <div className={classes.labels}>
-                    <p>Fee</p>
-                    <p>Active</p>
-                  </div>
-                  <div className={classes.formFields}>
-                    <TextField
-                      className={classes.formField}
-                      variant="outlined"
-                      margin="dense"
-                      name="fee"
-                      id="fee"
-                      autoComplete="fee"
-                      label="Fee"
-                      value="100"
-                    />
-                    <GreenSwitch
-                      checked
-                      onChange={() => alert("Switch")}
-                      name="active"
-                      inputProps={{ "aria-label": "primary checkbox" }}
-                    />
-                  </div>
-                  <div className={classes.formFields}>
-                    <TextField
-                      className={classes.formField}
-                      variant="outlined"
-                      margin="dense"
-                      name="fee"
-                      id="fee"
-                      autoComplete="fee"
-                      label="Fee"
-                      value="100"
-                    />
-                    <GreenSwitch
-                      checked={false}
-                      onChange={() => alert("Switch")}
-                      name="active"
-                      inputProps={{ "aria-label": "primary checkbox" }}
-                    />
-                  </div>
-                  <div className={classes.formFields}>
-                    <TextField
-                      className={classes.formField}
-                      variant="outlined"
-                      margin="dense"
-                      name="fee"
-                      id="fee"
-                      autoComplete="fee"
-                      label="Fee"
-                      value="100"
-                    />
-                    <GreenSwitch
-                      checked
-                      onChange={() => alert("Switch")}
-                      name="active"
-                      inputProps={{ "aria-label": "primary checkbox" }}
-                    />
-                  </div>
-                </div>
-              </Grid>
-              <Grid item xs={3}>
-                <p>Max Mustermann</p>
-                <div />
-                <div />
-                <div />
-              </Grid>
-              <Grid item xs={3}>
-                <p>Tim Johnson</p>
-                <div />
-                <div />
-                <div />
-              </Grid>
-            </Grid>
-          </Container>
-        </>
-      )}
-    </AuthConsumer>
+          <Grid item xs={3}>
+            <p>John Doe</p>
+            <div className={classes.forms}>
+              <div className={classes.labels}>
+                <p>Fee</p>
+                <p>Active</p>
+              </div>
+              <div className={classes.formFields}>
+                <TextField
+                  className={classes.formField}
+                  variant="outlined"
+                  margin="dense"
+                  name="fee"
+                  id="fee"
+                  autoComplete="fee"
+                  label="Fee"
+                  value="100"
+                />
+                <GreenSwitch
+                  checked
+                  onChange={() => alert("Switch")}
+                  name="active"
+                  inputProps={{ "aria-label": "primary checkbox" }}
+                />
+              </div>
+              <div className={classes.formFields}>
+                <TextField
+                  className={classes.formField}
+                  variant="outlined"
+                  margin="dense"
+                  name="fee"
+                  id="fee"
+                  autoComplete="fee"
+                  label="Fee"
+                  value="100"
+                />
+                <GreenSwitch
+                  checked={false}
+                  onChange={() => alert("Switch")}
+                  name="active"
+                  inputProps={{ "aria-label": "primary checkbox" }}
+                />
+              </div>
+              <div className={classes.formFields}>
+                <TextField
+                  className={classes.formField}
+                  variant="outlined"
+                  margin="dense"
+                  name="fee"
+                  id="fee"
+                  autoComplete="fee"
+                  label="Fee"
+                  value="100"
+                />
+                <GreenSwitch
+                  checked
+                  onChange={() => alert("Switch")}
+                  name="active"
+                  inputProps={{ "aria-label": "primary checkbox" }}
+                />
+              </div>
+            </div>
+          </Grid>
+          <Grid item xs={3}>
+            <p>Max Mustermann</p>
+            <div />
+            <div />
+            <div />
+          </Grid>
+          <Grid item xs={3}>
+            <p>Tim Johnson</p>
+            <div />
+            <div />
+            <div />
+          </Grid>
+        </Grid>
+      </Container>
+    </>
   );
 }

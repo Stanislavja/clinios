@@ -8,9 +8,10 @@ import {
   makeStyles,
   TextField,
 } from "@material-ui/core";
+import Proptypes from "prop-types";
 
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   formControl: {
     minWidth: "100%",
   },
@@ -181,6 +182,24 @@ const CPTform = ({
       </Button>
     </div>
   );
+};
+
+CPTform.propTypes = {
+  labCompanyId: Proptypes.string.isRequired,
+  lebCompanyList: Proptypes.arrayOf(
+    Proptypes.shape({
+      id: Proptypes.string,
+      name: Proptypes.string,
+    }),
+  ).isRequired,
+  fetchCptCodeSearch: Proptypes.func.isRequired,
+  handleChangeOfCptId: Proptypes.func.isRequired,
+  handleChangeOfCptDescription: Proptypes.func.isRequired,
+  handleChangeOfLabCompanyId: Proptypes.func.isRequired,
+  handleChangeOfFavorite: Proptypes.func.isRequired,
+  handleChangeOfBillable: Proptypes.func.isRequired,
+  handleChangeOfSelf: Proptypes.func.isRequired,
+  handleChangeOfGroup: Proptypes.func.isRequired,
 };
 
 export default CPTform;

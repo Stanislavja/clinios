@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 
 import Video from "../../../../components/videos/Video";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
     padding: "25px 0px",

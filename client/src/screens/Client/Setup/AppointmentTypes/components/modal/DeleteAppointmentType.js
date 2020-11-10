@@ -7,6 +7,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 
 import AppointmentService from "../../../../../../services/appointmentType.service";
@@ -71,6 +72,12 @@ const DeleteAppointment = ({ isOpen, onClose, id }) => {
       </Dialog>
     </div>
   );
+};
+
+DeleteAppointment.propTypes = {
+  id: PropTypes.string.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default DeleteAppointment;

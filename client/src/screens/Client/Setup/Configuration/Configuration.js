@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-
 import { makeStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
@@ -80,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Configuration(props) {
+export default function Configuration() {
   const dispatch = useDispatch();
   const currentUser = AuthService.getCurrentUser() || {};
   const classes = useStyles();
@@ -121,7 +120,8 @@ export default function Configuration(props) {
   const _fetchConfig = async () => {
     try {
       let { data = {} } = await ConfigurationService.getConfig({});
-      data = data.data[0];
+      // eslint-disable-next-line prefer-destructuring
+      data = data.data[0]; // TODO:: Refactor and remove eslint-disable-next-line
       setFormParams({
         logo: Logo,
         clientId: data.id,
@@ -137,7 +137,6 @@ export default function Configuration(props) {
         state: data.state,
         npi: data.npi,
         zipcode: data.postal,
-
         country: data.country,
         phone: data.phone,
         fax: data.fax,
@@ -162,6 +161,7 @@ export default function Configuration(props) {
       return response.data.data;
     } catch (e) {
       console.log(e);
+      return false;
     }
   };
 
@@ -210,7 +210,9 @@ export default function Configuration(props) {
         const formData = new FormData();
         formData.append("file", e.target.files[0]);
         await ConfigurationService.updateLogo(currentUser.id, formData);
-      } catch (e) {}
+      } catch (err) {
+        console.error(err);
+      }
     }
   };
 
@@ -219,7 +221,7 @@ export default function Configuration(props) {
     try {
       result = await _fetchConfigHistory();
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
     setModalHistory({
       ...modalHistory,
@@ -284,7 +286,7 @@ export default function Configuration(props) {
       </Typography>
       <ConfigModal modal={modalHistory} setModal={setModalHistory} />
       <Error errors={errors} />
-      <form className={classes.form} noValidate onSubmit={(e) => {}}>
+      <form className={classes.form} noValidate onSubmit={() => {}}>
         <Grid container spacing={2}>
           <Grid item sm={5}>
             <div className={classes.paper}>
@@ -343,7 +345,7 @@ export default function Configuration(props) {
                   style={{ maxWidth: "200px", maxHeight: "50px" }}
                   src={formParams.logo}
                 />
-
+                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label
                   className="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary"
                   style={{ marginLeft: "20px" }}
@@ -499,8 +501,8 @@ export default function Configuration(props) {
                   label="State"
                 >
                   <option aria-label="None" value="" />
-                  {StateData.map((v, i) => (
-                    <option key={`state${i}`} value={v.code}>
+                  {StateData.map((v) => (
+                    <option key={`state${v.code}`} value={v.code}>
                       {v.name}
                     </option>
                   ))}
