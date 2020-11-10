@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
+import PropTypes from "prop-types";
 
 import Colors from "../../../../../theme/colors";
 
@@ -94,9 +95,11 @@ const ProviderCards = ({ providers, handleProviderClick }) => {
           </li>
           {providers
             && providers.map((provider) => (
+              // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
               <li
                 key={provider.id}
-                onClick={() => handleProviderClick(provider)}
+                onClick={() => handleProviderClick(provider)} // TODO:: Refactor and remove the eslint disable comment
+                onKeyDown={() => handleProviderClick(provider)}
               >
                 <div>{provider.name}</div>
                 <div className={classes.count}>{provider.count}</div>
@@ -115,4 +118,15 @@ const ProviderCards = ({ providers, handleProviderClick }) => {
   );
 };
 
+ProviderCards.propTypes = {
+  providers: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      count: PropTypes.number,
+      dt: PropTypes.string,
+    }),
+  ).isRequired,
+  handleProviderClick: PropTypes.func.isRequired,
+};
 export default ProviderCards;

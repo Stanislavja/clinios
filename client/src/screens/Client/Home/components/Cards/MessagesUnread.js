@@ -7,6 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
 import Colors from "../../../../../theme/colors";
@@ -101,6 +102,30 @@ const MessagesUnread = ({
       </CardContent>
     </Card>
   );
+};
+
+MessagesUnread.propTypes = {
+  appointmentRequests: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      patient_id: PropTypes.number,
+      name: PropTypes.string,
+      start_dt: PropTypes.string,
+      end_dt: PropTypes.string,
+      created: PropTypes.string,
+    }),
+  ).isRequired,
+  messagesUnread: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      patient_id: PropTypes.number,
+      name: PropTypes.string,
+      subject: PropTypes.string,
+      message: PropTypes.string,
+      created: PropTypes.string,
+    }),
+  ).isRequired,
+  onMessageEdit: PropTypes.func.isRequired,
 };
 
 export default MessagesUnread;

@@ -7,6 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
+import PropTypes from "prop-types";
 
 import Colors from "../../../../../theme/colors";
 
@@ -197,4 +198,22 @@ const AppointmentRequests = ({
   );
 };
 
+AppointmentRequests.propTypes = {
+  appointmentRequests: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      patient_id: PropTypes.number,
+      name: PropTypes.string,
+      start_dt: PropTypes.string,
+      end_dt: PropTypes.string,
+      created: PropTypes.string,
+    }),
+  ).isRequired,
+  selectedProvider: PropTypes.shape({
+    name: PropTypes.string,
+  }).isRequired,
+  onMessageClick: PropTypes.func.isRequired,
+  onReject: PropTypes.func.isRequired,
+  onAccept: PropTypes.func.isRequired,
+};
 export default AppointmentRequests;
