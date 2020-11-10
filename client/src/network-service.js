@@ -7,17 +7,15 @@ export default {
   setupInterceptors: (store) => {
     // Add a response interceptor
     axios.interceptors.response.use(
-      function (response) {
-        return response;
-      },
-      function (error) {
-        //catches if the session ended!
+      (response) => response,
+      (error) => {
+        // catches if the session ended!
         if (error.message === "Network Error" && !error.response) {
           store.dispatch(
             setError({
               severity: "error",
-              message: "Network error - make sure API is running"
-            })
+              message: "Network error - make sure API is running",
+            }),
           );
         }
         if (error.response) {
@@ -32,16 +30,15 @@ export default {
           if (status === 400) {
             return Promise.reject(error);
           }
-          const resMessage =
-            (data && data.message) || error.message || error.toString();
+          const resMessage = (data && data.message) || error.message || error.toString();
           console.log("resMessage", resMessage);
           store.dispatch(
             setError({
-              severity: severity,
-              message: resMessage
-            })
+              severity,
+              message: resMessage,
+            }),
           );
-          //TODO:: Check access token validaity on backend and handle on fronend client
+          // TODO:: Check access token validaity on backend and handle on fronend client
           if (data.token && data.token.KEY === "ERR_EXPIRED_TOKEN") {
             console.log("EXPIRED TOKEN!");
             localStorage.clear();
@@ -51,7 +48,7 @@ export default {
         console.log("error", error);
 
         return Promise.reject(error);
-      }
+      },
     );
-  }
+  },
 };

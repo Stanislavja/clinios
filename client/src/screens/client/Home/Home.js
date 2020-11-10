@@ -91,22 +91,6 @@ export default function Home() {
     return formedData;
   };
 
-  useEffect(() => {
-    async function fetchProviders() {
-      const { data } = await DashboardHome.getProviders();
-      setProviders(data);
-      if (data.length > 0) {
-        setSelectedProvider(data[0]);
-        fetchEventsByProvider(data[0]);
-      }
-    }
-
-    fetchProviders();
-    fetchAppointments();
-    fetchProviderDetails();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   async function fetchAppointments() {
     const { data } = await Appointments.getAll();
     const eventsFromAPI = getMapFromArray(data);
@@ -114,12 +98,6 @@ export default function Home() {
     setAppointments(data);
   }
 
-  const handleProviderClick = async (provider) => {
-    setSelectedProvider(provider);
-    fetchEventsByProvider(provider);
-    fetchUnreadPatientMessages(provider.id);
-    fetchPatientApptRequests(provider.id);
-  };
 
   async function fetchEventsByProvider(provider) {
     const { data } = await Appointments.getAllByProvider(provider.id);
@@ -145,6 +123,22 @@ export default function Home() {
     setSelectedDate(date);
   };
 
+  useEffect(() => {
+    async function fetchProviders() {
+      const { data } = await DashboardHome.getProviders();
+      setProviders(data);
+      if (data.length > 0) {
+        setSelectedProvider(data[0]);
+        fetchEventsByProvider(data[0]);
+      }
+    }
+
+    fetchProviders();
+    fetchAppointments();
+    fetchProviderDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleEventCreation = (payload) => {
     setIsLoading(true);
     Appointments.create(payload).then(
@@ -164,7 +158,7 @@ export default function Home() {
   const handleEventClick = (calEvent) => {
     setIsNewEvent(false);
     const eventClicked = events.filter(
-      (event) => event.id === parseInt(calEvent.event.id),
+      (event) => event.id === parseInt(calEvent.event.id, 10),
     );
     setSelectedEvent(eventClicked[0]);
     setIsOpen(true);
@@ -201,17 +195,6 @@ export default function Home() {
     );
   };
 
-  const handleMessageClick = (_, patient_id_to) => {
-    setPatient_id_to(patient_id_to);
-    setIsMessageToPatientOpen(true);
-    setIsNewMessage(true);
-  };
-
-  const handleMessageEditClick = (_, msg) => {
-    setIsMessageToPatientOpen(true);
-    setIsNewMessage(false);
-    setSelectedMsg(msg);
-  };
 
   const fetchSingleMessage = () => !isNewMessage
     && Messages.getMessageByID(selectedMsg.id).then(
@@ -226,7 +209,7 @@ export default function Home() {
       },
     );
 
-  const handleMessageToPatientFormSubmit = (_, message, isNewMessage) => {
+  const handleMessageToPatientFormSubmit = (_, message, isNew) => {
     setIsLoading(true);
     const payload = {
       data: {
@@ -235,15 +218,15 @@ export default function Home() {
         patient_id_to,
       },
     };
-    if (isNewMessage) {
+    if (isNew) {
       // Create new message
       Messages.create(payload).then(
-        (response) => {
+        () => {
           setIsLoading(false);
           setIsMessageToPatientOpen(false);
           fetchUnreadPatientMessages(selectedProvider.id);
         },
-        (errors) => {
+        () => { // on errors
           setIsLoading(false);
           setIsMessageToPatientOpen(false);
         },
@@ -251,17 +234,35 @@ export default function Home() {
     } else {
       // Update message
       Messages.update(payload).then(
-        (response) => {
+        () => {
           setIsLoading(false);
           setIsMessageToPatientOpen(false);
           fetchUnreadPatientMessages(selectedProvider.id);
         },
-        (errors) => {
+        () => { // no error
           setIsLoading(false);
           setIsMessageToPatientOpen(false);
         },
       );
     }
+  };
+
+  const handleProviderClick = async (provider) => {
+    setSelectedProvider(provider);
+    fetchEventsByProvider(provider);
+    fetchUnreadPatientMessages(provider.id);
+    fetchPatientApptRequests(provider.id);
+  };
+  const handleMessageClick = (_, patientIdTo) => {
+    setPatient_id_to(patientIdTo);
+    setIsMessageToPatientOpen(true);
+    setIsNewMessage(true);
+  };
+
+  const handleMessageEditClick = (_, msg) => {
+    setIsMessageToPatientOpen(true);
+    setIsNewMessage(false);
+    setSelectedMsg(msg);
   };
 
   return (
