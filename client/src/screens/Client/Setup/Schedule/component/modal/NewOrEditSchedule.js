@@ -20,6 +20,7 @@ import { green, grey } from "@material-ui/core/colors";
 import Alert from "@material-ui/lab/Alert";
 import { KeyboardDatePicker, KeyboardTimePicker } from "@material-ui/pickers";
 import moment from "moment";
+import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 
 import ScheduleService from "../../../../../../services/schedule.service";
@@ -109,12 +110,15 @@ const NewOrEditSchedule = ({
   const [status, setStatus] = useState("");
   const [errors, setErrors] = useState([]);
 
+  /* eslint-disable */
   useEffect(() => {
     const tempSchedule = {
       ...props.schedule,
     };
     setSchedule(tempSchedule);
   }, [props.schedule]);
+
+  /* eslint-enable */
 
   useEffect(() => {
     if (moment(schedule.date_start) > moment()) {
@@ -197,6 +201,7 @@ const NewOrEditSchedule = ({
           </DialogContentText>
           {errors
             && errors.map((error, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <Alert severity="error" key={index}>
                 {error.msg}
               </Alert>
@@ -213,7 +218,10 @@ const NewOrEditSchedule = ({
                   select
                   label="User"
                   value={schedule.user_id}
-                  onChange={(e) => setSchedule({ ...schedule, user_id: e.target.value })}
+                  onChange={(e) => setSchedule({
+                    ...schedule,
+                    user_id: e.target.value,
+                  })}
                   variant="outlined"
                   size="small"
                   InputLabelProps={{
@@ -223,16 +231,14 @@ const NewOrEditSchedule = ({
                     native: true,
                   }}
                 >
-                  {userList.map((user) => (
-                    <option key={user.id} value={user.id}>
-                      {`${user.firstname} ${user.lastname}`}
+                  {userList.map((u) => (
+                    <option key={u.id} value={u.id}>
+                      {`${u.firstname} ${u.lastname}`}
                     </option>
                   ))}
                 </TextField>
               </Grid>
-              <p className={classes.formHelperText}>
-                The name shown in the Appointment
-              </p>
+              <p className={classes.formHelperText}>The name shown in the Appointment</p>
             </FormControl>
             <FormControl component="div" className={classes.formControl}>
               <Grid item xs={12} md={4} className={classes.gridMargin}>
@@ -255,15 +261,16 @@ const NewOrEditSchedule = ({
                   size="small"
                   name="date_start"
                   value={schedule.date_start}
-                  onChange={(date) => setSchedule({ ...schedule, date_start: date })}
+                  onChange={(date) => setSchedule({
+                    ...schedule,
+                    date_start: date,
+                  })}
                   onKeyUp={handleKeyUp}
                   maxDate={schedule.date_end}
                   maxDateMessage="Date start should not be after date end"
                 />
               </Grid>
-              <p className={classes.formHelperText}>
-                The name shown in the Appointment
-              </p>
+              <p className={classes.formHelperText}>The name shown in the Appointment</p>
             </FormControl>
             <FormControl component="div" className={classes.formControl}>
               <Grid item xs={12} md={4} className={classes.gridMargin}>
@@ -283,7 +290,10 @@ const NewOrEditSchedule = ({
                   size="small"
                   name="date_end"
                   value={schedule.date_end}
-                  onChange={(date) => setSchedule({ ...schedule, date_end: date })}
+                  onChange={(date) => setSchedule({
+                    ...schedule,
+                    date_end: date,
+                  })}
                   onKeyUp={handleKeyUp}
                   InputLabelProps={{
                     shrink: true,
@@ -292,9 +302,7 @@ const NewOrEditSchedule = ({
                   minDateMessage="Date end should not be before date start"
                 />
               </Grid>
-              <p className={classes.formHelperText}>
-                The name shown in the Appointment
-              </p>
+              <p className={classes.formHelperText}>The name shown in the Appointment</p>
             </FormControl>
             <FormControl component="div" className={classes.formControl}>
               <Grid item xs={12} md={4} className={classes.gridMargin}>
@@ -309,13 +317,14 @@ const NewOrEditSchedule = ({
                   label="Time Start"
                   value={
                     schedule.time_start
-                      ? moment(schedule.time_start, "HH:mm:ss").format(
-                        "YYYY-MM-DDTHH:mm:ss",
-                      )
+                      ? moment(schedule.time_start, "HH:mm:ss").format("YYYY-MM-DDTHH:mm:ss")
                       : null
                   }
                   className={classes.textField}
-                  onChange={(date) => setSchedule({ ...schedule, time_start: date })}
+                  onChange={(date) => setSchedule({
+                    ...schedule,
+                    time_start: date,
+                  })}
                   size="small"
                   autoOk
                   mask="__:__ _M"
@@ -326,9 +335,7 @@ const NewOrEditSchedule = ({
                   maxDateMessage="Time start should not be after time end"
                 />
               </Grid>
-              <p className={classes.formHelperText}>
-                The name shown in the Appointment
-              </p>
+              <p className={classes.formHelperText}>The name shown in the Appointment</p>
             </FormControl>
             <FormControl component="div" className={classes.formControl}>
               <Grid item xs={12} md={4} className={classes.gridMargin}>
@@ -343,13 +350,14 @@ const NewOrEditSchedule = ({
                   label="Time End"
                   value={
                     schedule.time_end
-                      ? moment(schedule.time_end, "HH:mm:ss").format(
-                        "YYYY-MM-DDTHH:mm:ss",
-                      )
+                      ? moment(schedule.time_end, "HH:mm:ss").format("YYYY-MM-DDTHH:mm:ss")
                       : null
                   }
                   className={classes.textField}
-                  onChange={(date) => setSchedule({ ...schedule, time_end: date })}
+                  onChange={(date) => setSchedule({
+                    ...schedule,
+                    time_end: date,
+                  })}
                   size="small"
                   autoOk
                   mask="__:__ _M"
@@ -360,9 +368,7 @@ const NewOrEditSchedule = ({
                   minDateMessage="Date end should not be before date start"
                 />
               </Grid>
-              <p className={classes.formHelperText}>
-                The name shown in the Appointment
-              </p>
+              <p className={classes.formHelperText}>The name shown in the Appointment</p>
             </FormControl>
             <FormControlLabel
               control={(
@@ -370,7 +376,10 @@ const NewOrEditSchedule = ({
                   checked={Boolean(schedule.active)}
                   size="small"
                   name="active"
-                  onChange={(e) => setSchedule({ ...schedule, active: e.target.checked })}
+                  onChange={(e) => setSchedule({
+                    ...schedule,
+                    active: e.target.checked,
+                  })}
                   onKeyUp={handleKeyUp}
                 />
               )}
@@ -378,7 +387,13 @@ const NewOrEditSchedule = ({
               className={classes.root}
             />
             <p className={classes.statusText}>
-              <span style={{ fontWeight: "500" }}>Status:</span>
+              <span
+                style={{
+                  fontWeight: "500",
+                }}
+              >
+                Status:
+              </span>
               {" "}
               {status}
             </p>
@@ -398,13 +413,13 @@ const NewOrEditSchedule = ({
                   rows: 6,
                 }}
                 value={schedule.note}
-                onChange={(e) => setSchedule({ ...schedule, note: e.target.value })}
+                onChange={(e) => setSchedule({
+                  ...schedule,
+                  note: e.target.value,
+                })}
                 onKeyUp={handleKeyUp}
                 error={String(schedule.note).length > 1000}
-                helperText={
-                  String(schedule.note).length > 1000
-                  && "Note can't be grater than 1000 Chars"
-                }
+                helperText={String(schedule.note).length > 1000 && "Note can't be grater than 1000 Chars"}
               />
             </FormControl>
           </div>
@@ -421,18 +436,30 @@ const NewOrEditSchedule = ({
           >
             Cancel
           </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            size="small"
-            onClick={handleCreateNewOrEditSchedule}
-          >
+          <Button variant="outlined" color="primary" size="small" onClick={handleCreateNewOrEditSchedule}>
             {isNewSchedule ? "Save" : "Update"}
           </Button>
         </DialogActions>
       </Dialog>
     </div>
   );
+};
+
+NewOrEditSchedule.propTypes = {
+  user: PropTypes.arrayOf(
+    PropTypes.arrayOf({
+      id: PropTypes.string,
+    }),
+  ).isRequired,
+  userId: PropTypes.bool.isRequired,
+  isNewSchedule: PropTypes.bool.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  handleOnClose: PropTypes.func.isRequired,
+  fetchScheduleSearch: PropTypes.func.isRequired,
+  handleChangeOfUserId: PropTypes.func.isRequired,
+  userList: PropTypes.arrayOf(
+    PropTypes.arrayOf(),
+  ).isRequired,
 };
 
 export default NewOrEditSchedule;

@@ -1,13 +1,13 @@
 import axios from "axios";
 
-import { API_BASE } from "./../../utils/API_BASE";
+import { API_BASE } from "../../utils/API_BASE";
 
 class PatientAuthService {
   async login(user) {
-    const loginResponse = await axios.post(API_BASE + "/auth/patient/login", {
+    const loginResponse = await axios.post(`${API_BASE}/auth/patient/login`, {
       client_id: user.client_id,
       email: user.email,
-      password: user.password
+      password: user.password,
     });
     if (loginResponse.data) {
       if (loginResponse.data.data.accessToken) {
@@ -15,33 +15,34 @@ class PatientAuthService {
       }
       return loginResponse.data;
     }
+    return false;
   }
 
   getClientCode(clientCode) {
     return axios
-      .get(API_BASE + `/auth/patient/client/?c=${clientCode}`)
+      .get(`${API_BASE}/auth/patient/client/?c=${clientCode}`)
       .then((res) => res.data);
   }
 
   upload(data) {
-    return axios.post(API_BASE + `/auth/patient/upload`, data);
+    return axios.post(`${API_BASE}/auth/patient/upload`, data);
   }
 
   validate(data) {
-    return axios.post(API_BASE + `/auth/field/validate`, data);
+    return axios.post(`${API_BASE}/auth/field/validate`, data);
   }
 
   register(patient) {
-    return axios.post(API_BASE + "/auth/patient/signup", patient);
+    return axios.post(`${API_BASE}/auth/patient/signup`, patient);
   }
 
   passwordChangeRequest(email, data) {
-    return axios.post(API_BASE + `/auth/patient/reset_password/${email}`, data);
+    return axios.post(`${API_BASE}/auth/patient/reset_password/${email}`, data);
   }
 
   resetPassword(patientId, token, password) {
-    return axios.post(API_BASE + `/auth/patient/reset/${patientId}/${token}`, {
-      password: password
+    return axios.post(`${API_BASE}/auth/patient/reset/${patientId}/${token}`, {
+      password,
     });
   }
 }

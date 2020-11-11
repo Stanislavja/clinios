@@ -15,6 +15,7 @@ import {
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import moment from "moment";
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
   tableContainer: {
@@ -55,7 +56,6 @@ const StyledTableRow = withStyles((theme) => ({
 const ScheduleSearchResultTable = ({
   handleOnEditClick,
   searchResult,
-  fetchScheduleSearch,
   handleDeleteSchedule,
 }) => {
   const classes = useStyles();
@@ -120,7 +120,10 @@ const ScheduleSearchResultTable = ({
                   {result.updated ? moment(result.updated).format("lll") : ""}
                 </TableCell>
                 <TableCell>{result.updated_name}</TableCell>
-                <TableCell style={{ minWidth: "120px" }}>
+                <TableCell style={{
+                  minWidth: "120px",
+                }}
+                >
                   <IconButton
                     aria-label="edit"
                     onClick={() => handleOnEditClick(result.id)}
@@ -141,6 +144,14 @@ const ScheduleSearchResultTable = ({
       </TableContainer>
     </div>
   );
+};
+
+ScheduleSearchResultTable.propTypes = {
+  handleOnEditClick: PropTypes.func.isRequired,
+  handleDeleteSchedule: PropTypes.func.isRequired,
+  searchResult: PropTypes.arrayOf(
+    PropTypes.arrayOf({}),
+  ).isRequired,
 };
 
 export default ScheduleSearchResultTable;

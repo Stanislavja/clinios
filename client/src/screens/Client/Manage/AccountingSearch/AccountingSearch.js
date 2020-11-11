@@ -158,8 +158,6 @@ export default function AccountingSearch() {
                   onChange={(event) => setAmountFrom(event.target.value)}
                   InputProps={{
                     inputComponent: NumberFormatCustom,
-                  }}
-                  inputProps={{
                     maxLength: 16,
                   }}
                   error={amountFrom.length >= 13}
@@ -181,8 +179,6 @@ export default function AccountingSearch() {
                   className={`${classes.textField} ${classes.amount}`}
                   InputProps={{
                     inputComponent: NumberFormatCustom,
-                  }}
-                  inputProps={{
                     maxLength: 16,
                   }}
                   error={amountTo.length >= 13}
@@ -274,7 +270,7 @@ export default function AccountingSearch() {
         </Grid>
       </div>
       {searchResult.length > 0 ? (
-        <AccountingSearchResults result={searchResult} />
+        <AccountingSearchResults results={searchResult} />
       ) : (
         <Typography component="p" variant="body2" color="textPrimary">
           {emptyResult}

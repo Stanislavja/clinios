@@ -3,8 +3,9 @@ import React from "react";
 import {
   Button, Grid, makeStyles, TextField,
 } from "@material-ui/core";
+import PropTypes from "prop-types";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   gridMargin: {
     marginTop: "15px",
   },
@@ -61,6 +62,19 @@ const ScheduleSearchForm = ({
       </Button>
     </Grid>
   );
+};
+
+ScheduleSearchForm.propTypes = {
+  userId: PropTypes.string.isRequired,
+  userList: PropTypes.arrayOf(
+    PropTypes.arrayOf({
+      id: PropTypes.string,
+      firstname: PropTypes.string,
+      lastname: PropTypes.string,
+    }),
+  ).isRequired,
+  handleChangeOfUserId: PropTypes.func.isRequired,
+  fetchScheduleSearch: PropTypes.func.isRequired,
 };
 
 export default ScheduleSearchForm;

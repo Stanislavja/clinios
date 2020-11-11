@@ -7,6 +7,7 @@ import {
   makeStyles,
   TextField,
 } from "@material-ui/core";
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
   controlLabel: {
@@ -74,6 +75,12 @@ const Drugsform = ({
       </Button>
     </div>
   );
+};
+
+Drugsform.propTypes = {
+  fetchSearchDrugs: PropTypes.func.isRequired,
+  textChangeHandler: PropTypes.func.isRequired,
+  checkBoxChangeHandler: PropTypes.func.isRequired,
 };
 
 export default Drugsform;

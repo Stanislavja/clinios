@@ -2,12 +2,12 @@ import {
   SET_SELECTED_ENCOUNTER,
   RESET_SELECTED_ENCOUNTER,
   SET_EDITOR_TEXT,
-  RESET_EDITOR_TEXT
+  RESET_EDITOR_TEXT,
 } from "./types";
 
 const initState = {
   selectedEncounter: null,
-  editorText: ""
+  editorText: "",
 };
 
 const reducer = (state = initState, action) => {
@@ -15,24 +15,24 @@ const reducer = (state = initState, action) => {
     case SET_SELECTED_ENCOUNTER:
       return {
         ...state,
-        selectedEncounter: action.payload
+        selectedEncounter: action.payload,
       };
     case RESET_SELECTED_ENCOUNTER:
       return {
         ...state,
-        selectedEncounter: null
+        selectedEncounter: null,
       };
     case SET_EDITOR_TEXT:
       return {
         ...state,
-        editorText: action.payload
+        editorText: action.payload,
       };
     case RESET_EDITOR_TEXT:
       return {
         ...state,
-        editorText: ""
+        editorText: "",
       };
-    //editor case
+    // editor case
     default:
       return state;
   }

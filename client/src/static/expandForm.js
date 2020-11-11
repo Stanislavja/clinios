@@ -6,7 +6,7 @@ export const FormFields = {
       label: "First Name",
       baseType: "input",
       type: "text",
-      options: []
+      options: [],
     },
     {
       name: "middlename",
@@ -14,7 +14,7 @@ export const FormFields = {
       label: "Middle Name",
       baseType: "input",
       type: "text",
-      options: []
+      options: [],
     },
     {
       name: "lastname",
@@ -22,7 +22,7 @@ export const FormFields = {
       label: "Last Name",
       baseType: "input",
       type: "text",
-      options: []
+      options: [],
     },
     {
       name: "dob",
@@ -30,7 +30,7 @@ export const FormFields = {
       label: "",
       baseType: "input",
       type: "date",
-      options: []
+      options: [],
     },
     {
       name: "ssn",
@@ -38,7 +38,7 @@ export const FormFields = {
       label: "Social Security",
       baseType: "input",
       type: "text",
-      options: []
+      options: [],
     },
     {
       name: "nickName",
@@ -46,7 +46,7 @@ export const FormFields = {
       label: "Nick Name",
       baseType: "input",
       type: "text",
-      options: []
+      options: [],
     },
     {
       name: "aboutUs",
@@ -54,7 +54,7 @@ export const FormFields = {
       label: "How did you hear about us?",
       baseType: "input",
       type: "text",
-      options: []
+      options: [],
     },
     {
       name: "gender",
@@ -65,14 +65,14 @@ export const FormFields = {
       options: [
         {
           label: "Male",
-          value: "M"
+          value: "M",
         },
         {
           label: "Female",
-          value: "F"
-        }
-      ]
-    }
+          value: "F",
+        },
+      ],
+    },
   ],
   addressDetails: [
     {
@@ -81,7 +81,7 @@ export const FormFields = {
       label: "Address",
       baseType: "input",
       type: "text",
-      options: []
+      options: [],
     },
     {
       name: "address2",
@@ -89,7 +89,7 @@ export const FormFields = {
       label: "Address 2",
       baseType: "input",
       type: "text",
-      options: []
+      options: [],
     },
     {
       name: "city",
@@ -97,7 +97,7 @@ export const FormFields = {
       label: "City",
       baseType: "input",
       type: "text",
-      options: []
+      options: [],
     },
     {
       name: "postal",
@@ -105,8 +105,8 @@ export const FormFields = {
       label: "Zip/Postal",
       baseType: "input",
       type: "text",
-      options: []
-    }
+      options: [],
+    },
   ],
   contactInfo: [
     {
@@ -115,7 +115,7 @@ export const FormFields = {
       label: "Home Phone",
       baseType: "input",
       type: "number",
-      options: []
+      options: [],
     },
     {
       name: "phone_cell",
@@ -123,7 +123,7 @@ export const FormFields = {
       label: "Cell Phone",
       baseType: "input",
       type: "number",
-      options: []
+      options: [],
     },
     {
       name: "phone_work",
@@ -131,7 +131,7 @@ export const FormFields = {
       label: "Work Phone",
       baseType: "input",
       type: "number",
-      options: []
+      options: [],
     },
     {
       name: "email",
@@ -139,7 +139,7 @@ export const FormFields = {
       label: "Email",
       baseType: "input",
       type: "email",
-      options: []
+      options: [],
     },
     {
       name: "contactPreference",
@@ -150,18 +150,18 @@ export const FormFields = {
       options: [
         {
           label: "Mobile Phone",
-          value: "mobile"
+          value: "mobile",
         },
         {
           label: "Home Phone",
-          value: "home"
+          value: "home",
         },
         {
           label: "Work Phone",
-          value: "work"
-        }
-      ]
-    }
+          value: "work",
+        },
+      ],
+    },
   ],
   emergencyInfo: [
     {
@@ -170,7 +170,7 @@ export const FormFields = {
       label: "First Name",
       baseType: "input",
       type: "text",
-      options: []
+      options: [],
     },
     {
       name: "emergency_middlename",
@@ -178,7 +178,7 @@ export const FormFields = {
       label: "Middle Name",
       baseType: "input",
       type: "text",
-      options: []
+      options: [],
     },
     {
       name: "emergency_lastname",
@@ -186,7 +186,7 @@ export const FormFields = {
       label: "Last Name",
       baseType: "input",
       type: "text",
-      options: []
+      options: [],
     },
     {
       name: "emergency_relationship",
@@ -194,7 +194,7 @@ export const FormFields = {
       label: "Relationship",
       baseType: "input",
       type: "text",
-      options: []
+      options: [],
     },
     {
       name: "emergency_email",
@@ -202,7 +202,7 @@ export const FormFields = {
       label: "Email",
       baseType: "input",
       type: "email",
-      options: []
+      options: [],
     },
     {
       name: "emergency_phone",
@@ -210,8 +210,8 @@ export const FormFields = {
       label: "Contact Number",
       baseType: "input",
       type: "number",
-      options: []
-    }
+      options: [],
+    },
   ],
   insuranceInfo: [
     {
@@ -220,7 +220,7 @@ export const FormFields = {
       label: "Plan Name",
       baseType: "input",
       type: "text",
-      options: []
+      options: [],
     },
     {
       name: "insurance_group",
@@ -228,7 +228,7 @@ export const FormFields = {
       label: "Group Number",
       baseType: "input",
       type: "text",
-      options: []
+      options: [],
     },
     {
       name: "insurance_member",
@@ -236,7 +236,7 @@ export const FormFields = {
       label: "Member Id",
       baseType: "input",
       type: "text",
-      options: []
+      options: [],
     },
     {
       name: "insuranceType",
@@ -244,8 +244,8 @@ export const FormFields = {
       label: "Insurance Type",
       baseType: "input",
       type: "text",
-      options: []
-    }
+      options: [],
+    },
   ],
   medicalInfo: [
     {
@@ -254,7 +254,7 @@ export const FormFields = {
       label: "Height in (INCHES)",
       baseType: "input",
       type: "number",
-      options: []
+      options: [],
     },
     {
       name: "weight",
@@ -262,7 +262,7 @@ export const FormFields = {
       label: "Weight in (POUNDS)",
       baseType: "input",
       type: "number",
-      options: []
+      options: [],
     },
     {
       name: "medical_note",
@@ -270,8 +270,8 @@ export const FormFields = {
       label: "Reason For Consult",
       baseType: "input",
       type: "number",
-      options: []
-    }
+      options: [],
+    },
   ],
   userNamePasswordDetails: [
     {
@@ -280,7 +280,7 @@ export const FormFields = {
       label: "Username",
       baseType: "input",
       type: "text",
-      options: []
+      options: [],
     },
     {
       name: "password",
@@ -288,7 +288,7 @@ export const FormFields = {
       label: "Password",
       baseType: "input",
       type: "password",
-      options: []
+      options: [],
     },
     {
       name: "confirmPassword",
@@ -296,7 +296,7 @@ export const FormFields = {
       label: "Confirm Password",
       baseType: "input",
       type: "password",
-      options: []
-    }
-  ]
+      options: [],
+    },
+  ],
 };

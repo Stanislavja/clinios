@@ -14,6 +14,7 @@ import Switch from "@material-ui/core/Switch";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import TextField from "@material-ui/core/TextField";
 import Alert from "@material-ui/lab/Alert";
+import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 
 import AppointmentService from "../../../../../../services/appointmentType.service";
@@ -99,6 +100,7 @@ const NewOrEditAppointment = ({
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const { savedAppointments } = props;
   const [appointment, setAppointment] = useState([]);
   const [errors, setErrors] = useState([]);
   const [nameError, setNameError] = useState(false);
@@ -113,20 +115,28 @@ const NewOrEditAppointment = ({
       active: true,
     };
     setAppointment(appt);
+    // eslint-disable-next-line react/destructuring-assignment
   }, [props.appointment]);
 
-  const handleFormSubmission = () => {
-    console.log(
-      appointment.appointment_name_portal,
-      props.savedAppointments,
-      appointment.appointment_type,
+  const createNewAppointment = (data) => {
+    AppointmentService.create(data).then(
+      (response) => {
+        dispatch(setSuccess(`${response.data.message}`));
+        onClose();
+      },
+      (error) => {
+        setErrors(error.response.data.error);
+      },
     );
+  };
+
+  const handleFormSubmission = () => {
     // Duplicate Name
-    const duplicateName = props.savedAppointments
+    const duplicateName = savedAppointments
       .map((x) => appointment.appointment_name_portal.includes(x.appointment_name_portal))
       .includes(true);
     // Duplicate Type
-    const duplicateType = props.savedAppointments
+    const duplicateType = savedAppointments
       .map((x) => appointment.appointment_type.includes(x.appointment_type))
       .includes(true);
     // Validation Start Here
@@ -174,18 +184,6 @@ const NewOrEditAppointment = ({
     }
   };
 
-  const createNewAppointment = (data) => {
-    AppointmentService.create(data).then(
-      (response) => {
-        dispatch(setSuccess(`${response.data.message}`));
-        onClose();
-      },
-      (error) => {
-        setErrors(error.response.data.error);
-      },
-    );
-  };
-
   const handleOnChange = (event) => {
     setAppointment({
       ...appointment,
@@ -213,6 +211,7 @@ const NewOrEditAppointment = ({
           </DialogContentText>
           {errors
             && errors.map((error, index) => (
+               // eslint-disable-next-line react/no-array-index-key
               <Alert severity="error" key={index}>
                 {error.msg}
               </Alert>
@@ -374,6 +373,33 @@ const NewOrEditAppointment = ({
       </Dialog>
     </div>
   );
+};
+
+NewOrEditAppointment.propTypes = {
+  user: PropTypes.arrayOf(
+    PropTypes.arrayOf({
+      id: PropTypes.string,
+      client_id: PropTypes.string,
+    }),
+  ).isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  isNewAppointment: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  appointment: PropTypes.shape({
+    id: PropTypes.string,
+    appointment_type: PropTypes.string,
+    appointment_name_portal: PropTypes.string,
+    length: PropTypes.number,
+    sort_order: PropTypes.number,
+    allow_patients_schedule: PropTypes.bool,
+    note: PropTypes.string,
+  }).isRequired,
+  savedAppointments: PropTypes.arrayOf(
+    PropTypes.shape({
+      appointment_name_portal: PropTypes.string,
+      appointment_type: PropTypes.string,
+    }),
+  ).isRequired,
 };
 
 export default NewOrEditAppointment;

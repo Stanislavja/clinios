@@ -4,10 +4,10 @@ const CustomSelectStyles = {
     ...base,
     maxHeight: 150,
   }),
-  menuList: base => ({
+  menuList: (base) => ({
     ...base,
-    maxHeight: 150
+    maxHeight: 150,
   }),
-}
+};
 
-export default CustomSelectStyles
+export default CustomSelectStyles;

@@ -14,6 +14,7 @@ import {
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import moment from "moment";
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
   tableContainer: {
@@ -138,6 +139,11 @@ const UsersTable = ({ users, handleOnEditClick }) => {
       </TableContainer>
     </div>
   );
+};
+
+UsersTable.propTypes = {
+  handleOnEditClick: PropTypes.func.isRequired,
+  users: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
 export default UsersTable;

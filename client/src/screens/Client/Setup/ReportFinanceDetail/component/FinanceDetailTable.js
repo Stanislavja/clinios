@@ -13,6 +13,7 @@ import {
   withStyles,
 } from "@material-ui/core";
 import moment from "moment";
+import PropTypes from "prop-types";
 import NumberFormat from "react-number-format";
 import { useHistory } from "react-router-dom";
 
@@ -151,6 +152,22 @@ const FinanceDetailTable = ({ financeDetail }) => {
       </TableContainer>
     </div>
   );
+};
+
+FinanceDetailTable.propTypes = {
+  financeDetail: PropTypes.arrayOf(
+    PropTypes.arrayOf({
+      name: PropTypes.string,
+      encounter_title: PropTypes.string,
+      dt: PropTypes.string,
+      note: PropTypes.string,
+      amount: PropTypes.number,
+      cpt_name: PropTypes.string,
+      created: PropTypes.string,
+      hyperlink: PropTypes.string,
+      patient_name: PropTypes.string,
+    }),
+  ).isRequired,
 };
 
 export default FinanceDetailTable;

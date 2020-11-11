@@ -16,10 +16,12 @@ import {
 import { green, grey } from "@material-ui/core/colors";
 import Alert from "@material-ui/lab/Alert";
 import moment from "moment";
+import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 
 import DrugsService from "../../../../../services/drugs.service";
 import { setSuccess } from "../../../../../store/common/actions";
+
 
 const useStyles = makeStyles((theme) => ({
   tableContainer: {
@@ -92,6 +94,7 @@ const Drugstable = ({ user, result, fetchSearchDrugs }) => {
     setState(
       result.map((item) => {
         if (drugId === item.id) {
+          // eslint-disable-next-line no-param-reassign
           item.favorite = checked;
         }
         return state;
@@ -130,6 +133,7 @@ const Drugstable = ({ user, result, fetchSearchDrugs }) => {
     <div>
       {errors
         && errors.map((error, index) => (
+          // eslint-disable-next-line react/no-array-index-key
           <Alert severity="error" key={index}>
             {error.msg}
           </Alert>
@@ -182,6 +186,24 @@ const Drugstable = ({ user, result, fetchSearchDrugs }) => {
       </TableContainer>
     </div>
   );
+};
+
+Drugstable.propTypes = {
+  user: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  ).isRequired,
+  result: PropTypes.arrayOf(
+    PropTypes.arrayOf({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      favorite: PropTypes.string,
+      updated: PropTypes.string,
+      updated_name: PropTypes.string,
+    }),
+  ).isRequired,
+  fetchSearchDrugs: PropTypes.func.isRequired,
 };
 
 export default Drugstable;

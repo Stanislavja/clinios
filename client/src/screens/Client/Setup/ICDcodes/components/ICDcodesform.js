@@ -9,6 +9,7 @@ import {
   withStyles,
 } from "@material-ui/core";
 import { green, grey } from "@material-ui/core/colors";
+import PropTypes from "prop-types";
 
 const GreenSwitch = withStyles({
   switchBase: {
@@ -104,6 +105,12 @@ const ICDcodesform = ({
       </Button>
     </div>
   );
+};
+
+ICDcodesform.propTypes = {
+  fetchSearchIcdCodes: PropTypes.func.isRequired,
+  textChangeHandler: PropTypes.func.isRequired,
+  checkBoxChangeHandler: PropTypes.func.isRequired,
 };
 
 export default ICDcodesform;

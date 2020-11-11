@@ -12,6 +12,7 @@ import {
   withStyles,
 } from "@material-ui/core";
 import moment from "moment";
+import PropTypes from "prop-types";
 import NumberFormat from "react-number-format";
 
 const useStyles = makeStyles((theme) => ({
@@ -113,6 +114,23 @@ const AccountingTypesTable = ({ result }) => {
       </TableContainer>
     </div>
   );
+};
+
+AccountingTypesTable.propTypes = {
+  result: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      amount: PropTypes.number,
+      status: PropTypes.string,
+      note: PropTypes.string,
+      client_name: PropTypes.string,
+      created: PropTypes.string,
+      created_user: PropTypes.string,
+      updated: PropTypes.string,
+      updated_user: PropTypes.string,
+    }),
+  ).isRequired,
 };
 
 export default AccountingTypesTable;

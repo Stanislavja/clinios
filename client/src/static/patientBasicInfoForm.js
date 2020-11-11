@@ -6,7 +6,7 @@ export const BasicInfoForm = {
       label: "First Name",
       baseType: "input",
       type: "text",
-      options: []
+      options: [],
     },
     {
       name: "middlename",
@@ -14,7 +14,7 @@ export const BasicInfoForm = {
       label: "Middle Name",
       baseType: "input",
       type: "text",
-      options: []
+      options: [],
     },
     {
       name: "lastname",
@@ -22,7 +22,7 @@ export const BasicInfoForm = {
       label: "Last Name",
       baseType: "input",
       type: "text",
-      options: []
+      options: [],
     },
     {
       name: "status",
@@ -33,13 +33,13 @@ export const BasicInfoForm = {
       options: [
         {
           label: "Active",
-          value: "active"
+          value: "active",
         },
         {
           label: "In-Active",
-          value: "inActive"
-        }
-      ]
+          value: "inActive",
+        },
+      ],
     },
     {
       name: "provider",
@@ -47,8 +47,8 @@ export const BasicInfoForm = {
       label: "Provider",
       baseType: "input",
       type: "text",
-      options: []
-    }
+      options: [],
+    },
   ],
   secondRow: [
     {
@@ -57,7 +57,7 @@ export const BasicInfoForm = {
       label: "Home Phone",
       baseType: "input",
       type: "number",
-      options: []
+      options: [],
     },
     {
       name: "phone_cell",
@@ -65,7 +65,7 @@ export const BasicInfoForm = {
       label: "Cell Phone",
       baseType: "input",
       type: "number",
-      options: []
+      options: [],
     },
     {
       name: "phone_work",
@@ -73,7 +73,7 @@ export const BasicInfoForm = {
       label: "Work Phone",
       baseType: "input",
       type: "number",
-      options: []
+      options: [],
     },
     {
       name: "email",
@@ -81,7 +81,7 @@ export const BasicInfoForm = {
       label: "Email",
       baseType: "input",
       type: "email",
-      options: []
+      options: [],
     },
     {
       name: "dob",
@@ -89,8 +89,8 @@ export const BasicInfoForm = {
       label: "  ",
       baseType: "input",
       type: "date",
-      options: []
-    }
+      options: [],
+    },
   ],
   thirdRow: [
     {
@@ -99,7 +99,7 @@ export const BasicInfoForm = {
       label: "Other Phone",
       baseType: "input",
       type: "number",
-      options: []
+      options: [],
     },
     {
       name: "phoneNotes",
@@ -107,7 +107,7 @@ export const BasicInfoForm = {
       label: "Phone Notes",
       baseType: "input",
       type: "number",
-      options: []
+      options: [],
     },
     {
       name: "gender",
@@ -118,13 +118,13 @@ export const BasicInfoForm = {
       options: [
         {
           label: "Male",
-          value: "M"
+          value: "M",
         },
         {
           label: "Female",
-          value: "F"
-        }
-      ]
+          value: "F",
+        },
+      ],
     },
     {
       name: "ssn",
@@ -132,9 +132,9 @@ export const BasicInfoForm = {
       label: "Social Security",
       baseType: "input",
       type: "text",
-      options: []
-    }
-  ]
+      options: [],
+    },
+  ],
 };
 
 export const InsuranceForm = [
@@ -144,7 +144,7 @@ export const InsuranceForm = [
     label: "Plan Name",
     baseType: "input",
     type: "text",
-    options: []
+    options: [],
   },
   {
     name: "groupName",
@@ -152,7 +152,7 @@ export const InsuranceForm = [
     label: "Group Name",
     baseType: "input",
     type: "text",
-    options: []
+    options: [],
   },
   {
     name: "memberId",
@@ -160,7 +160,7 @@ export const InsuranceForm = [
     label: "Member Id",
     baseType: "input",
     type: "number",
-    options: []
+    options: [],
   },
   {
     name: "planPhoneNo",
@@ -168,7 +168,7 @@ export const InsuranceForm = [
     label: "Plan Phone No",
     baseType: "input",
     type: "number",
-    options: []
+    options: [],
   },
   {
     name: "planDescription",
@@ -176,8 +176,8 @@ export const InsuranceForm = [
     label: "Plan Description",
     baseType: "input",
     type: "text",
-    options: []
-  }
+    options: [],
+  },
 ];
 
 export const AddressForm = [
@@ -187,7 +187,7 @@ export const AddressForm = [
     label: "Plan Name",
     baseType: "input",
     type: "text",
-    options: []
+    options: [],
   },
   {
     name: "state",
@@ -195,7 +195,7 @@ export const AddressForm = [
     label: "Plan Name",
     baseType: "input",
     type: "text",
-    options: []
+    options: [],
   },
   {
     name: "postal",
@@ -203,32 +203,32 @@ export const AddressForm = [
     label: "Plan Name",
     baseType: "input",
     type: "text",
-    options: []
-  }
+    options: [],
+  },
 ];
 
 export const Pharmacies = [
   {
     name: "Pharmacy 1",
     address: "100 Main St, Ottario Canada",
-    phone: "030-123-456"
+    phone: "030-123-456",
   },
   {
     name: "Pharmacy 2",
     address: "100 Main St, New York USA",
-    phone: "030-123-456"
-  }
+    phone: "030-123-456",
+  },
 ];
 
 export const PaymentData = [
   {
     type: "Visa",
     lastFour: 1234,
-    expires: "31-10-2020"
+    expires: "31-10-2020",
   },
   {
     type: "Master Card",
     lastFour: 4321,
-    expires: "20-9-2020"
-  }
+    expires: "20-9-2020",
+  },
 ];
