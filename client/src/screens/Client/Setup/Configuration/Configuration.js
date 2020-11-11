@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-
 import { makeStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
@@ -14,17 +13,17 @@ import moment from "moment";
 import { useDispatch } from "react-redux";
 
 import Logo from "../../../../assets/img/Logo.png";
+import Error from "../../../../components/common/Error";
 import AuthService from "../../../../services/auth.service";
 import ConfigurationService from "../../../../services/configuration.service";
-import Error from "./../../../../components/common/Error";
-import { setSuccess } from "./../../../../store/common/actions";
+import { setSuccess } from "../../../../store/common/actions";
 import StateData from "./data/state";
 import ConfigModal from "./modal";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    padding: "25px 0px"
+    padding: "25px 0px",
   },
   uploadButtons: {
     display: "flex",
@@ -34,53 +33,53 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
     "& h1": {
       [theme.breakpoints.up("md")]: {
-        marginRight: theme.spacing(4)
-      }
-    }
+        marginRight: theme.spacing(4),
+      },
+    },
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 180
+    minWidth: 180,
   },
   title: {
-    paddingBottom: theme.spacing(.5)
+    paddingBottom: theme.spacing(0.5),
   },
   form: {
     display: "flex",
     flexDirection: "column",
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   formElments: {
     display: "flex",
     flexDirection: "column",
-    maxWidth: "500px"
+    maxWidth: "500px",
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
     marginTop: "20px",
-    maxWidth: "440px"
+    maxWidth: "440px",
   },
   customSelect: {
-    width: "200px"
+    width: "200px",
   },
   type: {
-    marginTop: "20px"
+    marginTop: "20px",
   },
   paper: {
-    maxWidth: "456px"
+    maxWidth: "456px",
   },
   textField: {
-    width: "200px"
+    width: "200px",
   },
   amount: {
-    marginTop: "18px"
+    marginTop: "18px",
   },
   fileInput: {
-    display: "none"
-  }
+    display: "none",
+  },
 }));
 
-export default function Configuration(props) {
+export default function Configuration() {
   const dispatch = useDispatch();
   const currentUser = AuthService.getCurrentUser() || {};
   const classes = useStyles();
@@ -90,7 +89,7 @@ export default function Configuration(props) {
   const [modalHistory, setModalHistory] = useState({
     isOpen: false,
     data: [],
-    currentUser: currentUser
+    currentUser,
   });
   const logoRef = React.useRef(null);
 
@@ -111,7 +110,7 @@ export default function Configuration(props) {
     zipcode: "",
     country: "",
     phone: "",
-    fax: ""
+    fax: "",
   };
 
   const [formParams, setFormParams] = useState(initFormParams);
@@ -121,7 +120,8 @@ export default function Configuration(props) {
   const _fetchConfig = async () => {
     try {
       let { data = {} } = await ConfigurationService.getConfig({});
-      data = data.data[0];
+      // eslint-disable-next-line prefer-destructuring
+      data = data.data[0]; // TODO:: Refactor and remove eslint-disable-next-line
       setFormParams({
         logo: Logo,
         clientId: data.id,
@@ -137,18 +137,17 @@ export default function Configuration(props) {
         state: data.state,
         npi: data.npi,
         zipcode: data.postal,
-
         country: data.country,
         phone: data.phone,
-        fax: data.fax
+        fax: data.fax,
       });
       setCalendarStartTime(
         moment(data.calendar_start_time, "HH:mm:ss").format(
-          "YYYY-MM-DDTHH:mm:ss"
-        )
+          "YYYY-MM-DDTHH:mm:ss",
+        ),
       );
       setCalendarEndTime(
-        moment(data.calendar_end_time, "HH:mm:ss").format("YYYY-MM-DDTHH:mm:ss")
+        moment(data.calendar_end_time, "HH:mm:ss").format("YYYY-MM-DDTHH:mm:ss"),
       );
     } catch (e) {
       console.log(e);
@@ -162,6 +161,7 @@ export default function Configuration(props) {
       return response.data.data;
     } catch (e) {
       console.log(e);
+      return false;
     }
   };
 
@@ -186,11 +186,11 @@ export default function Configuration(props) {
         npi: formParams.npi,
         postal: formParams.zipcode,
         phone: formParams.phone,
-        fax: formParams.fax
+        fax: formParams.fax,
       };
       const response = await ConfigurationService.updateConfig(
         currentUser.id,
-        _params
+        _params,
       );
       setSubmitting(false);
       dispatch(setSuccess(`${response.data.message}`));
@@ -204,13 +204,15 @@ export default function Configuration(props) {
     if (e.target.files) {
       setFormParams({
         ...formParams,
-        logo: URL.createObjectURL(e.target.files[0])
+        logo: URL.createObjectURL(e.target.files[0]),
       });
       try {
-        let formData = new FormData();
+        const formData = new FormData();
         formData.append("file", e.target.files[0]);
         await ConfigurationService.updateLogo(currentUser.id, formData);
-      } catch (e) {}
+      } catch (err) {
+        console.error(err);
+      }
     }
   };
 
@@ -219,12 +221,12 @@ export default function Configuration(props) {
     try {
       result = await _fetchConfigHistory();
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
     setModalHistory({
       ...modalHistory,
       isOpen: true,
-      data: result
+      data: result,
     });
   };
 
@@ -241,7 +243,7 @@ export default function Configuration(props) {
   const _onChangeInput = (e) => {
     setFormParams({
       ...formParams,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
   // const _onTimeChangeStart = (date) => {
@@ -284,7 +286,7 @@ export default function Configuration(props) {
       </Typography>
       <ConfigModal modal={modalHistory} setModal={setModalHistory} />
       <Error errors={errors} />
-      <form className={classes.form} noValidate onSubmit={(e) => {}}>
+      <form className={classes.form} noValidate onSubmit={() => {}}>
         <Grid container spacing={2}>
           <Grid item sm={5}>
             <div className={classes.paper}>
@@ -293,11 +295,9 @@ export default function Configuration(props) {
                   <TextField
                     value={formParams.clientId}
                     variant="outlined"
-                    onKeyPress={(e) => {
-                      return onKeyPress(e);
-                    }}
+                    onKeyPress={(e) => onKeyPress(e)}
                     size="small"
-                    disabled={true}
+                    disabled
                     id="clientId"
                     label="Client ID"
                     name="clientId"
@@ -310,13 +310,11 @@ export default function Configuration(props) {
                   <TextField
                     value={formParams.clientCode}
                     variant="outlined"
-                    onKeyPress={(e) => {
-                      return onKeyPress(e);
-                    }}
+                    onKeyPress={(e) => onKeyPress(e)}
                     size="small"
                     id="clientCode"
                     label="Client Code"
-                    disabled={true}
+                    disabled
                     className={`${classes.textField} `}
                     name="clientCode"
                     autoComplete="clientCode"
@@ -343,13 +341,13 @@ export default function Configuration(props) {
               </div>
               <div style={{ display: "flex", alignItems: "center" }}>
                 <img
-                  alt={`logo`}
+                  alt="logo"
                   style={{ maxWidth: "200px", maxHeight: "50px" }}
                   src={formParams.logo}
                 />
-
+                {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                 <label
-                  className={`MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary`}
+                  className="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary"
                   style={{ marginLeft: "20px" }}
                   htmlFor="contained-button-file"
                 >
@@ -365,12 +363,10 @@ export default function Configuration(props) {
               <TextField
                 value={formParams.name}
                 variant="outlined"
-                onKeyPress={(e) => {
-                  return onKeyPress(e);
-                }}
+                onKeyPress={(e) => onKeyPress(e)}
                 size="small"
                 id="name"
-                disabled={true}
+                disabled
                 label="Name"
                 className={classes.textField}
                 name="name"
@@ -383,12 +379,10 @@ export default function Configuration(props) {
               <TextField
                 value={formParams.patientPortal}
                 variant="outlined"
-                onKeyPress={(e) => {
-                  return onKeyPress(e);
-                }}
+                onKeyPress={(e) => onKeyPress(e)}
                 size="small"
                 id="patientPortal"
-                disabled={true}
+                disabled
                 label="Patient Portal Login"
                 className={`${classes.textField} `}
                 name="patientPortal"
@@ -401,9 +395,7 @@ export default function Configuration(props) {
               <TextField
                 value={formParams.address}
                 variant="outlined"
-                onKeyPress={(e) => {
-                  return onKeyPress(e);
-                }}
+                onKeyPress={(e) => onKeyPress(e)}
                 size="small"
                 id="address"
                 label="Address"
@@ -419,9 +411,7 @@ export default function Configuration(props) {
               <TextField
                 value={formParams.clientWebsite}
                 variant="outlined"
-                onKeyPress={(e) => {
-                  return onKeyPress(e);
-                }}
+                onKeyPress={(e) => onKeyPress(e)}
                 size="small"
                 id="clientWebsite"
                 label="Website"
@@ -436,9 +426,7 @@ export default function Configuration(props) {
               <TextField
                 value={formParams.addressLineTwo}
                 variant="outlined"
-                onKeyPress={(e) => {
-                  return onKeyPress(e);
-                }}
+                onKeyPress={(e) => onKeyPress(e)}
                 size="small"
                 id="addressLineTwo"
                 label="Address Line 2"
@@ -453,9 +441,7 @@ export default function Configuration(props) {
               <TextField
                 value={formParams.email}
                 variant="outlined"
-                onKeyPress={(e) => {
-                  return onKeyPress(e);
-                }}
+                onKeyPress={(e) => onKeyPress(e)}
                 size="small"
                 id="email"
                 label="Email"
@@ -470,9 +456,7 @@ export default function Configuration(props) {
               <TextField
                 value={formParams.city}
                 variant="outlined"
-                onKeyPress={(e) => {
-                  return onKeyPress(e);
-                }}
+                onKeyPress={(e) => onKeyPress(e)}
                 size="small"
                 id="city"
                 label="City"
@@ -487,9 +471,7 @@ export default function Configuration(props) {
               <TextField
                 value={formParams.ein}
                 variant="outlined"
-                onKeyPress={(e) => {
-                  return onKeyPress(e);
-                }}
+                onKeyPress={(e) => onKeyPress(e)}
                 size="small"
                 id="ein"
                 label="EIN"
@@ -503,9 +485,7 @@ export default function Configuration(props) {
             <Grid item xs={12} sm={6}>
               <FormControl
                 variant="outlined"
-                onKeyPress={(e) => {
-                  return onKeyPress(e);
-                }}
+                onKeyPress={(e) => onKeyPress(e)}
                 className={classes.customSelect}
                 size="small"
               >
@@ -516,13 +496,13 @@ export default function Configuration(props) {
                   onChange={(e) => _onChangeInput(e)}
                   inputProps={{
                     name: "state",
-                    id: "age-native-simple"
+                    id: "age-native-simple",
                   }}
                   label="State"
                 >
                   <option aria-label="None" value="" />
-                  {StateData.map((v, i) => (
-                    <option key={`state${i}`} value={v.code}>
+                  {StateData.map((v) => (
+                    <option key={`state${v.code}`} value={v.code}>
                       {v.name}
                     </option>
                   ))}
@@ -534,9 +514,7 @@ export default function Configuration(props) {
               <TextField
                 value={formParams.npi}
                 variant="outlined"
-                onKeyPress={(e) => {
-                  return onKeyPress(e);
-                }}
+                onKeyPress={(e) => onKeyPress(e)}
                 size="small"
                 id="npi"
                 label="NPI"
@@ -551,9 +529,7 @@ export default function Configuration(props) {
               <TextField
                 value={formParams.zipcode}
                 variant="outlined"
-                onKeyPress={(e) => {
-                  return onKeyPress(e);
-                }}
+                onKeyPress={(e) => onKeyPress(e)}
                 size="small"
                 id="zipcode"
                 label="Zipcode"
@@ -568,10 +544,10 @@ export default function Configuration(props) {
               <KeyboardTimePicker
                 inputVariant="outlined"
                 KeyboardButtonProps={{
-                  "aria-label": "change time"
+                  "aria-label": "change time",
                 }}
                 id="calendarStartTime"
-                name={`calendarStartTime`}
+                name="calendarStartTime"
                 label="Calendar Start Time"
                 value={calendarStartTime}
                 className={classes.textField}
@@ -586,9 +562,7 @@ export default function Configuration(props) {
             <Grid item xs={12} sm={6}>
               <FormControl
                 variant="outlined"
-                onKeyPress={(e) => {
-                  return onKeyPress(e);
-                }}
+                onKeyPress={(e) => onKeyPress(e)}
                 className={classes.customSelect}
                 size="small"
               >
@@ -599,7 +573,7 @@ export default function Configuration(props) {
                   onChange={(e) => _onChangeInput(e)}
                   inputProps={{
                     name: "country",
-                    id: "age-native-simple"
+                    id: "age-native-simple",
                   }}
                   label="Country"
                 >
@@ -614,10 +588,10 @@ export default function Configuration(props) {
               <KeyboardTimePicker
                 inputVariant="outlined"
                 KeyboardButtonProps={{
-                  "aria-label": "change time"
+                  "aria-label": "change time",
                 }}
                 id="calendarEndTime"
-                name={`calendarEndTime`}
+                name="calendarEndTime"
                 label="Calendar End Time"
                 value={calendarEndTime}
                 className={classes.textField}
@@ -632,9 +606,7 @@ export default function Configuration(props) {
               <TextField
                 value={formParams.phone}
                 variant="outlined"
-                onKeyPress={(e) => {
-                  return onKeyPress(e);
-                }}
+                onKeyPress={(e) => onKeyPress(e)}
                 size="small"
                 id="phone"
                 label="Phone"
@@ -651,9 +623,7 @@ export default function Configuration(props) {
               <TextField
                 value={formParams.fax}
                 variant="outlined"
-                onKeyPress={(e) => {
-                  return onKeyPress(e);
-                }}
+                onKeyPress={(e) => onKeyPress(e)}
                 size="small"
                 id="fax"
                 label="Fax"

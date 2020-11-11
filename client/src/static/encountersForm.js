@@ -5,7 +5,7 @@ export const EncountersFormFields = [
     label: "Title",
     baseType: "input",
     type: "text",
-    options: []
+    options: [],
   },
   {
     name: "encounter_type",
@@ -16,25 +16,25 @@ export const EncountersFormFields = [
     options: [
       {
         label: "Office Visit",
-        value: "O"
+        value: "O",
       },
       {
         label: "Email",
-        value: "E"
+        value: "E",
       },
       {
         label: "Admin Note",
-        value: "A"
+        value: "A",
       },
       {
         label: "Phone Call",
-        value: "P"
+        value: "P",
       },
       {
         label: "Refill",
-        value: "R"
-      }
-    ]
+        value: "R",
+      },
+    ],
   },
   {
     name: "date",
@@ -42,8 +42,8 @@ export const EncountersFormFields = [
     label: "Date",
     baseType: "input",
     type: "date",
-    options: []
-  }
+    options: [],
+  },
 ];
 
 export const EncountersCards = [
@@ -54,7 +54,7 @@ export const EncountersCards = [
     data: [],
     primaryButtonText: "",
     secondaryButtonText: "",
-    icon: null
+    icon: null,
   },
   {
     title: "Plan",
@@ -63,7 +63,7 @@ export const EncountersCards = [
     data: [],
     primaryButtonText: "",
     secondaryButtonText: "",
-    icon: "AddIcon"
+    icon: "AddIcon",
   },
   {
     title: "Billing",
@@ -72,6 +72,6 @@ export const EncountersCards = [
     data: [],
     primaryButtonText: "",
     secondaryButtonText: "",
-    icon: "AddIcon"
-  }
+    icon: "AddIcon",
+  },
 ];

@@ -14,26 +14,28 @@ const useStyles = makeStyles((theme) => ({
     width: 240,
     [theme.breakpoints.up("lg")]: {
       marginTop: 65,
-      height: "calc(100% - 65px)"
-    }
+      height: "calc(100% - 65px)",
+    },
   },
   root: {
     backgroundColor: theme.palette.white,
     display: "flex",
     flexDirection: "column",
     height: "100%",
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
   },
   divider: {
-    margin: theme.spacing(2, 0)
+    margin: theme.spacing(2, 0),
   },
   nav: {
-    marginBottom: theme.spacing(2)
-  }
+    marginBottom: theme.spacing(2),
+  },
 }));
 
 const Sidebar = (props) => {
-  const { open, variant, onClose, isAuth, logout, className, ...rest } = props;
+  const {
+    open, variant, onClose, isAuth, className, ...rest
+  } = props;
 
   const classes = useStyles();
 
@@ -43,13 +45,13 @@ const Sidebar = (props) => {
     {
       title: "Login",
       href: "/login_client",
-      icon: <LockIcon />
+      icon: <LockIcon />,
     },
     {
       title: "Signup",
       href: "/signup_client",
-      icon: <LockOpenIcon />
-    }
+      icon: <LockOpenIcon />,
+    },
   ];
 
   return (
@@ -60,12 +62,13 @@ const Sidebar = (props) => {
       open={open}
       variant={variant}
     >
+      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <div {...rest} className={clsx(classes.root, className)}>
         {!isAuth && (
-          <React.Fragment>
+          <>
             <Divider className={classes.divider} />
             <GeneralSidebarNav className={classes.nav} pages={publicPages} />
-          </React.Fragment>
+          </>
         )}
         <Divider className={classes.divider} />
         {isAuth && <SidebarNav className={classes.nav} pages={pages} />}
@@ -74,12 +77,17 @@ const Sidebar = (props) => {
   );
 };
 
+Sidebar.defaultProps = {
+  className: "",
+  onClose: () => {},
+};
+
 Sidebar.propTypes = {
   className: PropTypes.string,
   onClose: PropTypes.func,
   open: PropTypes.bool.isRequired,
   isAuth: PropTypes.bool.isRequired,
-  variant: PropTypes.string.isRequired
+  variant: PropTypes.string.isRequired,
 };
 
 export default Sidebar;

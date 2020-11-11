@@ -8,7 +8,7 @@ import {
   MenuItem,
   Checkbox,
   FormControlLabel,
-  Divider
+  Divider,
 } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
@@ -16,17 +16,51 @@ import CheckIcon from "@material-ui/icons/Check";
 import RotateLeftTwoToneIcon from "@material-ui/icons/RotateLeftTwoTone";
 import Alert from "@material-ui/lab/Alert";
 import _ from "lodash";
+import PropTypes from "prop-types";
 import SignatureCanvas from "react-signature-canvas";
 
 import CountrySelect from "../../../../components/common/CountrySelect";
+import Error from "../../../../components/common/Error";
 import RegionSelect from "../../../../components/common/RegionSelect";
+import PatientAuthService from "../../../../services/patient_portal/auth.service";
 import { FormFields } from "../../../../static/expandForm";
-import Error from "./../../../../components/common/Error";
-import PatientAuthService from "./../../../../services/patient_portal/auth.service";
+
+const useStyles = makeStyles((theme) => ({
+  inputRow: {
+    margin: theme.spacing(3, 0),
+  },
+  sigCanvas: {
+    border: "1px solid grey",
+  },
+  sigCanvasClear: {
+    position: "absolute",
+    background: "#f3f3f3",
+    top: "-20px",
+  },
+  sigCanvasSave: {
+    position: "absolute",
+    background: "#f3f3f3",
+    top: "30px",
+  },
+  sigImage: {
+    backgroundSize: "200px 50px",
+    width: "200px",
+    height: "50px",
+    backgroundColor: "white",
+  },
+  signupActions: {
+    marginTop: theme.spacing(1),
+    maxWidth: "506px",
+    marginLeft: "auto",
+    marginRight: "auto",
+    textAlign: "right",
+    display: "block",
+  },
+}));
 
 const SignupForm = (props) => {
   const classes = useStyles();
-  const { onFormSubmit } = props;
+  const { errors, onFormSubmit } = props;
 
   const BasicInfo = FormFields.basicInfo;
   const AddressDetails = FormFields.addressDetails;
@@ -52,7 +86,7 @@ const SignupForm = (props) => {
     state: "",
     city: "",
     postal: "",
-    contactPreference: ""
+    contactPreference: "",
   });
   const [fieldErrors, setFieldErrors] = useState([]);
 
@@ -60,7 +94,7 @@ const SignupForm = (props) => {
     const { value, name } = e.target;
     setFormFields({
       ...formFields,
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -68,13 +102,13 @@ const SignupForm = (props) => {
     if (identifier === "country") {
       setFormFields({
         ...formFields,
-        [identifier]: value
+        [identifier]: value,
       });
     } else if (identifier === "region") {
-      let identifier = "state";
+      const ident = "state";
       setFormFields({
         ...formFields,
-        [identifier]: value
+        [ident]: value,
       });
     }
   };
@@ -90,16 +124,15 @@ const SignupForm = (props) => {
   const dataURItoBlob = (dataURI) => {
     // convert base64/URLEncoded data component to raw binary data held in a string
     let byteString;
-    if (dataURI.split(",")[0].indexOf("base64") >= 0)
-      byteString = atob(dataURI.split(",")[1]);
+    if (dataURI.split(",")[0].indexOf("base64") >= 0) byteString = atob(dataURI.split(",")[1]);
     else byteString = unescape(dataURI.split(",")[1]);
 
     // separate out the mime component
-    let mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+    const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
 
     // write the bytes of the string to a typed array
-    let ia = new Uint8Array(byteString.length);
-    for (let i = 0; i < byteString.length; i++) {
+    const ia = new Uint8Array(byteString.length);
+    for (let i = 0; i < byteString.length; i += 1) {
       ia[i] = byteString.charCodeAt(i);
     }
 
@@ -110,7 +143,7 @@ const SignupForm = (props) => {
     setSignature(signatureRef.getTrimmedCanvas().toDataURL("image/png"));
 
     const blob = dataURItoBlob(
-      signatureRef.getTrimmedCanvas().toDataURL("image/png")
+      signatureRef.getTrimmedCanvas().toDataURL("image/png"),
     );
 
     const formData = new FormData();
@@ -118,24 +151,23 @@ const SignupForm = (props) => {
 
     PatientAuthService.upload({
       data: {
-        imgBase64: signatureRef.getTrimmedCanvas().toDataURL("image/png")
-      }
+        imgBase64: signatureRef.getTrimmedCanvas().toDataURL("image/png"),
+      },
     }).then(
       (response) => {
         console.log("response:", response);
       },
       (error) => {
         console.log("error:", error);
-      }
+      },
     );
   };
-  const patientErrors =
-    props.errors && props.errors.filter((err) => err.param.includes("patient"));
+  const patientErrors = errors && errors.filter((err) => err.param.includes("patient"));
 
   const getFieldError = (target, fieldName) => {
-    let value = "client." + fieldName;
+    let value = `client.${fieldName}`;
     if (target) {
-      value = target + "." + fieldName;
+      value = `${target}.${fieldName}`;
     }
     return fieldErrors && fieldErrors.filter((err) => err.param === value);
   };
@@ -144,20 +176,17 @@ const SignupForm = (props) => {
     if (!event.target) {
       return;
     }
-    if (!target) {
-      target = "patient";
-    }
 
     PatientAuthService.validate({
       fieldName: event.target.name,
       value: event.target.value,
-      target
+      target: target || "patient",
     })
       .then(
         (response) => {
-          //Remove errors record with param
+          // Remove errors record with param
           const updatedErrors = fieldErrors.filter(
-            (error) => error.param !== response.data.message.param
+            (error) => error.param !== response.data.message.param,
           );
           setFieldErrors(updatedErrors);
         },
@@ -168,11 +197,11 @@ const SignupForm = (props) => {
           } else {
             const uniqueFieldErrors = _.uniqWith(
               [...fieldErrors, error.response.data.message],
-              _.isEqual
+              _.isEqual,
             );
             setFieldErrors(uniqueFieldErrors);
           }
-        }
+        },
       )
       .catch((err) => {
         console.log("catch err", err);
@@ -186,12 +215,12 @@ const SignupForm = (props) => {
         {
           value: event.target.value,
           msg: "Too Weak. Must be atleast 8 Characters",
-          param: `patient.${event.target.name}`
-        }
+          param: `patient.${event.target.name}`,
+        },
       ]);
     } else {
       const updatedErrors = fieldErrors.filter(
-        (error) => error.param !== `patient.${event.target.name}`
+        (error) => error.param !== `patient.${event.target.name}`,
       );
       setFieldErrors(updatedErrors);
     }
@@ -203,12 +232,12 @@ const SignupForm = (props) => {
           {
             value: event.target.value,
             msg: "Passwords must be same",
-            param: `patient.${event.target.name}`
-          }
+            param: `patient.${event.target.name}`,
+          },
         ]);
       } else {
         const updatedErrors = fieldErrors.filter(
-          (error) => error.param !== `patient.${event.target.name}`
+          (error) => error.param !== `patient.${event.target.name}`,
         );
         setFieldErrors(updatedErrors);
       }
@@ -222,7 +251,7 @@ const SignupForm = (props) => {
         firstname: formFields.firstname,
         middlename: formFields.middlename,
         lastname: formFields.lastname,
-        //preferred_name: formFields.preferred_name.trim(),
+        // preferred_name: formFields.preferred_name.trim(),
         address: formFields.address,
         address2: formFields.address2,
         city: formFields.city,
@@ -257,8 +286,8 @@ const SignupForm = (props) => {
         height: formFields.height,
         waist: formFields.waist,
         weight: formFields.weigh,
-        imgBase64: signatureRef.getTrimmedCanvas().toDataURL("image/png")
-      }
+        imgBase64: signatureRef.getTrimmedCanvas().toDataURL("image/png"),
+      },
     };
     onFormSubmit(formData);
   };
@@ -267,8 +296,9 @@ const SignupForm = (props) => {
     <>
       <form>
         <Grid className={classes.inputRow}>
-          {patientErrors &&
-            patientErrors.map((error, index) => (
+          {patientErrors
+            && patientErrors.map((error, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <Alert severity="error" variant="filled" key={index}>
                 {error.msg}
               </Alert>
@@ -278,6 +308,7 @@ const SignupForm = (props) => {
           </Typography>
           <Grid container spacing={1}>
             {BasicInfo.map((item, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={4}>
                 {item.baseType === "input" ? (
                   <TextField
@@ -292,7 +323,7 @@ const SignupForm = (props) => {
                   />
                 ) : (
                   <TextField
-                      // className={classes.select}
+                    // className={classes.select}
                     size="small"
                     variant="outlined"
                     select
@@ -304,13 +335,12 @@ const SignupForm = (props) => {
                     fullWidth
                     onChange={(e) => handleInputChange(e)}
                   >
-                    {item.options.map((option, index) => {
-                      return (
-                        <MenuItem key={index} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      );
-                    })}
+                    {item.options.map((option, i) => (
+                      // eslint-disable-next-line react/no-array-index-key
+                      <MenuItem key={i} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
                   </TextField>
                 )}
               </Grid>
@@ -326,6 +356,7 @@ const SignupForm = (props) => {
           </Typography>
           <Grid container spacing={1}>
             {AddressDetails.map((item, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={4}>
                 <TextField
                   size="small"
@@ -342,31 +373,27 @@ const SignupForm = (props) => {
             <Grid item lg={4}>
               <CountrySelect
                 size="small"
-                id={"country-select"}
+                id="country-select"
                 error={null}
-                name={"country-select"}
-                helperText={""}
-                label={"Country"}
-                outlined={true}
-                handleChange={(identifier, value) =>
-                  handleCountryRegion(identifier, value)
-                }
+                name="country-select"
+                helperText=""
+                label="Country"
+                outlined
+                handleChange={(identifier, value) => handleCountryRegion(identifier, value)}
                 country={formFields.country}
               />
             </Grid>
             <Grid item lg={4}>
               <RegionSelect
                 size="small"
-                id={"state-select"}
+                id="state-select"
                 error={null}
-                name={"state-select"}
-                helperText={""}
-                label={"State"}
-                outlined={true}
-                handleChange={(identifier, value) =>
-                  handleCountryRegion(identifier, value)
-                }
-                country={formFields["country"]}
+                name="state-select"
+                helperText=""
+                label="State"
+                outlined
+                handleChange={(identifier, value) => handleCountryRegion(identifier, value)}
+                country={formFields.country}
                 region={formFields.state}
               />
             </Grid>
@@ -381,6 +408,7 @@ const SignupForm = (props) => {
           </Typography>
           <Grid container spacing={1} alignItems="flex-end">
             {ContactInfo.map((item, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={4}>
                 {item.baseType === "input" ? (
                   <>
@@ -393,10 +421,8 @@ const SignupForm = (props) => {
                       type={item.type}
                       fullWidth
                       onChange={(e) => handleInputChange(e)}
-                      onBlur={(event) =>
-                        (item.name === "email" || item.name === "ssn") &&
-                        handleAjaxValidation(event)
-                      }
+                      onBlur={(event) => (item.name === "email" || item.name === "ssn")
+                        && handleAjaxValidation(event)}
                     />
                     <Error errors={getFieldError("patient", item.name)} />
                   </>
@@ -404,7 +430,7 @@ const SignupForm = (props) => {
                   <TextField
                     size="small"
                     variant="outlined"
-                      // className={classes.select}
+                    // className={classes.select}
                     select
                     placeholder={item.label}
                     label={item.label}
@@ -414,13 +440,12 @@ const SignupForm = (props) => {
                     fullWidth
                     onChange={(e) => handleInputChange(e)}
                   >
-                    {item.options.map((option, index) => {
-                      return (
-                        <MenuItem key={index} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      );
-                    })}
+                    {item.options.map((option, i) => (
+                      // eslint-disable-next-line react/no-array-index-key
+                      <MenuItem key={i} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
                   </TextField>
                 )}
               </Grid>
@@ -436,6 +461,7 @@ const SignupForm = (props) => {
           </Typography>
           <Grid container spacing={1}>
             {EmergencyInfo.map((item, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={4}>
                 <TextField
                   size="small"
@@ -446,10 +472,8 @@ const SignupForm = (props) => {
                   type={item.type}
                   fullWidth
                   onChange={(e) => handleInputChange(e)}
-                  onBlur={(event) =>
-                    item.name === "emergency_email" &&
-                    handleAjaxValidation(event)
-                  }
+                  onBlur={(event) => item.name === "emergency_email"
+                    && handleAjaxValidation(event)}
                 />
                 <Error errors={getFieldError("patient", item.name)} />
               </Grid>
@@ -463,6 +487,7 @@ const SignupForm = (props) => {
           </Typography>
           <Grid container spacing={1}>
             {InsuranceInfo.map((item, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={4}>
                 <TextField
                   size="small"
@@ -487,6 +512,7 @@ const SignupForm = (props) => {
           </Typography>
           <Grid container spacing={1}>
             {MedicalInfo.slice(0, 2).map((item, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={6}>
                 <TextField
                   size="small"
@@ -501,6 +527,7 @@ const SignupForm = (props) => {
               </Grid>
             ))}
             {MedicalInfo.slice(2, 3).map((item, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={12}>
                 <TextField
                   size="small"
@@ -511,7 +538,7 @@ const SignupForm = (props) => {
                   type={item.type}
                   fullWidth
                   onChange={(e) => handleInputChange(e)}
-                  multiline={true}
+                  multiline
                   rows={5}
                 />
               </Grid>
@@ -525,6 +552,7 @@ const SignupForm = (props) => {
           </Typography>
           <Grid container spacing={1}>
             {UserNamePasswordInfo.map((item, index) => (
+              // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={4}>
                 <TextField
                   size="small"
@@ -535,11 +563,9 @@ const SignupForm = (props) => {
                   type={item.type}
                   fullWidth
                   onChange={(e) => handleInputChange(e)}
-                  onBlur={(event) =>
-                    (item.name === "password" ||
-                      item.name === "confirmPassword") &&
-                    validatePassword(event)
-                  }
+                  onBlur={(event) => (item.name === "password"
+                      || item.name === "confirmPassword")
+                    && validatePassword(event)}
                 />
                 <Error errors={getFieldError("patient", item.name)} />
               </Grid>
@@ -551,13 +577,13 @@ const SignupForm = (props) => {
 
         <FormControlLabel
           value="end"
-          control={
+          control={(
             <Checkbox
               checked={termsChecked}
               onChange={(e) => handleCheckboxChange(e)}
               color="primary"
             />
-          }
+          )}
           label="I have read and accept the terms of the privacy policy below."
           labelPlacement="end"
         />
@@ -570,12 +596,12 @@ const SignupForm = (props) => {
             <Grid item>
               <SignatureCanvas
                 ref={(ref) => setSignatureRef(ref)}
-                on={true}
+                on
                 penColor="black"
                 canvasProps={{
                   width: 500,
                   height: 200,
-                  className: classes.sigCanvas
+                  className: classes.sigCanvas,
                 }}
               />
               <IconButton
@@ -594,7 +620,11 @@ const SignupForm = (props) => {
               </IconButton>
             </Grid>
             {signature ? (
-              <img alt="signature" className={classes.sigImage} src={signature} />
+              <img
+                alt="signature"
+                className={classes.sigImage}
+                src={signature}
+              />
             ) : null}
           </Grid>
           <Grid container justify="flex-end" className={classes.signupActions}>
@@ -613,37 +643,18 @@ const SignupForm = (props) => {
   );
 };
 
-const useStyles = makeStyles((theme) => ({
-  inputRow: {
-    margin: theme.spacing(3, 0)
-  },
-  sigCanvas: {
-    border: "1px solid grey"
-  },
-  sigCanvasClear: {
-    position: "absolute",
-    background: "#f3f3f3",
-    top: "-20px"
-  },
-  sigCanvasSave: {
-    position: "absolute",
-    background: "#f3f3f3",
-    top: "30px"
-  },
-  sigImage: {
-    backgroundSize: "200px 50px",
-    width: "200px",
-    height: "50px",
-    backgroundColor: "white"
-  },
-  signupActions: {
-    marginTop: theme.spacing(1),
-    maxWidth: "506px",
-    marginLeft: "auto",
-    marginRight: "auto",
-    textAlign: "right",
-    display: "block"
-  }
-}));
+SignupForm.defaultProps = {
+  errors: null,
+  onFormSubmit: () => {},
+};
+
+SignupForm.propTypes = {
+  errors: PropTypes.arrayOf(
+    PropTypes.shape({
+      msg: PropTypes.string.isRequired,
+    }),
+  ),
+  onFormSubmit: PropTypes.func,
+};
 
 export default SignupForm;

@@ -2,30 +2,34 @@ import React from "react";
 
 import MenuItem from "@material-ui/core/MenuItem";
 import TextField from "@material-ui/core/TextField";
+import PropTypes from "prop-types";
 
 const getRegions = (country) => {
   if (!country) {
     return [];
   }
   return country[2].split("|").map((regionPair) => {
-    let [regionName = null, regionInShort] = regionPair.split("~");
+    const [regionName = null, regionInShort] = regionPair.split("~");
     return [regionName, regionInShort];
   });
 };
 
 function RegionMUISelectors(props) {
+  const {
+    size, label, region, handleChange, outlined, country,
+  } = props;
   return (
     <TextField
-      size={props.size || "medium"}
+      size={size}
       id="state"
-      label={props.label}
-      value={props.region}
+      label={label}
+      value={region}
       select
-      onChange={(e) => props.handleChange("region", e.target.value)}
+      onChange={(e) => handleChange("region", e.target.value)}
       fullWidth
-      variant={!!props.outlined ? "outlined" : "standard"}
+      variant={outlined && "outlined"}
     >
-      {getRegions(props.country).map((option, index) => (
+      {getRegions(country).map((option) => (
         <MenuItem key={option[0]} value={option[1]}>
           {option[0]}
         </MenuItem>
@@ -33,5 +37,24 @@ function RegionMUISelectors(props) {
     </TextField>
   );
 }
+
+RegionMUISelectors.defaultProps = {
+  size: "medium",
+  outlined: "standard",
+  country: [],
+};
+
+RegionMUISelectors.propTypes = {
+  size: PropTypes.string,
+  outlined: PropTypes.string,
+  label: PropTypes.string.isRequired,
+  region: PropTypes.string.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  country: PropTypes.arrayOf(
+    PropTypes.shape({
+      option: PropTypes.arrayOf(),
+    }),
+  ),
+};
 
 export default RegionMUISelectors;

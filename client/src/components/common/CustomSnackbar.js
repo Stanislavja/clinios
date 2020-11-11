@@ -6,11 +6,13 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { closeSnackbar } from "../../store/auth/actions";
 
+/* eslint-disable */
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
+/* eslint-enable */
 
-const CustomSnackbar = (props) => {
+const CustomSnackbar = () => {
   const dispatch = useDispatch();
 
   const isOpen = useSelector((state) => state.common.snackbar.isOpen);

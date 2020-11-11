@@ -7,5 +7,5 @@ export default {
   MuiButton,
   MuiIconButton,
   MuiRadio,
-  MuiTab
+  MuiTab,
 };

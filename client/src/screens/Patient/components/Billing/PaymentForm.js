@@ -5,15 +5,31 @@ import {
   Button,
   Grid,
   Typography,
-  FormControlLabel
+  FormControlLabel,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
+
+const useStyles = makeStyles((theme) => ({
+  inputRow: {
+    margin: theme.spacing(3, 0),
+  },
+  processPaymentButton: {
+    margin: theme.spacing(3, 0),
+  },
+  amountContainer: {
+    marginLeft: "0px !important",
+  },
+  formInput: {
+    marginBottom: theme.spacing(1),
+  },
+}));
 
 const PaymentForm = (props) => {
   const classes = useStyles();
   const { onClose } = props;
 
-  const processPaymentHandler = (e) => {
+  const processPaymentHandler = () => {
     onClose();
   };
 
@@ -85,19 +101,9 @@ const PaymentForm = (props) => {
   );
 };
 
-const useStyles = makeStyles((theme) => ({
-  inputRow: {
-    margin: theme.spacing(3, 0)
-  },
-  processPaymentButton: {
-    margin: theme.spacing(3, 0)
-  },
-  amountContainer: {
-    marginLeft: "0px !important"
-  },
-  formInput: {
-    marginBottom: theme.spacing(1)
-  }
-}));
+PaymentForm.propTypes = {
+  onClose: PropTypes.func.isRequired,
+};
+
 
 export default PaymentForm;

@@ -10,27 +10,28 @@ import {
   TableHead,
   TableRow,
   Tooltip,
-  withStyles
+  withStyles,
 } from "@material-ui/core";
 import moment from "moment";
+import PropTypes from "prop-types";
 import NumberFormat from "react-number-format";
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   tableContainer: {
     minWidth: 450,
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
   },
   detailLink: {
     color: theme.palette.text.link,
-    cursor: "pointer"
+    cursor: "pointer",
   },
   overFlowControl: {
     maxWidth: "130px",
     textOverflow: "ellipsis",
     overflow: "hidden",
-    whiteSpace: "nowrap"
-  }
+    whiteSpace: "nowrap",
+  },
 }));
 
 const StyledTableCell = withStyles((theme) => ({
@@ -38,27 +39,27 @@ const StyledTableCell = withStyles((theme) => ({
     backgroundColor: theme.palette.grey,
     color: theme.palette.grey,
     fontSize: "12px",
-    fontWeight: 700
+    fontWeight: 700,
   },
   body: {
-    fontSize: 14
-  }
+    fontSize: 14,
+  },
 }))(TableCell);
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
     fontSize: 14,
     "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover
+      backgroundColor: theme.palette.action.hover,
     },
     "& th": {
-      fontSize: 12
+      fontSize: 12,
     },
     "& td": {
       fontSize: 12,
-      height: "50px"
-    }
-  }
+      height: "50px",
+    },
+  },
 }))(TableRow);
 
 const LightTooltip = withStyles((theme) => ({
@@ -66,8 +67,8 @@ const LightTooltip = withStyles((theme) => ({
     backgroundColor: theme.palette.common.white,
     color: "rgba(0, 0, 0, 0.87)",
     boxShadow: theme.shadows[1],
-    fontSize: 13
-  }
+    fontSize: 13,
+  },
 }))(Tooltip);
 
 const FinanceDetailTable = ({ financeDetail }) => {
@@ -111,9 +112,9 @@ const FinanceDetailTable = ({ financeDetail }) => {
                 <TableCell padding="checkbox">
                   <NumberFormat
                     value={detail.amount}
-                    displayType={"text"}
-                    thousandSeparator={true}
-                    prefix={"$"}
+                    displayType="text"
+                    thousandSeparator
+                    prefix="$"
                   />
                 </TableCell>
                 {detail.note && detail.note.length > 40 ? (
@@ -151,6 +152,22 @@ const FinanceDetailTable = ({ financeDetail }) => {
       </TableContainer>
     </div>
   );
+};
+
+FinanceDetailTable.propTypes = {
+  financeDetail: PropTypes.arrayOf(
+    PropTypes.arrayOf({
+      name: PropTypes.string,
+      encounter_title: PropTypes.string,
+      dt: PropTypes.string,
+      note: PropTypes.string,
+      amount: PropTypes.number,
+      cpt_name: PropTypes.string,
+      created: PropTypes.string,
+      hyperlink: PropTypes.string,
+      patient_name: PropTypes.string,
+    }),
+  ).isRequired,
 };
 
 export default FinanceDetailTable;

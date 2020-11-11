@@ -5,20 +5,20 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
-import Video from "./../../../../components/videos/Video";
+import Video from "../../../../components/videos/Video";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    padding: "25px 0px"
+    padding: "25px 0px",
   },
   title: {
-    paddingBottom: theme.spacing(.5)
+    paddingBottom: theme.spacing(0.5),
   },
   action: {
     textTransform: "none",
-    marginTop: theme.spacing(2)
-  }
+    marginTop: theme.spacing(2),
+  },
 }));
 
 export default function Backup() {

@@ -5,7 +5,8 @@
     "browser": true
   },
   "plugins": [
-    "simple-import-sort", "import"
+    "simple-import-sort",
+    "import"
   ],
   "extends": [
     "airbnb",
@@ -27,9 +28,18 @@
     }
   },
   "rules": {
-    "indent": ["error", 2,
-      { 
-        "VariableDeclarator": { "var": 2, "let": 2, "const": 3 },
+    "class-methods-use-this": [
+      0
+    ],
+    "indent": [
+      "error",
+      2,
+      {
+        "VariableDeclarator": {
+          "var": 2,
+          "let": 2,
+          "const": 3
+        },
         "outerIIFEBody": 0,
         "MemberExpression": 1,
         "ArrayExpression": 1,
@@ -37,16 +47,26 @@
         "ImportDeclaration": 1,
         "flatTernaryExpressions": true,
         "ignoreComments": true,
-        "SwitchCase": 1 
+        "SwitchCase": 1
       }
     ],
-    "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 1 }],
+    "no-multiple-empty-lines": [
+      "error",
+      {
+        "max": 2,
+        "maxEOF": 1
+      }
+    ],
     "no-var": "error",
     "import/no-duplicates": "error",
     "import/order": [
       "error",
       {
-        "groups": ["builtin", "external", "internal"],
+        "groups": [
+          "builtin",
+          "external",
+          "internal"
+        ],
         "pathGroups": [
           {
             "pattern": "react",
@@ -54,7 +74,9 @@
             "position": "before"
           }
         ],
-        "pathGroupsExcludedImportTypes": ["react"],
+        "pathGroupsExcludedImportTypes": [
+          "react"
+        ],
         "newlines-between": "always",
         "alphabetize": {
           "order": "asc",
@@ -69,7 +91,29 @@
         "allowTemplateLiterals": true
       }
     ],
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-    "no-console": 1
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".js",
+          ".jsx"
+        ]
+      }
+    ],
+    "no-console": 1,
+    "max-len": [
+      "error",
+      {
+        "code": 110,
+        "ignoreComments": true
+      }
+    ],
+    "react/jsx-props-no-spreading": "off",
+    "camelcase": [
+      0
+    ],
+    "import/prefer-default-export": "off",
+    "no-nested-ternary": "off",
+    "no-underscore-dangle": "off"
   }
 }

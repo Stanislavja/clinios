@@ -1,16 +1,19 @@
 import * as React from "react";
-import Typography from "@material-ui/core/Typography";
+
+import {
+  Button, Container, CssBaseline, makeStyles,
+} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import { Button, Container, CssBaseline, makeStyles } from "@material-ui/core";
-import { AuthConsumer } from "../../../../providers/AuthProvider";
-import PatientPortalHeaderService from "../../../../services/patientPortalHeader.service";
+import Typography from "@material-ui/core/Typography";
 import moment from "moment";
 import ReactHtmlParser from "react-html-parser";
+
+import PatientPortalHeaderService from "../../../../services/patientPortalHeader.service";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    padding: "40px 0px"
+    padding: "40px 0px",
   },
   uploadButtons: {
     display: "flex",
@@ -20,16 +23,16 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
     "& h1": {
       [theme.breakpoints.up("md")]: {
-        marginRight: theme.spacing(4)
-      }
-    }
+        marginRight: theme.spacing(4),
+      },
+    },
   },
   portal: {
     border: "1px solid",
     borderColor: "textPrimary",
     margin: "5px 0px",
     padding: "10px",
-    height: "500px"
+    height: "500px",
   },
   textField: {
     width: "100%",
@@ -40,8 +43,8 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "inherit",
     color: "inherit",
     fontSize: "inherit",
-    resize: "none"
-  }
+    resize: "none",
+  },
 }));
 
 const PortalHeader = () => {
@@ -67,7 +70,7 @@ const PortalHeader = () => {
 
   const editPatientPortalHeader = () => {
     PatientPortalHeaderService.editClientPortalHeader(portalId, {
-      header: editedHeader
+      header: editedHeader,
     });
   };
 
@@ -98,83 +101,81 @@ const PortalHeader = () => {
   };
 
   return (
-    <AuthConsumer>
-      {({ user }) => (
-        <React.Fragment>
-          <CssBaseline />
-          <Container maxWidth={false} className={classes.root}>
-            <div className={classes.uploadButtons}>
-              <Typography
-                component="h1"
-                variant="h2"
-                color="textPrimary"
-                className={classes.title}
-              >
-                Portal Header
-              </Typography>
-              <Button
-                variant="contained"
-                color="primary"
-                component="span"
-                onClick={handleOnSaveClick}
-              >
-                Save
-              </Button>
-            </div>
+    <>
+      <CssBaseline />
+      <Container maxWidth={false} className={classes.root}>
+        <div className={classes.uploadButtons}>
+          <Typography
+            component="h1"
+            variant="h2"
+            color="textPrimary"
+            className={classes.title}
+          >
+            Portal Header
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            component="span"
+            onClick={handleOnSaveClick}
+          >
+            Save
+          </Button>
+        </div>
+        <Grid container justify="center" spacing={2}>
+          <Grid item md={12} xs={12}>
+            <Typography component="p" variant="body2" color="textPrimary">
+              This page is used to set the patient portal header
+            </Typography>
             <Grid container justify="center" spacing={2}>
-              <Grid item md={12} xs={12}>
-                <Typography component="p" variant="body2" color="textPrimary">
-                  This page is used to set the patient portal header
-                </Typography>
-                <Grid container justify="center" spacing={2}>
-                  <Grid item md={5} xs={12}>
-                    <div className={classes.portal}>
-                      {isInEditMode ? (
-                        <textarea
-                          className={classes.textField}
-                          onChange={(e) => setEditedHeader(e.target.value)}
-                          onKeyUp={handleKeyUp}
-                        >
-                          {header}
-                        </textarea>
-                      ) : (
-                        <Typography
-                          component="p"
-                          variant="body2"
-                          color="textPrimary"
-                          onDoubleClick={handleDoubleClick}
-                        >
-                          {ReactHtmlParser(header)}
-                        </Typography>
-                      )}
-                    </div>
+              <Grid item md={5} xs={12}>
+                <div className={classes.portal}>
+                  {isInEditMode ? (
+                    <textarea
+                      className={classes.textField}
+                      onChange={(e) => setEditedHeader(e.target.value)}
+                      onKeyUp={handleKeyUp}
+                    >
+                      {header}
+                    </textarea>
+                  ) : (
                     <Typography
                       component="p"
                       variant="body2"
                       color="textPrimary"
+                      onDoubleClick={handleDoubleClick}
                     >
-                      Updated: {`${updated} ${updatedUser}`}
+                      {ReactHtmlParser(header)}
                     </Typography>
-                  </Grid>
-                  <Grid item md={7} xs={12}>
-                    <div className={classes.portal}>
-                      <Typography
-                        component="p"
-                        variant="body2"
-                        color="textPrimary"
-                        onDoubleClick={handleDoubleClick}
-                      >
-                        {ReactHtmlParser(header)}
-                      </Typography>
-                    </div>
-                  </Grid>
-                </Grid>
+                  )}
+                </div>
+                <Typography
+                  component="p"
+                  variant="body2"
+                  color="textPrimary"
+                >
+                  Updated:
+                  {" "}
+                  {`${updated} ${updatedUser}`}
+                </Typography>
+              </Grid>
+              <Grid item md={7} xs={12}>
+                <div className={classes.portal}>
+                  <Typography
+                    component="p"
+                    variant="body2"
+                    color="textPrimary"
+                    onDoubleClick={handleDoubleClick}
+                  >
+                    {ReactHtmlParser(header)}
+                  </Typography>
+                </div>
               </Grid>
             </Grid>
-          </Container>
-        </React.Fragment>
-      )}
-    </AuthConsumer>
+          </Grid>
+        </Grid>
+      </Container>
+    </>
   );
 };
 

@@ -18,28 +18,28 @@ import { setSuccess, setError } from "../../../../store/common/actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   title: {
-    paddingBottom: theme.spacing(1)
+    paddingBottom: theme.spacing(1),
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 180
+    minWidth: 180,
   },
   form: {
     display: "flex",
     flexDirection: "column",
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   formElment: {
     marginTop: theme.spacing(2),
-    width: "250px"
+    width: "250px",
   },
   submit: {
     width: "100px",
-    marginTop: theme.spacing(4)
-  }
+    marginTop: theme.spacing(4),
+  },
 }));
 
 function NumberFormatCustom(props) {
@@ -53,8 +53,8 @@ function NumberFormatCustom(props) {
         onChange({
           target: {
             name: props.name,
-            value: values.value
-          }
+            value: values.value,
+          },
         });
       }}
       thousandSeparator
@@ -66,7 +66,7 @@ function NumberFormatCustom(props) {
 NumberFormatCustom.propTypes = {
   inputRef: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
 };
 
 export default function MyProfile() {
@@ -96,11 +96,11 @@ export default function MyProfile() {
         title,
         created,
         ...(selectedForwardEmail > 0 && {
-          email_forward_user_id: selectedForwardEmail
+          email_forward_user_id: selectedForwardEmail,
         }),
         phone,
-        ...(password.length && { password })
-      }
+        ...(password.length && { password }),
+      },
     };
 
     MySelfService.updateProfile(payload, userId).then(
@@ -109,23 +109,23 @@ export default function MyProfile() {
       },
       (error) => {
         dispatch(setError(error));
-      }
+      },
     );
   };
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-    const userId = user.id;
-    setUserId(userId);
+    const user_Id = user.id;
+    setUserId(user_Id);
 
-    if (userId != null) {
-      MySelfService.getForwardEmail(userId).then((res) => {
+    if (user_Id != null) {
+      MySelfService.getForwardEmail(user_Id).then((res) => {
         setForwardEmails(res.data);
       });
 
-      MySelfService.getProfile(userId).then((res) => {
+      MySelfService.getProfile(user_Id).then((res) => {
         const profile = res.data;
-        setName(profile.firstname + " " + profile.lastname);
+        setName(`${profile.firstname} ${profile.lastname}`);
         setEmail(profile.email);
         setTitle(profile.title);
         setCreated(moment(profile.created).format("YYYY-MM-DD"));
@@ -163,9 +163,9 @@ export default function MyProfile() {
               className={classes.formElment}
               onChange={(event) => setName(event.target.value)}
               size="small"
-              disabled={true}
+              disabled
               InputProps={{
-                readOnly: true
+                readOnly: true,
               }}
             />
             <TextField
@@ -175,9 +175,9 @@ export default function MyProfile() {
               className={classes.formElment}
               onChange={(event) => setTitle(event.target.value)}
               size="small"
-              disabled={true}
+              disabled
               InputProps={{
-                readOnly: true
+                readOnly: true,
               }}
             />
             <TextField
@@ -187,9 +187,9 @@ export default function MyProfile() {
               className={classes.formElment}
               onChange={(event) => setEmail(event.target.value)}
               size="small"
-              disabled={true}
+              disabled
               InputProps={{
-                readOnly: true
+                readOnly: true,
               }}
             />
             <TextField
@@ -201,9 +201,9 @@ export default function MyProfile() {
               onChange={(event) => setCreated(event.target.value)}
               type="date"
               size="small"
-              disabled={true}
+              disabled
               InputProps={{
-                readOnly: true
+                readOnly: true,
               }}
             />
             <FormControl
@@ -220,7 +220,7 @@ export default function MyProfile() {
                 }}
                 inputProps={{
                   name: "Forward Email",
-                  id: "age-native-simple"
+                  id: "age-native-simple",
                 }}
                 label="Forward Email"
               >
@@ -239,8 +239,7 @@ export default function MyProfile() {
               value={phone}
               className={classes.formElment}
               onChange={(event) => {
-                event.target.value = event.target.value.slice(0, 25);
-                setPhone(event.target.value);
+                setPhone(event.target.value.slice(0, 25));
               }}
               size="small"
             />

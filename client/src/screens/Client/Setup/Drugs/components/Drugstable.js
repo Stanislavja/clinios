@@ -11,29 +11,31 @@ import {
   TableHead,
   TableRow,
   withStyles,
-  FormControlLabel
+  FormControlLabel,
 } from "@material-ui/core";
 import { green, grey } from "@material-ui/core/colors";
 import Alert from "@material-ui/lab/Alert";
 import moment from "moment";
+import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 
 import DrugsService from "../../../../../services/drugs.service";
 import { setSuccess } from "../../../../../store/common/actions";
 
+
 const useStyles = makeStyles((theme) => ({
   tableContainer: {
     minWidth: 450,
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
   },
   actions: {
     textAlign: "center",
     display: "flex",
     border: "none",
     "& button": {
-      fontSize: "12px"
-    }
-  }
+      fontSize: "12px",
+    },
+  },
 }));
 
 const StyledTableCell = withStyles((theme) => ({
@@ -41,61 +43,62 @@ const StyledTableCell = withStyles((theme) => ({
     backgroundColor: theme.palette.grey,
     color: theme.palette.grey,
     fontSize: "12px",
-    fontWeight: 700
+    fontWeight: 700,
   },
   body: {
-    fontSize: 14
-  }
+    fontSize: 14,
+  },
 }))(TableCell);
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
     fontSize: 14,
     "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover
+      backgroundColor: theme.palette.action.hover,
     },
     "& th": {
-      fontSize: 12
+      fontSize: 12,
     },
     "& td": {
       fontSize: 12,
-      height: "50px"
-    }
-  }
+      height: "50px",
+    },
+  },
 }))(TableRow);
 
 const GreenSwitch = withStyles({
   switchBase: {
     color: grey[300],
     "&$checked": {
-      color: green[500]
+      color: green[500],
     },
     "&$checked + $track": {
-      backgroundColor: green[500]
-    }
+      backgroundColor: green[500],
+    },
   },
   checked: {},
-  track: {}
+  track: {},
 })(Switch);
 
 const Drugstable = ({ user, result, fetchSearchDrugs }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  let [state, setState] = useState(result);
-  let [errors, setErrors] = useState([]);
+  const [state, setState] = useState(result);
+  const [errors, setErrors] = useState([]);
 
   const changeHandler = (event, drugId) => {
     const payload = {
-      drug_id: drugId
+      drug_id: drugId,
     };
-    let checked = event.target.checked;
+    const { checked } = event.target;
     setState(
       result.map((item) => {
         if (drugId === item.id) {
+          // eslint-disable-next-line no-param-reassign
           item.favorite = checked;
         }
         return state;
-      })
+      }),
     );
     if (checked === true) {
       DrugsService.addFavorite(drugId, user.id, payload).then(
@@ -108,7 +111,7 @@ const Drugstable = ({ user, result, fetchSearchDrugs }) => {
           setTimeout(() => {
             setErrors(error.response.error);
           }, 300);
-        }
+        },
       );
     } else {
       DrugsService.deleteFavorite(drugId).then(
@@ -121,15 +124,16 @@ const Drugstable = ({ user, result, fetchSearchDrugs }) => {
           setTimeout(() => {
             setErrors(error.response.error);
           }, 300);
-        }
+        },
       );
     }
   };
 
   return (
     <div>
-      {errors &&
-        errors.map((error, index) => (
+      {errors
+        && errors.map((error, index) => (
+          // eslint-disable-next-line react/no-array-index-key
           <Alert severity="error" key={index}>
             {error.msg}
           </Alert>
@@ -156,7 +160,7 @@ const Drugstable = ({ user, result, fetchSearchDrugs }) => {
                 </TableCell>
                 <TableCell padding="checkbox">
                   <FormControlLabel
-                    control={
+                    control={(
                       <GreenSwitch
                         size="small"
                         checked={Boolean(drug.favorite)}
@@ -168,7 +172,7 @@ const Drugstable = ({ user, result, fetchSearchDrugs }) => {
                           }, 200);
                         }}
                       />
-                    }
+                    )}
                   />
                 </TableCell>
                 <TableCell padding="checkbox">
@@ -182,6 +186,24 @@ const Drugstable = ({ user, result, fetchSearchDrugs }) => {
       </TableContainer>
     </div>
   );
+};
+
+Drugstable.propTypes = {
+  user: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  ).isRequired,
+  result: PropTypes.arrayOf(
+    PropTypes.arrayOf({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      favorite: PropTypes.string,
+      updated: PropTypes.string,
+      updated_name: PropTypes.string,
+    }),
+  ).isRequired,
+  fetchSearchDrugs: PropTypes.func.isRequired,
 };
 
 export default Drugstable;

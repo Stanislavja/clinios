@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
 import Colors from "../../../../../theme/colors";
@@ -15,13 +16,13 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "600",
     fontSize: "1em",
     "& h2": {
-      color: "#fff"
-    }
+      color: "#fff",
+    },
   },
   titleContainer: {
     padding: "0 0 0 1em",
     borderBottom: `1px solid ${Colors.border}`,
-    minHeight: 47
+    minHeight: 47,
   },
   providers: {
     display: "block",
@@ -35,11 +36,11 @@ const useStyles = makeStyles((theme) => ({
       padding: "3px 0px",
       cursor: "pointer",
       "&:hover": {
-        background: "#fafafa"
+        background: "#fafafa",
       },
       "& div": {
-        flex: 2
-      }
+        flex: 2,
+      },
     },
     "& a": {
       fontSize: "13px",
@@ -52,21 +53,21 @@ const useStyles = makeStyles((theme) => ({
       width: "100%",
       color: theme.palette.text.primary,
       "&:hover": {
-        background: "#fafafa"
+        background: "#fafafa",
       },
       "& div": {
-        flex: 2
-      }
-    }
+        flex: 2,
+      },
+    },
   },
   providersLabel: {
     fontWeight: 600,
-    marginBottom: theme.spacing(1)
+    marginBottom: theme.spacing(1),
   },
   count: {
     width: "30px",
-    flex: "1 !important"
-  }
+    flex: "1 !important",
+  },
 }));
 
 const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
@@ -101,17 +102,17 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
             >
               <div>Patient Labs</div>
               <div className={classes.count}>
-                {!!providerDetails &&
-                  providerDetails.patientLabs &&
-                  providerDetails.patientLabs["count(l.id)"]}
+                {!!providerDetails
+                  && providerDetails.patientLabs
+                  && providerDetails.patientLabs["count(l.id)"]}
               </div>
               <div>
-                {!!providerDetails &&
-                  providerDetails.patientLabs &&
-                  `${moment(
-                    providerDetails.patientLabs["min(l.created)"]
+                {!!providerDetails
+                  && providerDetails.patientLabs
+                  && `${moment(
+                    providerDetails.patientLabs["min(l.created)"],
                   ).format("ll")} (${moment(
-                    providerDetails.patientLabs["min(l.created)"]
+                    providerDetails.patientLabs["min(l.created)"],
                   )
                     .startOf("day")
                     .fromNow()})`}
@@ -123,17 +124,17 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
             <Link to={`/process-message/${selectedProvider.id}`}>
               <div>Messages from Patients</div>
               <div className={classes.count}>
-                {!!providerDetails &&
-                  providerDetails.messageFromPatients &&
-                  providerDetails.messageFromPatients["count(m.id)"]}
+                {!!providerDetails
+                  && providerDetails.messageFromPatients
+                  && providerDetails.messageFromPatients["count(m.id)"]}
               </div>
               <div>
-                {!!providerDetails &&
-                  providerDetails.patientLabs &&
-                  `${moment(
-                    providerDetails.patientLabs["min(m.created)"]
+                {!!providerDetails
+                  && providerDetails.patientLabs
+                  && `${moment(
+                    providerDetails.patientLabs["min(m.created)"],
                   ).format("ll")} (${moment(
-                    providerDetails.patientLabs["min(m.created)"]
+                    providerDetails.patientLabs["min(m.created)"],
                   )
                     .startOf("day")
                     .fromNow()})`}
@@ -143,24 +144,24 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
           <li>
             <div>Messages To Patient Unread</div>
             <div className={classes.count}>
-              {!!providerDetails &&
-                providerDetails.messageToPatientsNotRead &&
-                providerDetails.messageToPatientsNotRead["count(m.id)"]}
+              {!!providerDetails
+                && providerDetails.messageToPatientsNotRead
+                && providerDetails.messageToPatientsNotRead["count(m.id)"]}
             </div>
             <div>
-              {!!providerDetails &&
-              providerDetails.messageToPatientsNotRead &&
-              providerDetails.messageToPatientsNotRead[
+              {!!providerDetails
+              && providerDetails.messageToPatientsNotRead
+              && providerDetails.messageToPatientsNotRead[
                 "min(m.unread_notify_dt)"
               ]
                 ? `${moment(
                   providerDetails.messageToPatientsNotRead[
                     "min(m.unread_notify_dt)"
-                  ]
+                  ],
                 ).format("ll")} (${moment(
                   providerDetails.messageToPatientsNotRead[
                     "min(m.unread_notify_dt)"
-                  ]
+                  ],
                 )
                   .startOf("day")
                   .fromNow()})`
@@ -170,24 +171,24 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
           <li>
             <div>Patient Appointments Request</div>
             <div className={classes.count}>
-              {!!providerDetails &&
-                providerDetails.patientAppointmentRequest &&
-                providerDetails.patientAppointmentRequest["count(m.id)"]}
+              {!!providerDetails
+                && providerDetails.patientAppointmentRequest
+                && providerDetails.patientAppointmentRequest["count(m.id)"]}
             </div>
             <div>
-              {!!providerDetails &&
-              providerDetails.patientAppointmentRequest &&
-              providerDetails.patientAppointmentRequest[
+              {!!providerDetails
+              && providerDetails.patientAppointmentRequest
+              && providerDetails.patientAppointmentRequest[
                 "min(m.unread_notify_dt)"
               ]
                 ? `${moment(
                   providerDetails.patientAppointmentRequest[
                     "min(m.unread_notify_dt)"
-                  ]
+                  ],
                 ).format("ll")} (${moment(
                   providerDetails.messageToPatientsNotRead[
                     "min(m.unread_notify_dt)"
-                  ]
+                  ],
                 )
                   .startOf("day")
                   .fromNow()})`
@@ -200,4 +201,28 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
   );
 };
 
+ProviderDetailsCard.propTypes = {
+  selectedProvider: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
+  providerDetails: PropTypes.shape({
+    patientLabs: PropTypes.shape({
+      "count(l.id)": PropTypes.number,
+      "min(l.created)": PropTypes.number,
+      "min(m.created)": PropTypes.number,
+    }),
+    messageFromPatients: PropTypes.shape({
+      "count(m.id)": PropTypes.number,
+    }),
+    messageToPatientsNotRead: PropTypes.shape({
+      "count(m.id)": PropTypes.number,
+      "min(m.unread_notify_dt)": PropTypes.string,
+    }),
+    patientAppointmentRequest: PropTypes.shape({
+      "count(m.id)": PropTypes.number,
+      "min(m.unread_notify_dt)": PropTypes.string,
+    }),
+  }).isRequired,
+};
 export default ProviderDetailsCard;

@@ -4,16 +4,16 @@ import { makeStyles } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
-import Video from "./../../../../components/videos/Video";
+import Video from "../../../../components/videos/Video";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
-    padding: "25px 0px"
-  }
+    padding: "25px 0px",
+  },
 }));
 
-const Forms = (props) => {
+const Forms = () => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
@@ -26,7 +26,7 @@ const Forms = (props) => {
         Forms
       </Typography>
       <Grid container justify="center" spacing={8}>
-        <Grid item md={6} xs={12}></Grid>
+        <Grid item md={6} xs={12} />
         <Grid item md={6} xs={12}>
           <Video url="https://www.youtube.com/watch?v=ysz5S6PUM-U" />
         </Grid>

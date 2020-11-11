@@ -16,12 +16,12 @@ import moment from "moment";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { useParams } from "react-router-dom";
 
+import Dimmer from "../../../../components/common/Dimmer";
+import Error from "../../../../components/common/Error";
 import EmailService from "../../../../services/email.service";
-import Dimmer from "./../../../../components/common/Dimmer";
-import Error from "./../../../../components/common/Error";
-import AuthService from "./../../../../services/patient_portal/auth.service";
-import { resetPasswordSuccess } from "./../../../../store/auth/actions";
-import { setSuccess } from "./../../../../store/common/actions";
+import AuthService from "../../../../services/patient_portal/auth.service";
+import { resetPasswordSuccess } from "../../../../store/auth/actions";
+import { setSuccess } from "../../../../store/common/actions";
 import Success from "./Success";
 
 const useStyles = makeStyles((theme) => ({
@@ -29,41 +29,41 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: "transparent",
-    color: theme.palette.text.secondary
+    color: theme.palette.text.secondary,
   },
   lockIcon: {
-    fontSize: "40px"
+    fontSize: "40px",
   },
   pageTitle: {
-    marginBottom: theme.spacing(3)
+    marginBottom: theme.spacing(3),
   },
   dateOfBirth: {
-    width: "100%"
+    width: "100%",
   },
   Error: {
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   withErrors: {
-    opacity: 0.9
+    opacity: 0.9,
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
+    margin: theme.spacing(3, 0, 2),
   },
   meta: {
     textAlign: "right",
     "& a": {
-      color: theme.palette.text.secondary
-    }
-  }
+      color: theme.palette.text.secondary,
+    },
+  },
 }));
 
 const ForgotPassword = () => {
@@ -95,13 +95,13 @@ const ForgotPassword = () => {
         if (status === 400) {
           setErrors([
             {
-              msg: data.message
-            }
+              msg: data.message,
+            },
           ]);
         } else {
           setErrors([]);
         }
-      }
+      },
     );
   }, [clientCode]);
 
@@ -111,9 +111,9 @@ const ForgotPassword = () => {
     AuthService.passwordChangeRequest(email, {
       patient: {
         dob: moment(dob).format("YYYY-MM-DD"),
-        lastname: lastname,
-        postal: postal
-      }
+        lastname,
+        postal,
+      },
     }).then(
       (response) => {
         setIsLoading(false);
@@ -136,24 +136,24 @@ const ForgotPassword = () => {
 
           if (data && data.user && data.user.email_confirm_dt === null) {
             setRegistrationLink(false);
-            //Send email verification link
+            // Send email verification link
             EmailService.resendEmailVerification(error.response.data.user).then(
               (response) => {
                 console.info(
                   "resendEmailVerification response",
-                  response.response
+                  response.response,
                 );
               },
-              (error) => {
+              (err) => {
                 console.error(
-                  "resendEmailVerification error.response",
-                  error.response
+                  "resendEmailVerification err.response",
+                  err.response,
                 );
-              }
+              },
             );
           }
         }
-      }
+      },
     );
     setEmail("");
   };
@@ -175,21 +175,22 @@ const ForgotPassword = () => {
         </Error>
         {success && (
           <Success
-            header="If that account in our system then we have sent an email with instructions to reset your password!"
+            header="If that account in our system then we have sent an email with instructions
+              to reset your password!"
             loginText="Sign back in"
             client={client}
           />
         )}
         {!success && (
-          <React.Fragment>
+          <>
             <p>
               It happens to the best of us. Enter your email and we'll send you
               reset instructions.
             </p>
             <form
               className={clsx({
-                [classes.form]: true, //always apply
-                [classes.withErrors]: errors.length > 0 //only when isLoading === true
+                [classes.form]: true, // always apply
+                [classes.withErrors]: errors.length > 0, // only when isLoading === true
               })}
               noValidate
               onSubmit={sendPasswordResetEmail}
@@ -265,7 +266,7 @@ const ForgotPassword = () => {
                 </Grid>
               </Grid>
             </form>
-          </React.Fragment>
+          </>
         )}
       </div>
       <Dimmer isOpen={isLoading} />

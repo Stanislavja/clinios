@@ -5,15 +5,29 @@ import {
   Button,
   Grid,
   Typography,
-  MenuItem
+  MenuItem,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
+import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 
+import PatientService from "../../../../services/patient.service";
 import { TransactionFormFields } from "../../../../static/transactionForm";
-import PatientService from "./../../../../services/patient.service";
-import { setError, setSuccess } from "./../../../../store/common/actions";
+import { setError, setSuccess } from "../../../../store/common/actions";
+
+const useStyles = makeStyles((theme) => ({
+  inputRow: {
+    margin: theme.spacing(3, 0),
+  },
+  formInput: {
+    marginBottom: theme.spacing(1),
+  },
+  customLabel: {
+    fontSize: 16,
+    color: "#37474f",
+  },
+}));
 
 const NewTransactionForm = (props) => {
   const classes = useStyles();
@@ -33,7 +47,7 @@ const NewTransactionForm = (props) => {
     const { value, name } = e.target;
     setFormFields({
       ...formFields,
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -45,8 +59,8 @@ const NewTransactionForm = (props) => {
         type_id: formFields.type,
         payment_type: formFields.paymentType,
         amount: formFields.amount,
-        note: formFields.notes
-      }
+        note: formFields.notes,
+      },
     };
     PatientService.createBilling(patientId, reqBody)
       .then((response) => {
@@ -55,23 +69,20 @@ const NewTransactionForm = (props) => {
         onClose();
       })
       .catch((error) => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        let severity = "error";
+        const resMessage = (error.response
+            && error.response.data
+            && error.response.data.message)
+          || error.message
+          || error.toString();
+        const severity = "error";
         dispatch(
           setError({
-            severity: severity,
-            message: resMessage
-          })
+            severity,
+            message: resMessage,
+          }),
         );
       });
   };
-
-  console.log("######## formFields", formFields)
 
   return (
     <>
@@ -85,22 +96,22 @@ const NewTransactionForm = (props) => {
       </Grid>
       <form onSubmit={onFormSubmit}>
         <Grid className={classes.inputRow}>
-          {TransactionFormFields.map((item, index) => (
+          {TransactionFormFields.map((item) => (
             <Grid
-              key={index}
+              key={item.name}
               container
               alignItems="center"
               className={classes.formInput}
             >
               <Grid item lg={2}>
-                <label variant="h4" color="textSecondary">
+                <label htmlFor={item.label} variant="h4" color="textSecondary">
                   {item.label}
                 </label>
               </Grid>
               <Grid item md={4}>
                 {item.baseType === "input" ? (
                   <TextField
-                    variant={"standard"}
+                    variant="standard"
                     name={item.name}
                     id={item.id}
                     type={item.type}
@@ -120,34 +131,32 @@ const NewTransactionForm = (props) => {
                     fullWidth
                     onChange={(e) => handleInputChnage(e)}
                   >
-                    {item.options.map((option, index) => {
-                      return (
-                        <MenuItem key={index} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      );
-                    })}
+                    {item.options.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
                   </TextField>
                 )}
               </Grid>
             </Grid>
           ))}
           <Grid className={classes.formInput} item lg={2}>
-            <label variant="h4" color="textSecondary">
+            <Typography className={classes.customLabel} color="textSecondary">
               Notes
-            </label>
+            </Typography>
           </Grid>
           <Grid item md={12}>
             <TextField
               variant="outlined"
-              name={"notes"}
-              id={"notes"}
-              type={"text"}
+              name="notes"
+              id="notes"
+              type="text"
               required
               fullWidth
-              value={formFields["notes"]}
+              value={formFields.notes}
               onChange={(e) => handleInputChnage(e)}
-              multiline={true}
+              multiline
               rows={5}
             />
           </Grid>
@@ -166,13 +175,10 @@ const NewTransactionForm = (props) => {
   );
 };
 
-const useStyles = makeStyles((theme) => ({
-  inputRow: {
-    margin: theme.spacing(3, 0)
-  },
-  formInput: {
-    marginBottom: theme.spacing(1)
-  }
-}));
+NewTransactionForm.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  patientId: PropTypes.string.isRequired,
+  reloadData: PropTypes.func.isRequired,
+};
 
 export default NewTransactionForm;

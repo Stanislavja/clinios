@@ -16,10 +16,10 @@ const useStyles = makeStyles((theme) => ({
     display: "inline-flex",
     alignItems: "center",
     cursor: "pointer",
-    padding: "10px 10px"
+    padding: "10px 10px",
   },
   subMenus: {
-    zIndex: 9999
+    zIndex: 9999,
   },
   link: {
     color: theme.palette.secondary.main,
@@ -27,8 +27,8 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: "none",
     padding: "5px 0",
     "&:last-child": {
-      border: "none"
-    }
+      border: "none",
+    },
   },
 
   nav: {
@@ -41,19 +41,19 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "1px",
     "& .MuiListItem-divider": {
       "&:last-child": {
-        borderBottom: "none"
-      }
-    }
+        borderBottom: "none",
+      },
+    },
   },
   itemWithSubmenus: {
     color: theme.palette.white,
     padding: "16px 15px",
-    textDecoration: "none"
-  }
+    textDecoration: "none",
+  },
 }));
 
 // menuItems is an array of object like: {content: "", onClick: function}
-export default function DropdownItems({ menuId, parentItem, menuItems }) {
+export default function DropdownItems({ parentItem, menuItems }) {
   const classes = useStyles();
   // for maintaining open and close state
   const [anchorEl, setAnchorEl] = useState(null);
@@ -61,22 +61,18 @@ export default function DropdownItems({ menuId, parentItem, menuItems }) {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
-  const handleClose = (action) => {
+  const handleClose = () => {
     setAnchorEl(null);
   };
 
   return (
-    <React.Fragment>
+    <>
       <Button
         onClick={handleClick}
         className={classes.itemWithSubmenus} /* onMouseOver={handleClick} */
       >
         {parentItem}
-        {Boolean(anchorEl) ? (
-          <ArrowDropUpOutlinedIcon />
-        ) : (
-          <ArrowDropDownOutlinedIcon />
-        )}
+        {anchorEl ? <ArrowDropUpOutlinedIcon /> : <ArrowDropDownOutlinedIcon />}
       </Button>
       <Popper
         className={classes.subMenus}
@@ -89,6 +85,7 @@ export default function DropdownItems({ menuId, parentItem, menuItems }) {
           <ClickAwayListener onClickAway={handleClose}>
             <List component="nav" className={classes.nav}>
               {menuItems.map((item, i) => (
+                // eslint-disable-next-line react/no-array-index-key
                 <ListItem button divider key={i} onClick={handleClose}>
                   <RouterLink
                     to={item.href}
@@ -103,18 +100,12 @@ export default function DropdownItems({ menuId, parentItem, menuItems }) {
           </ClickAwayListener>
         </Paper>
       </Popper>
-    </React.Fragment>
+    </>
   );
 }
 
-// by default we are generating a random id for the dropdown menu
-DropdownItems.defaultProps = {
-  menuId: `simpleMenu`
-};
-
 // For additional type checking
 DropdownItems.propTypes = {
-  menuId: PropTypes.string,
   parentItem: PropTypes.string.isRequired,
-  menuItems: PropTypes.array
+  menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
 };

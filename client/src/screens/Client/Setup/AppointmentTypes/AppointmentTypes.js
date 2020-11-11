@@ -8,17 +8,16 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import _ from "lodash";
 
-import { AuthConsumer } from "./../../../../providers/AuthProvider";
-import AppointmentService from "./../../../../services/appointmentType.service";
+import { AuthConsumer } from "../../../../providers/AuthProvider";
+import AppointmentService from "../../../../services/appointmentType.service";
 import { Appointments } from "./components";
 import DeleteAppointmentModal from "./components/modal/DeleteAppointmentType";
 import NewOrEditAppointment from "./components/modal/NewOrEditAppointmentType";
-//import Video from "./../../../../components/videos/Video";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    padding: "25px 0px"
+    padding: "25px 0px",
   },
   uploadButtons: {
     display: "flex",
@@ -28,19 +27,19 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
     "& h1": {
       [theme.breakpoints.up("md")]: {
-        marginRight: theme.spacing(4)
-      }
-    }
+        marginRight: theme.spacing(4),
+      },
+    },
   },
   card: {
     minHeight: 300,
     display: "flex",
     alignItems: "center",
-    justifyContent: "center"
-  }
+    justifyContent: "center",
+  },
 }));
 
-export default function AppointmentTypes(props) {
+export default function AppointmentTypes() {
   const classes = useStyles();
   const [selectedAppointmentId, setSelectedAppointmentId] = useState("");
   const [selectedappointment, setSelectedAppointment] = useState("");
@@ -63,9 +62,9 @@ export default function AppointmentTypes(props) {
     setIsEditModalOpen(true);
     setIsNewAppointment(false);
     const appointmentById = appointments.filter(
-      (appointment) => appointment.id === id
+      (appointment) => appointment.id === id,
     );
-    if (!!appointmentById) {
+    if (appointmentById) {
       setSelectedAppointment(_.head(appointmentById));
     }
   };
@@ -95,7 +94,7 @@ export default function AppointmentTypes(props) {
   return (
     <AuthConsumer>
       {({ user }) => (
-        <React.Fragment>
+        <>
           <CssBaseline />
           <Container maxWidth={false} className={classes.root}>
             <div className={classes.uploadButtons}>
@@ -123,7 +122,7 @@ export default function AppointmentTypes(props) {
                   onDelete={handleDeleteButton}
                 />
               </Grid>
-              {/*}
+              {/* }
               <Grid item md={12} xs={12}>
                 <Card className={classes.card}>
                   <CardContent>
@@ -149,7 +148,7 @@ export default function AppointmentTypes(props) {
               onClose={() => handleDeleteModalClose(false)}
             />
           </Container>
-        </React.Fragment>
+        </>
       )}
     </AuthConsumer>
   );

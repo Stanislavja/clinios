@@ -10,32 +10,34 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Alert from "@material-ui/lab/Alert";
 import _ from "lodash";
+import PropTypes from "prop-types";
 
-import AuthService from "./../../services/auth.service";
-import { getAcronym } from "./../../utils/helpers";
+import AuthService from "../../services/auth.service";
+import { getAcronym } from "../../utils/helpers";
 import TextFieldWithError from "./TextFieldWithError";
 
 const useStyles = makeStyles((theme) => ({
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   formSectionTitle: {
-    marginBottom: theme.spacing(1)
+    marginBottom: theme.spacing(1),
   },
   personalFormTitle: {
     marginBottom: theme.spacing(1),
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
   },
   checkbox: {
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
-  }
+    margin: theme.spacing(3, 0, 2),
+  },
 }));
 
 const PracticeForm = ({ onFormSubmit, ...props }) => {
+  const { errors } = props;
   const classes = useStyles();
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
@@ -61,8 +63,8 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
   const [fieldErrors, setFieldErrors] = useState([]);
 
   useEffect(() => {
-    const clientCode = getAcronym(name);
-    setClientCode(clientCode);
+    const clientCodeAcc = getAcronym(name);
+    setClientCode(clientCodeAcc);
   }, [name]);
 
   const handleFormSubmission = () => {
@@ -80,7 +82,7 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
         website: url.trim(),
         ein: ein.trim(),
         npi: npi.trim(),
-        code: clientCode.trim()
+        code: clientCode.trim(),
       },
       user: {
         firstname: firstName.trim(),
@@ -88,8 +90,8 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
         email: email.trim(),
         npi: personalNPI.trim(),
         medical_license: medicalLicenseNumber.trim(),
-        password: password.trim()
-      }
+        password: password.trim(),
+      },
     };
 
     onFormSubmit(formData);
@@ -102,26 +104,24 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
         {
           value: event.target.value,
           msg: "Too Weak. Must be atleast 8 Characters",
-          param: "user.password"
-        }
+          param: "user.password",
+        },
       ]);
     } else {
       const updatedErrors = fieldErrors.filter(
-        (error) => error.param !== "user.password"
+        (error) => error.param !== "user.password",
       );
       setFieldErrors(updatedErrors);
     }
   };
 
-  const practiceErrors =
-    props.errors && props.errors.filter((err) => err.param.includes("client"));
-  const userErrors =
-    props.errors && props.errors.filter((err) => err.param.includes("user"));
+  const practiceErrors = errors && errors.filter((err) => err.param.includes("client"));
+  const userErrors = errors && errors.filter((err) => err.param.includes("user"));
 
   const getFieldError = (target, fieldName) => {
-    let value = "client." + fieldName;
+    let value = `client.${fieldName}`;
     if (target) {
-      value = target + "." + fieldName;
+      value = `${target}.${fieldName}`;
     }
     return fieldErrors && fieldErrors.filter((err) => err.param === value);
   };
@@ -129,20 +129,17 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
     if (!event.target) {
       return;
     }
-    if (!target) {
-      target = "client";
-    }
 
     AuthService.validate({
       fieldName: event.target.name,
       value: event.target.value,
-      target
+      target: target || "client",
     })
       .then(
         (response) => {
-          //Remove errors record with param
+          // Remove errors record with param
           const updatedErrors = fieldErrors.filter(
-            (error) => error.param !== response.data.message.param
+            (error) => error.param !== response.data.message.param,
           );
           console.log("updatedErrors:", updatedErrors);
           setFieldErrors(updatedErrors);
@@ -156,11 +153,11 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
           } else {
             const uniqueFieldErrors = _.uniqWith(
               [...fieldErrors, error.response.data.message],
-              _.isEqual
+              _.isEqual,
             );
             setFieldErrors(uniqueFieldErrors);
           }
-        }
+        },
       )
       .catch((err) => {
         console.log("catch err", err);
@@ -177,14 +174,16 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
       >
         Practice Information
       </Typography>
-      {practiceErrors &&
-        practiceErrors.map((error, index) => (
+      {practiceErrors
+        // eslint-disable-next-line react/no-array-index-key
+        && practiceErrors.map((error, index) => (
+          // eslint-disable-next-line react/no-array-index-key
           <Alert severity="error" key={index}>
             {error.msg}
           </Alert>
         ))}
       <TextFieldWithError
-        fieldName="name" 
+        fieldName="name"
         label="Practice Name"
         value={name}
         handleOnChange={(event) => setName(event.target.value)}
@@ -203,9 +202,6 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
         handleOnBlur={(event) => handleAjaxValidation(event)}
         errors={getFieldError("client", "code")}
         inputProps={{ maxLength: 35 }}
-        // helperText={`${
-        //   clientCode.length >= 35 ? "Enter a code between 35 charecter" : ""
-        // }`}
       />
       <TextField
         variant="outlined"
@@ -364,8 +360,9 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
       >
         Your Personal Information
       </Typography>
-      {userErrors &&
-        userErrors.map((error, index) => (
+      {userErrors
+        && userErrors.map((error, index) => (
+          // eslint-disable-next-line react/no-array-index-key
           <Alert severity="error" key={index}>
             {error.msg}
           </Alert>
@@ -457,14 +454,16 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
       />
       <FormControlLabel
         control={<Checkbox value="remember" color="primary" />}
-        label={
+        label={(
           <div>
             <span>
               Check here to indicate that you have read and agree to the terms
-              of the <Link href="/agreement">Clinios Customer Agreement</Link>
+              of the
+              {" "}
+              <Link href="/agreement">Clinios Customer Agreement</Link>
             </span>
           </div>
-        }
+        )}
         className={classes.checkbox}
         onChange={() => setTermsAndConditions(!termsAndConditions)}
       />
@@ -489,4 +488,17 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
   );
 };
 
+PracticeForm.defaultProps = {
+  onFormSubmit: () => {},
+  errors: null,
+};
+
+PracticeForm.propTypes = {
+  onFormSubmit: PropTypes.func,
+  errors: PropTypes.arrayOf(
+    PropTypes.shape({
+      msg: PropTypes.string.isRequired,
+    }),
+  ),
+};
 export default PracticeForm;

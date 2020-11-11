@@ -1,9 +1,8 @@
 {
   "bracketSpacing": true,
-  "printWidth": 80,
+  "printWidth": 110,
   "singleQuote": false,
-  "trailingComma": "none",
+  "trailingComma": "es5",
   "tabWidth": 2,
-  "useTabs": false,
-  "react/jsx-max-props-per-line": [1, { "when": "always" }]
+  "useTabs": false
 }

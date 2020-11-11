@@ -1,6 +1,6 @@
 import React from "react";
 
-import { makeStyles, withStyles , colors } from "@material-ui/core";
+import { makeStyles, withStyles, colors } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -13,20 +13,22 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
+import PropTypes from "prop-types";
+
 const useStyles = makeStyles((theme) => ({
   modal: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   paper: {
-    padding: theme.spacing(2, 4, 3)
+    padding: theme.spacing(2, 4, 3),
   },
   modalAction: {
     borderTop: `1px solid ${theme.palette.background.default}`,
     display: "flex",
-    justifyContent: "space-between"
-  }
+    justifyContent: "space-between",
+  },
 }));
 
 const StyledTableCell = withStyles((theme) => ({
@@ -34,26 +36,26 @@ const StyledTableCell = withStyles((theme) => ({
     backgroundColor: theme.palette.grey,
     color: theme.palette.grey,
     fontSize: "12px",
-    fontWeight: 700
+    fontWeight: 700,
   },
   body: {
-    fontSize: 14
-  }
+    fontSize: 14,
+  },
 }))(TableCell);
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
     fontSize: 14,
     "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover
+      backgroundColor: theme.palette.action.hover,
     },
     "& th": {
-      fontSize: 12
+      fontSize: 12,
     },
     "& td": {
-      fontSize: 12
-    }
-  }
+      fontSize: 12,
+    },
+  },
 }))(TableRow);
 
 // const GetConfigTime = ({ timeStart, timeEnd }) => {
@@ -80,14 +82,14 @@ export default function ConfigModal({ modal, setModal }) {
       onClose={() => setModal({ ...modal, isOpen: false })}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
-      maxWidth={`lg`}
+      maxWidth="lg"
     >
       <div className={classes.paper}>
         <div
           style={{
             marginBottom: "20px",
             display: "flex",
-            justifyContent: "space-between"
+            justifyContent: "space-between",
           }}
         >
           <Typography
@@ -106,7 +108,7 @@ export default function ConfigModal({ modal, setModal }) {
                 onClick={() => setModal({ ...modal, isOpen: false })}
                 style={{
                   borderColor: colors.orange[600],
-                  color: colors.orange[600]
+                  color: colors.orange[600],
                 }}
               >
                 Cancel
@@ -141,6 +143,7 @@ export default function ConfigModal({ modal, setModal }) {
             </TableHead>
             <TableBody>
               {modal.data.map((result, index) => (
+                // eslint-disable-next-line react/no-array-index-key
                 <StyledTableRow key={index}>
                   <TableCell component="th" scope="row">
                     {moment(result.dt).format("lll")}
@@ -208,3 +211,15 @@ export default function ConfigModal({ modal, setModal }) {
     </Dialog>
   );
 }
+
+ConfigModal.propTypes = {
+  modal: PropTypes.shape({
+    isOpen: PropTypes.bool.isRequired,
+    data: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+      }),
+    ),
+  }).isRequired,
+  setModal: PropTypes.func.isRequired,
+};

@@ -5,7 +5,7 @@ export const TransactionFormFields = [
     label: "Date",
     baseType: "input",
     type: "date",
-    options: []
+    options: [],
   },
   {
     name: "type",
@@ -16,21 +16,21 @@ export const TransactionFormFields = [
     options: [
       {
         label: "Service",
-        value: 1
+        value: 1,
       },
       {
         label: "Refund",
-        value: 2
+        value: 2,
       },
       {
         label: "Payment",
-        value: 3
+        value: 3,
       },
       {
         label: "Credit",
-        value: 4
-      }
-    ]
+        value: 4,
+      },
+    ],
   },
   {
     name: "amount",
@@ -38,7 +38,7 @@ export const TransactionFormFields = [
     label: "Amount",
     baseType: "input",
     type: "number",
-    options: []
+    options: [],
   },
   {
     name: "accountNum",
@@ -46,7 +46,7 @@ export const TransactionFormFields = [
     label: "Account Number",
     baseType: "input",
     type: "number",
-    options: []
+    options: [],
   },
   {
     name: "paymentType",
@@ -57,12 +57,12 @@ export const TransactionFormFields = [
     options: [
       {
         label: "Advance",
-        value: "A"
+        value: "A",
       },
       {
         label: "Credit",
-        value: "C"
-      }
-    ]
-  }
+        value: "C",
+      },
+    ],
+  },
 ];

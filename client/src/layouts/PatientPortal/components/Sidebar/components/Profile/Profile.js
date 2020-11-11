@@ -11,36 +11,38 @@ import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { Link as RouterLink } from "react-router-dom";
 
-import { logOut } from "./../../../../../../store/auth/actions";
+import { logOut } from "../../../../../../store/auth/actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    minHeight: "fit-content"
+    minHeight: "fit-content",
   },
   avatar: {
     width: 60,
-    height: 60
+    height: 60,
   },
   name: {
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   authCredential: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
   },
   signOutButton: {
     marginLeft: theme.spacing(1),
-    backgroundColor: fade(theme.palette.secondary.light, 0.15)
-  }
+    backgroundColor: fade(theme.palette.secondary.light, 0.15),
+  },
 }));
 
 const Profile = (props) => {
-  const { className, isAuth, logout, user, ...rest } = props;
+  const {
+    className, isAuth, logout, user, ...rest
+  } = props;
 
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -52,6 +54,7 @@ const Profile = (props) => {
   };
 
   return (
+    // eslint-disable-next-line react/jsx-props-no-spreading
     <div {...rest} className={clsx(classes.root, className)}>
       <Avatar
         alt="Person"
@@ -64,7 +67,7 @@ const Profile = (props) => {
         {user && `${user.firstname} ${user.lastname}`}
       </Typography>
       <Typography variant="body2">{user && user.bio}</Typography>
-      <React.Fragment>
+      <>
         <Divider className={classes.divider} />
         <Hidden lgUp>
           <div className={classes.authCredential}>
@@ -77,14 +80,21 @@ const Profile = (props) => {
             </IconButton>
           </div>
         </Hidden>
-      </React.Fragment>
+      </>
     </div>
   );
 };
 
+Profile.defaultProps = {
+  className: null,
+  logout: () => {},
+};
+
 Profile.propTypes = {
   className: PropTypes.string,
-  user: PropTypes.object.isRequired
+  user: PropTypes.objectOf(PropTypes.object).isRequired,
+  isAuth: PropTypes.bool.isRequired,
+  logout: PropTypes.func,
 };
 
 export default Profile;

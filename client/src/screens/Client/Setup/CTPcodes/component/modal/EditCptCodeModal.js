@@ -1,6 +1,8 @@
 import React from "react";
 
-import { colors, FormControlLabel, FormGroup, Grid } from "@material-ui/core";
+import {
+  colors, FormControlLabel, FormGroup, Grid,
+} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { green, grey } from "@material-ui/core/colors";
 import Dialog from "@material-ui/core/Dialog";
@@ -17,21 +19,21 @@ import NumberFormat from "react-number-format";
 
 const useStyles = makeStyles((theme) => ({
   gridMargin: {
-    margin: "8px 0px"
+    margin: "8px 0px",
   },
   noteMargin: {
-    margin: "15px 0px"
+    margin: "15px 0px",
   },
   title: {
     backgroundColor: theme.palette.primary.light,
     "& h2": {
-      color: "#fff"
-    }
+      color: "#fff",
+    },
   },
   content: {
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
-    fontSize: "18px"
+    fontSize: "18px",
   },
   formControl: {
     display: "flex",
@@ -39,19 +41,19 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     color: theme.palette.text.secondary,
     "& .MuiSelect-select": {
-      minWidth: 120
-    }
+      minWidth: 120,
+    },
   },
   root: {
     paddingLeft: "5px",
     "& .MuiTypography-root": {
-      marginLeft: "5px"
-    }
+      marginLeft: "5px",
+    },
   },
   formHelperText: {
     width: "220px",
     fontSize: "12px",
-    paddingLeft: "10px"
+    paddingLeft: "10px",
   },
   modalAction: {
     borderTop: `1px solid ${theme.palette.background.default}`,
@@ -60,23 +62,22 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
     paddingLeft: theme.spacing(3),
-    paddingRight: theme.spacing(3)
-  }
+    paddingRight: theme.spacing(3),
+  },
 }));
 
 const GreenSwitch = withStyles({
   switchBase: {
     color: grey[300],
     "&$checked": {
-      color: green[500]
+      color: green[500],
     },
     "&$checked + $track": {
-      backgroundColor: green[500]
-    }
+      backgroundColor: green[500],
+    },
   },
-
   checked: {},
-  track: {}
+  track: {},
 })(Switch);
 
 function NumberFormatCustom(props) {
@@ -90,8 +91,8 @@ function NumberFormatCustom(props) {
         onChange({
           target: {
             name: props.name,
-            value: values.value
-          }
+            value: values.value,
+          },
         });
       }}
       thousandSeparator
@@ -103,7 +104,7 @@ function NumberFormatCustom(props) {
 NumberFormatCustom.propTypes = {
   inputRef: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
 };
 
 const EditCptCodeModal = ({
@@ -119,7 +120,7 @@ const EditCptCodeModal = ({
   handleChangeFavorite,
   handleChangeBillable,
   handleChangeNotes,
-  handleEditCptCode
+  handleEditCptCode,
 }) => {
   const classes = useStyles();
   const handleKeyUp = (event) => {
@@ -132,7 +133,7 @@ const EditCptCodeModal = ({
     <div>
       <Dialog
         maxWidth="sm"
-        fullWidth={true}
+        fullWidth
         open={isOpen}
         onClose={hendleOnClose}
         aria-labelledby="alert-dialog-title"
@@ -149,15 +150,15 @@ const EditCptCodeModal = ({
             <FormControl component="div" className={classes.formControl}>
               <Grid item md={3} className={classes.gridMargin}>
                 <TextField
-                  fullWidth={true}
+                  fullWidth
                   label="CPT ID"
                   value={cpt_id}
                   variant="outlined"
                   size="small"
                   InputLabelProps={{
-                    shrink: true
+                    shrink: true,
                   }}
-                  disabled={true}
+                  disabled
                 />
               </Grid>
               <p className={classes.formHelperText}>The name of the appointm</p>
@@ -165,15 +166,15 @@ const EditCptCodeModal = ({
             <FormControl component="div" className={classes.formControl}>
               <Grid item xs={6} md={9} className={classes.gridMargin}>
                 <TextField
-                  fullWidth={true}
+                  fullWidth
                   label="CPT Description"
                   value={cpt_description}
                   variant="outlined"
                   size="small"
                   InputLabelProps={{
-                    shrink: true
+                    shrink: true,
                   }}
-                  disabled={true}
+                  disabled
                 />
               </Grid>
               <p className={classes.formHelperText}>
@@ -183,17 +184,17 @@ const EditCptCodeModal = ({
             <FormControl component="div" className={classes.formControl}>
               <Grid item md={2} className={classes.gridMargin}>
                 <TextField
-                  fullWidth={true}
-                  autoFocus={true}
+                  fullWidth
+                  autoFocus
                   label="Fee"
-                  value={cpt_fee ? cpt_fee : ""}
+                  value={cpt_fee || ""}
                   variant="outlined"
                   size="small"
                   InputProps={{
-                    inputComponent: NumberFormatCustom
+                    inputComponent: NumberFormatCustom,
                   }}
                   InputLabelProps={{
-                    shrink: true
+                    shrink: true,
                   }}
                   onChange={handleChangeFee}
                   onKeyUp={handleKeyUp}
@@ -203,7 +204,7 @@ const EditCptCodeModal = ({
             </FormControl>
             <FormGroup>
               <FormControlLabel
-                control={
+                control={(
                   <GreenSwitch
                     checked={Boolean(cpt_favorite)}
                     size="small"
@@ -211,12 +212,12 @@ const EditCptCodeModal = ({
                     onChange={handleChangeFavorite}
                     onKeyUp={handleKeyUp}
                   />
-                }
+                )}
                 label="Favorite"
                 className={classes.root}
               />
               <FormControlLabel
-                control={
+                control={(
                   <GreenSwitch
                     checked={Boolean(cpt_billable)}
                     size="small"
@@ -224,7 +225,7 @@ const EditCptCodeModal = ({
                     onChange={handleChangeBillable}
                     onKeyUp={handleKeyUp}
                   />
-                }
+                )}
                 label="Billable"
                 className={classes.root}
               />
@@ -232,16 +233,16 @@ const EditCptCodeModal = ({
             <FormControl component="div" className={classes.formControl}>
               <TextField
                 className={classes.noteMargin}
-                fullWidth={true}
+                fullWidth
                 variant="outlined"
                 multiline
                 name="note"
                 label="Notes"
                 InputLabelProps={{
-                  shrink: true
+                  shrink: true,
                 }}
                 InputProps={{
-                  rows: 8
+                  rows: 8,
                 }}
                 value={cpt_notes}
                 onChange={handleChangeNotes}
@@ -257,7 +258,7 @@ const EditCptCodeModal = ({
             onClick={hendleOnClose}
             style={{
               borderColor: colors.orange[600],
-              color: colors.orange[600]
+              color: colors.orange[600],
             }}
           >
             Cancel
@@ -276,4 +277,19 @@ const EditCptCodeModal = ({
   );
 };
 
+EditCptCodeModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  hendleOnClose: PropTypes.func.isRequired,
+  cpt_id: PropTypes.string.isRequired,
+  cpt_description: PropTypes.string.isRequired,
+  cpt_fee: PropTypes.string.isRequired,
+  cpt_favorite: PropTypes.string.isRequired,
+  cpt_billable: PropTypes.string.isRequired,
+  cpt_notes: PropTypes.string.isRequired,
+  handleChangeFee: PropTypes.func.isRequired,
+  handleChangeFavorite: PropTypes.func.isRequired,
+  handleChangeBillable: PropTypes.func.isRequired,
+  handleChangeNotes: PropTypes.func.isRequired,
+  handleEditCptCode: PropTypes.func.isRequired,
+};
 export default EditCptCodeModal;

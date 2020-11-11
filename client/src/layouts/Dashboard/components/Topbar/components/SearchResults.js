@@ -10,6 +10,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemText from "@material-ui/core/ListItemText";
 import { makeStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
 import { Link as RouterLink } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -20,42 +21,42 @@ const useStyles = makeStyles((theme) => ({
     background: "#f7f7f7",
     zIndex: 9999,
     minWidth: 350,
-    right: 0
+    right: 0,
   },
   CardContent: {
     padding: 0,
     backgroundColor: theme.palette.white,
-    textAlign: "center"
+    textAlign: "center",
   },
   paper: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
   },
   list: {
     width: "100%",
     maxWidth: 360,
-    backgroundColor: theme.palette.background.paper
+    backgroundColor: theme.palette.background.paper,
   },
   listItem: {
-    cursor: "pointer"
-  }
+    cursor: "pointer",
+  },
 }));
 
-const SearchResults = ({ open, results, noContent, handleClose }) => {
+const SearchResults = ({ results, noContent, handleClose }) => {
   const classes = useStyles();
   return (
     <Card className={classes.root}>
       <CardContent className={classes.CardContent}>
         <p
           style={{
-            paddingTop: "20px"
+            paddingTop: "20px",
           }}
         >
           {!noContent && results.length < 1 && <CircularProgress size={20} />}
           {noContent}
         </p>
         <List className={classes.list}>
-          {results &&
-            results.map((result) => (
+          {results
+            && results.map((result) => (
               <>
                 <ListItem
                   component={RouterLink}
@@ -87,4 +88,15 @@ const SearchResults = ({ open, results, noContent, handleClose }) => {
   );
 };
 
+SearchResults.defaultProps = {
+  results: null,
+  noContent: null,
+  handleClose: () => {},
+};
+
+SearchResults.propTypes = {
+  results: PropTypes.arrayOf(PropTypes.object),
+  noContent: PropTypes.string,
+  handleClose: PropTypes.func,
+};
 export default SearchResults;

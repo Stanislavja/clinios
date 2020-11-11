@@ -3,16 +3,30 @@ import React from "react";
 import { Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
+import PropTypes from "prop-types";
+
+const useStyles = makeStyles((theme) => ({
+  text12: {
+    fontSize: 12,
+  },
+  block: {
+    width: 90,
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    padding: theme.spacing(0, 0.5, 0, 0),
+  },
+}));
 
 
-export default function BillingContent(props) {
+const BillingContent = (props) => {
   const classes = useStyles();
   const { data } = props;
 
   return (
     <>
-      {data.map((item, index) => (
-        <Grid key={`${item.dt}_${index}`} container className={classes.inputRow}>
+      {data.map((item) => (
+        <Grid key={`${item.dt}_${item.amount}`} container className={classes.inputRow}>
           <Grid item className={classes.block}>
             <Typography
               component="span"
@@ -28,7 +42,8 @@ export default function BillingContent(props) {
               className={classes.text12}
               color="textPrimary"
             >
-              ${item.amount}
+              $
+              {item.amount}
             </Typography>
           </Grid>
           <Grid item className={classes.block}>
@@ -64,17 +79,10 @@ export default function BillingContent(props) {
       ))}
     </>
   );
-}
+};
 
-const useStyles = makeStyles((theme) => ({
-  text12: {
-    fontSize: 12
-  },
-  block: {
-    width: 90,
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    padding: theme.spacing(0, 0.5, 0, 0)
-  }
-}));
+BillingContent.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
+
+export default BillingContent;

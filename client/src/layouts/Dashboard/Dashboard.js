@@ -4,8 +4,9 @@ import { useMediaQuery } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import clsx from "clsx";
+import PropTypes from "prop-types";
 
-import { AuthConsumer } from "./../../providers/AuthProvider";
+import { AuthConsumer } from "../../providers/AuthProvider";
 import { Topbar, Sidebar, Footer } from "./components";
 
 const useStyles = makeStyles((theme) => ({
@@ -15,15 +16,15 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: 56,
     height: "100%",
     [theme.breakpoints.up("sm")]: {
-      paddingTop: 50
-    }
+      paddingTop: 50,
+    },
   },
   shiftContent: {
-    paddingLeft: 0
+    paddingLeft: 0,
   },
   content: {
-    height: "100%"
-  }
+    height: "100%",
+  },
 }));
 
 const Dashboard = (props) => {
@@ -32,7 +33,7 @@ const Dashboard = (props) => {
   const classes = useStyles();
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("lg"), {
-    defaultMatches: true
+    defaultMatches: true,
   });
   const [openSidebar, setOpenSidebar] = useState(false);
 
@@ -50,7 +51,7 @@ const Dashboard = (props) => {
         <div
           className={clsx({
             [classes.root]: true,
-            [classes.shiftContent]: isDesktop
+            [classes.shiftContent]: isDesktop,
           })}
         >
           <Topbar
@@ -75,6 +76,14 @@ const Dashboard = (props) => {
       )}
     </AuthConsumer>
   );
+};
+
+Dashboard.defaultProps = {
+  children: null,
+};
+
+Dashboard.propTypes = {
+  children: PropTypes.node,
 };
 
 export default Dashboard;

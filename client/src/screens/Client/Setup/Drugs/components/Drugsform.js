@@ -5,28 +5,29 @@ import {
   Checkbox,
   FormControlLabel,
   makeStyles,
-  TextField
+  TextField,
 } from "@material-ui/core";
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
   controlLabel: {
     marginLeft: "0px",
-    marginRight: "0px"
+    marginRight: "0px",
   },
   textField: {
-    width: "250px"
+    width: "250px",
   },
   submit: {
     marginTop: theme.spacing(1),
     padding: "4px 30px",
-    fontSize: "1rem"
-  }
+    fontSize: "1rem",
+  },
 }));
 
 const Drugsform = ({
   fetchSearchDrugs,
   textChangeHandler,
-  checkBoxChangeHandler
+  checkBoxChangeHandler,
 }) => {
   const classes = useStyles();
 
@@ -50,7 +51,7 @@ const Drugsform = ({
       />
       <div>
         <FormControlLabel
-          control={
+          control={(
             <Checkbox
               onChange={checkBoxChangeHandler}
               color="primary"
@@ -58,7 +59,7 @@ const Drugsform = ({
               name="favorite"
               size="small"
             />
-          }
+          )}
           label="Favorite"
         />
       </div>
@@ -74,6 +75,12 @@ const Drugsform = ({
       </Button>
     </div>
   );
+};
+
+Drugsform.propTypes = {
+  fetchSearchDrugs: PropTypes.func.isRequired,
+  textChangeHandler: PropTypes.func.isRequired,
+  checkBoxChangeHandler: PropTypes.func.isRequired,
 };
 
 export default Drugsform;

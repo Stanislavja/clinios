@@ -7,6 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
+import PropTypes from "prop-types";
 
 import Colors from "../../../../../theme/colors";
 
@@ -15,13 +16,13 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "600",
     fontSize: "1em",
     "& h2": {
-      color: "#fff"
-    }
+      color: "#fff",
+    },
   },
   titleContainer: {
     padding: "0 0 0 1em",
     borderBottom: `1px solid ${Colors.border}`,
-    minHeight: 47
+    minHeight: 47,
   },
   providers: {
     display: "block",
@@ -35,11 +36,11 @@ const useStyles = makeStyles((theme) => ({
       padding: "3px 0px",
       cursor: "pointer",
       "&:hover": {
-        background: "#fafafa"
+        background: "#fafafa",
       },
       "& div": {
-        flex: 2
-      }
+        flex: 2,
+      },
     },
     "& a": {
       fontSize: "13px",
@@ -52,20 +53,20 @@ const useStyles = makeStyles((theme) => ({
       width: "100%",
       color: theme.palette.text.primary,
       "&:hover": {
-        background: "#fafafa"
+        background: "#fafafa",
       },
       "& div": {
-        flex: 2
-      }
-    }
+        flex: 2,
+      },
+    },
   },
   providersLabel: {
     fontWeight: 600,
-    marginBottom: theme.spacing(1)
+    marginBottom: theme.spacing(1),
   },
   count: {
     width: "30px",
-    flex: "1 !important"
+    flex: "1 !important",
   },
   PatientsApptRequest: {
     marginTop: theme.spacing(1),
@@ -73,8 +74,8 @@ const useStyles = makeStyles((theme) => ({
       fontSize: "13px",
       listStyle: "none",
       lineHeight: "19px",
-      marginBottom: theme.spacing(1.5)
-    }
+      marginBottom: theme.spacing(1.5),
+    },
   },
   unreadMsgActions: {
     display: "flex",
@@ -87,14 +88,14 @@ const useStyles = makeStyles((theme) => ({
     "& a": {
       textDecoration: "none",
       fontSize: "13px",
-      color: theme.palette.text.primary
+      color: theme.palette.text.primary,
     },
     "& button": {
       border: "none",
       padding: 0,
-      fontSize: "13px"
-    }
-  }
+      fontSize: "13px",
+    },
+  },
 }));
 
 const AppointmentRequests = ({
@@ -102,7 +103,7 @@ const AppointmentRequests = ({
   selectedProvider,
   onMessageClick,
   onReject,
-  onAccept
+  onAccept,
 }) => {
   const classes = useStyles();
   const handleRejectCall = (_, appt) => {
@@ -113,10 +114,10 @@ const AppointmentRequests = ({
         patient: {
           id: appt.patient_id,
           firstname: appt.name,
-          email: appt.patient_email
+          email: appt.patient_email,
         },
-        appointmentDate: moment(appt.start_dt).format("YYYY-MM-DD HH:mm")
-      }
+        appointmentDate: moment(appt.start_dt).format("YYYY-MM-DD HH:mm"),
+      },
     };
     onReject(payload);
   };
@@ -129,12 +130,12 @@ const AppointmentRequests = ({
         patient: {
           id: appt.patient_id,
           firstname: appt.name,
-          email: appt.patient_email
+          email: appt.patient_email,
         },
         ApptStatus: "A",
         start_dt: appt.start_dt,
-        end_dt: appt.end_dt
-      }
+        end_dt: appt.end_dt,
+      },
     };
     onAccept(payload);
   };
@@ -156,13 +157,26 @@ const AppointmentRequests = ({
           {appointmentRequests.length > 0 ? (
             appointmentRequests.map((appt) => (
               <li key={appt.id}>
-                {moment(appt.created).format("ll")}, {appt.name}, requests
-                office visits{" "}
+                {moment(appt.created).format("ll")}
+                ,
+                {appt.name}
+                , requests
+                office visits
+                {" "}
                 {moment
                   .duration(moment(appt.end_dt).diff(moment(appt.start_dt)))
-                  .asMinutes()}{" "}
-                minutes with {selectedProvider.name} on{" "}
-                {moment(appt.start_dt).format("ll, h:mm")} -{" "}
+                  .asMinutes()}
+                {" "}
+                minutes with
+                {" "}
+                {selectedProvider.name}
+                {" "}
+                on
+                {" "}
+                {moment(appt.start_dt).format("ll, h:mm")}
+                {" "}
+                -
+                {" "}
                 {moment(appt.end_dt).format("h:mm")}
                 <div className={classes.unreadMsgActions}>
                   <Button onClick={(_) => handleAccept(_, appt)}>Accept</Button>
@@ -184,4 +198,22 @@ const AppointmentRequests = ({
   );
 };
 
+AppointmentRequests.propTypes = {
+  appointmentRequests: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      patient_id: PropTypes.number,
+      name: PropTypes.string,
+      start_dt: PropTypes.string,
+      end_dt: PropTypes.string,
+      created: PropTypes.string,
+    }),
+  ).isRequired,
+  selectedProvider: PropTypes.shape({
+    name: PropTypes.string,
+  }).isRequired,
+  onMessageClick: PropTypes.func.isRequired,
+  onReject: PropTypes.func.isRequired,
+  onAccept: PropTypes.func.isRequired,
+};
 export default AppointmentRequests;

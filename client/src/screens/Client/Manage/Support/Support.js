@@ -22,16 +22,16 @@ import SupportAPI from "../../../../services/supportStatus.service";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    padding: "25px 0px"
+    padding: "25px 0px",
   },
   title: {
-    paddingBottom: theme.spacing(0.5)
+    paddingBottom: theme.spacing(0.5),
   },
 
   tableContainer: {
     minWidth: 650,
     marginTop: theme.spacing(2),
-    maxWidth: "70%"
+    maxWidth: "70%",
   },
 
   actions: {
@@ -39,23 +39,23 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     border: "none",
     "& button": {
-      fontSize: "12px"
-    }
+      fontSize: "12px",
+    },
   },
   customSelect: {
     width: "185px",
-    margin: theme.spacing(2, 0, 0, 0)
+    margin: theme.spacing(2, 0, 0, 0),
   },
   submit: {
     margin: theme.spacing(2, 0, 2),
-    width: "185px"
+    width: "185px",
   },
   overFlowControl: {
     maxWidth: "130px",
     textOverflow: "ellipsis",
     overflow: "hidden",
-    whiteSpace: "nowrap"
-  }
+    whiteSpace: "nowrap",
+  },
 }));
 
 const LightTooltip = withStyles((theme) => ({
@@ -63,8 +63,8 @@ const LightTooltip = withStyles((theme) => ({
     backgroundColor: theme.palette.common.white,
     color: "rgba(0,0,0,0.87)",
     boxShadow: theme.shadows[1],
-    fontSize: 13
-  }
+    fontSize: 13,
+  },
 }))(Tooltip);
 
 const StyledTableCell = withStyles((theme) => ({
@@ -72,26 +72,26 @@ const StyledTableCell = withStyles((theme) => ({
     backgroundColor: theme.palette.grey,
     color: theme.palette.grey,
     fontSize: "12px",
-    fontWeight: 700
+    fontWeight: 700,
   },
   body: {
-    fontSize: 14
-  }
+    fontSize: 14,
+  },
 }))(TableCell);
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
     fontSize: 14,
     "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover
+      backgroundColor: theme.palette.action.hover,
     },
     "& th": {
-      fontSize: 12
+      fontSize: 12,
     },
     "& td": {
-      fontSize: 12
-    }
-  }
+      fontSize: 12,
+    },
+  },
 }))(TableRow);
 
 export default function Support() {
@@ -123,12 +123,7 @@ export default function Support() {
     <div className={classes.root}>
       <Grid container direction="column">
         <Grid item xs={12} sm={3}>
-          <Typography
-            component="h1"
-            variant="h2"
-            color="textPrimary"
-            className={classes.title}
-          >
+          <Typography component="h1" variant="h2" color="textPrimary" className={classes.title}>
             Technical Support
           </Typography>
           <Typography component="p" variant="body2" color="textPrimary">
@@ -136,11 +131,7 @@ export default function Support() {
           </Typography>
         </Grid>
         <Grid item xs={12} sm={2}>
-          <FormControl
-            variant="outlined"
-            size="small"
-            className={classes.customSelect}
-          >
+          <FormControl variant="outlined" size="small" className={classes.customSelect}>
             <InputLabel htmlFor="opneCases">Case Status</InputLabel>
             <Select
               native
@@ -175,11 +166,7 @@ export default function Support() {
 
       {searchResults.length > 0 ? (
         <TableContainer component={Paper} className={classes.tableContainer}>
-          <Table
-            size="small"
-            className={classes.table}
-            aria-label="a dense table"
-          >
+          <Table size="small" className={classes.table} aria-label="a dense table">
             <TableHead>
               <TableRow>
                 <StyledTableCell padding="checkbox">Case ID</StyledTableCell>
@@ -201,10 +188,7 @@ export default function Support() {
                     {result.client_name}
                   </TableCell>
                   {result.subject.length > 40 ? (
-                    <LightTooltip
-                      className={classes.overFlowControl}
-                      title={result.subject}
-                    >
+                    <LightTooltip className={classes.overFlowControl} title={result.subject}>
                       <TableCell padding="checkbox" component="th" scope="row">
                         {result.subject}
                       </TableCell>

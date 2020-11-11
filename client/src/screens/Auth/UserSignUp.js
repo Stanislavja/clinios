@@ -15,7 +15,7 @@ import _ from "lodash";
 import { useSelector, shallowEqual } from "react-redux";
 import { useHistory } from "react-router-dom";
 
-import { AuthConsumer } from "./../../providers/AuthProvider";
+import { AuthConsumer } from "../../providers/AuthProvider";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -23,18 +23,18 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    minHeight: "600px"
+    minHeight: "600px",
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: "transparent",
-    color: theme.palette.text.secondary
+    color: theme.palette.text.secondary,
   },
   lockIcon: {
-    fontSize: "40px"
+    fontSize: "40px",
   },
   pageTitle: {
-    marginBottom: theme.spacing(3)
+    marginBottom: theme.spacing(3),
   },
   userInfo: {
     textAlign: "left",
@@ -42,16 +42,16 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "88%",
     "& p": {
       margin: 0,
-      lineHeight: "24px"
-    }
+      lineHeight: "24px",
+    },
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
-  }
+    margin: theme.spacing(3, 0, 2),
+  },
 }));
 
 const UserSignUp = () => {
@@ -63,7 +63,7 @@ const UserSignUp = () => {
 
   return (
     <AuthConsumer>
-      {({ isAuth, login }) => {
+      {({ isAuth }) => {
         if (isAuth) {
           history.push("/");
         }
@@ -83,13 +83,23 @@ const UserSignUp = () => {
               </Typography>
               <div className={classes.userInfo}>
                 {!_.isEmpty(user) && (
-                  <React.Fragment>
-                    <p>Email: {user.email} </p>
-                    <p>Client: {user.client && user.client.name}</p>
+                  <>
                     <p>
-                      Name: {user.firstname} {user.lastname}
+                      Email:
+                      {user.email}
                     </p>
-                  </React.Fragment>
+                    <p>
+                      Client:
+                      {user.client && user.client.name}
+                    </p>
+                    <p>
+                      Name:
+                      {" "}
+                      {user.firstname}
+                      {" "}
+                      {user.lastname}
+                    </p>
+                  </>
                 )}
               </div>
               <form className={classes.form} noValidate>
@@ -108,17 +118,18 @@ const UserSignUp = () => {
                 />
                 <FormControlLabel
                   control={<Checkbox value="remember" color="primary" />}
-                  label={
+                  label={(
                     <div>
                       <span>
                         Check here to indicate that you have read and agree to
-                        the terms of the{" "}
+                        the terms of the
+                        {" "}
                         <Link href="/agreement">
                           Clinios Customer Agreement
                         </Link>
                       </span>
                     </div>
-                  }
+                  )}
                   className={classes.checkbox}
                   onChange={() => setTermsAndConditions(!termsAndConditions)}
                 />
@@ -127,9 +138,7 @@ const UserSignUp = () => {
                   variant="contained"
                   color="primary"
                   className={classes.submit}
-                  onClick={(event) =>
-                    alert("waiting for further instructions...")
-                  }
+                  onClick={() => alert("waiting for further instructions...")}
                 >
                   Continue
                 </Button>

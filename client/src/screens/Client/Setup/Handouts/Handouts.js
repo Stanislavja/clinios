@@ -4,13 +4,13 @@ import { makeStyles } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
-import Video from "./../../../../components/videos/Video";
+import Video from "../../../../components/videos/Video";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
-    padding: "25px 0px"
-  }
+    padding: "25px 0px",
+  },
 }));
 
 const Handouts = () => {

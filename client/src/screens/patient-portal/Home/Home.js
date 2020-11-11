@@ -10,22 +10,22 @@ import moment from "moment";
 import ReactHtmlParser from "react-html-parser";
 import { Link } from "react-router-dom";
 
-import HomeService from "./../../../services/patient_portal/home.service";
+import HomeService from "../../../services/patient_portal/home.service";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     paddingTop: theme.spacing(4),
     display: "flex",
     flexDirection: "column",
-    alignItems: "left"
+    alignItems: "left",
   },
   Logo: {
-    backgroundColor: "grey"
+    backgroundColor: "grey",
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: "transparent",
-    color: theme.palette.text.secondary
+    color: theme.palette.text.secondary,
   },
   BoxStyle: {
     backgroundColor: theme.palette.background.paper,
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     borderWidth: "1px",
     borderStyle: "solid",
     padding: "7px",
-    margin: "10px 0"
+    margin: "10px 0",
   },
   formBox: {
     backgroundColor: theme.palette.background.paper,
@@ -41,21 +41,21 @@ const useStyles = makeStyles((theme) => ({
     borderWidth: "1px",
     borderStyle: "solid",
     padding: "7px",
-    margin: "5px 0 40px 0"
+    margin: "5px 0 40px 0",
   },
   pageTitle: {
-    marginBottom: 0
+    marginBottom: 0,
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   withErrors: {
-    opacity: 0.9
+    opacity: 0.9,
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
-  }
+    margin: theme.spacing(3, 0, 2),
+  },
 }));
 
 const Home = () => {
@@ -71,7 +71,7 @@ const Home = () => {
       },
       (error) => {
         console.error("error", error);
-      }
+      },
     );
     HomeService.getClientForms().then(
       (response) => {
@@ -79,7 +79,7 @@ const Home = () => {
       },
       (error) => {
         console.error("error", error);
-      }
+      },
     );
     HomeService.getUpcomingAppointments().then(
       (response) => {
@@ -87,7 +87,7 @@ const Home = () => {
       },
       (error) => {
         console.error("error", error);
-      }
+      },
     );
   }, []);
 
@@ -101,11 +101,19 @@ const Home = () => {
         {upcomingAppointment && (
           <Box component="div" className={classes.BoxStyle}>
             <p>
-              Appointment Scheduled with {upcomingAppointment.provider} on{" "}
+              Appointment Scheduled with
+              {" "}
+              {upcomingAppointment.provider}
+              {" "}
+              on
+              {" "}
               {moment(upcomingAppointment.start_dt).format(
-                "MMM Do YYYY, h:mm a"
-              )}{" "}
-              - {moment(upcomingAppointment.end_dt).format("h:mm  a")}
+                "MMM Do YYYY, h:mm a",
+              )}
+              {" "}
+              -
+              {" "}
+              {moment(upcomingAppointment.end_dt).format("h:mm  a")}
             </p>
           </Box>
         )}
@@ -113,8 +121,9 @@ const Home = () => {
         {clientForms && (
           <Box component="div" className={classes.formBox}>
             <p>
-              Please fill out the following forms:{" "}
-              <Link to="#">{clientForms.title}</Link>
+              Please fill out the following forms:
+              {" "}
+              <Link to="/">{clientForms.title}</Link>
             </p>
           </Box>
         )}

@@ -10,17 +10,18 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  withStyles
+  withStyles,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import moment from "moment";
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
   tableContainer: {
     minWidth: 450,
-    marginTop: theme.spacing(2)
-  }
+    marginTop: theme.spacing(2),
+  },
 }));
 
 const StyledTableCell = withStyles((theme) => ({
@@ -28,35 +29,35 @@ const StyledTableCell = withStyles((theme) => ({
     backgroundColor: theme.palette.grey,
     color: theme.palette.grey,
     fontSize: "12px",
-    fontWeight: 700
+    fontWeight: 700,
   },
   body: {
-    fontSize: 14
-  }
+    fontSize: 14,
+  },
 }))(TableCell);
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
     fontSize: 14,
     "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover
+      backgroundColor: theme.palette.action.hover,
     },
     "& th": {
-      fontSize: 12
+      fontSize: 12,
     },
     "& td": {
       padding: "6px 16px",
       fontSize: 12,
-      height: "50px"
-    }
-  }
+      height: "50px",
+    },
+  },
 }))(TableRow);
 
 const ScheduleSearchResultTable = ({
   handleOnEditClick,
   searchResult,
   fetchScheduleSearch,
-  handleDeleteSchedule
+  handleDeleteSchedule,
 }) => {
   const classes = useStyles();
 
@@ -111,22 +112,16 @@ const ScheduleSearchResultTable = ({
                   {result.user_name}
                 </TableCell>
                 <TableCell padding="checkbox" align="center">
-                  {result.date_start
-                    ? moment(result.date_start).format("ll")
-                    : ""}
+                  {result.date_start ? moment(result.date_start).format("ll") : ""}
                 </TableCell>
                 <TableCell padding="checkbox" align="center">
                   {result.date_end ? moment(result.date_end).format("ll") : ""}
                 </TableCell>
                 <TableCell padding="checkbox" align="center">
-                  {result.time_start
-                    ? moment(result.time_start, "hh:mm:a").format("LT")
-                    : ""}
+                  {result.time_start ? moment(result.time_start, "hh:mm:a").format("LT") : ""}
                 </TableCell>
                 <TableCell padding="checkbox" align="center">
-                  {result.time_end
-                    ? moment(result.time_end, "hh:mm:a").format("LT")
-                    : ""}
+                  {result.time_end ? moment(result.time_end, "hh:mm:a").format("LT") : ""}
                 </TableCell>
                 <TableCell padding="checkbox" align="center">
                   {result.active ? "Yes" : "No"}
@@ -135,8 +130,8 @@ const ScheduleSearchResultTable = ({
                   {moment(result.date_start) > moment()
                     ? "Future"
                     : moment(result.date_end) < moment()
-                      ? "Past"
-                      : "Current"}
+                    ? "Past"
+                    : "Current"}
                 </TableCell>
                 <TableCell padding="checkbox" align="center">
                   {result.created ? moment(result.created).format("lll") : ""}
@@ -150,21 +145,11 @@ const ScheduleSearchResultTable = ({
                 <TableCell padding="checkbox" align="center">
                   {result.updated_name}
                 </TableCell>
-                <TableCell
-                  padding="checkbox"
-                  align="center"
-                  style={{ minWidth: "120px" }}
-                >
-                  <IconButton
-                    aria-label="edit"
-                    onClick={() => handleOnEditClick(result.id)}
-                  >
+                <TableCell padding="checkbox" align="center" style={{ minWidth: "120px" }}>
+                  <IconButton aria-label="edit" onClick={() => handleOnEditClick(result.id)}>
                     <EditIcon fontSize="small" />
                   </IconButton>
-                  <IconButton
-                    aria-label="edit"
-                    onClick={() => handleDeleteSchedule(result.id)}
-                  >
+                  <IconButton aria-label="edit" onClick={() => handleDeleteSchedule(result.id)}>
                     <DeleteIcon fontSize="small" />
                   </IconButton>
                 </TableCell>
@@ -175,6 +160,12 @@ const ScheduleSearchResultTable = ({
       </TableContainer>
     </div>
   );
+};
+
+ScheduleSearchResultTable.propTypes = {
+  handleOnEditClick: PropTypes.func.isRequired,
+  handleDeleteSchedule: PropTypes.func.isRequired,
+  searchResult: PropTypes.arrayOf(PropTypes.arrayOf({})).isRequired,
 };
 
 export default ScheduleSearchResultTable;

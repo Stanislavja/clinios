@@ -8,14 +8,27 @@ import {
   MenuItem,
   Checkbox,
   FormControlLabel,
-  Divider
+  Divider,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
 import SignatureCanvas from "react-signature-canvas";
 
 import CountrySelect from "../../../components/common/CountrySelect";
 import RegionSelect from "../../../components/common/RegionSelect";
 import { FormFields } from "../../../static/expandForm";
+
+const useStyles = makeStyles((theme) => ({
+  inputRow: {
+    margin: theme.spacing(3, 0),
+  },
+  sigCanvas: {
+    border: "1px solid grey",
+  },
+  sigCanvasActions: {
+    padding: "0 15px",
+  },
+}));
 
 const Form = (props) => {
   const classes = useStyles();
@@ -42,14 +55,14 @@ const Form = (props) => {
     state: "",
     city: "",
     zipPostal: "",
-    contactPreference: ""
+    contactPreference: "",
   });
 
   const handleInputChnage = (e) => {
     const { value, name } = e.target;
     setFormFields({
       ...formFields,
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -57,13 +70,13 @@ const Form = (props) => {
     if (identifier === "country") {
       setFormFields({
         ...formFields,
-        [identifier]: value
+        [identifier]: value,
       });
     } else if (identifier === "region") {
-      let identifier = "state";
+      const key = "state";
       setFormFields({
         ...formFields,
-        [identifier]: value
+        [key]: value,
       });
     }
   };
@@ -92,8 +105,8 @@ const Form = (props) => {
             Basic Information
           </Typography>
           <Grid container spacing={1}>
-            {BasicInfo.map((item, index) => (
-              <Grid key={index} item md={4}>
+            {BasicInfo.map((item) => (
+              <Grid key={item.name} item md={4}>
                 {item.baseType === "input" ? (
                   <TextField
                     size="small"
@@ -107,7 +120,7 @@ const Form = (props) => {
                   />
                 ) : (
                   <TextField
-                    // className={classes.select}
+                      // className={classes.select}
                     size="small"
                     variant="outlined"
                     select
@@ -119,13 +132,11 @@ const Form = (props) => {
                     fullWidth
                     onChange={(e) => handleInputChnage(e)}
                   >
-                    {item.options.map((option, index) => {
-                      return (
-                        <MenuItem key={index} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      );
-                    })}
+                    {item.options.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
                   </TextField>
                 )}
               </Grid>
@@ -140,8 +151,8 @@ const Form = (props) => {
             Address Information
           </Typography>
           <Grid container spacing={1}>
-            {AddressDetails.map((item, index) => (
-              <Grid key={index} item md={4}>
+            {AddressDetails.map((item) => (
+              <Grid key={item.name} item md={4}>
                 <TextField
                   size="small"
                   variant="outlined"
@@ -157,31 +168,27 @@ const Form = (props) => {
             <Grid item lg={4}>
               <CountrySelect
                 size="small"
-                id={"country-select"}
+                id="country-select"
                 error={null}
-                name={"country-select"}
-                helperText={""}
-                label={"Country"}
-                outlined={true}
-                handleChange={(identifier, value) =>
-                  handleCountryRegion(identifier, value)
-                }
+                name="country-select"
+                helperText=""
+                label="Country"
+                outlined
+                handleChange={(identifier, value) => handleCountryRegion(identifier, value)}
                 country={formFields.country}
               />
             </Grid>
             <Grid item lg={4}>
               <RegionSelect
                 size="small"
-                id={"state-select"}
+                id="state-select"
                 error={null}
-                name={"state-select"}
-                helperText={""}
-                label={"State"}
-                outlined={true}
-                handleChange={(identifier, value) =>
-                  handleCountryRegion(identifier, value)
-                }
-                country={formFields["country"]}
+                name="state-select"
+                helperText=""
+                label="State"
+                outlined
+                handleChange={(identifier, value) => handleCountryRegion(identifier, value)}
+                country={formFields.country}
                 region={formFields.state}
               />
             </Grid>
@@ -195,8 +202,8 @@ const Form = (props) => {
             Contact Information
           </Typography>
           <Grid container spacing={1} alignItems="flex-end">
-            {ContactInfo.map((item, index) => (
-              <Grid key={index} item md={4}>
+            {ContactInfo.map((item) => (
+              <Grid key={item.name} item md={4}>
                 {item.baseType === "input" ? (
                   <TextField
                     size="small"
@@ -212,7 +219,7 @@ const Form = (props) => {
                   <TextField
                     size="small"
                     variant="outlined"
-                    // className={classes.select}
+                      // className={classes.select}
                     select
                     placeholder={item.label}
                     label={item.label}
@@ -222,13 +229,11 @@ const Form = (props) => {
                     fullWidth
                     onChange={(e) => handleInputChnage(e)}
                   >
-                    {item.options.map((option, index) => {
-                      return (
-                        <MenuItem key={index} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      );
-                    })}
+                    {item.options.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
                   </TextField>
                 )}
               </Grid>
@@ -243,8 +248,8 @@ const Form = (props) => {
             Emergency Information
           </Typography>
           <Grid container spacing={1}>
-            {EmergencyInfo.map((item, index) => (
-              <Grid key={index} item md={4}>
+            {EmergencyInfo.map((item) => (
+              <Grid key={item.name} item md={4}>
                 <TextField
                   size="small"
                   variant="outlined"
@@ -265,8 +270,8 @@ const Form = (props) => {
             Insurance Information
           </Typography>
           <Grid container spacing={1}>
-            {InsuranceInfo.map((item, index) => (
-              <Grid key={index} item md={4}>
+            {InsuranceInfo.map((item) => (
+              <Grid key={item.name} item md={4}>
                 <TextField
                   size="small"
                   variant="outlined"
@@ -289,8 +294,8 @@ const Form = (props) => {
             Medical Information
           </Typography>
           <Grid container spacing={1}>
-            {MedicalInfo.slice(0, 2).map((item, index) => (
-              <Grid key={index} item md={6}>
+            {MedicalInfo.slice(0, 2).map((item) => (
+              <Grid key={item.name} item md={6}>
                 <TextField
                   size="small"
                   variant="outlined"
@@ -303,8 +308,8 @@ const Form = (props) => {
                 />
               </Grid>
             ))}
-            {MedicalInfo.slice(2, 3).map((item, index) => (
-              <Grid key={index} item md={12}>
+            {MedicalInfo.slice(2, 3).map((item) => (
+              <Grid key={item.name} item md={12}>
                 <TextField
                   size="small"
                   variant="outlined"
@@ -314,7 +319,7 @@ const Form = (props) => {
                   type={item.type}
                   fullWidth
                   onChange={(e) => handleInputChnage(e)}
-                  multiline={true}
+                  multiline
                   rows={5}
                 />
               </Grid>
@@ -329,8 +334,8 @@ const Form = (props) => {
             Set Username and Password for Patient Portal
           </Typography>
           <Grid container spacing={1}>
-            {UserNamePasswordInfo.map((item, index) => (
-              <Grid key={index} item md={4}>
+            {UserNamePasswordInfo.map((item) => (
+              <Grid key={item.name} item md={4}>
                 <TextField
                   size="small"
                   variant="outlined"
@@ -350,13 +355,13 @@ const Form = (props) => {
 
         <FormControlLabel
           value="end"
-          control={
+          control={(
             <Checkbox
               checked={termsChecked}
               onChange={(e) => handleCheckboxChange(e)}
               color="primary"
             />
-          }
+          )}
           label="I have read and accept the terms of the privacy policy below."
           labelPlacement="end"
         />
@@ -369,12 +374,12 @@ const Form = (props) => {
             <Grid item>
               <SignatureCanvas
                 ref={(ref) => setSignatureRef(ref)}
-                on={true}
+                on
                 penColor="black"
                 canvasProps={{
                   width: 500,
                   height: 200,
-                  className: classes.sigCanvas
+                  className: classes.sigCanvas,
                 }}
               />
             </Grid>
@@ -390,16 +395,8 @@ const Form = (props) => {
   );
 };
 
-const useStyles = makeStyles((theme) => ({
-  inputRow: {
-    margin: theme.spacing(3, 0)
-  },
-  sigCanvas: {
-    border: "1px solid grey"
-  },
-  sigCanvasActions: {
-    padding: "0 15px"
-  }
-}));
+Form.propTypes = {
+  onClose: PropTypes.func.isRequired,
+};
 
 export default Form;
