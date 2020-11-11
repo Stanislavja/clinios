@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
+import Switch from "@material-ui/core/Switch";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -32,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
     "& button": {
       fontSize: "12px",
     },
+  },
+  switchAction: {
+    minWidth: 135,
   },
 }));
 
@@ -67,6 +72,19 @@ const DiagnosesDetails = (props) => {
   const { data, patientId, reloadData } = props;
   const dispatch = useDispatch();
   const classes = useStyles();
+  const [state, setState] = useState({});
+
+  const mapStateForRows = useCallback(() => {
+    const stateObj = {};
+    data.forEach((item) => {
+      stateObj[item.name] = true;
+    });
+    setState({ ...stateObj });
+  }, [data]);
+
+  useEffect(() => {
+    mapStateForRows();
+  }, [mapStateForRows]);
 
   const deleteItemHandler = (selectedItem) => {
     const icdId = selectedItem.icd_id;
@@ -89,6 +107,11 @@ const DiagnosesDetails = (props) => {
           }),
         );
       });
+  };
+
+  const handleSwitchChange = (event) => {
+    const { name, checked } = event.target;
+    setState({ ...state, [name]: checked });
   };
 
   return (
@@ -120,6 +143,21 @@ const DiagnosesDetails = (props) => {
                   >
                     <DeleteIcon fontSize="small" />
                   </IconButton>
+                </TableCell>
+
+                <TableCell className={classes.switchAction}>
+                  <FormControlLabel
+                    control={(
+                      <Switch
+                        checked={!!state[row.name]}
+                        onChange={handleSwitchChange}
+                        name={row.name}
+                        color="primary"
+                        size="small"
+                      />
+                    )}
+                    label={state[row.name] ? "Active" : "In-Active"}
+                  />
                 </TableCell>
               </StyledTableRow>
             ))
