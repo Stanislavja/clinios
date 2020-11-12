@@ -176,7 +176,7 @@ const MessageToPatient = ({
           </DialogContentText>
           {errors
             && errors.map((error, index) => (
-               // eslint-disable-next-line react/no-array-index-key
+              // eslint-disable-next-line react/no-array-index-key
               <Alert severity="error" key={index}>
                 {error.msg}
               </Alert>
@@ -229,7 +229,7 @@ const MessageToPatient = ({
               value={message.unread_notify_dt || null}
               placeholder="2020/10/10"
               name="unread_notify_dt"
-              onError={console.log}
+              onError={() => { }}
               format="MM/dd/yyyy"
               onChange={(date) => setMessage({
                 ...message,

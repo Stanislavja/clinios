@@ -21,7 +21,9 @@ const AllergiesContent = (props) => {
     <>
       {data.map((item) => (
         <Grid key={item.drug_id} className={classes.inputRow}>
-          <Typography className={classes.text12}>{item.name}</Typography>
+          <Typography className={classes.text12}>
+            {item.name}
+          </Typography>
         </Grid>
       ))}
     </>

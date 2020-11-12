@@ -8,8 +8,9 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import moment from "moment";
+import PropTypes from "prop-types";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   tableContainer: {
     minWidth: 650,
   },
@@ -62,8 +63,8 @@ const BasicInfoHistory = (props) => {
         <TableBody>
           {!!data
             && data.length
-            && data.map((row, index) => (
-              <StyledTableRow key={`${row.created}_${index}`}>
+            && data.map((row) => (
+              <StyledTableRow key={`${row.created}_${row.name}`}>
                 <TableCell component="th" scope="row">
                   {moment(row.created).format("MMM D YYYY")}
                 </TableCell>
@@ -77,6 +78,10 @@ const BasicInfoHistory = (props) => {
       </Table>
     </TableContainer>
   );
+};
+
+BasicInfoHistory.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default BasicInfoHistory;

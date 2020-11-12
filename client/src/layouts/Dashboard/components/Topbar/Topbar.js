@@ -313,7 +313,7 @@ const Topbar = (props) => {
                 <DropdownItems
                   parentItem={page.title}
                   menuItems={page.subMenus}
-                    // eslint-disable-next-line react/no-array-index-key
+                  // eslint-disable-next-line react/no-array-index-key
                   key={index}
                 />
               ) : (
@@ -380,15 +380,15 @@ const Topbar = (props) => {
 
 Topbar.defaultProps = {
   className: null,
-  logout: () => {},
-  onSidebarOpen: () => {},
+  logout: () => { },
+  onSidebarOpen: () => { },
 };
 
 Topbar.propTypes = {
   className: PropTypes.string,
   onSidebarOpen: PropTypes.func,
   logout: PropTypes.func,
-  user: PropTypes.objectOf(PropTypes.object).isRequired,
+  user: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default Topbar;

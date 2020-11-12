@@ -63,8 +63,8 @@ const Allergies = (props) => {
       })
       .catch((error) => {
         const resMessage = (error.response
-            && error.response.data
-            && error.response.data.message)
+          && error.response.data
+          && error.response.data.message)
           || error.message
           || error.toString();
         const severity = "error";
@@ -80,10 +80,16 @@ const Allergies = (props) => {
   return (
     <>
       <Grid className={classes.heading} container justify="space-between">
-        <Typography variant="h3" color="textSecondary">
+        <Typography
+          variant="h3"
+          color="textSecondary"
+        >
           Select Allergy
         </Typography>
-        <Button variant="outlined" onClick={() => onClose()}>
+        <Button
+          variant="outlined"
+          onClick={() => onClose()}
+        >
           Cancel
         </Button>
       </Grid>
@@ -124,7 +130,10 @@ const Allergies = (props) => {
         >
           Save
         </Button>
-        <Button variant="outlined" onClick={() => onClose()}>
+        <Button
+          variant="outlined"
+          onClick={() => onClose()}
+        >
           Cancel
         </Button>
       </Grid>

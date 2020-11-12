@@ -70,8 +70,8 @@ const NewTransactionForm = (props) => {
       })
       .catch((error) => {
         const resMessage = (error.response
-            && error.response.data
-            && error.response.data.message)
+          && error.response.data
+          && error.response.data.message)
           || error.message
           || error.toString();
         const severity = "error";
@@ -163,10 +163,16 @@ const NewTransactionForm = (props) => {
         </Grid>
 
         <Grid container justify="space-between">
-          <Button variant="outlined" type="submit">
+          <Button
+            variant="outlined"
+            type="submit"
+          >
             Save
           </Button>
-          <Button variant="outlined" onClick={() => onClose()}>
+          <Button
+            variant="outlined"
+            onClick={() => onClose()}
+          >
             Cancel
           </Button>
         </Grid>
