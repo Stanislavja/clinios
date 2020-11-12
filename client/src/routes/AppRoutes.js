@@ -20,7 +20,7 @@ import {
   MergePatient,
   DeletePatient,
   PatientSearch,
-  Support
+  Support,
 } from "../screens/Client/Manage";
 import {
   AccountingTypes,
@@ -38,7 +38,7 @@ import {
   LabRanges,
   PortalHeader,
   Schedule,
-  Users
+  Users,
 } from "../screens/Client/Setup";
 import ReportFinanceDetail from "../screens/Client/Setup/ReportFinanceDetail/index";
 import Contact from "../screens/Contact";
@@ -65,7 +65,7 @@ import {
   Pharmacies,
   PatientAppointments,
   PatientProfile,
-  PatientForms
+  PatientForms,
 } from "../screens/patient-portal";
 import PatientResetPassword from "../screens/patient-portal/ResetPassword";
 import ProcessLab from "../screens/ProcessLab";

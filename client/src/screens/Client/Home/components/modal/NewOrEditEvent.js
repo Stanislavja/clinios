@@ -30,6 +30,7 @@ import Alert from "@material-ui/lab/Alert";
 import { KeyboardDateTimePicker } from "@material-ui/pickers";
 import clsx from "clsx";
 import moment from "moment";
+import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 
 import useDebounce from "../../../../../hooks/useDebounce";
@@ -113,7 +114,6 @@ const NewOrEditEvent = ({
   onClose,
   selectedDate,
   selectedProvider,
-  user,
   onEventUpdate,
   onSave,
   isNewEvent,
@@ -135,6 +135,7 @@ const NewOrEditEvent = ({
     error: "",
   });
 
+    /* eslint-disable */
   useEffect(() => {
     if (isNewEvent) {
       setCalEvent("");
@@ -147,7 +148,7 @@ const NewOrEditEvent = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.event, isNewEvent]);
-
+  /* eslint-enable */
   const handleOnChange = (event) => {
     setCalEvent({
       ...calEvent,
@@ -207,6 +208,7 @@ const NewOrEditEvent = ({
         };
         onSave(payload);
       } else {
+          /* eslint-disable */
         const payload = {
           data: {
             id: props.event.id,
@@ -228,6 +230,7 @@ const NewOrEditEvent = ({
             new_end_dt: moment(calEvent.end_dt).format("YYYY-MM-DD HH:mm"),
           },
         };
+          /* eslint-enable */
         onEventUpdate(payload);
       }
     };
@@ -545,6 +548,21 @@ const NewOrEditEvent = ({
       </DialogActions>
     </Dialog>
   );
+};
+
+NewOrEditEvent.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  selectedDate: PropTypes.string.isRequired,
+  onEventUpdate: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
+  isNewEvent: PropTypes.bool.isRequired,
+  errors: PropTypes.arrayOf(
+    PropTypes.shape({
+      msg: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
 };
 
 export default NewOrEditEvent;

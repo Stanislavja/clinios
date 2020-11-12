@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
 import Colors from "../../../../../theme/colors";
@@ -200,4 +201,28 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
   );
 };
 
+ProviderDetailsCard.propTypes = {
+  selectedProvider: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
+  providerDetails: PropTypes.shape({
+    patientLabs: PropTypes.shape({
+      "count(l.id)": PropTypes.number,
+      "min(l.created)": PropTypes.number,
+      "min(m.created)": PropTypes.number,
+    }),
+    messageFromPatients: PropTypes.shape({
+      "count(m.id)": PropTypes.number,
+    }),
+    messageToPatientsNotRead: PropTypes.shape({
+      "count(m.id)": PropTypes.number,
+      "min(m.unread_notify_dt)": PropTypes.string,
+    }),
+    patientAppointmentRequest: PropTypes.shape({
+      "count(m.id)": PropTypes.number,
+      "min(m.unread_notify_dt)": PropTypes.string,
+    }),
+  }).isRequired,
+};
 export default ProviderDetailsCard;

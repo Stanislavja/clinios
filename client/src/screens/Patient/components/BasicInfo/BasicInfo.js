@@ -20,42 +20,13 @@ import { useDispatch } from "react-redux";
 
 import CountrySelect from "../../../../components/common/CountrySelect";
 import RegionSelect from "../../../../components/common/RegionSelect";
-import PatientService from "../../../../services/patient.service";
 import {
   BasicInfoForm,
   InsuranceForm,
   Pharmacies,
   PaymentData,
 } from "../../../../static/patientBasicInfoForm";
-import { setError, setSuccess } from "../../../../store/common/actions";
 import { calculateAge } from "../../../../utils/helpers";
-
-const useStyles = makeStyles((theme) => ({
-  inputRow: {
-    marginBottom: theme.spacing(1),
-  },
-  sectionCard: {
-    padding: theme.spacing(1.5, 1),
-  },
-  halfSectionCard: {
-    padding: theme.spacing(1.5, 1),
-    minHeight: 198,
-  },
-  root: {
-    border: "1px solid",
-    margin: theme.spacing(0, 0, 1, 0),
-    borderRadius: 0,
-  },
-  inputTextRow: {
-    marginBottom: theme.spacing(3),
-  },
-  select: {
-    lineHeight: "2.30em",
-  },
-  table: {
-    background: "white",
-  },
-}));
 
 export default function BasicInfo(props) {
   const classes = useStyles();
@@ -164,23 +135,23 @@ export default function BasicInfo(props) {
                         onChange={(e) => handleInputChnage(e)}
                       />
                     ) : (
-                      <TextField
-                        select
-                        placeholder={item.label}
-                        label={item.label}
-                        id={item.id}
-                        name={item.name}
-                        value={basicInfo[item.name]}
-                        fullWidth
-                        onChange={(e) => handleInputChnage(e)}
-                      >
-                        {item.options.map((option) => (
-                          <MenuItem key={option.value} value={option.value}>
-                            {option.label}
-                          </MenuItem>
-                        ))}
-                      </TextField>
-                    )}
+                        <TextField
+                          select
+                          placeholder={item.label}
+                          label={item.label}
+                          id={item.id}
+                          name={item.name}
+                          value={basicInfo[item.name]}
+                          fullWidth
+                          onChange={(e) => handleInputChnage(e)}
+                        >
+                          {item.options.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                              {option.label}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      )}
                   </Grid>
                 ))}
               </Grid>
@@ -207,23 +178,23 @@ export default function BasicInfo(props) {
                         onChange={(e) => handleInputChnage(e)}
                       />
                     ) : (
-                      <TextField
-                        select
-                        placeholder={item.label}
-                        label={item.label}
-                        id={item.id}
-                        name={item.name}
-                        value={basicInfo[item.name]}
-                        fullWidth
-                        onChange={(e) => handleInputChnage(e)}
-                      >
-                        {item.options.map((option) => (
-                          <MenuItem key={option.value} value={option.value}>
-                            {option.label}
-                          </MenuItem>
-                        ))}
-                      </TextField>
-                    )}
+                        <TextField
+                          select
+                          placeholder={item.label}
+                          label={item.label}
+                          id={item.id}
+                          name={item.name}
+                          value={basicInfo[item.name]}
+                          fullWidth
+                          onChange={(e) => handleInputChnage(e)}
+                        >
+                          {item.options.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                              {option.label}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      )}
                   </Grid>
                 ))}
                 <Grid item md={2}>
@@ -247,23 +218,23 @@ export default function BasicInfo(props) {
                         onChange={(e) => handleInputChnage(e)}
                       />
                     ) : (
-                      <TextField
-                        select
-                        placeholder={item.label}
-                        label={item.label}
-                        id={item.id}
-                        name={item.name}
-                        value={basicInfo[item.name]}
-                        fullWidth
-                        onChange={(e) => handleInputChnage(e)}
-                      >
-                        {item.options.map((option) => (
-                          <MenuItem key={option.value} value={option.value}>
-                            {option.label}
-                          </MenuItem>
-                        ))}
-                      </TextField>
-                    )}
+                        <TextField
+                          select
+                          placeholder={item.label}
+                          label={item.label}
+                          id={item.id}
+                          name={item.name}
+                          value={basicInfo[item.name]}
+                          fullWidth
+                          onChange={(e) => handleInputChnage(e)}
+                        >
+                          {item.options.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                              {option.label}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      )}
                   </Grid>
                 ))}
               </Grid>

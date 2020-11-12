@@ -18,6 +18,7 @@ import Alert from "@material-ui/lab/Alert";
 import { KeyboardDatePicker } from "@material-ui/pickers";
 import clsx from "clsx";
 import moment from "moment";
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -112,10 +113,12 @@ const MessageToPatient = ({
   ...props
 }) => {
   const classes = useStyles();
+  const { onModalEnter } = props;
   // const [selectedDate, handleDateChange] = useState(new Date());
   const [message, setMessage] = useState("");
   const unread_notify_dt = "unread_notify_dt";
 
+  /* eslint-disable */
   useEffect(() => {
     if (isNewMessage) {
       setMessage("");
@@ -123,6 +126,7 @@ const MessageToPatient = ({
       setMessage(props.msg);
     }
   }, [isNewMessage, props.msg]);
+  /* eslint-enable */
 
   const handleOnChange = (event) => {
     setMessage({
@@ -135,7 +139,7 @@ const MessageToPatient = ({
     <Dialog
       open={isOpen}
       onClose={onClose}
-      onEnter={props.onModalEnter}
+      onEnter={onModalEnter}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
@@ -172,6 +176,7 @@ const MessageToPatient = ({
           </DialogContentText>
           {errors
             && errors.map((error, index) => (
+               // eslint-disable-next-line react/no-array-index-key
               <Alert severity="error" key={index}>
                 {error.msg}
               </Alert>
@@ -291,6 +296,20 @@ const MessageToPatient = ({
       </DialogActions>
     </Dialog>
   );
+};
+
+MessageToPatient.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  isNewMessage: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  onModalEnter: PropTypes.func.isRequired,
+  errors: PropTypes.arrayOf(
+    PropTypes.shape({
+      msg: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
 };
 
 export default MessageToPatient;
