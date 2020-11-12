@@ -6,6 +6,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { AuthProvider } from "./providers/AuthProvider";
+import { AuthProviderX } from './contexts/AuthContext';
 import AppRouter from "./routes/AppRoutes";
 import theme from "./theme";
 import routes, { renderRoutes } from './routes';
@@ -16,9 +17,11 @@ function App() {
     <ThemeProvider theme={theme}>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <Router history={history}>
-      <AuthProvider>
-        {renderRoutes(routes)}
-      </AuthProvider>
+        <AuthProvider>
+        <AuthProviderX>
+          {renderRoutes(routes)}
+        </AuthProviderX>
+        </AuthProvider>
       </Router>
         {/* <AppRouter /> */}
       </MuiPickersUtilsProvider>

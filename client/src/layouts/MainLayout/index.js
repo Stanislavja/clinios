@@ -1,53 +1,48 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core';
-import TopBar from './TopBar';
+import React, { useState } from "react";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    backgroundColor: theme.palette.background.default,
-    display: 'flex',
-    height: '100%',
-    overflow: 'hidden',
-    width: '100%'
-  },
-  wrapper: {
-    display: 'flex',
-    flex: '1 1 auto',
-    overflow: 'hidden',
-    paddingTop: 64
-  },
-  contentContainer: {
-    display: 'flex',
-    flex: '1 1 auto',
-    overflow: 'hidden'
-  },
-  content: {
-    flex: '1 1 auto',
-    height: '100%',
-    overflow: 'auto'
-  }
-}));
+import Container from "@material-ui/core/Container";
+import PropTypes from "prop-types";
+
+import Footer from "../../components/Footer";
+import Header from "../../components/Header";
+import Sidebar from "../../components/Sidebar";
+import { AuthConsumer } from "../../providers/AuthProvider";
 
 const MainLayout = ({ children }) => {
-  const classes = useStyles();
+  const [openSidebar, setOpenSidebar] = useState(false);
 
+  const handleSidebarOpen = () => {
+    setOpenSidebar(true);
+  };
+  const handleSidebarClose = () => {
+    setOpenSidebar(false);
+  };
   return (
-    <div className={classes.root}>
-      <TopBar />
-      <div className={classes.wrapper}>
-        <div className={classes.contentContainer}>
-          <div className={classes.content}>
-            {children}
-          </div>
+    <AuthConsumer>
+      {({ isAuth }) => (
+        <div className="main-container">
+          <Header onSidebarOpen={handleSidebarOpen} />
+          <Sidebar
+            onClose={handleSidebarClose}
+            open={openSidebar}
+            variant="temporary"
+            isAuth={isAuth}
+          />
+
+          <Container maxWidth="lg">{children}</Container>
+          <Footer />
         </div>
-      </div>
-    </div>
+      )}
+    </AuthConsumer>
   );
 };
 
+MainLayout.defaultProps = {
+  children: null,
+};
+
 MainLayout.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default MainLayout;

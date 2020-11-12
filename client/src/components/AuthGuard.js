@@ -7,7 +7,7 @@ const AuthGuard = ({ children }) => {
   const { isAuthenticated } = useAuth();
 
   if (!isAuthenticated) {
-    return <Redirect to="/login" />;
+    return <Redirect to="/login_client" />;
   }
 
   return (

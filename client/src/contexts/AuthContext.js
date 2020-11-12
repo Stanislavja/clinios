@@ -6,6 +6,7 @@ import React, {
 import jwtDecode from 'jwt-decode';
 import SplashScreen from './.././components/SlashScreen';
 import axios from './.././utils/axios';
+import { API_BASE } from "./../utils/API_BASE";
 
 const initialAuthState = {
   isAuthenticated: false,
@@ -85,13 +86,13 @@ const AuthContext = createContext({
   register: () => Promise.resolve()
 });
 
-export const AuthProvider = ({ children }) => {
+export const AuthProviderX = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialAuthState);
 
   const login = async (email, password) => {
-    const response = await axios.post('/api/account/login', { email, password });
-    const { accessToken, user } = response.data;
-
+    const response = await axios.post(`${API_BASE}/auth/login`, { email, password });
+    localStorage.setItem("user", JSON.stringify(response.data.data));
+    const { accessToken, user } = response.data.data;
     setSession(accessToken);
     dispatch({
       type: 'LOGIN',
@@ -132,8 +133,8 @@ export const AuthProvider = ({ children }) => {
         if (accessToken && isValidToken(accessToken)) {
           setSession(accessToken);
 
-          const response = await axios.get('/api/account/me');
-          const { user } = response.data;
+          //const response = await axios.get('/api/account/me');
+          const { user } = [];
 
           dispatch({
             type: 'INITIALISE',

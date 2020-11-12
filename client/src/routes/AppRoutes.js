@@ -3,7 +3,7 @@ import React from "react";
 import { createBrowserHistory } from "history";
 import { Router, Route, Switch } from "react-router-dom";
 
-import { Main } from "../layouts";
+import { MainLayout } from "../layouts";
 import Dashboard from "../layouts/Dashboard";
 import { PlainPatientPortal, WithLeftSidebar } from "../layouts/PatientPortal";
 import Plain from "../layouts/Plain";
@@ -81,33 +81,33 @@ const AppRouter = () => (
   <Router history={history}>
     <AuthProvider>
       <Switch>
-        <RouteWithLayout layout={Main} path="/" component={Home} exact />
+        <RouteWithLayout layout={MainLayout} path="/" component={Home} exact />
         <RouteWithLayout
-          layout={Main}
+          layout={MainLayout}
           path="/agreement"
           component={Agreement}
         />
-        <RouteWithLayout layout={Main} path="/contact" component={Contact} />
+        <RouteWithLayout layout={MainLayout} path="/contact" component={Contact} />
         <RouteWithLayout
-          layout={Main}
+          layout={MainLayout}
           path="/forgot-password"
           component={ForgetPassword}
           exact
         />
         <RouteWithLayout
-          layout={Main}
+          layout={MainLayout}
           path="/password/reset/:userId/:token"
           component={ResetPassword}
           exact
         />
         <RouteWithLayout
-          layout={Main}
+          layout={MainLayout}
           path="/email/confirmation/:userId/:token"
           component={EmailConfirmation}
           exact
         />
         <RouteWithLayout
-          layout={Main}
+          layout={MainLayout}
           path="/signup_client"
           component={SignUp}
         />
@@ -116,7 +116,7 @@ const AppRouter = () => (
               path="/signup"
               component={UserSignUp}
             /> */}
-        <RouteWithLayout layout={Main} path="/login_client" component={Login} />
+        <RouteWithLayout layout={MainLayout} path="/login_client" component={Login} />
         <PrivateRouteWithLayout
           layout={Dashboard}
           path="/dashboard"

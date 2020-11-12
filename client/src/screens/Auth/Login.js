@@ -19,6 +19,7 @@ import Error from "../../components/common/Error";
 import { AuthConsumer } from "../../providers/AuthProvider";
 import AuthService from "../../services/auth.service";
 import EmailService from "../../services/email.service";
+import useAuth from '../../hooks/useAuth';
 import { partialLoginComplete, loginComplete } from "../../store/auth/actions";
 
 const useStyles = makeStyles((theme) => ({
@@ -52,27 +53,31 @@ const Login = () => {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
+  const { login } = useAuth();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [isChecked, setIsChecked] = React.useState(false);
   const [isRedirect, setIsRedirect] = React.useState(false);
   const [errors, setErrors] = React.useState([]);
 
-  const onFormSubmit = (event, login) => {
+  const onFormSubmit = async (event) => {
     if (isChecked && email !== "") {
       localStorage.username = email;
       localStorage.password = password;
       localStorage.rememberme = isChecked;
     }
 
+    login(email.trim(), password.trim()); // Call AuthProvider login
+      
+/*
     AuthService.login({
       email: email.trim(),
       password: password.trim(),
     }).then(
-      (res) => {
+      async (res) => {
         setErrors([]);
         dispatch(loginComplete(res.data));
-        login(); // Call AuthProvider login
+        loginn(); // Call AuthProvider login
       },
       (error) => {
         if (!error.response) {
@@ -112,7 +117,7 @@ const Login = () => {
           );
         }
       },
-    );
+    ); */
   };
 
   useEffect(() => {
@@ -204,7 +209,7 @@ const Login = () => {
                   variant="contained"
                   color="primary"
                   className={classes.submit}
-                  onClick={(event) => onFormSubmit(event, login)}
+                  onClick={(event) => onFormSubmit(event)}
                 >
                   Sign In
                 </Button>

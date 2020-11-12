@@ -14,9 +14,6 @@ import AuthGuard from "./components/AuthGuard";
 import GuestGuard from "./components/GuestGuard";
 import LoadingScreen from "./components/LoadingScreen";
 import DashboardLayout from "./layouts/Dashboard";
-// import { Reports, Myself } from "./screens/Client";
-// import Home from "./screens/Home";
-// import DocsLayout from './layouts/DocsLayout';
 import MainLayout from "./layouts/MainLayout";
 import { PlainPatientPortal, WithLeftSidebar } from "./layouts/PatientPortal";
 
@@ -31,7 +28,7 @@ export const renderRoutes = (routes = []) => (
 
         return (
           <Route
-        // eslint-disable-next-line react/no-array-index-key
+            //eslint-disable-next-line react/no-array-index-key
             key={i}
             path={route.path}
             exact={route.exact}
