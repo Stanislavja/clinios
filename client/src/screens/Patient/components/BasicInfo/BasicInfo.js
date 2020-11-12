@@ -20,13 +20,42 @@ import { useDispatch } from "react-redux";
 
 import CountrySelect from "../../../../components/common/CountrySelect";
 import RegionSelect from "../../../../components/common/RegionSelect";
+import PatientService from "../../../../services/patient.service";
 import {
   BasicInfoForm,
   InsuranceForm,
   Pharmacies,
   PaymentData,
 } from "../../../../static/patientBasicInfoForm";
+import { setError, setSuccess } from "../../../../store/common/actions";
 import { calculateAge } from "../../../../utils/helpers";
+
+const useStyles = makeStyles((theme) => ({
+  inputRow: {
+    marginBottom: theme.spacing(1),
+  },
+  sectionCard: {
+    padding: theme.spacing(1.5, 1),
+  },
+  halfSectionCard: {
+    padding: theme.spacing(1.5, 1),
+    minHeight: 198,
+  },
+  root: {
+    border: "1px solid",
+    margin: theme.spacing(0, 0, 1, 0),
+    borderRadius: 0,
+  },
+  inputTextRow: {
+    marginBottom: theme.spacing(3),
+  },
+  select: {
+    lineHeight: "2.30em",
+  },
+  table: {
+    background: "white",
+  },
+}));
 
 export default function BasicInfo(props) {
   const classes = useStyles();
@@ -60,7 +89,6 @@ export default function BasicInfo(props) {
     address: "",
     address2: "",
     city: "",
-
   });
 
   useEffect(() => {
@@ -97,8 +125,7 @@ export default function BasicInfo(props) {
         onClose();
       })
       .catch((error) => {
-        const resMessage = (error.response
-          && error.response.data
+        const resMessage = (error.response && error.response.data
           && error.response.data.message)
           || error.message
           || error.toString();
@@ -135,32 +162,27 @@ export default function BasicInfo(props) {
                         onChange={(e) => handleInputChnage(e)}
                       />
                     ) : (
-                        <TextField
-                          select
-                          placeholder={item.label}
-                          label={item.label}
-                          id={item.id}
-                          name={item.name}
-                          value={basicInfo[item.name]}
-                          fullWidth
-                          onChange={(e) => handleInputChnage(e)}
-                        >
-                          {item.options.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      )}
+                      <TextField
+                        select
+                        placeholder={item.label}
+                        label={item.label}
+                        id={item.id}
+                        name={item.name}
+                        value={basicInfo[item.name]}
+                        fullWidth
+                        onChange={(e) => handleInputChnage(e)}
+                      >
+                        {item.options.map((option) => (
+                          <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    )}
                   </Grid>
                 ))}
               </Grid>
-              <Grid
-                container
-                spacing={1}
-                className={classes.inputRow}
-                alignItems="flex-end"
-              >
+              <Grid container spacing={1} className={classes.inputRow} alignItems="flex-end">
                 {SecondRow.map((item) => (
                   <Grid key={item.name} item md={2}>
                     {item.baseType === "input" ? (
@@ -178,23 +200,23 @@ export default function BasicInfo(props) {
                         onChange={(e) => handleInputChnage(e)}
                       />
                     ) : (
-                        <TextField
-                          select
-                          placeholder={item.label}
-                          label={item.label}
-                          id={item.id}
-                          name={item.name}
-                          value={basicInfo[item.name]}
-                          fullWidth
-                          onChange={(e) => handleInputChnage(e)}
-                        >
-                          {item.options.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      )}
+                      <TextField
+                        select
+                        placeholder={item.label}
+                        label={item.label}
+                        id={item.id}
+                        name={item.name}
+                        value={basicInfo[item.name]}
+                        fullWidth
+                        onChange={(e) => handleInputChnage(e)}
+                      >
+                        {item.options.map((option) => (
+                          <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    )}
                   </Grid>
                 ))}
                 <Grid item md={2}>
@@ -218,32 +240,29 @@ export default function BasicInfo(props) {
                         onChange={(e) => handleInputChnage(e)}
                       />
                     ) : (
-                        <TextField
-                          select
-                          placeholder={item.label}
-                          label={item.label}
-                          id={item.id}
-                          name={item.name}
-                          value={basicInfo[item.name]}
-                          fullWidth
-                          onChange={(e) => handleInputChnage(e)}
-                        >
-                          {item.options.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      )}
+                      <TextField
+                        select
+                        placeholder={item.label}
+                        label={item.label}
+                        id={item.id}
+                        name={item.name}
+                        value={basicInfo[item.name]}
+                        fullWidth
+                        onChange={(e) => handleInputChnage(e)}
+                      >
+                        {item.options.map((option) => (
+                          <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                          </MenuItem>
+                        ))}
+                      </TextField>
+                    )}
                   </Grid>
                 ))}
               </Grid>
               <Grid container spacing={1} alignItems="flex-end">
                 <Grid item md={2}>
-                  <Typography>
-                    Last Login:
-                    Jan 1, 2020
-                  </Typography>
+                  <Typography>Last Login: Jan 1, 2020</Typography>
                 </Grid>
                 <Grid item md={2}>
                   <TextField
@@ -344,10 +363,7 @@ export default function BasicInfo(props) {
               <Grid container spacing={1}>
                 {Pharmacies.map((pharmacy) => (
                   <Grid key={pharmacy.name} item md={4}>
-                    <TextField
-                      label={pharmacy.name}
-                      className={classes.inputTextRow}
-                    />
+                    <TextField label={pharmacy.name} className={classes.inputTextRow} />
                     <Typography>{pharmacy.name}</Typography>
                     <Typography>{pharmacy.address}</Typography>
                     <Typography>{pharmacy.phone}</Typography>
@@ -397,11 +413,7 @@ export default function BasicInfo(props) {
                   </Button>
                 </span>
               </Typography>
-              <Table
-                size="small"
-                className={classes.table}
-                aria-label="simple table"
-              >
+              <Table size="small" className={classes.table} aria-label="simple table">
                 <TableHead>
                   <TableRow>
                     <TableCell>Type</TableCell>
@@ -432,15 +444,19 @@ export default function BasicInfo(props) {
       </Grid>
 
       <Grid container justify="space-between">
-        <Button onClick={() => onFormSubmit()} variant="outlined">Save</Button>
-        <Button onClick={() => onClose()} variant="outlined">Cancel</Button>
+        <Button onClick={() => onFormSubmit()} variant="outlined">
+          Save
+        </Button>
+        <Button onClick={() => onClose()} variant="outlined">
+          Cancel
+        </Button>
       </Grid>
     </>
   );
 }
 
 BasicInfo.propTypes = {
-  formData: PropTypes.objectOf(PropTypes.string).isRequired,
+  formData: PropTypes.objectOf(PropTypes.any).isRequired,
   patientId: PropTypes.string.isRequired,
   reloadData: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
