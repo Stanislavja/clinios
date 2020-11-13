@@ -15,7 +15,7 @@ import GuestGuard from "./components/GuestGuard";
 import LoadingScreen from "./components/LoadingScreen";
 import DashboardLayout from "./layouts/Dashboard";
 import MainLayout from "./layouts/MainLayout";
-import { PlainPatientPortal, WithLeftSidebar } from "./layouts/PatientPortal";
+import { WithLeftSidebar } from "./layouts/PatientPortal";
 
 
 export const renderRoutes = (routes = []) => (
@@ -28,7 +28,7 @@ export const renderRoutes = (routes = []) => (
 
         return (
           <Route
-            //eslint-disable-next-line react/no-array-index-key
+            // eslint-disable-next-line react/no-array-index-key
             key={i}
             path={route.path}
             exact={route.exact}
@@ -71,7 +71,7 @@ const routes = [
   {
     exact: true,
     guard: AuthGuard,
-    layout: PlainPatientPortal,
+    layout: DashboardLayout,
     path: "/patients/:patientId",
     component: lazy(() => import("./screens/Patient")),
   },
