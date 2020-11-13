@@ -13,11 +13,10 @@ import SearchIcon from "@material-ui/icons/Search";
 import clsx from "clsx";
 import moment from "moment";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
-import { NavLink as RouterLink } from "react-router-dom";
+import { NavLink as RouterLink, useHistory } from "react-router-dom";
 
+import useAuth from "../../../../hooks/useAuth";
 import useDebounce from "../../../../hooks/useDebounce";
-import { logOut } from "../../../../store/auth/actions";
 import * as API from "../../../../utils/API";
 import { SearchResults } from "./components";
 import DropdownItems from "./DropdownItems";
@@ -248,11 +247,12 @@ const pages = [
 
 const Topbar = (props) => {
   const {
-    className, onSidebarOpen, logout, user, ...rest
+    className, onSidebarOpen, ...rest
   } = props;
 
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const history = useHistory();
+  const { user, logout } = useAuth();
   const [open, setOpen] = React.useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
@@ -291,11 +291,13 @@ const Topbar = (props) => {
     // value (searchTerm) hasn't changed for more than 500ms.
     [debouncedSearchTerm],
   );
-  const handleLogout = (event) => {
-    event.preventDefault();
-    dispatch(logOut());
-    logout();
-    window.location.reload();
+  const handleLogout = async () => {
+    try {
+      await logout();
+      history.push("/login_client");
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -380,15 +382,12 @@ const Topbar = (props) => {
 
 Topbar.defaultProps = {
   className: null,
-  logout: () => { },
-  onSidebarOpen: () => { },
+  onSidebarOpen: () => {},
 };
 
 Topbar.propTypes = {
   className: PropTypes.string,
   onSidebarOpen: PropTypes.func,
-  logout: PropTypes.func,
-  user: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default Topbar;

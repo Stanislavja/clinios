@@ -8,10 +8,9 @@ import { fade, makeStyles } from "@material-ui/core/styles";
 import InputIcon from "@material-ui/icons/Input";
 import clsx from "clsx";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useHistory } from "react-router-dom";
 
-import { logOut } from "../../../../../../store/auth/actions";
+import useAuth from "../../../../../../hooks/useAuth";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,16 +40,20 @@ const useStyles = makeStyles((theme) => ({
 
 const Profile = (props) => {
   const {
-    className, isAuth, logout, user, ...rest
+    className, ...rest
   } = props;
 
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const history = useHistory();
+  const { user, logout } = useAuth();
 
-  const handleLogout = (event, authProviderLogOut) => {
-    dispatch(logOut());
-    authProviderLogOut();
-    window.location.reload();
+  const handleLogout = async () => {
+    try {
+      await logout();
+      history.push("/login_client");
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -86,14 +89,10 @@ const Profile = (props) => {
 
 Profile.defaultProps = {
   className: null,
-  logout: () => { },
 };
 
 Profile.propTypes = {
   className: PropTypes.string,
-  user: PropTypes.objectOf(PropTypes.any).isRequired,
-  isAuth: PropTypes.bool.isRequired,
-  logout: PropTypes.func,
 };
 
 export default Profile;

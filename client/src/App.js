@@ -1,7 +1,7 @@
 import React from "react";
 import { Router } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-
+import { SnackbarProvider } from 'notistack';
 import DateFnsUtils from "@date-io/date-fns";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -16,14 +16,22 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <Router history={history}>
-        <AuthProvider>
-        <AuthProviderX>
-          {renderRoutes(routes)}
-        </AuthProviderX>
-        </AuthProvider>
-      </Router>
-        {/* <AppRouter /> */}
+        <SnackbarProvider
+          dense
+          maxSnack={3}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+        >
+          <Router history={history}>
+            <AuthProvider>
+            <AuthProviderX>
+              {renderRoutes(routes)}
+            </AuthProviderX>
+            </AuthProvider>
+          </Router>
+        </SnackbarProvider>
       </MuiPickersUtilsProvider>
     </ThemeProvider>
   );
