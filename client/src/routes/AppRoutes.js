@@ -6,7 +6,7 @@ import { Router, Route, Switch } from "react-router-dom";
 import { MainLayout } from "../layouts";
 import Dashboard from "../layouts/Dashboard";
 import { PlainPatientPortal, WithLeftSidebar } from "../layouts/PatientPortal";
-import Plain from "../layouts/Plain";
+import Plain from "../layouts/PlainLayout";
 import { AuthProvider } from "../providers/AuthProvider";
 import Agreement from "../screens/Agreement";
 import Login from "../screens/Auth/Login";

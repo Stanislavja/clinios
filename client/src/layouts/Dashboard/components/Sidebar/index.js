@@ -46,7 +46,7 @@ const Sidebar = (props) => {
   const pages = [
     {
       title: "Home",
-      href: "/dashboard/appoinment-types",
+      href: "/dashboard",
       icon: <Icon path={mdiAccount} size={1} horizontal vertical rotate={180} />,
     },
     {
