@@ -77,7 +77,7 @@ const DiagnosesDetails = (props) => {
   const mapStateForRows = useCallback(() => {
     const stateObj = {};
     data.forEach((item) => {
-      stateObj[item.name] = true;
+      stateObj[item.name] = !!item.active;
     });
     setState({ ...stateObj });
   }, [data]);
@@ -109,9 +109,33 @@ const DiagnosesDetails = (props) => {
       });
   };
 
-  const handleSwitchChange = (event) => {
+  const updateStatusHandler = (event, icdId) => {
     const { name, checked } = event.target;
     setState({ ...state, [name]: checked });
+    const reqBody = {
+      data: {
+        active: checked,
+      },
+    };
+    PatientService.updateDiagnoses(patientId, icdId, reqBody)
+      .then((response) => {
+        dispatch(setSuccess(`${response.data.message}`));
+        reloadData();
+      })
+      .catch((error) => {
+        const resMessage = (error.response
+          && error.response.data
+          && error.response.data.message)
+          || error.message
+          || error.toString();
+        const severity = "error";
+        dispatch(
+          setError({
+            severity,
+            message: resMessage,
+          }),
+        );
+      });
   };
 
   return (
@@ -150,7 +174,7 @@ const DiagnosesDetails = (props) => {
                     control={(
                       <Switch
                         checked={!!state[row.name]}
-                        onChange={handleSwitchChange}
+                        onChange={(e) => updateStatusHandler(e, row.icd_id)}
                         name={row.name}
                         color="primary"
                         size="small"
