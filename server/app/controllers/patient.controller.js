@@ -1485,7 +1485,7 @@ const getDiagnoses = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select pi.created, pi.icd_id, i.name
+      `select pi.created, pi.icd_id, pi.active, i.name
         from patient_icd pi
         left join icd i on i.id=pi.icd_id
         where pi.patient_id=${patient_id}
