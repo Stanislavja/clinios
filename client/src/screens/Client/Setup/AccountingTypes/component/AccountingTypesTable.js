@@ -119,7 +119,7 @@ const AccountingTypesTable = ({ result }) => {
 AccountingTypesTable.propTypes = {
   result: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string,
+      id: PropTypes.number,
       name: PropTypes.string,
       amount: PropTypes.number,
       status: PropTypes.string,

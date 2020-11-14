@@ -387,7 +387,6 @@ const NewOrEditEvent = ({
                   );
                   setAppointmentLeangth(length);
                 }}
-                minD
                 ate={new Date()}
                 onError={console.log}
                 disablePast
@@ -505,7 +504,7 @@ const NewOrEditEvent = ({
               aria-label="minimum height"
               placeholder="Notes..."
               name="notes"
-              value={calEvent.notes}
+              value={calEvent.notes || ""}
               onChange={(event) => handleOnChange(event)}
             />
           </div>
