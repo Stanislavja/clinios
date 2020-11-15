@@ -234,9 +234,9 @@ class Patient {
     );
   }
 
-  updateDiagnoses(data, encounterId, icdId) {
+  updateDiagnoses(patient_id, icd_id, data) {
     return axios.put(
-      `${API_BASE}/patient/diagnoses/${encounterId}/${icdId}`,
+      `${API_BASE}/patient/${patient_id}/diagnoses/${icd_id}`,
       data,
       {
         headers: authHeader(),

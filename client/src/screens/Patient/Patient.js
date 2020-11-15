@@ -153,6 +153,7 @@ export default function Patient() {
   const [showMessageDialog, setShowMessageDialog] = useState(false);
   const [showMessageExpandDialog, setShowMessageExpandDialog] = useState(false);
 
+  const [fetchDiagnosesStatus, setFetchDiagnosesStatus] = useState(true);
   const [showDiagnosesDialog, setShowDiagnosesDialog] = useState(false);
   const [showDiagnosesExpandDialog, setShowDiagnosesExpandDialog] = useState(
     false,
@@ -1224,12 +1225,12 @@ export default function Patient() {
       {!!showDiagnosesExpandDialog && (
         <Dialog
           open={showDiagnosesExpandDialog}
-          title={" "}
+          title={`${fetchDiagnosesStatus ? "Active" : "In-Active"} Diagnoses`}
           message={(
             <DiagnosesDetails
               data={diagnoses}
               onClose={toggleDiagnosesExpandDialog}
-              reloadData={() => fetchDiagnoses(true)}
+              reloadData={() => fetchDiagnoses(fetchDiagnosesStatus)}
               patientId={patientId}
             />
           )}
@@ -1456,7 +1457,10 @@ export default function Patient() {
                       ? `Balance $${patientBalance}`
                       : ""
                   }
-                  contentToggleHandler={(value) => fetchDiagnoses(value)}
+                  contentToggleHandler={(value) => {
+                    setFetchDiagnosesStatus(value);
+                    fetchDiagnoses(value);
+                  }}
                 />
               </Grid>
             ))}

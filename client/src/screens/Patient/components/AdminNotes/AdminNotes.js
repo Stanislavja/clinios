@@ -81,8 +81,8 @@ const AdminNotes = (props) => {
       })
       .catch((error) => {
         const resMessage = (error.response
-            && error.response.data
-            && error.response.data.message[0].msg)
+          && error.response.data
+          && error.response.data.message[0].msg)
           || error.message
           || error.toString();
         const severity = "error";
