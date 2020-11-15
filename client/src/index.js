@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 
 import App from "./App";
+import CustomSnackbar from "./components/common/CustomSnackbar";
 import NetworkService from "./network-service";
 import * as serviceWorker from "./serviceWorker";
 import configureStore from "./store/configureStore";
@@ -14,7 +15,10 @@ NetworkService.setupInterceptors(store);
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <>
+        <App />
+        <CustomSnackbar />
+      </>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root"),
