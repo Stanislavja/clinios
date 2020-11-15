@@ -6,10 +6,9 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
-import { NavLink as RouterLink } from "react-router-dom";
+import { NavLink as RouterLink, useHistory } from "react-router-dom";
 
-import { logOut } from "../../../../../../store/auth/actions";
+import useAuth from "../../../../../../hooks/useAuth";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -53,23 +52,26 @@ const CustomRouterLink = forwardRef((props, ref) => (
 
 const SidebarNav = (props) => {
   const {
-    pages, className, logout, ...rest
+    pages, className, ...rest
   } = props;
+  const { logout } = useAuth();
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const history = useHistory();
 
-  const handleLogout = (event) => {
-    event.preventDefault();
-    dispatch(logOut());
-    logout();
-    window.location.reload();
+  const handleLogout = async () => {
+    try {
+      await logout();
+      history.push("/login_client");
+    } catch (err) {
+      console.error(err);
+    }
   };
 
+
   return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
     <List {...rest} className={clsx(classes.root, className)}>
       {pages.map((page) => (
-        <ListItem className={classes.item} disableGutters key={page.title}>
+        <ListItem className={classes.item} disableGutters key={page.id}>
           <Button
             activeClassName={classes.active}
             className={classes.button}
