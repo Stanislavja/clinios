@@ -189,20 +189,6 @@ const routes = [
         exact: true,
         guard: AuthGuard,
         layout: DashboardLayout,
-        path: "/reports/report-finance",
-        component: lazy(() => import("./screens/Client/Setup/ReportFinance")),
-      },
-      {
-        exact: true,
-        guard: AuthGuard,
-        layout: DashboardLayout,
-        path: "/reports/report-finance-detail/:dateFrom/:dateTo",
-        component: lazy(() => import("./screens/Client/Setup/ReportFinanceDetail")),
-      },
-      {
-        exact: true,
-        guard: AuthGuard,
-        layout: DashboardLayout,
         path: "/setup/integrations",
         component: lazy(() => import("./screens/Client/Setup/Integrations")),
       },
@@ -307,11 +293,24 @@ const routes = [
     ],
   },
   {
-    exact: true,
     guard: AuthGuard,
     layout: DashboardLayout,
     path: "/reports",
-    component: lazy(() => import("./screens/Client/Reports")),
+    routes: [
+      {
+        exact: true,
+        path: "/reports",
+        component: lazy(() => import("./screens/Client/Reports")),
+      },
+      {
+        path: "/reports/report-finance",
+        component: lazy(() => import("./screens/Client/Setup/ReportFinance")),
+      },
+      {
+        path: "/reports/report-finance-detail/:dateFrom/:dateTo",
+        component: lazy(() => import("./screens/Client/Setup/ReportFinanceDetail")),
+      },
+    ],
   },
   {
     exact: true,
@@ -360,6 +359,12 @@ const routes = [
     guard: AuthGuard,
     layout: WithLeftSidebar,
     routes: [
+      {
+        exact: true,
+        guard: AuthGuard,
+        path: "/patient",
+        component: lazy(() => import("./screens/patient-portal/Home/Home")),
+      },
       {
         guard: AuthGuard,
         path: "/patient/messages",
