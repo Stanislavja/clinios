@@ -6,7 +6,6 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 
-import { AuthConsumer } from "../../providers/AuthProvider";
 import { Topbar, Sidebar, Footer } from "./components";
 
 const useStyles = makeStyles((theme) => ({
@@ -46,35 +45,26 @@ const Dashboard = (props) => {
     setOpenSidebar(false);
   };
   return (
-    <AuthConsumer>
-      {({ isAuth, logout, user }) => (
-        <div
-          className={clsx({
-            [classes.root]: true,
-            [classes.shiftContent]: isDesktop,
-          })}
-        >
-          <Topbar
-            onSidebarOpen={handleSidebarOpen}
-            logout={logout}
-            user={user}
-          />
-          <Sidebar
-            onClose={handleSidebarClose}
-            open={shouldOpenSidebar}
-            variant={isDesktop ? "persistent" : "temporary"}
-            isAuth={isAuth}
-            logout={logout}
-            user={user}
-          />
+    <div
+      className={clsx({
+        [classes.root]: true,
+        [classes.shiftContent]: isDesktop,
+      })}
+    >
+      <Topbar
+        onSidebarOpen={handleSidebarOpen}
+      />
+      <Sidebar
+        onClose={handleSidebarClose}
+        open={shouldOpenSidebar}
+        variant={isDesktop ? "persistent" : "temporary"}
+      />
 
-          <Container maxWidth="xl" style={{ flex: 1 }}>
-            {children}
-          </Container>
-          <Footer />
-        </div>
-      )}
-    </AuthConsumer>
+      <Container maxWidth="xl" style={{ flex: 1 }}>
+        {children}
+      </Container>
+      <Footer />
+    </div>
   );
 };
 

@@ -120,9 +120,9 @@ const NewOrEditEvent = ({
   isLoading,
   ...props
 }) => {
+  const { appointments, providers, errors } = props;
   const classes = useStyles();
   const history = useHistory();
-  const { providers, errors } = props;
   const [provider, setProvider] = React.useState("");
   const [patients, setPatients] = React.useState([]);
   const [selectedPatient, setSelectedPatient] = React.useState("");
@@ -188,8 +188,8 @@ const NewOrEditEvent = ({
     setPatientSearchTerm(`${patient.firstname} ${patient.lastname}`);
   };
   const handleProviderChange = (event) => {
-    const p = providers.filter((p) => p.id === event.target.value);
-    setProvider(p[0]);
+    const pd = providers.filter((p) => p.id === event.target.value);
+    setProvider(pd[0]);
   };
 
   const handleSaveOrUpdate = () => {
@@ -234,10 +234,10 @@ const NewOrEditEvent = ({
         onEventUpdate(payload);
       }
     };
-    const existPatientID = props.appointments
+    const existPatientID = appointments
       .map((appointment) => selectedPatient.id === appointment.patient_id)
       .includes(true);
-    const startTimeExist = props.appointments
+    const startTimeExist = appointments
       // eslint-disable-next-line
       .map((appointment) => calEvent.start_dt == appointment.start_dt)
       .includes(true);
@@ -318,6 +318,7 @@ const NewOrEditEvent = ({
           </DialogContentText>
           {errors
             && errors.map((error, index) => (
+               // eslint-disable-next-line react/no-array-index-key
               <Alert severity="error" key={index}>
                 {error.msg}
               </Alert>
@@ -386,7 +387,6 @@ const NewOrEditEvent = ({
                   );
                   setAppointmentLeangth(length);
                 }}
-                minD
                 ate={new Date()}
                 onError={console.log}
                 disablePast
@@ -453,9 +453,9 @@ const NewOrEditEvent = ({
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                {providers.map((provider) => (
-                  <MenuItem key={provider.id} value={provider.id}>
-                    {provider.name}
+                {providers.map((pvd) => (
+                  <MenuItem key={pvd.id} value={pvd.id}>
+                    {pvd.name}
                   </MenuItem>
                 ))}
               </Select>
@@ -504,7 +504,7 @@ const NewOrEditEvent = ({
               aria-label="minimum height"
               placeholder="Notes..."
               name="notes"
-              value={calEvent.notes}
+              value={calEvent.notes || ""}
               onChange={(event) => handleOnChange(event)}
             />
           </div>
@@ -552,9 +552,33 @@ const NewOrEditEvent = ({
 
 NewOrEditEvent.propTypes = {
   isOpen: PropTypes.bool.isRequired,
+  appointments: PropTypes.arrayOf(
+    PropTypes.arrayOf({
+      id: PropTypes.string,
+      appointment_type: PropTypes.string,
+      appointment_name_portal: PropTypes.string,
+      length: PropTypes.string,
+      allow_patients_schedule: PropTypes.bool,
+      sort_order: PropTypes.number,
+      note: PropTypes.string,
+      created: PropTypes.string,
+      created_user: PropTypes.string,
+      updated: PropTypes.string,
+      updated_user: PropTypes.string,
+    }),
+  ).isRequired,
+  selectedProvider: PropTypes.shape({
+    name: PropTypes.string,
+  }).isRequired,
+  providers: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+    }),
+  ).isRequired,
   isLoading: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  selectedDate: PropTypes.string.isRequired,
+  selectedDate: PropTypes.instanceOf(Date).isRequired,
   onEventUpdate: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   isNewEvent: PropTypes.bool.isRequired,

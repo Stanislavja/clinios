@@ -37,11 +37,8 @@ const Sidebar = (props) => {
   const {
     open,
     variant,
-    isAuth,
-    logout,
     onClose,
     className,
-    user,
     ...rest
   } = props;
   const classes = useStyles();
@@ -49,7 +46,7 @@ const Sidebar = (props) => {
   const pages = [
     {
       title: "Home",
-      href: "/dashboard/appoinment-types",
+      href: "/dashboard",
       icon: <Icon path={mdiAccount} size={1} horizontal vertical rotate={180} />,
     },
     {
@@ -93,7 +90,7 @@ const Sidebar = (props) => {
       variant={variant}
     >
       <div {...rest} className={clsx(classes.root, className)}>
-        <Profile isAuth={isAuth} logout={logout} user={user} />
+        <Profile />
         <Divider className={classes.divider} />
         <SidebarNav className={classes.nav} pages={pages} />
         <SearchBar />
@@ -104,8 +101,7 @@ const Sidebar = (props) => {
 
 Sidebar.defaultProps = {
   className: null,
-  logout: () => { },
-  onClose: () => { },
+  onClose: () => {},
 };
 
 Sidebar.propTypes = {
@@ -113,9 +109,6 @@ Sidebar.propTypes = {
   onClose: PropTypes.func,
   open: PropTypes.bool.isRequired,
   variant: PropTypes.string.isRequired,
-  user: PropTypes.objectOf(PropTypes.any).isRequired,
-  isAuth: PropTypes.bool.isRequired,
-  logout: PropTypes.func,
 };
 
 export default Sidebar;

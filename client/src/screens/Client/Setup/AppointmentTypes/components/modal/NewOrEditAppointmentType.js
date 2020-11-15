@@ -17,6 +17,7 @@ import Alert from "@material-ui/lab/Alert";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 
+import useAuth from "../../../../../../hooks/useAuth";
 import AppointmentService from "../../../../../../services/appointmentType.service";
 import { setSuccess } from "../../../../../../store/common/actions";
 import { removeEmpty } from "../../../../../../utils/helpers";
@@ -94,12 +95,12 @@ const useStyles = makeStyles((theme) => ({
 const NewOrEditAppointment = ({
   isOpen,
   onClose,
-  user,
   isNewAppointment,
   ...props
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const { user } = useAuth();
   const { savedAppointments } = props;
   const [appointment, setAppointment] = useState([]);
   const [errors, setErrors] = useState([]);
@@ -376,12 +377,6 @@ const NewOrEditAppointment = ({
 };
 
 NewOrEditAppointment.propTypes = {
-  user: PropTypes.arrayOf(
-    PropTypes.arrayOf({
-      id: PropTypes.string,
-      client_id: PropTypes.string,
-    }),
-  ).isRequired,
   isOpen: PropTypes.bool.isRequired,
   isNewAppointment: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,

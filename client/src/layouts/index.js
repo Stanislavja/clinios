@@ -1,3 +1,3 @@
 /* eslint-disable */
-export { default as Main } from "./Main";
+export { default as MainLayout } from "./MainLayout";
 /* eslint-enable */

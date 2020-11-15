@@ -4,8 +4,6 @@ import { makeStyles, Container, CssBaseline } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
-// simport Video from "./../../../../components/videos/Video";
-import { AuthConsumer } from "../../../../providers/AuthProvider";
 import DrugsService from "../../../../services/drugs.service";
 import Drugsform from "./components/Drugsform";
 import Drugstable from "./components/Drugstable";
@@ -56,53 +54,37 @@ export default function Drugs() {
   };
 
   return (
-    <AuthConsumer>
-      {({ user }) => (
-        <>
-          <CssBaseline>
-            <Container maxWidth={false} className={classes.root}>
-              <Grid container justify="center" spacing={2}>
-                <Grid item md={12} xs={12}>
-                  <Typography
-                    component="h1"
-                    variant="h2"
-                    color="textPrimary"
-                    className={classes.title}
-                  >
-                    Drugs
-                  </Typography>
-                  <Typography component="p" variant="body2" color="textPrimary">
-                    This page is used to manage drugs information.
-                  </Typography>
-                  <Drugsform
-                    fetchSearchDrugs={fetchSearchDrugs}
-                    textChangeHandler={textChangeHandler}
-                    checkBoxChangeHandler={checkBoxChangeHandler}
-                  />
-                  {searchResult.length > 0 && (
-                    <Drugstable
-                      user={user}
-                      result={searchResult}
-                      fetchSearchDrugs={fetchSearchDrugs}
-                    />
-                  )}
-                </Grid>
-                {/* }
-                <Grid item md={12} xs={12}>
-                  <Card className={classes.card}>
-                    <CardContent>
-                      <Typography variant="h4" gutterBottom>
-                        <Video url="https://www.youtube.com/watch?v=ysz5S6PUM-U" />
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-                */}
-              </Grid>
-            </Container>
-          </CssBaseline>
-        </>
-      )}
-    </AuthConsumer>
+    <>
+      <CssBaseline>
+        <Container maxWidth={false} className={classes.root}>
+          <Grid container justify="center" spacing={2}>
+            <Grid item md={12} xs={12}>
+              <Typography
+                component="h1"
+                variant="h2"
+                color="textPrimary"
+                className={classes.title}
+              >
+                Drugs
+              </Typography>
+              <Typography component="p" variant="body2" color="textPrimary">
+                This page is used to manage drugs information.
+              </Typography>
+              <Drugsform
+                fetchSearchDrugs={fetchSearchDrugs}
+                textChangeHandler={textChangeHandler}
+                checkBoxChangeHandler={checkBoxChangeHandler}
+              />
+              {searchResult.length > 0 && (
+                <Drugstable
+                  result={searchResult}
+                  fetchSearchDrugs={fetchSearchDrugs}
+                />
+              )}
+            </Grid>
+          </Grid>
+        </Container>
+      </CssBaseline>
+    </>
   );
 }

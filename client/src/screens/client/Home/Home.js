@@ -58,8 +58,8 @@ export default function Home() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [errors, setErrors] = useState([]);
-  const [selectedProvider, setSelectedProvider] = useState("");
-  const [providerDetails, setProviderDetails] = useState("");
+  const [selectedProvider, setSelectedProvider] = useState({});
+  const [providerDetails, setProviderDetails] = useState({});
   const [messagesUnread, setMessagesUnread] = useState([]);
   const [appointmentRequests, setAppointmentRequests] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());

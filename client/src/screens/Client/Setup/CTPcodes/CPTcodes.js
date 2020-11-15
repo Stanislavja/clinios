@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { CssBaseline, makeStyles } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 
-import { AuthConsumer } from "../../../../providers/AuthProvider";
 import CPTCodesService from "../../../../services/cpt.service";
 import CPTform from "./component/CPTform";
 import CPTtable from "./component/CPTtable";
@@ -78,44 +77,39 @@ export default function CTPcodes() {
   };
 
   return (
-    <AuthConsumer>
-      {({ user }) => (
-        <>
-          <CssBaseline />
-          <div className={classes.root}>
-            <Typography
-              component="h1"
-              variant="h2"
-              color="textPrimary"
-              className={classes.title}
-            >
-              CPT Codes
-            </Typography>
-            <Typography component="p" variant="body2" color="textPrimary">
-              This page is used to manage CTP codes
-            </Typography>
-            <CPTform
-              lebCompanyList={lebCompanyList}
-              fetchCptCodeSearch={fetchCptCodeSearch}
-              handleChangeOfCptId={handleChangeOfCptId}
-              handleChangeOfCptDescription={handleChangeOfCptDescription}
-              handleChangeOfLabCompanyId={handleChangeOfLabCompanyId}
-              handleChangeOfFavorite={handleChangeOfFavorite}
-              handleChangeOfBillable={handleChangeOfBillable}
-              handleChangeOfSelf={handleChangeOfSelf}
-              handleChangeOfGroup={handleChangeOfGroup}
-              labCompanyId={labCompanyId}
-            />
-            {searchResult.length > 0 && (
-              <CPTtable
-                searchResult={searchResult}
-                user={user}
-                fetchCptCodeSearch={fetchCptCodeSearch}
-              />
-            )}
-          </div>
-        </>
-      )}
-    </AuthConsumer>
+    <>
+      <CssBaseline />
+      <div className={classes.root}>
+        <Typography
+          component="h1"
+          variant="h2"
+          color="textPrimary"
+          className={classes.title}
+        >
+          CPT Codes
+        </Typography>
+        <Typography component="p" variant="body2" color="textPrimary">
+          This page is used to manage CTP codes
+        </Typography>
+        <CPTform
+          lebCompanyList={lebCompanyList}
+          fetchCptCodeSearch={fetchCptCodeSearch}
+          handleChangeOfCptId={handleChangeOfCptId}
+          handleChangeOfCptDescription={handleChangeOfCptDescription}
+          handleChangeOfLabCompanyId={handleChangeOfLabCompanyId}
+          handleChangeOfFavorite={handleChangeOfFavorite}
+          handleChangeOfBillable={handleChangeOfBillable}
+          handleChangeOfSelf={handleChangeOfSelf}
+          handleChangeOfGroup={handleChangeOfGroup}
+          labCompanyId={labCompanyId}
+        />
+        {searchResult.length > 0 && (
+          <CPTtable
+            searchResult={searchResult}
+            fetchCptCodeSearch={fetchCptCodeSearch}
+          />
+        )}
+      </div>
+    </>
   );
 }

@@ -223,7 +223,7 @@ AccountingSearchResults.propTypes = {
   results: PropTypes.arrayOf(
     PropTypes.shape({
       amount: PropTypes.number.isRequired,
-      client_id: PropTypes.string.isRequired,
+      client_id: PropTypes.number.isRequired,
       cpt_id: PropTypes.string,
       cpt_name: PropTypes.string,
       created: PropTypes.string.isRequired,

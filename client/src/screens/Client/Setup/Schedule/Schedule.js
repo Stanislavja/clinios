@@ -8,7 +8,6 @@ import Typography from "@material-ui/core/Typography";
 import _ from "lodash";
 import moment from "moment";
 
-import { AuthConsumer } from "../../../../providers/AuthProvider";
 import ScheduleService from "../../../../services/schedule.service";
 import DeleteSchedule from "./component/modal/DeleteSchedule";
 import NewOrEditSchedule from "./component/modal/NewOrEditSchedule";
@@ -103,68 +102,64 @@ const Schedule = () => {
   };
 
   return (
-    <AuthConsumer>
-      {({ user }) => (
-        <>
-          <CssBaseline>
-            <Container maxWidth={false} className={classes.root}>
-              <div className={classes.uploadButtons}>
-                <Typography component="h1" variant="h2" color="textPrimary">
-                  Schedule
-                </Typography>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  component="span"
-                  onClick={handleOnNewClick}
-                >
-                  New
-                </Button>
-              </div>
-              <Grid container justify="center" spacing={2}>
-                <Grid item md={12} xs={12}>
-                  <Typography component="p" variant="body2" color="textPrimary">
-                    This page is used to set availability for new patient
-                    appointments.
-                  </Typography>
-                  <ScheduleSearchForm
-                    userList={userList}
-                    userId={userId}
-                    handleChangeOfUserId={handleChangeOfUserId}
-                    fetchScheduleSearch={fetchScheduleSearch}
-                  />
-                  {searchResult.length > 0 && (
-                    <ScheduleSearchResultTable
-                      handleOnEditClick={handleOnEditClick}
-                      searchResult={searchResult}
-                      fetchScheduleSearch={fetchScheduleSearch}
-                      handleDeleteSchedule={handleDeleteSchedule}
-                    />
-                  )}
-                </Grid>
-              </Grid>
-              <NewOrEditSchedule
-                user={user}
-                isOpen={isOpen}
-                handleOnClose={() => setIsOpen(false)}
-                isNewSchedule={isNewSchedule}
+
+    <>
+      <CssBaseline>
+        <Container maxWidth={false} className={classes.root}>
+          <div className={classes.uploadButtons}>
+            <Typography component="h1" variant="h2" color="textPrimary">
+              Schedule
+            </Typography>
+            <Button
+              variant="outlined"
+              color="primary"
+              component="span"
+              onClick={handleOnNewClick}
+            >
+              New
+            </Button>
+          </div>
+          <Grid container justify="center" spacing={2}>
+            <Grid item md={12} xs={12}>
+              <Typography component="p" variant="body2" color="textPrimary">
+                This page is used to set availability for new patient
+                appointments.
+              </Typography>
+              <ScheduleSearchForm
                 userList={userList}
                 userId={userId}
                 handleChangeOfUserId={handleChangeOfUserId}
                 fetchScheduleSearch={fetchScheduleSearch}
-                schedule={selectedScheduleValues}
               />
-              <DeleteSchedule
-                isDeleteModalOpen={isDeleteModalOpen}
-                onClose={() => setIsDeleteModalOpen(false)}
-                fetchScheduleSearch={fetchScheduleSearch}
-                id={selectedScheduleId}
-              />
-            </Container>
-          </CssBaseline>
-        </>
-      )}
-    </AuthConsumer>
+              {searchResult.length > 0 && (
+                <ScheduleSearchResultTable
+                  handleOnEditClick={handleOnEditClick}
+                  searchResult={searchResult}
+                  fetchScheduleSearch={fetchScheduleSearch}
+                  handleDeleteSchedule={handleDeleteSchedule}
+                />
+              )}
+            </Grid>
+          </Grid>
+          <NewOrEditSchedule
+            isOpen={isOpen}
+            handleOnClose={() => setIsOpen(false)}
+            isNewSchedule={isNewSchedule}
+            userList={userList}
+            userId={userId}
+            handleChangeOfUserId={handleChangeOfUserId}
+            fetchScheduleSearch={fetchScheduleSearch}
+            schedule={selectedScheduleValues}
+          />
+          <DeleteSchedule
+            isDeleteModalOpen={isDeleteModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
+            fetchScheduleSearch={fetchScheduleSearch}
+            id={selectedScheduleId}
+          />
+        </Container>
+      </CssBaseline>
+    </>
   );
 };
 
