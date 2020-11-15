@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Sidebar = (props) => {
   const {
-    open, variant, isAuth, logout, onClose, className, ...rest
+    open, variant, onClose, className, ...rest
   } = props;
   const classes = useStyles();
 
@@ -170,7 +170,7 @@ const Sidebar = (props) => {
     >
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <div {...rest} className={clsx(classes.root, className)}>
-        <SidebarNav className={classes.nav} pages={pages} logout={logout} />
+        <SidebarNav className={classes.nav} pages={pages} />
       </div>
     </Drawer>
   );
@@ -178,7 +178,6 @@ const Sidebar = (props) => {
 
 Sidebar.defaultProps = {
   className: null,
-  logout: () => {},
   onClose: () => {},
 };
 
@@ -187,8 +186,6 @@ Sidebar.propTypes = {
   onClose: PropTypes.func,
   open: PropTypes.bool.isRequired,
   variant: PropTypes.string.isRequired,
-  isAuth: PropTypes.bool.isRequired,
-  logout: PropTypes.func,
 };
 
 export default Sidebar;
