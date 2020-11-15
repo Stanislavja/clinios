@@ -67,15 +67,6 @@ const reducer = (state, action) => {
         user: null,
       };
     }
-    case "REGISTER": {
-      const { user } = action.payload;
-
-      return {
-        ...state,
-        isAuthenticated: true,
-        user,
-      };
-    }
     default: {
       return { ...state };
     }
@@ -87,7 +78,6 @@ const AuthContext = createContext({
   method: "JWT",
   login: () => Promise.resolve(),
   logout: () => { },
-  register: () => Promise.resolve(),
 });
 
 export const AuthProviderX = ({ children }) => {
@@ -109,24 +99,6 @@ export const AuthProviderX = ({ children }) => {
   const logout = () => {
     setSession(null);
     dispatch({ type: "LOGOUT" });
-  };
-
-  const register = async (email, name, password) => {
-    const response = await axios.post("/api/account/register", {
-      email,
-      name,
-      password,
-    });
-    const { accessToken, user } = response.data;
-
-    window.localStorage.setItem("accessToken", accessToken);
-
-    dispatch({
-      type: "REGISTER",
-      payload: {
-        user,
-      },
-    });
   };
 
   useEffect(() => {
@@ -185,7 +157,6 @@ export const AuthProviderX = ({ children }) => {
         method: "JWT",
         login,
         logout,
-        register,
       }}
     >
       {children}

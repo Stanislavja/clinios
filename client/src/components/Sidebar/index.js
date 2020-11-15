@@ -87,7 +87,6 @@ Sidebar.propTypes = {
   className: PropTypes.string,
   onClose: PropTypes.func,
   open: PropTypes.bool.isRequired,
-  isAuth: PropTypes.bool.isRequired,
   variant: PropTypes.string.isRequired,
 };
 
