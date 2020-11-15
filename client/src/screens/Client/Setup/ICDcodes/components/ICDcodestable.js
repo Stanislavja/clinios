@@ -19,6 +19,7 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 
+import useAuth from "../../../../../hooks/useAuth";
 import icdcodesService from "../../../../../services/icdcodes.service";
 import { setSuccess } from "../../../../../store/common/actions";
 
@@ -83,9 +84,10 @@ const GreenSwitch = withStyles({
   track: {},
 })(Switch);
 
-const ICDcodestable = ({ user, result, fetchSearchIcdCodes }) => {
+const ICDcodestable = ({ result, fetchSearchIcdCodes }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const { user } = useAuth();
   const [state, setState] = useState(result);
   const [errors, setErrors] = useState([]);
 
@@ -194,9 +196,6 @@ const ICDcodestable = ({ user, result, fetchSearchIcdCodes }) => {
 };
 
 ICDcodestable.propTypes = {
-  user: PropTypes.shape(
-    { id: PropTypes.string },
-  ).isRequired,
   result: PropTypes.arrayOf(
     PropTypes.arrayOf({
       id: PropTypes.string,

@@ -11,7 +11,6 @@ import { useDispatch } from "react-redux";
 import { Link, useHistory, useParams } from "react-router-dom";
 
 import Error from "../../../components/common/Error";
-import { AuthConsumer } from "../../../providers/AuthProvider";
 import AuthService from "../../../services/patient_portal/auth.service";
 import { setSuccess } from "../../../store/common/actions";
 import { SignupForm } from "./components";
@@ -92,64 +91,55 @@ const PatientSignUp = () => {
   };
 
   return (
-    <AuthConsumer>
-      {({ isAuth }) => {
-        if (isAuth) {
-          history.push("/");
-        }
-        return (
-          <Container component="main" maxWidth="lg">
-            <CssBaseline />
-            {clientError.length > 0 ? (
-              <div className={`${classes.paper} ${classes.ErrorSection}`}>
-                <Error errors={clientError} variant="filled" />
-                <Alert icon={false} severity="info">
-                  Go back to
-                  {" "}
-                  <Link to="/">Home page</Link>
-                </Alert>
-              </div>
-            ) : (
-              <>
-                <div className={classes.paper}>
-                  <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon className={classes.lockIcon} />
-                  </Avatar>
-                  <Typography
-                    component="h1"
-                    variant="h2"
-                    className={classes.pageTitle}
-                  >
-                    Register with
-                    {" "}
-                    {client && client.name}
-                  </Typography>
-                  <Typography variant="body2" gutterBottom>
-                    To register as a new patient, please enter your infromation
-                    in the fields below. Please do not use this form if you are
-                    already patient.
-                  </Typography>
-                  <Typography variant="body2" gutterBottom>
-                    If you would like to amend your information, please send a
-                    Secure Message or call our office.
-                  </Typography>
-                  <Typography variant="body2" gutterBottom>
-                    If you are already a registered patient with online access,
-                    you can log in
-                    {" "}
-                    <Link to={`/login/${clientCode}`}>here</Link>
-                  </Typography>
-                </div>
-                <SignupForm
-                  onFormSubmit={handleFormSubmit}
-                  errors={errors.error}
-                />
-              </>
-            )}
-          </Container>
-        );
-      }}
-    </AuthConsumer>
+    <Container component="main" maxWidth="lg">
+      <CssBaseline />
+      {clientError.length > 0 ? (
+        <div className={`${classes.paper} ${classes.ErrorSection}`}>
+          <Error errors={clientError} variant="filled" />
+          <Alert icon={false} severity="info">
+            Go back to
+            {" "}
+            <Link to="/">Home page</Link>
+          </Alert>
+        </div>
+      ) : (
+        <>
+          <div className={classes.paper}>
+            <Avatar className={classes.avatar}>
+              <LockOutlinedIcon className={classes.lockIcon} />
+            </Avatar>
+            <Typography
+              component="h1"
+              variant="h2"
+              className={classes.pageTitle}
+            >
+              Register with
+              {" "}
+              {client && client.name}
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+              To register as a new patient, please enter your infromation
+              in the fields below. Please do not use this form if you are
+              already patient.
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+              If you would like to amend your information, please send a
+              Secure Message or call our office.
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+              If you are already a registered patient with online access,
+              you can log in
+              {" "}
+              <Link to={`/login/${clientCode}`}>here</Link>
+            </Typography>
+          </div>
+          <SignupForm
+            onFormSubmit={handleFormSubmit}
+            errors={errors.error}
+          />
+        </>
+      )}
+    </Container>
   );
 };
 

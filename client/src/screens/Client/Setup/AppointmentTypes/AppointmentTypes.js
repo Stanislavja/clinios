@@ -8,7 +8,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import _ from "lodash";
 
-import { AuthConsumer } from "../../../../providers/AuthProvider";
 import AppointmentService from "../../../../services/appointmentType.service";
 import { Appointments } from "./components";
 import DeleteAppointmentModal from "./components/modal/DeleteAppointmentType";
@@ -92,64 +91,48 @@ export default function AppointmentTypes() {
   };
 
   return (
-    <AuthConsumer>
-      {({ user }) => (
-        <>
-          <CssBaseline />
-          <Container maxWidth={false} className={classes.root}>
-            <div className={classes.uploadButtons}>
-              <Typography component="h1" variant="h2" color="textPrimary">
-                Appointment Types
-              </Typography>
-              <Button
-                variant="contained"
-                color="primary"
-                component="span"
-                onClick={() => handleOnNewClick()}
-              >
-                New
-              </Button>
-            </div>
-            <Grid container justify="center" spacing={2}>
-              <Grid item md={12} xs={12}>
-                <Typography component="p" variant="body2" color="textPrimary">
-                  This page is used to manage appointment types that are offered
-                  to patients
-                </Typography>
-                <Appointments
-                  appointments={appointments}
-                  onEdit={handleEditButtonClick}
-                  onDelete={handleDeleteButton}
-                />
-              </Grid>
-              {/* }
-              <Grid item md={12} xs={12}>
-                <Card className={classes.card}>
-                  <CardContent>
-                    <Typography variant="h4" gutterBottom>
-                      <Video url="https://www.youtube.com/watch?v=ysz5S6PUM-U" />
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            */}
-            </Grid>
-            <NewOrEditAppointment
-              appointment={selectedappointment}
-              isOpen={isEditModalOpen}
-              onClose={() => handleEditModalClose(false)}
-              user={user}
-              isNewAppointment={isNewAppointment}
-              savedAppointments={appointments}
+    <>
+      <CssBaseline />
+      <Container maxWidth={false} className={classes.root}>
+        <div className={classes.uploadButtons}>
+          <Typography component="h1" variant="h2" color="textPrimary">
+            Appointment Types
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            component="span"
+            onClick={() => handleOnNewClick()}
+          >
+            New
+          </Button>
+        </div>
+        <Grid container justify="center" spacing={2}>
+          <Grid item md={12} xs={12}>
+            <Typography component="p" variant="body2" color="textPrimary">
+              This page is used to manage appointment types that are offered
+              to patients
+            </Typography>
+            <Appointments
+              appointments={appointments}
+              onEdit={handleEditButtonClick}
+              onDelete={handleDeleteButton}
             />
-            <DeleteAppointmentModal
-              id={selectedAppointmentId}
-              isOpen={isDeleteModalOpen}
-              onClose={() => handleDeleteModalClose(false)}
-            />
-          </Container>
-        </>
-      )}
-    </AuthConsumer>
+          </Grid>
+        </Grid>
+        <NewOrEditAppointment
+          appointment={selectedappointment}
+          isOpen={isEditModalOpen}
+          onClose={() => handleEditModalClose(false)}
+          isNewAppointment={isNewAppointment}
+          savedAppointments={appointments}
+        />
+        <DeleteAppointmentModal
+          id={selectedAppointmentId}
+          isOpen={isDeleteModalOpen}
+          onClose={() => handleDeleteModalClose(false)}
+        />
+      </Container>
+    </>
   );
 }

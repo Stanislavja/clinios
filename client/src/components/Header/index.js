@@ -9,12 +9,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import InputIcon from "@material-ui/icons/Input";
 import MenuIcon from "@material-ui/icons/Menu";
-import { useDispatch } from "react-redux";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useHistory } from "react-router-dom";
 
 import Logo from "../../assets/img/Logo.png";
-import { AuthConsumer } from "../../providers/AuthProvider";
-import { logOut } from "../../store/auth/actions";
+import useAuth from "../../hooks/useAuth";
+
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -55,13 +54,19 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = ({ ...props }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const history = useHistory();
+  const { isAuthenticated, logout } = useAuth();
   const { onSidebarOpen } = props;
 
-  const handleLogout = (_e, authProviderLogOut) => {
-    dispatch(logOut());
-    authProviderLogOut();
+  const handleLogout = async () => {
+    try {
+      await logout();
+      history.push("/login_client");
+    } catch (err) {
+      console.error(err);
+    }
   };
+
 
   return (
     <AppBar
@@ -70,44 +75,40 @@ const Header = ({ ...props }) => {
       elevation={0}
       className={classes.appBar}
     >
-      <AuthConsumer>
-        {({ isAuth, logout }) => (
-          <Toolbar className={classes.toolbar}>
-            <RouterLink to="/">
-              <img src={Logo} alt="AvonHealth" className={classes.Logo} />
-            </RouterLink>
-            <Hidden mdDown>
-              <div className={classes.navItems}>
-                {isAuth ? (
-                  <>
-                    <IconButton
-                      className={classes.signOutButton}
-                      color="inherit"
-                      onClick={(event) => handleLogout(event, logout)}
-                    >
-                      <InputIcon />
-                    </IconButton>
-                  </>
-                ) : (
-                  <>
-                    <RouterLink to="/signup_client" className={classes.link}>
-                      Sign Up
-                    </RouterLink>
-                    <RouterLink to="/login_client" className={classes.link}>
-                      Login
-                    </RouterLink>
-                  </>
-                )}
-              </div>
-            </Hidden>
-            <Hidden lgUp>
-              <IconButton color="inherit" onClick={onSidebarOpen}>
-                <MenuIcon />
-              </IconButton>
-            </Hidden>
-          </Toolbar>
-        )}
-      </AuthConsumer>
+      <Toolbar className={classes.toolbar}>
+        <RouterLink to="/">
+          <img src={Logo} alt="AvonHealth" className={classes.Logo} />
+        </RouterLink>
+        <Hidden mdDown>
+          <div className={classes.navItems}>
+            {isAuthenticated ? (
+              <>
+                <IconButton
+                  className={classes.signOutButton}
+                  color="inherit"
+                  onClick={() => handleLogout()}
+                >
+                  <InputIcon />
+                </IconButton>
+              </>
+            ) : (
+              <>
+                <RouterLink to="/signup_client" className={classes.link}>
+                  Sign Up
+                </RouterLink>
+                <RouterLink to="/login_client" className={classes.link}>
+                  Login
+                </RouterLink>
+              </>
+            )}
+          </div>
+        </Hidden>
+        <Hidden lgUp>
+          <IconButton color="inherit" onClick={onSidebarOpen}>
+            <MenuIcon />
+          </IconButton>
+        </Hidden>
+      </Toolbar>
     </AppBar>
   );
 };
