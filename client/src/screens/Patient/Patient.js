@@ -144,13 +144,13 @@ const useStyles = makeStyles(() => ({
 export default function Patient() {
   const classes = useStyles();
   const inputFile = useRef(null);
-  const dispatch = useDispatch();
+  const reduxDispatch = useDispatch();
   const history = useHistory();
   const { patientId } = useParams();
   const user = useContext(AuthContext)?.user;
   const userId = user.id;
 
-  const [state, _dispatch] = useReducer(PatientReducer, initialState);
+  const [state, dispatch] = useReducer(PatientReducer, initialState);
 
   const {
     patientInfo, adminNotes, forms, handouts, documents, encounters, medicalNotes,
@@ -275,7 +275,7 @@ export default function Patient() {
     PatientService.updateCardsLayout(userId, layoutToSave).then((res) => {
       if (res.status === "success") {
         setIsLayoutUpdated(true);
-        dispatch(setSuccess(`Layout updated successfully`));
+        reduxDispatch(setSuccess(`Layout updated successfully`));
       }
     });
   };
@@ -286,7 +286,7 @@ export default function Patient() {
         setIsLayoutUpdated(false);
         setLayout([]); // removing the current layout state so the cards layout gets re-rendered
         generateLayout();
-        dispatch(setSuccess(`Layout reset successfully`));
+        reduxDispatch(setSuccess(`Layout reset successfully`));
       }
     });
   };
@@ -323,10 +323,10 @@ export default function Patient() {
         && res.data.client_id
         && res.data.client_id === user.client_id
       ) {
-        _dispatch(setPatientData(res.data));
+        dispatch(setPatientData(res.data));
         setHasPatientIderror(false);
       } else {
-        dispatch(
+        reduxDispatch(
           setError({
             severity: "error",
             message: "Patient not found",
@@ -346,93 +346,93 @@ export default function Patient() {
 
   const fetchPatientHistory = useCallback(() => {
     PatientService.getPatientHistory(patientId).then((res) => {
-      _dispatch(setPatientHistory(res.data));
+      dispatch(setPatientHistory(res.data));
     });
   }, [patientId]);
 
   const fetchAdminNotesHistory = useCallback(() => {
     PatientService.getAdminNotesHistory(patientId).then((res) => {
-      _dispatch(setAdminNotes(res.data));
+      dispatch(setAdminNotes(res.data));
     });
   }, [patientId]);
 
   const fetchAllergies = useCallback(() => {
     PatientService.getAllergies(patientId).then((res) => {
-      _dispatch(setAllergies(res.data));
+      dispatch(setAllergies(res.data));
     });
   }, [patientId]);
 
   const fetchPatientHandouts = useCallback(() => {
     PatientService.getPatientHandouts(patientId).then((res) => {
-      _dispatch(setHandouts(res.data));
+      dispatch(setHandouts(res.data));
     });
   }, [patientId]);
 
   const fetchForms = useCallback(() => {
     PatientService.getForms(patientId).then((res) => {
-      _dispatch(setForms(res.data));
+      dispatch(setForms(res.data));
     });
   }, [patientId]);
 
   const fetchBillings = useCallback(() => {
     PatientService.getBillings(patientId).then((res) => {
-      _dispatch(setBilling(res.data));
+      dispatch(setBilling(res.data));
     });
   }, [patientId]);
 
   const fetchPatientBalance = useCallback(() => {
     PatientService.getPatientBalance(patientId).then((res) => {
-      _dispatch(setBalance(res.data && res.data.length ? res.data[0].amount : ""));
+      dispatch(setBalance(res.data && res.data.length ? res.data[0].amount : ""));
     });
   }, [patientId]);
 
   const fetchDocuments = useCallback(() => {
     const tab = "All";
     PatientService.getDocuments(patientId, tab).then((res) => {
-      _dispatch(setDocuments(res.data));
+      dispatch(setDocuments(res.data));
     });
   }, [patientId]);
 
   const fetchEncounters = useCallback(() => {
     PatientService.getEncounters(patientId).then((res) => {
-      _dispatch(setEncounters(res.data));
+      dispatch(setEncounters(res.data));
     });
   }, [patientId]);
 
   const fetchMedicalNotes = useCallback(() => {
     PatientService.getMedicalNotes(patientId).then((res) => {
-      _dispatch(setMedicalNotes(res.data));
+      dispatch(setMedicalNotes(res.data));
     });
   }, [patientId]);
 
   const fetchMessages = useCallback(() => {
     PatientService.getMessages(patientId).then((res) => {
-      _dispatch(setMessages(res.data));
+      dispatch(setMessages(res.data));
     });
   }, [patientId]);
 
   const fetchDiagnoses = useCallback((status) => {
     PatientService.getDiagnoses(patientId, status).then((res) => {
-      _dispatch(setDiagnoses(res.data));
+      dispatch(setDiagnoses(res.data));
     });
   }, [patientId]);
 
   const fetchMedications = useCallback(() => {
     PatientService.getMedications(patientId).then((res) => {
-      _dispatch(setMedications(res.data));
+      dispatch(setMedications(res.data));
     });
   }, [patientId]);
 
   const fetchRequisitions = useCallback(() => {
     const encounterId = 1; // static for the time being: discussion required
     PatientService.getRequisitions(patientId, encounterId).then((res) => {
-      _dispatch(setRequisitions(res.data));
+      dispatch(setRequisitions(res.data));
     });
   }, [patientId]);
 
   const fetchTests = useCallback(() => {
     PatientService.getTests(patientId).then((res) => {
-      _dispatch(setTests(res.data));
+      dispatch(setTests(res.data));
     });
   }, [patientId]);
 
@@ -454,27 +454,27 @@ export default function Patient() {
   const mapPrimaryButtonHandlers = (value) => {
     switch (value) {
       case "Patient":
-        return _dispatch(togglePatientHistoryDialog());
+        return dispatch(togglePatientHistoryDialog());
       case "Admin Notes":
-        return _dispatch(toggleAdminHistoryDialog());
+        return dispatch(toggleAdminHistoryDialog());
       case "Forms":
-        return _dispatch(toggleFormsViewDialog());
+        return dispatch(toggleFormsViewDialog());
       case "Handouts":
-        return _dispatch(toggleHandoutsDialog());
+        return dispatch(toggleHandoutsDialog());
       case "Billing":
-        return _dispatch(toggleNewTransactionDialog());
+        return dispatch(toggleNewTransactionDialog());
       case "Allergies":
-        return _dispatch(toggleAllergyDialog());
+        return dispatch(toggleAllergyDialog());
       case "Medical Notes":
-        return _dispatch(toggleMedicalNotesDialog());
+        return dispatch(toggleMedicalNotesDialog());
       case "Messages":
-        return _dispatch(toggleMessageDialog());
+        return dispatch(toggleMessageDialog());
       case "Medications":
-        return _dispatch(toggleMedicationDialog());
+        return dispatch(toggleMedicationDialog());
       case "Diagnoses":
-        return _dispatch(toggleDiagnosesDialog());
+        return dispatch(toggleDiagnosesDialog());
       case "Requisitions":
-        return _dispatch(toggleRequisitionDialog());
+        return dispatch(toggleRequisitionDialog());
       default:
         return () => { };
     }
@@ -483,27 +483,27 @@ export default function Patient() {
   const mapSecondaryButtonHandlers = (value) => {
     switch (value) {
       case "Patient":
-        return _dispatch(togglePatientInfoDialog());
+        return dispatch(togglePatientInfoDialog());
       case "Admin Notes":
-        return _dispatch(toggleAdminFormDialog());
+        return dispatch(toggleAdminFormDialog());
       case "Forms":
-        return _dispatch(toggleFormsExpandDialog());
+        return dispatch(toggleFormsExpandDialog());
       case "Handouts":
-        return _dispatch(toggleHandoutsExpandDialog());
+        return dispatch(toggleHandoutsExpandDialog());
       case "Billing":
-        return _dispatch(toggleBillngExpandDialog());
+        return dispatch(toggleBillngExpandDialog());
       case "Allergies":
-        return _dispatch(toggleAllergyExpandDialog());
+        return dispatch(toggleAllergyExpandDialog());
       case "Medical Notes":
-        return _dispatch(toggleMedicalNotesFormDialog());
+        return dispatch(toggleMedicalNotesFormDialog());
       case "Messages":
-        return _dispatch(toggleMessageExpandDialog());
+        return dispatch(toggleMessageExpandDialog());
       case "Medications":
-        return _dispatch(toggleMedicationExpandDialog());
+        return dispatch(toggleMedicationExpandDialog());
       case "Diagnoses":
-        return _dispatch(toggleDiagnosesExpandDialog());
+        return dispatch(toggleDiagnosesExpandDialog());
       case "Requisitions":
-        return _dispatch(toggleRequisitionExpandDialog());
+        return dispatch(toggleRequisitionExpandDialog());
       default:
         return () => { };
     }
@@ -519,7 +519,7 @@ export default function Patient() {
             <AdminNotesForm
               patientId={patientId}
               oldAdminNote={patientData && patientData.admin_note}
-              onClose={() => _dispatch(toggleAdminFormDialog())}
+              onClose={() => dispatch(toggleAdminFormDialog())}
               reloadData={() => {
                 fetchPatientData();
                 fetchAdminNotesHistory();
@@ -545,7 +545,7 @@ export default function Patient() {
           return (
             <MedicalNotesForm
               patientId={patientId}
-              onClose={() => _dispatch(toggleMedicalNotesFormDialog())}
+              onClose={() => dispatch(toggleMedicalNotesFormDialog())}
               oldMedicalNote={patientData && patientData.medical_note}
               reloadData={() => {
                 fetchPatientData();
@@ -590,7 +590,7 @@ export default function Patient() {
       case "Patient":
         return redirectToPatientPortal;
       case "Billing":
-        return () => _dispatch(togglePaymentDialog());
+        return () => dispatch(togglePaymentDialog());
       default:
         return () => { };
     }
@@ -604,7 +604,7 @@ export default function Patient() {
   const createDocument = (reqBody) => {
     PatientService.createDocuments(patientId, reqBody)
       .then((response) => {
-        dispatch(setSuccess(`${response.data.message}`));
+        reduxDispatch(setSuccess(`${response.data.message}`));
         fetchDocuments();
       })
       .catch((error) => {
@@ -614,7 +614,7 @@ export default function Patient() {
           || error.message
           || error.toString();
         const severity = "error";
-        dispatch(
+        reduxDispatch(
           setError({
             severity,
             message: resMessage,
@@ -647,11 +647,11 @@ export default function Patient() {
       const noteId = 1;
       PatientService.updateAdminNotes(patientId, reqBody, noteId)
         .then((response) => {
-          dispatch(setSuccess(`${response.data.message}`));
-          dispatch(resetEditorText());
+          reduxDispatch(setSuccess(`${response.data.message}`));
+          reduxDispatch(resetEditorText());
           fetchPatientData();
           fetchAdminNotesHistory();
-          _dispatch(toggleAdminFormDialog());
+          dispatch(toggleAdminFormDialog());
         })
         .catch((error) => {
           const resMessage = (error.response
@@ -660,7 +660,7 @@ export default function Patient() {
             || error.message
             || error.toString();
           const severity = "error";
-          dispatch(
+          reduxDispatch(
             setError({
               severity,
               message: resMessage,
@@ -668,7 +668,7 @@ export default function Patient() {
           );
         });
     } else {
-      _dispatch(toggleAdminFormDialog());
+      dispatch(toggleAdminFormDialog());
     }
   };
 
@@ -684,11 +684,11 @@ export default function Patient() {
       };
       PatientService.updateMedicalNotes(patientId, reqBody, noteId)
         .then((response) => {
-          dispatch(setSuccess(`${response.data.message}`));
-          dispatch(resetEditorText());
+          reduxDispatch(setSuccess(`${response.data.message}`));
+          reduxDispatch(resetEditorText());
           fetchPatientData();
           fetchMedicalNotes();
-          _dispatch(toggleMedicalNotesFormDialog());
+          dispatch(toggleMedicalNotesFormDialog());
         })
         .catch((error) => {
           const resMessage = (error.response
@@ -697,7 +697,7 @@ export default function Patient() {
             || error.message
             || error.toString();
           const severity = "error";
-          dispatch(
+          reduxDispatch(
             setError({
               severity,
               message: resMessage,
@@ -705,16 +705,16 @@ export default function Patient() {
           );
         });
     } else {
-      _dispatch(toggleMedicalNotesFormDialog());
+      dispatch(toggleMedicalNotesFormDialog());
     }
   };
 
   const mapEditorCancelHandler = (value) => {
     switch (value) {
       case "Admin Notes":
-        return _dispatch(toggleAdminFormDialog());
+        return dispatch(toggleAdminFormDialog());
       case "Medical Notes":
-        return _dispatch(toggleMedicalNotesFormDialog());
+        return dispatch(toggleMedicalNotesFormDialog());
       default:
         return () => { };
     }
@@ -797,11 +797,11 @@ export default function Patient() {
               formData={patientData}
               patientId={patientId}
               reloadData={fetchPatientData}
-              onClose={() => _dispatch(togglePatientInfoDialog())}
+              onClose={() => dispatch(togglePatientInfoDialog())}
             />
           )}
-          applyForm={() => _dispatch(togglePatientInfoDialog())}
-          cancelForm={() => _dispatch(togglePatientInfoDialog())}
+          applyForm={() => dispatch(togglePatientInfoDialog())}
+          cancelForm={() => dispatch(togglePatientInfoDialog())}
           hideActions
           size="lg"
         />
@@ -814,11 +814,11 @@ export default function Patient() {
           message={(
             <PatientHistoryDetails
               data={patientHistory}
-              onClose={() => _dispatch(togglePatientHistoryDialog())}
+              onClose={() => dispatch(togglePatientHistoryDialog())}
             />
           )}
-          applyForm={() => _dispatch(togglePatientHistoryDialog())}
-          cancelForm={() => _dispatch(togglePatientHistoryDialog())}
+          applyForm={() => dispatch(togglePatientHistoryDialog())}
+          cancelForm={() => dispatch(togglePatientHistoryDialog())}
           hideActions
           size="md"
         />
@@ -829,13 +829,13 @@ export default function Patient() {
           title="Admin Notes History"
           message={(
             <AdminNotesHistory
-              onClose={() => _dispatch(toggleAdminHistoryDialog())}
+              onClose={() => dispatch(toggleAdminHistoryDialog())}
               data={adminNotesHistory}
             // onLoad={() => fetchPatientHistory()}
             />
           )}
-          applyForm={() => _dispatch(toggleAdminHistoryDialog())}
-          cancelForm={() => _dispatch(toggleAdminHistoryDialog())}
+          applyForm={() => dispatch(toggleAdminHistoryDialog())}
+          cancelForm={() => dispatch(toggleAdminHistoryDialog())}
           hideActions
           size="md"
         />
@@ -848,11 +848,11 @@ export default function Patient() {
           message={(
             <FormDetails
               data={patientForms}
-              onClose={() => _dispatch(toggleFormsExpandDialog())}
+              onClose={() => dispatch(toggleFormsExpandDialog())}
             />
           )}
-          applyForm={() => _dispatch(toggleFormsExpandDialog())}
-          cancelForm={() => _dispatch(toggleFormsExpandDialog())}
+          applyForm={() => dispatch(toggleFormsExpandDialog())}
+          cancelForm={() => dispatch(toggleFormsExpandDialog())}
           hideActions
           size="md"
         />
@@ -862,9 +862,9 @@ export default function Patient() {
         <Dialog
           open={forms.viewDialog}
           title={" "}
-          message={<Form onClose={() => _dispatch(toggleFormsViewDialog())} />}
-          applyForm={() => _dispatch(toggleFormsViewDialog())}
-          cancelForm={() => _dispatch(toggleFormsViewDialog())}
+          message={<Form onClose={() => dispatch(toggleFormsViewDialog())} />}
+          applyForm={() => dispatch(toggleFormsViewDialog())}
+          cancelForm={() => dispatch(toggleFormsViewDialog())}
           hideActions
           size="lg"
         />
@@ -876,7 +876,7 @@ export default function Patient() {
           title={" "}
           message={(
             <NewTransactionForm
-              onClose={() => _dispatch(toggleNewTransactionDialog())}
+              onClose={() => dispatch(toggleNewTransactionDialog())}
               patientId={patientId}
               reloadData={() => {
                 fetchBillings();
@@ -884,8 +884,8 @@ export default function Patient() {
               }}
             />
           )}
-          applyForm={() => _dispatch(toggleNewTransactionDialog())}
-          cancelForm={() => _dispatch(toggleNewTransactionDialog())}
+          applyForm={() => dispatch(toggleNewTransactionDialog())}
+          cancelForm={() => dispatch(toggleNewTransactionDialog())}
           hideActions
           size="md"
         />
@@ -898,12 +898,12 @@ export default function Patient() {
           message={(
             <BillingDetails
               data={patientBillings}
-              onClose={() => _dispatch(toggleBillngExpandDialog())}
+              onClose={() => dispatch(toggleBillngExpandDialog())}
               patientId={patientId}
             />
           )}
-          applyForm={() => _dispatch(toggleBillngExpandDialog())}
-          cancelForm={() => _dispatch(toggleBillngExpandDialog())}
+          applyForm={() => dispatch(toggleBillngExpandDialog())}
+          cancelForm={() => dispatch(toggleBillngExpandDialog())}
           hideActions
           size="md"
         />
@@ -913,9 +913,9 @@ export default function Patient() {
         <Dialog
           open={billing.newDialog}
           title={" "}
-          message={<PaymentForm onClose={() => _dispatch(togglePaymentDialog())} />}
-          applyForm={() => _dispatch(togglePaymentDialog())}
-          cancelForm={() => _dispatch(togglePaymentDialog())}
+          message={<PaymentForm onClose={() => dispatch(togglePaymentDialog())} />}
+          applyForm={() => dispatch(togglePaymentDialog())}
+          cancelForm={() => dispatch(togglePaymentDialog())}
           hideActions
           size="sm"
         />
@@ -927,13 +927,13 @@ export default function Patient() {
           title={" "}
           message={(
             <Allergies
-              onClose={() => _dispatch(toggleAllergyDialog())}
+              onClose={() => dispatch(toggleAllergyDialog())}
               patientId={patientId}
               reloadData={() => fetchAllergies()}
             />
           )}
-          applyForm={() => _dispatch(toggleAllergyDialog())}
-          cancelForm={() => _dispatch(toggleAllergyDialog())}
+          applyForm={() => dispatch(toggleAllergyDialog())}
+          cancelForm={() => dispatch(toggleAllergyDialog())}
           hideActions
           size="md"
         />
@@ -946,13 +946,13 @@ export default function Patient() {
           message={(
             <AllergiesDetails
               data={patientAllergies}
-              onClose={() => _dispatch(toggleAllergyExpandDialog())}
+              onClose={() => dispatch(toggleAllergyExpandDialog())}
               patientId={patientId}
               reloadData={() => fetchAllergies()}
             />
           )}
-          applyForm={() => _dispatch(toggleAllergyExpandDialog())}
-          cancelForm={() => _dispatch(toggleAllergyExpandDialog())}
+          applyForm={() => dispatch(toggleAllergyExpandDialog())}
+          cancelForm={() => dispatch(toggleAllergyExpandDialog())}
           hideActions
           size="md"
         />
@@ -965,12 +965,12 @@ export default function Patient() {
           message={(
             <HandoutsForm
               patientId={patientId}
-              onClose={() => _dispatch(toggleHandoutsDialog())}
+              onClose={() => dispatch(toggleHandoutsDialog())}
               reloadData={fetchPatientHandouts}
             />
           )}
-          applyForm={() => _dispatch(toggleHandoutsDialog())}
-          cancelForm={() => _dispatch(toggleHandoutsDialog())}
+          applyForm={() => dispatch(toggleHandoutsDialog())}
+          cancelForm={() => dispatch(toggleHandoutsDialog())}
           hideActions
           size="md"
         />
@@ -985,11 +985,11 @@ export default function Patient() {
               patientId={patientId}
               data={patientHandouts}
               reloadData={fetchPatientHandouts}
-              onClose={() => _dispatch(toggleHandoutsExpandDialog())}
+              onClose={() => dispatch(toggleHandoutsExpandDialog())}
             />
           )}
-          applyForm={() => _dispatch(toggleHandoutsExpandDialog())}
-          cancelForm={() => _dispatch(toggleHandoutsExpandDialog())}
+          applyForm={() => dispatch(toggleHandoutsExpandDialog())}
+          cancelForm={() => dispatch(toggleHandoutsExpandDialog())}
           hideActions
           size="md"
         />
@@ -1003,11 +1003,11 @@ export default function Patient() {
             <EncountersForm
               patientId={patientId}
               reloadData={fetchEncounters}
-              onClose={() => _dispatch(toggleEncountersDialog())}
+              onClose={() => dispatch(toggleEncountersDialog())}
             />
           )}
-          applyForm={() => _dispatch(toggleEncountersDialog())}
-          cancelForm={() => _dispatch(toggleEncountersDialog())}
+          applyForm={() => dispatch(toggleEncountersDialog())}
+          cancelForm={() => dispatch(toggleEncountersDialog())}
           hideActions
           size="lg"
         />
@@ -1021,13 +1021,13 @@ export default function Patient() {
             <EncountersDetails
               patientId={patientId}
               data={patientEncounters}
-              onClose={() => _dispatch(toggleEncountersExpandDialog())}
-              toggleEncountersDialog={() => _dispatch(toggleEncountersDialog())}
+              onClose={() => dispatch(toggleEncountersExpandDialog())}
+              toggleEncountersDialog={() => dispatch(toggleEncountersDialog())}
               reloadData={fetchEncounters}
             />
           )}
-          applyForm={() => _dispatch(toggleEncountersExpandDialog())}
-          cancelForm={() => _dispatch(toggleEncountersExpandDialog())}
+          applyForm={() => dispatch(toggleEncountersExpandDialog())}
+          cancelForm={() => dispatch(toggleEncountersExpandDialog())}
           hideActions
           size="lg"
         />
@@ -1038,8 +1038,8 @@ export default function Patient() {
           open={medicalNotes.historyDialog}
           title={" "}
           message={<MedicalNotesDetails data={patientMedicalNotes} />}
-          applyForm={() => _dispatch(toggleMedicalNotesDialog())}
-          cancelForm={() => _dispatch(toggleMedicalNotesDialog())}
+          applyForm={() => dispatch(toggleMedicalNotesDialog())}
+          cancelForm={() => dispatch(toggleMedicalNotesDialog())}
           hideActions
           size="md"
         />
@@ -1051,13 +1051,13 @@ export default function Patient() {
           title="New Message"
           message={(
             <NewMessageForm
-              onClose={() => _dispatch(toggleMessageDialog())}
+              onClose={() => dispatch(toggleMessageDialog())}
               reloadData={fetchMessages}
               patientId={patientId}
             />
           )}
-          applyForm={() => _dispatch(toggleMessageDialog())}
-          cancelForm={() => _dispatch(toggleMessageDialog())}
+          applyForm={() => dispatch(toggleMessageDialog())}
+          cancelForm={() => dispatch(toggleMessageDialog())}
           hideActions
           size="md"
         />
@@ -1070,13 +1070,13 @@ export default function Patient() {
           message={(
             <MessagesDetails
               data={patientMessages}
-              onClose={() => _dispatch(toggleMessageExpandDialog())}
+              onClose={() => dispatch(toggleMessageExpandDialog())}
               reloadData={fetchMessages}
               patientId={patientId}
             />
           )}
-          applyForm={() => _dispatch(toggleMessageExpandDialog())}
-          cancelForm={() => _dispatch(toggleMessageExpandDialog())}
+          applyForm={() => dispatch(toggleMessageExpandDialog())}
+          cancelForm={() => dispatch(toggleMessageExpandDialog())}
           hideActions
           size="lg"
         />
@@ -1088,13 +1088,13 @@ export default function Patient() {
           title={" "}
           message={(
             <DiagnosesForm
-              onClose={() => _dispatch(toggleDiagnosesDialog())}
+              onClose={() => dispatch(toggleDiagnosesDialog())}
               patientId={patientId}
               reloadData={() => fetchDiagnoses(true)}
             />
           )}
-          applyForm={() => _dispatch(toggleDiagnosesDialog())}
-          cancelForm={() => _dispatch(toggleDiagnosesDialog())}
+          applyForm={() => dispatch(toggleDiagnosesDialog())}
+          cancelForm={() => dispatch(toggleDiagnosesDialog())}
           hideActions
           size="md"
         />
@@ -1107,13 +1107,13 @@ export default function Patient() {
           message={(
             <DiagnosesDetails
               data={patientDiagnoses}
-              onClose={() => _dispatch(toggleDiagnosesExpandDialog())}
+              onClose={() => dispatch(toggleDiagnosesExpandDialog())}
               reloadData={() => fetchDiagnoses(diagnoses.status)}
               patientId={patientId}
             />
           )}
-          applyForm={() => _dispatch(toggleDiagnosesExpandDialog())}
-          cancelForm={() => _dispatch(toggleDiagnosesExpandDialog())}
+          applyForm={() => dispatch(toggleDiagnosesExpandDialog())}
+          cancelForm={() => dispatch(toggleDiagnosesExpandDialog())}
           hideActions
           size="md"
         />
@@ -1126,12 +1126,12 @@ export default function Patient() {
           message={(
             <MedicationsForm
               patientId={patientId}
-              onClose={() => _dispatch(toggleMedicationDialog())}
+              onClose={() => dispatch(toggleMedicationDialog())}
               reloadData={fetchMedications}
             />
           )}
-          applyForm={() => _dispatch(toggleMedicationDialog())}
-          cancelForm={() => _dispatch(toggleMedicationDialog())}
+          applyForm={() => dispatch(toggleMedicationDialog())}
+          cancelForm={() => dispatch(toggleMedicationDialog())}
           hideActions
           size="md"
         />
@@ -1144,13 +1144,13 @@ export default function Patient() {
           message={(
             <MedicationsDetails
               data={patientMedications}
-              onClose={() => _dispatch(toggleMedicationExpandDialog())}
+              onClose={() => dispatch(toggleMedicationExpandDialog())}
               reloadData={() => fetchMedications()}
               patientId={patientId}
             />
           )}
-          applyForm={() => _dispatch(toggleMedicationExpandDialog())}
-          cancelForm={() => _dispatch(toggleMedicationExpandDialog())}
+          applyForm={() => dispatch(toggleMedicationExpandDialog())}
+          cancelForm={() => dispatch(toggleMedicationExpandDialog())}
           hideActions
           size="md"
         />
@@ -1162,13 +1162,13 @@ export default function Patient() {
           title={" "}
           message={(
             <RequisitionsForm
-              onClose={() => _dispatch(toggleRequisitionDialog())}
+              onClose={() => dispatch(toggleRequisitionDialog())}
               reloadData={fetchRequisitions}
               patientId={patientId}
             />
           )}
-          applyForm={() => _dispatch(toggleRequisitionDialog())}
-          cancelForm={() => _dispatch(toggleRequisitionDialog())}
+          applyForm={() => dispatch(toggleRequisitionDialog())}
+          cancelForm={() => dispatch(toggleRequisitionDialog())}
           hideActions
           size="xl"
         />
@@ -1181,13 +1181,13 @@ export default function Patient() {
           message={(
             <RequisitionsDetails
               data={patientRequisitions}
-              onClose={() => _dispatch(toggleRequisitionExpandDialog())}
+              onClose={() => dispatch(toggleRequisitionExpandDialog())}
               patientId={patientId}
               reloadData={fetchRequisitions}
             />
           )}
-          applyForm={() => _dispatch(toggleRequisitionExpandDialog())}
-          cancelForm={() => _dispatch(toggleRequisitionExpandDialog())}
+          applyForm={() => dispatch(toggleRequisitionExpandDialog())}
+          cancelForm={() => dispatch(toggleRequisitionExpandDialog())}
           hideActions
           size="md"
         />
@@ -1200,13 +1200,13 @@ export default function Patient() {
           message={(
             <DocumentsCardContent
               data={patientDocuments}
-              onClose={() => _dispatch(toggleDocumentsExpandDialog())}
+              onClose={() => dispatch(toggleDocumentsExpandDialog())}
               patientId={patientId}
               reloadData={() => fetchDocuments()}
             />
           )}
-          applyForm={() => _dispatch(toggleDocumentsExpandDialog())}
-          cancelForm={() => _dispatch(toggleDocumentsExpandDialog())}
+          applyForm={() => dispatch(toggleDocumentsExpandDialog())}
+          cancelForm={() => dispatch(toggleDocumentsExpandDialog())}
           hideActions
           size="lg"
         />
@@ -1217,10 +1217,10 @@ export default function Patient() {
           open={tests.expandDialog}
           title={" "}
           message={
-            <TestsCardContent data={patientTests} onClose={() => _dispatch(toggleTestsExpandDialog())} />
+            <TestsCardContent data={patientTests} onClose={() => dispatch(toggleTestsExpandDialog())} />
           }
-          applyForm={() => _dispatch(toggleTestsExpandDialog())}
-          cancelForm={() => _dispatch(toggleTestsExpandDialog())}
+          applyForm={() => dispatch(toggleTestsExpandDialog())}
+          cancelForm={() => dispatch(toggleTestsExpandDialog())}
           hideActions
           size="lg"
         />
@@ -1285,8 +1285,8 @@ export default function Patient() {
                 showActions
                 primaryButtonText="New"
                 secondaryButtonText="Expand"
-                primaryButtonHandler={() => _dispatch(toggleEncountersDialog())}
-                secondaryButtonHandler={() => _dispatch(toggleEncountersExpandDialog())}
+                primaryButtonHandler={() => dispatch(toggleEncountersDialog())}
+                secondaryButtonHandler={() => dispatch(toggleEncountersExpandDialog())}
                 showSearch={false}
                 updateMinHeight={updateMinHeight}
               />
@@ -1337,7 +1337,7 @@ export default function Patient() {
                   }
                   contentToggleHandler={(value) => {
                     // setFetchDiagnosesStatus(value);
-                    _dispatch(setDiagnosesStatus(value));
+                    dispatch(setDiagnosesStatus(value));
                     fetchDiagnoses(value);
                   }}
                 />
@@ -1360,7 +1360,7 @@ export default function Patient() {
                 secondaryButtonText="Expand"
                 showSearch={false}
                 primaryButtonHandler={onFilePickerClick}
-                secondaryButtonHandler={() => _dispatch(toggleDocumentsExpandDialog())}
+                secondaryButtonHandler={() => dispatch(toggleDocumentsExpandDialog())}
                 updateMinHeight={updateMinHeight}
               />
             </Grid>
@@ -1372,7 +1372,7 @@ export default function Patient() {
                 primaryButtonText="Expand"
                 secondaryButtonText={null}
                 showSearch={false}
-                primaryButtonHandler={() => _dispatch(toggleTestsExpandDialog())}
+                primaryButtonHandler={() => dispatch(toggleTestsExpandDialog())}
                 updateMinHeight={updateMinHeight}
               />
             </Grid>
