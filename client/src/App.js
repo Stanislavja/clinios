@@ -7,7 +7,7 @@ import { createBrowserHistory } from "history";
 import { SnackbarProvider } from "notistack";
 import { Router } from "react-router-dom";
 
-import { AuthProviderX } from "./contexts/AuthContext";
+import { AuthProvider } from "./contexts/AuthContext";
 import routes, { renderRoutes } from "./routes";
 import theme from "./theme";
 
@@ -26,9 +26,9 @@ function App() {
           }}
         >
           <Router history={history}>
-            <AuthProviderX>
+            <AuthProvider>
               {renderRoutes(routes)}
-            </AuthProviderX>
+            </AuthProvider>
           </Router>
         </SnackbarProvider>
       </MuiPickersUtilsProvider>

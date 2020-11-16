@@ -80,7 +80,7 @@ const AuthContext = createContext({
   logout: () => { },
 });
 
-export const AuthProviderX = ({ children }) => {
+export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialAuthState);
 
   const login = async (email, password) => {
@@ -164,7 +164,7 @@ export const AuthProviderX = ({ children }) => {
   );
 };
 
-AuthProviderX.propTypes = {
+AuthProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
