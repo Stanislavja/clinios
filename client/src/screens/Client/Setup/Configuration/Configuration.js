@@ -150,7 +150,7 @@ export default function Configuration() {
         moment(data.calendar_end_time, "HH:mm:ss").format("YYYY-MM-DDTHH:mm:ss"),
       );
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
 
@@ -160,7 +160,6 @@ export default function Configuration() {
 
       return response.data.data;
     } catch (e) {
-      console.log(e);
       return false;
     }
   };
@@ -200,7 +199,6 @@ export default function Configuration() {
   };
 
   const _onSelectLogo = async (e) => {
-    console.log(e);
     if (e.target.files) {
       setFormParams({
         ...formParams,

@@ -148,7 +148,7 @@ export default function MyProfile() {
             My Profile
           </Typography>
           <Typography component="p" variant="body2" color="textPrimary">
-            This page is used to manage a user's basic information
+            This page is used to manage a user&apos;s basic information
           </Typography>
           <form
             className={classes.form}

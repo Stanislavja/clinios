@@ -1,25 +1,26 @@
-import React from 'react';
+import React from "react";
+
 import {
   Box,
   LinearProgress,
-  makeStyles
-} from '@material-ui/core';
+  makeStyles,
+} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    alignItems: 'center',
+    alignItems: "center",
     backgroundColor: theme.palette.background.default,
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-    justifyContent: 'center',
+    display: "flex",
+    flexDirection: "column",
+    height: "100%",
+    justifyContent: "center",
     left: 0,
     padding: theme.spacing(3),
-    position: 'fixed',
+    position: "fixed",
     top: 0,
-    width: '100%',
-    zIndex: 2000
-  }
+    width: "100%",
+    zIndex: 2000,
+  },
 }));
 
 const SlashScreen = () => {
@@ -32,6 +33,6 @@ const SlashScreen = () => {
       </Box>
     </div>
   );
-}
+};
 
 export default SlashScreen;

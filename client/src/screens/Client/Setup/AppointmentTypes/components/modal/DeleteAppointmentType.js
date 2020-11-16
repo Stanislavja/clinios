@@ -54,7 +54,7 @@ const DeleteAppointment = ({ isOpen, onClose, id }) => {
         <DialogContent className={classes.content}>
           <DialogContentText id="alert-dialog-description">
             Your appointment type will be deleted forever from our system and
-            you won't be able to access it anymore.
+            you won&apos;t be able to access it anymore.
           </DialogContentText>
         </DialogContent>
         <DialogActions className={classes.modalAction}>

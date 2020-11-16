@@ -137,7 +137,7 @@ const ForgetPassword = () => {
         {!success && (
           <>
             <p>
-              It happens to the best of us. Enter your email and we'll send you
+              It happens to the best of us. Enter your email and we&apos;ll send you
               reset instructions.
             </p>
             <form

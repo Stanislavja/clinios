@@ -66,8 +66,8 @@ const DeleteSchedule = ({
         </DialogTitle>
         <DialogContent className={classes.content}>
           <DialogContentText id="alert-dialog-description">
-            Your this schedule entry will be deleted forever from our system and you won't be able to access
-            it anymore.
+            Your this schedule entry will be deleted forever from our system and you won&apos;t be able to
+            access it anymore.
           </DialogContentText>
         </DialogContent>
         <DialogActions className={classes.modalAction}>

@@ -38,14 +38,12 @@ export const verificationEmail = (userId, token) => (dispatch) => {
   EmailService.emailVerify(userId, token).then(
     (response) => {
       dispatch(setSuccess(`${response.data.message}`));
-      console.log("EmailService.emailVerify:", response);
       if (response.data.isVerified) {
         dispatch(emailAlreadyVerified(response.data.message));
       }
       dispatch(verificationEmailSuccess(response.data.message));
     },
     (error) => {
-      console.log("EmailService emailVerify error:", error);
       const resMessage = (error.response
             && error.response.data
             && error.response.data.message)
@@ -66,12 +64,10 @@ export const verificationEmail = (userId, token) => (dispatch) => {
 export const sendVerificationEmail = (data) => (dispatch) => {
   EmailService.sendEmailVerification(data).then(
     (response) => {
-      dispatch(verificationEmailSuccess());
-      console.log("EmailService.sendEmailVerification:", response);
+      dispatch(verificationEmailSuccess(response));
     },
     (error) => {
-      console.log("EmailService error:", error);
-      dispatch(verificationEmailFailed());
+      dispatch(verificationEmailFailed(error));
     },
   );
 };

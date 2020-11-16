@@ -77,7 +77,6 @@ const PatientLogin = () => {
         setClientId(client_id);
       },
       (error) => {
-        console.log("getClientCode error:", error);
         if (!error.response) {
           return;
         }
@@ -228,7 +227,7 @@ const PatientLogin = () => {
         <Grid container className={classes.meta}>
           <Grid item xs={6}>
             <Link href={`/signup/${clientCode}`} variant="body2">
-              Don't have an account? Register.
+              Don&apos;t have an account? Register.
             </Link>
           </Grid>
           <Grid item xs={6} className={classes.forgotPass}>

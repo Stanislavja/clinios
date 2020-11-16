@@ -33,14 +33,12 @@ const Success = () => {
     setIsLoading(true);
     EmailService.resendEmailVerification(user).then(
       (response) => {
-        console.log("resend response", response.data);
         setErrors(response.data);
         dispatch(setSuccess(response.response));
         setIsLoading(false);
       },
       (error) => {
         setErrors(error.response);
-        console.log("error.response", error.response);
       },
     );
   };

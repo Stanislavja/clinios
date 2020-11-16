@@ -104,7 +104,7 @@ export default function AppointmentTypesUser() {
                 />
                 <GreenSwitch
                   checked
-                  onChange={() => alert("Switch")}
+                  onChange={() => {}}
                   name="active"
                   inputProps={{ "aria-label": "primary checkbox" }}
                 />
@@ -122,7 +122,7 @@ export default function AppointmentTypesUser() {
                 />
                 <GreenSwitch
                   checked={false}
-                  onChange={() => alert("Switch")}
+                  onChange={() => {}}
                   name="active"
                   inputProps={{ "aria-label": "primary checkbox" }}
                 />
@@ -140,7 +140,7 @@ export default function AppointmentTypesUser() {
                 />
                 <GreenSwitch
                   checked
-                  onChange={() => alert("Switch")}
+                  onChange={() => {}}
                   name="active"
                   inputProps={{ "aria-label": "primary checkbox" }}
                 />
