@@ -57,7 +57,7 @@ const routes = [
   {
     exact: true,
     guard: GuestGuard,
-    layout: DashboardLayout,
+    layout: MainLayout,
     path: "/login_client",
     component: lazy(() => import("./screens/Auth/Login")),
   },
@@ -280,14 +280,14 @@ const routes = [
   {
     exact: true,
     guard: GuestGuard,
-    layout: DashboardLayout,
+    layout: MainLayout,
     path: "/signup/:clientCode",
     component: lazy(() => import("./screens/patient-portal/auth/Signup")),
   },
   {
     exact: true,
     guard: GuestGuard,
-    layout: DashboardLayout,
+    layout: MainLayout,
     path: "/login/:clientCode",
     component: lazy(() => import("./screens/patient-portal/auth/Login")),
   },

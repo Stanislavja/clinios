@@ -73,8 +73,7 @@ const SignupForm = (props) => {
   const [termsChecked, setTermsChecked] = useState(true);
   const [signatureRef, setSignatureRef] = useState(null);
   const [signature, setSignature] = useState(null);
-  console.log("signatureRef:", signatureRef);
-  console.log("signature:", signature);
+
   const [formFields, setFormFields] = useState({
     firstname: "",
     middlename: "",

@@ -11,12 +11,12 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import clsx from "clsx";
-import { useDispatch } from "react-redux";
+import { useSnackbar } from "notistack";
 import { useParams } from "react-router-dom";
 
 import Error from "../../../components/common/Error";
+import useAuth from "../../../hooks/useAuth";
 import AuthService from "../../../services/patient_portal/auth.service";
-import { loginComplete } from "../../../store/auth/actions";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -62,7 +62,8 @@ const useStyles = makeStyles((theme) => ({
 
 const PatientLogin = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
+  const { patientLogin } = useAuth();
   const { clientCode } = useParams();
   const [email, setEmail] = React.useState("");
   const [clientId, setClientId] = React.useState(null);
@@ -95,12 +96,30 @@ const PatientLogin = () => {
     );
   }, [clientCode]);
 
-  const onFormSubmit = (event, login) => {
+  const onFormSubmit = async () => {
     if (email !== "") {
       localStorage.username = email;
       localStorage.password = password;
     }
 
+    try {
+      await patientLogin(clientId, email.trim(), password.trim()); // Call AuthProvider login
+      enqueueSnackbar("Successfully logged in!", {
+        variant: "success",
+      });
+    } catch (error) {
+      console.error(error);
+      enqueueSnackbar("Unable to login", {
+        variant: "error",
+      });
+      setErrors([
+        {
+          msg: error.message,
+        },
+      ]);
+    }
+
+    /*
     AuthService.login({
       client_id: clientId,
       email: email.trim(),
@@ -127,7 +146,7 @@ const PatientLogin = () => {
           setErrors([]);
         }
       },
-    );
+    ); */
   };
 
   useEffect(() => {
