@@ -78,6 +78,7 @@ const AuthContext = createContext({
   method: "JWT",
   login: () => Promise.resolve(),
   logout: () => { },
+  patientLogin: () => Promise.resolve(),
 });
 
 export const AuthProvider = ({ children }) => {
@@ -87,6 +88,18 @@ export const AuthProvider = ({ children }) => {
     const response = await axios.post(`${API_BASE}/auth/login`, { email, password });
     const { accessToken, user } = response.data.data;
     localStorage.setItem("user", JSON.stringify(user)); // TODO:: Refactor current AuthProvider and remove
+    setSession(accessToken);
+    dispatch({
+      type: "LOGIN",
+      payload: {
+        user,
+      },
+    });
+  };
+
+  const patientLogin = async (client_id, email, password) => {
+    const response = await axios.post(`${API_BASE}/auth/patient/login`, { client_id, email, password });
+    const { accessToken, user } = response.data.data;
     setSession(accessToken);
     dispatch({
       type: "LOGIN",
@@ -156,6 +169,7 @@ export const AuthProvider = ({ children }) => {
         ...state,
         method: "JWT",
         login,
+        patientLogin,
         logout,
       }}
     >

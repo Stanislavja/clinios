@@ -18,7 +18,7 @@ function CountryRegionMUISelectors(props) {
       select
       onChange={(e) => handleChange("country", e.target.value)}
       fullWidth
-      variant={outlined && "outlined"}
+      variant={outlined ? "outlined" : "standard"}
     >
       {CountryRegionData.map((option) => (
         <MenuItem key={option[0]} value={option}>
@@ -32,14 +32,14 @@ function CountryRegionMUISelectors(props) {
 CountryRegionMUISelectors.defaultProps = {
   size: "medium",
   country: null,
-  outlined: "standard",
+  outlined: true,
 };
 
 CountryRegionMUISelectors.propTypes = {
   size: PropTypes.string,
   country: PropTypes.string,
   handleChange: PropTypes.func.isRequired,
-  outlined: PropTypes.string,
+  outlined: PropTypes.bool,
 };
 
 export default CountryRegionMUISelectors;
