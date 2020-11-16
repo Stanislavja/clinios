@@ -1,7 +1,9 @@
-import React from 'react';
-import { Redirect } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import useAuth from '../hooks/useAuth';
+import React from "react";
+
+import PropTypes from "prop-types";
+import { Redirect } from "react-router-dom";
+
+import useAuth from "../hooks/useAuth";
 
 const GuestGuard = ({ children }) => {
   const { isAuthenticated } = useAuth();
@@ -18,7 +20,7 @@ const GuestGuard = ({ children }) => {
 };
 
 GuestGuard.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node.isRequired,
 };
 
 export default GuestGuard;
