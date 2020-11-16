@@ -154,10 +154,10 @@ const SignupForm = (props) => {
       },
     }).then(
       (response) => {
-        console.log("response:", response);
+        console.info("image uploadresponse:", response);
       },
       (error) => {
-        console.log("error:", error);
+        console.error("image upload error:", error);
       },
     );
   };
@@ -203,7 +203,7 @@ const SignupForm = (props) => {
         },
       )
       .catch((err) => {
-        console.log("catch err", err);
+        console.error("catch err", err);
       });
   };
 

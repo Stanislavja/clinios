@@ -167,7 +167,7 @@ const NewOrEditEvent = ({
             setPatients(data);
           },
           (error) => {
-            console.log("search error", error);
+            console.error("search error", error);
           },
         );
       } else {
@@ -241,7 +241,6 @@ const NewOrEditEvent = ({
       // eslint-disable-next-line
       .map((appointment) => calEvent.start_dt == appointment.start_dt)
       .includes(true);
-    console.log(calEvent.title, calEvent.patient_id);
     if (!calEvent.title || selectedPatient.length === 0) {
       if (!calEvent.title && selectedPatient.length === 0) {
         setErrorText({
@@ -359,7 +358,6 @@ const NewOrEditEvent = ({
                   });
                 }}
                 minDate={new Date()}
-                onError={console.log}
                 disablePast
                 format="yyyy/MM/dd HH:mm"
                 KeyboardButtonProps={{
@@ -388,7 +386,6 @@ const NewOrEditEvent = ({
                   setAppointmentLeangth(length);
                 }}
                 ate={new Date()}
-                onError={console.log}
                 disablePast
                 format="yyyy/MM/dd HH:mm"
                 KeyboardButtonProps={{

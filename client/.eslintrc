@@ -100,7 +100,6 @@
         ]
       }
     ],
-    "no-console": 1,
     "max-len": [
       "error",
       {
@@ -114,6 +113,18 @@
     ],
     "import/prefer-default-export": "off",
     "no-nested-ternary": "off",
-    "no-underscore-dangle": "off"
+    "no-underscore-dangle": "off",
+    "no-console": [
+      "error",
+      {
+        "allow": [
+          "warn",
+          "error",
+          "group",
+          "groupEnd",
+          "info"
+        ]
+      }
+    ]
   }
 }

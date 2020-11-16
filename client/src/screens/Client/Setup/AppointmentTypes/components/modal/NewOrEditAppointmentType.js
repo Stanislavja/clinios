@@ -168,10 +168,8 @@ const NewOrEditAppointment = ({
       };
       if (isNewAppointment) {
         createNewAppointment(formedData);
-        console.log("new");
       } else {
         delete formedData.data.created_user_id;
-        console.log("Update");
 
         AppointmentService.update(
           formedData,
@@ -191,7 +189,6 @@ const NewOrEditAppointment = ({
       [event.target.name]: event.target.value.trim(),
     });
   };
-  console.log("appointment", appointment);
 
   return (
     <div>

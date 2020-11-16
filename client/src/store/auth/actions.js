@@ -51,11 +51,9 @@ export const verificationEmail = (userId, token) => (dispatch) => {
   EmailService.emailVerify(userId, token).then(
     (response) => {
       dispatch(setSuccess(`${response.data.message}`));
-      console.log("EmailService.emailVerify:", response);
       dispatch(fetchingCompleted());
     },
     (error) => {
-      console.log("EmailService emailVerify error:", error);
       const resMessage = (error.response
             && error.response.data
             && error.response.data.message)
@@ -79,7 +77,6 @@ export const loginAction = (email, password, authProviderLogin) => (dispatch) =>
     password,
   }).then(
     (res) => {
-      console.log(" AuthService.login:", res);
       authProviderLogin(); // login to authContext
       dispatch(loginComplete(res.data));
       dispatch(fetchingCompleted());
@@ -119,7 +116,6 @@ export const signupPatient = (data) => (dispatch) => {
       dispatch(fetchingCompleted());
     },
     (error) => {
-      console.log("error.res.data", error.response.data);
       const resMessage = (error.response
             && error.response.data
             && error.response.data.message)

@@ -141,12 +141,9 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
           const updatedErrors = fieldErrors.filter(
             (error) => error.param !== response.data.message.param,
           );
-          console.log("updatedErrors:", updatedErrors);
           setFieldErrors(updatedErrors);
         },
         (error) => {
-          console.log("error.status", error);
-
           if (!error.response) {
             // network error
             console.error(error);
@@ -160,7 +157,7 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
         },
       )
       .catch((err) => {
-        console.log("catch err", err);
+        console.error("catch err", err);
       });
   };
 

@@ -305,7 +305,7 @@ const Topbar = (props) => {
             }
           },
           (error) => {
-            console.log("search error", error);
+            console.error("search error", error);
           },
         );
       } else {

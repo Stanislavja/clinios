@@ -102,7 +102,6 @@ export default function AccountingSearchResults(props) {
   const amount = results.reduce((a, b) => a + b.amount, 0);
   return (
     <div className={classes.root}>
-      {console.log(amount)}
       <TableContainer component={Paper} className={classes.tableContainer}>
         <Table
           size="small"
