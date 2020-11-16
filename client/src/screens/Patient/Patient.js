@@ -164,108 +164,24 @@ export default function Patient() {
   const [layout, setLayout] = useState([]);
   const [layoutToSave, setLayoutToSave] = useState([]);
   const [isLayoutUpdated, setIsLayoutUpdated] = useState(false);
-  // const [firstCardsSequence, setFirstCardsSequence] = useState([
-  //   ...FirstColumnPatientCards,
-  // ]);
-  // const [thirdCardsSequence, setThirdCardsSequence] = useState([
-  //   ...ThirdColumnPatientCards,
-  // ]);
-
-  // dialog states
-  // const [showPatientInfoDialog, setShowPatientInfoDialog] = useState(false);
-  // const [showPatientHistoryDialog, setShowPatientHistoryDialog] = useState(
-  //   false,
-  // );
-
-  // const [showAdminFormDialog, setShowAdminFormDialog] = useState(false);
-  // const [showAdminHistoryDialog, setShowAdminHistoryDialog] = useState(false);
-
-  // const [showFormsExpandDialog, setShowFormsExpandDialog] = useState(false);
-  // const [showFormsViewDialog, setShowFormsViewDialog] = useState(false);
-
-  // const [showBillingExpandDialog, setShowBillingExpandDialog] = useState(false);
-  // const [showNewTransactionDialog, setShowNewTransactionDialog] = useState(
-  //   false,
-  // );
-  // const [showPaymentDialog, setShowPaymentDialog] = useState(false);
-
-  // const [showAllergyDialog, setShowAllergyDialog] = useState(false);
-  // const [showAllergyExpandDialog, setShowAllergyExpandDialog] = useState(false);
-
-  // const [showHandoutsDialog, setShowHandoutsDialog] = useState(false);
-  // const [showHandoutsExpandDialog, setShowHandoutsExpandDialog] = useState(
-  //   false,
-  // );
-
-  // const [showEncountersDialog, setShowEncountersDialog] = useState(false);
-  // const [showEncountersExpandDialog, setShowEncountersExpandDialog] = useState(
-  //   false,
-  // );
-
-  // const [showMedicalNotesFormDialog, setShowMedicalNotesFormDialog] = useState(
-  //   false,
-  // );
-  // const [showMedicalNotesDialog, setShowMedicalNotesDialog] = useState(false);
-
-  // const [showMessageDialog, setShowMessageDialog] = useState(false);
-  // const [showMessageExpandDialog, setShowMessageExpandDialog] = useState(false);
-
-  // const [fetchDiagnosesStatus, setFetchDiagnosesStatus] = useState(true);
-  // const [showDiagnosesDialog, setShowDiagnosesDialog] = useState(false);
-  // const [showDiagnosesExpandDialog, setShowDiagnosesExpandDialog] = useState(
-  //   false,
-  // );
-
-  // const [showMedicationDialog, setShowMedicationDialog] = useState(false);
-  // const [showMedicationExpandDialog, setShowMedicationExpandDialog] = useState(
-  //   false,
-  // );
-
-  // const [showRequisitionDialog, setShowRequisitionDialog] = useState(false);
-  // const [
-  //   showRequisitionExpandDialog,
-  //   setShowRequisitionExpandDialog,
-  // ] = useState(false);
-
-  // const [showDocumentsExpandDialog, setShowDocumentsExpandDialog] = useState(
-  //   false,
-  // );
-
-  // const [showTestsExpandDialog, setShowTestsExpandDialog] = useState(false);
 
   // data states
-  // const [patientData, setPatientData] = useState(null);
-  const patientData = patientInfo.data;
-  // const [patientBalance, setPatientBalance] = useState(null);
-  const patientBalance = billing.balance;
-  // const [patientHistory, setPatientHistory] = useState([]);
-  const patientHistory = patientInfo.history;
-  // const [adminNotesHistory, setAdminNotesHistory] = useState([]);
-  const adminNotesHistory = adminNotes.data;
   const [patients, setPatients] = useState([]);
-  // const [patientAllergies, setPatientAllergies] = useState([]);
+  const patientData = patientInfo.data;
+  const patientBalance = billing.balance;
+  const patientHistory = patientInfo.history;
+  const adminNotesHistory = adminNotes.data;
   const patientAllergies = allergies.data;
-  // const [patientHandouts, setPatientHandouts] = useState([]);
   const patientHandouts = handouts.data;
-  // const [patientBillings, setPatientBillings] = useState([]);
   const patientBillings = billing.data;
-  // const [patientForms, setPatientForms] = useState([]);
   const patientForms = forms.data;
-  // const [patientDocuments, setPatientDocuments] = useState([]);
   const patientDocuments = documents.data;
-  // const [patientEncounters, setPatientEncounters] = useState([]);
   const patientEncounters = encounters.data;
-  // const [patientMedicalNotes, setPatientMedicalNotes] = useState([]);
   const patientMedicalNotes = medicalNotes.data;
-  // const [patientMessages, setPatientMessages] = useState([]);
   const patientMessages = messages.data;
-  // const [patientDiagnoses, setPatientDiagnoses] = useState([]);
   const patientDiagnoses = diagnoses.data;
-  // const [patientMedications, setPatientMedications] = useState([]);
   const patientMedications = medications.data;
-  // const [patientRequisitions, setPatientRequisitions] = useState([]);
   const patientRequisitions = requisitions.data;
-  // const [patientTests, setPatientTests] = useState([]);
   const patientTests = tests.data;
 
   const fetchCardsLayout = () => {
@@ -436,42 +352,36 @@ export default function Patient() {
 
   const fetchAdminNotesHistory = useCallback(() => {
     PatientService.getAdminNotesHistory(patientId).then((res) => {
-      // setAdminNotesHistory(res.data);
       _dispatch(setAdminNotes(res.data));
     });
   }, [patientId]);
 
   const fetchAllergies = useCallback(() => {
     PatientService.getAllergies(patientId).then((res) => {
-      // setPatientAllergies(res.data);
       _dispatch(setAllergies(res.data));
     });
   }, [patientId]);
 
   const fetchPatientHandouts = useCallback(() => {
     PatientService.getPatientHandouts(patientId).then((res) => {
-      // setPatientHandouts(res.data);
       _dispatch(setHandouts(res.data));
     });
   }, [patientId]);
 
   const fetchForms = useCallback(() => {
     PatientService.getForms(patientId).then((res) => {
-      // setPatientForms(res.data);
       _dispatch(setForms(res.data));
     });
   }, [patientId]);
 
   const fetchBillings = useCallback(() => {
     PatientService.getBillings(patientId).then((res) => {
-      // setPatientBillings(res.data);
       _dispatch(setBilling(res.data));
     });
   }, [patientId]);
 
   const fetchPatientBalance = useCallback(() => {
     PatientService.getPatientBalance(patientId).then((res) => {
-      // setPatientBalance(res.data && res.data.length ? res.data[0].amount : "");
       _dispatch(setBalance(res.data && res.data.length ? res.data[0].amount : ""));
     });
   }, [patientId]);
@@ -479,42 +389,36 @@ export default function Patient() {
   const fetchDocuments = useCallback(() => {
     const tab = "All";
     PatientService.getDocuments(patientId, tab).then((res) => {
-      // setPatientDocuments(res.data);
       _dispatch(setDocuments(res.data));
     });
   }, [patientId]);
 
   const fetchEncounters = useCallback(() => {
     PatientService.getEncounters(patientId).then((res) => {
-      // setPatientEncounters(res.data);
       _dispatch(setEncounters(res.data));
     });
   }, [patientId]);
 
   const fetchMedicalNotes = useCallback(() => {
     PatientService.getMedicalNotes(patientId).then((res) => {
-      // setPatientMedicalNotes(res.data);
       _dispatch(setMedicalNotes(res.data));
     });
   }, [patientId]);
 
   const fetchMessages = useCallback(() => {
     PatientService.getMessages(patientId).then((res) => {
-      // setPatientMessages(res.data);
       _dispatch(setMessages(res.data));
     });
   }, [patientId]);
 
   const fetchDiagnoses = useCallback((status) => {
     PatientService.getDiagnoses(patientId, status).then((res) => {
-      // setPatientDiagnoses(res.data);
       _dispatch(setDiagnoses(res.data));
     });
   }, [patientId]);
 
   const fetchMedications = useCallback(() => {
     PatientService.getMedications(patientId).then((res) => {
-      // setPatientMedications(res.data);
       _dispatch(setMedications(res.data));
     });
   }, [patientId]);
@@ -522,14 +426,12 @@ export default function Patient() {
   const fetchRequisitions = useCallback(() => {
     const encounterId = 1; // static for the time being: discussion required
     PatientService.getRequisitions(patientId, encounterId).then((res) => {
-      // setPatientRequisitions(res.data);
       _dispatch(setRequisitions(res.data));
     });
   }, [patientId]);
 
   const fetchTests = useCallback(() => {
     PatientService.getTests(patientId).then((res) => {
-      // setPatientTests(res.data);
       _dispatch(setTests(res.data));
     });
   }, [patientId]);
@@ -548,120 +450,6 @@ export default function Patient() {
   const debouncedSearchPatients = _.debounce((query) => {
     searchPatientHandler(query);
   }, 1000);
-
-  // const togglePatientInfoDialog = () => {
-  //   setShowPatientInfoDialog((prevState) => !prevState);
-  // };
-
-  // const togglePatientHistoryDialog = () => {
-  //   setShowPatientHistoryDialog((prevState) => !prevState);
-  // };
-
-  // const toggleAdminFormDialog = () => {
-  //   firstCardsSequence[1].showEditorActions = !firstCardsSequence[1]
-  //     .showEditorActions;
-  //   setFirstCardsSequence([...firstCardsSequence]);
-  //   setShowAdminFormDialog((prevState) => !prevState);
-  // };
-
-  // const toggleAdminHistoryDialog = () => {
-  //   setShowAdminHistoryDialog((prevState) => !prevState);
-  // };
-
-  // const toggleFormsExpandDialog = () => {
-  //   setShowFormsExpandDialog((prevState) => !prevState);
-  // };
-
-  // const toggleFormsViewDialog = () => {
-  //   setShowFormsViewDialog((prevState) => !prevState);
-  // };
-
-  // const toggleNewTransactionDialog = () => {
-  //   setShowNewTransactionDialog((prevState) => !prevState);
-  // };
-
-  // const togglePaymentDialog = () => {
-  //   setShowPaymentDialog((prevState) => !prevState);
-  // };
-
-  // const toggleBillngExpandDialog = () => {
-  //   setShowBillingExpandDialog((prevState) => !prevState);
-  // };
-
-  // const toggleAllergyDialog = () => {
-  //   setShowAllergyDialog((prevState) => !prevState);
-  // };
-
-  // const toggleAllergyExpandDialog = () => {
-  //   setShowAllergyExpandDialog((prevState) => !prevState);
-  // };
-
-  // const toggleHandoutsDialog = () => {
-  //   setShowHandoutsDialog((prevState) => !prevState);
-  // };
-
-  // const toggleHandoutsExpandDialog = () => {
-  //   setShowHandoutsExpandDialog((prevState) => !prevState);
-  // };
-
-  // const toggleEncountersDialog = () => {
-  //   setShowEncountersDialog((prevState) => !prevState);
-  // };
-
-  // const toggleEncountersExpandDialog = () => {
-  //   setShowEncountersExpandDialog((prevState) => !prevState);
-  // };
-
-  // const toggleMedicalNotesDialog = () => {
-  //   setShowMedicalNotesDialog((prevState) => !prevState);
-  // };
-
-  // const toggleMedicalNotesFormDialog = () => {
-  //   thirdCardsSequence[0].showEditorActions = !thirdCardsSequence[0]
-  //     .showEditorActions;
-  //   setThirdCardsSequence([...thirdCardsSequence]);
-  //   setShowMedicalNotesFormDialog((prevState) => !prevState);
-  // };
-
-  // const toggleMessageDialog = () => {
-  //   setShowMessageDialog((prevState) => !prevState);
-  // };
-
-  // const toggleMessageExpandDialog = () => {
-  //   setShowMessageExpandDialog((prevState) => !prevState);
-  // };
-
-  // const toggleMedicationDialog = () => {
-  //   setShowMedicationDialog((prevState) => !prevState);
-  // };
-
-  // const toggleMedicationExpandDialog = () => {
-  //   setShowMedicationExpandDialog((prevState) => !prevState);
-  // };
-
-  // const toggleDiagnosesDialog = () => {
-  //   setShowDiagnosesDialog((prevState) => !prevState);
-  // };
-
-  // const toggleDiagnosesExpandDialog = () => {
-  //   setShowDiagnosesExpandDialog((prevState) => !prevState);
-  // };
-
-  // const toggleRequisitionDialog = () => {
-  //   setShowRequisitionDialog((prevState) => !prevState);
-  // };
-
-  // const toggleRequisitionExpandDialog = () => {
-  //   setShowRequisitionExpandDialog((prevState) => !prevState);
-  // };
-
-  // const toggleDocumentsExpandDialog = () => {
-  //   setShowDocumentsExpandDialog((prevState) => !prevState);
-  // };
-
-  // const toggleTestsExpandDialog = () => {
-  //   setShowTestsExpandDialog((prevState) => !prevState);
-  // };
 
   const mapPrimaryButtonHandlers = (value) => {
     switch (value) {
