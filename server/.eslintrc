@@ -33,6 +33,7 @@
   "rules": {
     "prettier/prettier": "error",
     "camelcase": 0,
+    "import/no-unresolved": 1,
     "consistent-return": [
       "warn",
       {
