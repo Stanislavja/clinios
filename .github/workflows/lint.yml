@@ -23,7 +23,6 @@ jobs:
         JAVASCRIPT_ES_CONFIG_FILE: .eslintrc
         FILTER_REGEX_INCLUDE: .*src/.*
         FILTER_REGEX_EXCLUDE: .*test/.*
-        FILTER_REGEX_EXCLUDE: .*test/.*.js
         VALIDATE_HTML: false
         VALIDATE_CSS: false
         VALIDATE_TERRAFORM_TERRASCAN: false
