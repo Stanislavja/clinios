@@ -74,7 +74,7 @@ exports.signin = async (req, res) => {
       // expiresIn: 5 * 60, // 2minutes
     }
   );
-  let resData = {}
+  const resData = {};
   resData.accessToken = token;
   delete user.password; // delete password from response
   resData.user = user;

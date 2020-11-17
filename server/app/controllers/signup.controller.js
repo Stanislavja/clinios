@@ -59,14 +59,14 @@ exports.signup = async (req, res) => {
   }
 
   const db = makeDb(configuration, res);
-  let client = req.body.client;
+  const { client } = req.body;
   client.created = new Date();
   client.calendar_start_time = "8:00";
   client.calendar_end_time = "18:00";
   client.functional_range = true;
   client.concierge_lab_ordering = false;
 
-  let user = req.body.user;
+  const { user } = req.body;
   user.password = bcrypt.hashSync(user.password, 8);
 
   const existingClientRows = await db.query(
@@ -109,14 +109,14 @@ exports.signup = async (req, res) => {
     }
 
     if (clientResponse.insertId) {
-      user.client_id = clientResponse.insertId; //add user foreign key client_id from clientResponse
+      user.client_id = clientResponse.insertId; // add user foreign key client_id from clientResponse
       user.admin = 1;
       user.sign_dt = new Date();
       const forwarded = req.headers["x-forwarded-for"];
       const userIP = forwarded
         ? forwarded.split(/, /)[0]
         : req.connection.remoteAddress;
-      //TODO: for localhost ::1 might be taken. Need further test
+      // TODO: for localhost ::1 might be taken. Need further test
       user.sign_ip_address = userIP;
       const userResponse = await db.query("INSERT INTO user set ?", user);
       const clientRows = await db.query(
@@ -143,13 +143,13 @@ exports.signup = async (req, res) => {
           clientRows[0]
         );
         responseData.contractLink = pdf;
-        //end Create contract PDF
+        // end Create contract PDF
       }
       successMessage.data = clientResponse.insertId;
       successMessage.data = responseData;
 
-      //run database procedure to set up basic data for the new Client
-      //clientSetup(responseData.user.client_id, responseData.user.id);
+      // run database procedure to set up basic data for the new Client
+      // clientSetup(responseData.user.client_id, responseData.user.id);
       try {
         const clientSetupRows = await db.query("CALL clientSetup(?, ?)", [
           responseData.user.client_id,
