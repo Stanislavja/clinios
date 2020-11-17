@@ -18,4 +18,19 @@ jobs:
       uses: docker://github/super-linter:latest
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        VALIDATE_HTML: false
+        VALIDATE_CSS: false
         VALIDATE_TERRAFORM_TERRASCAN: false
+        VALIDATE_JSON: false
+        VALIDATE_KUBERNETES_KUBEVAL: false
+        VALIDATE_KOTLIN: false
+        VALIDATE_LATEX: false
+        VALIDATE_LUA: false
+        VALIDATE_MARKDOWN: false
+        VALIDATE_OPENAPI: false
+        VALIDATE_PERL: false
+        VALIDATE_PHP: false
+        VALIDATE_PHP_BUILTIN: false
+        VALIDATE_PHP_PHPCS: false
+        VALIDATE_PHP_PHPSTAN: false
+        VALIDATE_PHP_PSALM: false
