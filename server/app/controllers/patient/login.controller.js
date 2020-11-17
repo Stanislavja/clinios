@@ -58,8 +58,10 @@ exports.signin = async (req, res) => {
     }
   );
 
-  patient.accessToken = token;
+  let resData = {}
+  resData.accessToken = token;
   delete patient.password; // delete password from response
-  successMessage.data = patient;
+  resData.user = patient;
+  successMessage.data = resData;
   res.status(status.success).send(successMessage);
 };

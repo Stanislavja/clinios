@@ -2,7 +2,6 @@ import React, {
   useState,
   useEffect,
   useRef,
-  useContext,
   useCallback,
   useReducer,
 } from "react";
@@ -16,7 +15,6 @@ import { useHistory, useParams } from "react-router-dom";
 
 import Card from "../../components/common/Card";
 import Dialog from "../../components/Dialog";
-import { AuthContext } from "../../providers/AuthProvider";
 import PatientReducer from "../../providers/Patient";
 import {
   setPatientData,
@@ -65,6 +63,7 @@ import {
   togglePaymentDialog,
 } from "../../providers/Patient/actions";
 import initialState from "../../providers/Patient/initialState";
+import useAuth from "../../hooks/useAuth";
 import PatientService from "../../services/patient.service";
 import {
   FirstColumnPatientCards,
@@ -146,7 +145,7 @@ export default function Patient() {
   const reduxDispatch = useDispatch();
   const history = useHistory();
   const { patientId } = useParams();
-  const user = useContext(AuthContext)?.user;
+  const { user } = useAuth();
   const userId = user.id;
 
   const [state, dispatch] = useReducer(PatientReducer, initialState);

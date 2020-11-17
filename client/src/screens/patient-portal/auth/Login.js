@@ -11,13 +11,12 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import clsx from "clsx";
-import { useDispatch } from "react-redux";
-import { useHistory, useParams } from "react-router-dom";
+import { useSnackbar } from "notistack";
+import { useParams } from "react-router-dom";
 
 import Error from "../../../components/common/Error";
-import { AuthConsumer } from "../../../providers/AuthProvider";
+import useAuth from "../../../hooks/useAuth";
 import AuthService from "../../../services/patient_portal/auth.service";
-import { loginComplete } from "../../../store/auth/actions";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -63,8 +62,8 @@ const useStyles = makeStyles((theme) => ({
 
 const PatientLogin = () => {
   const classes = useStyles();
-  const history = useHistory();
-  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
+  const { patientLogin } = useAuth();
   const { clientCode } = useParams();
   const [email, setEmail] = React.useState("");
   const [clientId, setClientId] = React.useState(null);
@@ -78,7 +77,6 @@ const PatientLogin = () => {
         setClientId(client_id);
       },
       (error) => {
-        console.log("getClientCode error:", error);
         if (!error.response) {
           return;
         }
@@ -97,12 +95,30 @@ const PatientLogin = () => {
     );
   }, [clientCode]);
 
-  const onFormSubmit = (event, login) => {
+  const onFormSubmit = async () => {
     if (email !== "") {
       localStorage.username = email;
       localStorage.password = password;
     }
 
+    try {
+      await patientLogin(clientId, email.trim(), password.trim()); // Call AuthProvider login
+      enqueueSnackbar("Successfully logged in!", {
+        variant: "success",
+      });
+    } catch (error) {
+      console.error(error);
+      enqueueSnackbar("Unable to login", {
+        variant: "error",
+      });
+      setErrors([
+        {
+          msg: error.message,
+        },
+      ]);
+    }
+
+    /*
     AuthService.login({
       client_id: clientId,
       email: email.trim(),
@@ -129,7 +145,7 @@ const PatientLogin = () => {
           setErrors([]);
         }
       },
-    );
+    ); */
   };
 
   useEffect(() => {
@@ -140,97 +156,88 @@ const PatientLogin = () => {
   }, []);
 
   return (
-    <AuthConsumer>
-      {({ isAuth, login }) => {
-        if (isAuth) {
-          history.push(`/patient`);
-        }
-        return (
-          <Container component="main" maxWidth="xs">
-            <CssBaseline />
-            <div className={classes.Logo}>
-              <img
-                src={`${process.env.REACT_APP_API_URL}static/client/c${clientId}_logo.png`}
-                alt="Client logo"
-              />
-            </div>
-            <div className={classes.paper}>
-              <Avatar className={classes.avatar}>
-                <LockOutlinedIcon className={classes.lockIcon} />
-              </Avatar>
-              <Typography
-                component="h1"
-                variant="h2"
-                className={classes.pageTitle}
-              >
-                Patient Sign in
-              </Typography>
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <div className={classes.Logo}>
+        <img
+          src={`${process.env.REACT_APP_API_URL}static/client/c${clientId}_logo.png`}
+          alt="Client logo"
+        />
+      </div>
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon className={classes.lockIcon} />
+        </Avatar>
+        <Typography
+          component="h1"
+          variant="h2"
+          className={classes.pageTitle}
+        >
+          Patient Sign in
+        </Typography>
 
-              <Error errors={errors} />
+        <Error errors={errors} />
 
-              <form
-                className={clsx({
-                  [classes.form]: true, // always apply
-                  [classes.withErrors]: errors.length > 0, // only when isLoading === true
-                })}
-                noValidate
-              >
-                <TextField
-                  disabled={errors.length > 0}
-                  value={email}
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  autoFocus
-                  onChange={(event) => setEmail(event.target.value)}
-                />
-                <TextField
-                  disabled={errors.length > 0}
-                  value={password}
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                  onChange={(event) => setPassword(event.target.value)}
-                />
-                <Button
-                  disabled={!email || !password || errors.length > 0}
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                  onClick={(event) => onFormSubmit(event, login)}
-                >
-                  Sign In
-                </Button>
-              </form>
-              <Grid container className={classes.meta}>
-                <Grid item xs={6}>
-                  <Link href={`/signup/${clientCode}`} variant="body2">
-                    Don't have an account? Register.
-                  </Link>
-                </Grid>
-                <Grid item xs={6} className={classes.forgotPass}>
-                  <Link href={`/forgot/${clientCode}`} variant="body2">
-                    Forgot your password? Reset.
-                  </Link>
-                </Grid>
-              </Grid>
-            </div>
-          </Container>
-        );
-      }}
-    </AuthConsumer>
+        <form
+          className={clsx({
+            [classes.form]: true, // always apply
+            [classes.withErrors]: errors.length > 0, // only when isLoading === true
+          })}
+          noValidate
+        >
+          <TextField
+            disabled={errors.length > 0}
+            value={email}
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          <TextField
+            disabled={errors.length > 0}
+            value={password}
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            onChange={(event) => setPassword(event.target.value)}
+          />
+          <Button
+            disabled={!email || !password || errors.length > 0}
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={(event) => onFormSubmit(event)}
+          >
+            Sign In
+          </Button>
+        </form>
+        <Grid container className={classes.meta}>
+          <Grid item xs={6}>
+            <Link href={`/signup/${clientCode}`} variant="body2">
+              Don&apos;t have an account? Register.
+            </Link>
+          </Grid>
+          <Grid item xs={6} className={classes.forgotPass}>
+            <Link href={`/forgot/${clientCode}`} variant="body2">
+              Forgot your password? Reset.
+            </Link>
+          </Grid>
+        </Grid>
+      </div>
+    </Container>
   );
 };
 

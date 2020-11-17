@@ -7,6 +7,7 @@ import LockOpenIcon from "@material-ui/icons/LockOpen";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 
+import useAuth from "../../hooks/useAuth";
 import { SidebarNav, GeneralSidebarNav } from "./components";
 
 const useStyles = makeStyles((theme) => ({
@@ -34,9 +35,9 @@ const useStyles = makeStyles((theme) => ({
 
 const Sidebar = (props) => {
   const {
-    open, variant, onClose, isAuth, className, ...rest
+    open, variant, onClose, className, ...rest
   } = props;
-
+  const { isAuthenticated } = useAuth();
   const classes = useStyles();
 
   const pages = [];
@@ -64,14 +65,14 @@ const Sidebar = (props) => {
     >
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <div {...rest} className={clsx(classes.root, className)}>
-        {!isAuth && (
+        {!isAuthenticated && (
           <>
             <Divider className={classes.divider} />
             <GeneralSidebarNav className={classes.nav} pages={publicPages} />
           </>
         )}
         <Divider className={classes.divider} />
-        {isAuth && <SidebarNav className={classes.nav} pages={pages} />}
+        {isAuthenticated && <SidebarNav className={classes.nav} pages={pages} />}
       </div>
     </Drawer>
   );
@@ -86,7 +87,6 @@ Sidebar.propTypes = {
   className: PropTypes.string,
   onClose: PropTypes.func,
   open: PropTypes.bool.isRequired,
-  isAuth: PropTypes.bool.isRequired,
   variant: PropTypes.string.isRequired,
 };
 

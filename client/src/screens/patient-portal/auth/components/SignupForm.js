@@ -73,8 +73,7 @@ const SignupForm = (props) => {
   const [termsChecked, setTermsChecked] = useState(true);
   const [signatureRef, setSignatureRef] = useState(null);
   const [signature, setSignature] = useState(null);
-  console.log("signatureRef:", signatureRef);
-  console.log("signature:", signature);
+
   const [formFields, setFormFields] = useState({
     firstname: "",
     middlename: "",
@@ -155,10 +154,10 @@ const SignupForm = (props) => {
       },
     }).then(
       (response) => {
-        console.log("response:", response);
+        console.info("image uploadresponse:", response);
       },
       (error) => {
-        console.log("error:", error);
+        console.error("image upload error:", error);
       },
     );
   };
@@ -204,7 +203,7 @@ const SignupForm = (props) => {
         },
       )
       .catch((err) => {
-        console.log("catch err", err);
+        console.error("catch err", err);
       });
   };
 
