@@ -12,6 +12,7 @@ import _ from "lodash";
 import { Responsive, WidthProvider } from "react-grid-layout";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
+import logger from "use-reducer-logger";
 
 import Card from "../../components/common/Card";
 import Dialog from "../../components/Dialog";
@@ -72,6 +73,7 @@ import {
 } from "../../static/patient";
 import { setError, setSuccess } from "../../store/common/actions";
 import { resetEditorText } from "../../store/patient/actions";
+import { isDev } from "../../utils/helpers";
 import {
   AdminNotesForm,
   AdminNotesHistory,
@@ -149,7 +151,7 @@ export default function Patient() {
   const { user } = useAuth();
   const userId = user.id;
 
-  const [state, dispatch] = useReducer(PatientReducer, initialState);
+  const [state, dispatch] = useReducer(isDev() ? logger(PatientReducer) : PatientReducer, initialState);
 
   const {
     patientInfo, adminNotes, forms, handouts, documents, encounters, medicalNotes,
