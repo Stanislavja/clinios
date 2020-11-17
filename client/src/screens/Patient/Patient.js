@@ -15,6 +15,7 @@ import { useHistory, useParams } from "react-router-dom";
 
 import Card from "../../components/common/Card";
 import Dialog from "../../components/Dialog";
+import useAuth from "../../hooks/useAuth";
 import PatientReducer from "../../providers/Patient";
 import {
   setPatientData,
@@ -63,7 +64,6 @@ import {
   togglePaymentDialog,
 } from "../../providers/Patient/actions";
 import initialState from "../../providers/Patient/initialState";
-import useAuth from "../../hooks/useAuth";
 import PatientService from "../../services/patient.service";
 import {
   FirstColumnPatientCards,
@@ -132,6 +132,7 @@ const ResponsiveGridLayout = WidthProvider(Responsive);
 
 const useStyles = makeStyles(() => ({
   main: {
+    paddingTop: "15px",
     minHeight: "calc(100vh - 163px)",
   },
   noDisplay: {
