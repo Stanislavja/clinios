@@ -73,6 +73,7 @@ const BillingDetails = (props) => {
         <TableHead>
           <TableRow>
             <StyledTableCell>Date</StyledTableCell>
+            <StyledTableCell>Amount</StyledTableCell>
             <StyledTableCell>Transaction Type</StyledTableCell>
             <StyledTableCell>Encounter Title</StyledTableCell>
             <StyledTableCell>CPT Procedure</StyledTableCell>
@@ -82,9 +83,13 @@ const BillingDetails = (props) => {
         <TableBody>
           {billings.length
             ? billings.map((item) => (
-              <StyledTableRow key={item.dt}>
+              <StyledTableRow key={`${item.dt}_${item.amount}_${item.tran_type}`}>
                 <TableCell component="th" scope="item">
                   {moment(item.dt).format("MMM D YYYY")}
+                </TableCell>
+                <TableCell>
+                  $
+                  {item.amount}
                 </TableCell>
                 <TableCell>{item.tran_type}</TableCell>
                 <TableCell>{item.encounter_title}</TableCell>
@@ -94,7 +99,7 @@ const BillingDetails = (props) => {
             ))
             : (
               <StyledTableRow>
-                <TableCell colSpan={5}>
+                <TableCell colSpan={6}>
                   <Typography align="center" variant="body1">
                     {isLoading ? "Fetching Records" : "No Records Found..."}
                   </Typography>
