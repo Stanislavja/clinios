@@ -1,5 +1,5 @@
 const { configuration, makeDb } = require("../db/db.js");
-const { errorMessage, successMessage, status } = require("../helpers/status");
+const { errorMessage, successMessage, status } = require('../helpers/status');
 
 const getAccountingTypes = async (req, res) => {
   const db = makeDb(configuration, res);
