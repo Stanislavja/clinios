@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -8,7 +8,8 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import moment from "moment";
-import PropTypes from "prop-types";
+
+import { PatientContext } from "../../Patient";
 
 const useStyles = makeStyles(() => ({
   tableContainer: {
@@ -44,9 +45,10 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-const BasicInfoHistory = (props) => {
-  const { data /* reloadData */ } = props;
+const BasicInfoHistory = () => {
+  const { state } = useContext(PatientContext);
   const classes = useStyles();
+  const data = state.patientInfo.history;
 
   return (
     <TableContainer className={classes.tableContainer}>
@@ -78,10 +80,6 @@ const BasicInfoHistory = (props) => {
       </Table>
     </TableContainer>
   );
-};
-
-BasicInfoHistory.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default BasicInfoHistory;
