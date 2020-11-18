@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -11,11 +11,11 @@ import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import DeleteIcon from "@material-ui/icons/Delete";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
 
 import PatientService from "../../../../services/patient.service";
-import { setError, setSuccess } from "../../../../store/common/actions";
+import { PatientContext } from "../../Patient";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -64,15 +64,17 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 
 const HandoutsDetails = (props) => {
-  const { data, reloadData, patientId } = props;
-  const dispatch = useDispatch();
+  const { reloadData, patientId } = props;
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
+  const { state } = useContext(PatientContext);
+  const { data } = state.handouts;
 
   const deleteItemHandler = (selectedItem) => {
     const handoutId = selectedItem.handout_id;
     PatientService.deleteHandout(patientId, handoutId)
       .then((response) => {
-        dispatch(setSuccess(`${response.data.message}`));
+        enqueueSnackbar(`${response.data.message}`, { variant: "success" });
         reloadData();
       })
       .catch((error) => {
@@ -81,13 +83,7 @@ const HandoutsDetails = (props) => {
           && error.response.data.message)
           || error.message
           || error.toString();
-        const severity = "error";
-        dispatch(
-          setError({
-            severity,
-            message: resMessage,
-          }),
-        );
+        enqueueSnackbar(`${resMessage}`, { variant: "error" });
       });
   };
 
@@ -138,7 +134,6 @@ const HandoutsDetails = (props) => {
 };
 
 HandoutsDetails.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
   patientId: PropTypes.string.isRequired,
   reloadData: PropTypes.func.isRequired,
 };

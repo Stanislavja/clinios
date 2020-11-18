@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, {
+  useState, useEffect, useCallback, useContext,
+} from "react";
 
 import {
   Button,
@@ -13,11 +15,12 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
 
+import { toggleHandoutsDialog } from "../../../../providers/Patient/actions";
 import PatientService from "../../../../services/patient.service";
-import { setError, setSuccess } from "../../../../store/common/actions";
+import { PatientContext } from "../../Patient";
 
 const useStyles = makeStyles((theme) => ({
   inputRow: {
@@ -39,10 +42,11 @@ const useStyles = makeStyles((theme) => ({
 
 const HandoutsForm = (props) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const { onClose, reloadData, patientId } = props;
+  const { enqueueSnackbar } = useSnackbar();
+  const { reloadData, patientId } = props;
   const [allHandouts, setAllHandouts] = useState([]);
   const [selectedHandout, setSelectedHandout] = useState(null);
+  const { dispatch } = useContext(PatientContext);
 
   const fetchAllHandouts = useCallback(() => {
     PatientService.getAllHandouts().then((res) => {
@@ -65,9 +69,9 @@ const HandoutsForm = (props) => {
       };
       PatientService.createPatientHandout(patientId, reqBody)
         .then((response) => {
-          dispatch(setSuccess(`${response.data.message}`));
+          enqueueSnackbar(`${response.data.message}`, { variant: "success" });
           reloadData();
-          onClose();
+          dispatch(toggleHandoutsDialog());
         })
         .catch((error) => {
           const resMessage = (error.response
@@ -75,21 +79,10 @@ const HandoutsForm = (props) => {
             && error.response.data.message)
             || error.message
             || error.toString();
-          const severity = "error";
-          dispatch(
-            setError({
-              severity,
-              message: resMessage,
-            }),
-          );
+          enqueueSnackbar(`${resMessage}`, { variant: "error" });
         });
     } else {
-      dispatch(
-        setError({
-          severity: "error",
-          message: "Checkbox selection is required",
-        }),
-      );
+      enqueueSnackbar("Checkbox selection is required", { variant: "error" });
     }
   };
 
@@ -138,7 +131,7 @@ const HandoutsForm = (props) => {
         >
           Save
         </Button>
-        <Button variant="outlined" onClick={() => onClose()}>
+        <Button variant="outlined" onClick={() => dispatch(toggleHandoutsDialog())}>
           Cancel
         </Button>
       </Grid>
@@ -149,7 +142,6 @@ const HandoutsForm = (props) => {
 HandoutsForm.propTypes = {
   patientId: PropTypes.string.isRequired,
   reloadData: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
 };
 
 export default HandoutsForm;
