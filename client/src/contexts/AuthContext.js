@@ -9,6 +9,7 @@ import PropTypes from "prop-types";
 
 
 import SplashScreen from "../components/SlashScreen";
+import authHeader from "../services/auth-header";
 import { API_BASE } from "../utils/API_BASE";
 import axios from "../utils/axios";
 
@@ -119,15 +120,13 @@ export const AuthProvider = ({ children }) => {
       try {
         const accessToken = window.localStorage.getItem("accessToken");
 
-        // TODO:: Add API call to get user information and remove this
-          // const response = await axios.get('/api/account/me');
-         // const { user } = [];
-        const user = JSON.parse(window.localStorage.getItem("user"));
-
         if (accessToken && isValidToken(accessToken)) {
           setSession(accessToken);
 
-
+          const response = await axios.get(`${API_BASE}/user`, {
+            headers: authHeader(),
+          });
+          const { user } = response.data.data;
           dispatch({
             type: "INITIALISE",
             payload: {

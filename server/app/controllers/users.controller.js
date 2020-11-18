@@ -42,7 +42,8 @@ const getUser = async (req, res) => {
       errorMessage.error = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
-    successMessage.data = dbResponse;
+    const user = dbResponse[0];
+    successMessage.data = {user}
     return res.status(status.created).send(successMessage);
   } catch (error) {
     errorMessage.error = "Select not successful";

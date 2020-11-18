@@ -16,7 +16,7 @@ const verifyToken = (req, res, next) => {
       if (err.name === "TokenExpiredError") {
         verifyErrMsg = "Token Expired!";
       }
-      return res.status(401).send({ message: verifyErrMsg });
+      return res.status(401).send({ message: verifyErrMsg, data: {token: token, KEY: "ERR_EXPIRED_TOKEN"} });
     }
     req.user_id = decoded.id;
     req.client_id = decoded.client_id;

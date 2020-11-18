@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { UNAUTH_USER } from "./store/auth/types";
+import { LOGOUT } from "./store/auth/types";
 import { setError } from "./store/common/actions";
 
 export default {
@@ -36,10 +36,10 @@ export default {
             }),
           );
           // TODO:: Check access token validaity on backend and handle on fronend client
-          if (data.token && data.token.KEY === "ERR_EXPIRED_TOKEN") {
+          if (data.data.token && data.data.KEY === "ERR_EXPIRED_TOKEN") {
             console.info("EXPIRED TOKEN!");
             localStorage.clear();
-            store.dispatch({ type: UNAUTH_USER });
+            store.dispatch({ type: LOGOUT });
           }
         }
 
