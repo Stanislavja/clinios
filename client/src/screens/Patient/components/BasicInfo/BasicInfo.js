@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Grid,
@@ -20,6 +20,7 @@ import PropTypes from "prop-types";
 
 import CountrySelect from "../../../../components/common/CountrySelect";
 import RegionSelect from "../../../../components/common/RegionSelect";
+import usePatientContext from "../../../../hooks/usePatientContext";
 import { togglePatientInfoDialog } from "../../../../providers/Patient/actions";
 import PatientService from "../../../../services/patient.service";
 import {
@@ -29,7 +30,6 @@ import {
   PaymentData,
 } from "../../../../static/patientBasicInfoForm";
 import { calculateAge } from "../../../../utils/helpers";
-import { PatientContext } from "../../Patient";
 
 const useStyles = makeStyles((theme) => ({
   inputRow: {
@@ -61,9 +61,10 @@ const useStyles = makeStyles((theme) => ({
 export default function BasicInfo(props) {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  const { state, dispatch } = useContext(PatientContext);
+  const { state, dispatch } = usePatientContext();
   const formData = state.patientInfo.data;
-  const { reloadData, patientId } = props;
+  const { patientId } = state;
+  const { reloadData } = props;
   const FirstRow = BasicInfoForm.firstRow;
   const SecondRow = BasicInfoForm.secondRow;
   const ThirdRow = BasicInfoForm.thirdRow;
@@ -451,6 +452,5 @@ export default function BasicInfo(props) {
 }
 
 BasicInfo.propTypes = {
-  patientId: PropTypes.string.isRequired,
   reloadData: PropTypes.func.isRequired,
 };

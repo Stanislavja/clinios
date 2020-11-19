@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -9,7 +9,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import moment from "moment";
 
-import { PatientContext } from "../../Patient";
+import usePatientContext from "../../../../hooks/usePatientContext";
 
 const useStyles = makeStyles(() => ({
   tableContainer: {
@@ -46,7 +46,7 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 
 const BasicInfoHistory = () => {
-  const { state } = useContext(PatientContext);
+  const { state } = usePatientContext();
   const classes = useStyles();
   const data = state.patientInfo.history;
 

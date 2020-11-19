@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Grid, Typography, Popover } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
-import PropTypes from "prop-types";
 
+import usePatientContext from "../../../../hooks/usePatientContext";
 import PatientService from "../../../../services/patient.service";
 import {
   calculateAge,
@@ -13,7 +13,6 @@ import {
   dateDiffInMonths,
   dateDiffInYears,
 } from "../../../../utils/helpers";
-import { PatientContext } from "../../Patient";
 
 const useStyles = makeStyles((theme) => ({
   inputRow: {
@@ -42,11 +41,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BasicInfoContent = (props) => {
+const BasicInfoContent = () => {
   const classes = useStyles();
-  const { patientId } = props;
-  const { state } = useContext(PatientContext);
+  const { state } = usePatientContext();
   const { data } = state.patientInfo;
+  const { patientId } = state;
   const [nextAppointment, setNextAppointment] = useState(null);
   const [showTooltip, setShowTooltip] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -287,10 +286,5 @@ const BasicInfoContent = (props) => {
     </>
   );
 };
-
-BasicInfoContent.propTypes = {
-  patientId: PropTypes.string.isRequired,
-};
-
 
 export default BasicInfoContent;
