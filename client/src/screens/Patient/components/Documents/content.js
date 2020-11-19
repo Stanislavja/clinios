@@ -11,12 +11,12 @@ import TableRow from "@material-ui/core/TableRow";
 import DeleteIcon from "@material-ui/icons/Delete";
 import RestoreIcon from "@material-ui/icons/RestorePage";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
 
 import Tooltip from "../../../../components/common/CustomTooltip";
+import usePatientContext from "../../../../hooks/usePatientContext";
 import PatientService from "../../../../services/patient.service";
-import { setError, setSuccess } from "../../../../store/common/actions";
 
 const useStyles = makeStyles((theme) => ({
   tab: {
@@ -91,11 +91,14 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 
 const DocumentsContent = (props) => {
-  const { data, reloadData, patientId } = props;
-  const dispatch = useDispatch();
+  const { reloadData } = props;
+  const { enqueueSnackbar } = useSnackbar();
+  const { state } = usePatientContext();
   const classes = useStyles();
   const [tabValue, setTabValue] = useState(0);
   const [tableData, setTableData] = useState([]);
+  const { data } = state.documents;
+  const { patientId } = state;
 
   const fetchDocuments = useCallback((selectedTab) => {
     if (selectedTab === 0) { // (All)
@@ -129,7 +132,7 @@ const DocumentsContent = (props) => {
     };
     PatientService.updateDocument(patientId, selectedItemId, reqBody)
       .then((response) => {
-        dispatch(setSuccess(`${response.data.message}`));
+        enqueueSnackbar(`${response.data.message}`, { variant: "success" });
         reloadData();
       })
       .catch((error) => {
@@ -138,13 +141,7 @@ const DocumentsContent = (props) => {
           && error.response.data.message)
           || error.message
           || error.toString();
-        const severity = "error";
-        dispatch(
-          setError({
-            severity,
-            message: resMessage,
-          }),
-        );
+        enqueueSnackbar(`${resMessage}`, { variant: "error" });
       });
   };
 
@@ -273,10 +270,7 @@ const DocumentsContent = (props) => {
 };
 
 DocumentsContent.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  patientId: PropTypes.string.isRequired,
   reloadData: PropTypes.func.isRequired,
 };
-
 
 export default DocumentsContent;
