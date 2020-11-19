@@ -327,9 +327,6 @@ const NewOrEditAppointment = ({
               component="div"
               className={`${classes.formControl} ${classes.textArea}`}
             >
-              {/* <FormLabel component="p" className={classes.formLabel}>
-                Note
-              </FormLabel> */}
               <TextField
                 fullWidth
                 variant="outlined"

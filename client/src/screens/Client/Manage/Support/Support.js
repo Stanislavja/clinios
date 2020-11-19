@@ -19,7 +19,6 @@ import moment from "moment";
 
 import SupportAPI from "../../../../services/supportStatus.service";
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -124,12 +123,7 @@ export default function Support() {
     <div className={classes.root}>
       <Grid container direction="column">
         <Grid item xs={12} sm={3}>
-          <Typography
-            component="h1"
-            variant="h2"
-            color="textPrimary"
-            className={classes.title}
-          >
+          <Typography component="h1" variant="h2" color="textPrimary" className={classes.title}>
             Technical Support
           </Typography>
           <Typography component="p" variant="body2" color="textPrimary">
@@ -137,11 +131,7 @@ export default function Support() {
           </Typography>
         </Grid>
         <Grid item xs={12} sm={2}>
-          <FormControl
-            variant="outlined"
-            size="small"
-            className={classes.customSelect}
-          >
+          <FormControl variant="outlined" size="small" className={classes.customSelect}>
             <InputLabel htmlFor="opneCases">Case Status</InputLabel>
             <Select
               native
@@ -176,43 +166,36 @@ export default function Support() {
 
       {searchResults.length > 0 ? (
         <TableContainer component={Paper} className={classes.tableContainer}>
-          <Table
-            size="small"
-            className={classes.table}
-            aria-label="a dense table"
-          >
+          <Table size="small" className={classes.table} aria-label="a dense table">
             <TableHead>
               <TableRow>
-                <StyledTableCell padding="default">Case ID</StyledTableCell>
-                <StyledTableCell padding="default">Client</StyledTableCell>
-                <StyledTableCell padding="default">Subject</StyledTableCell>
-                <StyledTableCell padding="default">Status</StyledTableCell>
-                <StyledTableCell padding="default">Created</StyledTableCell>
-                <StyledTableCell padding="default">Created By</StyledTableCell>
-                <StyledTableCell padding="default">Updated</StyledTableCell>
+                <StyledTableCell padding="checkbox">Case ID</StyledTableCell>
+                <StyledTableCell padding="checkbox">Client</StyledTableCell>
+                <StyledTableCell padding="checkbox">Subject</StyledTableCell>
+                <StyledTableCell padding="checkbox">Status</StyledTableCell>
+                <StyledTableCell padding="checkbox">Created</StyledTableCell>
+                <StyledTableCell padding="checkbox">Created By</StyledTableCell>
+                <StyledTableCell padding="checkbox">Updated</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {searchResults.map((result) => (
                 <StyledTableRow key={result.id}>
-                  <TableCell padding="default" component="th" scope="row">
+                  <TableCell padding="checkbox" component="th" scope="row">
                     {result.id}
                   </TableCell>
-                  <TableCell padding="default" component="th" scope="row">
+                  <TableCell padding="checkbox" component="th" scope="row">
                     {result.client_name}
                   </TableCell>
                   {result.subject.length > 40 ? (
-                    <LightTooltip
-                      className={classes.overFlowControl}
-                      title={result.subject}
-                    >
-                      <TableCell padding="default" component="th" scope="row">
+                    <LightTooltip className={classes.overFlowControl} title={result.subject}>
+                      <TableCell padding="checkbox" component="th" scope="row">
                         {result.subject}
                       </TableCell>
                     </LightTooltip>
                   ) : (
                     <TableCell
-                      padding="default"
+                      padding="checkbox"
                       className={classes.overFlowControl}
                       component="th"
                       scope="row"
@@ -220,16 +203,16 @@ export default function Support() {
                       {result.subject}
                     </TableCell>
                   )}
-                  <TableCell padding="default" component="th" scope="row">
+                  <TableCell padding="checkbox" component="th" scope="row">
                     {result.case_status}
                   </TableCell>
-                  <TableCell padding="default" component="th" scope="row">
+                  <TableCell padding="checkbox" component="th" scope="row">
                     {moment(result.created).format("lll")}
                   </TableCell>
-                  <TableCell padding="default" component="th" scope="row">
+                  <TableCell padding="checkbox" component="th" scope="row">
                     {result.created_user}
                   </TableCell>
-                  <TableCell padding="default" component="th" scope="row">
+                  <TableCell padding="checkbox" component="th" scope="row">
                     {moment(result.updated).format("lll")}
                   </TableCell>
                 </StyledTableRow>

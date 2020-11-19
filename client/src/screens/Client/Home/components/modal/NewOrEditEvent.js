@@ -33,8 +33,10 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 
-import useDebounce from "../../../../../hooks/useDebounce";
-import * as API from "../../../../../utils/API";
+import useDebounce from "./../../../../../hooks/useDebounce";
+import * as API from "./../../../../../utils/API";
+import useAuth from "../../../../../hooks/useAuth";
+// import { AuthConsumer } from "../../../../../contexts/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -67,6 +69,7 @@ const useStyles = makeStyles((theme) => ({
   },
   startdatePicker: {
     marginRight: theme.spacing(4),
+    maxWidth: "165px",
   },
   statuses: {
     marginTop: theme.spacing(2),
@@ -107,6 +110,10 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
     color: theme.palette.text.link,
   },
+  appointmentLength: {
+    maxWidth: "150px",
+    margin: "15px 5px 0",
+  },
 }));
 
 const NewOrEditEvent = ({
@@ -123,19 +130,34 @@ const NewOrEditEvent = ({
   const { appointments, providers, errors } = props;
   const classes = useStyles();
   const history = useHistory();
-  const [provider, setProvider] = React.useState("");
+  // const { providers, errors } = props;
+  // const [provider, setProvider] = React.useState("");
   const [patients, setPatients] = React.useState([]);
   const [selectedPatient, setSelectedPatient] = React.useState("");
   const [patientSearchTerm, setPatientSearchTerm] = useState("");
   const [calEvent, setCalEvent] = useState("");
   const [appointmentLength, setAppointmentLeangth] = useState(" ");
+  const [appointmentLengthDays, setAppointmentLengthDays] = useState(" ");
+  const [currentDayLength, setCurrentDayLength] = useState(" ");
   const [errorText, setErrorText] = useState({
     title: "",
     patient: "",
     error: "",
   });
+  // const user = JSON.parse(localStorage.getItem("user"));
+  // const index = providers.findIndex((provider) => provider.id === user.id);
+  const [indexP, setIndex] = useState(0);
+  const [provider, setProvider] = React.useState(providers[indexP]);
+  const { user } = useAuth();
 
-    /* eslint-disable */
+  const calculateLength = async () => {
+    const length = await moment(calEvent.end_dt).diff(calEvent.start_dt, "minutes");
+    const length2 = await moment(calEvent.end_dt).diff(calEvent.start_dt, "days");
+    const lengthFromCuurrentDay = await moment(calEvent.start_dt).diff(moment(), "days");
+    setCurrentDayLength(lengthFromCuurrentDay);
+    setAppointmentLengthDays(length2);
+    setAppointmentLeangth(length);
+  };
   useEffect(() => {
     if (isNewEvent) {
       setCalEvent("");
@@ -146,6 +168,7 @@ const NewOrEditEvent = ({
       setPatientSearchTerm(`${props.event.firstname} ${props.event.firstname}`);
       setProvider(selectedProvider);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.event, isNewEvent]);
   /* eslint-enable */
@@ -157,6 +180,12 @@ const NewOrEditEvent = ({
   };
 
   const debouncedSearchTerm = useDebounce(patientSearchTerm, 500);
+  useEffect(() => {
+    calculateLength(calEvent.end_dt);
+    // eslint-disable-next-line
+  }, [calEvent]);
+  /* eslint-enable */
+
   useEffect(
     () => {
       if (debouncedSearchTerm) {
@@ -168,7 +197,7 @@ const NewOrEditEvent = ({
           },
           (error) => {
             console.error("search error", error);
-          },
+          }
         );
       } else {
         setPatients([]);
@@ -179,7 +208,7 @@ const NewOrEditEvent = ({
     // Our useEffect function will only execute if this value changes ...
     // ... and thanks to our hook it will only change if the original ...
     // value (searchTerm) hasn't changed for more than 500ms.
-    [debouncedSearchTerm],
+    [debouncedSearchTerm]
   );
 
   const handlePatientChange = (_, patient) => {
@@ -198,7 +227,7 @@ const NewOrEditEvent = ({
         const payload = {
           data: {
             title: calEvent.title,
-            provider,
+            provider: provider === "selectedProvider" ? providers[indexP] : provider,
             patient: selectedPatient,
             ApptStatus: calEvent.status,
             notes: calEvent.notes,
@@ -208,29 +237,29 @@ const NewOrEditEvent = ({
         };
         onSave(payload);
       } else {
-          /* eslint-disable */
+        /* eslint-disable */
         const payload = {
           data: {
             id: props.event.id,
             title: calEvent.title,
             providerName: calEvent.provider_name,
-            provider,
-            patient: selectedPatient || {
-              id: props.event.patient_id,
-              firstname: props.event.firstname,
-              email: props.event.email,
-            },
+            provider: provider,
+            patient: selectedPatient
+              ? selectedPatient
+              : {
+                  id: props.event.patient_id,
+                  firstname: props.event.firstname,
+                  email: props.event.email,
+                },
             ApptStatus: calEvent.status,
             notes: calEvent.notes,
-            old_start_dt: moment(props.event.start_dt).format(
-              "YYYY-MM-DD HH:mm",
-            ),
+            old_start_dt: moment(props.event.start_dt).format("YYYY-MM-DD HH:mm"),
             old_end_dt: moment(props.event.end_dt).format("YYYY-MM-DD HH:mm"),
             new_start_dt: moment(calEvent.start_dt).format("YYYY-MM-DD HH:mm"),
             new_end_dt: moment(calEvent.end_dt).format("YYYY-MM-DD HH:mm"),
           },
         };
-          /* eslint-enable */
+        /* eslint-enable */
         onEventUpdate(payload);
       }
     };
@@ -275,7 +304,15 @@ const NewOrEditEvent = ({
     }
   };
 
+  useEffect(() => {
+    const index2 = providers.findIndex((provider) => provider.id === user.id);
+    setIndex(index2);
+  }, [providers, user]);
+
   return (
+    // <AuthConsumer>
+    //   {({ user }) => {
+
     <Dialog
       open={isOpen}
       onClose={onClose}
@@ -283,15 +320,9 @@ const NewOrEditEvent = ({
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title" className={classes.title}>
-        {isNewEvent
-          ? `New Appointment - ${moment(selectedDate).format("YYYY.MM.DD")}`
-          : "Edit Appointment"}
+        {isNewEvent ? `New Appointment - ${moment(selectedDate).format("YYYY.MM.DD")}` : "Edit Appointment"}
         {onClose ? (
-          <IconButton
-            aria-label="Close"
-            className={classes.closeButton}
-            onClick={onClose}
-          >
+          <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
             <CloseIcon />
           </IconButton>
         ) : null}
@@ -308,16 +339,15 @@ const NewOrEditEvent = ({
         )}
         <div
           className={clsx({
-            [classes.modalConentBelow]: true, // always apply
-            [classes.contentWithLoading]: isLoading, // only when isLoading === true
+            [classes.modalConentBelow]: true, //always apply
+            [classes.contentWithLoading]: isLoading, //only when isLoading === true
           })}
         >
           <DialogContentText id="alert-dialog-description">
             This page is used to create a new appointment
           </DialogContentText>
-          {errors
-            && errors.map((error, index) => (
-               // eslint-disable-next-line react/no-array-index-key
+          {errors &&
+            errors.map((error, index) => (
               <Alert severity="error" key={index}>
                 {error.msg}
               </Alert>
@@ -351,7 +381,7 @@ const NewOrEditEvent = ({
                 value={calEvent.start_dt}
                 placeholder="2020/10/10 10:00"
                 onChange={(date) => {
-                  const property = "start_dt";
+                  let property = "start_dt";
                   setCalEvent({
                     ...calEvent,
                     [property]: date,
@@ -374,17 +404,14 @@ const NewOrEditEvent = ({
                 value={calEvent.end_dt}
                 placeholder="2020/10/10 11:00"
                 onChange={(date) => {
-                  const property = "end_dt";
+                  let property = "end_dt";
                   setCalEvent({
                     ...calEvent,
                     [property]: date,
                   });
-                  const length = moment(date).diff(
-                    calEvent.start_dt,
-                    "minutes",
-                  );
-                  setAppointmentLeangth(length);
+                  calculateLength(date);
                 }}
+                minD
                 ate={new Date()}
                 disablePast
                 format="yyyy/MM/dd HH:mm"
@@ -392,20 +419,87 @@ const NewOrEditEvent = ({
                   "aria-label": "change date",
                 }}
               />
-              <TextField
-                value={appointmentLength}
-                variant="outlined"
-                margin="dense"
-                className={classes.appointmentLength}
-                size="small"
-                id="appointmentLength"
-                label="Appointment Length"
-                name="appointmentLength"
-                autoComplete="appointmentLength"
-                onChange={(event) => handleOnChange(event)}
-                disabled
-              />
+              <Button
+                style={{
+                  whiteSpace: "nowrap",
+                  maxHeight: "30px",
+                  marginLeft: "-15px",
+                  marginRight: "5px",
+                  marginTop: "15px",
+                }}
+                variant="contained"
+                disableElevation
+                onClick={async () => {
+                  await setCalEvent({
+                    ...calEvent,
+                    start_dt: moment(calEvent.start_dt).add(1, "days"),
+                    end_dt: moment(calEvent.start_dt).add(1, "days").add(15, "minutes"),
+                    // moment(calEvent.start_dt).add(15, "minutes")
+                  });
+                }}
+              >
+                Add day
+              </Button>
+              <Button
+                variant="contained"
+                style={{
+                  whiteSpace: "nowrap",
+                  maxHeight: "30px",
+                  marginTop: "15px",
+                }}
+                disableElevation
+                onClick={async () => {
+                  await setCalEvent({
+                    ...calEvent,
+                    start_dt: moment(calEvent.start_dt).subtract(1, "days"),
+                    end_dt: moment(calEvent.end_dt).subtract(1, "days").subtract(15, "minutes"),
+                  });
+                }}
+              >
+                Subtract Day
+              </Button>
             </div>
+            <TextField
+              value={appointmentLengthDays}
+              variant="outlined"
+              margin="dense"
+              className={classes.appointmentLength}
+              size="small"
+              id="appointmentLength"
+              label="Length days"
+              name="appointmentLength"
+              autoComplete="appointmentLength"
+              onChange={(event) => handleOnChange(event)}
+              disabled
+              defaultValue={`${appointmentLengthDays === 0 ? "Same day" : `${appointmentLength} day`}`}
+            />
+            <TextField
+              value={appointmentLength}
+              variant="outlined"
+              margin="dense"
+              className={classes.appointmentLength}
+              size="small"
+              id="appointmentLength"
+              label="Length minutes"
+              name="appointmentLength"
+              autoComplete="appointmentLength"
+              onChange={(event) => handleOnChange(event)}
+              disabled
+            />
+            <TextField
+              value={currentDayLength}
+              variant="outlined"
+              margin="dense"
+              className={classes.appointmentLength}
+              size="small"
+              id="appointmentLength"
+              label="In days"
+              name="appointmentLength"
+              autoComplete="appointmentLength"
+              onChange={(event) => handleOnChange(event)}
+              disabled
+              defaultValue={`${currentDayLength === 0 ? "Today" : `In ${appointmentLength} days`}`}
+            />
             <FormControl className={classes.statuses}>
               <FormLabel component="legend">Status</FormLabel>
               <RadioGroup
@@ -415,44 +509,27 @@ const NewOrEditEvent = ({
                 onChange={(event) => handleOnChange(event)}
                 className={classes.statusList}
               >
-                <FormControlLabel
-                  value="R"
-                  control={<Radio />}
-                  label="Requested"
-                />
-                <FormControlLabel
-                  value="A"
-                  control={<Radio />}
-                  label="Approved"
-                />
-                <FormControlLabel
-                  value="D"
-                  control={<Radio />}
-                  label="Declined"
-                />
+                <FormControlLabel value="R" control={<Radio />} label="Requested" />
+                <FormControlLabel value="A" control={<Radio />} label="Approved" />
+                <FormControlLabel value="D" control={<Radio />} label="Declined" />
               </RadioGroup>
             </FormControl>
-            <FormControl
-              variant="outlined"
-              size="small"
-              className={classes.formControl}
-            >
-              <InputLabel id="provider-select-outlined-label">
-                Provider
-              </InputLabel>
+            <FormControl variant="outlined" size="small" className={classes.formControl}>
+              <InputLabel id="provider-select-outlined-label">Provider</InputLabel>
               <Select
                 labelId="provider-select-outlined-label"
                 id="provider-select-outlined-label"
                 value={!!provider && provider.id}
                 onChange={handleProviderChange}
                 label="Provider"
+                defaultValue={providers[indexP]?.id}
               >
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                {providers.map((pvd) => (
-                  <MenuItem key={pvd.id} value={pvd.id}>
-                    {pvd.name}
+                {providers.map((provider) => (
+                  <MenuItem key={provider.id} value={provider.id}>
+                    {provider.name}
                   </MenuItem>
                 ))}
               </Select>
@@ -483,9 +560,7 @@ const NewOrEditEvent = ({
                           onClick={(event) => handlePatientChange(event, patient)}
                           key={patient.id}
                         >
-                          <ListItemText
-                            primary={`${patient.firstname} ${patient.lastname}`}
-                          />
+                          <ListItemText primary={`${patient.firstname} ${patient.lastname}`} />
                         </ListItem>
                       ))}
                     </List>
@@ -501,7 +576,7 @@ const NewOrEditEvent = ({
               aria-label="minimum height"
               placeholder="Notes..."
               name="notes"
-              value={calEvent.notes || ""}
+              value={calEvent.notes}
               onChange={(event) => handleOnChange(event)}
             />
           </div>
@@ -544,6 +619,9 @@ const NewOrEditEvent = ({
         </div>
       </DialogActions>
     </Dialog>
+
+    //   }}
+    // </AuthConsumer>
   );
 };
 
@@ -562,7 +640,7 @@ NewOrEditEvent.propTypes = {
       created_user: PropTypes.string,
       updated: PropTypes.string,
       updated_user: PropTypes.string,
-    }),
+    })
   ).isRequired,
   selectedProvider: PropTypes.shape({
     name: PropTypes.string,
@@ -571,7 +649,7 @@ NewOrEditEvent.propTypes = {
     PropTypes.shape({
       id: PropTypes.number,
       name: PropTypes.string,
-    }),
+    })
   ).isRequired,
   isLoading: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
@@ -582,7 +660,7 @@ NewOrEditEvent.propTypes = {
   errors: PropTypes.arrayOf(
     PropTypes.shape({
       msg: PropTypes.string.isRequired,
-    }),
+    })
   ).isRequired,
 };
 
