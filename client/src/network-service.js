@@ -40,10 +40,11 @@ export default {
             },
           }));
           // TODO:: Check access token validaity on backend and handle on fronend client
-          if (data.data.token && data.data.KEY === "ERR_EXPIRED_TOKEN") {
-            console.info("EXPIRED TOKEN!");
+          if (data.data && data.data.token && data.data.KEY === "ERR_EXPIRED_TOKEN") {
             localStorage.clear();
             store.dispatch({ type: LOGOUT });
+            window.location.reload();
+            return false;
           }
         }
 

@@ -25,15 +25,15 @@ const Notifier = () => {
       key, message, options = {}, dismissed = false,
     }) => {
       if (dismissed) {
-                // dismiss snackbar using notistack
+        // dismiss snackbar using notistack
         closeSnackbar(key);
         return;
       }
 
-            // do nothing if snackbar is already displayed
+      // do nothing if snackbar is already displayed
       if (displayed.includes(key)) return;
 
-            // display snackbar using notistack
+      // display snackbar using notistack
       enqueueSnackbar(message, {
         key,
         ...options,
