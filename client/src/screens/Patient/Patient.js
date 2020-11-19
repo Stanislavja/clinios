@@ -4,6 +4,7 @@ import React, {
   useRef,
   useCallback,
   useReducer,
+  createContext,
 } from "react";
 
 import { Grid } from "@material-ui/core";
@@ -19,6 +20,7 @@ import Dialog from "../../components/Dialog";
 import useAuth from "../../hooks/useAuth";
 import PatientReducer from "../../providers/Patient";
 import {
+  setPatientId,
   setPatientData,
   setPatientHistory,
   setAdminNotes,
@@ -142,7 +144,9 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function Patient() {
+export const PatientContext = createContext(null);
+
+const Patient = () => {
   const classes = useStyles();
   const inputFile = useRef(null);
   const reduxDispatch = useDispatch();
@@ -341,6 +345,7 @@ export default function Patient() {
     generateLayout();
     fetchCardsLayout();
     fetchPatientData();
+    dispatch(setPatientId(patientId)); // saving patientId in reducer
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [patientId]);
 
@@ -779,7 +784,7 @@ export default function Patient() {
   ]);
 
   return (
-    <>
+    <PatientContext.Provider value={{ state, dispatch }}>
       <input
         type="file"
         id="file"
@@ -1380,6 +1385,8 @@ export default function Patient() {
           </ResponsiveGridLayout>
         )}
       </Grid>
-    </>
+    </PatientContext.Provider>
   );
-}
+};
+
+export default Patient;
