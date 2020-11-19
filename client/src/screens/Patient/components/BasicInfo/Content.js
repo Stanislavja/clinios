@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Grid, Typography, Popover } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
+import PropTypes from "prop-types";
 
 import PatientService from "../../../../services/patient.service";
 import {
@@ -13,7 +14,34 @@ import {
   dateDiffInYears,
 } from "../../../../utils/helpers";
 
-export default function BasicInfoContent(props) {
+const useStyles = makeStyles((theme) => ({
+  inputRow: {
+    marginBottom: theme.spacing(0.5),
+    flexWrap: "nowrap",
+  },
+  text12: {
+    fontSize: 12,
+  },
+  value: {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  },
+  paper: {
+    padding: theme.spacing(1),
+    maxWidth: 400,
+    wordWrap: "break-word",
+    backgroundColor: theme.palette.common.white,
+    color: "rgba(0, 0, 0, 0.87)",
+    boxShadow: theme.shadows[1],
+    fontSize: 13,
+  },
+  popover: {
+    pointerEvents: "none",
+  },
+}));
+
+const BasicInfoContent = (props) => {
   const classes = useStyles();
   const { data, patientId } = props;
   const [nextAppointment, setNextAppointment] = useState(null);
@@ -111,6 +139,8 @@ export default function BasicInfoContent(props) {
           color="textPrimary"
           onMouseOver={(e) => isEllipsisActive(e)}
           onMouseOut={() => handleClose()}
+          onFocus={() => { }} // for onMouseOver
+          onBlur={() => { }} // for onMouseOut
         >
           {data.firstname}
           {" "}
@@ -132,6 +162,8 @@ export default function BasicInfoContent(props) {
           color="textPrimary"
           onMouseOver={(e) => isEllipsisActive(e)}
           onMouseOut={() => handleClose()}
+          onFocus={() => { }} // for onMouseOver
+          onBlur={() => { }} // for onMouseOut
         >
           {mapGender(data.gender)}
         </Typography>
@@ -151,6 +183,8 @@ export default function BasicInfoContent(props) {
           color="textPrimary"
           onMouseOver={(e) => isEllipsisActive(e)}
           onMouseOut={() => handleClose()}
+          onFocus={() => { }} // for onMouseOver
+          onBlur={() => { }} // for onMouseOut
         >
           {moment(data.dob).format("MMM D YYYY")}
           {" "}
@@ -174,6 +208,8 @@ export default function BasicInfoContent(props) {
           color="textPrimary"
           onMouseOver={(e) => isEllipsisActive(e)}
           onMouseOut={() => handleClose()}
+          onFocus={() => { }} // for onMouseOver
+          onBlur={() => { }} // for onMouseOut
         >
           {formatPhoneNumber(data.phone_home)}
         </Typography>
@@ -193,6 +229,8 @@ export default function BasicInfoContent(props) {
           color="textPrimary"
           onMouseOver={(e) => isEllipsisActive(e)}
           onMouseOut={() => handleClose()}
+          onFocus={() => { }} // for onMouseOver
+          onBlur={() => { }} // for onMouseOut
         >
           {formatPhoneNumber(data.phone_cell)}
         </Typography>
@@ -212,6 +250,8 @@ export default function BasicInfoContent(props) {
           color="textPrimary"
           onMouseOver={(e) => isEllipsisActive(e)}
           onMouseOut={() => handleClose()}
+          onFocus={() => { }} // for onMouseOver
+          onBlur={() => { }} // for onMouseOut
         >
           {data.provider}
         </Typography>
@@ -231,6 +271,8 @@ export default function BasicInfoContent(props) {
           color="textPrimary"
           onMouseOver={(e) => isEllipsisActive(e)}
           onMouseOut={() => handleClose()}
+          onFocus={() => { }} // for onMouseOver
+          onBlur={() => { }} // for onMouseOut
         >
           {nextAppointment
             ? moment(nextAppointment).format("MMM D YYYY")
@@ -241,31 +283,12 @@ export default function BasicInfoContent(props) {
       </Grid>
     </>
   );
-}
+};
 
-const useStyles = makeStyles((theme) => ({
-  inputRow: {
-    marginBottom: theme.spacing(0.5),
-    flexWrap: "nowrap",
-  },
-  text12: {
-    fontSize: 12,
-  },
-  value: {
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-  },
-  paper: {
-    padding: theme.spacing(1),
-    maxWidth: 400,
-    wordWrap: "break-word",
-    backgroundColor: theme.palette.common.white,
-    color: "rgba(0, 0, 0, 0.87)",
-    boxShadow: theme.shadows[1],
-    fontSize: 13,
-  },
-  popover: {
-    pointerEvents: "none",
-  },
-}));
+BasicInfoContent.propTypes = {
+  patientId: PropTypes.string.isRequired,
+  data: PropTypes.objectOf(PropTypes.any).isRequired,
+};
+
+
+export default BasicInfoContent;

@@ -82,9 +82,14 @@ function NumberFormatCustom(props) {
     />
   );
 }
+
+NumberFormatCustom.defaultProps = {
+  name: null,
+};
+
 NumberFormatCustom.propTypes = {
   inputRef: PropTypes.func.isRequired,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   onChange: PropTypes.func.isRequired,
 };
 

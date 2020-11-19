@@ -2,7 +2,6 @@ import React, {
   useState,
   useEffect,
   useRef,
-  useContext,
   useCallback,
 } from "react";
 
@@ -15,7 +14,7 @@ import { useHistory, useParams } from "react-router-dom";
 
 import Card from "../../components/common/Card";
 import Dialog from "../../components/Dialog";
-import { AuthContext } from "../../providers/AuthProvider";
+import useAuth from "../../hooks/useAuth";
 import PatientService from "../../services/patient.service";
 import {
   FirstColumnPatientCards,
@@ -97,7 +96,7 @@ export default function Patient() {
   const dispatch = useDispatch();
   const history = useHistory();
   const { patientId } = useParams();
-  const user = useContext(AuthContext)?.user;
+  const { user } = useAuth();
   const userId = user.id;
 
   // patient ID authenticity
@@ -153,6 +152,7 @@ export default function Patient() {
   const [showMessageDialog, setShowMessageDialog] = useState(false);
   const [showMessageExpandDialog, setShowMessageExpandDialog] = useState(false);
 
+  const [fetchDiagnosesStatus, setFetchDiagnosesStatus] = useState(true);
   const [showDiagnosesDialog, setShowDiagnosesDialog] = useState(false);
   const [showDiagnosesExpandDialog, setShowDiagnosesExpandDialog] = useState(
     false,
@@ -1224,12 +1224,12 @@ export default function Patient() {
       {!!showDiagnosesExpandDialog && (
         <Dialog
           open={showDiagnosesExpandDialog}
-          title={" "}
+          title={`${fetchDiagnosesStatus ? "Active" : "In-Active"} Diagnoses`}
           message={(
             <DiagnosesDetails
               data={diagnoses}
               onClose={toggleDiagnosesExpandDialog}
-              reloadData={() => fetchDiagnoses(true)}
+              reloadData={() => fetchDiagnoses(fetchDiagnosesStatus)}
               patientId={patientId}
             />
           )}
@@ -1456,7 +1456,10 @@ export default function Patient() {
                       ? `Balance $${patientBalance}`
                       : ""
                   }
-                  contentToggleHandler={(value) => fetchDiagnoses(value)}
+                  contentToggleHandler={(value) => {
+                    setFetchDiagnosesStatus(value);
+                    fetchDiagnoses(value);
+                  }}
                 />
               </Grid>
             ))}

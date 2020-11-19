@@ -6,6 +6,8 @@ import Toolbar from "@material-ui/core/Toolbar";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 
+import useAuth from "../../../../hooks/useAuth";
+
 const useStyles = makeStyles(() => ({
   root: {
     boxShadow: "none",
@@ -24,9 +26,10 @@ const useStyles = makeStyles(() => ({
 
 const Topbar = (props) => {
   const {
-    className, onSidebarOpen, user, ...rest
+    className, onSidebarOpen, ...rest
   } = props;
   const classes = useStyles();
+  const { user } = useAuth();
 
   return (
     <AppBar {...rest} className={clsx(classes.root, className)}>
@@ -44,13 +47,12 @@ const Topbar = (props) => {
 
 Topbar.defaultProps = {
   className: null,
-  onSidebarOpen: () => {},
+  onSidebarOpen: () => { },
 };
 
 Topbar.propTypes = {
   className: PropTypes.string,
   onSidebarOpen: PropTypes.func,
-  user: PropTypes.objectOf(PropTypes.object).isRequired,
 };
 
 export default Topbar;

@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
+import Switch from "@material-ui/core/Switch";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -32,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
     "& button": {
       fontSize: "12px",
     },
+  },
+  switchAction: {
+    minWidth: 135,
   },
 }));
 
@@ -67,10 +72,52 @@ const DiagnosesDetails = (props) => {
   const { data, patientId, reloadData } = props;
   const dispatch = useDispatch();
   const classes = useStyles();
+  const [state, setState] = useState({});
+
+  const mapStateForRows = useCallback(() => {
+    const stateObj = {};
+    data.forEach((item) => {
+      stateObj[item.name] = !!item.active;
+    });
+    setState({ ...stateObj });
+  }, [data]);
+
+  useEffect(() => {
+    mapStateForRows();
+  }, [mapStateForRows]);
 
   const deleteItemHandler = (selectedItem) => {
     const icdId = selectedItem.icd_id;
     PatientService.deleteDiagnoses(patientId, icdId)
+      .then((response) => {
+        dispatch(setSuccess(`${response.data.message}`));
+        reloadData();
+      })
+      .catch((error) => {
+        const resMessage = (error.response
+          && error.response.data
+          && error.response.data.message)
+          || error.message
+          || error.toString();
+        const severity = "error";
+        dispatch(
+          setError({
+            severity,
+            message: resMessage,
+          }),
+        );
+      });
+  };
+
+  const updateStatusHandler = (event, icdId) => {
+    const { name, checked } = event.target;
+    setState({ ...state, [name]: checked });
+    const reqBody = {
+      data: {
+        active: checked,
+      },
+    };
+    PatientService.updateDiagnoses(patientId, icdId, reqBody)
       .then((response) => {
         dispatch(setSuccess(`${response.data.message}`));
         reloadData();
@@ -120,6 +167,21 @@ const DiagnosesDetails = (props) => {
                   >
                     <DeleteIcon fontSize="small" />
                   </IconButton>
+                </TableCell>
+
+                <TableCell className={classes.switchAction}>
+                  <FormControlLabel
+                    control={(
+                      <Switch
+                        checked={!!state[row.name]}
+                        onChange={(e) => updateStatusHandler(e, row.icd_id)}
+                        name={row.name}
+                        color="primary"
+                        size="small"
+                      />
+                    )}
+                    label={state[row.name] ? "Active" : "In-Active"}
+                  />
                 </TableCell>
               </StyledTableRow>
             ))

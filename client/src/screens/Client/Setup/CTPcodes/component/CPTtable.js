@@ -19,6 +19,7 @@ import Proptypes from "prop-types";
 import NumberFormat from "react-number-format";
 import { useDispatch } from "react-redux";
 
+import useAuth from "../../../../../hooks/useAuth";
 import CPTCodesService from "../../../../../services/cpt.service";
 import { setSuccess } from "../../../../../store/common/actions";
 import CptGroupMembersModal from "./modal/CptGroupMembersModal";
@@ -60,9 +61,10 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-const CPTtable = ({ searchResult, user, fetchCptCodeSearch }) => {
+const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const { user } = useAuth();
   const [errors, setErrors] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [groupIsOpen, setGroupIsOpen] = useState(false);
@@ -297,11 +299,6 @@ const CPTtable = ({ searchResult, user, fetchCptCodeSearch }) => {
 };
 
 CPTtable.propTypes = {
-  user: Proptypes.arrayOf(
-    Proptypes.arrayOf({
-      id: Proptypes.string,
-    }),
-  ).isRequired,
   searchResult: Proptypes.arrayOf(
     Proptypes.shape({
       id: Proptypes.string,

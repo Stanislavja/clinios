@@ -49,27 +49,31 @@ const useStyles = makeStyles((theme) => ({
 
 const Sidebar = (props) => {
   const {
-    open, variant, isAuth, logout, onClose, className, ...rest
+    open, variant, onClose, className, ...rest
   } = props;
   const classes = useStyles();
 
   const pages = [
     {
+      id: 1,
       title: "Home",
       href: "/patient",
       icon: <Icon path={mdiHome} size={1} horizontal vertical rotate={180} />,
     },
     {
+      id: 2,
       title: "Messages",
       href: "/patient/messages",
       icon: <Icon path={mdiMessage} size={1} horizontal vertical rotate={180} />,
     },
     {
+      id: 3,
       title: "Encounters",
       href: "/patient/encounters",
       icon: <SettingsIcon />,
     },
     {
+      id: 4,
       title: "Handouts",
       href: "/patient/handouts",
       icon: (
@@ -77,6 +81,7 @@ const Sidebar = (props) => {
       ),
     },
     {
+      id: 5,
       title: "Labs/Documents",
       href: "/patient/labs",
       icon: (
@@ -84,6 +89,7 @@ const Sidebar = (props) => {
       ),
     },
     {
+      id: 6,
       title: "Labs/Requisition",
       href: "/patient/labs-requisition",
       icon: (
@@ -91,21 +97,25 @@ const Sidebar = (props) => {
       ),
     },
     {
+      id: 7,
       title: "Billing",
       href: "/patient/billing",
       icon: <ReceiptIcon />,
     },
     {
+      id: 8,
       title: "Payment Methods",
       href: "/patient/payment-methods",
       icon: <PaymentIcon />,
     },
     {
+      id: 9,
       title: "Allergies",
       href: "/patient/allergies",
       icon: <Icon path={mdiAllergy} size={1} horizontal vertical rotate={180} />,
     },
     {
+      id: 10,
       title: "Prescriptions",
       href: "/patient/prescriptions",
       icon: (
@@ -119,6 +129,7 @@ const Sidebar = (props) => {
       ),
     },
     {
+      id: 11,
       title: "Pharmacies",
       href: "/patient/pharmacies",
       icon: (
@@ -126,6 +137,7 @@ const Sidebar = (props) => {
       ),
     },
     {
+      id: 12,
       title: "Appointments",
       href: "/patient/appointments",
       icon: (
@@ -133,11 +145,13 @@ const Sidebar = (props) => {
       ),
     },
     {
+      id: 13,
       title: "Profile",
       href: "/patient/profile",
       icon: <Icon path={mdiAccount} size={1} horizontal vertical rotate={180} />,
     },
     {
+      id: 14,
       title: "Forms",
       href: "/patient/forms",
       icon: (
@@ -145,6 +159,7 @@ const Sidebar = (props) => {
       ),
     },
     {
+      id: 15,
       title: "Signoff",
       href: "/",
       logout: true,
@@ -170,7 +185,7 @@ const Sidebar = (props) => {
     >
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <div {...rest} className={clsx(classes.root, className)}>
-        <SidebarNav className={classes.nav} pages={pages} logout={logout} />
+        <SidebarNav className={classes.nav} pages={pages} />
       </div>
     </Drawer>
   );
@@ -178,7 +193,6 @@ const Sidebar = (props) => {
 
 Sidebar.defaultProps = {
   className: null,
-  logout: () => {},
   onClose: () => {},
 };
 
@@ -187,8 +201,6 @@ Sidebar.propTypes = {
   onClose: PropTypes.func,
   open: PropTypes.bool.isRequired,
   variant: PropTypes.string.isRequired,
-  isAuth: PropTypes.bool.isRequired,
-  logout: PropTypes.func,
 };
 
 export default Sidebar;

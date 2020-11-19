@@ -23,6 +23,7 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 
+import useAuth from "../../../../../../hooks/useAuth";
 import ScheduleService from "../../../../../../services/schedule.service";
 import { setSuccess } from "../../../../../../store/common/actions";
 
@@ -94,7 +95,6 @@ const GreenSwitch = withStyles({
 })(Switch);
 
 const NewOrEditSchedule = ({
-  user,
   isNewSchedule,
   isOpen,
   handleOnClose,
@@ -106,6 +106,7 @@ const NewOrEditSchedule = ({
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const { user } = useAuth();
   const [schedule, setSchedule] = useState([]);
   const [status, setStatus] = useState("");
   const [errors, setErrors] = useState([]);
@@ -446,11 +447,6 @@ const NewOrEditSchedule = ({
 };
 
 NewOrEditSchedule.propTypes = {
-  user: PropTypes.arrayOf(
-    PropTypes.arrayOf({
-      id: PropTypes.string,
-    }),
-  ).isRequired,
   userId: PropTypes.bool.isRequired,
   isNewSchedule: PropTypes.bool.isRequired,
   isOpen: PropTypes.bool.isRequired,

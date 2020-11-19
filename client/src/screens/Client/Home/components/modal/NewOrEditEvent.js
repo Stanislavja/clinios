@@ -35,8 +35,8 @@ import { useHistory } from "react-router-dom";
 
 import useDebounce from "./../../../../../hooks/useDebounce";
 import * as API from "./../../../../../utils/API";
-import { AuthConsumer } from "../../../../../providers/AuthProvider";
-import PropTypes from "prop-types";
+import useAuth from "../../../../../hooks/useAuth";
+// import { AuthConsumer } from "../../../../../contexts/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -127,9 +127,11 @@ const NewOrEditEvent = ({
   isLoading,
   ...props
 }) => {
+  const { appointments, providers, errors } = props;
   const classes = useStyles();
   const history = useHistory();
-  const { providers, errors } = props;
+  // const { providers, errors } = props;
+  // const [provider, setProvider] = React.useState("");
   const [patients, setPatients] = React.useState([]);
   const [selectedPatient, setSelectedPatient] = React.useState("");
   const [patientSearchTerm, setPatientSearchTerm] = useState("");
@@ -144,8 +146,9 @@ const NewOrEditEvent = ({
   });
   // const user = JSON.parse(localStorage.getItem("user"));
   // const index = providers.findIndex((provider) => provider.id === user.id);
-  const [index, setIndex] = useState(0);
-  const [provider, setProvider] = React.useState(providers[index]);
+  const [indexP, setIndex] = useState(0);
+  const [provider, setProvider] = React.useState(providers[indexP]);
+  const { user } = useAuth();
 
   const calculateLength = async () => {
     const length = await moment(calEvent.end_dt).diff(calEvent.start_dt, "minutes");
@@ -165,6 +168,7 @@ const NewOrEditEvent = ({
       setPatientSearchTerm(`${props.event.firstname} ${props.event.firstname}`);
       setProvider(selectedProvider);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.event, isNewEvent]);
   /* eslint-enable */
@@ -178,7 +182,10 @@ const NewOrEditEvent = ({
   const debouncedSearchTerm = useDebounce(patientSearchTerm, 500);
   useEffect(() => {
     calculateLength(calEvent.end_dt);
+    // eslint-disable-next-line
   }, [calEvent]);
+  /* eslint-enable */
+
   useEffect(
     () => {
       if (debouncedSearchTerm) {
@@ -189,7 +196,7 @@ const NewOrEditEvent = ({
             setPatients(data);
           },
           (error) => {
-            // console.log("search error", error);
+            console.error("search error", error);
           }
         );
       } else {
@@ -210,8 +217,8 @@ const NewOrEditEvent = ({
     setPatientSearchTerm(`${patient.firstname} ${patient.lastname}`);
   };
   const handleProviderChange = (event) => {
-    const p = providers.filter((p) => p.id === event.target.value);
-    setProvider(p[0]);
+    const pd = providers.filter((p) => p.id === event.target.value);
+    setProvider(pd[0]);
   };
 
   const handleSaveOrUpdate = () => {
@@ -220,7 +227,7 @@ const NewOrEditEvent = ({
         const payload = {
           data: {
             title: calEvent.title,
-            provider: provider === "selectedProvider" ? providers[index] : provider,
+            provider: provider === "selectedProvider" ? providers[indexP] : provider,
             patient: selectedPatient,
             ApptStatus: calEvent.status,
             notes: calEvent.notes,
@@ -256,10 +263,10 @@ const NewOrEditEvent = ({
         onEventUpdate(payload);
       }
     };
-    const existPatientID = props.appointments
+    const existPatientID = appointments
       .map((appointment) => selectedPatient.id === appointment.patient_id)
       .includes(true);
-    const startTimeExist = props.appointments
+    const startTimeExist = appointments
       // eslint-disable-next-line
       .map((appointment) => calEvent.start_dt == appointment.start_dt)
       .includes(true);
@@ -297,332 +304,356 @@ const NewOrEditEvent = ({
     }
   };
 
-  return (
-    <AuthConsumer>
-      {({ user }) => {
-        const index2 = providers.findIndex((provider) => provider.id === user.id);
-        setIndex(index2);
+  useEffect(() => {
+    const index2 = providers.findIndex((provider) => provider.id === user.id);
+    setIndex(index2);
+  }, [providers, user]);
 
-        return (
-          <Dialog
-            open={isOpen}
-            onClose={onClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
+  return (
+    // <AuthConsumer>
+    //   {({ user }) => {
+
+    <Dialog
+      open={isOpen}
+      onClose={onClose}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title" className={classes.title}>
+        {isNewEvent ? `New Appointment - ${moment(selectedDate).format("YYYY.MM.DD")}` : "Edit Appointment"}
+        {onClose ? (
+          <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
+            <CloseIcon />
+          </IconButton>
+        ) : null}
+      </DialogTitle>
+      <DialogContent className={classes.content}>
+        {isLoading && (
+          <div
+            style={{
+              textAlign: "center",
+            }}
           >
-            <DialogTitle id="alert-dialog-title" className={classes.title}>
-              {isNewEvent
-                ? `New Appointment - ${moment(selectedDate).format("YYYY.MM.DD")}`
-                : "Edit Appointment"}
-              {onClose ? (
-                <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
-                  <CloseIcon />
-                </IconButton>
-              ) : null}
-            </DialogTitle>
-            <DialogContent className={classes.content}>
-              {isLoading && (
-                <div
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
-                  <CircularProgress />
-                </div>
-              )}
-              <div
-                className={clsx({
-                  [classes.modalConentBelow]: true, //always apply
-                  [classes.contentWithLoading]: isLoading, //only when isLoading === true
-                })}
+            <CircularProgress />
+          </div>
+        )}
+        <div
+          className={clsx({
+            [classes.modalConentBelow]: true, //always apply
+            [classes.contentWithLoading]: isLoading, //only when isLoading === true
+          })}
+        >
+          <DialogContentText id="alert-dialog-description">
+            This page is used to create a new appointment
+          </DialogContentText>
+          {errors &&
+            errors.map((error, index) => (
+              <Alert severity="error" key={index}>
+                {error.msg}
+              </Alert>
+            ))}
+          <div className={classes.root}>
+            <FormControl component="div" className={classes.formControl}>
+              <TextField
+                value={calEvent.title}
+                variant="outlined"
+                margin="normal"
+                size="small"
+                required
+                fullWidth
+                id="title"
+                label="Title"
+                name="title"
+                autoComplete="title"
+                autoFocus
+                onChange={(event) => handleOnChange(event)}
+                error={errorText.title.length > 0}
+                helperText={errorText.title.length > 0 && errorText.title}
+              />
+            </FormControl>
+            <div className={classes.datePickers}>
+              <KeyboardDateTimePicker
+                className={classes.startdatePicker}
+                ampm={false}
+                clearable
+                id="start-date-picker-inline"
+                label="Start"
+                value={calEvent.start_dt}
+                placeholder="2020/10/10 10:00"
+                onChange={(date) => {
+                  let property = "start_dt";
+                  setCalEvent({
+                    ...calEvent,
+                    [property]: date,
+                  });
+                }}
+                minDate={new Date()}
+                disablePast
+                format="yyyy/MM/dd HH:mm"
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+              />
+              <KeyboardDateTimePicker
+                clearable
+                className={classes.startdatePicker}
+                ampm={false}
+                variant="outlined"
+                id="start-date-picker-inline"
+                label="End"
+                value={calEvent.end_dt}
+                placeholder="2020/10/10 11:00"
+                onChange={(date) => {
+                  let property = "end_dt";
+                  setCalEvent({
+                    ...calEvent,
+                    [property]: date,
+                  });
+                  calculateLength(date);
+                }}
+                minD
+                ate={new Date()}
+                disablePast
+                format="yyyy/MM/dd HH:mm"
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+              />
+              <Button
+                style={{
+                  whiteSpace: "nowrap",
+                  maxHeight: "30px",
+                  marginLeft: "-15px",
+                  marginRight: "5px",
+                  marginTop: "15px",
+                }}
+                variant="contained"
+                disableElevation
+                onClick={async () => {
+                  await setCalEvent({
+                    ...calEvent,
+                    start_dt: moment(calEvent.start_dt).add(1, "days"),
+                    end_dt: moment(calEvent.start_dt).add(1, "days").add(15, "minutes"),
+                    // moment(calEvent.start_dt).add(15, "minutes")
+                  });
+                }}
               >
-                <DialogContentText id="alert-dialog-description">
-                  This page is used to create a new appointment
-                </DialogContentText>
-                {errors &&
-                  errors.map((error, index) => (
-                    <Alert severity="error" key={index}>
-                      {error.msg}
-                    </Alert>
-                  ))}
-                <div className={classes.root}>
-                  <FormControl component="div" className={classes.formControl}>
-                    <TextField
-                      value={calEvent.title}
-                      variant="outlined"
-                      margin="normal"
-                      size="small"
-                      required
-                      fullWidth
-                      id="title"
-                      label="Title"
-                      name="title"
-                      autoComplete="title"
-                      autoFocus
-                      onChange={(event) => handleOnChange(event)}
-                      error={errorText.title.length > 0}
-                      helperText={errorText.title.length > 0 && errorText.title}
-                    />
-                  </FormControl>
-                  <div className={classes.datePickers}>
-                    <KeyboardDateTimePicker
-                      className={classes.startdatePicker}
-                      ampm={false}
-                      clearable
-                      id="start-date-picker-inline"
-                      label="Start"
-                      value={calEvent.start_dt}
-                      placeholder="2020/10/10 10:00"
-                      onChange={(date) => {
-                        let property = "start_dt";
-                        setCalEvent({
-                          ...calEvent,
-                          [property]: date,
-                        });
-                      }}
-                      minDate={new Date()}
-                      disablePast
-                      format="yyyy/MM/dd HH:mm"
-                      KeyboardButtonProps={{
-                        "aria-label": "change date",
-                      }}
-                    />
-                    <KeyboardDateTimePicker
-                      clearable
-                      className={classes.startdatePicker}
-                      ampm={false}
-                      variant="outlined"
-                      id="start-date-picker-inline"
-                      label="End"
-                      value={calEvent.end_dt}
-                      placeholder="2020/10/10 11:00"
-                      onChange={(date) => {
-                        let property = "end_dt";
-                        setCalEvent({
-                          ...calEvent,
-                          [property]: date,
-                        });
-                        calculateLength(date);
-                      }}
-                      minD
-                      ate={new Date()}
-                      disablePast
-                      format="yyyy/MM/dd HH:mm"
-                      KeyboardButtonProps={{
-                        "aria-label": "change date",
-                      }}
-                    />
-                    <Button
-                      style={{
-                        whiteSpace: "nowrap",
-                        maxHeight: "30px",
-                        marginLeft: "-15px",
-                        marginRight: "5px",
-                        marginTop: "15px",
-                      }}
-                      variant="contained"
-                      disableElevation
-                      onClick={async () => {
-                        await setCalEvent({
-                          ...calEvent,
-                          start_dt: moment(calEvent.start_dt).add(1, "days"),
-                          end_dt: moment(calEvent.start_dt).add(1, "days").add(15, "minutes"),
-                          // moment(calEvent.start_dt).add(15, "minutes")
-                        });
-                      }}
-                    >
-                      Add day
-                    </Button>
-                    <Button
-                      variant="contained"
-                      style={{
-                        whiteSpace: "nowrap",
-                        maxHeight: "30px",
-                        marginTop: "15px",
-                      }}
-                      disableElevation
-                      onClick={async () => {
-                        await setCalEvent({
-                          ...calEvent,
-                          start_dt: moment(calEvent.start_dt).subtract(1, "days"),
-                          end_dt: moment(calEvent.end_dt).subtract(1, "days").subtract(15, "minutes"),
-                        });
-                      }}
-                    >
-                      Subtract Day
-                    </Button>
-                  </div>
-                  <TextField
-                    value={appointmentLengthDays}
-                    variant="outlined"
-                    margin="dense"
-                    className={classes.appointmentLength}
-                    size="small"
-                    id="appointmentLength"
-                    label="Length days"
-                    name="appointmentLength"
-                    autoComplete="appointmentLength"
-                    onChange={(event) => handleOnChange(event)}
-                    disabled
-                    defaultValue={`${appointmentLengthDays === 0 ? "Same day" : `${appointmentLength} day`}`}
-                  />
-                  <TextField
-                    value={appointmentLength}
-                    variant="outlined"
-                    margin="dense"
-                    className={classes.appointmentLength}
-                    size="small"
-                    id="appointmentLength"
-                    label="Length minutes"
-                    name="appointmentLength"
-                    autoComplete="appointmentLength"
-                    onChange={(event) => handleOnChange(event)}
-                    disabled
-                  />
-                  <TextField
-                    value={currentDayLength}
-                    variant="outlined"
-                    margin="dense"
-                    className={classes.appointmentLength}
-                    size="small"
-                    id="appointmentLength"
-                    label="In days"
-                    name="appointmentLength"
-                    autoComplete="appointmentLength"
-                    onChange={(event) => handleOnChange(event)}
-                    disabled
-                    defaultValue={`${currentDayLength === 0 ? "Today" : `In ${appointmentLength} days`}`}
-                  />
-                  <FormControl className={classes.statuses}>
-                    <FormLabel component="legend">Status</FormLabel>
-                    <RadioGroup
-                      aria-label="status"
-                      name="status"
-                      value={calEvent.status ? calEvent.status : "R"}
-                      onChange={(event) => handleOnChange(event)}
-                      className={classes.statusList}
-                    >
-                      <FormControlLabel value="R" control={<Radio />} label="Requested" />
-                      <FormControlLabel value="A" control={<Radio />} label="Approved" />
-                      <FormControlLabel value="D" control={<Radio />} label="Declined" />
-                    </RadioGroup>
-                  </FormControl>
-                  <FormControl variant="outlined" size="small" className={classes.formControl}>
-                    <InputLabel id="provider-select-outlined-label">Provider</InputLabel>
-                    <Select
-                      labelId="provider-select-outlined-label"
-                      id="provider-select-outlined-label"
-                      value={!!provider && provider.id}
-                      onChange={handleProviderChange}
-                      label="Provider"
-                      defaultValue={providers[index]?.id}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      {providers.map((provider) => (
-                        <MenuItem key={provider.id} value={provider.id}>
-                          {provider.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                  <FormControl component="div" className={classes.formControl}>
-                    <TextField
-                      value={patientSearchTerm}
-                      variant="outlined"
-                      margin="normal"
-                      size="small"
-                      required
-                      fullWidth
-                      id="patient"
-                      label="Patient"
-                      name="patient"
-                      autoComplete="patient"
-                      onChange={(event) => setPatientSearchTerm(event.target.value)}
-                      error={errorText.patient.length > 0}
-                      helperText={errorText.patient.length > 0 && errorText.patient}
-                    />
-                    {patients.length > 0 && !selectedPatient && (
-                      <Card className={classes.patientListCard}>
-                        <CardContent className={classes.patientListContent}>
-                          <List component="nav" aria-label="secondary mailbox folder">
-                            {patients.map((patient) => (
-                              <ListItem
-                                button
-                                onClick={(event) => handlePatientChange(event, patient)}
-                                key={patient.id}
-                              >
-                                <ListItemText primary={`${patient.firstname} ${patient.lastname}`} />
-                              </ListItem>
-                            ))}
-                          </List>
-                        </CardContent>
-                      </Card>
-                    )}
-                  </FormControl>
-                  <Typography component="p" variant="body2" color="textPrimary">
-                    Notes
-                  </Typography>
-                  <TextareaAutosize
-                    className={classes.textArea}
-                    aria-label="minimum height"
-                    placeholder="Notes..."
-                    name="notes"
-                    value={calEvent.notes}
-                    onChange={(event) => handleOnChange(event)}
-                  />
-                </div>
-                <div>
-                  <Typography
-                    onClick={() => history.push(`/patients/${selectedPatient}`)}
-                    component="p"
-                    variant="body2"
-                    color="textPrimary"
-                    className={classes.patientLink}
-                  >
-                    Go to patient page
-                  </Typography>
-                  <Typography
-                    onClick={() => history.push(`/patients/${selectedPatient}`)}
-                    component="p"
-                    variant="body2"
-                    color="textPrimary"
-                    className={classes.patientLink}
-                  >
-                    Go to patient page in new tab
-                  </Typography>
-                </div>
-              </div>
-            </DialogContent>
-            <DialogActions className={classes.modalAction}>
-              <Button size="small" variant="outlined" onClick={() => onClose()}>
-                close
+                Add day
               </Button>
-              <div>
-                <Button
-                  disabled={!calEvent}
-                  variant="outlined"
-                  color="primary"
-                  size="small"
-                  onClick={() => handleSaveOrUpdate()}
-                >
-                  {isNewEvent ? "Save" : "Update"}
-                </Button>
-              </div>
-            </DialogActions>
-          </Dialog>
-        );
-      }}
-    </AuthConsumer>
+              <Button
+                variant="contained"
+                style={{
+                  whiteSpace: "nowrap",
+                  maxHeight: "30px",
+                  marginTop: "15px",
+                }}
+                disableElevation
+                onClick={async () => {
+                  await setCalEvent({
+                    ...calEvent,
+                    start_dt: moment(calEvent.start_dt).subtract(1, "days"),
+                    end_dt: moment(calEvent.end_dt).subtract(1, "days").subtract(15, "minutes"),
+                  });
+                }}
+              >
+                Subtract Day
+              </Button>
+            </div>
+            <TextField
+              value={appointmentLengthDays}
+              variant="outlined"
+              margin="dense"
+              className={classes.appointmentLength}
+              size="small"
+              id="appointmentLength"
+              label="Length days"
+              name="appointmentLength"
+              autoComplete="appointmentLength"
+              onChange={(event) => handleOnChange(event)}
+              disabled
+              defaultValue={`${appointmentLengthDays === 0 ? "Same day" : `${appointmentLength} day`}`}
+            />
+            <TextField
+              value={appointmentLength}
+              variant="outlined"
+              margin="dense"
+              className={classes.appointmentLength}
+              size="small"
+              id="appointmentLength"
+              label="Length minutes"
+              name="appointmentLength"
+              autoComplete="appointmentLength"
+              onChange={(event) => handleOnChange(event)}
+              disabled
+            />
+            <TextField
+              value={currentDayLength}
+              variant="outlined"
+              margin="dense"
+              className={classes.appointmentLength}
+              size="small"
+              id="appointmentLength"
+              label="In days"
+              name="appointmentLength"
+              autoComplete="appointmentLength"
+              onChange={(event) => handleOnChange(event)}
+              disabled
+              defaultValue={`${currentDayLength === 0 ? "Today" : `In ${appointmentLength} days`}`}
+            />
+            <FormControl className={classes.statuses}>
+              <FormLabel component="legend">Status</FormLabel>
+              <RadioGroup
+                aria-label="status"
+                name="status"
+                value={calEvent.status ? calEvent.status : "R"}
+                onChange={(event) => handleOnChange(event)}
+                className={classes.statusList}
+              >
+                <FormControlLabel value="R" control={<Radio />} label="Requested" />
+                <FormControlLabel value="A" control={<Radio />} label="Approved" />
+                <FormControlLabel value="D" control={<Radio />} label="Declined" />
+              </RadioGroup>
+            </FormControl>
+            <FormControl variant="outlined" size="small" className={classes.formControl}>
+              <InputLabel id="provider-select-outlined-label">Provider</InputLabel>
+              <Select
+                labelId="provider-select-outlined-label"
+                id="provider-select-outlined-label"
+                value={!!provider && provider.id}
+                onChange={handleProviderChange}
+                label="Provider"
+                defaultValue={providers[indexP]?.id}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {providers.map((provider) => (
+                  <MenuItem key={provider.id} value={provider.id}>
+                    {provider.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl component="div" className={classes.formControl}>
+              <TextField
+                value={patientSearchTerm}
+                variant="outlined"
+                margin="normal"
+                size="small"
+                required
+                fullWidth
+                id="patient"
+                label="Patient"
+                name="patient"
+                autoComplete="patient"
+                onChange={(event) => setPatientSearchTerm(event.target.value)}
+                error={errorText.patient.length > 0}
+                helperText={errorText.patient.length > 0 && errorText.patient}
+              />
+              {patients.length > 0 && !selectedPatient && (
+                <Card className={classes.patientListCard}>
+                  <CardContent className={classes.patientListContent}>
+                    <List component="nav" aria-label="secondary mailbox folder">
+                      {patients.map((patient) => (
+                        <ListItem
+                          button
+                          onClick={(event) => handlePatientChange(event, patient)}
+                          key={patient.id}
+                        >
+                          <ListItemText primary={`${patient.firstname} ${patient.lastname}`} />
+                        </ListItem>
+                      ))}
+                    </List>
+                  </CardContent>
+                </Card>
+              )}
+            </FormControl>
+            <Typography component="p" variant="body2" color="textPrimary">
+              Notes
+            </Typography>
+            <TextareaAutosize
+              className={classes.textArea}
+              aria-label="minimum height"
+              placeholder="Notes..."
+              name="notes"
+              value={calEvent.notes}
+              onChange={(event) => handleOnChange(event)}
+            />
+          </div>
+          <div>
+            <Typography
+              onClick={() => history.push(`/patients/${selectedPatient}`)}
+              component="p"
+              variant="body2"
+              color="textPrimary"
+              className={classes.patientLink}
+            >
+              Go to patient page
+            </Typography>
+            <Typography
+              onClick={() => history.push(`/patients/${selectedPatient}`)}
+              component="p"
+              variant="body2"
+              color="textPrimary"
+              className={classes.patientLink}
+            >
+              Go to patient page in new tab
+            </Typography>
+          </div>
+        </div>
+      </DialogContent>
+      <DialogActions className={classes.modalAction}>
+        <Button size="small" variant="outlined" onClick={() => onClose()}>
+          close
+        </Button>
+        <div>
+          <Button
+            disabled={!calEvent}
+            variant="outlined"
+            color="primary"
+            size="small"
+            onClick={() => handleSaveOrUpdate()}
+          >
+            {isNewEvent ? "Save" : "Update"}
+          </Button>
+        </div>
+      </DialogActions>
+    </Dialog>
+
+    //   }}
+    // </AuthConsumer>
   );
 };
 
 NewOrEditEvent.propTypes = {
   isOpen: PropTypes.bool.isRequired,
+  appointments: PropTypes.arrayOf(
+    PropTypes.arrayOf({
+      id: PropTypes.string,
+      appointment_type: PropTypes.string,
+      appointment_name_portal: PropTypes.string,
+      length: PropTypes.string,
+      allow_patients_schedule: PropTypes.bool,
+      sort_order: PropTypes.number,
+      note: PropTypes.string,
+      created: PropTypes.string,
+      created_user: PropTypes.string,
+      updated: PropTypes.string,
+      updated_user: PropTypes.string,
+    })
+  ).isRequired,
+  selectedProvider: PropTypes.shape({
+    name: PropTypes.string,
+  }).isRequired,
+  providers: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+    })
+  ).isRequired,
   isLoading: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  selectedDate: PropTypes.string.isRequired,
+  selectedDate: PropTypes.instanceOf(Date).isRequired,
   onEventUpdate: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   isNewEvent: PropTypes.bool.isRequired,

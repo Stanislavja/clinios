@@ -218,8 +218,9 @@ const updatePatient = async (req, res) => {
     }
     $sql += `, updated='${moment().format(
       "YYYY-MM-DD HH:mm:ss"
-    )}', updated_user_id=${req.user_id} where user_id=${req.user_id
-      } and id=${patient_id}`;
+    )}', updated_user_id=${req.user_id} where user_id=${
+      req.user_id
+    } and id=${patient_id}`;
 
     const updateResponse = await db.query($sql);
     if (!updateResponse.affectedRows) {
@@ -1238,8 +1239,9 @@ const updateEncounter = async (req, res) => {
 
     $sql += `, updated='${moment().format(
       "YYYY-MM-DD HH:mm:ss"
-    )}', updated_user_id=${req.user_id
-      } where patient_id=${patient_id} and id=${id}`;
+    )}', updated_user_id=${
+      req.user_id
+    } where patient_id=${patient_id} and id=${id}`;
 
     const updateResponse = await db.query($sql);
     if (!updateResponse.affectedRows) {
@@ -1485,7 +1487,7 @@ const getDiagnoses = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select pi.created, pi.icd_id, i.name
+      `select pi.created, pi.icd_id, pi.active, i.name
         from patient_icd pi
         left join icd i on i.id=pi.icd_id
         where pi.patient_id=${patient_id}

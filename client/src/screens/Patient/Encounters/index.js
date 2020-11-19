@@ -253,6 +253,7 @@ const Encounters = (props) => {
                 showActions={item.showActions}
                 showSearch={item.showSearch}
                 icon={item.icon}
+                data={item.title}
                 primaryButtonText={item.primaryButtonText}
                 secondaryButtonText={item.secondaryButtonText}
                 hasMinHeight

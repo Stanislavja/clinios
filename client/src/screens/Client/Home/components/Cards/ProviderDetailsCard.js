@@ -203,8 +203,8 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
 
 ProviderDetailsCard.propTypes = {
   selectedProvider: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
+    id: PropTypes.number,
+    name: PropTypes.string,
   }).isRequired,
   providerDetails: PropTypes.shape({
     patientLabs: PropTypes.shape({

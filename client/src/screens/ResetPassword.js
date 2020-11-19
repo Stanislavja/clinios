@@ -49,7 +49,6 @@ const ResetPassword = () => {
     e.preventDefault();
     AuthService.resetPassword(userId, token, password).then(
       (response) => {
-        console.log("change password response", response);
         dispatch(setSuccess(`${response.data.message}`));
       },
       (error) => {

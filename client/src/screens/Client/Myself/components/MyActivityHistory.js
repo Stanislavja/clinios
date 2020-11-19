@@ -110,7 +110,7 @@ export default function MyActivityHistory() {
             My Activity History
           </Typography>
           <Typography component="p" variant="body2" color="textPrimary">
-            This page shows a user's activity history
+            This page shows a user&apos;s activity history
           </Typography>
           <TableContainer component={Paper} className={classes.tableContainer}>
             <Table className={classes.table} aria-label="a dense table">

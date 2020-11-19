@@ -19,6 +19,7 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 
+import useAuth from "../../../../../hooks/useAuth";
 import DrugsService from "../../../../../services/drugs.service";
 import { setSuccess } from "../../../../../store/common/actions";
 
@@ -80,9 +81,10 @@ const GreenSwitch = withStyles({
   track: {},
 })(Switch);
 
-const Drugstable = ({ user, result, fetchSearchDrugs }) => {
+const Drugstable = ({ result, fetchSearchDrugs }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const { user } = useAuth();
   const [state, setState] = useState(result);
   const [errors, setErrors] = useState([]);
 
@@ -189,11 +191,6 @@ const Drugstable = ({ user, result, fetchSearchDrugs }) => {
 };
 
 Drugstable.propTypes = {
-  user: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-    }),
-  ).isRequired,
   result: PropTypes.arrayOf(
     PropTypes.arrayOf({
       id: PropTypes.string,
