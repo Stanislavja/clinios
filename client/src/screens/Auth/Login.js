@@ -72,7 +72,7 @@ const Login = () => {
       });
       setErrors([
         {
-          msg: error.message,
+          msg: error,
         },
       ]);
     }
