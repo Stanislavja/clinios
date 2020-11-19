@@ -2,9 +2,8 @@ name: Lint
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches-ignore:
+      - 'master'
 
 jobs:
   run-linters:

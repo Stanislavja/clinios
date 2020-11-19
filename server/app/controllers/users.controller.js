@@ -32,6 +32,27 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+const getUser = async (req, res) => {
+  const db = makeDb(configuration, res);
+  try {
+    const dbResponse = await db.query(`SELECT id, client_id, firstname, lastname, email, sign_dt,
+     email_confirm_dt FROM user WHERE id=${req.user_id}`);
+
+    if (!dbResponse) {
+      errorMessage.error = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    const user = dbResponse[0];
+    successMessage.data = {user}
+    return res.status(status.created).send(successMessage);
+  } catch (error) {
+    errorMessage.error = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const getForwardEmailList = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
@@ -152,6 +173,7 @@ const updateUser = async (req, res) => {
 const users = {
   getAllUsers,
   getForwardEmailList,
+  getUser,
   createNewUser,
   updateUser,
 };

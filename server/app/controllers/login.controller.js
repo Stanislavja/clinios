@@ -71,7 +71,6 @@ exports.signin = async (req, res) => {
     config.authSecret,
     {
       expiresIn: 86400, // 24 hours
-      // expiresIn: 5 * 60, // 2minutes
     }
   );
   const resData = {};
