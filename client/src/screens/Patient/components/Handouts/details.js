@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -14,8 +14,8 @@ import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 
+import usePatientContext from "../../../../hooks/usePatientContext";
 import PatientService from "../../../../services/patient.service";
-import { PatientContext } from "../../Patient";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -64,11 +64,12 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 
 const HandoutsDetails = (props) => {
-  const { reloadData, patientId } = props;
+  const { reloadData } = props;
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  const { state } = useContext(PatientContext);
+  const { state } = usePatientContext();
   const { data } = state.handouts;
+  const { patientId } = state;
 
   const deleteItemHandler = (selectedItem) => {
     const handoutId = selectedItem.handout_id;
@@ -134,7 +135,6 @@ const HandoutsDetails = (props) => {
 };
 
 HandoutsDetails.propTypes = {
-  patientId: PropTypes.string.isRequired,
   reloadData: PropTypes.func.isRequired,
 };
 

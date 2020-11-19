@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 
 import { Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
 
 import Tooltip from "../../../../components/common/CustomTooltip";
-import { PatientContext } from "../../Patient";
+import usePatientContext from "../../../../hooks/usePatientContext";
 
 const useStyles = makeStyles((theme) => ({
   inputRow: {
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 
 const HandoutsContent = () => {
   const classes = useStyles();
-  const { state } = useContext(PatientContext);
+  const { state } = usePatientContext();
   const { data } = state.handouts;
 
   return (

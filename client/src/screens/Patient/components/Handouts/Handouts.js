@@ -1,5 +1,5 @@
 import React, {
-  useState, useEffect, useCallback, useContext,
+  useState, useEffect, useCallback,
 } from "react";
 
 import {
@@ -18,9 +18,9 @@ import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 
+import usePatientContext from "../../../../hooks/usePatientContext";
 import { toggleHandoutsDialog } from "../../../../providers/Patient/actions";
 import PatientService from "../../../../services/patient.service";
-import { PatientContext } from "../../Patient";
 
 const useStyles = makeStyles((theme) => ({
   inputRow: {
@@ -43,10 +43,11 @@ const useStyles = makeStyles((theme) => ({
 const HandoutsForm = (props) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  const { reloadData, patientId } = props;
+  const { reloadData } = props;
   const [allHandouts, setAllHandouts] = useState([]);
   const [selectedHandout, setSelectedHandout] = useState(null);
-  const { dispatch } = useContext(PatientContext);
+  const { state, dispatch } = usePatientContext();
+  const { patientId } = state;
 
   const fetchAllHandouts = useCallback(() => {
     PatientService.getAllHandouts().then((res) => {
@@ -140,7 +141,6 @@ const HandoutsForm = (props) => {
 };
 
 HandoutsForm.propTypes = {
-  patientId: PropTypes.string.isRequired,
   reloadData: PropTypes.func.isRequired,
 };
 
