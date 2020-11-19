@@ -6,6 +6,7 @@ import {
   RESET_EDITOR_TEXT,
 
   // Setters
+  SET_PATIENT_ID,
   SET_PATIENT_INFO,
   SET_PATIENT_HISTORY,
   SET_ADMIN_NOTES,
@@ -80,6 +81,11 @@ const reducer = (state = initialState, action) => {
     // editor case ends here...
 
     // data setter starts here...
+    case SET_PATIENT_ID:
+      return {
+        ...state,
+        patientId: action.payload,
+      };
     case SET_PATIENT_INFO:
       return {
         ...state,

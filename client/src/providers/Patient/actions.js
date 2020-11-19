@@ -5,6 +5,7 @@ import {
   RESET_EDITOR_TEXT,
 
   // Setters
+  SET_PATIENT_ID,
   SET_PATIENT_INFO,
   SET_PATIENT_HISTORY,
   SET_ADMIN_NOTES,
@@ -74,6 +75,11 @@ export const resetEditorText = () => ({
 });
 
 // data setters starts here
+export const setPatientId = (data) => ({
+  type: SET_PATIENT_ID,
+  payload: data,
+});
+
 export const setPatientData = (data) => ({
   type: SET_PATIENT_INFO,
   payload: data,
