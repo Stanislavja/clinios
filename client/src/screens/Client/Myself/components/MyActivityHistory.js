@@ -11,11 +11,11 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
-import { useDispatch } from "react-redux";
+import { useSnackbar } from "notistack";
 import { useHistory } from "react-router-dom";
 
+import useAuth from "../../../../hooks/useAuth";
 import MySelfService from "../../../../services/myself.service";
-import { setError } from "../../../../store/common/actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -76,12 +76,12 @@ const StyledTableRow = withStyles((theme) => ({
 
 export default function MyActivityHistory() {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const history = useHistory();
+  const { user } = useAuth();
   const [activityHistory, setActivityHistory] = useState([]);
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
     const userId = user.id;
 
     if (userId != null) {
@@ -89,8 +89,10 @@ export default function MyActivityHistory() {
         (res) => {
           setActivityHistory(res.data);
         },
-        (error) => {
-          dispatch(setError(error));
+        () => {
+          enqueueSnackbar("Unable to fetch Activity history.", {
+            variant: "error",
+          });
         },
       );
     }
