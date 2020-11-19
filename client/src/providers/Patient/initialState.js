@@ -28,6 +28,7 @@ const initialState = {
   },
   encounters: {
     data: [],
+    selectedEncounter: null,
     newDialog: false,
     expandDialog: false,
   },

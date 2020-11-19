@@ -61,12 +61,18 @@ const reducer = (state = initialState, action) => {
     case SET_SELECTED_ENCOUNTER:
       return {
         ...state,
-        selectedEncounter: action.payload,
+        encounters: {
+          ...state.encounters,
+          selectedEncounter: action.payload,
+        },
       };
     case RESET_SELECTED_ENCOUNTER:
       return {
         ...state,
-        selectedEncounter: null,
+        encounters: {
+          ...state.encounters,
+          selectedEncounter: null,
+        },
       };
     case SET_EDITOR_TEXT:
       return {
