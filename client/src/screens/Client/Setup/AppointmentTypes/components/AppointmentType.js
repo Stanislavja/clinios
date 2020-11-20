@@ -91,7 +91,7 @@ const Appointments = ({ appointments, onEdit, onDelete }) => {
             <StyledTableCell padding="checkbox">Created By</StyledTableCell>
             <StyledTableCell padding="checkbox">Updated</StyledTableCell>
             <StyledTableCell padding="checkbox">Updated By</StyledTableCell>
-            <StyledTableCell /*align="center"*/ padding="checkbox">Actions</StyledTableCell>
+            <StyledTableCell padding="checkbox">Actions</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -128,14 +128,14 @@ const Appointments = ({ appointments, onEdit, onDelete }) => {
                   className={classes.margin}
                   onClick={() => onEdit(appointment.id)}
                 >
-                  <EditIcon fontSize="medium" />
+                  <EditIcon fontSize="default" />
                 </IconButton>
                 <IconButton
                   aria-label="delete"
                   className={classes.margin}
                   onClick={() => onDelete(appointment.id)}
                 >
-                  <DeleteIcon fontSize="medium" />
+                  <DeleteIcon fontSize="default" />
                 </IconButton>
               </TableCell>
             </StyledTableRow>
@@ -148,19 +148,19 @@ const Appointments = ({ appointments, onEdit, onDelete }) => {
 
 Appointments.propTypes = {
   appointments: PropTypes.arrayOf(
-    PropTypes.arrayOf({
-      id: PropTypes.string,
+    PropTypes.shape({
+      id: PropTypes.number,
       appointment_type: PropTypes.string,
       appointment_name_portal: PropTypes.string,
-      length: PropTypes.string,
-      allow_patients_schedule: PropTypes.bool,
+      length: PropTypes.number,
+      allow_patients_schedule: PropTypes.number,
       sort_order: PropTypes.number,
       note: PropTypes.string,
       created: PropTypes.string,
       created_user: PropTypes.string,
       updated: PropTypes.string,
       updated_user: PropTypes.string,
-    })
+    }),
   ).isRequired,
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
