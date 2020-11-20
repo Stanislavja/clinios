@@ -174,7 +174,6 @@ const NewOrEditAppointment = ({
 
         AppointmentService.update(
           formedData,
-          user.id,
           props.appointment.id,
         ).then((response) => {
           dispatch(setSuccess(`${response.data.message}`));

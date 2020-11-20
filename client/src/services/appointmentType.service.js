@@ -16,9 +16,9 @@ class AppointmentService {
     });
   }
 
-  update(data, userId, appointmentId) {
+  update(data, appointmentId) {
     return axios.put(
-      `${API_BASE}/appointment-types/${userId}/${appointmentId}`,
+      `${API_BASE}/appointment-types/${appointmentId}`,
       data,
       {
         headers: authHeader(),

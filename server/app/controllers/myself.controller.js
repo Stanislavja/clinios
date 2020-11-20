@@ -39,7 +39,7 @@ const updateProfile = async (req, res) => {
   const { data } = req.body;
 
   data.updated = moment().format("YYYY-MM-DD HH:mm:ss");
-  data.updated_user_id = req.params.userId;
+  data.updated_user_id = req.user_id;
 
   // Convert date format
   data.created = moment(data.created).format("YYYY-MM-DD HH:mm:ss");

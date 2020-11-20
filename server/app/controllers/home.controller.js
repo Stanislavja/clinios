@@ -150,7 +150,7 @@ const cancelAppointment = async (req, res) => {
   try {
     const updateResponse = await db.query(
       `update user_calendar
-        set status='D', decline_dt=now()
+        set status='D', declined=now(), updated= now(), updated_user_id='${req.user_id}'
         where id=${id}`
     );
     if (!updateResponse.affectedRows) {
@@ -216,7 +216,7 @@ const updateAppointment = async (req, res) => {
   try {
     const updateResponse = await db.query(
       `update user_calendar
-        set title='${title}', notes='${notes}', status='${ApptStatus}', start_dt='${new_start_dt}', end_dt='${new_end_dt}'
+        set title='${title}', notes='${notes}', status='${ApptStatus}', start_dt='${new_start_dt}', end_dt='${new_end_dt}', updated= now(), updated_user_id='${req.user_id}'
         where id=${id}`
     );
     if (!updateResponse.affectedRows) {

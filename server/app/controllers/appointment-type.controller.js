@@ -61,6 +61,7 @@ const create = async (req, res) => {
     successMessage.message = "Creation successful";
     return res.status(status.created).send(successMessage);
   } catch (err) {
+    console.error(err);
     errorMessage.error = "Creation not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
@@ -79,7 +80,7 @@ const update = async (req, res) => {
   const appointment_type = req.body.data;
 
   appointment_type.updated = new Date();
-  appointment_type.updated_user_id = req.params.userId;
+  appointment_type.updated_user_id = req.user_id;
 
   try {
     const updateResponse = await db.query(
@@ -95,6 +96,7 @@ const update = async (req, res) => {
     successMessage.message = "Update successful";
     return res.status(status.success).send(successMessage);
   } catch (error) {
+    console.error(error)
     errorMessage.error = "Update not successful";
     return res.status(status.error).send(errorMessage);
   } finally {

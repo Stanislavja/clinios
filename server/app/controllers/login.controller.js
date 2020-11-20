@@ -49,7 +49,7 @@ exports.signin = async (req, res) => {
   }
   if (!user.email_confirm_dt) {
     errorMessage.message =
-      "Login can not be done until the email address is confirmed.  Please see the request in your email inbox.";
+      "Login can not be done until the email address is confirmed. Please see the request in your email inbox.";
     delete user.password; // delete password from response
     errorMessage.user = user;
     return res.status(status.unauthorized).send(errorMessage);
@@ -64,7 +64,7 @@ exports.signin = async (req, res) => {
 
   // update user login_dt
   const now = moment().format("YYYY-MM-DD HH:mm:ss");
-  await db.query(`UPDATE user SET login_dt='${now}' WHERE id =${user.id}`);
+  await db.query(`UPDATE user SET login_dt='${now}', updated= now(), updated_user_id='${req.user_id}' WHERE id =${user.id}`);
 
   const token = jwt.sign(
     { id: user.id, client_id: user.client_id },

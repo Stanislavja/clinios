@@ -135,7 +135,7 @@ const update = async (req, res) => {
   const client = req.body;
 
   client.updated = new Date();
-  client.updated_user_id = req.params.clientId;
+  client.updated_user_id = req.user_id;
 
   try {
     const updateResponse = await db.query(
