@@ -8,6 +8,7 @@ import { SnackbarProvider } from "notistack";
 import { Router } from "react-router-dom";
 
 import { AuthProvider } from "./contexts/AuthContext";
+import Notifier from "./Notifier";
 import routes, { renderRoutes } from "./routes";
 import theme from "./theme";
 
@@ -25,6 +26,7 @@ function App() {
             horizontal: "center",
           }}
         >
+          <Notifier />
           <Router history={history}>
             <AuthProvider>
               {renderRoutes(routes)}

@@ -168,30 +168,65 @@ const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
         <Table className={classes.table} aria-label="a dense table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>CPT ID</StyledTableCell>
-              <StyledTableCell>CPT Description</StyledTableCell>
-              <StyledTableCell>Lab Company</StyledTableCell>
-              <StyledTableCell>Favorite</StyledTableCell>
-              <StyledTableCell>Billable</StyledTableCell>
-              <StyledTableCell>Fee</StyledTableCell>
-              <StyledTableCell>Client</StyledTableCell>
-              <StyledTableCell>Group</StyledTableCell>
-              <StyledTableCell>Updated</StyledTableCell>
-              <StyledTableCell>Updated By</StyledTableCell>
-              <StyledTableCell>Action</StyledTableCell>
+              <StyledTableCell padding="checkbox" align="center">
+                CPT ID
+              </StyledTableCell>
+              <StyledTableCell padding="checkbox" align="center">
+                CPT Description
+              </StyledTableCell>
+              <StyledTableCell padding="checkbox" align="center">
+                Lab Company
+              </StyledTableCell>
+              <StyledTableCell padding="checkbox" align="center">
+                Favorite
+              </StyledTableCell>
+              <StyledTableCell padding="checkbox" align="center">
+                Billable
+              </StyledTableCell>
+              <StyledTableCell padding="checkbox" align="center">
+                Fee
+              </StyledTableCell>
+              <StyledTableCell padding="checkbox" align="center">
+                Client
+              </StyledTableCell>
+              <StyledTableCell padding="checkbox" align="center">
+                Group
+              </StyledTableCell>
+              <StyledTableCell padding="checkbox" align="center">
+                Updated
+              </StyledTableCell>
+              <StyledTableCell padding="checkbox" align="center">
+                Updated By
+              </StyledTableCell>
+              <StyledTableCell padding="checkbox" align="center">
+                Action
+              </StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {searchResult.map((result) => (
               <StyledTableRow key={result.id}>
-                <TableCell component="th" scope="row">
+                <TableCell
+                  component="th"
+                  scope="row"
+                  padding="checkbox"
+                  align="center"
+                >
                   {result.id}
                 </TableCell>
-                <TableCell>{result.cpt}</TableCell>
-                <TableCell>{result.lab_company}</TableCell>
-                <TableCell>{result.favorite ? "Yes" : "No"}</TableCell>
-                <TableCell>{result.billable ? "Yes" : "No"}</TableCell>
-                <TableCell>
+                <TableCell padding="checkbox" align="center">
+                  {result.cpt}
+                </TableCell>
+                <TableCell padding="checkbox" align="center">
+                  {result.lab_company}
+                </TableCell>
+                <TableCell padding="checkbox" align="center">
+                  {result.favorite ? "Yes" : "No"}
+                </TableCell>
+                <TableCell padding="checkbox" align="center">
+                  {result.billable ? "Yes" : "No"}
+                </TableCell>
+                <TableCell padding="checkbox" align="center">
                   <NumberFormat
                     value={result.fee}
                     displayType="text"
@@ -199,8 +234,12 @@ const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
                     prefix="$"
                   />
                 </TableCell>
-                <TableCell>{result.client_name}</TableCell>
+                <TableCell padding="checkbox" align="center">
+                  {result.client_name}
+                </TableCell>
                 <TableCell
+                  padding="checkbox"
+                  align="center"
                   style={{ cursor: "pointer" }}
                   onClick={() => handleGroupIsOpen(result.cpt_group)}
                 >
@@ -210,11 +249,13 @@ const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
                       : String(result.cpt_group)
                     : ""}
                 </TableCell>
-                <TableCell>
+                <TableCell padding="checkbox" align="center">
                   {result.updated ? moment(result.updated).format("lll") : ""}
                 </TableCell>
-                <TableCell>{result.updated_name}</TableCell>
-                <TableCell>
+                <TableCell padding="checkbox" align="center">
+                  {result.updated_name}
+                </TableCell>
+                <TableCell padding="checkbox" align="center">
                   <IconButton
                     aria-label="edit"
                     onClick={() => handleIsOpen(

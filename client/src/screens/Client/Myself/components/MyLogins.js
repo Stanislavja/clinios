@@ -11,10 +11,9 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
-import { useDispatch } from "react-redux";
+import { useSnackbar } from "notistack";
 
 import MySelfService from "../../../../services/myself.service";
-import { setError } from "../../../../store/common/actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -75,7 +74,7 @@ const StyledTableRow = withStyles((theme) => ({
 
 export default function MyActivityHistory() {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [logins, setLogins] = useState([]);
 
@@ -88,8 +87,10 @@ export default function MyActivityHistory() {
         (res) => {
           setLogins(res.data);
         },
-        (error) => {
-          dispatch(setError(error));
+        () => {
+          enqueueSnackbar("Unable to fetch data.", {
+            variant: "error",
+          });
         },
       );
     }

@@ -9,12 +9,11 @@ import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 import NumberFormat from "react-number-format";
-import { useDispatch } from "react-redux";
 
 import MySelfService from "../../../../services/myself.service";
-import { setSuccess, setError } from "../../../../store/common/actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,8 +70,7 @@ NumberFormatCustom.propTypes = {
 
 export default function MyProfile() {
   const classes = useStyles();
-  const dispatch = useDispatch();
-
+  const { enqueueSnackbar } = useSnackbar();
   const [userId, setUserId] = useState(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -105,10 +103,14 @@ export default function MyProfile() {
 
     MySelfService.updateProfile(payload, userId).then(
       (res) => {
-        dispatch(setSuccess(res.data.message));
+        enqueueSnackbar(res.data.message, {
+          variant: "success",
+        });
       },
-      (error) => {
-        dispatch(setError(error));
+      () => {
+        enqueueSnackbar("Unable to update profile", {
+          variant: "error",
+        });
       },
     );
   };
