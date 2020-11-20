@@ -11,11 +11,11 @@ import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import DeleteIcon from "@material-ui/icons/Delete";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
 
+import usePatientContext from "../../../../hooks/usePatientContext";
 import PatientService from "../../../../services/patient.service";
-import { setError, setSuccess } from "../../../../store/common/actions";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -67,15 +67,18 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 
 const AllergiesDetails = (props) => {
-  const { data, patientId, reloadData } = props;
-  const dispatch = useDispatch();
+  const { reloadData } = props;
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
+  const { state } = usePatientContext();
+  const { data } = state.allergies;
+  const { patientId } = state;
 
   const deleteItemHandler = (selectedItem) => {
     const allergyId = selectedItem.drug_id;
     PatientService.deleteAllergy(patientId, allergyId)
       .then((response) => {
-        dispatch(setSuccess(`${response.data.message}`));
+        enqueueSnackbar(`${response.data.message}`, { variant: "success" });
         reloadData();
       })
       .catch((error) => {
@@ -84,13 +87,7 @@ const AllergiesDetails = (props) => {
           && error.response.data.message)
           || error.message
           || error.toString();
-        const severity = "error";
-        dispatch(
-          setError({
-            severity,
-            message: resMessage,
-          }),
-        );
+        enqueueSnackbar(`${resMessage}`, { variant: "error" });
       });
   };
 
@@ -141,8 +138,6 @@ const AllergiesDetails = (props) => {
 };
 
 AllergiesDetails.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  patientId: PropTypes.string.isRequired,
   reloadData: PropTypes.func.isRequired,
 };
 
