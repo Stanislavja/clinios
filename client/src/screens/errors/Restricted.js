@@ -7,16 +7,14 @@ const useStyles = makeStyles(() => ({
   root: {
     textAlign: "center",
     paddingTop: "60px",
-  },
-  bg: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100vw",
-    height: "100vh",
+    // backgroundColor: "rgb(255, 244, 229)",
+    height: "100%",
     backgroundSize: "cover",
     mixBlendMode: "overlay",
-    backgroundColor: "rgb(255, 244, 229)",
+  },
+  WarningIcon: {
+    color: "#ff9800",
+    fontSize: "87px",
   },
   title: {
     fontSize: "44px",
@@ -40,8 +38,7 @@ const Restricted = () => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <div className={classes.bg} />
-      <WarningIcon style={{ size: "large" }} />
+      <WarningIcon className={classes.WarningIcon} />
       <h1 className={classes.title}>Restricted area!</h1>
       <p className={classes.subTitle}>Only authorized user can access.</p>
     </div>
