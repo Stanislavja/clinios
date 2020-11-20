@@ -8,11 +8,12 @@ import {
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
 
+import usePatientContext from "../../../hooks/usePatientContext";
+import { toggleMessageDialog } from "../../../providers/Patient/actions";
 import PatientService from "../../../services/patient.service";
-import { setError, setSuccess } from "../../../store/common/actions";
 
 const useStyles = makeStyles((theme) => ({
   inputRow: {
@@ -31,8 +32,11 @@ const useStyles = makeStyles((theme) => ({
 
 const NewMessage = (props) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const { onClose, reloadData, patientId } = props;
+  const { enqueueSnackbar } = useSnackbar();
+  const { reloadData } = props;
+
+  const { state, dispatch } = usePatientContext();
+  const { patientId } = state;
 
   const [formFields, setFormFields] = useState({
     subject: "",
@@ -64,23 +68,17 @@ const NewMessage = (props) => {
     };
     PatientService.createMessage(patientId, reqBody)
       .then((response) => {
-        dispatch(setSuccess(`${response.data.message}`));
+        enqueueSnackbar(`${response.data.message}`, { variant: "success" });
         reloadData();
-        onClose();
+        dispatch(toggleMessageDialog());
       })
       .catch((error) => {
         const resMessage = (error.response
-            && error.response.data
-            && error.response.data.message)
+          && error.response.data
+          && error.response.data.message)
           || error.message
           || error.toString();
-        const severity = "error";
-        dispatch(
-          setError({
-            severity,
-            message: resMessage,
-          }),
-        );
+        enqueueSnackbar(`${resMessage}`, { variant: "error" });
       });
   };
 
@@ -154,7 +152,7 @@ const NewMessage = (props) => {
           <Button variant="outlined" type="submit">
             Send
           </Button>
-          <Button variant="outlined" onClick={() => onClose()}>
+          <Button variant="outlined" onClick={() => dispatch(toggleMessageDialog())}>
             Cancel
           </Button>
         </Grid>
@@ -164,9 +162,7 @@ const NewMessage = (props) => {
 };
 
 NewMessage.propTypes = {
-  patientId: PropTypes.string.isRequired,
   reloadData: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
 };
 
 export default NewMessage;
