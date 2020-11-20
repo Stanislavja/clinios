@@ -9,8 +9,8 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import moment from "moment";
-import PropTypes from "prop-types";
 
+import usePatientContext from "../../../../hooks/usePatientContext";
 import PatientService from "../../../../services/patient.service";
 
 const useStyles = makeStyles((theme) => ({
@@ -50,11 +50,12 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-const BillingDetails = (props) => {
-  const { patientId } = props;
+const BillingDetails = () => {
   const classes = useStyles();
   const [billings, setBillings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { state } = usePatientContext();
+  const { patientId } = state;
 
   const fetchBillings = useCallback(() => {
     PatientService.getBillings(patientId).then((res) => {
@@ -110,10 +111,6 @@ const BillingDetails = (props) => {
       </Table>
     </TableContainer>
   );
-};
-
-BillingDetails.propTypes = {
-  patientId: PropTypes.string.isRequired,
 };
 
 export default BillingDetails;
