@@ -13,9 +13,10 @@ import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import DeleteIcon from "@material-ui/icons/Delete";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
 
+import usePatientContext from "../../../../hooks/usePatientContext";
 import PatientService from "../../../../services/patient.service";
 import { setError, setSuccess } from "../../../../store/common/actions";
 
@@ -69,17 +70,21 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 
 const DiagnosesDetails = (props) => {
-  const { data, patientId, reloadData } = props;
-  const dispatch = useDispatch();
+  const { reloadData } = props;
+  const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
-  const [state, setState] = useState({});
+  const [activeState, setActiveState] = useState({});
+
+  const { state, dispatch } = usePatientContext();
+  const { data } = state.diagnoses;
+  const { patientId } = state;
 
   const mapStateForRows = useCallback(() => {
     const stateObj = {};
     data.forEach((item) => {
       stateObj[item.name] = !!item.active;
     });
-    setState({ ...stateObj });
+    setActiveState({ ...stateObj });
   }, [data]);
 
   useEffect(() => {
@@ -90,7 +95,7 @@ const DiagnosesDetails = (props) => {
     const icdId = selectedItem.icd_id;
     PatientService.deleteDiagnoses(patientId, icdId)
       .then((response) => {
-        dispatch(setSuccess(`${response.data.message}`));
+        enqueueSnackbar(`${response.data.message}`, { variant: "success" });
         reloadData();
       })
       .catch((error) => {
@@ -99,19 +104,13 @@ const DiagnosesDetails = (props) => {
           && error.response.data.message)
           || error.message
           || error.toString();
-        const severity = "error";
-        dispatch(
-          setError({
-            severity,
-            message: resMessage,
-          }),
-        );
+        enqueueSnackbar(`${resMessage}`, { variant: "error" });
       });
   };
 
   const updateStatusHandler = (event, icdId) => {
     const { name, checked } = event.target;
-    setState({ ...state, [name]: checked });
+    setActiveState({ ...activeState, [name]: checked });
     const reqBody = {
       data: {
         active: checked,
@@ -173,14 +172,14 @@ const DiagnosesDetails = (props) => {
                   <FormControlLabel
                     control={(
                       <Switch
-                        checked={!!state[row.name]}
+                        checked={!!activeState[row.name]}
                         onChange={(e) => updateStatusHandler(e, row.icd_id)}
                         name={row.name}
                         color="primary"
                         size="small"
                       />
                     )}
-                    label={state[row.name] ? "Active" : "In-Active"}
+                    label={activeState[row.name] ? "Active" : "In-Active"}
                   />
                 </TableCell>
               </StyledTableRow>
@@ -201,8 +200,6 @@ const DiagnosesDetails = (props) => {
 };
 
 DiagnosesDetails.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  patientId: PropTypes.string.isRequired,
   reloadData: PropTypes.func.isRequired,
 };
 
