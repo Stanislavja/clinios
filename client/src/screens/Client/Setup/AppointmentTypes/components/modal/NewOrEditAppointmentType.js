@@ -114,6 +114,7 @@ const NewOrEditAppointment = ({
       sort_order: 1,
       allow_patients_schedule: true,
       active: true,
+      note: props.appointment.note || "",
     };
     setAppointment(appt);
     // eslint-disable-next-line react/destructuring-assignment
@@ -374,15 +375,18 @@ NewOrEditAppointment.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   isNewAppointment: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  appointment: PropTypes.shape({
-    id: PropTypes.string,
-    appointment_type: PropTypes.string,
-    appointment_name_portal: PropTypes.string,
-    length: PropTypes.number,
-    sort_order: PropTypes.number,
-    allow_patients_schedule: PropTypes.bool,
-    note: PropTypes.string,
-  }).isRequired,
+  appointment: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({
+      id: PropTypes.number,
+      appointment_type: PropTypes.string,
+      appointment_name_portal: PropTypes.string,
+      length: PropTypes.number,
+      sort_order: PropTypes.number,
+      allow_patients_schedule: PropTypes.number,
+      note: PropTypes.string,
+    }),
+  ]).isRequired,
   savedAppointments: PropTypes.arrayOf(
     PropTypes.shape({
       appointment_name_portal: PropTypes.string,

@@ -74,6 +74,7 @@ const MenuWithDropDowns = (
               component={RouterLink}
               to={item.href}
               className={classes.MenuItem}
+              onClick={handleClose}
             >
               {item.title}
             </MenuItem>
