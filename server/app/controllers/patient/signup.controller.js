@@ -95,7 +95,7 @@ exports.patientSignup = async (req, res) => {
             const newDb = makeDb(configuration, res);
             const updateResponse = await newDb.query(
               `update patient
-                  set signature='${dest}'
+                  set signature='${dest}', updated= now(), updated_user_id='${req.user_id}'
                   where id=${patientResponse.insertId}
                 `
             );

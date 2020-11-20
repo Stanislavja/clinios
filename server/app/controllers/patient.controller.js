@@ -994,12 +994,12 @@ const updateDocuments = async (req, res) => {
     const now = moment().format("YYYY-MM-DD HH:mm:ss");
     let $sql = `update lab set status='${type}'`;
     if (type === "D") {
-      $sql += `, deleted_dt='${now}' `;
+      $sql += `, deleted_dt='${now}', `;
     } else if (type === "A") {
-      $sql += `, deleted_dt=null`;
+      $sql += `, deleted_dt=null, `;
     }
 
-    $sql += ` where id=${id}`;
+    $sql += `updated=now(), updated_user_id=${req.user_id} where id=${id}`;
 
     const updateResponse = await db.query($sql);
 
@@ -1525,7 +1525,7 @@ const updateDiagnose = async (req, res) => {
     if (typeof is_primary !== "undefined") {
       $sql += `set is_primary=${is_primary} \n`;
     }
-    $sql += `where patient_id=${patient_id}
+    $sql += `, updated= now(), updated_user_id='${req.user_id}' where patient_id=${patient_id}
         and icd_id='${icd_id}'`;
 
     const updateResponse = await db.query($sql);
