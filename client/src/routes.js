@@ -10,6 +10,7 @@ import {
   Route,
 } from "react-router-dom";
 
+import AdminGuard from "./components/AdminGuard";
 import AuthGuard from "./components/AuthGuard";
 import GuestGuard from "./components/GuestGuard";
 import LoadingScreen from "./components/LoadingScreen";
@@ -53,6 +54,13 @@ const routes = [
     exact: true,
     path: "/404",
     component: lazy(() => import("./screens/errors/NotFound")),
+  },
+  {
+    exact: true,
+    guard: AuthGuard,
+    layout: DashboardLayout,
+    path: "/protected-area",
+    component: lazy(() => import("./screens/errors/Restricted")),
   },
   {
     exact: true,
@@ -153,7 +161,7 @@ const routes = [
   },
   {
     path: "/setup",
-    guard: AuthGuard,
+    guard: AdminGuard,
     layout: DashboardLayout,
     routes: [
       {
@@ -399,7 +407,7 @@ const routes = [
   },
   {
     path: "*",
-    layout: DashboardLayout,
+    layout: MainLayout,
     routes: [
       {
         exact: true,
