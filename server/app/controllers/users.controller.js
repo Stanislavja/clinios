@@ -35,7 +35,7 @@ const getAllUsers = async (req, res) => {
 const getUser = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
-    const dbResponse = await db.query(`SELECT id, client_id, firstname, lastname, email, sign_dt,
+    const dbResponse = await db.query(`SELECT id, client_id, firstname, lastname, email, admin, sign_dt,
      email_confirm_dt FROM user WHERE id=${req.user_id}`);
 
     if (!dbResponse) {
