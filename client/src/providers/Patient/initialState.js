@@ -1,5 +1,6 @@
 const initialState = {
   patientId: null,
+  editorText: null,
   patientInfo: {
     data: {},
     history: [],
