@@ -158,3 +158,5 @@ export const encounterLetterToTypeConversion = (encounter) => {
       return "";
   }
 };
+
+export const isDev = () => process.env.NODE_ENV === "development";

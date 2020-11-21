@@ -8,7 +8,8 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import moment from "moment";
-import PropTypes from "prop-types";
+
+import usePatientContext from "../../../hooks/usePatientContext";
 
 const useStyles = makeStyles(() => ({
   tableContainer: {
@@ -53,9 +54,11 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-const MedicalNotesDetails = (props) => {
-  const { data /* reloadData */ } = props;
+const MedicalNotesDetails = () => {
   const classes = useStyles();
+
+  const { state } = usePatientContext();
+  const { data } = state.medicalNotes;
 
   return (
     <TableContainer className={classes.tableContainer}>
@@ -81,10 +84,6 @@ const MedicalNotesDetails = (props) => {
       </Table>
     </TableContainer>
   );
-};
-
-MedicalNotesDetails.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default MedicalNotesDetails;

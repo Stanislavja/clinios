@@ -11,11 +11,12 @@ import {
   Divider,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import PropTypes from "prop-types";
 import SignatureCanvas from "react-signature-canvas";
 
 import CountrySelect from "../../../components/common/CountrySelect";
 import RegionSelect from "../../../components/common/RegionSelect";
+import usePatientContext from "../../../hooks/usePatientContext";
+import { toggleFormsViewDialog } from "../../../providers/Patient/actions";
 import { FormFields } from "../../../static/expandForm";
 
 const useStyles = makeStyles((theme) => ({
@@ -30,9 +31,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Form = (props) => {
+const Form = () => {
   const classes = useStyles();
-  const { onClose } = props;
+  const { dispatch } = usePatientContext();
 
   const BasicInfo = FormFields.basicInfo;
   const AddressDetails = FormFields.addressDetails;
@@ -95,7 +96,7 @@ const Form = (props) => {
         <Typography variant="h3" color="textSecondary" gutterBottom>
           Register with Ultrawellnes Center
         </Typography>
-        <Button variant="outlined" onClick={() => onClose()}>
+        <Button variant="outlined" onClick={() => dispatch(toggleFormsViewDialog())}>
           Close
         </Button>
       </Grid>
@@ -393,10 +394,6 @@ const Form = (props) => {
       </form>
     </>
   );
-};
-
-Form.propTypes = {
-  onClose: PropTypes.func.isRequired,
 };
 
 export default Form;

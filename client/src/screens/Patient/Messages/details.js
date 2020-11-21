@@ -11,11 +11,11 @@ import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import DeleteIcon from "@material-ui/icons/Delete";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
 
+import usePatientContext from "../../../hooks/usePatientContext";
 import PatientService from "../../../services/patient.service";
-import { setError, setSuccess } from "../../../store/common/actions";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -64,15 +64,19 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 
 const MessagesDetails = (props) => {
-  const { data, reloadData, patientId } = props;
-  const dispatch = useDispatch();
+  const { reloadData } = props;
+  const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
+
+  const { state } = usePatientContext();
+  const { data } = state.messages;
+  const { patientId } = state;
 
   const deleteItemHandler = (selectedItem) => {
     const messageId = selectedItem.id;
     PatientService.deleteMessages(patientId, messageId)
       .then((response) => {
-        dispatch(setSuccess(`${response.data.message}`));
+        enqueueSnackbar(`${response.data.message}`, { variant: "success" });
         reloadData();
       })
       .catch((error) => {
@@ -81,13 +85,7 @@ const MessagesDetails = (props) => {
           && error.response.data.message)
           || error.message
           || error.toString();
-        const severity = "error";
-        dispatch(
-          setError({
-            severity,
-            message: resMessage,
-          }),
-        );
+        enqueueSnackbar(`${resMessage}`, { variant: "error" });
       });
   };
 
@@ -108,7 +106,7 @@ const MessagesDetails = (props) => {
         <TableBody>
           {!!data && data.length
             ? data.map((row) => (
-              <StyledTableRow key={`${row.created}_${row.name}`}>
+              <StyledTableRow key={row.id}>
                 <TableCell component="th" scope="row">
                   {moment(row.created).format("MMM D YYYY")}
                 </TableCell>
@@ -144,8 +142,6 @@ const MessagesDetails = (props) => {
 };
 
 MessagesDetails.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  patientId: PropTypes.string.isRequired,
   reloadData: PropTypes.func.isRequired,
 };
 

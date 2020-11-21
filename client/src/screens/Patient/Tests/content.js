@@ -9,7 +9,8 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
-import PropTypes from "prop-types";
+
+import usePatientContext from "../../../hooks/usePatientContext";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -61,9 +62,10 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-const TestsContent = (props) => {
-  const { data } = props;
+const TestsContent = () => {
   const classes = useStyles();
+  const { state } = usePatientContext();
+  const { data } = state.tests;
 
   return (
     <TableContainer className={classes.tableContainer}>
@@ -113,10 +115,6 @@ const TestsContent = (props) => {
       </Table>
     </TableContainer>
   );
-};
-
-TestsContent.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default TestsContent;

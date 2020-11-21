@@ -9,12 +9,13 @@ import {
   ListItemText,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
 import Select from "react-select";
 
+import usePatientContext from "../../../../hooks/usePatientContext";
+import { toggleDiagnosesDialog } from "../../../../providers/Patient/actions";
 import PatientService from "../../../../services/patient.service";
-import { setError, setSuccess } from "../../../../store/common/actions";
 import SelectCustomStyles from "../../../../styles/SelectCustomStyles";
 
 const useStyles = makeStyles((theme) => ({
@@ -38,10 +39,13 @@ const useStyles = makeStyles((theme) => ({
 
 const Diagnoses = (props) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const { onClose, patientId, reloadData } = props;
+  const { enqueueSnackbar } = useSnackbar();
+  const { reloadData } = props;
   const [diagnosis, setDiagnosis] = useState([]);
   const [selectedDiagnosis, setSelectedDiagnoses] = useState([]);
+
+  const { state, dispatch } = usePatientContext();
+  const { patientId } = state;
 
   const fetchDiagnosis = (searchText) => {
     PatientService.searchICD(searchText).then((res) => {
@@ -62,23 +66,17 @@ const Diagnoses = (props) => {
     };
     PatientService.createDiagnoses(patientId, reqBody)
       .then((response) => {
-        dispatch(setSuccess(`${response.data.message}`));
+        enqueueSnackbar(`${response.data.message}`, { variant: "success" });
         reloadData();
-        onClose();
+        dispatch(toggleDiagnosesDialog());
       })
       .catch((error) => {
         const resMessage = (error.response
-            && error.response.data
-            && error.response.data.message)
+          && error.response.data
+          && error.response.data.message)
           || error.message
           || error.toString();
-        const severity = "error";
-        dispatch(
-          setError({
-            severity,
-            message: resMessage,
-          }),
-        );
+        enqueueSnackbar(`${resMessage}`, { variant: "error" });
       });
   };
 
@@ -161,7 +159,7 @@ const Diagnoses = (props) => {
         >
           Save
         </Button>
-        <Button variant="outlined" onClick={() => onClose()}>
+        <Button variant="outlined" onClick={() => dispatch(toggleDiagnosesDialog())}>
           Cancel
         </Button>
       </Grid>
@@ -170,9 +168,7 @@ const Diagnoses = (props) => {
 };
 
 Diagnoses.propTypes = {
-  patientId: PropTypes.string.isRequired,
   reloadData: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
 };
 
 export default Diagnoses;

@@ -9,17 +9,17 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import { useSelector, shallowEqual, useDispatch } from "react-redux";
 
 import Card from "../../../components/common/Card";
+import usePatientContext from "../../../hooks/usePatientContext";
+import { resetEncounter, toggleEncountersDialog } from "../../../providers/Patient/actions";
 import PatientService from "../../../services/patient.service";
 import {
   EncountersFormFields,
   EncountersCards,
 } from "../../../static/encountersForm";
-import { setError, setSuccess } from "../../../store/common/actions";
-import { resetEncounter } from "../../../store/patient/actions";
 import { encounterTypeToLetterConversion, encounterLetterToTypeConversion } from "../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
@@ -36,8 +36,9 @@ const useStyles = makeStyles((theme) => ({
 
 const Encounters = (props) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const { onClose, patientId, reloadData } = props;
+  const { enqueueSnackbar } = useSnackbar();
+  const { state, dispatch } = usePatientContext();
+  const { reloadData } = props;
   const [formFields, setFormFields] = useState({
     title: "",
     encounter_type: "",
@@ -46,10 +47,9 @@ const Encounters = (props) => {
     notes: "",
     treatment: "",
   });
-  const encounter = useSelector(
-    (state) => state.patient.selectedEncounter,
-    shallowEqual,
-  );
+
+  const { patientId } = state;
+  const encounter = state.encounters.selectedEncounter;
 
   const updateFields = () => {
     formFields.title = encounter.title;
@@ -94,9 +94,9 @@ const Encounters = (props) => {
       };
       PatientService.updateEncounters(patientId, encounterId, reqBody)
         .then((response) => {
-          dispatch(setSuccess(`${response.data.message}`));
+          enqueueSnackbar(`${response.data.message}`, { variant: "success" });
           reloadData();
-          onClose();
+          dispatch(toggleEncountersDialog());
         })
         .catch((error) => {
           const resMessage = (error.response
@@ -104,13 +104,7 @@ const Encounters = (props) => {
             && error.response.data.message)
             || error.message
             || error.toString();
-          const severity = "error";
-          dispatch(
-            setError({
-              severity,
-              message: resMessage,
-            }),
-          );
+          enqueueSnackbar(`${resMessage}`, { variant: "error" });
         });
     } else {
       const reqBody = {
@@ -125,9 +119,9 @@ const Encounters = (props) => {
       };
       PatientService.createEncounter(patientId, reqBody)
         .then((response) => {
-          dispatch(setSuccess(`${response.data.message}`));
+          enqueueSnackbar(`${response.data.message}`, { variant: "success" });
           reloadData();
-          onClose();
+          dispatch(toggleEncountersDialog());
         })
         .catch((error) => {
           const resMessage = (error.response
@@ -135,13 +129,7 @@ const Encounters = (props) => {
             && error.response.data.message)
             || error.message
             || error.toString();
-          const severity = "error";
-          dispatch(
-            setError({
-              severity,
-              message: resMessage,
-            }),
-          );
+          enqueueSnackbar(`${resMessage}`, { variant: "error" });
         });
     }
   };
@@ -264,7 +252,7 @@ const Encounters = (props) => {
               <Button variant="outlined" type="submit">
                 Save
               </Button>
-              <Button variant="outlined" onClick={() => onClose()}>
+              <Button variant="outlined" onClick={() => dispatch(toggleEncountersDialog())}>
                 Exit
               </Button>
             </Grid>
@@ -286,9 +274,7 @@ const Encounters = (props) => {
 };
 
 Encounters.propTypes = {
-  patientId: PropTypes.string.isRequired,
   reloadData: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
 };
 
 export default Encounters;

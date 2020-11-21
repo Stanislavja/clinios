@@ -3,9 +3,9 @@ import React from "react";
 import { Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
-import PropTypes from "prop-types";
 
 import Tooltip from "../../../components/common/CustomTooltip";
+import usePatientContext from "../../../hooks/usePatientContext";
 
 const useStyles = makeStyles((theme) => ({
   text12: {
@@ -30,9 +30,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RequisitionsContent = (props) => {
+const RequisitionsContent = () => {
   const classes = useStyles();
-  const { data } = props;
+  const { state } = usePatientContext();
+  const { data } = state.requisitions;
 
   return (
     <>
@@ -81,10 +82,6 @@ const RequisitionsContent = (props) => {
       }
     </>
   );
-};
-
-RequisitionsContent.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default RequisitionsContent;

@@ -9,12 +9,13 @@ import {
   ListItemText,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
 import Select from "react-select";
 
+import usePatientContext from "../../../hooks/usePatientContext";
+import { toggleMedicationDialog } from "../../../providers/Patient/actions";
 import PatientService from "../../../services/patient.service";
-import { setError, setSuccess } from "../../../store/common/actions";
 import SelectCustomStyles from "../../../styles/SelectCustomStyles";
 
 const useStyles = makeStyles((theme) => ({
@@ -38,8 +39,12 @@ const useStyles = makeStyles((theme) => ({
 
 const Medications = (props) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const { onClose, patientId, reloadData } = props;
+  const { reloadData } = props;
+  const { enqueueSnackbar } = useSnackbar();
+
+  const { state, dispatch } = usePatientContext();
+  const { patientId } = state;
+
   const [medications, setMedications] = useState([]);
   const [selectedMedication, setSelectedMedication] = useState([]);
 
@@ -62,23 +67,17 @@ const Medications = (props) => {
     };
     PatientService.createMedication(patientId, reqBody)
       .then((response) => {
-        dispatch(setSuccess(`${response.data.message}`));
+        enqueueSnackbar(`${response.data.message}`, { variant: "success" });
         reloadData();
-        onClose();
+        dispatch(toggleMedicationDialog());
       })
       .catch((error) => {
         const resMessage = (error.response
-            && error.response.data
-            && error.response.data.message)
+          && error.response.data
+          && error.response.data.message)
           || error.message
           || error.toString();
-        const severity = "error";
-        dispatch(
-          setError({
-            severity,
-            message: resMessage,
-          }),
-        );
+        enqueueSnackbar(`${resMessage}`, { variant: "error" });
       });
   };
 
@@ -158,7 +157,7 @@ const Medications = (props) => {
         >
           Save
         </Button>
-        <Button variant="outlined" onClick={() => onClose()}>
+        <Button variant="outlined" onClick={() => dispatch(toggleMedicationDialog())}>
           Cancel
         </Button>
       </Grid>
@@ -167,9 +166,7 @@ const Medications = (props) => {
 };
 
 Medications.propTypes = {
-  patientId: PropTypes.string.isRequired,
   reloadData: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
 };
 
 export default Medications;

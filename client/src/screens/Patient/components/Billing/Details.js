@@ -9,8 +9,8 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import moment from "moment";
-import PropTypes from "prop-types";
 
+import usePatientContext from "../../../../hooks/usePatientContext";
 import PatientService from "../../../../services/patient.service";
 
 const useStyles = makeStyles((theme) => ({
@@ -50,11 +50,12 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-const BillingDetails = (props) => {
-  const { patientId } = props;
+const BillingDetails = () => {
   const classes = useStyles();
   const [billings, setBillings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { state } = usePatientContext();
+  const { patientId } = state;
 
   const fetchBillings = useCallback(() => {
     PatientService.getBillings(patientId).then((res) => {
@@ -73,6 +74,7 @@ const BillingDetails = (props) => {
         <TableHead>
           <TableRow>
             <StyledTableCell>Date</StyledTableCell>
+            <StyledTableCell>Amount</StyledTableCell>
             <StyledTableCell>Transaction Type</StyledTableCell>
             <StyledTableCell>Encounter Title</StyledTableCell>
             <StyledTableCell>CPT Procedure</StyledTableCell>
@@ -82,9 +84,13 @@ const BillingDetails = (props) => {
         <TableBody>
           {billings.length
             ? billings.map((item) => (
-              <StyledTableRow key={item.dt}>
+              <StyledTableRow key={`${item.dt}_${item.amount}_${item.tran_type}`}>
                 <TableCell component="th" scope="item">
                   {moment(item.dt).format("MMM D YYYY")}
+                </TableCell>
+                <TableCell>
+                  $
+                  {item.amount}
                 </TableCell>
                 <TableCell>{item.tran_type}</TableCell>
                 <TableCell>{item.encounter_title}</TableCell>
@@ -94,7 +100,7 @@ const BillingDetails = (props) => {
             ))
             : (
               <StyledTableRow>
-                <TableCell colSpan={5}>
+                <TableCell colSpan={6}>
                   <Typography align="center" variant="body1">
                     {isLoading ? "Fetching Records" : "No Records Found..."}
                   </Typography>
@@ -105,10 +111,6 @@ const BillingDetails = (props) => {
       </Table>
     </TableContainer>
   );
-};
-
-BillingDetails.propTypes = {
-  patientId: PropTypes.string.isRequired,
 };
 
 export default BillingDetails;

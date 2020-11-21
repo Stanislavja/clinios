@@ -11,11 +11,12 @@ import TableRow from "@material-ui/core/TableRow";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
 
+import usePatientContext from "../../../hooks/usePatientContext";
+import { toggleEncountersDialog } from "../../../providers/Patient/actions";
 import PatientService from "../../../services/patient.service";
-import { setError, setSuccess } from "../../../store/common/actions";
 import { setEncounter } from "../../../store/patient/actions";
 
 const useStyles = makeStyles((theme) => ({
@@ -65,37 +66,33 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 
 const EncountersDetails = (props) => {
-  const {
-    data, patientId, reloadData, toggleEncountersDialog,
-  } = props;
-  const dispatch = useDispatch();
+  const { reloadData } = props;
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
+  const { state, dispatch } = usePatientContext();
+
+  const { data } = state.encounters;
+  const { patientId } = state;
 
   const onItemEdit = (selectedItem) => {
     dispatch(setEncounter(selectedItem));
-    toggleEncountersDialog();
+    dispatch(toggleEncountersDialog());
   };
 
   const deleteItemHandler = (selectedItem) => {
     const encounterId = selectedItem.id;
     PatientService.deleteEncounter(patientId, encounterId)
       .then((response) => {
-        dispatch(setSuccess(`${response.data.message}`));
+        enqueueSnackbar(`${response.data.message}`, { variant: "success" });
         reloadData();
       })
       .catch((error) => {
         const resMessage = (error.response
-            && error.response.data
-            && error.response.data.message)
+          && error.response.data
+          && error.response.data.message)
           || error.message
           || error.toString();
-        const severity = "error";
-        dispatch(
-          setError({
-            severity,
-            message: resMessage,
-          }),
-        );
+        enqueueSnackbar(`${resMessage}`, { variant: "error" });
       });
   };
 
@@ -148,10 +145,7 @@ const EncountersDetails = (props) => {
 };
 
 EncountersDetails.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  patientId: PropTypes.string.isRequired,
   reloadData: PropTypes.func.isRequired,
-  toggleEncountersDialog: PropTypes.func.isRequired,
 };
 
 export default EncountersDetails;

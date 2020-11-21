@@ -2,7 +2,8 @@ import React from "react";
 
 import { Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import PropTypes from "prop-types";
+
+import usePatientContext from "../../../../hooks/usePatientContext";
 
 const useStyles = makeStyles((theme) => ({
   inputRow: {
@@ -13,9 +14,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AllergiesContent = (props) => {
+const AllergiesContent = () => {
   const classes = useStyles();
-  const { data /* reloadData */ } = props;
+  const { state } = usePatientContext();
+  const { data } = state.allergies;
 
   return (
     <>
@@ -28,10 +30,6 @@ const AllergiesContent = (props) => {
       ))}
     </>
   );
-};
-
-AllergiesContent.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default AllergiesContent;

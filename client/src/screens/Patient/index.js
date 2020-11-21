@@ -1,1 +1,1 @@
-export { default } from "./Patient";
+export { default, PatientContext } from "./Patient";

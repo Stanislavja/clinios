@@ -2,15 +2,13 @@ import React, { useEffect, useState } from "react";
 
 import { TextField, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import PropTypes from "prop-types";
-import { useDispatch, useSelector, shallowEqual } from "react-redux";
 
-import PatientService from "../../../../services/patient.service";
-import { setError, setSuccess } from "../../../../store/common/actions";
+import usePatientContext from "../../../../hooks/usePatientContext";
 import {
   setEditorText,
   resetEditorText,
-} from "../../../../store/patient/actions";
+  toggleAdminFormDialog,
+} from "../../../../providers/Patient/actions";
 
 const useStyles = makeStyles((theme) => ({
   inputRow: {
@@ -29,106 +27,49 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AdminNotes = (props) => {
-  const dispatch = useDispatch();
+const AdminNotes = () => {
   const classes = useStyles();
-  const currentEditorText = useSelector(
-    (state) => state.patient.editorText,
-    shallowEqual,
-  );
-  const {
-    onClose, reloadData, patientId, oldAdminNote,
-  } = props;
-  const [oldAdminNoteState, setOldAdminNoteState] = useState("");
-  const [formFields, setFormFields] = useState({
-    notes: "",
-  });
+  const { state, dispatch } = usePatientContext();
+  const { editorText } = state;
+  const { admin_note } = state.patientInfo.data;
+  const [formField, setFormField] = useState("");
 
   const handleInputChange = (e) => {
-    const { value, name } = e.target;
-    setFormFields({
-      ...formFields,
-      [name]: value,
-    });
+    const { value } = e.target;
+    setFormField(value);
   };
 
   useEffect(() => {
-    setOldAdminNoteState(oldAdminNote);
-    const fieldName = "notes";
-    setFormFields({
-      ...formFields,
-      [fieldName]: oldAdminNote,
-    });
-    dispatch(setEditorText(oldAdminNote));
+    setFormField(admin_note);
+    dispatch(setEditorText(admin_note));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [oldAdminNote]);
-
-  const onFormSubmit = (e) => {
-    e.preventDefault();
-    const reqBody = {
-      data: {
-        admin_note: formFields.notes,
-        old_admin_note: oldAdminNoteState,
-      },
-    };
-    // TODO:: static for the time being - discussion required
-    const noteId = 1;
-    PatientService.updateAdminNotes(patientId, reqBody, noteId)
-      .then((response) => {
-        dispatch(setSuccess(`${response.data.message}`));
-        reloadData();
-        onClose();
-      })
-      .catch((error) => {
-        const resMessage = (error.response
-          && error.response.data
-          && error.response.data.message[0].msg)
-          || error.message
-          || error.toString();
-        const severity = "error";
-        dispatch(
-          setError({
-            severity,
-            message: resMessage,
-          }),
-        );
-      });
-  };
+  }, [admin_note]);
 
   return (
     <>
-      <form onSubmit={onFormSubmit}>
-        <Grid className={classes.formInput} item md={12}>
-          <TextField
-            variant="outlined"
-            value={formFields.notes}
-            name="notes"
-            id="notes"
-            type="text"
-            fullWidth
-            onChange={(e) => handleInputChange(e)}
-            onBlur={() => currentEditorText !== formFields.notes && dispatch(setEditorText(formFields.notes))}
-            multiline
-            rows={5}
-            autoFocus
-            onKeyDown={(event) => {
-              if (event.key === "Escape") {
-                onClose();
-                dispatch(resetEditorText());
-              }
-            }}
-          />
-        </Grid>
-      </form>
+      <Grid className={classes.formInput} item md={12}>
+        <TextField
+          variant="outlined"
+          value={formField}
+          name="notes"
+          id="notes"
+          type="text"
+          fullWidth
+          onChange={(e) => handleInputChange(e)}
+          onBlur={() => editorText !== formField && dispatch(setEditorText(formField))}
+          multiline
+          rows={5}
+          autoFocus
+          onKeyDown={(event) => {
+            if (event.key === "Escape") {
+              dispatch(toggleAdminFormDialog());
+              dispatch(resetEditorText());
+            }
+          }}
+        />
+      </Grid>
     </>
   );
-};
-
-AdminNotes.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  patientId: PropTypes.string.isRequired,
-  reloadData: PropTypes.func.isRequired,
-  oldAdminNote: PropTypes.string.isRequired,
 };
 
 export default AdminNotes;

@@ -9,7 +9,8 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
-import PropTypes from "prop-types";
+
+import usePatientContext from "../../../hooks/usePatientContext";
 
 const useStyles = makeStyles(() => ({
   tableContainer: {
@@ -45,9 +46,10 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-const FormsDetails = (props) => {
-  const { data /* reloadData */ } = props;
+const FormsDetails = () => {
   const classes = useStyles();
+  const { state } = usePatientContext();
+  const { data } = state.forms;
 
   return (
     <TableContainer className={classes.tableContainer}>
@@ -63,7 +65,7 @@ const FormsDetails = (props) => {
           {!!data
             && data.length
             ? data.map((row) => (
-              <StyledTableRow key={row.created}>
+              <StyledTableRow key={row.form_id}>
                 <TableCell component="th" scope="row">
                   {moment(row.created).format("MMM D YYYY")}
                 </TableCell>
@@ -84,10 +86,6 @@ const FormsDetails = (props) => {
       </Table>
     </TableContainer>
   );
-};
-
-FormsDetails.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default FormsDetails;
