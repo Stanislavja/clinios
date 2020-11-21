@@ -16,7 +16,7 @@ router.post(
   AppointmentTypes.create
 );
 router.put(
-  "/appointment-types/:userId/:appointmentId",
+  "/appointment-types/:appointmentId",
   [authJwt.verifyToken],
   AppointmentTypes.update
 );

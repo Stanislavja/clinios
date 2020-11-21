@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 export default function AppointmentTypes() {
   const classes = useStyles();
   const [selectedAppointmentId, setSelectedAppointmentId] = useState("");
-  const [selectedappointment, setSelectedAppointment] = useState("");
+  const [selectedappointment, setSelectedAppointment] = useState({});
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [appointments, setAppointments] = useState([]);
