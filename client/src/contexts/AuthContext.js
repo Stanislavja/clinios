@@ -88,7 +88,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     const response = await axios.post(`${API_BASE}/auth/login`, { email, password });
     const { accessToken, user } = response.data.data;
-    localStorage.setItem("user", JSON.stringify(user)); // TODO:: Refactor current AuthProvider and remove
+    localStorage.setItem("user", JSON.stringify(user));
     setSession(accessToken);
     dispatch({
       type: "LOGIN",

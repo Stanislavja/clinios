@@ -3,6 +3,8 @@ import React from "react";
 import { Container, Box, Typography } from "@material-ui/core";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 
+import useAuth from "../../../../hooks/useAuth";
+
 const useStyles = makeStyles((theme) => ({
   footer: {
     flex: 0,
@@ -41,6 +43,7 @@ const CustomTypography = withStyles(() => ({
 
 export default function Footer() {
   const classes = useStyles();
+  const { user } = useAuth();
   return (
     <Container component="footer" maxWidth={false} className={classes.footer}>
       <Box mt={5} className={classes.footerText}>
@@ -50,7 +53,9 @@ export default function Footer() {
           {new Date().getFullYear()}
           {" Clinios"}
           {" "}
-          - User David Potter
+          - User
+          {" "}
+          {`${user.firstname} ${user.lastname}`}
         </CustomTypography>
       </Box>
     </Container>
