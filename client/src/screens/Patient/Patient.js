@@ -782,9 +782,7 @@ const Patient = () => {
         <Dialog
           open={patientInfo.historyDialog}
           title="Patient History"
-          message={(
-            <PatientHistoryDetails />
-          )}
+          message={<PatientHistoryDetails />}
           applyForm={() => dispatch(togglePatientHistoryDialog())}
           cancelForm={() => dispatch(togglePatientHistoryDialog())}
           hideActions
@@ -795,9 +793,7 @@ const Patient = () => {
         <Dialog
           open={adminNotes.historyDialog}
           title="Admin Notes History"
-          message={(
-            <AdminNotesHistory />
-          )}
+          message={<AdminNotesHistory />}
           applyForm={() => dispatch(toggleAdminHistoryDialog())}
           cancelForm={() => dispatch(toggleAdminHistoryDialog())}
           hideActions
@@ -809,9 +805,7 @@ const Patient = () => {
         <Dialog
           open={forms.expandDialog}
           title={" "}
-          message={(
-            <FormDetails />
-          )}
+          message={<FormDetails />}
           applyForm={() => dispatch(toggleFormsExpandDialog())}
           cancelForm={() => dispatch(toggleFormsExpandDialog())}
           hideActions
@@ -854,9 +848,7 @@ const Patient = () => {
         <Dialog
           open={billing.expandDialog}
           title={" "}
-          message={(
-            <BillingDetails />
-          )}
+          message={<BillingDetails />}
           applyForm={() => dispatch(toggleBillngExpandDialog())}
           cancelForm={() => dispatch(toggleBillngExpandDialog())}
           hideActions
