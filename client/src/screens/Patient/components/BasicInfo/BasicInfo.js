@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function BasicInfo(props) {
+const BasicInfo = (props) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const { state, dispatch } = usePatientContext();
@@ -449,8 +449,10 @@ export default function BasicInfo(props) {
       </Grid>
     </>
   );
-}
+};
 
 BasicInfo.propTypes = {
   reloadData: PropTypes.func.isRequired,
 };
+
+export default BasicInfo;
