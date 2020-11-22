@@ -380,7 +380,13 @@ const Topbar = (props) => {
             <div className={classes.sectionDesktop}>
               <Typography className={classes.name}>
                 {
-                  lastVisitedPatient && <RouterLink to={`/patients/${lastVisitedPatient.id}`} className={classes.patientLink}>{lastVisitedPatient.firstname} {lastVisitedPatient.lastname}</RouterLink>
+                  lastVisitedPatient && (
+                    <RouterLink to={`/patients/${lastVisitedPatient.id}`} className={classes.patientLink}>
+                      {lastVisitedPatient.firstname}
+                      {" "}
+                      {lastVisitedPatient.lastname}
+                    </RouterLink>
+                  )
                 }
               </Typography>
               <Typography className={classes.date}>
