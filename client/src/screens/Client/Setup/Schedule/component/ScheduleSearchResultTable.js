@@ -130,8 +130,8 @@ const ScheduleSearchResultTable = ({
                   {moment(result.date_start) > moment()
                     ? "Future"
                     : moment(result.date_end) < moment()
-                    ? "Past"
-                    : "Current"}
+                      ? "Past"
+                      : "Current"}
                 </TableCell>
                 <TableCell padding="checkbox" align="center">
                   {result.created ? moment(result.created).format("lll") : ""}

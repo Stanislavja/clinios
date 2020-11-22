@@ -33,9 +33,9 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 
-import useDebounce from "./../../../../../hooks/useDebounce";
-import * as API from "./../../../../../utils/API";
 import useAuth from "../../../../../hooks/useAuth";
+import useDebounce from "../../../../../hooks/useDebounce";
+import * as API from "../../../../../utils/API";
 // import { AuthConsumer } from "../../../../../contexts/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
@@ -197,7 +197,7 @@ const NewOrEditEvent = ({
           },
           (error) => {
             console.error("search error", error);
-          }
+          },
         );
       } else {
         setPatients([]);
@@ -208,7 +208,7 @@ const NewOrEditEvent = ({
     // Our useEffect function will only execute if this value changes ...
     // ... and thanks to our hook it will only change if the original ...
     // value (searchTerm) hasn't changed for more than 500ms.
-    [debouncedSearchTerm]
+    [debouncedSearchTerm],
   );
 
   const handlePatientChange = (_, patient) => {
@@ -339,15 +339,15 @@ const NewOrEditEvent = ({
         )}
         <div
           className={clsx({
-            [classes.modalConentBelow]: true, //always apply
-            [classes.contentWithLoading]: isLoading, //only when isLoading === true
+            [classes.modalConentBelow]: true, // always apply
+            [classes.contentWithLoading]: isLoading, // only when isLoading === true
           })}
         >
           <DialogContentText id="alert-dialog-description">
             This page is used to create a new appointment
           </DialogContentText>
-          {errors &&
-            errors.map((error, index) => (
+          {errors
+            && errors.map((error, index) => (
               <Alert severity="error" key={index}>
                 {error.msg}
               </Alert>
@@ -381,7 +381,7 @@ const NewOrEditEvent = ({
                 value={calEvent.start_dt}
                 placeholder="2020/10/10 10:00"
                 onChange={(date) => {
-                  let property = "start_dt";
+                  const property = "start_dt";
                   setCalEvent({
                     ...calEvent,
                     [property]: date,
@@ -404,7 +404,7 @@ const NewOrEditEvent = ({
                 value={calEvent.end_dt}
                 placeholder="2020/10/10 11:00"
                 onChange={(date) => {
-                  let property = "end_dt";
+                  const property = "end_dt";
                   setCalEvent({
                     ...calEvent,
                     [property]: date,
@@ -640,7 +640,7 @@ NewOrEditEvent.propTypes = {
       created_user: PropTypes.string,
       updated: PropTypes.string,
       updated_user: PropTypes.string,
-    })
+    }),
   ).isRequired,
   selectedProvider: PropTypes.shape({
     name: PropTypes.string,
@@ -649,7 +649,7 @@ NewOrEditEvent.propTypes = {
     PropTypes.shape({
       id: PropTypes.number,
       name: PropTypes.string,
-    })
+    }),
   ).isRequired,
   isLoading: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
@@ -660,7 +660,7 @@ NewOrEditEvent.propTypes = {
   errors: PropTypes.arrayOf(
     PropTypes.shape({
       msg: PropTypes.string.isRequired,
-    })
+    }),
   ).isRequired,
 };
 
