@@ -53,6 +53,28 @@ const getUser = async (req, res) => {
   }
 };
 
+const getLastVisitedPatient = async (req, res) => {
+  const db = makeDb(configuration, res);
+  const { patientId } = req.params;
+  try {
+    const dbResponse = await db.query(
+      `select id, firstname, lastname from patient where id=${patientId}`
+    );
+    if (!dbResponse) {
+      errorMessage.error = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = dbResponse[0];
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.error = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const getForwardEmailList = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
@@ -173,6 +195,7 @@ const updateUser = async (req, res) => {
 const users = {
   getAllUsers,
   getForwardEmailList,
+  getLastVisitedPatient,
   getUser,
   createNewUser,
   updateUser,
