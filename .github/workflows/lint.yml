@@ -17,6 +17,7 @@ jobs:
       uses: docker://github/super-linter:latest
       env:
         VALIDATE_ALL_CODEBASE: false
+        DEFAULT_BRANCH: master
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         LINTER_RULES_PATH: /client/
         JAVASCRIPT_ES_CONFIG_FILE: .eslintrc
