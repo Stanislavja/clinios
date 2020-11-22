@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     minHeight: 50,
   },
   currentDate: {
-    paddingBottom: theme.spacing(5),
+    paddingBottom: theme.spacing(4.75),
   },
 }));
 
@@ -161,6 +161,7 @@ const Appointments = () => {
                     {userSelection.date
                       ? moment(userSelection.date).format("dddd, DD")
                       : moment().format("dddd, DD")}
+&nbsp;
                     {userSelection.time}
                   </Typography>
                   {
@@ -177,6 +178,19 @@ const Appointments = () => {
                     ))
                   }
                 </Grid>
+              </Grid>
+              <Grid
+                container
+                justify="center"
+              >
+                <Button
+                  type="submit"
+                  color="primary"
+                  variant="contained"
+                  className={classes.submitBtn}
+                >
+                  Book Appointment
+                </Button>
               </Grid>
             </Grid>
           </>
