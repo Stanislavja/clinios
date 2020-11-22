@@ -146,8 +146,8 @@ const NewOrEditEvent = ({
   });
   // const user = JSON.parse(localStorage.getItem("user"));
   // const index = providers.findIndex((provider) => provider.id === user.id);
-  //Test message
-  
+  // Test message
+
   const [indexP, setIndex] = useState(0);
   const [provider, setProvider] = React.useState(providers[indexP]);
   const { user } = useAuth();
@@ -171,7 +171,7 @@ const NewOrEditEvent = ({
       setProvider(selectedProvider);
     }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps, react/destructuring-assignment
   }, [props.event, isNewEvent]);
   /* eslint-enable */
   const handleOnChange = (event) => {
@@ -307,7 +307,7 @@ const NewOrEditEvent = ({
   };
 
   useEffect(() => {
-    const index2 = providers.findIndex((provider) => provider.id === user.id);
+    const index2 = providers.findIndex((pd) => pd.id === user.id);
     setIndex(index2);
   }, [providers, user]);
 
@@ -350,6 +350,7 @@ const NewOrEditEvent = ({
           </DialogContentText>
           {errors
             && errors.map((error, index) => (
+               // eslint-disable-next-line react/no-array-index-key
               <Alert severity="error" key={index}>
                 {error.msg}
               </Alert>
@@ -529,9 +530,9 @@ const NewOrEditEvent = ({
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                {providers.map((provider) => (
-                  <MenuItem key={provider.id} value={provider.id}>
-                    {provider.name}
+                {providers.map((pd) => (
+                  <MenuItem key={pd.id} value={pd.id}>
+                    {pd.name}
                   </MenuItem>
                 ))}
               </Select>
@@ -646,6 +647,9 @@ NewOrEditEvent.propTypes = {
   ).isRequired,
   selectedProvider: PropTypes.shape({
     name: PropTypes.string,
+  }).isRequired,
+  event: PropTypes.shape({
+    firstname: PropTypes.string,
   }).isRequired,
   providers: PropTypes.arrayOf(
     PropTypes.shape({

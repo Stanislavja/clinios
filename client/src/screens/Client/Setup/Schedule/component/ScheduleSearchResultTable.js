@@ -56,7 +56,6 @@ const StyledTableRow = withStyles((theme) => ({
 const ScheduleSearchResultTable = ({
   handleOnEditClick,
   searchResult,
-  fetchScheduleSearch,
   handleDeleteSchedule,
 }) => {
   const classes = useStyles();
