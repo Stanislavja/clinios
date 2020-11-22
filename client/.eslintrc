@@ -10,8 +10,7 @@
   ],
   "extends": [
     "airbnb",
-    "airbnb/hooks",
-    "plugin:mdx/recommended"
+    "airbnb/hooks"
   ],
   "settings": {
     "import/resolver": {
@@ -21,8 +20,7 @@
         ],
         "extensions": [
           ".js",
-          ".jsx",
-          ".mdx"
+          ".jsx"
         ]
       }
     }
