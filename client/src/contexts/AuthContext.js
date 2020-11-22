@@ -6,17 +6,20 @@ import React, {
 
 import jwtDecode from "jwt-decode";
 import PropTypes from "prop-types";
-
+import { useCookies } from "react-cookie";
+import logger from "use-reducer-logger";
 
 import SplashScreen from "../components/SlashScreen";
 import authHeader from "../services/auth-header";
 import { API_BASE } from "../utils/API_BASE";
 import axios from "../utils/axios";
+import { isDev } from "../utils/helpers";
 
 const initialAuthState = {
   isAuthenticated: false,
   isInitialised: false,
   user: null,
+  lastVisitedPatient: null,
 };
 
 const isValidToken = (accessToken) => {
@@ -43,13 +46,22 @@ const setSession = (accessToken) => {
 const reducer = (state, action) => {
   switch (action.type) {
     case "INITIALISE": {
-      const { isAuthenticated, user } = action.payload;
+      const { isAuthenticated, user, lastVisitedPatient } = action.payload;
 
       return {
         ...state,
         isAuthenticated,
         isInitialised: true,
         user,
+        lastVisitedPatient,
+      };
+    }
+    case "UPDATE_LAST_VISITED_PATIENT": {
+      const { lastVisitedPatient } = action.payload;
+
+      return {
+        ...state,
+        lastVisitedPatient,
       };
     }
     case "LOGIN": {
@@ -83,12 +95,12 @@ const AuthContext = createContext({
 });
 
 export const AuthProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialAuthState);
+  const [state, dispatch] = useReducer(isDev() ? logger(reducer) : reducer, initialAuthState);
+  const [cookies] = useCookies(["last_viewed_patient_id"]);
 
   const login = async (email, password) => {
     const response = await axios.post(`${API_BASE}/auth/login`, { email, password });
     const { accessToken, user } = response.data.data;
-    localStorage.setItem("user", JSON.stringify(user)); // TODO:: Refactor current AuthProvider and remove
     setSession(accessToken);
     dispatch({
       type: "LOGIN",
@@ -110,6 +122,25 @@ export const AuthProvider = ({ children }) => {
     });
   };
 
+  const updateLastVisitedPatient = async (patientId) => {
+    try {
+      const lastVisitedPatentResponse = await axios.get(`${API_BASE}/user/last-visited-patient/${patientId}`,
+        {
+          headers: authHeader(),
+        });
+      const lastVisitedPatient = lastVisitedPatentResponse.data.data;
+
+      dispatch({
+        type: "UPDATE_LAST_VISITED_PATIENT",
+        payload: {
+          lastVisitedPatient,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const logout = () => {
     setSession(null);
     dispatch({ type: "LOGOUT" });
@@ -126,12 +157,22 @@ export const AuthProvider = ({ children }) => {
           const response = await axios.get(`${API_BASE}/user`, {
             headers: authHeader(),
           });
+
+          const patientId = cookies.last_viewed_patient_id;
+          let lastVisitedPatient = null;
+          if (patientId) {
+            const lastPatentRes = await axios.get(`${API_BASE}/user/last-visited-patient/${patientId}`,
+              { headers: authHeader() });
+            lastVisitedPatient = lastPatentRes.data.data;
+          }
+
           const { user } = response.data.data;
           dispatch({
             type: "INITIALISE",
             payload: {
               isAuthenticated: true,
               user,
+              lastVisitedPatient,
             },
           });
         } else {
@@ -140,6 +181,7 @@ export const AuthProvider = ({ children }) => {
             payload: {
               isAuthenticated: false,
               user: null,
+              lastVisitedPatient: null,
             },
           });
         }
@@ -150,12 +192,14 @@ export const AuthProvider = ({ children }) => {
           payload: {
             isAuthenticated: false,
             user: null,
+            lastVisitedPatient: null,
           },
         });
       }
     };
 
     initialise();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!state.isInitialised) {
@@ -169,6 +213,7 @@ export const AuthProvider = ({ children }) => {
         method: "JWT",
         login,
         patientLogin,
+        updateLastVisitedPatient,
         logout,
       }}
     >
