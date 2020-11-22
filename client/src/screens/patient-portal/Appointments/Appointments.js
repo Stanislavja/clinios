@@ -176,6 +176,7 @@ const Appointments = () => {
                   {
                     timings.map((timing) => (
                       <Button
+                        key={timing.label}
                         onClick={() => calendarSelectionHandler("time", timing.value)}
                         className={classes.timingBox}
                         variant={userSelection.time === timing.value ? "contained" : "outlined"}

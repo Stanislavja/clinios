@@ -50,8 +50,8 @@ EventCalendar.propTypes = {
   onEventClick: PropTypes.func.isRequired,
   events: PropTypes.arrayOf(
     PropTypes.shape({
-      start_dt: PropTypes.string.isRequired,
-      end_dt: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      date: PropTypes.string.isRequired,
     }),
   ).isRequired,
 };
