@@ -11,6 +11,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: npm install
+        run: npm i --ignore-scripts
 
     - name: Super-Linter-on-Client
       uses: docker://github/super-linter:latest
