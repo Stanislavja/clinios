@@ -146,6 +146,8 @@ const NewOrEditEvent = ({
   });
   // const user = JSON.parse(localStorage.getItem("user"));
   // const index = providers.findIndex((provider) => provider.id === user.id);
+  //Test message
+  
   const [indexP, setIndex] = useState(0);
   const [provider, setProvider] = React.useState(providers[indexP]);
   const { user } = useAuth();
