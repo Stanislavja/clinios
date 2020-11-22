@@ -24,6 +24,7 @@ jobs:
         FILTER_REGEX_INCLUDE: .*src/.*
         FILTER_REGEX_EXCLUDE: .*test/.*
         VALIDATE_ARM: false
+        VALIDATE_JAVASCRIPT_STANDARD: false
         VALIDATE_BASH: false
         VALIDATE_BASH_EXEC: false
         VALIDATE_CLOUDFORMATION: false
