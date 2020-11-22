@@ -12,7 +12,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import _ from "lodash";
 import { useSnackbar } from "notistack";
 import { Responsive, WidthProvider } from "react-grid-layout";
-import { useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import logger from "use-reducer-logger";
 
@@ -75,7 +74,6 @@ import {
   ThirdColumnPatientCards,
   FourthColumnPatientCards,
 } from "../../static/patient";
-import { setError, setSuccess } from "../../store/common/actions";
 import { isDev } from "../../utils/helpers";
 import {
   AdminNotesForm,
@@ -151,7 +149,6 @@ const Patient = () => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const inputFile = useRef(null);
-  const reduxDispatch = useDispatch();
   const history = useHistory();
   const { patientId } = useParams();
   const { user } = useAuth();
@@ -268,7 +265,7 @@ const Patient = () => {
     PatientService.updateCardsLayout(userId, layoutToSave).then((res) => {
       if (res.status === "success") {
         setIsLayoutUpdated(true);
-        reduxDispatch(setSuccess(`Layout updated successfully`));
+        enqueueSnackbar(`Layout updated successfully`, { variant: "success" });
       }
     });
   };
@@ -279,7 +276,7 @@ const Patient = () => {
         setIsLayoutUpdated(false);
         setLayout([]); // removing the current layout state so the cards layout gets re-rendered
         generateLayout();
-        reduxDispatch(setSuccess(`Layout reset successfully`));
+        enqueueSnackbar(`Layout reset successfully`, { variant: "success" });
       }
     });
   };
@@ -319,12 +316,7 @@ const Patient = () => {
         dispatch(setPatientData(res.data));
         setHasPatientIderror(false);
       } else {
-        reduxDispatch(
-          setError({
-            severity: "error",
-            message: "Patient not found",
-          }),
-        );
+        enqueueSnackbar(`Patient not found`, { variant: "error" });
       }
     });
   };
@@ -580,7 +572,7 @@ const Patient = () => {
   const createDocument = (reqBody) => {
     PatientService.createDocuments(patientId, reqBody)
       .then((response) => {
-        reduxDispatch(setSuccess(`${response.data.message}`));
+        enqueueSnackbar(`${response.data.message}`, { variant: "success" });
         fetchDocuments();
       })
       .catch((error) => {
@@ -589,13 +581,7 @@ const Patient = () => {
           && error.response.data.message)
           || error.message
           || error.toString();
-        const severity = "error";
-        reduxDispatch(
-          setError({
-            severity,
-            message: resMessage,
-          }),
-        );
+        enqueueSnackbar(`${resMessage}`, { variant: "error" });
       });
   };
 
@@ -633,13 +619,7 @@ const Patient = () => {
             && error.response.data.message[0].msg)
             || error.message
             || error.toString();
-          const severity = "error";
-          reduxDispatch(
-            setError({
-              severity,
-              message: resMessage,
-            }),
-          );
+          enqueueSnackbar(`${resMessage}`, { variant: "error" });
         });
     } else {
       dispatch(toggleAdminFormDialog());
@@ -670,13 +650,7 @@ const Patient = () => {
             && error.response.data.message)
             || error.message
             || error.toString();
-          const severity = "error";
-          reduxDispatch(
-            setError({
-              severity,
-              message: resMessage,
-            }),
-          );
+          enqueueSnackbar(`${resMessage}`, { variant: "error" });
         });
     } else {
       dispatch(toggleMedicalNotesFormDialog());
@@ -782,9 +756,7 @@ const Patient = () => {
         <Dialog
           open={patientInfo.historyDialog}
           title="Patient History"
-          message={(
-            <PatientHistoryDetails />
-          )}
+          message={<PatientHistoryDetails />}
           applyForm={() => dispatch(togglePatientHistoryDialog())}
           cancelForm={() => dispatch(togglePatientHistoryDialog())}
           hideActions
@@ -795,9 +767,7 @@ const Patient = () => {
         <Dialog
           open={adminNotes.historyDialog}
           title="Admin Notes History"
-          message={(
-            <AdminNotesHistory />
-          )}
+          message={<AdminNotesHistory />}
           applyForm={() => dispatch(toggleAdminHistoryDialog())}
           cancelForm={() => dispatch(toggleAdminHistoryDialog())}
           hideActions
@@ -809,9 +779,7 @@ const Patient = () => {
         <Dialog
           open={forms.expandDialog}
           title={" "}
-          message={(
-            <FormDetails />
-          )}
+          message={<FormDetails />}
           applyForm={() => dispatch(toggleFormsExpandDialog())}
           cancelForm={() => dispatch(toggleFormsExpandDialog())}
           hideActions
@@ -854,9 +822,7 @@ const Patient = () => {
         <Dialog
           open={billing.expandDialog}
           title={" "}
-          message={(
-            <BillingDetails />
-          )}
+          message={<BillingDetails />}
           applyForm={() => dispatch(toggleBillngExpandDialog())}
           cancelForm={() => dispatch(toggleBillngExpandDialog())}
           hideActions
