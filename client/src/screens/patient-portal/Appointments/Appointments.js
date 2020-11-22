@@ -33,9 +33,18 @@ const useStyles = makeStyles((theme) => ({
   timingBox: {
     marginBottom: theme.spacing(2),
     minHeight: 50,
+
+    [theme.breakpoints.down("md")]: {
+      marginBottom: theme.spacing(1),
+      minHeight: 40,
+    },
   },
   currentDate: {
     paddingBottom: theme.spacing(4.75),
+
+    [theme.breakpoints.down("md")]: {
+      paddingBottom: theme.spacing(2),
+    },
   },
 }));
 
