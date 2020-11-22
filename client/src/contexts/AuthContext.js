@@ -6,12 +6,14 @@ import React, {
 
 import jwtDecode from "jwt-decode";
 import PropTypes from "prop-types";
+import logger from "use-reducer-logger";
 
 
 import SplashScreen from "../components/SlashScreen";
 import authHeader from "../services/auth-header";
 import { API_BASE } from "../utils/API_BASE";
 import axios from "../utils/axios";
+import { isDev } from "../utils/helpers";
 
 const initialAuthState = {
   isAuthenticated: false,
@@ -83,7 +85,7 @@ const AuthContext = createContext({
 });
 
 export const AuthProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialAuthState);
+  const [state, dispatch] = useReducer(isDev() ? logger(reducer) : reducer, initialAuthState);
 
   const login = async (email, password) => {
     const response = await axios.post(`${API_BASE}/auth/login`, { email, password });
