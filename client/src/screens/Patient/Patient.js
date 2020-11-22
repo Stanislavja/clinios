@@ -11,6 +11,7 @@ import { Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import _ from "lodash";
 import { useSnackbar } from "notistack";
+import { useCookies } from "react-cookie";
 import { Responsive, WidthProvider } from "react-grid-layout";
 import { useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
@@ -129,6 +130,7 @@ import RequisitionsCardContent from "./Requisitions/content";
 import RequisitionsDetails from "./Requisitions/details";
 import TestsCardContent from "./Tests/content";
 
+
 import "react-grid-layout/css/styles.css";
 // import "react-resizable/css/styles.css";
 import "../../reactGridLayout.css";
@@ -154,7 +156,9 @@ const Patient = () => {
   const reduxDispatch = useDispatch();
   const history = useHistory();
   const { patientId } = useParams();
-  const { user } = useAuth();
+  const { user, updateLastVisitedPatient } = useAuth();
+  // eslint-disable-next-line no-unused-vars
+  const [cookies, setCookie] = useCookies(["last_viewed_patient_id"]);
   const userId = user.id;
 
   const [state, dispatch] = useReducer(isDev() ? logger(PatientReducer) : PatientReducer, initialState);
@@ -334,6 +338,8 @@ const Patient = () => {
     fetchCardsLayout();
     fetchPatientData();
     dispatch(setPatientId(patientId)); // saving patientId in reducer
+    setCookie("last_viewed_patient_id", patientId, { path: "/" }); // Same patientId into cookie
+    updateLastVisitedPatient(patientId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [patientId]);
 

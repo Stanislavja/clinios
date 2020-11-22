@@ -61,6 +61,11 @@ const useStyles = makeStyles((theme) => ({
     padding: "10px 10px",
     textDecoration: "none",
   },
+  patientLink: {
+    color: "#ffffff",
+    padding: "10px 10px",
+    textDecoration: "none",
+  },
   search: {
     position: "relative",
     borderRadius: theme.shape.borderRadius,
@@ -280,11 +285,12 @@ const Topbar = (props) => {
 
   const classes = useStyles();
   const history = useHistory();
-  const { user, logout } = useAuth();
+  const { lastVisitedPatient, logout } = useAuth();
   const [open, setOpen] = React.useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
   const [nothingFound, setNothingFound] = useState(false);
+
   const handleClose = () => {
     setOpen(false);
     setSearchTerm("");
@@ -342,7 +348,6 @@ const Topbar = (props) => {
             <div className={classes.navs}>
               {
                 pages.map((page) => (
-
                   page.subMenus
                     ? (
                       <MenuWithDropDowns
@@ -374,7 +379,9 @@ const Topbar = (props) => {
           <div className={classes.headerWithSearchBar}>
             <div className={classes.sectionDesktop}>
               <Typography className={classes.name}>
-                {user && `${user.firstname} ${user.lastname}`}
+                {
+                  lastVisitedPatient && <RouterLink to={`/patients/${lastVisitedPatient.id}`} className={classes.patientLink}>{lastVisitedPatient.firstname} {lastVisitedPatient.lastname}</RouterLink>
+                }
               </Typography>
               <Typography className={classes.date}>
                 {moment().format("ddd, MMM Do")}
