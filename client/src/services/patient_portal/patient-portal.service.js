@@ -11,6 +11,14 @@ class PatientPortalService {
       })
       .then((res) => res.data);
   }
+
+  getLabDocuments() {
+    return axios
+      .get(`${API_BASE}/client-portal/labs`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
 }
 
 export default new PatientPortalService();
