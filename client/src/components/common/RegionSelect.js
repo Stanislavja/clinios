@@ -41,7 +41,7 @@ function RegionMUISelectors(props) {
 
 RegionMUISelectors.defaultProps = {
   size: "medium",
-  outlined: "standard",
+  outlined: true,
   margin: "none",
 };
 
