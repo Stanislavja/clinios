@@ -7,7 +7,7 @@ import { CountryRegionData } from "react-country-region-selector";
 
 function CountryRegionMUISelectors(props) {
   const {
-    country, size, handleChange, outlined,
+    country, size, handleChange, outlined, margin,
   } = props;
   return (
     <TextField
@@ -19,6 +19,7 @@ function CountryRegionMUISelectors(props) {
       onChange={(e) => handleChange("country", e.target.value)}
       fullWidth
       variant={outlined ? "outlined" : "standard"}
+      margin={margin || "none"}
     >
       {CountryRegionData.map((option) => (
         <MenuItem key={option[0]} value={option}>
@@ -33,6 +34,7 @@ CountryRegionMUISelectors.defaultProps = {
   size: "medium",
   country: null,
   outlined: true,
+  margin: "none",
 };
 
 CountryRegionMUISelectors.propTypes = {
@@ -40,6 +42,7 @@ CountryRegionMUISelectors.propTypes = {
   country: PropTypes.string,
   handleChange: PropTypes.func.isRequired,
   outlined: PropTypes.bool,
+  margin: PropTypes.string,
 };
 
 export default CountryRegionMUISelectors;

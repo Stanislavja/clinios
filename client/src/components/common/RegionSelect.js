@@ -16,7 +16,7 @@ const getRegions = (country) => {
 
 function RegionMUISelectors(props) {
   const {
-    size, label, region, handleChange, outlined, country,
+    size, label, region, handleChange, outlined, country, margin,
   } = props;
   return (
     <TextField
@@ -28,6 +28,7 @@ function RegionMUISelectors(props) {
       onChange={(e) => handleChange("region", e.target.value)}
       fullWidth
       variant={outlined ? "outlined" : "standard"}
+      margin={margin || "none"}
     >
       {getRegions(country).map((option) => (
         <MenuItem key={option[0]} value={option[1]}>
@@ -41,6 +42,7 @@ function RegionMUISelectors(props) {
 RegionMUISelectors.defaultProps = {
   size: "medium",
   outlined: "standard",
+  margin: "none",
 };
 
 RegionMUISelectors.propTypes = {
@@ -50,6 +52,7 @@ RegionMUISelectors.propTypes = {
   region: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
   country: PropTypes.string.isRequired,
+  margin: PropTypes.string,
 };
 
 export default RegionMUISelectors;
