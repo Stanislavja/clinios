@@ -209,12 +209,12 @@ export const AddressForm = [
 
 export const Pharmacies = [
   {
-    name: "Pharmacy 1",
+    name: "Search",
     address: "100 Main St, Ottario Canada",
     phone: "030-123-456",
   },
   {
-    name: "Pharmacy 2",
+    name: "Search",
     address: "100 Main St, New York USA",
     phone: "030-123-456",
   },
