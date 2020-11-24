@@ -46,6 +46,15 @@ class PatientPortalService {
       })
       .then((res) => res.data);
   }
+
+  // Billings
+  getBillings() {
+    return axios
+      .get(`${API_BASE}/client-portal/billings`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
 }
 
 export default new PatientPortalService();
