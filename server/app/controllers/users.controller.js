@@ -43,7 +43,7 @@ const getUser = async (req, res) => {
       return res.status(status.notfound).send(errorMessage);
     }
     const user = dbResponse[0];
-    successMessage.data = {user}
+    successMessage.data = { user };
     return res.status(status.created).send(successMessage);
   } catch (error) {
     errorMessage.error = "Select not successful";

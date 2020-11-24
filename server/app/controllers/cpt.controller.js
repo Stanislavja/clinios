@@ -105,7 +105,9 @@ const updateClientCpt = async (req, res) => {
   let $sql;
   try {
     $sql = `insert into client_cpt (client_id, user_id, cpt_id, favorite, billable, fee, notes, created, created_user_id, updated, updated_user_id )
-        values (${req.client_id}, ${req.user_id}, '${cptId}', ${favorite}, ${billable}, ${
+        values (${req.client_id}, ${
+      req.user_id
+    }, '${cptId}', ${favorite}, ${billable}, ${
       fee > 0 ? fee : 0
     } /*TODO if fee is "" then set fee to null*/, '${notes}', now(), ${
       req.user_id
