@@ -91,7 +91,7 @@ const createAppointment = async (req, res) => {
 
     successMessage.data = insertResponse;
     successMessage.message = "Insert successful";
-    return res.status(status.created).send(successMessage);
+    return res.status(status.created).send(successMessage)
   } catch (err) {
     console.log("err", err);
     errorMessage.error = "Insert not successful";
