@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import {
   makeStyles, Grid, TextField, Typography, MenuItem, Button,
 } from "@material-ui/core";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 
-import { timings, appointments } from "../../../static/patient-portal/appointments";
+import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
+import { timings } from "../../../static/patient-portal/appointments";
 import Calendar from "./Calendar";
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,6 +51,9 @@ const useStyles = makeStyles((theme) => ({
 
 const Appointments = () => {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
+  const [practitioners, setPractitioners] = useState([]);
+  const [appointmentTypes, setAppointmentTypes] = useState([]);
   const [showCalendar, setShowCalendar] = useState(false);
   const [userSelection, setUserSelection] = useState({
     practitioner: "",
@@ -58,16 +62,69 @@ const Appointments = () => {
     time: null,
   });
 
-  const onFormSubmit = (e) => {
-    e.preventDefault();
-    setShowCalendar(true);
-  };
+  const fetchPractitioners = useCallback(() => {
+    PatientPortalService.getPractitioners().then((res) => {
+      setPractitioners(res.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    fetchPractitioners();
+  }, [fetchPractitioners]);
 
   const calendarSelectionHandler = (type, value) => {
     setUserSelection({
       ...userSelection,
       [type]: value,
     });
+    if (type === "practitioner") {
+      const reqBody = {
+        data: {
+          practitioner_id: value,
+        },
+      };
+      PatientPortalService.getAppointmentTypesByPractitionerId(reqBody).then((res) => {
+        setAppointmentTypes(res.data);
+      });
+    }
+  };
+
+  const onFormSubmit = (e) => {
+    e.preventDefault();
+    setShowCalendar(true);
+  };
+
+  const bookAppointmentHandler = () => {
+    const selectedPractitioner = practitioners.filter((x) => x.user_id === userSelection.practitioner);
+    if (!!userSelection.time && userSelection.date) {
+      const reqBody = {
+        data: {
+          provider: {
+            ...selectedPractitioner[0],
+          },
+          ApptStatus: "R",
+          start_dt: `${moment(userSelection.date).format("YYYY-MM-DD")} ${userSelection.time.split("am")[0]}`,
+          end_dt: `${moment(userSelection.date).format("YYYY-MM-DD")} ${userSelection.time.split("am")[0]}`,
+        },
+      };
+      PatientPortalService.bookAppointment(reqBody).then((res) => {
+        setShowCalendar(false);
+        setUserSelection({
+          ...userSelection,
+          practitioner: "",
+          appointmentType: "",
+          date: null,
+          time: null,
+        });
+        enqueueSnackbar(res.message, {
+          variant: "success",
+        });
+      });
+    } else {
+      enqueueSnackbar("Date & Time selection is required", {
+        variant: "error",
+      });
+    }
   };
 
   return (
@@ -95,9 +152,9 @@ const Appointments = () => {
                 className={classes.inputFix}
                 onChange={(e) => calendarSelectionHandler("practitioner", e.target.value)}
               >
-                {appointments.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
+                {practitioners.map((option) => (
+                  <MenuItem key={option.user_id} value={option.user_id}>
+                    {option.name}
                   </MenuItem>
                 ))}
               </TextField>
@@ -112,9 +169,9 @@ const Appointments = () => {
                 className={classes.inputFix}
                 onChange={(e) => calendarSelectionHandler("appointmentType", e.target.value)}
               >
-                {appointments.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
+                {appointmentTypes.map((option) => (
+                  <MenuItem key={option.length} value={option.length}>
+                    {option.appointment_type}
                   </MenuItem>
                 ))}
               </TextField>
@@ -198,6 +255,7 @@ const Appointments = () => {
                   color="primary"
                   variant="contained"
                   className={classes.submitBtn}
+                  onClick={() => bookAppointmentHandler()}
                 >
                   Book Appointment
                 </Button>
