@@ -5,20 +5,19 @@ const {
   status,
 } = require("../../helpers/status");
 
-const getPrescription = async (req, res) => {
+const getLabRequitions = async (req, res) => {
   const db = makeDb(configuration, res);
 
   let $sql;
   try {
-    $sql = `select pd.created, d.name
-    , concat(ds.strength, ds.unit) strength
-    , case when ds.form='T' then 'Tablets' end form
-    from patient_drug pd
-    join drug d on d.id=pd.drug_id
-    join drug_strength ds on ds.id=pd.drug_strength_id
-    where pd.patient_id=${req.user_id}
-    order by pd.created desc
-    limit 100`;
+    $sql = `select e.id, e.dt, left (group_concat(c.name order by c.name), 100) lab
+    from encounter e
+    join patient_cpt pc on pc.encounter_id=e.id
+    join cpt c on c.id=pc.cpt_id
+    where pc.patient_id=${req.user_id}
+    group by e.id
+    order by e.id desc
+    limit 50`;
 
     const dbResponse = await db.query($sql);
 
@@ -29,7 +28,6 @@ const getPrescription = async (req, res) => {
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
-    console.log("error:", err);
     errorMessage.error = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
@@ -37,8 +35,8 @@ const getPrescription = async (req, res) => {
   }
 };
 
-const Prescription = {
-  getPrescription,
+const labRequitions = {
+  getLabRequitions,
 };
 
-module.exports = Prescription;
+module.exports = labRequitions;
