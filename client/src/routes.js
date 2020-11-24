@@ -405,6 +405,14 @@ const routes = [
     path: "/myself",
     component: lazy(() => import("./screens/Client/Myself")),
   },
+  // login_corp
+  {
+    exact: true,
+    guard: GuestGuard,
+    layout: MainLayout,
+    path: "/login_corp",
+    component: lazy(() => import("./screens/corporate-portal/Auth/Login")),
+  },
   {
     path: "*",
     layout: MainLayout,
