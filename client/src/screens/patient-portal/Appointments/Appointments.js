@@ -108,14 +108,16 @@ const Appointments = () => {
         },
       };
       PatientPortalService.bookAppointment(reqBody).then((res) => {
-        setShowCalendar(false);
-        setUserSelection({
-          ...userSelection,
-          practitioner: "",
-          appointmentType: "",
-          date: null,
-          time: null,
-        });
+        setTimeout(() => {
+          setShowCalendar(false);
+          setUserSelection({
+            ...userSelection,
+            practitioner: "",
+            appointmentType: "",
+            date: null,
+            time: null,
+          });
+        }, 2000);
         enqueueSnackbar(res.message, {
           variant: "success",
         });
