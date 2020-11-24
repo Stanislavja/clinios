@@ -10,4 +10,16 @@ router.get(
   encountersController.getAllPractitioner
 );
 
+router.post(
+  "/client-portal/appointment-types",
+  [authJwt.verifyToken],
+  encountersController.getAppointmentTypes
+);
+
+router.post(
+  "/client-portal/appointment",
+  [authJwt.verifyToken],
+  encountersController.createAppointment
+);
+
 module.exports = router;

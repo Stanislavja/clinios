@@ -96,7 +96,7 @@ const update = async (req, res) => {
     successMessage.message = "Update successful";
     return res.status(status.success).send(successMessage);
   } catch (error) {
-    console.error(error)
+    console.error(error);
     errorMessage.error = "Update not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
