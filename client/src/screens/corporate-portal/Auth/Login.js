@@ -62,10 +62,9 @@ const useStyles = makeStyles((theme) => ({
 const PatientLogin = () => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  const { patientLogin } = useAuth();
+  const { corporateLogin } = useAuth();
   const { clientCode } = useParams();
   const [email, setEmail] = React.useState("");
-  const [clientId] = React.useState(null);
   const [password, setPassword] = React.useState("");
   const [errors, setErrors] = React.useState([]);
 
@@ -76,7 +75,7 @@ const PatientLogin = () => {
     }
 
     try {
-      await patientLogin(clientId, email.trim(), password.trim()); // Call AuthProvider login
+      await corporateLogin(email.trim(), password.trim()); // Call AuthProvider login
       enqueueSnackbar("Successfully logged in!", {
         variant: "success",
       });

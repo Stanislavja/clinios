@@ -76,6 +76,9 @@ app.use(baseAPIPath, require("./app/routes/patient/lab_requisitions.routes"));
 
 app.use(baseAPIPath, require("./app/routes/myself.routes"));
 
+//Corporate Portal
+app.use(baseAPIPath, require("./app/routes/corporate/login.routes"));
+
 app.listen(config.port).on("listening", () => {
   console.log(`API is live on ${config.port}`);
 });
