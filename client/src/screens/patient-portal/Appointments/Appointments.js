@@ -170,6 +170,7 @@ const Appointments = () => {
                 value={userSelection.appointmentType}
                 className={classes.inputFix}
                 onChange={(e) => calendarSelectionHandler("appointmentType", e.target.value)}
+                disabled={!appointmentTypes.length}
               >
                 {appointmentTypes.map((option) => (
                   <MenuItem key={option.length} value={option.length}>
