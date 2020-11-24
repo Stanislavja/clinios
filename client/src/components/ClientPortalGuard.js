@@ -5,14 +5,15 @@ import { Redirect } from "react-router-dom";
 
 import useAuth from "../hooks/useAuth";
 
-const GuestGuard = ({ children }) => {
+const ClientPortalGuard = ({ children }) => {
   const { isAuthenticated, user } = useAuth();
 
-  if (isAuthenticated && user.role !== "CLIENT") {
-    return <Redirect to="/dashboard" />;
+  if (!isAuthenticated) {
+    return <Redirect to="/login_client" />;
   }
-  if (isAuthenticated && user.role === "CLIENT") {
-    return <Redirect to="/patient" />;
+
+  if (user.role !== "CLIENT") {
+    return <Redirect to="/protected-area" />;
   }
 
   return (
@@ -22,8 +23,8 @@ const GuestGuard = ({ children }) => {
   );
 };
 
-GuestGuard.propTypes = {
+ClientPortalGuard.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export default GuestGuard;
+export default ClientPortalGuard;

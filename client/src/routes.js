@@ -12,6 +12,7 @@ import {
 
 import AdminGuard from "./components/AdminGuard";
 import AuthGuard from "./components/AuthGuard";
+import ClientPortalGuard from "./components/ClientPortalGuard";
 import GuestGuard from "./components/GuestGuard";
 import LoadingScreen from "./components/LoadingScreen";
 import DashboardLayout from "./layouts/Dashboard";
@@ -315,7 +316,7 @@ const routes = [
   },
   {
     path: "/patient",
-    guard: AuthGuard,
+    guard: ClientPortalGuard,
     layout: WithLeftSidebar,
     routes: [
       {

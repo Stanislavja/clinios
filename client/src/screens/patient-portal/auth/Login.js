@@ -117,35 +117,6 @@ const PatientLogin = () => {
         },
       ]);
     }
-
-    /*
-    AuthService.login({
-      client_id: clientId,
-      email: email.trim(),
-      password: password.trim(),
-    }).then(
-      (res) => {
-        setErrors([]);
-        dispatch(loginComplete(res.data));
-        login(); // Call AuthProvider login
-      },
-      (error) => {
-        if (!error.response) {
-          return;
-        }
-        const { data, status } = error.response;
-
-        if (status === 400) {
-          setErrors([
-            {
-              msg: data.message,
-            },
-          ]);
-        } else {
-          setErrors([]);
-        }
-      },
-    ); */
   };
 
   useEffect(() => {
