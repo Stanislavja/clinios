@@ -55,6 +55,15 @@ class PatientPortalService {
       })
       .then((res) => res.data);
   }
+
+  // Payment Methods
+  getPaymentMethods() {
+    return axios
+      .get(`${API_BASE}/client-portal/payment-methods`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
 }
 
 export default new PatientPortalService();
