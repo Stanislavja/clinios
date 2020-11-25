@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const moment = require("moment");
 const config = require("../../../config");
 const { configuration, makeDb } = require("../../db/db.js");
 const {
@@ -31,10 +30,7 @@ exports.signin = async (req, res) => {
     return res.status(status.notfound).send(errorMessage);
   }
 
-  const isPasswordValid = bcrypt.compareSync(
-    req.body.password,
-    user.password
-  );
+  const isPasswordValid = bcrypt.compareSync(req.body.password, user.password);
 
   if (!isPasswordValid) {
     errorMessage.message = "Wrong password!";
@@ -42,13 +38,9 @@ exports.signin = async (req, res) => {
     return res.status(status.unauthorized).send(errorMessage);
   }
 
-  const token = jwt.sign(
-    { id: user.id },
-    config.authSecret,
-    {
-      expiresIn: 86400, // 24 hours
-    }
-  );
+  const token = jwt.sign({ id: user.id }, config.authSecret, {
+    expiresIn: 86400, // 24 hours
+  });
 
   const resData = {};
   resData.accessToken = token;
