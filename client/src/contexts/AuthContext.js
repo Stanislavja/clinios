@@ -20,6 +20,7 @@ const initialAuthState = {
   isInitialised: false,
   user: null,
   lastVisitedPatient: null,
+  login_url: null,
 };
 
 const isValidToken = (accessToken) => {
@@ -29,7 +30,6 @@ const isValidToken = (accessToken) => {
 
   const decoded = jwtDecode(accessToken);
   const currentTime = Date.now() / 1000;
-
   return decoded.exp > currentTime;
 };
 
@@ -47,7 +47,6 @@ const reducer = (state, action) => {
   switch (action.type) {
     case "INITIALISE": {
       const { isAuthenticated, user, lastVisitedPatient } = action.payload;
-
       return {
         ...state,
         isAuthenticated,
@@ -58,19 +57,18 @@ const reducer = (state, action) => {
     }
     case "UPDATE_LAST_VISITED_PATIENT": {
       const { lastVisitedPatient } = action.payload;
-
       return {
         ...state,
         lastVisitedPatient,
       };
     }
     case "LOGIN": {
-      const { user } = action.payload;
-
+      const { user, login_url } = action.payload;
       return {
         ...state,
         isAuthenticated: true,
         user,
+        login_url,
       };
     }
     case "LOGOUT": {
@@ -119,6 +117,7 @@ export const AuthProvider = ({ children }) => {
       type: "LOGIN",
       payload: {
         user,
+        login_url: `/login/${user.code}`,
       },
     });
   };
@@ -131,6 +130,7 @@ export const AuthProvider = ({ children }) => {
       type: "LOGIN",
       payload: {
         user,
+        login_url: "/login_corp",
       },
     });
   };

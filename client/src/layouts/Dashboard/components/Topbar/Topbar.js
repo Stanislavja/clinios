@@ -315,7 +315,9 @@ const Topbar = (props) => {
 
   const classes = useStyles();
   const history = useHistory();
-  const { lastVisitedPatient, user, logout } = useAuth();
+  const {
+    lastVisitedPatient, user, login_url, logout,
+  } = useAuth();
   const [open, setOpen] = React.useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
@@ -359,7 +361,7 @@ const Topbar = (props) => {
   const handleLogout = async () => {
     try {
       await logout();
-      history.push("/login_client");
+      history.push(login_url || "/login_client");
     } catch (err) {
       console.error(err);
     }

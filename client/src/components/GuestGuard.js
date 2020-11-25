@@ -8,7 +8,7 @@ import useAuth from "../hooks/useAuth";
 const GuestGuard = ({ children }) => {
   const { isAuthenticated, user } = useAuth();
 
-  if (isAuthenticated && user.role) {
+  if (isAuthenticated) {
     switch (user.role) {
       case "CLIENT":
         return <Redirect to="/patient" />;

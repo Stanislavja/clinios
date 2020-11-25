@@ -430,11 +430,11 @@ const routes = [
       },
       {
         path: "/corporate/users",
-        component: lazy(() => import("./screens/corporate-portal/Clients")),
+        component: lazy(() => import("./screens/corporate-portal/Users")),
       },
       {
         path: "/corporate/myself",
-        component: lazy(() => import("./screens/corporate-portal/Clients")),
+        component: lazy(() => import("./screens/corporate-portal/Myself")),
       },
     ],
   },

@@ -19,8 +19,8 @@ exports.signin = async (req, res) => {
 
   const { client_id, email } = req.body;
   const rows = await db.query(
-    `select p.id, p.client_id, p.firstname, p.lastname, p.password, p.status, roles.role from patient p JOIN roles
-    ON p.role_id=roles.id where p.client_id=${client_id} and p.email='${email}'`
+    `select p.id, p.client_id, p.firstname, p.lastname, p.password, p.status, roles.role, client.code from patient p JOIN roles
+    ON p.role_id=roles.id JOIN client on p.client_id=client.id where p.client_id=${client_id} and p.email='${email}'`
   );
 
   const patient = rows[0];
