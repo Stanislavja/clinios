@@ -12,6 +12,7 @@ import {
 
 import AdminGuard from "./components/AdminGuard";
 import AuthGuard from "./components/AuthGuard";
+import ClientPortalGuard from "./components/ClientPortalGuard";
 import GuestGuard from "./components/GuestGuard";
 import LoadingScreen from "./components/LoadingScreen";
 import DashboardLayout from "./layouts/Dashboard";
@@ -315,7 +316,7 @@ const routes = [
   },
   {
     path: "/patient",
-    guard: AuthGuard,
+    guard: ClientPortalGuard,
     layout: WithLeftSidebar,
     routes: [
       {
@@ -404,6 +405,38 @@ const routes = [
     layout: DashboardLayout,
     path: "/myself",
     component: lazy(() => import("./screens/Client/Myself")),
+  },
+  // login_corp
+  {
+    exact: true,
+    guard: GuestGuard,
+    layout: MainLayout,
+    path: "/login_corp",
+    component: lazy(() => import("./screens/corporate-portal/Auth/Login")),
+  },
+  {
+    path: "/corporate",
+    guard: AuthGuard,
+    layout: DashboardLayout,
+    routes: [
+      {
+        exact: true,
+        path: "/corporate",
+        component: lazy(() => import("./screens/corporate-portal/Home")),
+      },
+      {
+        path: "/corporate/clients",
+        component: lazy(() => import("./screens/corporate-portal/Clients")),
+      },
+      {
+        path: "/corporate/users",
+        component: lazy(() => import("./screens/corporate-portal/Users")),
+      },
+      {
+        path: "/corporate/myself",
+        component: lazy(() => import("./screens/corporate-portal/Myself")),
+      },
+    ],
   },
   {
     path: "*",
