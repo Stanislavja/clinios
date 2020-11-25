@@ -278,6 +278,36 @@ const pages = [
   },
 ];
 
+
+const corporate_pages = [
+  {
+    id: 1,
+    title: "Home",
+    href: "/coporate",
+  },
+  {
+    id: 2,
+    title: "Clients",
+    href: "/coporate/clients",
+  },
+  {
+    id: 3,
+    title: "Users",
+    href: "/coporate/users",
+  },
+  {
+    id: 4,
+    title: "Myself",
+    href: "/coporate/myself",
+  },
+  {
+    id: 6,
+    title: "Logout",
+    href: "/",
+    logout: true,
+  },
+];
+
 const Topbar = (props) => {
   const {
     className, onSidebarOpen, ...rest
@@ -285,12 +315,13 @@ const Topbar = (props) => {
 
   const classes = useStyles();
   const history = useHistory();
-  const { lastVisitedPatient, logout } = useAuth();
+  const { lastVisitedPatient, user, logout } = useAuth();
   const [open, setOpen] = React.useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
   const [nothingFound, setNothingFound] = useState(false);
 
+  const navPages = (user.role === "CORPORATE") ? corporate_pages : pages;
   const handleClose = () => {
     setOpen(false);
     setSearchTerm("");
@@ -347,7 +378,7 @@ const Topbar = (props) => {
           <Hidden mdDown>
             <div className={classes.navs}>
               {
-                pages.map((page) => (
+                navPages.map((page) => (
                   page.subMenus
                     ? (
                       <MenuWithDropDowns

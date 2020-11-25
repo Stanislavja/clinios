@@ -8,11 +8,15 @@ import useAuth from "../hooks/useAuth";
 const GuestGuard = ({ children }) => {
   const { isAuthenticated, user } = useAuth();
 
-  if (isAuthenticated && user.role !== "CLIENT") {
-    return <Redirect to="/dashboard" />;
-  }
-  if (isAuthenticated && user.role === "CLIENT") {
-    return <Redirect to="/patient" />;
+  if (isAuthenticated && user.role) {
+    switch (user.role) {
+      case "CLIENT":
+        return <Redirect to="/patient" />;
+      case "CORPORATE":
+        return <Redirect to="/corporate" />;
+      default:
+        return <Redirect to="/dashboard" />;
+    }
   }
 
   return (

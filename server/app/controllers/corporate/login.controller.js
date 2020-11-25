@@ -20,7 +20,8 @@ exports.signin = async (req, res) => {
 
   const { email } = req.body;
   const rows = await db.query(
-    `select id, firstname, lastname, password from user where email='${email}' and client_id is null`
+    `select user.id, user.firstname, user.lastname, user.password, roles.role from user JOIN roles
+    ON user.role_id=roles.id  where email='${email}' and client_id is null`
   );
 
   const user = rows[0];
