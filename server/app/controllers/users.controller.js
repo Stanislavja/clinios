@@ -35,8 +35,9 @@ const getAllUsers = async (req, res) => {
 const getUser = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
-    const dbResponse = await db.query(`SELECT id, client_id, firstname, lastname, email, admin, sign_dt,
-     email_confirm_dt FROM user WHERE id=${req.user_id}`);
+    const dbResponse = await db.query(`SELECT id, client_id, firstname, lastname, email, admin, roles.role, sign_dt,
+     email_confirm_dt FROM user JOIN roles
+     ON user.role_id=roles.id WHERE id=${req.user_id}`);
 
     if (!dbResponse) {
       errorMessage.error = "None found";

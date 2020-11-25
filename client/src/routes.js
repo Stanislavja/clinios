@@ -415,6 +415,30 @@ const routes = [
     component: lazy(() => import("./screens/corporate-portal/Auth/Login")),
   },
   {
+    path: "/corporate",
+    guard: AuthGuard,
+    layout: DashboardLayout,
+    routes: [
+      {
+        exact: true,
+        path: "/corporate",
+        component: lazy(() => import("./screens/corporate-portal/Home")),
+      },
+      {
+        path: "/corporate/clients",
+        component: lazy(() => import("./screens/corporate-portal/Clients")),
+      },
+      {
+        path: "/corporate/users",
+        component: lazy(() => import("./screens/corporate-portal/Clients")),
+      },
+      {
+        path: "/corporate/myself",
+        component: lazy(() => import("./screens/corporate-portal/Clients")),
+      },
+    ],
+  },
+  {
     path: "*",
     layout: MainLayout,
     routes: [

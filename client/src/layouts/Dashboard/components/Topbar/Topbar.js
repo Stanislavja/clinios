@@ -283,22 +283,22 @@ const corporate_pages = [
   {
     id: 1,
     title: "Home",
-    href: "/coporate",
+    href: "/corporate",
   },
   {
     id: 2,
     title: "Clients",
-    href: "/coporate/clients",
+    href: "/corporate/clients",
   },
   {
     id: 3,
     title: "Users",
-    href: "/coporate/users",
+    href: "/corporate/users",
   },
   {
     id: 4,
     title: "Myself",
-    href: "/coporate/myself",
+    href: "/corporate/myself",
   },
   {
     id: 6,
@@ -374,7 +374,6 @@ const Topbar = (props) => {
               Clinios
             </RouterLink>
           </Typography>
-
           <Hidden mdDown>
             <div className={classes.navs}>
               {
