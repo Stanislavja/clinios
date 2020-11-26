@@ -16,7 +16,6 @@ import { useParams } from "react-router-dom";
 
 import Error from "../../../components/common/Error";
 import useAuth from "../../../hooks/useAuth";
-import AuthService from "../../../services/patient_portal/auth.service";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -63,37 +62,11 @@ const useStyles = makeStyles((theme) => ({
 const PatientLogin = () => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  const { patientLogin } = useAuth();
+  const { corporateLogin } = useAuth();
   const { clientCode } = useParams();
   const [email, setEmail] = React.useState("");
-  const [clientId, setClientId] = React.useState(null);
   const [password, setPassword] = React.useState("");
   const [errors, setErrors] = React.useState([]);
-
-  useEffect(() => {
-    AuthService.getClientCode(clientCode).then(
-      (res) => {
-        const { client_id } = res.data[0];
-        setClientId(client_id);
-      },
-      (error) => {
-        if (!error.response) {
-          return;
-        }
-        const { data, status } = error.response;
-
-        if (status === 400) {
-          setErrors([
-            {
-              msg: data.message,
-            },
-          ]);
-        } else {
-          setErrors([]);
-        }
-      },
-    );
-  }, [clientCode]);
 
   const onFormSubmit = async () => {
     if (email !== "") {
@@ -102,7 +75,7 @@ const PatientLogin = () => {
     }
 
     try {
-      await patientLogin(clientId, email.trim(), password.trim()); // Call AuthProvider login
+      await corporateLogin(email.trim(), password.trim()); // Call AuthProvider login
       enqueueSnackbar("Successfully logged in!", {
         variant: "success",
       });
@@ -129,12 +102,6 @@ const PatientLogin = () => {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.Logo}>
-        <img
-          src={`${process.env.REACT_APP_API_URL}static/client/c${clientId}_logo.png`}
-          alt="Client logo"
-        />
-      </div>
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon className={classes.lockIcon} />
@@ -144,7 +111,7 @@ const PatientLogin = () => {
           variant="h2"
           className={classes.pageTitle}
         >
-          Patient Sign in
+          Corporate Sign in
         </Typography>
 
         <Error errors={errors} />
@@ -196,11 +163,7 @@ const PatientLogin = () => {
           </Button>
         </form>
         <Grid container className={classes.meta}>
-          <Grid item xs={6}>
-            <Link href={`/signup/${clientCode}`} variant="body2">
-              Don&apos;t have an account? Register.
-            </Link>
-          </Grid>
+          <Grid item xs={6} />
           <Grid item xs={6} className={classes.forgotPass}>
             <Link href={`/forgot/${clientCode}`} variant="body2">
               Forgot your password? Reset.

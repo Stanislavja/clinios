@@ -5,14 +5,14 @@ import { Redirect } from "react-router-dom";
 
 import useAuth from "../hooks/useAuth";
 
-const AdminGuard = ({ children }) => {
+const ClientPortalGuard = ({ children }) => {
   const { isAuthenticated, user, login_url } = useAuth();
 
   if (!isAuthenticated) {
     return <Redirect to={login_url || "/login_client"} />;
   }
 
-  if (!user.admin) {
+  if (user.role !== "CLIENT") {
     return <Redirect to="/protected-area" />;
   }
 
@@ -23,8 +23,8 @@ const AdminGuard = ({ children }) => {
   );
 };
 
-AdminGuard.propTypes = {
+ClientPortalGuard.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export default AdminGuard;
+export default ClientPortalGuard;

@@ -54,14 +54,14 @@ const SidebarNav = (props) => {
   const {
     pages, className, ...rest
   } = props;
-  const { logout } = useAuth();
+  const { login_url, logout } = useAuth();
   const classes = useStyles();
   const history = useHistory();
 
   const handleLogout = async () => {
     try {
       await logout();
-      history.push("/login_client");
+      history.push(login_url || "/login_client");
     } catch (err) {
       console.error(err);
     }

@@ -6,10 +6,10 @@ import { Redirect } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
 const AuthGuard = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, login_url } = useAuth();
 
   if (!isAuthenticated) {
-    return <Redirect to="/login_client" />;
+    return <Redirect to={login_url || "/login_client"} />;
   }
 
   return (

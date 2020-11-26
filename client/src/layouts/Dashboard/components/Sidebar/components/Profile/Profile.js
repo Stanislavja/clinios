@@ -45,12 +45,12 @@ const Profile = (props) => {
 
   const classes = useStyles();
   const history = useHistory();
-  const { user, logout } = useAuth();
+  const { user, login_url, logout } = useAuth();
 
   const handleLogout = async () => {
     try {
       await logout();
-      history.push("/login_client");
+      history.push(login_url || "/login_client");
     } catch (err) {
       console.error(err);
     }

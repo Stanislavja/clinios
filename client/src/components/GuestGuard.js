@@ -6,10 +6,17 @@ import { Redirect } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
 const GuestGuard = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   if (isAuthenticated) {
-    return <Redirect to="/dashboard" />;
+    switch (user.role) {
+      case "CLIENT":
+        return <Redirect to="/patient" />;
+      case "CORPORATE":
+        return <Redirect to="/corporate" />;
+      default:
+        return <Redirect to="/dashboard" />;
+    }
   }
 
   return (
