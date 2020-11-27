@@ -79,7 +79,7 @@ exports.verifyConfirmation = async (req, res) => {
       // update email_confirm_dt if it's null and remove token
       const now = moment().format("YYYY-MM-DD HH:mm:ss");
       await db.query(
-        `UPDATE user SET email_confirm_dt='${now}', token=null, updated= now(), updated_user_id='${req.user_id}' WHERE id = ?`,
+        `UPDATE user SET email_confirm_dt='${now}', token=null, updated= now() WHERE id = ?`,
         [req.params.userId]
       );
 
@@ -132,7 +132,7 @@ exports.sendSignupConfirmationEmail = async (req, res) => {
 
   // update token field on that user table
   await db.query(
-    `UPDATE user SET token='${accesstToken}', updated= now(), updated_user_id='${req.user_id}' WHERE id =${user.id}`
+    `UPDATE user SET token='${accesstToken}', updated= now() WHERE id =${user.id}`
   );
 
   // send mail with defined transport object
@@ -181,7 +181,7 @@ exports.resendSignupConfirmationEmail = async (req, res) => {
     accesstToken = usePasswordHashToMakeToken(user);
     // update token field on that user table
     await db.query(
-      `UPDATE user SET token='${accesstToken}', updated= now(), updated_user_id='${req.user_id}' WHERE id =${user.id}`
+      `UPDATE user SET token='${accesstToken}', updated= now() WHERE id =${user.id}`
     );
   }
   const url = getEmailVerificationURL(user, accesstToken);
