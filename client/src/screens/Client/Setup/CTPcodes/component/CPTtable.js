@@ -15,13 +15,12 @@ import {
 import EditIcon from "@material-ui/icons/Edit";
 import Alert from "@material-ui/lab/Alert";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 import Proptypes from "prop-types";
 import NumberFormat from "react-number-format";
-import { useDispatch } from "react-redux";
 
 import useAuth from "../../../../../hooks/useAuth";
 import CPTCodesService from "../../../../../services/cpt.service";
-import { setSuccess } from "../../../../../store/common/actions";
 import CptGroupMembersModal from "./modal/CptGroupMembersModal";
 import EditCptCodeModal from "./modal/EditCptCodeModal";
 
@@ -63,7 +62,7 @@ const StyledTableRow = withStyles((theme) => ({
 
 const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuth();
   const [errors, setErrors] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -140,7 +139,9 @@ const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
     CPTCodesService.updateClientCpt(cpt_id, user.id, payload).then(
       (response) => {
         setTimeout(() => {
-          dispatch(setSuccess(`${response.data.message}`));
+          enqueueSnackbar(`${response.data.message}`, {
+            variant: "success",
+          });
         }, 300);
       },
       (error) => {

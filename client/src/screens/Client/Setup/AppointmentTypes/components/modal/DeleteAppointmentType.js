@@ -7,11 +7,10 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
 
 import AppointmentService from "../../../../../../services/appointmentType.service";
-import { setSuccess } from "../../../../../../store/common/actions";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -32,10 +31,12 @@ const useStyles = makeStyles((theme) => ({
 
 const DeleteAppointment = ({ isOpen, onClose, id }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const handleDeleteAppointment = () => {
     AppointmentService.deleteById(id).then((response) => {
-      dispatch(setSuccess(`${response.data.message}`));
+      enqueueSnackbar(`${response.data.message}`, {
+        variant: "success",
+      });
       onClose();
     });
   };

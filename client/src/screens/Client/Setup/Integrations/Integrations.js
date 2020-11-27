@@ -6,10 +6,9 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
-import { useDispatch } from "react-redux";
+import { useSnackbar } from "notistack";
 
 import IntegrationsService from "../../../../services/integrations.service";
-import { setSuccess } from "../../../../store/common/actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Integrations() {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const [labcorpKey, setLabcorpKey] = useState("");
   const [questKey, setQuestKey] = useState("");
   const [doctorsDataId, setDoctorsDataId] = useState("");
@@ -76,7 +75,9 @@ export default function Integrations() {
       },
     };
     IntegrationsService.update(payload).then((res) => {
-      dispatch(setSuccess(`${res.data.message}`));
+      enqueueSnackbar(`${res.data.message}`, {
+        variant: "success",
+      });
     });
   };
 

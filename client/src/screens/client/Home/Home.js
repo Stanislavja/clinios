@@ -6,12 +6,11 @@ import FormControl from "@material-ui/core/FormControl";
 import Grid from "@material-ui/core/Grid";
 import Switch from "@material-ui/core/Switch";
 import Typography from "@material-ui/core/Typography";
-import { useDispatch } from "react-redux";
+import { useSnackbar } from "notistack";
 
 import Appointments from "../../../services/appointments.service";
 import DashboardHome from "../../../services/DashboardHome.service";
 import Messages from "../../../services/message-to-patient.service";
-import { setSuccess } from "../../../store/common/actions";
 import { statusToColorCode } from "../../../utils/helpers";
 import {
   AppointmentRequests,
@@ -56,7 +55,7 @@ const GreenSwitch = withStyles({
 
 export default function Home() {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const [errors, setErrors] = useState([]);
   const [selectedProvider, setSelectedProvider] = useState({});
   const [providerDetails, setProviderDetails] = useState({});
@@ -146,7 +145,9 @@ export default function Home() {
         setIsLoading(false);
         fetchEventsByProvider(selectedProvider);
         fetchPatientApptRequests(selectedProvider.id);
-        dispatch(setSuccess(`${response.data.message}`));
+        enqueueSnackbar(`${response.data.message}`, {
+          variant: "success",
+        });
         setIsOpen(false);
       },
       (error) => {
@@ -171,7 +172,9 @@ export default function Home() {
         setIsLoading(false);
         fetchEventsByProvider(selectedProvider);
         fetchPatientApptRequests(selectedProvider.id);
-        dispatch(setSuccess(`${response.data.message}`));
+        enqueueSnackbar(`${response.data.message}`, {
+          variant: "success",
+        });
         setIsOpen(false);
       },
       (error) => {
@@ -186,7 +189,9 @@ export default function Home() {
       (response) => {
         setIsLoading(false);
         fetchEventsByProvider(selectedProvider);
-        dispatch(setSuccess(`${response.data.message}`));
+        enqueueSnackbar(`${response.data.message}`, {
+          variant: "success",
+        });
         setIsOpen(false);
       },
       (error) => {

@@ -10,7 +10,6 @@ import {
 import { sendVerificationEmail } from "../email/actions";
 import {
   SIGNUP_COMPLETED,
-  CLOSE_SNACKBAR,
   LOGOUT,
   LOGIN_ERROR,
   LOGIN_COMPLETED,
@@ -31,10 +30,6 @@ export const loginComplete = (data) => ({
 const loginError = (err) => ({
   type: LOGIN_ERROR,
   err,
-});
-
-export const closeSnackbar = () => ({
-  type: CLOSE_SNACKBAR,
 });
 
 export const signupComplete = (data) => ({

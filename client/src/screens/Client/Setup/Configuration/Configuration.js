@@ -10,13 +10,12 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import { KeyboardTimePicker } from "@material-ui/pickers";
 import moment from "moment";
-import { useDispatch } from "react-redux";
+import { useSnackbar } from "notistack";
 
 import Logo from "../../../../assets/img/Logo.png";
 import Error from "../../../../components/common/Error";
 import AuthService from "../../../../services/auth.service";
 import ConfigurationService from "../../../../services/configuration.service";
-import { setSuccess } from "../../../../store/common/actions";
 import StateData from "./data/state";
 import ConfigModal from "./modal";
 
@@ -80,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Configuration() {
-  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const currentUser = AuthService.getCurrentUser() || {};
   const classes = useStyles();
   const [isSubmitting, setSubmitting] = useState(false);
@@ -192,7 +191,9 @@ export default function Configuration() {
         _params,
       );
       setSubmitting(false);
-      dispatch(setSuccess(`${response.data.message}`));
+      enqueueSnackbar(`${response.data.message}`, {
+        variant: "success",
+      });
     } catch (e) {
       setSubmitting(false);
     }

@@ -18,7 +18,6 @@ import PropTypes from "prop-types";
 
 import usePatientContext from "../../../../hooks/usePatientContext";
 import PatientService from "../../../../services/patient.service";
-import { setError, setSuccess } from "../../../../store/common/actions";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -75,7 +74,7 @@ const DiagnosesDetails = (props) => {
   const classes = useStyles();
   const [activeState, setActiveState] = useState({});
 
-  const { state, dispatch } = usePatientContext();
+  const { state } = usePatientContext();
   const { data } = state.diagnoses;
   const { patientId } = state;
 
@@ -118,7 +117,9 @@ const DiagnosesDetails = (props) => {
     };
     PatientService.updateDiagnoses(patientId, icdId, reqBody)
       .then((response) => {
-        dispatch(setSuccess(`${response.data.message}`));
+        enqueueSnackbar(`${response.data.message}`, {
+          variant: "success",
+        });
         reloadData();
       })
       .catch((error) => {
@@ -127,13 +128,9 @@ const DiagnosesDetails = (props) => {
           && error.response.data.message)
           || error.message
           || error.toString();
-        const severity = "error";
-        dispatch(
-          setError({
-            severity,
-            message: resMessage,
-          }),
-        );
+        enqueueSnackbar(resMessage, {
+          variant: "error",
+        });
       });
   };
 

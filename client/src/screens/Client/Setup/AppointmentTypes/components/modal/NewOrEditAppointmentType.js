@@ -14,12 +14,11 @@ import Switch from "@material-ui/core/Switch";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import TextField from "@material-ui/core/TextField";
 import Alert from "@material-ui/lab/Alert";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
 
 import useAuth from "../../../../../../hooks/useAuth";
 import AppointmentService from "../../../../../../services/appointmentType.service";
-import { setSuccess } from "../../../../../../store/common/actions";
 import { removeEmpty } from "../../../../../../utils/helpers";
 
 const GreenSwitch = withStyles({
@@ -99,8 +98,8 @@ const NewOrEditAppointment = ({
   ...props
 }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
   const { user } = useAuth();
+  const { enqueueSnackbar } = useSnackbar();
   const { savedAppointments } = props;
   const [appointment, setAppointment] = useState([]);
   const [errors, setErrors] = useState([]);
@@ -123,7 +122,9 @@ const NewOrEditAppointment = ({
   const createNewAppointment = (data) => {
     AppointmentService.create(data).then(
       (response) => {
-        dispatch(setSuccess(`${response.data.message}`));
+        enqueueSnackbar(`${response.data.message}`, {
+          variant: "success",
+        });
         onClose();
       },
       (error) => {
@@ -176,7 +177,9 @@ const NewOrEditAppointment = ({
           formedData,
           props.appointment.id,
         ).then((response) => {
-          dispatch(setSuccess(`${response.data.message}`));
+          enqueueSnackbar(`${response.data.message}`, {
+            variant: "success",
+          });
           onClose();
         });
       }

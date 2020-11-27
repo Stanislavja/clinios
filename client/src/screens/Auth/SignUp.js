@@ -6,13 +6,13 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import { useSnackbar } from "notistack";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 
 import PracticeForm from "../../components/signup/PracticeForm";
 import Success from "../../components/signup/Success";
 import AuthService from "../../services/auth.service";
 import { signupComplete } from "../../store/auth/actions";
-import { setSuccess } from "../../store/common/actions";
 import { sendVerificationEmail } from "../../store/email/actions";
 
 
@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
 const SignUp = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const [errors, setErrors] = useState([]);
   const success = useSelector(
     (state) => state.auth.success || false,
@@ -52,7 +53,9 @@ const SignUp = () => {
           dispatch(signupComplete(response.data.data.user));
           dispatch(sendVerificationEmail(response.data.data.user));
         }
-        dispatch(setSuccess(`${response.data.message}`));
+        enqueueSnackbar(`${response.data.message}`, {
+          variant: "success",
+        });
       },
       (error) => {
         if (error.response) {
@@ -81,7 +84,7 @@ const SignUp = () => {
         ) : (
           <PracticeForm
             onFormSubmit={handleFormSubmit}
-            errors={errors.error}
+            errors={errors}
           />
         )}
       </div>
