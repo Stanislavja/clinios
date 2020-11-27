@@ -56,13 +56,11 @@ const getCorporateUser = async (req, res) => {
     const dbResponse = await db.query(
       `select id, admin, firstname, lastname, password from user where id='${req.user_id}' and client_id is null`
     );
-
     if (!dbResponse) {
       errorMessage.error = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     const user = dbResponse[0];
-    console.log("user:", user);
     if (user.admin) {
       user.permissions = ["ADMIN"];
     }

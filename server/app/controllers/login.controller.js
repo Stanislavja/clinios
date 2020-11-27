@@ -23,11 +23,14 @@ exports.signin = async (req, res) => {
   const db = makeDb(configuration, res);
 
   const rows = await db.query(
-    "SELECT id, client_id, firstname, lastname, email, password, sign_dt, email_confirm_dt FROM user WHERE email = ?",
+    "SELECT id, admin, client_id, firstname, lastname, email, password, sign_dt, email_confirm_dt FROM user WHERE email = ?",
     [req.body.email]
   );
 
   const user = rows[0];
+  if (user.admin) {
+    user.permissions = ["ADMIN"];
+  }
   if (!user) {
     errorMessage.message = "User not found";
     errorMessage.user = user;

@@ -327,7 +327,7 @@ const Topbar = (props) => {
   const [nothingFound, setNothingFound] = useState(false);
 
   const navPages = (user.role === "CORPORATE") ? corporate_pages : pages;
-  const allowedPages = getAllowedRoutes(navPages, (user && user.roles) || []);
+  const allowedPages = getAllowedRoutes(navPages, (user && user.permissions) ? user.permissions : []);
   const handleClose = () => {
     setOpen(false);
     setSearchTerm("");

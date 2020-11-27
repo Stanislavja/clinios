@@ -6,7 +6,7 @@ import { getAllowedRoutes } from "./utils/helpers";
 
 const HocRoutes = () => {
   const { user } = useAuth();
-  const allowedRoutes = getAllowedRoutes(routes, (user && user.roles) || []);
+  const allowedRoutes = getAllowedRoutes(routes, (user && user.permissions) || []);
 
   return (
     <>
