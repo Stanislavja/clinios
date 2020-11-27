@@ -119,12 +119,10 @@ const PatientLogin = () => {
         <form
           className={clsx({
             [classes.form]: true, // always apply
-            [classes.withErrors]: errors.length > 0, // only when isLoading === true
           })}
           noValidate
         >
           <TextField
-            disabled={errors.length > 0}
             value={email}
             variant="outlined"
             margin="normal"
@@ -138,7 +136,6 @@ const PatientLogin = () => {
             onChange={(event) => setEmail(event.target.value)}
           />
           <TextField
-            disabled={errors.length > 0}
             value={password}
             variant="outlined"
             margin="normal"
@@ -152,7 +149,7 @@ const PatientLogin = () => {
             onChange={(event) => setPassword(event.target.value)}
           />
           <Button
-            disabled={!email || !password || errors.length > 0}
+            disabled={!email || !password}
             fullWidth
             variant="contained"
             color="primary"
