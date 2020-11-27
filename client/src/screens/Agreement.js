@@ -19,6 +19,7 @@ const Agreement = () => {
       setAgreement(res.data);
     });
   }, []);
+
   return (
     <>
       <CssBaseline />

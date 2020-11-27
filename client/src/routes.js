@@ -397,7 +397,7 @@ const routes = [
   {
     exact: true,
     guard: GuestGuard,
-    layout: DashboardLayout,
+    layout: MainLayout,
     path: "/agreement",
     component: lazy(() => import("./screens/Agreement")),
   },
