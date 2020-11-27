@@ -43,8 +43,8 @@ const getUser = async (req, res) => {
       return res.status(status.notfound).send(errorMessage);
     }
     const user = dbResponse[0];
-    if(user.admin){
-      user.permissions = ["ADMIN"]
+    if (user.admin) {
+      user.permissions = ["ADMIN"];
     }
     successMessage.data = { user };
     return res.status(status.created).send(successMessage);

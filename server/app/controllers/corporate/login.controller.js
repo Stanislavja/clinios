@@ -37,16 +37,20 @@ exports.signin = async (req, res) => {
     return res.status(status.unauthorized).send(errorMessage);
   }
 
-  const token = jwt.sign({ id: user.id, role: "CORPORATE" }, config.authSecret, {
-    expiresIn: 86400, // 24 hours
-  });
+  const token = jwt.sign(
+    { id: user.id, role: "CORPORATE" },
+    config.authSecret,
+    {
+      expiresIn: 86400, // 24 hours
+    }
+  );
 
   const resData = {};
   resData.accessToken = token;
   delete user.password; // delete password from response
   resData.user = user;
-  if(user.admin){
-    resData.user.permissions = ["ADMIN"]
+  if (user.admin) {
+    resData.user.permissions = ["ADMIN"];
   }
   resData.user.role = "CORPORATE";
   successMessage.data = resData;

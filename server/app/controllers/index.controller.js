@@ -1,7 +1,5 @@
-const { validationResult } = require("express-validator");
 const { configuration, makeDb } = require("../db/db.js");
 const { errorMessage, successMessage, status } = require("../helpers/status");
-
 
 const getUser = async (req, res) => {
   const db = makeDb(configuration, res);
@@ -14,8 +12,8 @@ const getUser = async (req, res) => {
       return res.status(status.notfound).send(errorMessage);
     }
     const user = dbResponse[0];
-    if(user.admin){
-      user.permissions = ["ADMIN"]
+    if (user.admin) {
+      user.permissions = ["ADMIN"];
     }
     user.role = "CLIENT";
     successMessage.data = { user };
@@ -29,7 +27,6 @@ const getUser = async (req, res) => {
 };
 
 const getPatient = async (req, res) => {
-  const { email } = req.body;
   const db = makeDb(configuration, res);
   try {
     const dbResponse = await db.query(
@@ -45,7 +42,7 @@ const getPatient = async (req, res) => {
     successMessage.data = { user };
     return res.status(status.created).send(successMessage);
   } catch (error) {
-    console.log('error:', error)
+    console.log("error:", error);
     errorMessage.error = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
@@ -56,22 +53,24 @@ const getPatient = async (req, res) => {
 const getCorporateUser = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
-    const dbResponse = await db.query(`select id, admin, firstname, lastname, password from user where id='${req.user_id}' and client_id is null`);
+    const dbResponse = await db.query(
+      `select id, admin, firstname, lastname, password from user where id='${req.user_id}' and client_id is null`
+    );
 
     if (!dbResponse) {
       errorMessage.error = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     const user = dbResponse[0];
-    console.log('user:', user)
-    if(user.admin){
-      user.permissions = ["ADMIN"]
+    console.log("user:", user);
+    if (user.admin) {
+      user.permissions = ["ADMIN"];
     }
     user.role = "CORPORATE";
     successMessage.data = { user };
     return res.status(status.created).send(successMessage);
   } catch (error) {
-    console.log('error:', error)
+    console.log("error:", error);
     errorMessage.error = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
@@ -82,7 +81,7 @@ const getCorporateUser = async (req, res) => {
 const users = {
   getUser,
   getPatient,
-  getCorporateUser
+  getCorporateUser,
 };
 
 module.exports = users;
