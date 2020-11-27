@@ -75,6 +75,7 @@ app.use(baseAPIPath, require("./app/routes/patient/prescription.routes"));
 app.use(baseAPIPath, require("./app/routes/patient/lab_requisitions.routes"));
 
 app.use(baseAPIPath, require("./app/routes/myself.routes"));
+app.use(baseAPIPath, require("./app/routes/index.routes"));
 
 // Corporate Portal
 app.use(baseAPIPath, require("./app/routes/corporate/login.routes"));

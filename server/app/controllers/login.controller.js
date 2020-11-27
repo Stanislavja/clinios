@@ -23,11 +23,14 @@ exports.signin = async (req, res) => {
   const db = makeDb(configuration, res);
 
   const rows = await db.query(
-    "SELECT id, client_id, firstname, lastname, email, password, sign_dt, email_confirm_dt FROM user WHERE email = ?",
+    "SELECT id, admin, client_id, firstname, lastname, email, password, sign_dt, email_confirm_dt FROM user WHERE email = ?",
     [req.body.email]
   );
 
   const user = rows[0];
+  if (user.admin) {
+    user.permissions = ["ADMIN"];
+  }
   if (!user) {
     errorMessage.message = "User not found";
     errorMessage.user = user;
@@ -69,7 +72,7 @@ exports.signin = async (req, res) => {
   );
 
   const token = jwt.sign(
-    { id: user.id, client_id: user.client_id },
+    { id: user.id, client_id: user.client_id, role: "CLIENT" },
     config.authSecret,
     {
       expiresIn: 86400, // 24 hours
@@ -79,6 +82,7 @@ exports.signin = async (req, res) => {
   resData.accessToken = token;
   delete user.password; // delete password from response
   resData.user = user;
+  resData.user.role = "CLIENT";
   successMessage.data = resData;
   res.status(status.success).send(successMessage);
 };

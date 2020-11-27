@@ -19,8 +19,7 @@ exports.signin = async (req, res) => {
 
   const { client_id, email } = req.body;
   const rows = await db.query(
-    `select p.id, p.client_id, p.firstname, p.lastname, p.password, p.status, roles.role, client.code from patient p JOIN roles
-    ON p.role_id=roles.id JOIN client on p.client_id=client.id where p.client_id=${client_id} and p.email='${email}'`
+    `select p.id, p.client_id, p.firstname, p.lastname, p.password, p.status, client.code from patient p JOIN client on p.client_id=client.id where p.client_id=${client_id} and p.email='${email}'`
   );
 
   const patient = rows[0];
@@ -53,7 +52,7 @@ exports.signin = async (req, res) => {
   );
 
   const token = jwt.sign(
-    { id: patient.id, client_id: patient.client_id, role: patient.role },
+    { id: patient.id, client_id: patient.client_id, role: "PATIENT" },
     config.authSecret,
     {
       expiresIn: 86400, // 24 hours
@@ -65,6 +64,7 @@ exports.signin = async (req, res) => {
   resData.accessToken = token;
   delete patient.password; // delete password from response
   resData.user = patient;
+  resData.user.role = "PATIENT";
   successMessage.data = resData;
   res.status(status.success).send(successMessage);
 };

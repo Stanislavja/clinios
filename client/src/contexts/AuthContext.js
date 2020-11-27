@@ -163,14 +163,21 @@ export const AuthProvider = ({ children }) => {
     const initialise = async () => {
       try {
         const accessToken = window.localStorage.getItem("accessToken");
-
         if (accessToken && isValidToken(accessToken)) {
           setSession(accessToken);
+          const decoded = jwtDecode(accessToken);
 
-          const response = await axios.get(`${API_BASE}/user`, {
+          let fetchURL = `${API_BASE}/auth/user`;
+          if (decoded.role === "CORPORATE") {
+            fetchURL = `${API_BASE}/auth/corporate-user`;
+          } else if (decoded.role === "PATIENT") {
+            fetchURL = `${API_BASE}/auth/patient`;
+          }
+
+          const response = await axios.get(fetchURL, {
             headers: authHeader(),
           });
-
+          const { user } = response.data.data;
           const patientId = cookies.last_viewed_patient_id;
           let lastVisitedPatient = null;
           if (patientId) {
@@ -179,10 +186,10 @@ export const AuthProvider = ({ children }) => {
             lastVisitedPatient = lastPatentRes.data.data;
           }
 
-          const { user } = response.data.data;
           dispatch({
             type: "INITIALISE",
             payload: {
+              ...state,
               isAuthenticated: true,
               user,
               lastVisitedPatient,
@@ -199,7 +206,6 @@ export const AuthProvider = ({ children }) => {
           });
         }
       } catch (err) {
-        console.error(err);
         dispatch({
           type: "INITIALISE",
           payload: {

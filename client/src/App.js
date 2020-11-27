@@ -9,8 +9,8 @@ import { CookiesProvider } from "react-cookie";
 import { Router } from "react-router-dom";
 
 import { AuthProvider } from "./contexts/AuthContext";
+import HocRoutes from "./HocRoutes";
 import Notifier from "./Notifier";
-import routes, { renderRoutes } from "./routes";
 import theme from "./theme";
 
 const history = createBrowserHistory();
@@ -31,7 +31,7 @@ function App() {
             <Notifier />
             <Router history={history}>
               <AuthProvider>
-                {renderRoutes(routes)}
+                <HocRoutes />
               </AuthProvider>
             </Router>
           </SnackbarProvider>

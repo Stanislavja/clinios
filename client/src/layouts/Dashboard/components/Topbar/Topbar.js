@@ -18,6 +18,7 @@ import { NavLink as RouterLink, useHistory } from "react-router-dom";
 import useAuth from "../../../../hooks/useAuth";
 import useDebounce from "../../../../hooks/useDebounce";
 import * as API from "../../../../utils/API";
+import { getAllowedRoutes } from "../../../../utils/helpers";
 import { SearchResults } from "./components";
 import MenuWithDropDowns from "./components/MenuWithDropDowns";
 
@@ -182,6 +183,7 @@ const pages = [
     id: 23,
     title: "Setup",
     href: "/setup",
+    permission: ["ADMIN"],
     subMenus: [
       {
         id: 31,
@@ -318,12 +320,14 @@ const Topbar = (props) => {
   const {
     lastVisitedPatient, user, login_url, logout,
   } = useAuth();
+
   const [open, setOpen] = React.useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
   const [nothingFound, setNothingFound] = useState(false);
 
   const navPages = (user.role === "CORPORATE") ? corporate_pages : pages;
+  const allowedPages = getAllowedRoutes(navPages, (user && user.permissions) ? user.permissions : []);
   const handleClose = () => {
     setOpen(false);
     setSearchTerm("");
@@ -372,14 +376,14 @@ const Topbar = (props) => {
       <Toolbar variant="dense" className={classes.toolbar}>
         <div className={classes.headerWithNav}>
           <Typography className={classes.title} variant="h6" noWrap>
-            <RouterLink to="/dashboard" className={classes.titleAsLogo}>
+            <RouterLink to={login_url || "/dashboard"} className={classes.titleAsLogo}>
               Clinios
             </RouterLink>
           </Typography>
           <Hidden mdDown>
             <div className={classes.navs}>
               {
-                navPages.map((page) => (
+                allowedPages.map((page) => (
                   page.subMenus
                     ? (
                       <MenuWithDropDowns
