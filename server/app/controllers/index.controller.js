@@ -16,6 +16,7 @@ const getUser = async (req, res) => {
       user.permissions = ["ADMIN"];
     }
     user.role = "CLIENT";
+    user.login_url = `/login_client`;
     successMessage.data = { user };
     return res.status(status.created).send(successMessage);
   } catch (error) {
@@ -39,6 +40,7 @@ const getPatient = async (req, res) => {
     }
     const user = dbResponse[0];
     user.role = "PATIENT";
+    user.login_url = `/login/${user.code}`;
     successMessage.data = { user };
     return res.status(status.created).send(successMessage);
   } catch (error) {
@@ -65,6 +67,7 @@ const getCorporateUser = async (req, res) => {
       user.permissions = ["ADMIN"];
     }
     user.role = "CORPORATE";
+    user.login_url = `/login_corp`;
     successMessage.data = { user };
     return res.status(status.created).send(successMessage);
   } catch (error) {

@@ -20,7 +20,6 @@ const initialAuthState = {
   isInitialised: false,
   user: null,
   lastVisitedPatient: null,
-  login_url: null,
 };
 
 const isValidToken = (accessToken) => {
@@ -63,12 +62,11 @@ const reducer = (state, action) => {
       };
     }
     case "LOGIN": {
-      const { user, login_url } = action.payload;
+      const { user } = action.payload;
       return {
         ...state,
         isAuthenticated: true,
         user,
-        login_url,
       };
     }
     case "LOGOUT": {
@@ -117,7 +115,6 @@ export const AuthProvider = ({ children }) => {
       type: "LOGIN",
       payload: {
         user,
-        login_url: `/login/${user.code}`,
       },
     });
   };
@@ -130,7 +127,6 @@ export const AuthProvider = ({ children }) => {
       type: "LOGIN",
       payload: {
         user,
-        login_url: "/login_corp",
       },
     });
   };

@@ -28,13 +28,13 @@ exports.signin = async (req, res) => {
   );
 
   const user = rows[0];
-  if (user.admin) {
-    user.permissions = ["ADMIN"];
-  }
   if (!user) {
     errorMessage.message = "User not found";
     errorMessage.user = user;
     return res.status(status.notfound).send(errorMessage);
+  }
+  if (user.admin) {
+    user.permissions = ["ADMIN"];
   }
   const clientRows = await db.query(
     "SELECT id, name FROM client WHERE id = ?",
@@ -83,6 +83,7 @@ exports.signin = async (req, res) => {
   delete user.password; // delete password from response
   resData.user = user;
   resData.user.role = "CLIENT";
+  resData.user.login_url = `/login_client`;
   successMessage.data = resData;
   res.status(status.success).send(successMessage);
 };

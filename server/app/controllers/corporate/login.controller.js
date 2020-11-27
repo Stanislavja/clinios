@@ -53,6 +53,7 @@ exports.signin = async (req, res) => {
     resData.user.permissions = ["ADMIN"];
   }
   resData.user.role = "CORPORATE";
+  resData.user.login_url = `/login_corp`;
   successMessage.data = resData;
   res.status(status.success).send(successMessage);
 };
