@@ -50,6 +50,7 @@ export const renderRoutes = (routes = []) => (
   </Suspense>
 );
 
+
 const routes = [
   {
     exact: true,
@@ -164,6 +165,7 @@ const routes = [
     path: "/setup",
     guard: AdminGuard,
     layout: DashboardLayout,
+    permission: ["ADMIN"],
     routes: [
       {
         exact: true,

@@ -35,15 +35,17 @@ const getAllUsers = async (req, res) => {
 const getUser = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
-    const dbResponse = await db.query(`SELECT id, client_id, firstname, lastname, email, admin, roles.role, sign_dt,
-     email_confirm_dt FROM user JOIN roles
-     ON user.role_id=roles.id WHERE id=${req.user_id}`);
+    const dbResponse = await db.query(`SELECT u.id, u.client_id, u.firstname, u.lastname, u.email, u.admin, u.sign_dt,
+    u.email_confirm_dt FROM user u WHERE u.id=${req.user_id}`);
 
     if (!dbResponse) {
       errorMessage.error = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     const user = dbResponse[0];
+    if(user.admin){
+      user.permissions = ["ADMIN"]
+    }
     successMessage.data = { user };
     return res.status(status.created).send(successMessage);
   } catch (error) {

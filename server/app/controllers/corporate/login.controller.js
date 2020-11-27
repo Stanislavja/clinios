@@ -19,8 +19,7 @@ exports.signin = async (req, res) => {
 
   const { email } = req.body;
   const rows = await db.query(
-    `select user.id, user.firstname, user.lastname, user.password, roles.role from user JOIN roles
-    ON user.role_id=roles.id  where email='${email}' and client_id is null`
+    `select id, admin, firstname, lastname, password from user where email='${email}' and client_id is null`
   );
 
   const user = rows[0];
@@ -38,7 +37,7 @@ exports.signin = async (req, res) => {
     return res.status(status.unauthorized).send(errorMessage);
   }
 
-  const token = jwt.sign({ id: user.id }, config.authSecret, {
+  const token = jwt.sign({ id: user.id, role: "CORPORATE" }, config.authSecret, {
     expiresIn: 86400, // 24 hours
   });
 
@@ -46,6 +45,10 @@ exports.signin = async (req, res) => {
   resData.accessToken = token;
   delete user.password; // delete password from response
   resData.user = user;
+  if(user.admin){
+    resData.user.permissions = ["ADMIN"]
+  }
+  resData.user.role = "CORPORATE";
   successMessage.data = resData;
   res.status(status.success).send(successMessage);
 };

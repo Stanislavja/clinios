@@ -1,10 +1,10 @@
 const express = require("express");
-const { authJwt } = require("../middlewares");
+const { authJwt, authorization } = require("../middlewares");
 const homeController = require("../controllers/home.controller.js");
 
 const router = express.Router();
 
-router.get("/appointments", [authJwt.verifyToken], homeController.getAll);
+router.get("/appointments", [authJwt.verifyToken, authorization.permit('CORPORATE')], homeController.getAll);
 router.get(
   "/appointments/:providerId",
   [authJwt.verifyToken],

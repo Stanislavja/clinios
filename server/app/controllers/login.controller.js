@@ -69,7 +69,7 @@ exports.signin = async (req, res) => {
   );
 
   const token = jwt.sign(
-    { id: user.id, client_id: user.client_id },
+    { id: user.id, client_id: user.client_id, role: "CLIENT" },
     config.authSecret,
     {
       expiresIn: 86400, // 24 hours
@@ -79,6 +79,7 @@ exports.signin = async (req, res) => {
   resData.accessToken = token;
   delete user.password; // delete password from response
   resData.user = user;
+  resData.user.role = "CLIENT";
   successMessage.data = resData;
   res.status(status.success).send(successMessage);
 };

@@ -13,9 +13,11 @@ const MainLayout = ({ children }) => {
   const handleSidebarOpen = () => {
     setOpenSidebar(true);
   };
+
   const handleSidebarClose = () => {
     setOpenSidebar(false);
   };
+
   return (
     <div className="main-container">
       <Header onSidebarOpen={handleSidebarOpen} />
@@ -24,7 +26,6 @@ const MainLayout = ({ children }) => {
         open={openSidebar}
         variant="temporary"
       />
-
       <Container maxWidth="lg">{children}</Container>
       <Footer />
     </div>
