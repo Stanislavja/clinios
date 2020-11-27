@@ -318,7 +318,7 @@ const Topbar = (props) => {
   const classes = useStyles();
   const history = useHistory();
   const {
-    lastVisitedPatient, user, login_url, logout,
+    lastVisitedPatient, user, logout,
   } = useAuth();
 
   const [open, setOpen] = React.useState(false);
@@ -365,7 +365,7 @@ const Topbar = (props) => {
   const handleLogout = async () => {
     try {
       await logout();
-      history.push(login_url || "/login_client");
+      history.push(user.login_url || "/login_client");
     } catch (err) {
       console.error(err);
     }
@@ -376,7 +376,7 @@ const Topbar = (props) => {
       <Toolbar variant="dense" className={classes.toolbar}>
         <div className={classes.headerWithNav}>
           <Typography className={classes.title} variant="h6" noWrap>
-            <RouterLink to={login_url || "/dashboard"} className={classes.titleAsLogo}>
+            <RouterLink to={user.login_url || "/dashboard"} className={classes.titleAsLogo}>
               Clinios
             </RouterLink>
           </Typography>

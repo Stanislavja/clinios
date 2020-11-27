@@ -65,6 +65,7 @@ exports.signin = async (req, res) => {
   delete patient.password; // delete password from response
   resData.user = patient;
   resData.user.role = "PATIENT";
+  resData.user.login_url = `/login/${patient.code}`;
   successMessage.data = resData;
   res.status(status.success).send(successMessage);
 };
