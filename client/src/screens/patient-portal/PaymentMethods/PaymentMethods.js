@@ -11,6 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import moment from "moment";
 
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
+import NewTransactionForm from "./NewTransactionForm";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,6 +62,7 @@ const StyledTableRow = withStyles(() => ({
 const PaymentMethods = () => {
   const classes = useStyles();
   const [paymentMethods, setPaymentMethods] = useState([]);
+  const [newPaymentDialog, setNewPaymentDialog] = useState(false);
 
   const fetchPaymentMethods = useCallback(() => {
     PatientPortalService.getPaymentMethods().then((res) => {
@@ -73,58 +75,67 @@ const PaymentMethods = () => {
   }, [fetchPaymentMethods]);
 
   return (
-    <div className={classes.root}>
-      <Typography
-        component="h1"
-        variant="h2"
-        color="textPrimary"
-        className={classes.title}
-      >
-        Payment Methods
-      </Typography>
-      <Typography
-        variant="h5"
-        color="textPrimary"
-        className={classes.title}
-      >
-        This page is used to manage credit cards or bank accounts used to pay invoices.
-      </Typography>
-      <Grid
-        container
-        className={classes.btnContainer}
-      >
-        <Button
-          variant="outlined"
-          className={classes.btn}
+    <>
+      {!!newPaymentDialog && (
+        <NewTransactionForm
+          isOpen={newPaymentDialog}
+          onClose={() => setNewPaymentDialog(false)}
+        />
+      )}
+      <div className={classes.root}>
+        <Typography
+          component="h1"
+          variant="h2"
+          color="textPrimary"
+          className={classes.title}
         >
-          New
-        </Button>
-      </Grid>
-      <TableContainer className={classes.tableContainer}>
-        <Table size="small" className={classes.table}>
-          <TableBody>
-            {paymentMethods.length ? (
-              paymentMethods.map((item) => (
-                <StyledTableRow key={`${item.created}_${item.filename}`}>
-                  <StyledTableCell component="th" scope="item">
-                    {moment(item.created).format("MMM D YYYY")}
+          Payment Methods
+        </Typography>
+        <Typography
+          variant="h5"
+          color="textPrimary"
+          className={classes.title}
+        >
+          This page is used to manage credit cards or bank accounts used to pay invoices.
+        </Typography>
+        <Grid
+          container
+          className={classes.btnContainer}
+        >
+          <Button
+            variant="outlined"
+            className={classes.btn}
+            onClick={() => setNewPaymentDialog(true)}
+          >
+            New
+          </Button>
+        </Grid>
+        <TableContainer className={classes.tableContainer}>
+          <Table size="small" className={classes.table}>
+            <TableBody>
+              {paymentMethods.length ? (
+                paymentMethods.map((item) => (
+                  <StyledTableRow key={`${item.created}_${item.filename}`}>
+                    <StyledTableCell component="th" scope="item">
+                      {moment(item.created).format("MMM D YYYY")}
+                    </StyledTableCell>
+                    <StyledTableCell>{item.filename}</StyledTableCell>
+                  </StyledTableRow>
+                ))
+              ) : (
+                <StyledTableRow>
+                  <StyledTableCell colSpan={2}>
+                    <Typography className={classes.resMessage}>
+                      No Payment Methods Found...
+                    </Typography>
                   </StyledTableCell>
-                  <StyledTableCell>{item.filename}</StyledTableCell>
                 </StyledTableRow>
-              ))
-            ) : (
-              <StyledTableRow>
-                <StyledTableCell colSpan={2}>
-                  <Typography className={classes.resMessage}>
-                    No Payment Methods Found...
-                  </Typography>
-                </StyledTableCell>
-              </StyledTableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </div>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
+    </>
   );
 };
 
