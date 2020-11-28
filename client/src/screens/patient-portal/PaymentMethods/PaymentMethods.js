@@ -12,6 +12,7 @@ import moment from "moment";
 
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 import NewTransactionForm from "./NewTransactionForm";
+import ViewTransactionDetails from "./ViewTransactionDetails";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -63,6 +64,7 @@ const PaymentMethods = () => {
   const classes = useStyles();
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [newPaymentDialog, setNewPaymentDialog] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState(null);
 
   const fetchPaymentMethods = useCallback(() => {
     PatientPortalService.getPaymentMethods().then((res) => {
@@ -74,12 +76,23 @@ const PaymentMethods = () => {
     fetchPaymentMethods();
   }, [fetchPaymentMethods]);
 
+  const onRowClick = (item) => {
+    setSelectedPayment(item);
+  };
+
   return (
     <>
       {!!newPaymentDialog && (
         <NewTransactionForm
           isOpen={newPaymentDialog}
           onClose={() => setNewPaymentDialog(false)}
+        />
+      )}
+      {!!selectedPayment && (
+        <ViewTransactionDetails
+          isOpen={Boolean(selectedPayment)}
+          onClose={() => setSelectedPayment(null)}
+          data={selectedPayment}
         />
       )}
       <div className={classes.root}>
@@ -115,7 +128,7 @@ const PaymentMethods = () => {
             <TableBody>
               {paymentMethods.length ? (
                 paymentMethods.map((item) => (
-                  <StyledTableRow key={`${item.created}_${item.filename}`}>
+                  <StyledTableRow onClick={() => onRowClick(item)} key={`${item.created}_${item.filename}`}>
                     <StyledTableCell component="th" scope="item">
                       {moment(item.created).format("MMM D YYYY")}
                     </StyledTableCell>
