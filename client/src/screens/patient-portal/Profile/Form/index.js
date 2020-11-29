@@ -90,6 +90,7 @@ const ProfileForm = () => {
 
   useEffect(() => {
     user.status = user.status && user.status === "A" ? "active" : user.status;
+    user.gender = user.gender ? user.gender : "M";
     setBasicInfo({ ...user });
   }, [user]);
 
