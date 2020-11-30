@@ -1,14 +1,13 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { makeStyles } from "@material-ui/core/styles";
-import { useSelector, useDispatch, shallowEqual } from "react-redux";
-
+import { useSnackbar } from "notistack";
+import EmailService from "./../services/email.service";
 import Dimmer from "../components/common/Dimmer";
 import VerificationMessage from "../components/email/VerificationMessage";
 import VerificationSuccess from "../components/email/VerificationSuccess";
-import { verificationEmail } from "../store/email/actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,42 +22,57 @@ const useStyles = makeStyles((theme) => ({
 
 const EmailConfirmation = ({ ...props }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
+  const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [message, setMessage] = useState('');
+  const [showError, setShowError] = useState(false);
+
   const {
     match: { params },
   } = props;
 
-  const success = useSelector(
-    (state) => state.email.success || false,
-    shallowEqual,
-  );
-  const loading = useSelector(
-    (state) => state.email.loading || false,
-    shallowEqual,
-  );
-  const error = useSelector(
-    (state) => state.email.error || false,
-    shallowEqual,
-  );
-  const isEmailVerified = useSelector(
-    (state) => state.email.isEmailVerified || false,
-    shallowEqual,
-  );
-  const message = useSelector(
-    (state) => state.email.message || false,
-    shallowEqual,
-  );
+  const initFetch = () => {
 
-  const initFetch = useCallback(() => {
-    dispatch(verificationEmail(params.userId, params.token));
-  }, [dispatch, params]);
+    EmailService.emailVerify(params.userId, params.token).then(
+      (response) => {
+        
+        enqueueSnackbar(`${response.data.message}`, {
+          variant: "success",
+        });
+  
+        if (response.data.isVerified) {
+          setIsEmailVerified(true);
+          setIsLoading(false);
+          setMessage(response.data.message)
+        }
+        setIsLoading(false);
+        setSuccess(true);
+        setMessage(response.data.message)
+      },
+      (error) => {
+        const resMessage = (error.response
+              && error.response.data
+              && error.response.data.message)
+            || error.message
+            || error.toString();
+
+        setIsLoading(false);
+        setMessage(resMessage);
+        setSuccess(false);
+        setShowError(true);
+      },
+    );
+
+  };
 
   useEffect(() => {
     initFetch();
-  }, [initFetch]);
+  }, []);
 
   let severity = "error";
-  if (error) {
+  if (showError) {
     severity = "error";
   }
   if (isEmailVerified) {
@@ -68,14 +82,14 @@ const EmailConfirmation = ({ ...props }) => {
     <>
       <Card className={classes.root} variant="outlined">
         <CardContent>
-          {(error || isEmailVerified) && (
+          {(showError || isEmailVerified) && (
             <VerificationMessage severity={severity} message={message} />
           )}
           {success && <VerificationSuccess isEmailVerified={isEmailVerified} />}
         </CardContent>
       </Card>
 
-      <Dimmer isOpen={loading} />
+      <Dimmer isOpen={isLoading} />
     </>
   );
 };

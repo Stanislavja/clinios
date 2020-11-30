@@ -90,13 +90,7 @@ exports.signup = async (req, res) => {
   );
 
   if (existingUserRows.length > 0) {
-    errorMessage.error = [
-      {
-        value: JSON.stringify(client),
-        msg: "User is already in our system. Try different values",
-        param: "user.body",
-      },
-    ];
+    errorMessage.message = "User is already in our system. Try different values"
     return res.status(status.error).send(errorMessage);
   }
 

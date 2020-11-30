@@ -1,5 +1,8 @@
 import EmailService from "../../services/email.service";
-import { setError, setSuccess } from "../common/actions";
+import { setError } from "../common/actions";
+import {
+  enqueueSnackbar as enqueueSnackbarAction,
+} from "../notifications/actions";
 import {
   EMAIL_PENDING,
   EMAIL_ERROR,
@@ -37,7 +40,17 @@ export const verificationEmail = (userId, token) => (dispatch) => {
   dispatch(startEmail());
   EmailService.emailVerify(userId, token).then(
     (response) => {
-      dispatch(setSuccess(`${response.data.message}`));
+      //dispatch(setSuccess(`${response.data.message}`));
+
+      
+      dispatch(enqueueSnackbarAction({
+        message: `${response.data.message}`,
+        options: {
+          key: new Date().getTime() + Math.random(),
+          variant: "success",
+        },
+      })) 
+
       if (response.data.isVerified) {
         dispatch(emailAlreadyVerified(response.data.message));
       }
