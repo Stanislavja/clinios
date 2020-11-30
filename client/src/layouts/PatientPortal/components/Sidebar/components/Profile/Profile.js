@@ -8,10 +8,7 @@ import { fade, makeStyles } from "@material-ui/core/styles";
 import InputIcon from "@material-ui/icons/Input";
 import clsx from "clsx";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
 import { Link as RouterLink } from "react-router-dom";
-
-import { logOut } from "../../../../../../store/auth/actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,13 +42,6 @@ const Profile = (props) => {
   } = props;
 
   const classes = useStyles();
-  const dispatch = useDispatch();
-
-  const handleLogout = (event, authProviderLogOut) => {
-    dispatch(logOut());
-    authProviderLogOut();
-    window.location.reload();
-  };
 
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -74,7 +64,7 @@ const Profile = (props) => {
             <IconButton
               className={classes.signOutButton}
               color="inherit"
-              onClick={(event) => handleLogout(event, logout)}
+              onClick={() => logout()}
             >
               <InputIcon />
             </IconButton>

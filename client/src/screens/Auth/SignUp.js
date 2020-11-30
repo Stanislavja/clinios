@@ -7,13 +7,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useSnackbar } from "notistack";
-import { useSelector, useDispatch, shallowEqual } from "react-redux";
 
 import PracticeForm from "../../components/signup/PracticeForm";
 import Success from "../../components/signup/Success";
 import AuthService from "../../services/auth.service";
-import { signupComplete } from "../../store/auth/actions";
-import { sendVerificationEmail } from "../../store/email/actions";
+import EmailService from "../../services/email.service";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -38,20 +36,33 @@ const useStyles = makeStyles((theme) => ({
 
 const SignUp = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const [errors, setErrors] = useState([]);
-  const success = useSelector(
-    (state) => state.auth.success || false,
-    shallowEqual,
-  );
+  const [success, setSuccess] = useState(false);
+
+  const sendVerificationEmail = (data) => {
+    EmailService.sendEmailVerification(data).then(
+      (response) => {
+        setSuccess(true);
+        enqueueSnackbar(`${response.data.message}`, {
+          variant: "success",
+        });
+      },
+      (error) => {
+        setSuccess(false);
+        enqueueSnackbar(`${error.response.data}`, {
+          variant: "error",
+        });
+      },
+    );
+  };
 
   const handleFormSubmit = (data) => {
     AuthService.register(data).then(
       (response) => {
         if (response.data) {
-          dispatch(signupComplete(response.data.data.user));
-          dispatch(sendVerificationEmail(response.data.data.user));
+          setSuccess(true);
+          sendVerificationEmail(response.data.data.user);
         }
         enqueueSnackbar(`${response.data.message}`, {
           variant: "success",
@@ -59,7 +70,7 @@ const SignUp = () => {
       },
       (error) => {
         if (error.response) {
-          setErrors(error.response.data);
+          setErrors(error.response.data.error);
         }
       },
     );

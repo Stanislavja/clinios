@@ -4,10 +4,11 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSnackbar } from "notistack";
-import EmailService from "./../services/email.service";
+
 import Dimmer from "../components/common/Dimmer";
 import VerificationMessage from "../components/email/VerificationMessage";
 import VerificationSuccess from "../components/email/VerificationSuccess";
+import EmailService from "../services/email.service";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,30 +27,28 @@ const EmailConfirmation = ({ ...props }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [isEmailVerified, setIsEmailVerified] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [showError, setShowError] = useState(false);
 
   const {
     match: { params },
   } = props;
 
-  const initFetch = () => {
-
+  useEffect(() => {
     EmailService.emailVerify(params.userId, params.token).then(
       (response) => {
-        
         enqueueSnackbar(`${response.data.message}`, {
           variant: "success",
         });
-  
+
         if (response.data.isVerified) {
           setIsEmailVerified(true);
           setIsLoading(false);
-          setMessage(response.data.message)
+          setMessage(response.data.message);
         }
         setIsLoading(false);
         setSuccess(true);
-        setMessage(response.data.message)
+        setMessage(response.data.message);
       },
       (error) => {
         const resMessage = (error.response
@@ -64,11 +63,7 @@ const EmailConfirmation = ({ ...props }) => {
         setShowError(true);
       },
     );
-
-  };
-
-  useEffect(() => {
-    initFetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   let severity = "error";

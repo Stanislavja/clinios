@@ -14,14 +14,13 @@ import { KeyboardDatePicker } from "@material-ui/pickers";
 import clsx from "clsx";
 import moment from "moment";
 import { useSnackbar } from "notistack";
-import { useSelector, useDispatch, shallowEqual } from "react-redux";
+import { useSelector, shallowEqual } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import Dimmer from "../../../../components/common/Dimmer";
 import Error from "../../../../components/common/Error";
 import EmailService from "../../../../services/email.service";
 import AuthService from "../../../../services/patient_portal/auth.service";
-import { resetPasswordSuccess } from "../../../../store/auth/actions";
 import Success from "./Success";
 
 const useStyles = makeStyles((theme) => ({
@@ -68,7 +67,6 @@ const useStyles = makeStyles((theme) => ({
 
 const ForgotPassword = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const { clientCode } = useParams();
   const [client, setClient] = React.useState(null);
@@ -117,7 +115,6 @@ const ForgotPassword = () => {
     }).then(
       (response) => {
         setIsLoading(false);
-        dispatch(resetPasswordSuccess());
         enqueueSnackbar(`${email} ${response.data.message}`, {
           variant: "success",
         });

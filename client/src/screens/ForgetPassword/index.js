@@ -11,13 +11,12 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useSnackbar } from "notistack";
-import { useSelector, useDispatch, shallowEqual } from "react-redux";
+import { useSelector, shallowEqual } from "react-redux";
 
 import Dimmer from "../../components/common/Dimmer";
 import Error from "../../components/common/Error";
 import AuthService from "../../services/auth.service";
 import EmailService from "../../services/email.service";
-import { resetPasswordSuccess } from "../../store/auth/actions";
 import Success from "./Success";
 
 const useStyles = makeStyles((theme) => ({
@@ -58,7 +57,6 @@ const useStyles = makeStyles((theme) => ({
 
 const ForgetPassword = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const [email, setEmail] = useState("");
   const [errors, setErrors] = React.useState([]);
@@ -72,7 +70,6 @@ const ForgetPassword = () => {
     AuthService.passwordChangeRequest(email).then(
       (response) => {
         setIsLoading(false);
-        dispatch(resetPasswordSuccess());
         enqueueSnackbar(`${email} ${response.data.message}`, {
           variant: "success",
         });
