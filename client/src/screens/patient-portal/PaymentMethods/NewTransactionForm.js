@@ -29,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
 const NewTransactionForm = (props) => {
   const classes = useStyles();
   const { isOpen, onClose } = props;
-  // const { enqueueSnackbar } = useSnackbar();
 
   const [formFields, setFormFields] = useState({
     date: "",
