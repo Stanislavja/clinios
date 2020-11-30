@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
   Button, makeStyles, Typography, Grid, TextField, MenuItem,
@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Encounters = () => {
   const classes = useStyles();
+  const [selectedRequisition, setSelectedRequisition] = useState("");
 
   const onFormSubmit = (e) => {
     e.preventDefault();
@@ -49,6 +50,8 @@ const Encounters = () => {
             label="Lab Requisitions"
             margin="dense"
             fullWidth
+            value={selectedRequisition}
+            onChange={(e) => setSelectedRequisition(e.target.value)}
           >
             {timings.map((option) => (
               <MenuItem key={option.value} value={option.value}>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import {
   Grid,
@@ -18,6 +18,7 @@ import moment from "moment";
 
 import CountrySelect from "../../../../components/common/CountrySelect";
 import RegionSelect from "../../../../components/common/RegionSelect";
+import useAuth from "../../../../hooks/useAuth";
 import {
   BasicInfoForm,
   InsuranceForm,
@@ -58,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ProfileForm = () => {
   const classes = useStyles();
+  const { user } = useAuth();
   const FirstRow = BasicInfoForm.firstRow;
   const SecondRow = BasicInfoForm.secondRow;
   const ThirdRow = BasicInfoForm.thirdRow;
@@ -86,7 +88,13 @@ const ProfileForm = () => {
     city: "",
   });
 
-  const handleInputChnage = (e) => {
+  useEffect(() => {
+    user.status = user.status && user.status === "A" ? "active" : user.status;
+    user.gender = user.gender ? user.gender : "M";
+    setBasicInfo({ ...user });
+  }, [user]);
+
+  const handleInputChange = (e) => {
     const { value, name } = e.target;
     setBasicInfo({
       ...basicInfo,
@@ -126,7 +134,7 @@ const ProfileForm = () => {
                         id={item.id}
                         type={item.type}
                         fullWidth
-                        onChange={(e) => handleInputChnage(e)}
+                        onChange={(e) => handleInputChange(e)}
                       />
                     ) : (
                       <TextField
@@ -137,7 +145,7 @@ const ProfileForm = () => {
                         name={item.name}
                         value={basicInfo[item.name]}
                         fullWidth
-                        onChange={(e) => handleInputChnage(e)}
+                        onChange={(e) => handleInputChange(e)}
                       >
                         {item.options.map((option) => (
                           <MenuItem key={option.value} value={option.value}>
@@ -164,7 +172,7 @@ const ProfileForm = () => {
                         id={item.id}
                         type={item.type}
                         fullWidth
-                        onChange={(e) => handleInputChnage(e)}
+                        onChange={(e) => handleInputChange(e)}
                       />
                     ) : (
                       <TextField
@@ -175,7 +183,7 @@ const ProfileForm = () => {
                         name={item.name}
                         value={basicInfo[item.name]}
                         fullWidth
-                        onChange={(e) => handleInputChnage(e)}
+                        onChange={(e) => handleInputChange(e)}
                       >
                         {item.options.map((option) => (
                           <MenuItem key={option.value} value={option.value}>
@@ -204,7 +212,7 @@ const ProfileForm = () => {
                         id={item.id}
                         type={item.type}
                         fullWidth
-                        onChange={(e) => handleInputChnage(e)}
+                        onChange={(e) => handleInputChange(e)}
                       />
                     ) : (
                       <TextField
@@ -215,7 +223,7 @@ const ProfileForm = () => {
                         name={item.name}
                         value={basicInfo[item.name]}
                         fullWidth
-                        onChange={(e) => handleInputChnage(e)}
+                        onChange={(e) => handleInputChange(e)}
                       >
                         {item.options.map((option) => (
                           <MenuItem key={option.value} value={option.value}>
@@ -238,7 +246,7 @@ const ProfileForm = () => {
                     id="password"
                     type="password"
                     fullWidth
-                    onChange={(e) => handleInputChnage(e)}
+                    onChange={(e) => handleInputChange(e)}
                   />
                 </Grid>
                 <Grid item md={2}>
@@ -264,7 +272,7 @@ const ProfileForm = () => {
                     name="address"
                     value={basicInfo.address}
                     fullWidth
-                    onChange={(e) => handleInputChnage(e)}
+                    onChange={(e) => handleInputChange(e)}
                   />
                 </Grid>
                 <Grid item lg={12}>
@@ -273,7 +281,7 @@ const ProfileForm = () => {
                     name="address2"
                     value={basicInfo.address2}
                     fullWidth
-                    onChange={(e) => handleInputChnage(e)}
+                    onChange={(e) => handleInputChange(e)}
                   />
                 </Grid>
                 <Grid item lg={3}>
@@ -282,7 +290,7 @@ const ProfileForm = () => {
                     name="city"
                     value={basicInfo.city}
                     fullWidth
-                    onChange={(e) => handleInputChnage(e)}
+                    onChange={(e) => handleInputChange(e)}
                   />
                 </Grid>
                 <Grid item lg={3}>
@@ -291,7 +299,7 @@ const ProfileForm = () => {
                     name="zipPostal"
                     value={basicInfo.postal}
                     fullWidth
-                    onChange={(e) => handleInputChnage(e)}
+                    onChange={(e) => handleInputChange(e)}
                   />
                 </Grid>
                 <Grid item lg={3}>
@@ -341,7 +349,7 @@ const ProfileForm = () => {
                       id={item.id}
                       type={item.type}
                       fullWidth
-                      onChange={(e) => handleInputChnage(e)}
+                      onChange={(e) => handleInputChange(e)}
                     />
                   </Grid>
                 ))}

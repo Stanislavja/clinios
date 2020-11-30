@@ -13,6 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import moment from "moment";
 
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
+import NewTransactionForm from "../PaymentMethods/NewTransactionForm";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,6 +58,7 @@ const StyledTableRow = withStyles(() => ({
 const Billing = () => {
   const classes = useStyles();
   const [billings, setBillings] = useState([]);
+  const [newPaymentDialog, setNewPaymentDialog] = useState(false);
 
   const fetchBillings = useCallback(() => {
     PatientPortalService.getBillings().then((res) => {
@@ -69,86 +71,95 @@ const Billing = () => {
   }, [fetchBillings]);
 
   return (
-    <div className={classes.root}>
-      <Grid
-        item
-        sm={6}
-        xs={12}
-      >
+    <>
+      {!!newPaymentDialog && (
+        <NewTransactionForm
+          isOpen={newPaymentDialog}
+          onClose={() => setNewPaymentDialog(false)}
+        />
+      )}
+      <div className={classes.root}>
         <Grid
-          container
-          justify="space-between"
+          item
+          sm={6}
+          xs={12}
         >
-          <Typography
-            component="h1"
-            variant="h2"
-            color="textPrimary"
-            className={classes.title}
+          <Grid
+            container
+            justify="space-between"
           >
-            Billing
-          </Typography>
-          <Button
-            variant="outlined"
-          >
-            Make Payment
-          </Button>
+            <Typography
+              component="h1"
+              variant="h2"
+              color="textPrimary"
+              className={classes.title}
+            >
+              Billing
+            </Typography>
+            <Button
+              variant="outlined"
+              onClick={() => setNewPaymentDialog(true)}
+            >
+              Make Payment
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
 
-      <Typography
-        variant="h5"
-        color="textPrimary"
-        className={classes.title}
-      >
-        This page is used to view billings.
-      </Typography>
+        <Typography
+          variant="h5"
+          color="textPrimary"
+          className={classes.title}
+        >
+          This page is used to view billings.
+        </Typography>
 
-      <Grid item md={6} sm={12} xs={12}>
-        <TableContainer className={classes.tableContainer}>
-          <Table size="small" className={classes.table}>
-            <TableHead>
-              <TableRow>
-                <StyledTableCell>Date</StyledTableCell>
-                <StyledTableCell>Transaction Type</StyledTableCell>
-                <StyledTableCell>Payment Type</StyledTableCell>
-                <StyledTableCell>Account Number</StyledTableCell>
-                <StyledTableCell>Encounter Type</StyledTableCell>
-                <StyledTableCell>Amount</StyledTableCell>
-                <StyledTableCell>Invoice/Receipt</StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {billings.length ? (
-                billings.map((item) => (
-                  <StyledTableRow key={`${item.dt}_${item.amount}_${item.tran_type}`}>
-                    <StyledTableCell component="th" scope="item">
-                      {moment(item.dt).format("MMM D YYYY")}
+        <Grid item md={6} sm={12} xs={12}>
+          <TableContainer className={classes.tableContainer}>
+            <Table size="small" className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>Date</StyledTableCell>
+                  <StyledTableCell>Transaction Type</StyledTableCell>
+                  <StyledTableCell>Payment Type</StyledTableCell>
+                  <StyledTableCell>Account Number</StyledTableCell>
+                  <StyledTableCell>Encounter Type</StyledTableCell>
+                  <StyledTableCell>Amount</StyledTableCell>
+                  <StyledTableCell>Invoice/Receipt</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {billings.length ? (
+                  billings.map((item) => (
+                    <StyledTableRow key={`${item.dt}_${item.amount}_${item.tran_type}`}>
+                      <StyledTableCell component="th" scope="item">
+                        {moment(item.dt).format("MMM D YYYY")}
+                      </StyledTableCell>
+                      <StyledTableCell>{item.tran_type}</StyledTableCell>
+                      <StyledTableCell>{item.cpt_procedure}</StyledTableCell>
+                      <StyledTableCell>{item.account_num}</StyledTableCell>
+                      <StyledTableCell>{item.encounter_title}</StyledTableCell>
+                      <StyledTableCell>
+                        $
+                        {item.amount}
+                      </StyledTableCell>
+                      <StyledTableCell>{item.filename}</StyledTableCell>
+                    </StyledTableRow>
+                  ))
+                ) : (
+                  <StyledTableRow>
+                    <StyledTableCell colSpan={2}>
+                      <Typography className={classes.resMessage}>
+                        No Billings Found...
+                      </Typography>
                     </StyledTableCell>
-                    <StyledTableCell>{item.tran_type}</StyledTableCell>
-                    <StyledTableCell>{item.cpt_procedure}</StyledTableCell>
-                    <StyledTableCell>{item.account_num}</StyledTableCell>
-                    <StyledTableCell>{item.encounter_title}</StyledTableCell>
-                    <StyledTableCell>
-                      $
-                      {item.amount}
-                    </StyledTableCell>
-                    <StyledTableCell>{item.filename}</StyledTableCell>
                   </StyledTableRow>
-                ))
-              ) : (
-                <StyledTableRow>
-                  <StyledTableCell colSpan={2}>
-                    <Typography className={classes.resMessage}>
-                      No Billings Found...
-                    </Typography>
-                  </StyledTableCell>
-                </StyledTableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Grid>
-    </div>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+      </div>
+    </>
   );
 };
 
