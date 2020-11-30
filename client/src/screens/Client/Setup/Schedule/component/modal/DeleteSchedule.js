@@ -9,15 +9,11 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import {
   makeStyles,
 } from "@material-ui/core/styles";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import {
-  useDispatch,
-} from "react-redux";
 
 import ScheduleService from "../../../../../../services/schedule.service";
-import {
-  setSuccess,
-} from "../../../../../../store/common/actions";
+
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -40,12 +36,14 @@ const DeleteSchedule = ({
   id, isDeleteModalOpen, onClose, fetchScheduleSearch,
 }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleDeleteSchedule = () => {
     ScheduleService.deleteSchedule(id).then((res) => {
       setTimeout(() => {
-        dispatch(setSuccess(res.data.message));
+        enqueueSnackbar(`${res.data.message}`, {
+          variant: "success",
+        });
       }, 300);
     });
     onClose();

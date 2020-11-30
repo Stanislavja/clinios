@@ -8,12 +8,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import { useSelector, useDispatch, shallowEqual } from "react-redux";
+import { useSnackbar } from "notistack";
+import { useSelector, shallowEqual } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import Error from "../../components/common/Error";
 import AuthService from "../../services/patient_portal/auth.service";
-import { setSuccess } from "../../store/common/actions";
 import Success from "./auth/ForgotPassword/Success";
 
 const useStyles = makeStyles((theme) => ({
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 
 const PatientResetPassword = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const { patientId, token } = useParams();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -50,7 +50,9 @@ const PatientResetPassword = () => {
     e.preventDefault();
     AuthService.resetPassword(patientId, token, password).then(
       (response) => {
-        dispatch(setSuccess(`${response.data.message}`));
+        enqueueSnackbar(`${response.data.message}`, {
+          variant: "success",
+        });
         setClient(response.data.data.client);
       },
       (error) => {

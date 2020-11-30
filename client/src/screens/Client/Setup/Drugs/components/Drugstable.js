@@ -16,12 +16,11 @@ import {
 import { green, grey } from "@material-ui/core/colors";
 import Alert from "@material-ui/lab/Alert";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
 
 import useAuth from "../../../../../hooks/useAuth";
 import DrugsService from "../../../../../services/drugs.service";
-import { setSuccess } from "../../../../../store/common/actions";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -83,7 +82,7 @@ const GreenSwitch = withStyles({
 
 const Drugstable = ({ result, fetchSearchDrugs }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuth();
   const [state, setState] = useState(result);
   const [errors, setErrors] = useState([]);
@@ -106,7 +105,9 @@ const Drugstable = ({ result, fetchSearchDrugs }) => {
       DrugsService.addFavorite(drugId, user.id, payload).then(
         (response) => {
           setTimeout(() => {
-            dispatch(setSuccess(`${response.data.message}`));
+            enqueueSnackbar(`${response.data.message}`, {
+              variant: "success",
+            });
           }, 300);
         },
         (error) => {
@@ -119,7 +120,9 @@ const Drugstable = ({ result, fetchSearchDrugs }) => {
       DrugsService.deleteFavorite(drugId).then(
         (response) => {
           setTimeout(() => {
-            dispatch(setSuccess(`${response.data.message}`));
+            enqueueSnackbar(`${response.data.message}`, {
+              variant: "success",
+            });
           }, 300);
         },
         (error) => {

@@ -20,12 +20,11 @@ import { green, grey } from "@material-ui/core/colors";
 import Alert from "@material-ui/lab/Alert";
 import { KeyboardDatePicker, KeyboardTimePicker } from "@material-ui/pickers";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
 
 import useAuth from "../../../../../../hooks/useAuth";
 import ScheduleService from "../../../../../../services/schedule.service";
-import { setSuccess } from "../../../../../../store/common/actions";
 
 const useStyles = makeStyles((theme) => ({
   gridMargin: {
@@ -105,7 +104,7 @@ const NewOrEditSchedule = ({
   ...props
 }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuth();
   const [schedule, setSchedule] = useState([]);
   const [status, setStatus] = useState("");
@@ -146,7 +145,9 @@ const NewOrEditSchedule = ({
       ScheduleService.createNewSchedule(payload).then(
         (response) => {
           setTimeout(() => {
-            dispatch(setSuccess(response.data.message));
+            enqueueSnackbar(`${response.data.message}`, {
+              variant: "success",
+            });
           }, 300);
         },
         (error) => {
@@ -159,7 +160,9 @@ const NewOrEditSchedule = ({
       ScheduleService.updateSchedule(user.id, schedule.id, payload).then(
         (response) => {
           setTimeout(() => {
-            dispatch(setSuccess(response.data.message));
+            enqueueSnackbar(`${response.data.message}`, {
+              variant: "success",
+            });
           }, 300);
         },
         (error) => {

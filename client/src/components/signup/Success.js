@@ -5,10 +5,10 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { makeStyles } from "@material-ui/core/styles";
 import Alert from "@material-ui/lab/Alert";
-import { useSelector, useDispatch, shallowEqual } from "react-redux";
+import { useSnackbar } from "notistack";
+import { useSelector, shallowEqual } from "react-redux";
 
 import EmailService from "../../services/email.service";
-import { setSuccess } from "../../store/common/actions";
 import Dimmer from "../common/Dimmer";
 
 
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Success = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const [errors, setErrors] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const user = useSelector((state) => state.auth.user, shallowEqual);
@@ -34,7 +34,9 @@ const Success = () => {
     EmailService.resendEmailVerification(user).then(
       (response) => {
         setErrors(response.data);
-        dispatch(setSuccess(response.response));
+        enqueueSnackbar(response.data.message, {
+          variant: "success",
+        });
         setIsLoading(false);
       },
       (error) => {

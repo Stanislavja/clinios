@@ -176,7 +176,7 @@ export const AuthProvider = ({ children }) => {
           const { user } = response.data.data;
           const patientId = cookies.last_viewed_patient_id;
           let lastVisitedPatient = null;
-          if (patientId) {
+          if (patientId && (decoded.role === "CLIENT")) {
             const lastPatentRes = await axios.get(`${API_BASE}/user/last-visited-patient/${patientId}`,
               { headers: authHeader() });
             lastVisitedPatient = lastPatentRes.data.data;
