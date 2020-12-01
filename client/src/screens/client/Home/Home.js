@@ -56,7 +56,7 @@ const GreenSwitch = withStyles({
 export default function Home() {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  const [errors, setErrors] = useState([]);
+  const [errors, setErrors] = useState(null);
   const [selectedProvider, setSelectedProvider] = useState({});
   const [providerDetails, setProviderDetails] = useState({});
   const [messagesUnread, setMessagesUnread] = useState([]);
@@ -151,7 +151,7 @@ export default function Home() {
         setIsOpen(false);
       },
       (error) => {
-        setErrors(error.response.data.error);
+        setErrors(error.response.data.message);
       },
     );
   };
@@ -178,7 +178,7 @@ export default function Home() {
         setIsOpen(false);
       },
       (error) => {
-        setErrors(error.response.data.error);
+        setErrors(error.response.data.message);
       },
     );
   };
@@ -195,7 +195,8 @@ export default function Home() {
         setIsOpen(false);
       },
       (error) => {
-        setErrors(error.response.data.error);
+        setErrors(error.response.data.message);
+        setIsLoading(false);
       },
     );
   };
@@ -327,30 +328,38 @@ export default function Home() {
           )}
         </Grid>
       </Grid>
-      <NewOrEditEvent
-        isLoading={isLoading}
-        isNewEvent={isNewEvent}
-        event={selectedEvent && selectedEvent}
-        selectedDate={selectedDate}
-        selectedProvider={selectedProvider}
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        providers={providers}
-        onSave={handleEventCreation}
-        onEventUpdate={(payload) => handleEventUpdate(payload)}
-        errors={errors}
-        appointments={appointments}
-      />
-      <MessageToPatient
-        isLoading={isLoading}
-        msg={selectedMsg}
-        isNewMessage={isNewMessage}
-        onModalEnter={fetchSingleMessage}
-        isOpen={isMessageToPatientOpen}
-        onSubmit={handleMessageToPatientFormSubmit}
-        onClose={() => setIsMessageToPatientOpen(false)}
-        errors={errors}
-      />
+      {isOpen
+        && (
+          <NewOrEditEvent
+            isLoading={isLoading}
+            isNewEvent={isNewEvent}
+            event={selectedEvent && selectedEvent}
+            selectedDate={selectedDate}
+            selectedProvider={selectedProvider}
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            providers={providers}
+            onSave={handleEventCreation}
+            onEventUpdate={(payload) => handleEventUpdate(payload)}
+            errors={errors}
+            appointments={appointments}
+          />
+        )}
+
+      {isMessageToPatientOpen
+        && (
+          <MessageToPatient
+            isLoading={isLoading}
+            msg={selectedMsg}
+            isNewMessage={isNewMessage}
+            onModalEnter={fetchSingleMessage}
+            isOpen={isMessageToPatientOpen}
+            onSubmit={handleMessageToPatientFormSubmit}
+            onClose={() => setIsMessageToPatientOpen(false)}
+            errors={errors}
+          />
+        )}
+
     </div>
   );
 }
