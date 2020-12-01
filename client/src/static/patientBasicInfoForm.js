@@ -207,6 +207,25 @@ export const AddressForm = [
   },
 ];
 
+export const PortalForm = [
+  {
+    name: "email",
+    id: "portal-email",
+    label: "Email",
+    baseType: "input",
+    type: "email",
+    options: [],
+  },
+  {
+    name: "password",
+    id: "portal-password",
+    label: "Password",
+    baseType: "input",
+    type: "password",
+    options: [],
+  },
+];
+
 export const Pharmacies = [
   {
     name: "Search",
