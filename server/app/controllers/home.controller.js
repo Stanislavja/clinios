@@ -79,13 +79,13 @@ const createAppointment = async (req, res) => {
     return res.status(status.bad).send(errorMessage);
   }
   const {
+    ApptStatus,
     title,
     notes,
     patient,
     start_dt,
     end_dt,
     provider,
-    ApptStatus,
   } = req.body.data;
 
   const db = makeDb(configuration, res);
@@ -220,7 +220,7 @@ const updateAppointment = async (req, res) => {
         where id=${id}`
     );
     if (!updateResponse.affectedRows) {
-      errorMessage.error = "Update not successful";
+      errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
     }
     let emailTemplate;
@@ -264,7 +264,7 @@ const updateAppointment = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Update not successful";
+    errorMessage.message = "Update not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
