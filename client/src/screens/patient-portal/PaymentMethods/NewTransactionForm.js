@@ -8,9 +8,12 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import moment from "moment";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 
 import Dialog from "../../../components/Dialog";
+import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 import { TransactionFormFields } from "../../../static/transactionForm";
 
 const useStyles = makeStyles((theme) => ({
@@ -28,7 +31,8 @@ const useStyles = makeStyles((theme) => ({
 
 const NewTransactionForm = (props) => {
   const classes = useStyles();
-  const { isOpen, onClose } = props;
+  const { enqueueSnackbar } = useSnackbar();
+  const { isOpen, onClose, reloadData } = props;
 
   const [formFields, setFormFields] = useState({
     date: "",
@@ -49,7 +53,23 @@ const NewTransactionForm = (props) => {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
-    onClose();
+    // onClose();
+    const reqBody = {
+      data: {
+        dt: moment(formFields.date).format("YYYY-MM-DD hh:mm"),
+        type_id: formFields.type,
+        payment_type: formFields.paymentType,
+        amount: formFields.amount,
+        note: formFields.notes,
+        account_number: formFields.accountNum,
+      },
+    };
+    PatientPortalService.createBilling(reqBody)
+      .then((response) => {
+        enqueueSnackbar(`${response.message}`, { variant: "success" });
+        reloadData();
+        onClose();
+      });
   };
 
   return (
@@ -158,6 +178,7 @@ const NewTransactionForm = (props) => {
 NewTransactionForm.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  reloadData: PropTypes.func.isRequired,
 };
 
 export default NewTransactionForm;
