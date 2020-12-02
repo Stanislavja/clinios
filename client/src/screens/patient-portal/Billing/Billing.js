@@ -76,6 +76,7 @@ const Billing = () => {
         <NewTransactionForm
           isOpen={newPaymentDialog}
           onClose={() => setNewPaymentDialog(false)}
+          reloadData={fetchBillings}
         />
       )}
       <div className={classes.root}>
