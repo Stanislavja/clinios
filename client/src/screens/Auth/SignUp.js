@@ -37,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
 const SignUp = () => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
+  const [signedUpUser, setSignedUpUser] = useState([]);
   const [errors, setErrors] = useState([]);
   const [success, setSuccess] = useState(false);
 
@@ -63,6 +64,7 @@ const SignUp = () => {
         if (response.data) {
           setSuccess(true);
           sendVerificationEmail(response.data.data.user);
+          setSignedUpUser(response.data.data.user);
         }
         enqueueSnackbar(`${response.data.message}`, {
           variant: "success",
@@ -91,7 +93,7 @@ const SignUp = () => {
           Physician Sign Up
         </Typography>
         {success ? (
-          <Success />
+          <Success user={signedUpUser} />
         ) : (
           <PracticeForm
             onFormSubmit={handleFormSubmit}
