@@ -110,6 +110,7 @@ const Appointments = () => {
       PatientPortalService.bookAppointment(reqBody).then((res) => {
         setTimeout(() => {
           setShowCalendar(false);
+          setAppointmentTypes([]);
           setUserSelection({
             ...userSelection,
             practitioner: "",

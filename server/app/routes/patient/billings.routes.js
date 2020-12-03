@@ -10,4 +10,10 @@ router.get(
   billingsController.getBillings
 );
 
+router.post(
+  "/client-portal/billings",
+  [authJwt.verifyToken],
+  billingsController.createBilling
+);
+
 module.exports = router;

@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
   makeStyles, TextField, Grid, Typography,
 } from "@material-ui/core";
+import _ from "lodash";
 
+import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 import {
   Pharmacies as pharmacies,
 } from "../../../static/patientBasicInfoForm";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,6 +35,26 @@ const useStyles = makeStyles((theme) => ({
 
 const Pharmacies = () => {
   const classes = useStyles();
+  const [searchedResults, setSearchedResults] = useState({
+    pharmacy1: [],
+    pharmacy2: [],
+  });
+
+  const debouncedSearchPharmacies = _.debounce((event) => {
+    const { name, value } = event.target;
+    const reqBody = {
+      data: {
+        text: value,
+      },
+    };
+    PatientPortalService.searchPharmacies(reqBody).then((res) => {
+      setSearchedResults({
+        ...searchedResults,
+        [name]: res.data,
+      });
+    });
+  }, 1000);
+
   return (
     <div className={classes.root}>
       <Typography
@@ -52,7 +75,13 @@ const Pharmacies = () => {
                   {" "}
                   {index + 1}
                 </Typography>
-                <TextField label={pharmacy.name} className={classes.inputTextRow} />
+                <TextField
+                  id={pharmacy.id}
+                  name={pharmacy.name}
+                  label={pharmacy.label}
+                  className={classes.inputTextRow}
+                  onChange={(e) => debouncedSearchPharmacies(e)}
+                />
                 <Typography gutterBottom>{pharmacy.name}</Typography>
                 <Typography gutterBottom>{pharmacy.address}</Typography>
                 <Typography gutterBottom>{pharmacy.phone}</Typography>

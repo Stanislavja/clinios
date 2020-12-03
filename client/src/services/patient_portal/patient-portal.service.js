@@ -56,6 +56,14 @@ class PatientPortalService {
       .then((res) => res.data);
   }
 
+  createBilling(data) {
+    return axios
+      .post(`${API_BASE}/client-portal/billings`, data, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
   // Payment Methods
   getPaymentMethods() {
     return axios

@@ -23,6 +23,7 @@ import {
   BasicInfoForm,
   InsuranceForm,
   PaymentData,
+  PortalForm,
 } from "../../../../static/patientBasicInfoForm";
 import { calculateAge } from "../../../../utils/helpers";
 
@@ -66,7 +67,7 @@ const ProfileForm = () => {
 
   const [country, setCountry] = useState("");
   const [region, setRegion] = useState("");
-  const [basicInfo, setBasicInfo] = useState({
+  const [formFields, setFormFields] = useState({
     firstname: "",
     middlename: "",
     lastname: "",
@@ -91,13 +92,15 @@ const ProfileForm = () => {
   useEffect(() => {
     user.status = user.status && user.status === "A" ? "active" : user.status;
     user.gender = user.gender ? user.gender : "M";
-    setBasicInfo({ ...user });
+    user.dob = user.dob ? user.dob : moment().format("YYYY-MM-DD");
+    setFormFields({ ...formFields, ...user });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const handleInputChange = (e) => {
     const { value, name } = e.target;
-    setBasicInfo({
-      ...basicInfo,
+    setFormFields({
+      ...formFields,
       [name]: value,
     });
   };
@@ -111,7 +114,6 @@ const ProfileForm = () => {
   };
 
   const onFormSubmit = () => {
-    alert("form submitted");
   };
 
   return (
@@ -130,7 +132,7 @@ const ProfileForm = () => {
                       <TextField
                         label={item.label}
                         name={item.name}
-                        value={basicInfo[item.name]}
+                        value={formFields[item.name]}
                         id={item.id}
                         type={item.type}
                         fullWidth
@@ -143,7 +145,7 @@ const ProfileForm = () => {
                         label={item.label}
                         id={item.id}
                         name={item.name}
-                        value={basicInfo[item.name]}
+                        value={formFields[item.name]}
                         fullWidth
                         onChange={(e) => handleInputChange(e)}
                       >
@@ -166,8 +168,8 @@ const ProfileForm = () => {
                         name={item.name}
                         value={
                           item.type === "date"
-                            ? moment(basicInfo[item.name]).format("YYYY-MM-DD")
-                            : basicInfo[item.name]
+                            ? moment(formFields[item.name]).format("YYYY-MM-DD")
+                            : formFields[item.name]
                         }
                         id={item.id}
                         type={item.type}
@@ -181,7 +183,7 @@ const ProfileForm = () => {
                         label={item.label}
                         id={item.id}
                         name={item.name}
-                        value={basicInfo[item.name]}
+                        value={formFields[item.name]}
                         fullWidth
                         onChange={(e) => handleInputChange(e)}
                       >
@@ -197,7 +199,7 @@ const ProfileForm = () => {
                 <Grid item md={2}>
                   <Typography>
                     &nbsp;&nbsp;Age:
-                    {calculateAge(basicInfo.dob)}
+                    {calculateAge(formFields.dob)}
                   </Typography>
                 </Grid>
               </Grid>
@@ -208,7 +210,7 @@ const ProfileForm = () => {
                       <TextField
                         label={item.label}
                         name={item.name}
-                        value={basicInfo[item.name]}
+                        value={formFields[item.name]}
                         id={item.id}
                         type={item.type}
                         fullWidth
@@ -221,7 +223,7 @@ const ProfileForm = () => {
                         label={item.label}
                         id={item.id}
                         name={item.name}
-                        value={basicInfo[item.name]}
+                        value={formFields[item.name]}
                         fullWidth
                         onChange={(e) => handleInputChange(e)}
                       >
@@ -270,7 +272,7 @@ const ProfileForm = () => {
                   <TextField
                     label="Address"
                     name="address"
-                    value={basicInfo.address}
+                    value={formFields.address}
                     fullWidth
                     onChange={(e) => handleInputChange(e)}
                   />
@@ -279,7 +281,7 @@ const ProfileForm = () => {
                   <TextField
                     label="Address Line 2"
                     name="address2"
-                    value={basicInfo.address2}
+                    value={formFields.address2}
                     fullWidth
                     onChange={(e) => handleInputChange(e)}
                   />
@@ -288,7 +290,7 @@ const ProfileForm = () => {
                   <TextField
                     label="City"
                     name="city"
-                    value={basicInfo.city}
+                    value={formFields.city}
                     fullWidth
                     onChange={(e) => handleInputChange(e)}
                   />
@@ -297,7 +299,7 @@ const ProfileForm = () => {
                   <TextField
                     label="Zip/Postal"
                     name="zipPostal"
-                    value={basicInfo.postal}
+                    value={formFields.postal}
                     fullWidth
                     onChange={(e) => handleInputChange(e)}
                   />
@@ -396,6 +398,33 @@ const ProfileForm = () => {
                   ))}
                 </TableBody>
               </Table>
+            </Grid>
+          </Paper>
+        </Grid>
+      </Grid>
+
+      <Grid container>
+        <Grid item xs={12}>
+          <Paper className={classes.root} variant="outlined">
+            <Grid className={classes.sectionCard}>
+              <Typography variant="h5" color="textPrimary">
+                Portal
+              </Typography>
+              <Grid container spacing={1} className={classes.inputRow}>
+                {PortalForm.map((item) => (
+                  <Grid key={item.name} item md={2}>
+                    <TextField
+                      label={item.label}
+                      name={item.name}
+                      id={item.id}
+                      type={item.type}
+                      value={formFields[item.name]}
+                      fullWidth
+                      onChange={(e) => handleInputChange(e)}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
             </Grid>
           </Paper>
         </Grid>

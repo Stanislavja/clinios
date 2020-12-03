@@ -86,6 +86,7 @@ const PaymentMethods = () => {
         <NewTransactionForm
           isOpen={newPaymentDialog}
           onClose={() => setNewPaymentDialog(false)}
+          reloadData={() => { }}
         />
       )}
       {!!selectedPayment && (
