@@ -268,10 +268,12 @@ const NewOrEditEvent = ({
     const existPatientID = appointments
       .map((appointment) => selectedPatient.id === appointment.patient_id)
       .includes(true);
+
     const startTimeExist = appointments
       // eslint-disable-next-line
       .map((appointment) => calEvent.start_dt == appointment.start_dt)
       .includes(true);
+
     if (!calEvent.title || selectedPatient.length === 0) {
       if (!calEvent.title && selectedPatient.length === 0) {
         setErrorText({
@@ -310,11 +312,7 @@ const NewOrEditEvent = ({
     const index2 = providers.findIndex((pd) => pd.id === user.id);
     setIndex(index2);
   }, [providers, user]);
-
   return (
-    // <AuthConsumer>
-    //   {({ user }) => {
-
     <Dialog
       open={isOpen}
       onClose={onClose}
@@ -349,12 +347,11 @@ const NewOrEditEvent = ({
             This page is used to create a new appointment
           </DialogContentText>
           {errors
-            && errors.map((error, index) => (
-               // eslint-disable-next-line react/no-array-index-key
-              <Alert severity="error" key={index}>
-                {error.msg}
+            && (
+              <Alert severity="error">
+                {errors}
               </Alert>
-            ))}
+            )}
           <div className={classes.root}>
             <FormControl component="div" className={classes.formControl}>
               <TextField
@@ -508,7 +505,10 @@ const NewOrEditEvent = ({
               <RadioGroup
                 aria-label="status"
                 name="status"
-                value={calEvent.status ? calEvent.status : "R"}
+                value={calEvent.status ? calEvent.status : setCalEvent({
+                  ...calEvent,
+                  status: "R",
+                })}
                 onChange={(event) => handleOnChange(event)}
                 className={classes.statusList}
               >
@@ -622,9 +622,6 @@ const NewOrEditEvent = ({
         </div>
       </DialogActions>
     </Dialog>
-
-    //   }}
-    // </AuthConsumer>
   );
 };
 
@@ -663,11 +660,7 @@ NewOrEditEvent.propTypes = {
   onEventUpdate: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   isNewEvent: PropTypes.bool.isRequired,
-  errors: PropTypes.arrayOf(
-    PropTypes.shape({
-      msg: PropTypes.string.isRequired,
-    }),
-  ).isRequired,
+  errors: PropTypes.string.isRequired,
 };
 
 export default NewOrEditEvent;

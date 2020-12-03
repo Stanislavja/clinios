@@ -9,7 +9,6 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useSnackbar } from "notistack";
-import { useSelector, shallowEqual } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import Error from "../components/common/Error";
@@ -43,7 +42,7 @@ const ResetPassword = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [fieldErrors, setFieldErrors] = useState([]);
-  const success = useSelector((state) => state.common.success, shallowEqual);
+  const [success, setSuccess] = useState(false);
 
   const handlePasswordReset = (e) => {
     e.preventDefault();
@@ -52,6 +51,7 @@ const ResetPassword = () => {
         enqueueSnackbar(`${response.data.message}`, {
           variant: "success",
         });
+        setSuccess(true);
       },
       (error) => {
         if (!error.response) {
