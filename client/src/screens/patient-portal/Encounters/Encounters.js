@@ -12,6 +12,9 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: "40px 0px",
   },
+  mainContainer: {
+    margin: theme.spacing(2, 0),
+  },
   title: {
     paddingBottom: theme.spacing(1),
   },
@@ -56,6 +59,13 @@ const Encounters = () => {
       >
         Encounters
       </Typography>
+      <Typography
+        variant="h5"
+        color="textPrimary"
+        className={classes.title}
+      >
+        This page is used to view your treatment plans.
+      </Typography>
       {
         encounters.length
           ? encounters.map((item, index) => (
@@ -63,6 +73,7 @@ const Encounters = () => {
               item
               md={4}
               key={moment(item.dt).format("MMM D YYYY")}
+              className={classes.mainContainer}
             >
               <Grid className={classes.inputRow} container>
                 <Typography
