@@ -38,7 +38,7 @@ const getBillings = async (req, res) => {
 };
 
 const createBilling = async (req, res) => {
-  const { patient_id } = req.params;
+  // const { patient_id } = req.params;
   const { dt, type_id, amount, note } = req.body.data;
   let { payment_type } = req.body.data;
 
@@ -63,7 +63,6 @@ const createBilling = async (req, res) => {
     successMessage.message = "Insert successful";
     return res.status(status.created).send(successMessage);
   } catch (err) {
-    console.log("err", err);
     errorMessage.error = "Insert not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
