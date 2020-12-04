@@ -49,6 +49,9 @@ const getPasswordResetURL = (user, userType, token) => {
   if (userType === "patient") {
     return `${process.env.CLIENT_URL}/patient/password/reset/${user.id}/${token}`;
   }
+  if (userType === "corporate") {
+    return `${process.env.CLIENT_URL}/corporate/password/reset/${user.id}/${token}`;
+  }
   return `${process.env.CLIENT_URL}/password/reset/${user.id}/${token}`;
 };
 
