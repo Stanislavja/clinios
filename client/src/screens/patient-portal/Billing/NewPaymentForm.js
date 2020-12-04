@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 
 import {
-  TextField,
-  Button,
-  Grid,
-  Typography,
+  TextField, Button, Grid, Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
@@ -18,12 +15,16 @@ const useStyles = makeStyles((theme) => ({
   inputRow: {
     margin: theme.spacing(3, 0),
   },
-  formInput: {
+  gutterBottom: {
     marginBottom: theme.spacing(1),
   },
   customLabel: {
     fontSize: 16,
     color: "#37474f",
+    marginBottom: theme.spacing(2),
+  },
+  buttonsContainer: {
+    margin: theme.spacing(3, 0),
   },
 }));
 
@@ -61,12 +62,11 @@ const NewPaymentForm = (props) => {
         account_number: formFields.accountNum,
       },
     };
-    PatientPortalService.createBilling(reqBody)
-      .then((response) => {
-        enqueueSnackbar(`${response.message}`, { variant: "success" });
-        reloadData();
-        onClose();
-      });
+    PatientPortalService.createBilling(reqBody).then((response) => {
+      enqueueSnackbar(`${response.message}`, { variant: "success" });
+      reloadData();
+      onClose();
+    });
   };
 
   return (
@@ -81,16 +81,42 @@ const NewPaymentForm = (props) => {
             </Typography>
           </Grid>
           <form onSubmit={onFormSubmit}>
-            <Grid className={classes.inputRow} />
 
-            <Grid
-              className={classes.formInput}
-            >
-              <Typography className={classes.customLabel} color="textSecondary">
-                New Payment Method
+            <Grid className={classes.inputRow}>
+              <Typography
+                className={classes.customLabel}
+                color="textSecondary"
+                gutterBottom
+              >
+                Use existing payment method
+              </Typography>
+              <Typography
+                className={classes.gutterBottom}
+                color="textSecondary"
+                gutterBottom
+              >
+                Visa 0043
+              </Typography>
+              <Typography
+                className={classes.gutterBottom}
+                color="textSecondary"
+                gutterBottom
+              >
+                MasterCard 0222
+              </Typography>
+              <Typography
+                className={classes.gutterBottom}
+                color="textSecondary"
+                gutterBottom
+              >
+                Checking 0111
               </Typography>
             </Grid>
-            <Grid className={classes.formInput} item lg={2}>
+
+            <Typography className={classes.customLabel} color="textSecondary">
+              New Payment Method
+            </Typography>
+            <Grid className={classes.gutterBottom} item lg={4}>
               <TextField
                 variant="outlined"
                 name="notes"
@@ -105,17 +131,11 @@ const NewPaymentForm = (props) => {
               />
             </Grid>
 
-            <Grid container justify="space-between">
-              <Button
-                variant="outlined"
-                type="submit"
-              >
+            <Grid container className={classes.buttonsContainer} justify="space-between">
+              <Button variant="outlined" type="submit">
                 Process Payment
               </Button>
-              <Button
-                variant="outlined"
-                onClick={() => onClose()}
-              >
+              <Button variant="outlined" onClick={() => onClose()}>
                 Cancel
               </Button>
             </Grid>
@@ -124,7 +144,7 @@ const NewPaymentForm = (props) => {
       )}
       cancelForm={() => onClose()}
       hideActions
-      size="md"
+      size="sm"
     />
   );
 };
