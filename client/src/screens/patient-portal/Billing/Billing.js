@@ -10,10 +10,12 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
+import ViewIcon from "@material-ui/icons/Visibility";
 import moment from "moment";
 
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 import NewTransactionForm from "../PaymentMethods/NewTransactionForm";
+import ViewTransactionDetails from "../PaymentMethods/ViewTransactionDetails";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,6 +24,13 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     paddingBottom: theme.spacing(1),
+  },
+  viewIcon: {
+    cursor: "pointer",
+    fontSize: "1rem",
+  },
+  centered: {
+    textAlign: "center",
   },
 }));
 
@@ -59,6 +68,7 @@ const Billing = () => {
   const classes = useStyles();
   const [billings, setBillings] = useState([]);
   const [newPaymentDialog, setNewPaymentDialog] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState(null);
 
   const fetchBillings = useCallback(() => {
     PatientPortalService.getBillings().then((res) => {
@@ -79,10 +89,17 @@ const Billing = () => {
           reloadData={fetchBillings}
         />
       )}
+      {!!selectedPayment && (
+        <ViewTransactionDetails
+          isOpen={Boolean(selectedPayment)}
+          onClose={() => setSelectedPayment(null)}
+          data={selectedPayment}
+        />
+      )}
       <div className={classes.root}>
         <Grid
           item
-          sm={6}
+          sm={7}
           xs={12}
         >
           <Grid
@@ -114,7 +131,7 @@ const Billing = () => {
           This page is used to view billings.
         </Typography>
 
-        <Grid item md={6} sm={12} xs={12}>
+        <Grid item md={7} sm={12} xs={12}>
           <TableContainer className={classes.tableContainer}>
             <Table size="small" className={classes.table}>
               <TableHead>
@@ -126,6 +143,7 @@ const Billing = () => {
                   <StyledTableCell>Encounter Type</StyledTableCell>
                   <StyledTableCell>Amount</StyledTableCell>
                   <StyledTableCell>Invoice/Receipt</StyledTableCell>
+                  <StyledTableCell>View</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -144,6 +162,14 @@ const Billing = () => {
                         {item.amount}
                       </StyledTableCell>
                       <StyledTableCell>{item.filename}</StyledTableCell>
+                      <StyledTableCell
+                        className={classes.centered}
+                      >
+                        <ViewIcon
+                          className={classes.viewIcon}
+                          onClick={() => setSelectedPayment(item)}
+                        />
+                      </StyledTableCell>
                     </StyledTableRow>
                   ))
                 ) : (
