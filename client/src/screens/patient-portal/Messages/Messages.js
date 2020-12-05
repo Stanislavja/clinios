@@ -1,9 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-import { Button, Divider, Grid, makeStyles } from "@material-ui/core";
+import { Button, Divider, Grid, makeStyles, TextField } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import MessagesService from "../../../services/patient_portal/messages.service";
 import moment from "moment";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,7 +37,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Messages() {
   const classes = useStyles();
-  const [messages, setMessages] = React.useState([]);
+  const [messages, setMessages] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("");
+
   const fetchMessages = async () => {
     const msg = await MessagesService.getMessages();
     setMessages(msg.data.data);
@@ -41,13 +48,22 @@ export default function Messages() {
   useEffect(() => {
     fetchMessages();
   }, []);
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
     <div className={classes.root}>
       <div className={classes.titleSection}>
         <Typography component="h1" variant="h2" color="textPrimary" className={classes.title}>
           Messages
         </Typography>
-        <Button className={classes.newMessage} size="small" variant="contained" color="primary">
+        <Button
+          className={classes.newMessage}
+          onClick={() => setOpen(true)}
+          size="small"
+          variant="contained"
+          color="primary"
+        >
           New Message
         </Button>
       </div>
@@ -94,6 +110,39 @@ export default function Messages() {
           </Grid>
         ))}
       </div>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent style={{ minWidth: "600px" }}>
+          <Typography variant="h2">Send A Secure Message</Typography>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <TextField fullWidth margin="normal" variant="outlined" label="To" />
+            <TextField fullWidth margin="normal" variant="outlined" label="Subject" />
+            <TextField
+              fullWidth
+              variant="outlined"
+              label="Message"
+              className={classes.texArea}
+              InputProps={{
+                classes: classes.normalOutline,
+                inputComponent: TextareaAutosize,
+                rows: 8,
+              }}
+              value={message}
+              onChange={(event) => setMessage(event.target.value)}
+              size="small"
+            />
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button>Send</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

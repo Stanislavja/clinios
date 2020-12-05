@@ -309,7 +309,7 @@ const NewOrEditEvent = ({
   }, [providers, user]);
 
   return (
-    <Dialog 
+    <Dialog
       open={isOpen}
       onClose={onClose}
       aria-labelledby="alert-dialog-title"
