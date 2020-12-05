@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import {
-  Button, makeStyles, Typography, Grid, TextField, MenuItem,
+  Button, makeStyles, Typography, Grid, TextField, MenuItem, Grow,
 } from "@material-ui/core";
 
-import { timings } from "../../../static/patient-portal/appointments";
+import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,7 +25,18 @@ const useStyles = makeStyles((theme) => ({
 
 const Encounters = () => {
   const classes = useStyles();
+  const [requisitions, setRequisitions] = useState([]);
   const [selectedRequisition, setSelectedRequisition] = useState("");
+
+  const fetchRequisitions = useCallback(() => {
+    PatientPortalService.getRequisitions().then((res) => {
+      setRequisitions(res.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    fetchRequisitions();
+  }, [fetchRequisitions]);
 
   const onFormSubmit = (e) => {
     e.preventDefault();
@@ -53,31 +64,37 @@ const Encounters = () => {
             value={selectedRequisition}
             onChange={(e) => setSelectedRequisition(e.target.value)}
           >
-            {timings.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
+            {requisitions.map((option) => (
+              <MenuItem key={option.id} value={option.id}>
+                {option.lab}
               </MenuItem>
             ))}
           </TextField>
         </form>
       </Grid>
-      <Grid
-        container
-        className={classes.btnContainer}
+      <Grow
+        in={Boolean(selectedRequisition)}
+        style={{ transformOrigin: "0 0 0" }}
+        {...(selectedRequisition ? { timeout: 500 } : {})}
       >
-        <Button
-          variant="outlined"
-          className={classes.btn}
+        <Grid
+          container
+          className={classes.btnContainer}
         >
-          Download
-        </Button>
-        <Button
-          variant="outlined"
-          className={classes.btn}
-        >
-          Print
-        </Button>
-      </Grid>
+          <Button
+            variant="outlined"
+            className={classes.btn}
+          >
+            Download
+          </Button>
+          <Button
+            variant="outlined"
+            className={classes.btn}
+          >
+            Print
+          </Button>
+        </Grid>
+      </Grow>
     </div>
   );
 };
