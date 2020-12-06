@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import { makeStyles, withStyles } from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
@@ -12,6 +12,8 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
+
+import HomeService from "../../../services/corporate_portal/home.service";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -60,35 +62,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const supports = [
-  {
-    id: 1,
-    name: "Ultrawellness Center",
-    created: "2020-12-01T12:18:19.000Z",
-    created_by: "Mark Hyman MD",
-    subject: "Upload of lab gives error message file not supported",
-    status: "Waiting for Clinios",
-    updated: "2020-12-01T12:18:19.000Z",
-  },
-  {
-    id: 2,
-    name: "Ultrawellness Center",
-    created: "2020-12-01T12:18:19.000Z",
-    created_by: "Mark Hyman MD",
-    subject: "Make a new signup form for me so that I can use this new form",
-    status: "Waiting for Customer",
-    updated: "2020-12-01T12:18:19.000Z",
-  },
-];
-
 export default function Home() {
   const classes = useStyles();
   const [caseStatus, setCaseStatus] = useState("");
   const [open, setOpen] = useState(false);
+  const [supports, setSupports] = useState([]);
 
   const handleChange = (event) => {
     setCaseStatus(event.target.value);
   };
+
+
+  const fetchSupports = useCallback(() => {
+    const formData = {
+      data: {
+        caseStatus,
+      },
+    };
+
+    HomeService.getSupports(formData).then((response) => {
+      setSupports(response.data);
+    });
+  }, [caseStatus]);
+
+  useEffect(() => {
+    fetchSupports();
+  }, [fetchSupports]);
 
   return (
     <div className={classes.root}>
@@ -138,7 +137,7 @@ export default function Home() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {supports.map((s) => (
+          {supports && supports.map((s) => (
             <StyledTableRow key="dd">
               <TableCell padding="checkbox" component="th" scope="row">
                 {s.id}
