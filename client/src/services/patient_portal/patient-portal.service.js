@@ -72,6 +72,24 @@ class PatientPortalService {
       })
       .then((res) => res.data);
   }
+
+  // Pharmacies
+  searchPharmacies(data) {
+    return axios
+      .post(`${API_BASE}/pharmacies/search`, data, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  // Requisitions
+  getRequisitions() {
+    return axios
+      .get(`${API_BASE}/client-portal/lab_requisitions`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
 }
 
 export default new PatientPortalService();

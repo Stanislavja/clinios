@@ -42,17 +42,19 @@ const Pharmacies = () => {
 
   const debouncedSearchPharmacies = _.debounce((event) => {
     const { name, value } = event.target;
-    const reqBody = {
-      data: {
-        text: value,
-      },
-    };
-    PatientPortalService.searchPharmacies(reqBody).then((res) => {
-      setSearchedResults({
-        ...searchedResults,
-        [name]: res.data,
+    if (value.length > 5) {
+      const reqBody = {
+        data: {
+          text: value,
+        },
+      };
+      PatientPortalService.searchPharmacies(reqBody).then((res) => {
+        setSearchedResults({
+          ...searchedResults,
+          [name]: res.data,
+        });
       });
-    });
+    }
   }, 1000);
 
   return (

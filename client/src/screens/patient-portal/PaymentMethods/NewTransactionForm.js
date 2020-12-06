@@ -53,7 +53,6 @@ const NewTransactionForm = (props) => {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
-    // onClose();
     const reqBody = {
       data: {
         dt: moment(formFields.date).format("YYYY-MM-DD hh:mm"),
