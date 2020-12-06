@@ -12,7 +12,6 @@ import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import clsx from "clsx";
 import { useSnackbar } from "notistack";
-import { useParams } from "react-router-dom";
 
 import Error from "../../../components/common/Error";
 import useAuth from "../../../hooks/useAuth";
@@ -63,7 +62,6 @@ const PatientLogin = () => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const { corporateLogin } = useAuth();
-  const { clientCode } = useParams();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [errors, setErrors] = React.useState([]);
@@ -162,7 +160,7 @@ const PatientLogin = () => {
         <Grid container className={classes.meta}>
           <Grid item xs={6} />
           <Grid item xs={6} className={classes.forgotPass}>
-            <Link href={`/forgot/${clientCode}`} variant="body2">
+            <Link href="/corp/forgot-password" variant="body2">
               Forgot your password? Reset.
             </Link>
           </Grid>

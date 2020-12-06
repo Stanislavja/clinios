@@ -80,6 +80,7 @@ app.use(baseAPIPath, require("./app/routes/index.routes"));
 
 // Corporate Portal
 app.use(baseAPIPath, require("./app/routes/corporate/login.routes"));
+app.use(baseAPIPath, require("./app/routes/corporate/password-reset.routes"));
 
 app.listen(config.port).on("listening", () => {
   console.log(`API is live on ${config.port}`);

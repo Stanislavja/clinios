@@ -417,6 +417,20 @@ const routes = [
     component: lazy(() => import("./screens/corporate-portal/Auth/Login")),
   },
   {
+    exact: true,
+    guard: GuestGuard,
+    layout: MainLayout,
+    path: "/corp/forgot-password",
+    component: lazy(() => import("./screens/corporate-portal/Auth/ForgetPassword")),
+  },
+  {
+    exact: true,
+    guard: GuestGuard,
+    layout: MainLayout,
+    path: "/corporate/password/reset/:corporateId/:token",
+    component: lazy(() => import("./screens/corporate-portal/Auth/ResetPassword")),
+  },
+  {
     path: "/corporate",
     guard: AuthGuard,
     layout: DashboardLayout,
