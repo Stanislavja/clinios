@@ -1,11 +1,44 @@
 import React, { useState } from "react";
 
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, withStyles } from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
+import moment from "moment";
+
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.grey,
+    color: theme.palette.grey,
+    fontSize: "12px",
+    fontWeight: 700,
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
+
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    fontSize: 14,
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+    "& th": {
+      fontSize: 12,
+    },
+    "& td": {
+      fontSize: 12,
+    },
+  },
+}))(TableRow);
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,6 +59,27 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 160,
   },
 }));
+
+const supports = [
+  {
+    id: 1,
+    name: "Ultrawellness Center",
+    created: "2020-12-01T12:18:19.000Z",
+    created_by: "Mark Hyman MD",
+    subject: "Upload of lab gives error message file not supported",
+    status: "Waiting for Clinios",
+    updated: "2020-12-01T12:18:19.000Z",
+  },
+  {
+    id: 2,
+    name: "Ultrawellness Center",
+    created: "2020-12-01T12:18:19.000Z",
+    created_by: "Mark Hyman MD",
+    subject: "Make a new signup form for me so that I can use this new form",
+    status: "Waiting for Customer",
+    updated: "2020-12-01T12:18:19.000Z",
+  },
+];
 
 export default function Home() {
   const classes = useStyles();
@@ -66,6 +120,51 @@ export default function Home() {
           </Select>
         </FormControl>
       </div>
+
+      <Table
+        size="small"
+        className={classes.table}
+        aria-label="a dense table"
+      >
+        <TableHead>
+          <TableRow>
+            <StyledTableCell padding="checkbox">Case ID</StyledTableCell>
+            <StyledTableCell padding="checkbox">Client</StyledTableCell>
+            <StyledTableCell padding="checkbox">Created</StyledTableCell>
+            <StyledTableCell padding="checkbox">Created By</StyledTableCell>
+            <StyledTableCell padding="checkbox">Subject</StyledTableCell>
+            <StyledTableCell padding="checkbox">Status</StyledTableCell>
+            <StyledTableCell padding="checkbox">Updated</StyledTableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {supports.map((s) => (
+            <StyledTableRow key="dd">
+              <TableCell padding="checkbox" component="th" scope="row">
+                {s.id}
+              </TableCell>
+              <TableCell padding="checkbox" component="th" scope="row">
+                {s.name}
+              </TableCell>
+              <TableCell padding="checkbox" component="th" scope="row">
+                {moment(s.created).format("YYYY-MM-DD HH:mm")}
+              </TableCell>
+              <TableCell padding="checkbox" component="th" scope="row">
+                {s.created_by}
+              </TableCell>
+              <TableCell padding="checkbox" component="th" scope="row">
+                {s.subject}
+              </TableCell>
+              <TableCell padding="checkbox" component="th" scope="row">
+                {s.status}
+              </TableCell>
+              <TableCell padding="checkbox" component="th" scope="row">
+                {moment(s.updated).format("YYYY-MM-DD HH:mm")}
+              </TableCell>
+            </StyledTableRow>
+          ))}
+        </TableBody>
+      </Table>
 
     </div>
   );
