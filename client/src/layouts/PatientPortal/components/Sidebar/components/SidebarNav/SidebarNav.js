@@ -61,7 +61,7 @@ const SidebarNav = (props) => {
   const handleLogout = async () => {
     try {
       await logout();
-      history.push(user.login_url || "/login/ultrawellness");
+      history.push(user.login_url || "/login_client");
     } catch (err) {
       console.error(err);
     }
@@ -90,7 +90,7 @@ const SidebarNav = (props) => {
 
 SidebarNav.defaultProps = {
   className: null,
-  logout: () => { },
+  logout: () => {},
 };
 
 SidebarNav.propTypes = {
