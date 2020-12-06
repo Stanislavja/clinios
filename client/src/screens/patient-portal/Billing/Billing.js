@@ -40,9 +40,11 @@ const StyledTableCell = withStyles(() => ({
     fontSize: "12px",
     fontWeight: 700,
     padding: "6px 24px 6px 2px",
+    borderBottom: "unset",
   },
   body: {
     fontSize: 12,
+    borderBottom: "unset",
   },
 }))(TableCell);
 
