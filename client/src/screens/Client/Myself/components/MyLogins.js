@@ -13,6 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 
+import useAuth from "../../../../hooks/useAuth";
 import MySelfService from "../../../../services/myself.service";
 
 const useStyles = makeStyles((theme) => ({
@@ -75,27 +76,22 @@ const StyledTableRow = withStyles((theme) => ({
 export default function MyActivityHistory() {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-
+  const { user } = useAuth();
   const [logins, setLogins] = useState([]);
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const userId = user.id;
-
-    if (userId != null) {
-      MySelfService.getLogins(userId).then(
-        (res) => {
-          setLogins(res.data);
-        },
-        () => {
-          enqueueSnackbar("Unable to fetch data.", {
-            variant: "error",
-          });
-        },
-      );
-    }
+    MySelfService.getLogins(user.id).then(
+      (res) => {
+        setLogins(res.data);
+      },
+      () => {
+        enqueueSnackbar("Unable to fetch data.", {
+          variant: "error",
+        });
+      },
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
 
   return (
     <div className={classes.root}>
