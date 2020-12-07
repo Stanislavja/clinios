@@ -52,7 +52,7 @@ const CustomRouterLink = forwardRef((props, ref) => (
 
 const SidebarNav = (props) => {
   const {
-    pages, className, ...rest
+    pages, className,
   } = props;
   const { user, logout } = useAuth();
   const classes = useStyles();
@@ -67,9 +67,8 @@ const SidebarNav = (props) => {
     }
   };
 
-
   return (
-    <List {...rest} className={clsx(classes.root, className)}>
+    <List className={clsx(classes.root, className)}>
       {pages.map((page) => (
         <ListItem className={classes.item} disableGutters key={page.id}>
           <Button
@@ -90,7 +89,6 @@ const SidebarNav = (props) => {
 
 SidebarNav.defaultProps = {
   className: null,
-  logout: () => {},
 };
 
 SidebarNav.propTypes = {
@@ -99,10 +97,9 @@ SidebarNav.propTypes = {
     PropTypes.shape({
       title: PropTypes.string,
       href: PropTypes.string,
-      icon: PropTypes.string,
+      icon: PropTypes.objectOf(PropTypes.any),
     }),
   ).isRequired,
-  logout: PropTypes.func,
 };
 
 export default SidebarNav;
