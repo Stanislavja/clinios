@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { makeStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
@@ -13,6 +13,7 @@ import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 import NumberFormat from "react-number-format";
 
+import useAuth from "../../../../hooks/useAuth";
 import MySelfService from "../../../../services/myself.service";
 
 const useStyles = makeStyles((theme) => ({
@@ -71,7 +72,7 @@ NumberFormatCustom.propTypes = {
 export default function MyProfile() {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  const [userId, setUserId] = useState(null);
+  const { user } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [title, setTitle] = useState("");
@@ -101,7 +102,7 @@ export default function MyProfile() {
       },
     };
 
-    MySelfService.updateProfile(payload, userId).then(
+    MySelfService.updateProfile(payload, user.id).then(
       (res) => {
         enqueueSnackbar(res.data.message, {
           variant: "success",
@@ -115,27 +116,28 @@ export default function MyProfile() {
     );
   };
 
+  const fetchForwardEmail = useCallback(() => {
+    MySelfService.getForwardEmail(user.id).then((res) => {
+      setForwardEmails(res.data);
+    });
+  }, [user]);
+
+  const fetchProfile = useCallback(() => {
+    MySelfService.getProfile(user.id).then((res) => {
+      const profile = res.data;
+      setName(`${profile.firstname} ${profile.lastname}`);
+      setEmail(profile.email);
+      setTitle(profile.title);
+      setCreated(moment(profile.created).format("YYYY-MM-DD"));
+      setSelectedForwardEmail(profile.email_forward_user_id);
+      setPhone(profile.phone);
+    });
+  }, [user]);
+
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const user_Id = user.id;
-    setUserId(user_Id);
-
-    if (user_Id != null) {
-      MySelfService.getForwardEmail(user_Id).then((res) => {
-        setForwardEmails(res.data);
-      });
-
-      MySelfService.getProfile(user_Id).then((res) => {
-        const profile = res.data;
-        setName(`${profile.firstname} ${profile.lastname}`);
-        setEmail(profile.email);
-        setTitle(profile.title);
-        setCreated(moment(profile.created).format("YYYY-MM-DD"));
-        setSelectedForwardEmail(profile.email_forward_user_id);
-        setPhone(profile.phone);
-      });
-    }
-  }, []);
+    fetchForwardEmail();
+    fetchProfile();
+  }, [fetchProfile, fetchForwardEmail]);
 
   return (
     <div className={classes.root}>

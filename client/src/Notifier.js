@@ -43,13 +43,13 @@ const Notifier = () => {
           }
         },
         onExited: (event, myKey) => {
-                    // remove this snackbar from redux store
+          // remove this snackbar from redux store
           dispatch(removeSnackbar(myKey));
           removeDisplayed(myKey);
         },
       });
 
-            // keep track of snackbars that we've displayed
+      // keep track of snackbars that we've displayed
       storeDisplayed(key);
     });
   }, [notifications, closeSnackbar, enqueueSnackbar, dispatch]);
