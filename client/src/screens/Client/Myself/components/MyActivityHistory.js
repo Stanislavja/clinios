@@ -82,20 +82,16 @@ export default function MyActivityHistory() {
   const [activityHistory, setActivityHistory] = useState([]);
 
   useEffect(() => {
-    const userId = user.id;
-
-    if (userId != null) {
-      MySelfService.getActivityHistory(userId).then(
-        (res) => {
-          setActivityHistory(res.data);
-        },
-        () => {
-          enqueueSnackbar("Unable to fetch Activity history.", {
-            variant: "error",
-          });
-        },
-      );
-    }
+    MySelfService.getActivityHistory(user.id).then(
+      (res) => {
+        setActivityHistory(res.data);
+      },
+      () => {
+        enqueueSnackbar("Unable to fetch Activity history.", {
+          variant: "error",
+        });
+      },
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
