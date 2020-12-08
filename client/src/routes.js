@@ -305,14 +305,14 @@ const routes = [
   {
     exact: true,
     guard: GuestGuard,
-    layout: DashboardLayout,
+    layout: MainLayout,
     path: "/forgot/:clientCode",
     component: lazy(() => import("./screens/patient-portal/auth/ForgotPassword")),
   },
   {
     exact: true,
     guard: GuestGuard,
-    layout: DashboardLayout,
+    layout: MainLayout,
     path: "/patient/password/reset/:patientId/:token",
     component: lazy(() => import("./screens/patient-portal/ResetPassword")),
   },
