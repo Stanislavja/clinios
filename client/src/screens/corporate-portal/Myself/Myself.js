@@ -50,8 +50,8 @@ const Myself = () => {
               </Button>
             </div>
             {(activeView === "history") && <MyActivityHistory />}
-            {(activeView === "profile") && <MyLogins />}
-            {(activeView === "login") && <MyProfile />}
+            {(activeView === "profile") && <MyProfile />}
+            {(activeView === "login") && <MyLogins />}
           </Grid>
         </Grid>
       </Grid>
