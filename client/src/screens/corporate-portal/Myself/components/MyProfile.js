@@ -14,7 +14,7 @@ import PropTypes from "prop-types";
 import NumberFormat from "react-number-format";
 
 import useAuth from "../../../../hooks/useAuth";
-import MySelfService from "../../../../services/myself.service";
+import MySelfService from "../../../../services/corporate_portal/myself.service";
 
 const useStyles = makeStyles((theme) => ({
   root: {
