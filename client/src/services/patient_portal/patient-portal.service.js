@@ -76,7 +76,7 @@ class PatientPortalService {
   // Pharmacies
   searchPharmacies(data) {
     return axios
-      .post(`${API_BASE}/pharmacies/search`, data, {
+      .post(`${API_BASE}/client-portal/pharmacy/search`, data, {
         headers: authHeader(),
       })
       .then((res) => res.data);
