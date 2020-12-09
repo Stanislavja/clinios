@@ -7,7 +7,11 @@ const {
 
 const getBillings = async (req, res) => {
   const db = makeDb(configuration, res);
+  let { patient_id } = req.query;
 
+  if(typeof patient_id === "undefined"){
+    patient_id = req.user_id
+  }
   let $sql;
   try {
     $sql = `select t.encounter_id, t.dt, tt.name tran_type, t.payment_type, pm.account_number
@@ -17,7 +21,7 @@ const getBillings = async (req, res) => {
     left join encounter e on e.id=t.encounter_id
     left join encounter_type et on et.id=e.type_id
     left join payment_method pm on pm.id=t.payment_method_id
-    where t.patient_id=${req.user_id}
+    where t.patient_id=${patient_id}
     order by t.dt desc
     limit 100`;
 
@@ -38,8 +42,15 @@ const getBillings = async (req, res) => {
 };
 
 const createBilling = async (req, res) => {
-  // const { patient_id } = req.params;
-  const { dt, type_id, amount, note } = req.body.data;
+  const { client_id, dt, type_id, amount, note, patient_id } = req.body.data;
+
+  if(typeof patient_id === "undefined"){
+    patient_id = req.user_id
+  }
+  if(typeof client_id === "undefined"){
+    client_id = req.client_id
+  }
+
   let { payment_type } = req.body.data;
 
   const db = makeDb(configuration, res);
@@ -52,7 +63,7 @@ const createBilling = async (req, res) => {
   try {
     const insertResponse = await db.query(
       `insert into tran (patient_id, user_id, client_id, dt, type_id, amount, payment_type, note, created, created_user_id) values 
-        (${req.client_id}, ${req.user_id}, ${req.client_id}, '${dt}', ${type_id}, ${amount}, ${payment_type}, '${note}', now(), ${req.user_id})`
+        (${patient_id}, ${req.user_id}, ${client_id}, '${dt}', ${type_id}, ${amount}, ${payment_type}, '${note}', now(), ${req.user_id})`
     );
 
     if (!insertResponse.affectedRows) {

@@ -7,12 +7,17 @@ const {
 
 const getPaymentMethods = async (req, res) => {
   const db = makeDb(configuration, res);
+  let { patient_id } = req.query;
+
+  if(typeof patient_id === "undefined"){
+    patient_id = req.user_id
+  }
 
   let $sql;
   try {
-    $sql = `select * ?
-    from patient_card
-    where patient_id=${req.user_id}
+    $sql = `select *
+    from payment_method
+    where patient_id=${patient_id}
     order by id`;
 
     const dbResponse = await db.query($sql);
@@ -24,6 +29,7 @@ const getPaymentMethods = async (req, res) => {
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
+    console.log('err', err)
     errorMessage.error = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
