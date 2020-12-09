@@ -552,9 +552,9 @@ const Patient = () => {
 
   const redirectToPatientPortal = () => {
     history.push({
-      pathname: "/manage/patient-search",
+      pathname: "/patient",
       state: {
-        patients,
+        patientId,
       },
     });
   };

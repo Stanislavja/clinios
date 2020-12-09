@@ -10,6 +10,7 @@ import moment from "moment";
 import ReactHtmlParser from "react-html-parser";
 import { Link } from "react-router-dom";
 
+import useAuth from "../../../hooks/useAuth";
 import HomeService from "../../../services/patient_portal/home.service";
 
 const useStyles = makeStyles((theme) => ({
@@ -61,11 +62,13 @@ const useStyles = makeStyles((theme) => ({
 const Home = () => {
   const classes = useStyles();
   const [header, setHeader] = useState({});
+  const { lastVisitedPatient } = useAuth();
   const [clientForms, setClientForms] = useState({});
   const [upcomingAppointment, setUpcomingAppointment] = useState({});
 
+
   useEffect(() => {
-    HomeService.getClientHeader().then(
+    HomeService.getClientHeader(lastVisitedPatient).then(
       (response) => {
         setHeader(response.data[0]);
       },
@@ -73,7 +76,7 @@ const Home = () => {
         console.error("error", error);
       },
     );
-    HomeService.getClientForms().then(
+    HomeService.getClientForms(lastVisitedPatient).then(
       (response) => {
         setClientForms(response.data[0]);
       },
@@ -81,7 +84,7 @@ const Home = () => {
         console.error("error", error);
       },
     );
-    HomeService.getUpcomingAppointments().then(
+    HomeService.getUpcomingAppointments(lastVisitedPatient).then(
       (response) => {
         setUpcomingAppointment(response.data[0]);
       },

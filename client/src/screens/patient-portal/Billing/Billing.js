@@ -13,6 +13,7 @@ import Typography from "@material-ui/core/Typography";
 import ViewIcon from "@material-ui/icons/Visibility";
 import moment from "moment";
 
+import useAuth from "../../../hooks/useAuth";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 import NewTransactionForm from "../PaymentMethods/NewTransactionForm";
 import ViewTransactionDetails from "../PaymentMethods/ViewTransactionDetails";
@@ -68,15 +69,16 @@ const StyledTableRow = withStyles(() => ({
 
 const Billing = () => {
   const classes = useStyles();
+  const { lastVisitedPatient } = useAuth();
   const [billings, setBillings] = useState([]);
   const [newPaymentDialog, setNewPaymentDialog] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
 
   const fetchBillings = useCallback(() => {
-    PatientPortalService.getBillings().then((res) => {
+    PatientPortalService.getBillings(lastVisitedPatient).then((res) => {
       setBillings(res.data);
     });
-  }, []);
+  }, [lastVisitedPatient]);
 
   useEffect(() => {
     fetchBillings();

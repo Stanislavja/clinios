@@ -10,6 +10,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
 
+import useAuth from "../../../hooks/useAuth";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 import NewTransactionForm from "./NewTransactionForm";
 import ViewTransactionDetails from "./ViewTransactionDetails";
@@ -64,15 +65,16 @@ const StyledTableRow = withStyles(() => ({
 
 const PaymentMethods = () => {
   const classes = useStyles();
+  const { lastVisitedPatient } = useAuth();
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [newPaymentDialog, setNewPaymentDialog] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
 
   const fetchPaymentMethods = useCallback(() => {
-    PatientPortalService.getPaymentMethods().then((res) => {
+    PatientPortalService.getPaymentMethods(lastVisitedPatient).then((res) => {
       setPaymentMethods(res.data);
     });
-  }, []);
+  }, [lastVisitedPatient]);
 
   useEffect(() => {
     fetchPaymentMethods();

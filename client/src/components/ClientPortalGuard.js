@@ -11,8 +11,7 @@ const ClientPortalGuard = ({ children }) => {
   if (!isAuthenticated) {
     return <Redirect to={(user && user.login_url) || "/login_client"} />;
   }
-
-  if (user.role !== "PATIENT") {
+  if (!((user.role !== "PATIENT") || (user.role !== "CLIENT"))) {
     return <Redirect to="/protected-area" />;
   }
 
