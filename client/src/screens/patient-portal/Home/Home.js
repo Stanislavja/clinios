@@ -92,7 +92,7 @@ const Home = () => {
         console.error("error", error);
       },
     );
-  }, []);
+  }, [lastVisitedPatient]);
 
   return (
     <Container component="main">

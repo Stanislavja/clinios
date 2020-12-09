@@ -174,7 +174,7 @@ const Patient = () => {
   const [isLayoutUpdated, setIsLayoutUpdated] = useState(false);
 
   // data states
-  const [patients, setPatients] = useState([]);
+  const [setPatients] = useState([]);
   const patientData = patientInfo.data;
   const patientBalance = billing.balance;
 
