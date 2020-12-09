@@ -8,8 +8,8 @@ class PatientPortalService {
   getPractitioners(patient) {
     let url = `${API_BASE}/client-portal/practitioners`;
     if (patient) {
-      url = `${API_BASE}/client-portal/practitioners/
-        ?patient_id=${patient.id}&client_id=${patient.client_id}`;
+      // eslint-disable-next-line max-len
+      url = `${API_BASE}/client-portal/practitioners/?patient_id=${patient.id}&client_id=${patient.client_id}`;
     }
     return axios
       .get(url, {
@@ -38,8 +38,8 @@ class PatientPortalService {
   getEncounters(patient) {
     let url = `${API_BASE}/client-portal/encounters`;
     if (patient) {
-      url = `${API_BASE}/client-portal/encounters/
-        ?patient_id=${patient.id}&client_id=${patient.client_id}`;
+      // eslint-disable-next-line max-len
+      url = `${API_BASE}/client-portal/encounters/?patient_id=${patient.id}&client_id=${patient.client_id}`;
     }
     return axios
       .get(url, {
@@ -52,8 +52,8 @@ class PatientPortalService {
   getLabDocuments(patient) {
     let url = `${API_BASE}/client-portal/labs`;
     if (patient) {
-      url = `${API_BASE}/client-portal/labs/
-        ?patient_id=${patient.id}&client_id=${patient.client_id}`;
+      // eslint-disable-next-line max-len
+      url = `${API_BASE}/client-portal/labs/?patient_id=${patient.id}&client_id=${patient.client_id}`;
     }
     return axios
       .get(url, {
@@ -66,8 +66,8 @@ class PatientPortalService {
   getBillings(patient) {
     let url = `${API_BASE}/client-portal/billings`;
     if (patient) {
-      url = `${API_BASE}/client-portal/billings/
-        ?patient_id=${patient.id}&client_id=${patient.client_id}`;
+      // eslint-disable-next-line max-len
+      url = `${API_BASE}/client-portal/billings/?patient_id=${patient.id}&client_id=${patient.client_id}`;
     }
 
     return axios
@@ -89,8 +89,8 @@ class PatientPortalService {
   getPaymentMethods(patient) {
     let url = `${API_BASE}/client-portal/payment-methods`;
     if (patient) {
-      url = `${API_BASE}/client-portal/payment-methods/
-        ?patient_id=${patient.id}&client_id=${patient.client_id}`;
+      // eslint-disable-next-line max-len
+      url = `${API_BASE}/client-portal/payment-methods/?patient_id=${patient.id}&client_id=${patient.client_id}`;
     }
     return axios
       .get(url, {
@@ -112,8 +112,8 @@ class PatientPortalService {
   getRequisitions(patient) {
     let url = `${API_BASE}/client-portal/lab_requisitions`;
     if (patient) {
-      url = `${API_BASE}/client-portal/lab_requisitions/
-        ?patient_id=${patient.id}&client_id=${patient.client_id}`;
+      // eslint-disable-next-line max-len
+      url = `${API_BASE}/client-portal/lab_requisitions/?patient_id=${patient.id}&client_id=${patient.client_id}`;
     }
     return axios
       .get(url, {

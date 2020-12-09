@@ -10,8 +10,9 @@ const getPatient = async (req, res) => {
   const db = makeDb(configuration, res);
   let { patient_id } = req.query;
 
-  if(typeof patient_id === "undefined"){
-    patient_id = req.user_id
+  if (typeof patient_id === "undefined") {
+    // eslint-disable-next-line prefer-destructuring
+    patient_id = req.user_id;
   }
   let $sql;
   try {
@@ -77,14 +78,15 @@ const updatePatient = async (req, res) => {
   const db = makeDb(configuration, res);
   let { client_id } = req.query;
 
-  if(typeof client_id === "undefined"){
-    client_id = req.client_id
+  if (typeof client_id === "undefined") {
+    // eslint-disable-next-line prefer-destructuring
+    client_id = req.client_id;
   }
   try {
     let $sql;
     if (typeof email !== "undefined") {
       const doesEmailExists = await db.query(
-        `select 1 from patient where client_id=${client_id} and  id<>1 and email='${email}' limit 1`
+        `select 1 from patient where client_id=${client_id} and id<>1 and email='${email}' limit 1`
       );
       if (doesEmailExists.length > 0) {
         errorMessage.message = "The new email address is already in use.";
@@ -219,8 +221,8 @@ const getPatientPaymentMethod = async (req, res) => {
   const db = makeDb(configuration, res);
   let { patient_id } = req.query;
 
-  if(typeof patient_id === "undefined"){
-    patient_id = req.user_id
+  if (typeof patient_id === "undefined") {
+    patient_id = req.user_id;
   }
   let $sql;
 

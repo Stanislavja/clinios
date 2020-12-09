@@ -10,8 +10,9 @@ const getAllPractitioner = async (req, res) => {
   const db = makeDb(configuration, res);
   let { client_id } = req.query;
 
-  if(typeof client_id === "undefined"){
-    client_id = req.client_id
+  if (typeof client_id === "undefined") {
+    // eslint-disable-next-line prefer-destructuring
+    client_id = req.client_id;
   }
   let $sql;
 

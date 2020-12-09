@@ -10,12 +10,14 @@ const getAllHandouts = async (req, res) => {
 
   let { client_id, patient_id } = req.query;
 
-  if(typeof patient_id === "undefined"){
-    patient_id = req.user_id
+  if (typeof patient_id === "undefined") {
+    // eslint-disable-next-line prefer-destructuring
+    patient_id = req.user_id;
   }
 
-  if(typeof client_id === "undefined"){
-    client_id = req.client_id
+  if (typeof client_id === "undefined") {
+    // eslint-disable-next-line prefer-destructuring
+    client_id = req.client_id;
   }
 
   let $sql;

@@ -9,12 +9,13 @@ const getClientPortalHeader = async (req, res) => {
   const db = makeDb(configuration, res);
   let { client_id } = req.query;
 
-  if(typeof client_id === "undefined"){
-    client_id = req.client_id
+  if (typeof client_id === "undefined") {
+    // eslint-disable-next-line prefer-destructuring
+    client_id = req.client_id;
   }
 
   try {
-    $sql = `select cp.id, cp.header
+    const $sql = `select cp.id, cp.header
       from client_portal cp
       where cp.id =${client_id}`;
 
@@ -38,14 +39,13 @@ const getClientPortalForms = async (req, res) => {
   const db = makeDb(configuration, res);
   let { client_id } = req.query;
 
-  if(typeof client_id === "undefined"){
-    client_id = req.client_id
+  if (typeof client_id === "undefined") {
+    // eslint-disable-next-line prefer-destructuring
+    client_id = req.client_id;
   }
 
-  let $sql;
-
   try {
-    $sql = `select cf.id, cf.title, pf.patient_id, pf.sign_dt
+    const $sql = `select cf.id, cf.title, pf.patient_id, pf.sign_dt
     from client_form cf
     left join patient_form pf on pf.patient_id=cf.id
     where cf.client_id=${client_id}
@@ -72,8 +72,8 @@ const getUpcomingAppointments = async (req, res) => {
   const db = makeDb(configuration, res);
   let { patient_id } = req.query;
 
-  if(typeof patient_id === "undefined"){
-    patient_id = req.user_id
+  if (typeof patient_id === "undefined") {
+    patient_id = req.user_id;
   }
   let $sql;
 

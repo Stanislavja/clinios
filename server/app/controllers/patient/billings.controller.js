@@ -9,8 +9,8 @@ const getBillings = async (req, res) => {
   const db = makeDb(configuration, res);
   let { patient_id } = req.query;
 
-  if(typeof patient_id === "undefined"){
-    patient_id = req.user_id
+  if (typeof patient_id === "undefined") {
+    patient_id = req.user_id;
   }
   let $sql;
   try {
@@ -42,13 +42,16 @@ const getBillings = async (req, res) => {
 };
 
 const createBilling = async (req, res) => {
-  const { client_id, dt, type_id, amount, note, patient_id } = req.body.data;
+  const { dt, type_id, amount, note } = req.body.data;
+  let { client_id, patient_id } = req.body.data;
 
-  if(typeof patient_id === "undefined"){
-    patient_id = req.user_id
+  if (typeof patient_id === "undefined") {
+    // eslint-disable-next-line prefer-destructuring
+    patient_id = req.user_id;
   }
-  if(typeof client_id === "undefined"){
-    client_id = req.client_id
+  if (typeof client_id === "undefined") {
+    // eslint-disable-next-line prefer-destructuring
+    client_id = req.client_id;
   }
 
   let { payment_type } = req.body.data;

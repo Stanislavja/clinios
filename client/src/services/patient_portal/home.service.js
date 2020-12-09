@@ -7,6 +7,7 @@ class HomeService {
   getClientHeader(patient) {
     let url = `${API_BASE}/client-portal/header`;
     if (patient) {
+      // eslint-disable-next-line max-len
       url = `${API_BASE}/client-portal/header/?patient_id=${patient.id}&client_id=${patient.client_id}`;
     }
     return axios
@@ -19,6 +20,7 @@ class HomeService {
   getClientForms(patient) {
     let url = `${API_BASE}/client-portal/forms`;
     if (patient) {
+      // eslint-disable-next-line max-len
       url = `${API_BASE}/client-portal/forms/?patient_id=${patient.id}&client_id=${patient.client_id}`;
     }
     return axios
@@ -31,8 +33,8 @@ class HomeService {
   getUpcomingAppointments(patient) {
     let url = `${API_BASE}/client-portal/upcoming-appointments`;
     if (patient) {
-      url = `${API_BASE}/client-portal/upcoming-appointments/
-        ?patient_id=${patient.id}&client_id=${patient.client_id}`;
+      // eslint-disable-next-line max-len
+      url = `${API_BASE}/client-portal/upcoming-appointments/?patient_id=${patient.id}&client_id=${patient.client_id}`;
     }
     return axios
       .get(url, {

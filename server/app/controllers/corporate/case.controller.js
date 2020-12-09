@@ -1,13 +1,15 @@
 const { configuration, makeDb } = require("../../db/db.js");
-const { errorMessage, successMessage, status } = require("../../helpers/status");
+const {
+  errorMessage,
+  successMessage,
+  status,
+} = require("../../helpers/status");
 
 const getCase = async (req, res) => {
   const db = makeDb(configuration, res);
 
   try {
-    let $sql;
-
-    $sql = `select s.id, c.name, s.subject, cs.name, s.created, concat(u.firstname, ' ', u.lastname) created_user, s.updated
+    const $sql = `select s.id, c.name, s.subject, cs.name, s.created, concat(u.firstname, ' ', u.lastname) created_user, s.updated
     from support s
     left join client c on c.id=s.client_id
     left join case_status cs on cs.id=s.status_id

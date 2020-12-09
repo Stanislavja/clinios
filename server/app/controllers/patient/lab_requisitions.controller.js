@@ -9,8 +9,8 @@ const getLabRequitions = async (req, res) => {
   const db = makeDb(configuration, res);
   let { patient_id } = req.query;
 
-  if(typeof patient_id === "undefined"){
-    patient_id = req.user_id
+  if (typeof patient_id === "undefined") {
+    patient_id = req.user_id;
   }
   let $sql;
   try {
