@@ -15,7 +15,7 @@ import { useSnackbar } from "notistack";
 import { useHistory } from "react-router-dom";
 
 import useAuth from "../../../../hooks/useAuth";
-import MySelfService from "../../../../services/myself.service";
+import MySelfService from "../../../../services/corporate_portal/myself.service";
 
 const useStyles = makeStyles((theme) => ({
   root: {

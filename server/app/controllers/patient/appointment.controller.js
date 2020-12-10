@@ -8,13 +8,18 @@ const {
 
 const getAllPractitioner = async (req, res) => {
   const db = makeDb(configuration, res);
+  let { client_id } = req.query;
 
+  if (typeof client_id === "undefined") {
+    // eslint-disable-next-line prefer-destructuring
+    client_id = req.client_id;
+  }
   let $sql;
 
   try {
     $sql = `select u.id user_id, concat(u.firstname, ' ', u.lastname) name
     from user u
-    where u.client_id=${req.client_id}
+    where u.client_id=${client_id}
     order by name
     limit 100`;
 

@@ -7,12 +7,17 @@ const {
 
 const getClientPortalHeader = async (req, res) => {
   const db = makeDb(configuration, res);
-  let $sql;
+  let { client_id } = req.query;
+
+  if (typeof client_id === "undefined") {
+    // eslint-disable-next-line prefer-destructuring
+    client_id = req.client_id;
+  }
 
   try {
-    $sql = `select cp.id, cp.header
+    const $sql = `select cp.id, cp.header
       from client_portal cp
-      where cp.id =${req.client_id}`;
+      where cp.id =${client_id}`;
 
     const dbResponse = await db.query($sql);
 
@@ -32,13 +37,18 @@ const getClientPortalHeader = async (req, res) => {
 
 const getClientPortalForms = async (req, res) => {
   const db = makeDb(configuration, res);
-  let $sql;
+  let { client_id } = req.query;
+
+  if (typeof client_id === "undefined") {
+    // eslint-disable-next-line prefer-destructuring
+    client_id = req.client_id;
+  }
 
   try {
-    $sql = `select cf.id, cf.title, pf.patient_id, pf.sign_dt
+    const $sql = `select cf.id, cf.title, pf.patient_id, pf.sign_dt
     from client_form cf
     left join patient_form pf on pf.patient_id=cf.id
-    where cf.client_id=${req.client_id}
+    where cf.client_id=${client_id}
     and cf.active is true
     and (pf.patient_id is null or pf.sign_dt is null)`;
 
@@ -60,13 +70,18 @@ const getClientPortalForms = async (req, res) => {
 
 const getUpcomingAppointments = async (req, res) => {
   const db = makeDb(configuration, res);
+  let { patient_id } = req.query;
+
+  if (typeof patient_id === "undefined") {
+    patient_id = req.user_id;
+  }
   let $sql;
 
   try {
     $sql = `select uc.patient_id, uc.start_dt, uc2.end_dt, uc2.status, concat(u.firstname, ' ', u.lastname) provider from (
       select uc.patient_id, min(start_dt) start_dt
       from user_calendar uc
-      where uc.patient_id=${req.user_id}
+      where uc.patient_id=${patient_id}
       and uc.start_dt>now()
       group by uc.patient_id
       ) uc

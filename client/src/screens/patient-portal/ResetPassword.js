@@ -9,7 +9,6 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useSnackbar } from "notistack";
-import { useSelector, shallowEqual } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import Error from "../../components/common/Error";
@@ -44,7 +43,7 @@ const PatientResetPassword = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [client, setClient] = useState("");
   const [fieldErrors, setFieldErrors] = useState([]);
-  const success = useSelector((state) => state.common.success, shallowEqual);
+  const [success, setSuccess] = useState(false);
 
   const handlePasswordReset = (e) => {
     e.preventDefault();
@@ -54,11 +53,13 @@ const PatientResetPassword = () => {
           variant: "success",
         });
         setClient(response.data.data.client);
+        setSuccess(true);
       },
       (error) => {
         if (!error.response) {
           return;
         }
+        setSuccess(false);
         const { data, status } = error.response;
 
         if (status === 400) {

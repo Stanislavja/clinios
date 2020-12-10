@@ -4,6 +4,7 @@ import {
   Button, makeStyles, Typography, Grid, TextField, MenuItem, Grow,
 } from "@material-ui/core";
 
+import useAuth from "../../../hooks/useAuth";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 
 const useStyles = makeStyles((theme) => ({
@@ -25,14 +26,15 @@ const useStyles = makeStyles((theme) => ({
 
 const Encounters = () => {
   const classes = useStyles();
+  const { lastVisitedPatient } = useAuth();
   const [requisitions, setRequisitions] = useState([]);
   const [selectedRequisition, setSelectedRequisition] = useState("");
 
   const fetchRequisitions = useCallback(() => {
-    PatientPortalService.getRequisitions().then((res) => {
+    PatientPortalService.getRequisitions(lastVisitedPatient).then((res) => {
       setRequisitions(res.data);
     });
-  }, []);
+  }, [lastVisitedPatient]);
 
   useEffect(() => {
     fetchRequisitions();

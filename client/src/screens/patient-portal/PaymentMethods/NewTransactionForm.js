@@ -13,6 +13,7 @@ import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 
 import Dialog from "../../../components/Dialog";
+import useAuth from "../../../hooks/useAuth";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 import { TransactionFormFields } from "../../../static/transactionForm";
 
@@ -31,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
 
 const NewTransactionForm = (props) => {
   const classes = useStyles();
+  const { lastVisitedPatient } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const { isOpen, onClose, reloadData } = props;
 
@@ -56,6 +58,8 @@ const NewTransactionForm = (props) => {
     const reqBody = {
       data: {
         dt: moment(formFields.date).format("YYYY-MM-DD hh:mm"),
+        patient_id: lastVisitedPatient.id,
+        client_id: lastVisitedPatient.client_id,
         type_id: formFields.type,
         payment_type: formFields.paymentType,
         amount: formFields.amount,

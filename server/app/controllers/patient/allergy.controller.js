@@ -7,14 +7,24 @@ const {
 
 const getAllergy = async (req, res) => {
   const db = makeDb(configuration, res);
+  let { client_id, patient_id } = req.query;
 
-  let $sql;
+  if (typeof patient_id === "undefined") {
+    // eslint-disable-next-line prefer-destructuring
+    patient_id = req.user_id;
+  }
+
+  if (typeof client_id === "undefined") {
+    // eslint-disable-next-line prefer-destructuring
+    client_id = req.client_id;
+  }
+
   try {
-    $sql = `select pa.created, d.name
+    const $sql = `select pa.created, d.name
     from patient_allergy pa
     left join drug d on d.id=pa.drug_id
-    where pa.client_id=${req.client_id}
-    and pa.patient_id=${req.user_id}
+    where pa.client_id=${client_id}
+    and pa.patient_id=${patient_id}
     order by d.name
     limit 100`;
 

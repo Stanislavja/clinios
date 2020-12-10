@@ -174,7 +174,7 @@ const Patient = () => {
   const [isLayoutUpdated, setIsLayoutUpdated] = useState(false);
 
   // data states
-  const [patients, setPatients] = useState([]);
+  const [setPatients] = useState([]);
   const patientData = patientInfo.data;
   const patientBalance = billing.balance;
 
@@ -552,9 +552,9 @@ const Patient = () => {
 
   const redirectToPatientPortal = () => {
     history.push({
-      pathname: "/manage/patient-search",
+      pathname: "/patient",
       state: {
-        patients,
+        patientId,
       },
     });
   };

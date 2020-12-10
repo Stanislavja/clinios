@@ -61,7 +61,7 @@ const getLastVisitedPatient = async (req, res) => {
   const { patientId } = req.params;
   try {
     const dbResponse = await db.query(
-      `select id, firstname, lastname from patient where id=${patientId}`
+      `select id, client_id, firstname, lastname from patient where id=${patientId}`
     );
     if (!dbResponse) {
       errorMessage.error = "None found";

@@ -5,6 +5,7 @@ import {
 } from "@material-ui/core";
 import moment from "moment";
 
+import useAuth from "../../../hooks/useAuth";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 
 const useStyles = makeStyles((theme) => ({
@@ -37,13 +38,14 @@ const useStyles = makeStyles((theme) => ({
 
 const Encounters = () => {
   const classes = useStyles();
+  const { lastVisitedPatient } = useAuth();
   const [encounters, setEncounters] = useState([]);
 
   const fetchEncounters = useCallback(() => {
-    PatientPortalService.getEncounters().then((res) => {
+    PatientPortalService.getEncounters(lastVisitedPatient).then((res) => {
       setEncounters(res.data);
     });
-  }, []);
+  }, [lastVisitedPatient]);
 
   useEffect(() => {
     fetchEncounters();

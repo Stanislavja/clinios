@@ -7,6 +7,11 @@ const {
 
 const getAllencounters = async (req, res) => {
   const db = makeDb(configuration, res);
+  let { patient_id } = req.query;
+
+  if (typeof patient_id === "undefined") {
+    patient_id = req.user_id;
+  }
   let $sql;
 
   try {
@@ -14,7 +19,7 @@ const getAllencounters = async (req, res) => {
     from encounter e
     left join patient p on p.id=e.patient_id
     left join user u on u.id=e.user_id
-    where e.patient_id=${req.user_id}
+    where e.patient_id=${patient_id}
     order by e.dt desc
     limit 100`;
 

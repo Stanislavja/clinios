@@ -24,7 +24,11 @@ const { configuration, makeDb } = require("../../db/db.js");
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-const { errorMessage, successMessage, status } = require("../../helpers/status");
+const {
+  errorMessage,
+  successMessage,
+  status,
+} = require("../../helpers/status");
 const {
   transporter,
   getPasswordResetURL,
