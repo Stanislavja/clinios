@@ -8,6 +8,8 @@ import Icon from "@mdi/react";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 
+import useAuth from "../../../../hooks/useAuth";
+import { client_pages, corporate_pages } from "../../../../static/nav-pages";
 import { Profile, SidebarNav, SearchBar } from "./components";
 
 const useStyles = makeStyles((theme) => ({
@@ -42,7 +44,8 @@ const Sidebar = (props) => {
     ...rest
   } = props;
   const classes = useStyles();
-
+  const { user } = useAuth();
+  const navPages = (user.role === "CORPORATE") ? corporate_pages : client_pages;
   const pages = [
     {
       title: "Home",
@@ -92,7 +95,7 @@ const Sidebar = (props) => {
       <div {...rest} className={clsx(classes.root, className)}>
         <Profile />
         <Divider className={classes.divider} />
-        <SidebarNav className={classes.nav} pages={pages} />
+        <SidebarNav className={classes.nav} pages={navPages} />
         <SearchBar />
       </div>
     </Drawer>
