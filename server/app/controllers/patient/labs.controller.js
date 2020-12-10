@@ -17,7 +17,7 @@ const getAlllabs = async (req, res) => {
   let $sql;
 
   try {
-    $sql = `select l.created, l.filename
+    $sql = `select l.created, l.filename, l.status
     from lab l
     where l.patient_id=${patient_id} `;
 

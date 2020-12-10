@@ -46,7 +46,7 @@ const searchPharmacy = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const dbResponse = await db.query(
-      `select id, name
+      `select id, name, address, address2, city, state, postal, country, phone, fax
       from pharmacy
       where name like '${text}%'
       order by name

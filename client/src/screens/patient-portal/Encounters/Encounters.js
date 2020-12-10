@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "40px 0px",
   },
   mainContainer: {
-    margin: theme.spacing(2, 0),
+    margin: theme.spacing(1, 0),
   },
   title: {
     paddingBottom: theme.spacing(1),

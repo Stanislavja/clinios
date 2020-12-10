@@ -248,6 +248,7 @@ const ProfileForm = () => {
                     id="password"
                     type="password"
                     fullWidth
+                    value={formFields.password}
                     onChange={(e) => handleInputChange(e)}
                   />
                 </Grid>
