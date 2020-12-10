@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import {
-  makeStyles, TextField, Grid, Typography,
+  makeStyles, TextField, Grid, Typography, Box,
 } from "@material-ui/core";
 import _ from "lodash";
 
@@ -29,16 +29,26 @@ const useStyles = makeStyles((theme) => ({
   },
   halfSectionCard: {
     padding: theme.spacing(1.5, 0, 1, 0),
-    minHeight: 198,
   },
 }));
 
 const Pharmacies = () => {
   const classes = useStyles();
+  const [patientPharmacy, setPatientPharmacy] = useState(null);
   const [searchedResults, setSearchedResults] = useState({
     pharmacy1: [],
     pharmacy2: [],
   });
+
+  const fetchPatienPharmacy = useCallback(() => {
+    PatientPortalService.getPharmacies().then((res) => {
+      setPatientPharmacy(res.data.length ? res.data[0] : null);
+    });
+  }, []);
+
+  useEffect(() => {
+    fetchPatienPharmacy();
+  }, [fetchPatienPharmacy]);
 
   const debouncedSearchPharmacies = _.debounce((event) => {
     const { name, value } = event.target;
@@ -84,13 +94,48 @@ const Pharmacies = () => {
                   className={classes.inputTextRow}
                   onChange={(e) => debouncedSearchPharmacies(e)}
                 />
-                <Typography gutterBottom>{pharmacy.name}</Typography>
-                <Typography gutterBottom>{pharmacy.address}</Typography>
-                <Typography gutterBottom>{pharmacy.phone}</Typography>
+                {
+                  searchedResults[pharmacy.name].map((item) => (
+                    <Box key={item.id} mb={2}>
+                      <Typography gutterBottom>{item.name}</Typography>
+                      <Typography gutterBottom>{item.address}</Typography>
+                      <Typography gutterBottom>
+                        {item.city}
+                        {" "}
+                        {item.state}
+                        {" "}
+                        {item.postal}
+                      </Typography>
+                      <Typography gutterBottom>
+                        Phone
+                        {item.phone}
+                      </Typography>
+                    </Box>
+                  ))
+                }
               </Grid>
             ))}
           </Grid>
         </Grid>
+        {
+          !!patientPharmacy && (
+            <>
+              <Typography gutterBottom>{patientPharmacy.name}</Typography>
+              <Typography gutterBottom>{patientPharmacy.address}</Typography>
+              <Typography gutterBottom>
+                {patientPharmacy.city}
+                {" "}
+                {patientPharmacy.state}
+                {" "}
+                {patientPharmacy.postal}
+              </Typography>
+              <Typography gutterBottom>
+                Phone
+                {patientPharmacy.phone}
+              </Typography>
+            </>
+          )
+        }
       </Grid>
     </div>
   );
