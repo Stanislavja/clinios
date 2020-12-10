@@ -7,6 +7,12 @@ const {
 
 const getPharmacy = async (req, res) => {
   const db = makeDb(configuration, res);
+  let { patient_id } = req.query;
+
+  if (typeof patient_id === "undefined") {
+    patient_id = req.user_id;
+  }
+
   let $sql;
 
   try {
@@ -16,7 +22,7 @@ const getPharmacy = async (req, res) => {
     from patient p
     left join pharmacy ph on ph.id=p.pharmacy_id
     left join pharmacy ph2 on ph2.id=p.pharmacy2_id
-    where p.id=${req.user_id}`;
+    where p.id=${patient_id}`;
 
     const dbResponse = await db.query($sql);
 

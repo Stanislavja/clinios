@@ -8,12 +8,18 @@ const {
 
 const getPatient = async (req, res) => {
   const db = makeDb(configuration, res);
+  let { patient_id } = req.query;
+
+  if (typeof patient_id === "undefined") {
+    // eslint-disable-next-line prefer-destructuring
+    patient_id = req.user_id;
+  }
   let $sql;
   try {
     $sql = `select p.id, p.firstname, p.middlename, p.lastname, p.gender, p.dob, p.ssn, p.preferred_name, p.referred_by, p.phone_home, p.phone_cell, p.phone_work, p.email, p.client_id
     , p.admin_note, p.medical_note, p.address, p.address2, p.city, p.postal, p.state, p.emergency_firstname, p.emergency_middlename, p.emergency_lastname, p.emergency_relationship, p.emergency_email,
     p.emergency_phone, p.insurance_name, p.insurance_group, p.insurance_member, p.insurance_phone, p.insurance_desc, p.height, p.waist, p.weight, p.medical_note
-    from patient p where p.id=${req.user_id}`;
+    from patient p where p.id=${patient_id}`;
 
     const dbResponse = await db.query($sql);
 
@@ -70,12 +76,17 @@ const updatePatient = async (req, res) => {
   } = req.body.data;
 
   const db = makeDb(configuration, res);
+  let { client_id } = req.query;
 
+  if (typeof client_id === "undefined") {
+    // eslint-disable-next-line prefer-destructuring
+    client_id = req.client_id;
+  }
   try {
     let $sql;
     if (typeof email !== "undefined") {
       const doesEmailExists = await db.query(
-        `select 1 from patient where client_id=${req.client_id} and  id<>1 and email='${email}' limit 1`
+        `select 1 from patient where client_id=${client_id} and id<>1 and email='${email}' limit 1`
       );
       if (doesEmailExists.length > 0) {
         errorMessage.message = "The new email address is already in use.";
@@ -208,10 +219,15 @@ const updatePatient = async (req, res) => {
 
 const getPatientPaymentMethod = async (req, res) => {
   const db = makeDb(configuration, res);
+  let { patient_id } = req.query;
+
+  if (typeof patient_id === "undefined") {
+    patient_id = req.user_id;
+  }
   let $sql;
 
   try {
-    $sql = `select id, type, account_number, exp, created from payment_method where patient_id=${req.user_id} order by 1`;
+    $sql = `select id, type, account_number, exp, created from payment_method where patient_id=${patient_id} order by 1`;
 
     const dbResponse = await db.query($sql);
     if (!dbResponse) {

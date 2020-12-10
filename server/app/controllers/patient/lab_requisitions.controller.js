@@ -7,14 +7,18 @@ const {
 
 const getLabRequitions = async (req, res) => {
   const db = makeDb(configuration, res);
+  let { patient_id } = req.query;
 
+  if (typeof patient_id === "undefined") {
+    patient_id = req.user_id;
+  }
   let $sql;
   try {
     $sql = `select e.id, e.dt, left (group_concat(c.name order by c.name), 100) lab
     from encounter e
     join patient_cpt pc on pc.encounter_id=e.id
     join cpt c on c.id=pc.cpt_id
-    where pc.patient_id=${req.user_id}
+    where pc.patient_id=${patient_id}
     group by e.id
     order by e.id desc
     limit 50`;

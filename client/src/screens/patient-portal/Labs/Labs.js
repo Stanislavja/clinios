@@ -11,6 +11,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import moment from "moment";
 
+import useAuth from "../../../hooks/useAuth";
 import useDidMountEffect from "../../../hooks/useDidMountEffect";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 
@@ -71,15 +72,16 @@ const StyledTableRow = withStyles(() => ({
 
 const Labs = () => {
   const classes = useStyles();
+  const { lastVisitedPatient } = useAuth();
   const [labDocuments, setLabDocuments] = useState([]);
   const [tabValue, setTabValue] = useState(0);
   const [tableData, setTableData] = useState([]);
 
   const fetchLabDocuments = useCallback(() => {
-    PatientPortalService.getLabDocuments().then((res) => {
+    PatientPortalService.getLabDocuments(lastVisitedPatient).then((res) => {
       setLabDocuments(res.data);
     });
-  }, []);
+  }, [lastVisitedPatient]);
 
   const sortDocumentByStatus = useCallback((selectedTab) => {
     if (selectedTab === 0) { // (All)

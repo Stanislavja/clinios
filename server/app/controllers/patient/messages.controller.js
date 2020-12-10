@@ -7,6 +7,11 @@ const {
 
 const getAllMessages = async (req, res) => {
   const db = makeDb(configuration, res);
+  let { patient_id } = req.query;
+
+  if (typeof patient_id === "undefined") {
+    patient_id = req.user_id;
+  }
   let $sql;
 
   try {
@@ -17,7 +22,7 @@ const getAllMessages = async (req, res) => {
     from message m
     left join user u on u.id=m.user_id_from
     left join user u2 on u2.id=m.user_id_to
-    where (patient_id_from=${req.user_id} or patient_id_to=${req.user_id})
+    where (patient_id_from=${patient_id} or patient_id_to=${patient_id})
     order by m.created desc
     limit 50`;
 

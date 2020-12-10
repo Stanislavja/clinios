@@ -7,6 +7,11 @@ const {
 
 const getPrescription = async (req, res) => {
   const db = makeDb(configuration, res);
+  let { patient_id } = req.query;
+
+  if (typeof patient_id === "undefined") {
+    patient_id = req.user_id;
+  }
 
   let $sql;
   try {
@@ -16,7 +21,7 @@ const getPrescription = async (req, res) => {
     from patient_drug pd
     join drug d on d.id=pd.drug_id
     join drug_strength ds on ds.id=pd.drug_strength_id
-    where pd.patient_id=${req.user_id}
+    where pd.patient_id=${patient_id}
     order by pd.created desc
     limit 100`;
 

@@ -1,5 +1,9 @@
 const { configuration, makeDb } = require("../../db/db.js");
-const { errorMessage, successMessage, status } = require("../../helpers/status");
+const {
+  errorMessage,
+  successMessage,
+  status,
+} = require("../../helpers/status");
 
 const getSupports = async (req, res) => {
   const db = makeDb(configuration, res);

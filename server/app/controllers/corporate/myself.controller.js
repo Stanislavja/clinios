@@ -2,7 +2,11 @@ const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const moment = require("moment");
 const { configuration, makeDb } = require("../../db/db.js");
-const { errorMessage, successMessage, status } = require("../../helpers/status");
+const {
+  errorMessage,
+  successMessage,
+  status,
+} = require("../../helpers/status");
 
 const getProfile = async (req, res) => {
   const db = makeDb(configuration, res);
@@ -87,7 +91,7 @@ const getForwardEmail = async (req, res) => {
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
-    console.log('error:', err)
+    console.log("error:", err);
     errorMessage.error = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {

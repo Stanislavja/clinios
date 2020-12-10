@@ -7,14 +7,27 @@ const {
 
 const getAllHandouts = async (req, res) => {
   const db = makeDb(configuration, res);
+
+  let { client_id, patient_id } = req.query;
+
+  if (typeof patient_id === "undefined") {
+    // eslint-disable-next-line prefer-destructuring
+    patient_id = req.user_id;
+  }
+
+  if (typeof client_id === "undefined") {
+    // eslint-disable-next-line prefer-destructuring
+    client_id = req.client_id;
+  }
+
   let $sql;
 
   try {
     $sql = `select ph.created, ph.handout_id, h.filename
     from patient_handout ph
     left join handout h on h.id=ph.handout_id
-    where ph.client_id=${req.client_id}
-    and ph.patient_id=${req.user_id}
+    where ph.client_id=${client_id}
+    and ph.patient_id=${patient_id}
     order by h.filename
     limit 100`;
 
