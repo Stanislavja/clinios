@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 
-import { Button, Divider, Grid, makeStyles, TextField } from "@material-ui/core";
-import Typography from "@material-ui/core/Typography";
-import MessagesService from "../../../services/patient_portal/messages.service";
-import moment from "moment";
+import {
+  Button, Divider, Grid, makeStyles, TextField,
+} from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
+import Typography from "@material-ui/core/Typography";
+import moment from "moment";
+
+import MessagesService from "../../../services/patient_portal/messages.service";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -73,18 +75,25 @@ export default function Messages() {
       </Typography>
 
       <div className={classes.content}>
-        {messages.map((message) => (
+        {messages.map((msg) => (
           <Grid container spacing={4} alignItems="flex-start">
             <Grid item xs={4}>
               <Typography component="p" variant="body2" color="textPrimary">
-                <span style={{ fontWeight: "bold" }}>Time: </span>{" "}
-                {moment(message.created).format("ll, h:mm")}{" "}
-                <span style={{ fontWeight: "bold" }}>Subject: </span> {message.subject}{" "}
+                <span style={{ fontWeight: "bold" }}>Time: </span>
+                {" "}
+                {moment(msg.created).format("ll, h:mm")}
+                {" "}
+                <span style={{ fontWeight: "bold" }}>Subject: </span>
+                {" "}
+                {msg.subject}
+                {" "}
                 <span style={{ fontWeight: "bold" }}>From: </span>
-                {message.user_to_from} <span style={{ fontWeight: "bold" }}>To: </span>
-                {message.user_to_name ? message.user_to_name : "You"}
+                {msg.user_to_from}
+                {" "}
+                <span style={{ fontWeight: "bold" }}>To: </span>
+                {msg.user_to_name ? msg.user_to_name : "You"}
                 <br />
-                {message.message}
+                {msg.message}
               </Typography>
               <Divider className={classes.divider} />
             </Grid>

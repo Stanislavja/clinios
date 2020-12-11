@@ -199,7 +199,7 @@ const NewOrEditEvent = ({
           },
           (error) => {
             console.error("search error", error);
-          }
+          },
         );
       } else {
         setPatients([]);
@@ -210,7 +210,7 @@ const NewOrEditEvent = ({
     // Our useEffect function will only execute if this value changes ...
     // ... and thanks to our hook it will only change if the original ...
     // value (searchTerm) hasn't changed for more than 500ms.
-    [debouncedSearchTerm]
+    [debouncedSearchTerm],
   );
 
   const handlePatientChange = (_, patient) => {
@@ -460,7 +460,7 @@ const NewOrEditEvent = ({
                 value={calEvent.start_dt}
                 placeholder="2020/10/10 10:00"
                 onChange={(date) => {
-                  let property = "start_dt";
+                  const property = "start_dt";
                   setCalEvent({
                     ...calEvent,
                     [property]: date,
@@ -482,7 +482,7 @@ const NewOrEditEvent = ({
                 value={calEvent.end_dt}
                 placeholder="2020/10/10 11:00"
                 onChange={(date) => {
-                  let property = "end_dt";
+                  const property = "end_dt";
                   setCalEvent({
                     ...calEvent,
                     [property]: date,
@@ -613,9 +613,9 @@ const NewOrEditEvent = ({
                   calEvent.status
                     ? calEvent.status
                     : setCalEvent({
-                        ...calEvent,
-                        status: "R",
-                      })
+                      ...calEvent,
+                      status: "R",
+                    })
                 }
                 onChange={(event) => handleOnChange(event)}
                 className={classes.statusList}
@@ -748,7 +748,7 @@ NewOrEditEvent.propTypes = {
       created_user: PropTypes.string,
       updated: PropTypes.string,
       updated_user: PropTypes.string,
-    })
+    }),
   ).isRequired,
   selectedProvider: PropTypes.shape({
     name: PropTypes.string,
@@ -760,7 +760,7 @@ NewOrEditEvent.propTypes = {
     PropTypes.shape({
       id: PropTypes.number,
       name: PropTypes.string,
-    })
+    }),
   ).isRequired,
   isLoading: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
