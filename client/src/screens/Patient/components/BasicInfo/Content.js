@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { Grid, Typography, Popover } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
-import PropTypes from "prop-types";
 
+import usePatientContext from "../../../../hooks/usePatientContext";
 import PatientService from "../../../../services/patient.service";
 import {
   calculateAge,
@@ -41,9 +41,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BasicInfoContent = (props) => {
+const BasicInfoContent = () => {
   const classes = useStyles();
-  const { data, patientId } = props;
+  const { state } = usePatientContext();
+  const { data } = state.patientInfo;
+  const { patientId } = state;
   const [nextAppointment, setNextAppointment] = useState(null);
   const [showTooltip, setShowTooltip] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -284,11 +286,5 @@ const BasicInfoContent = (props) => {
     </>
   );
 };
-
-BasicInfoContent.propTypes = {
-  patientId: PropTypes.string.isRequired,
-  data: PropTypes.objectOf(PropTypes.any).isRequired,
-};
-
 
 export default BasicInfoContent;

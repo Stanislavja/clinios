@@ -5,10 +5,10 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { makeStyles } from "@material-ui/core/styles";
 import Alert from "@material-ui/lab/Alert";
-import { useSelector, useDispatch, shallowEqual } from "react-redux";
+import { useSnackbar } from "notistack";
+import PropTypes from "prop-types";
 
 import EmailService from "../../services/email.service";
-import { setSuccess } from "../../store/common/actions";
 import Dimmer from "../common/Dimmer";
 
 
@@ -23,18 +23,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Success = () => {
+const Success = ({ user }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const [errors, setErrors] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const user = useSelector((state) => state.auth.user, shallowEqual);
+
   const sendResendEmailRequest = () => {
     setIsLoading(true);
     EmailService.resendEmailVerification(user).then(
       (response) => {
         setErrors(response.data);
-        dispatch(setSuccess(response.response));
+        enqueueSnackbar(response.data.message, {
+          variant: "success",
+        });
         setIsLoading(false);
       },
       (error) => {
@@ -63,6 +65,10 @@ const Success = () => {
       <Dimmer isOpen={isLoading} />
     </Card>
   );
+};
+
+Success.propTypes = {
+  user: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default Success;

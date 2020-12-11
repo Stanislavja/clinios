@@ -33,9 +33,10 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 
-import useDebounce from "./../../../../../hooks/useDebounce";
-import * as API from "./../../../../../utils/API";
 import useAuth from "../../../../../hooks/useAuth";
+import useDebounce from "../../../../../hooks/useDebounce";
+import * as API from "../../../../../utils/API";
+// import { AuthConsumer } from "../../../../../contexts/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -145,6 +146,8 @@ const NewOrEditEvent = ({
   });
   // const user = JSON.parse(localStorage.getItem("user"));
   // const index = providers.findIndex((provider) => provider.id === user.id);
+  // Test message
+
   const [indexP, setIndex] = useState(0);
   const [provider, setProvider] = React.useState(providers[indexP]);
   const { user } = useAuth();
@@ -168,7 +171,7 @@ const NewOrEditEvent = ({
       setProvider(selectedProvider);
     }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps, react/destructuring-assignment
   }, [props.event, isNewEvent]);
   /* eslint-enable */
   const handleOnChange = (event) => {
@@ -265,10 +268,12 @@ const NewOrEditEvent = ({
     const existPatientID = appointments
       .map((appointment) => selectedPatient.id === appointment.patient_id)
       .includes(true);
+
     const startTimeExist = appointments
       // eslint-disable-next-line
       .map((appointment) => calEvent.start_dt == appointment.start_dt)
       .includes(true);
+
     if (!calEvent.title || selectedPatient.length === 0) {
       if (!calEvent.title && selectedPatient.length === 0) {
         setErrorText({
@@ -304,10 +309,9 @@ const NewOrEditEvent = ({
   };
 
   useEffect(() => {
-    const index2 = providers.findIndex((provider) => provider.id === user.id);
+    const index2 = providers.findIndex((pd) => pd.id === user.id);
     setIndex(index2);
   }, [providers, user]);
-
   return (
     <Dialog
       open={isOpen}
@@ -335,19 +339,14 @@ const NewOrEditEvent = ({
         )}
         <div
           className={clsx({
-            [classes.modalConentBelow]: true, //always apply
-            [classes.contentWithLoading]: isLoading, //only when isLoading === true
+            [classes.modalConentBelow]: true, // always apply
+            [classes.contentWithLoading]: isLoading, // only when isLoading === true
           })}
         >
           <DialogContentText id="alert-dialog-description">
             This page is used to create a new appointment
           </DialogContentText>
-          {errors &&
-            errors.map((error, index) => (
-              <Alert severity="error" key={index}>
-                {error.msg}
-              </Alert>
-            ))}
+          {errors && <Alert severity="error">{errors}</Alert>}
           <div className={classes.root}>
             <FormControl component="div" className={classes.formControl}>
               <TextField
@@ -377,7 +376,7 @@ const NewOrEditEvent = ({
                 value={calEvent.start_dt}
                 variant="inline"
                 onChange={(date) => {
-                  let property = "start_dt";
+                  const property = "start_dt";
                   setCalEvent({
                     ...calEvent,
                     [property]: date,
@@ -399,7 +398,7 @@ const NewOrEditEvent = ({
                 label="End Date"
                 value={calEvent.end_dt}
                 onChange={(date) => {
-                  let property = "end_dt";
+                  const property = "end_dt";
                   setCalEvent({
                     ...calEvent,
                     [property]: date,
@@ -610,7 +609,14 @@ const NewOrEditEvent = ({
               <RadioGroup
                 aria-label="status"
                 name="status"
-                value={calEvent.status ? calEvent.status : "R"}
+                value={
+                  calEvent.status
+                    ? calEvent.status
+                    : setCalEvent({
+                        ...calEvent,
+                        status: "R",
+                      })
+                }
                 onChange={(event) => handleOnChange(event)}
                 className={classes.statusList}
               >
@@ -632,9 +638,9 @@ const NewOrEditEvent = ({
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                {providers.map((provider) => (
-                  <MenuItem key={provider.id} value={provider.id}>
-                    {provider.name}
+                {providers.map((pd) => (
+                  <MenuItem key={pd.id} value={pd.id}>
+                    {pd.name}
                   </MenuItem>
                 ))}
               </Select>
@@ -747,6 +753,9 @@ NewOrEditEvent.propTypes = {
   selectedProvider: PropTypes.shape({
     name: PropTypes.string,
   }).isRequired,
+  event: PropTypes.shape({
+    firstname: PropTypes.string,
+  }).isRequired,
   providers: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
@@ -759,11 +768,7 @@ NewOrEditEvent.propTypes = {
   onEventUpdate: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   isNewEvent: PropTypes.bool.isRequired,
-  errors: PropTypes.arrayOf(
-    PropTypes.shape({
-      msg: PropTypes.string.isRequired,
-    })
-  ).isRequired,
+  errors: PropTypes.string.isRequired,
 };
 
 export default NewOrEditEvent;

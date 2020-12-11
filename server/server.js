@@ -60,6 +60,7 @@ app.use(baseAPIPath, require("./app/routes/patient-portal-header.routes"));
 app.use(baseAPIPath, require("./app/routes/patient/signup.routes"));
 app.use(baseAPIPath, require("./app/routes/patient/login.routes"));
 app.use(baseAPIPath, require("./app/routes/patient/home.routes"));
+app.use(baseAPIPath, require("./app/routes/patient/billings.routes"));
 app.use(baseAPIPath, require("./app/routes/patient/password-reset.routes"));
 app.use(baseAPIPath, require("./app/routes/patient/messages.routes"));
 app.use(baseAPIPath, require("./app/routes/patient/encounters.routes"));
@@ -69,8 +70,19 @@ app.use(baseAPIPath, require("./app/routes/patient/profile.routes"));
 app.use(baseAPIPath, require("./app/routes/patient/pharmacy.routes"));
 app.use(baseAPIPath, require("./app/routes/patient/allergy.routes"));
 app.use(baseAPIPath, require("./app/routes/patient/payment-method.routes"));
+app.use(baseAPIPath, require("./app/routes/patient/appointment.routes"));
+app.use(baseAPIPath, require("./app/routes/patient/invoice.routes"));
+app.use(baseAPIPath, require("./app/routes/patient/prescription.routes"));
+app.use(baseAPIPath, require("./app/routes/patient/lab_requisitions.routes"));
 
 app.use(baseAPIPath, require("./app/routes/myself.routes"));
+app.use(baseAPIPath, require("./app/routes/index.routes"));
+
+// Corporate Portal
+app.use(baseAPIPath, require("./app/routes/corporate/login.routes"));
+app.use(baseAPIPath, require("./app/routes/corporate/password-reset.routes"));
+app.use(baseAPIPath, require("./app/routes/corporate/index.routes"));
+app.use(baseAPIPath, require("./app/routes/corporate/myself.routes"));
 
 app.listen(config.port).on("listening", () => {
   console.log(`API is live on ${config.port}`);

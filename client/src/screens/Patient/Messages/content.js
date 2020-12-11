@@ -3,7 +3,8 @@ import React from "react";
 import { Grid, Typography, Divider } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
-import PropTypes from "prop-types";
+
+import usePatientContext from "../../../hooks/usePatientContext";
 
 const useStyles = makeStyles((theme) => ({
   inputRow: {
@@ -20,9 +21,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MessagesContent = (props) => {
+const MessagesContent = () => {
   const classes = useStyles();
-  const { data /* reloadData */ } = props;
+  const { state } = usePatientContext();
+  const { data } = state.messages;
 
   return (
     <>
@@ -124,10 +126,6 @@ const MessagesContent = (props) => {
       ))}
     </>
   );
-};
-
-MessagesContent.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default MessagesContent;

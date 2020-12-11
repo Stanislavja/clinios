@@ -7,12 +7,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Alert from "@material-ui/lab/Alert";
-import { useDispatch } from "react-redux";
+import { useSnackbar } from "notistack";
 import { Link, useHistory, useParams } from "react-router-dom";
 
 import Error from "../../../components/common/Error";
 import AuthService from "../../../services/patient_portal/auth.service";
-import { setSuccess } from "../../../store/common/actions";
 import { SignupForm } from "./components";
 
 const useStyles = makeStyles((theme) => ({
@@ -41,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 const PatientSignUp = () => {
   const classes = useStyles();
   const history = useHistory();
-  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const { clientCode } = useParams();
   const [client, setClient] = React.useState(null);
   const [clientError, setClientError] = React.useState([]);
@@ -79,7 +78,9 @@ const PatientSignUp = () => {
     };
     AuthService.register(formData).then(
       (response) => {
-        dispatch(setSuccess(`${response.data.message}`));
+        enqueueSnackbar(`${response.data.message}`, {
+          variant: "success",
+        });
         history.push(`/login/${clientCode}`);
       },
       (error) => {

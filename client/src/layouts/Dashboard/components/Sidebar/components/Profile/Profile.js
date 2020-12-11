@@ -50,7 +50,7 @@ const Profile = (props) => {
   const handleLogout = async () => {
     try {
       await logout();
-      history.push("/login_client");
+      history.push(user.login_url || "/login_client");
     } catch (err) {
       console.error(err);
     }

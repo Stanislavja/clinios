@@ -6,12 +6,11 @@ import FormControl from "@material-ui/core/FormControl";
 import Grid from "@material-ui/core/Grid";
 import Switch from "@material-ui/core/Switch";
 import Typography from "@material-ui/core/Typography";
-import { useDispatch } from "react-redux";
+import { useSnackbar } from "notistack";
 
 import Appointments from "../../../services/appointments.service";
 import DashboardHome from "../../../services/DashboardHome.service";
 import Messages from "../../../services/message-to-patient.service";
-import { setSuccess } from "../../../store/common/actions";
 import { statusToColorCode } from "../../../utils/helpers";
 import {
   AppointmentRequests,
@@ -56,8 +55,8 @@ const GreenSwitch = withStyles({
 
 export default function Home() {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const [errors, setErrors] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
+  const [errors, setErrors] = useState(null);
   const [selectedProvider, setSelectedProvider] = useState({});
   const [providerDetails, setProviderDetails] = useState({});
   const [messagesUnread, setMessagesUnread] = useState([]);
@@ -146,11 +145,13 @@ export default function Home() {
         setIsLoading(false);
         fetchEventsByProvider(selectedProvider);
         fetchPatientApptRequests(selectedProvider.id);
-        dispatch(setSuccess(`${response.data.message}`));
+        enqueueSnackbar(`${response.data.message}`, {
+          variant: "success",
+        });
         setIsOpen(false);
       },
       (error) => {
-        setErrors(error.response.data.error);
+        setErrors(error.response.data.message);
       },
     );
   };
@@ -171,11 +172,13 @@ export default function Home() {
         setIsLoading(false);
         fetchEventsByProvider(selectedProvider);
         fetchPatientApptRequests(selectedProvider.id);
-        dispatch(setSuccess(`${response.data.message}`));
+        enqueueSnackbar(`${response.data.message}`, {
+          variant: "success",
+        });
         setIsOpen(false);
       },
       (error) => {
-        setErrors(error.response.data.error);
+        setErrors(error.response.data.message);
       },
     );
   };
@@ -186,11 +189,14 @@ export default function Home() {
       (response) => {
         setIsLoading(false);
         fetchEventsByProvider(selectedProvider);
-        dispatch(setSuccess(`${response.data.message}`));
+        enqueueSnackbar(`${response.data.message}`, {
+          variant: "success",
+        });
         setIsOpen(false);
       },
       (error) => {
-        setErrors(error.response.data.error);
+        setErrors(error.response.data.message);
+        setIsLoading(false);
       },
     );
   };
@@ -322,30 +328,38 @@ export default function Home() {
           )}
         </Grid>
       </Grid>
-      <NewOrEditEvent
-        isLoading={isLoading}
-        isNewEvent={isNewEvent}
-        event={selectedEvent && selectedEvent}
-        selectedDate={selectedDate}
-        selectedProvider={selectedProvider}
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        providers={providers}
-        onSave={handleEventCreation}
-        onEventUpdate={(payload) => handleEventUpdate(payload)}
-        errors={errors}
-        appointments={appointments}
-      />
-      <MessageToPatient
-        isLoading={isLoading}
-        msg={selectedMsg}
-        isNewMessage={isNewMessage}
-        onModalEnter={fetchSingleMessage}
-        isOpen={isMessageToPatientOpen}
-        onSubmit={handleMessageToPatientFormSubmit}
-        onClose={() => setIsMessageToPatientOpen(false)}
-        errors={errors}
-      />
+      {isOpen
+        && (
+          <NewOrEditEvent
+            isLoading={isLoading}
+            isNewEvent={isNewEvent}
+            event={selectedEvent && selectedEvent}
+            selectedDate={selectedDate}
+            selectedProvider={selectedProvider}
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            providers={providers}
+            onSave={handleEventCreation}
+            onEventUpdate={(payload) => handleEventUpdate(payload)}
+            errors={errors}
+            appointments={appointments}
+          />
+        )}
+
+      {isMessageToPatientOpen
+        && (
+          <MessageToPatient
+            isLoading={isLoading}
+            msg={selectedMsg}
+            isNewMessage={isNewMessage}
+            onModalEnter={fetchSingleMessage}
+            isOpen={isMessageToPatientOpen}
+            onSubmit={handleMessageToPatientFormSubmit}
+            onClose={() => setIsMessageToPatientOpen(false)}
+            errors={errors}
+          />
+        )}
+
     </div>
   );
 }

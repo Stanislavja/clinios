@@ -44,6 +44,7 @@ const Dashboard = (props) => {
   const handleSidebarClose = () => {
     setOpenSidebar(false);
   };
+
   return (
     <div
       className={clsx({

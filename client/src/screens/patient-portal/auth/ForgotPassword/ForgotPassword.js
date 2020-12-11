@@ -13,15 +13,14 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { KeyboardDatePicker } from "@material-ui/pickers";
 import clsx from "clsx";
 import moment from "moment";
-import { useSelector, useDispatch, shallowEqual } from "react-redux";
+import { useSnackbar } from "notistack";
+import { useSelector, shallowEqual } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import Dimmer from "../../../../components/common/Dimmer";
 import Error from "../../../../components/common/Error";
 import EmailService from "../../../../services/email.service";
 import AuthService from "../../../../services/patient_portal/auth.service";
-import { resetPasswordSuccess } from "../../../../store/auth/actions";
-import { setSuccess } from "../../../../store/common/actions";
 import Success from "./Success";
 
 const useStyles = makeStyles((theme) => ({
@@ -68,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ForgotPassword = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const { clientCode } = useParams();
   const [client, setClient] = React.useState(null);
   const [email, setEmail] = useState("");
@@ -116,8 +115,9 @@ const ForgotPassword = () => {
     }).then(
       (response) => {
         setIsLoading(false);
-        dispatch(resetPasswordSuccess());
-        dispatch(setSuccess(`${email} ${response.data.message}`));
+        enqueueSnackbar(`${email} ${response.data.message}`, {
+          variant: "success",
+        });
         setErrors([]);
       },
       (error) => {

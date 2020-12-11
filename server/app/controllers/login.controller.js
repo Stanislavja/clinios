@@ -23,7 +23,7 @@ exports.signin = async (req, res) => {
   const db = makeDb(configuration, res);
 
   const rows = await db.query(
-    "SELECT id, client_id, firstname, lastname, email, password, sign_dt, email_confirm_dt FROM user WHERE email = ?",
+    "SELECT id, admin, client_id, firstname, lastname, email, password, sign_dt, email_confirm_dt FROM user WHERE email = ?",
     [req.body.email]
   );
 
@@ -32,6 +32,9 @@ exports.signin = async (req, res) => {
     errorMessage.message = "User not found";
     errorMessage.user = user;
     return res.status(status.notfound).send(errorMessage);
+  }
+  if (user.admin) {
+    user.permissions = ["ADMIN"];
   }
   const clientRows = await db.query(
     "SELECT id, name FROM client WHERE id = ?",
@@ -64,10 +67,12 @@ exports.signin = async (req, res) => {
 
   // update user login_dt
   const now = moment().format("YYYY-MM-DD HH:mm:ss");
-  await db.query(`UPDATE user SET login_dt='${now}', updated= now(), updated_user_id='${user.id}' WHERE id =${user.id}`);
+  await db.query(
+    `UPDATE user SET login_dt='${now}', updated= now(), updated_user_id='${user.id}' WHERE id =${user.id}`
+  );
 
   const token = jwt.sign(
-    { id: user.id, client_id: user.client_id },
+    { id: user.id, client_id: user.client_id, role: "CLIENT" },
     config.authSecret,
     {
       expiresIn: 86400, // 24 hours
@@ -77,6 +82,8 @@ exports.signin = async (req, res) => {
   resData.accessToken = token;
   delete user.password; // delete password from response
   resData.user = user;
+  resData.user.role = "CLIENT";
+  resData.user.login_url = `/login_client`;
   successMessage.data = resData;
   res.status(status.success).send(successMessage);
 };

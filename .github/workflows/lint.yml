@@ -1,9 +1,8 @@
 name: Lint
 
 on:
-  push:
-    branches-ignore:
-      - 'master'
+  pull_request:
+    branches: [master]
 
 jobs:
   run-linters:
@@ -12,17 +11,22 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: npm install
+      run: cd client/ && npm i --ignore-scripts
 
     - name: Super-Linter-on-Client
       uses: docker://github/super-linter:latest
       env:
         VALIDATE_ALL_CODEBASE: false
+        DEFAULT_BRANCH: master
+        DEFAULT_WORKSPACE: /client/src
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         LINTER_RULES_PATH: /client/
         JAVASCRIPT_ES_CONFIG_FILE: .eslintrc
         FILTER_REGEX_INCLUDE: .*src/.*
         FILTER_REGEX_EXCLUDE: .*test/.*
         VALIDATE_ARM: false
+        VALIDATE_JAVASCRIPT_STANDARD: false
         VALIDATE_BASH: false
         VALIDATE_BASH_EXEC: false
         VALIDATE_CLOUDFORMATION: false
@@ -72,7 +76,7 @@ jobs:
         VALIDATE_SNAKEMAKE_LINT: false
 
     - name: Super-Linter-on-Server
-      uses: docker://github/super-linter:latest
+      uses: github/super-linter@v3.10.0
       env:
         VALIDATE_ALL_CODEBASE: false
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

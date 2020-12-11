@@ -7,14 +7,19 @@ const {
 
 const getAlllabs = async (req, res) => {
   const { tab } = req.query;
+  let { patient_id } = req.query;
+
+  if (typeof patient_id === "undefined") {
+    patient_id = req.user_id;
+  }
   const db = makeDb(configuration, res);
 
   let $sql;
 
   try {
-    $sql = `select l.created, l.filename
+    $sql = `select l.created, l.filename, l.status
     from lab l
-    where l.patient_id=${req.user_id} `;
+    where l.patient_id=${patient_id} `;
 
     if (typeof tab !== "undefined" && tab !== "All") {
       if (tab === "Lab") {

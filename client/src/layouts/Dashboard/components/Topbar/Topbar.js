@@ -18,6 +18,7 @@ import { NavLink as RouterLink, useHistory } from "react-router-dom";
 import useAuth from "../../../../hooks/useAuth";
 import useDebounce from "../../../../hooks/useDebounce";
 import * as API from "../../../../utils/API";
+import { getAllowedRoutes } from "../../../../utils/helpers";
 import { SearchResults } from "./components";
 import MenuWithDropDowns from "./components/MenuWithDropDowns";
 
@@ -57,6 +58,11 @@ const useStyles = makeStyles((theme) => ({
     display: "block",
   },
   link: {
+    color: "#ffffff",
+    padding: "10px 10px",
+    textDecoration: "none",
+  },
+  patientLink: {
     color: "#ffffff",
     padding: "10px 10px",
     textDecoration: "none",
@@ -177,6 +183,7 @@ const pages = [
     id: 23,
     title: "Setup",
     href: "/setup",
+    permission: ["ADMIN"],
     subMenus: [
       {
         id: 31,
@@ -273,6 +280,36 @@ const pages = [
   },
 ];
 
+
+const corporate_pages = [
+  {
+    id: 1,
+    title: "Home",
+    href: "/corporate",
+  },
+  {
+    id: 2,
+    title: "Clients",
+    href: "/corporate/clients",
+  },
+  {
+    id: 3,
+    title: "Users",
+    href: "/corporate/users",
+  },
+  {
+    id: 4,
+    title: "Myself",
+    href: "/corporate/myself",
+  },
+  {
+    id: 6,
+    title: "Logout",
+    href: "/",
+    logout: true,
+  },
+];
+
 const Topbar = (props) => {
   const {
     className, onSidebarOpen, ...rest
@@ -280,11 +317,17 @@ const Topbar = (props) => {
 
   const classes = useStyles();
   const history = useHistory();
-  const { user, logout } = useAuth();
+  const {
+    lastVisitedPatient, user, logout,
+  } = useAuth();
+
   const [open, setOpen] = React.useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
   const [nothingFound, setNothingFound] = useState(false);
+
+  const navPages = (user.role === "CORPORATE") ? corporate_pages : pages;
+  const allowedPages = getAllowedRoutes(navPages, (user && user.permissions) ? user.permissions : []);
   const handleClose = () => {
     setOpen(false);
     setSearchTerm("");
@@ -322,7 +365,7 @@ const Topbar = (props) => {
   const handleLogout = async () => {
     try {
       await logout();
-      history.push("/login_client");
+      history.push(user.login_url || "/login_client");
     } catch (err) {
       console.error(err);
     }
@@ -333,16 +376,14 @@ const Topbar = (props) => {
       <Toolbar variant="dense" className={classes.toolbar}>
         <div className={classes.headerWithNav}>
           <Typography className={classes.title} variant="h6" noWrap>
-            <RouterLink to="/dashboard" className={classes.titleAsLogo}>
+            <RouterLink to={user.login_url || "/dashboard"} className={classes.titleAsLogo}>
               Clinios
             </RouterLink>
           </Typography>
-
           <Hidden mdDown>
             <div className={classes.navs}>
               {
-                pages.map((page) => (
-
+                allowedPages.map((page) => (
                   page.subMenus
                     ? (
                       <MenuWithDropDowns
@@ -374,7 +415,15 @@ const Topbar = (props) => {
           <div className={classes.headerWithSearchBar}>
             <div className={classes.sectionDesktop}>
               <Typography className={classes.name}>
-                {user && `${user.firstname} ${user.lastname}`}
+                {
+                  lastVisitedPatient && (
+                    <RouterLink to={`/patients/${lastVisitedPatient.id}`} className={classes.patientLink}>
+                      {lastVisitedPatient.firstname}
+                      {" "}
+                      {lastVisitedPatient.lastname}
+                    </RouterLink>
+                  )
+                }
               </Typography>
               <Typography className={classes.date}>
                 {moment().format("ddd, MMM Do")}

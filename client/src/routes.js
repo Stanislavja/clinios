@@ -12,6 +12,7 @@ import {
 
 import AdminGuard from "./components/AdminGuard";
 import AuthGuard from "./components/AuthGuard";
+import ClientPortalGuard from "./components/ClientPortalGuard";
 import GuestGuard from "./components/GuestGuard";
 import LoadingScreen from "./components/LoadingScreen";
 import DashboardLayout from "./layouts/Dashboard";
@@ -48,6 +49,7 @@ export const renderRoutes = (routes = []) => (
     </Switch>
   </Suspense>
 );
+
 
 const routes = [
   {
@@ -163,6 +165,7 @@ const routes = [
     path: "/setup",
     guard: AdminGuard,
     layout: DashboardLayout,
+    permission: ["ADMIN"],
     routes: [
       {
         exact: true,
@@ -302,20 +305,20 @@ const routes = [
   {
     exact: true,
     guard: GuestGuard,
-    layout: DashboardLayout,
+    layout: MainLayout,
     path: "/forgot/:clientCode",
     component: lazy(() => import("./screens/patient-portal/auth/ForgotPassword")),
   },
   {
     exact: true,
     guard: GuestGuard,
-    layout: DashboardLayout,
+    layout: MainLayout,
     path: "/patient/password/reset/:patientId/:token",
     component: lazy(() => import("./screens/patient-portal/ResetPassword")),
   },
   {
     path: "/patient",
-    guard: AuthGuard,
+    guard: ClientPortalGuard,
     layout: WithLeftSidebar,
     routes: [
       {
@@ -394,7 +397,7 @@ const routes = [
   {
     exact: true,
     guard: GuestGuard,
-    layout: DashboardLayout,
+    layout: MainLayout,
     path: "/agreement",
     component: lazy(() => import("./screens/Agreement")),
   },
@@ -404,6 +407,52 @@ const routes = [
     layout: DashboardLayout,
     path: "/myself",
     component: lazy(() => import("./screens/Client/Myself")),
+  },
+  // login_corp
+  {
+    exact: true,
+    guard: GuestGuard,
+    layout: MainLayout,
+    path: "/login_corp",
+    component: lazy(() => import("./screens/corporate-portal/Auth/Login")),
+  },
+  {
+    exact: true,
+    guard: GuestGuard,
+    layout: MainLayout,
+    path: "/corp/forgot-password",
+    component: lazy(() => import("./screens/corporate-portal/Auth/ForgetPassword")),
+  },
+  {
+    exact: true,
+    guard: GuestGuard,
+    layout: MainLayout,
+    path: "/corporate/password/reset/:corporateId/:token",
+    component: lazy(() => import("./screens/corporate-portal/Auth/ResetPassword")),
+  },
+  {
+    path: "/corporate",
+    guard: AuthGuard,
+    layout: DashboardLayout,
+    routes: [
+      {
+        exact: true,
+        path: "/corporate",
+        component: lazy(() => import("./screens/corporate-portal/Home")),
+      },
+      {
+        path: "/corporate/clients",
+        component: lazy(() => import("./screens/corporate-portal/Clients")),
+      },
+      {
+        path: "/corporate/users",
+        component: lazy(() => import("./screens/corporate-portal/Users")),
+      },
+      {
+        path: "/corporate/myself",
+        component: lazy(() => import("./screens/corporate-portal/Myself")),
+      },
+    ],
   },
   {
     path: "*",

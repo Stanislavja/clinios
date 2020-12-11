@@ -35,17 +35,42 @@ const getAllUsers = async (req, res) => {
 const getUser = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
-    const dbResponse = await db.query(`SELECT id, client_id, firstname, lastname, email, admin, sign_dt,
-     email_confirm_dt FROM user WHERE id=${req.user_id}`);
+    const dbResponse = await db.query(`SELECT u.id, u.client_id, u.firstname, u.lastname, u.email, u.admin, u.sign_dt,
+    u.email_confirm_dt FROM user u WHERE u.id=${req.user_id}`);
 
     if (!dbResponse) {
       errorMessage.error = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     const user = dbResponse[0];
-    successMessage.data = {user}
+    if (user.admin) {
+      user.permissions = ["ADMIN"];
+    }
+    successMessage.data = { user };
     return res.status(status.created).send(successMessage);
   } catch (error) {
+    errorMessage.error = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+const getLastVisitedPatient = async (req, res) => {
+  const db = makeDb(configuration, res);
+  const { patientId } = req.params;
+  try {
+    const dbResponse = await db.query(
+      `select id, client_id, firstname, lastname from patient where id=${patientId}`
+    );
+    if (!dbResponse) {
+      errorMessage.error = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = dbResponse[0];
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
     errorMessage.error = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
@@ -173,6 +198,7 @@ const updateUser = async (req, res) => {
 const users = {
   getAllUsers,
   getForwardEmailList,
+  getLastVisitedPatient,
   getUser,
   createNewUser,
   updateUser,

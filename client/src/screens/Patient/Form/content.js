@@ -3,9 +3,9 @@ import React from "react";
 import { Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
-import PropTypes from "prop-types";
 
 import Tooltip from "../../../components/common/CustomTooltip";
+import usePatientContext from "../../../hooks/usePatientContext";
 
 const useStyles = makeStyles((theme) => ({
   inputRow: {
@@ -30,15 +30,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FormContent = (props) => {
+const FormContent = () => {
   const classes = useStyles();
-  const { data } = props;
+  const { state } = usePatientContext();
+  const { data } = state.forms;
 
   return (
     <>
       {
         data.map((item) => (
-          <Grid key={`${item.created}_${item.title}`} container className={classes.inputRow}>
+          <Grid key={item.form_id} container className={classes.inputRow}>
             <Typography
               component="span"
               className={`${classes.text12} ${classes.block}`}
@@ -74,10 +75,6 @@ const FormContent = (props) => {
       }
     </>
   );
-};
-
-FormContent.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default FormContent;

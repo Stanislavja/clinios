@@ -2,7 +2,8 @@ import React from "react";
 
 import { Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import PropTypes from "prop-types";
+
+import usePatientContext from "../../../../hooks/usePatientContext";
 
 const useStyles = makeStyles(() => ({
   inputRow: {
@@ -14,9 +15,10 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const AdminNotesContent = (props) => {
+const AdminNotesContent = () => {
   const classes = useStyles();
-  const { data } = props;
+  const { state } = usePatientContext();
+  const { admin_note } = state.patientInfo.data;
 
   return (
     <Grid className={classes.inputRow}>
@@ -25,14 +27,10 @@ const AdminNotesContent = (props) => {
         className={classes.text12}
         color="textPrimary"
       >
-        {data}
+        {admin_note}
       </Typography>
     </Grid>
   );
-};
-
-AdminNotesContent.propTypes = {
-  data: PropTypes.string.isRequired,
 };
 
 export default AdminNotesContent;

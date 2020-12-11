@@ -55,13 +55,13 @@ const useStyles = makeStyles((theme) => ({
 const Header = ({ ...props }) => {
   const classes = useStyles();
   const history = useHistory();
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, user, logout } = useAuth();
   const { onSidebarOpen } = props;
 
   const handleLogout = async () => {
     try {
       await logout();
-      history.push("/login_client");
+      history.push(user.login_url || "/login_client");
     } catch (err) {
       console.error(err);
     }

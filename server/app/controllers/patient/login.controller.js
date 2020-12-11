@@ -19,7 +19,7 @@ exports.signin = async (req, res) => {
 
   const { client_id, email } = req.body;
   const rows = await db.query(
-    `select id, client_id, firstname, lastname, password, status from patient where client_id=${client_id} and email='${email}'`
+    `select p.id, p.client_id, p.firstname, p.lastname, p.password, p.status, client.code from patient p JOIN client on p.client_id=client.id where p.client_id=${client_id} and p.email='${email}'`
   );
 
   const patient = rows[0];
@@ -47,10 +47,12 @@ exports.signin = async (req, res) => {
   }
 
   const now = moment().format("YYYY-MM-DD HH:mm:ss");
-  await db.query(`update patient set login_dt='${now}', updated= now(), updated_user_id='${req.user_id}' where id=${patient.id}`);
+  await db.query(
+    `update patient set login_dt='${now}', updated= now() where id=${patient.id}`
+  );
 
   const token = jwt.sign(
-    { id: patient.id, client_id: patient.client_id },
+    { id: patient.id, client_id: patient.client_id, role: "PATIENT" },
     config.authSecret,
     {
       expiresIn: 86400, // 24 hours
@@ -62,6 +64,8 @@ exports.signin = async (req, res) => {
   resData.accessToken = token;
   delete patient.password; // delete password from response
   resData.user = patient;
+  resData.user.role = "PATIENT";
+  resData.user.login_url = `/login/${patient.code}`;
   successMessage.data = resData;
   res.status(status.success).send(successMessage);
 };

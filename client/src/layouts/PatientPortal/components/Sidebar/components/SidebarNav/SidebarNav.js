@@ -52,24 +52,23 @@ const CustomRouterLink = forwardRef((props, ref) => (
 
 const SidebarNav = (props) => {
   const {
-    pages, className, ...rest
+    pages, className,
   } = props;
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const classes = useStyles();
   const history = useHistory();
 
   const handleLogout = async () => {
     try {
       await logout();
-      history.push("/login_client");
+      history.push(user.login_url || "/login_client");
     } catch (err) {
       console.error(err);
     }
   };
 
-
   return (
-    <List {...rest} className={clsx(classes.root, className)}>
+    <List className={clsx(classes.root, className)}>
       {pages.map((page) => (
         <ListItem className={classes.item} disableGutters key={page.id}>
           <Button
@@ -90,7 +89,6 @@ const SidebarNav = (props) => {
 
 SidebarNav.defaultProps = {
   className: null,
-  logout: () => {},
 };
 
 SidebarNav.propTypes = {
@@ -99,10 +97,9 @@ SidebarNav.propTypes = {
     PropTypes.shape({
       title: PropTypes.string,
       href: PropTypes.string,
-      icon: PropTypes.string,
+      icon: PropTypes.objectOf(PropTypes.any),
     }),
   ).isRequired,
-  logout: PropTypes.func,
 };
 
 export default SidebarNav;

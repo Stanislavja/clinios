@@ -207,14 +207,37 @@ export const AddressForm = [
   },
 ];
 
+export const PortalForm = [
+  {
+    name: "email",
+    id: "portal-email",
+    label: "Email",
+    baseType: "input",
+    type: "email",
+    options: [],
+  },
+  {
+    name: "password",
+    id: "portal-password",
+    label: "Password",
+    baseType: "input",
+    type: "password",
+    options: [],
+  },
+];
+
 export const Pharmacies = [
   {
-    name: "Pharmacy 1",
+    id: "pharmacy1",
+    name: "pharmacy1",
+    label: "Search",
     address: "100 Main St, Ottario Canada",
     phone: "030-123-456",
   },
   {
-    name: "Pharmacy 2",
+    id: "pharmacy2",
+    name: "pharmacy2",
+    label: "Search",
     address: "100 Main St, New York USA",
     phone: "030-123-456",
   },

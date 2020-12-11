@@ -1,6 +1,5 @@
 import axios from "axios";
 
-import { LOGOUT } from "./store/auth/types";
 import {
   enqueueSnackbar as enqueueSnackbarAction,
 } from "./store/notifications/actions";
@@ -42,7 +41,6 @@ export default {
 
           if (data.data && data.data.token && data.data.KEY === "ERR_EXPIRED_TOKEN") {
             localStorage.clear();
-            store.dispatch({ type: LOGOUT });
             window.location.reload();
             return false;
           }

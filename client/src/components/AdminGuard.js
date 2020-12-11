@@ -9,7 +9,7 @@ const AdminGuard = ({ children }) => {
   const { isAuthenticated, user } = useAuth();
 
   if (!isAuthenticated) {
-    return <Redirect to="/login_client" />;
+    return <Redirect to={(user && user.login_url) || "/login_client"} />;
   }
 
   if (!user.admin) {

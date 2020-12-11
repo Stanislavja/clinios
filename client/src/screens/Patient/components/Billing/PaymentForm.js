@@ -8,7 +8,9 @@ import {
   FormControlLabel,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import PropTypes from "prop-types";
+
+import usePatientContext from "../../../../hooks/usePatientContext";
+import { togglePaymentDialog } from "../../../../providers/Patient/actions";
 
 const useStyles = makeStyles((theme) => ({
   inputRow: {
@@ -25,12 +27,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PaymentForm = (props) => {
+const PaymentForm = () => {
   const classes = useStyles();
-  const { onClose } = props;
+  const { dispatch } = usePatientContext();
 
   const processPaymentHandler = () => {
-    onClose();
+    dispatch(togglePaymentDialog());
   };
 
   return (
@@ -100,10 +102,5 @@ const PaymentForm = (props) => {
     </>
   );
 };
-
-PaymentForm.propTypes = {
-  onClose: PropTypes.func.isRequired,
-};
-
 
 export default PaymentForm;

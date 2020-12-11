@@ -9,12 +9,13 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
 
+import usePatientContext from "../../../../hooks/usePatientContext";
+import { toggleNewTransactionDialog } from "../../../../providers/Patient/actions";
 import PatientService from "../../../../services/patient.service";
 import { TransactionFormFields } from "../../../../static/transactionForm";
-import { setError, setSuccess } from "../../../../store/common/actions";
 
 const useStyles = makeStyles((theme) => ({
   inputRow: {
@@ -31,8 +32,10 @@ const useStyles = makeStyles((theme) => ({
 
 const NewTransactionForm = (props) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const { onClose, patientId, reloadData } = props;
+  const { reloadData } = props;
+  const { state, dispatch } = usePatientContext();
+  const { patientId } = state;
+  const { enqueueSnackbar } = useSnackbar();
 
   const [formFields, setFormFields] = useState({
     date: "",
@@ -64,9 +67,9 @@ const NewTransactionForm = (props) => {
     };
     PatientService.createBilling(patientId, reqBody)
       .then((response) => {
-        dispatch(setSuccess(`${response.data.message}`));
+        enqueueSnackbar(`${response.data.message}`, { variant: "success" });
         reloadData();
-        onClose();
+        dispatch(toggleNewTransactionDialog());
       })
       .catch((error) => {
         const resMessage = (error.response
@@ -74,13 +77,7 @@ const NewTransactionForm = (props) => {
           && error.response.data.message)
           || error.message
           || error.toString();
-        const severity = "error";
-        dispatch(
-          setError({
-            severity,
-            message: resMessage,
-          }),
-        );
+        enqueueSnackbar(`${resMessage}`, { variant: "error" });
       });
   };
 
@@ -90,7 +87,7 @@ const NewTransactionForm = (props) => {
         <Typography variant="h3" color="textSecondary">
           New Transaction
         </Typography>
-        <Button variant="outlined" onClick={() => onClose()}>
+        <Button variant="outlined" onClick={() => dispatch(toggleNewTransactionDialog())}>
           Close
         </Button>
       </Grid>
@@ -171,7 +168,7 @@ const NewTransactionForm = (props) => {
           </Button>
           <Button
             variant="outlined"
-            onClick={() => onClose()}
+            onClick={() => dispatch(toggleNewTransactionDialog())}
           >
             Cancel
           </Button>
@@ -182,8 +179,6 @@ const NewTransactionForm = (props) => {
 };
 
 NewTransactionForm.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  patientId: PropTypes.string.isRequired,
   reloadData: PropTypes.func.isRequired,
 };
 

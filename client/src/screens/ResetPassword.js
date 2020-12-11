@@ -8,12 +8,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import { useSelector, useDispatch, shallowEqual } from "react-redux";
+import { useSnackbar } from "notistack";
 import { useParams } from "react-router-dom";
 
 import Error from "../components/common/Error";
 import AuthService from "../services/auth.service";
-import { setSuccess } from "../store/common/actions";
 import Success from "./ForgetPassword/Success";
 
 const useStyles = makeStyles((theme) => ({
@@ -38,18 +37,21 @@ const useStyles = makeStyles((theme) => ({
 
 const ResetPassword = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const { userId, token } = useParams();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [fieldErrors, setFieldErrors] = useState([]);
-  const success = useSelector((state) => state.common.success, shallowEqual);
+  const [success, setSuccess] = useState(false);
 
   const handlePasswordReset = (e) => {
     e.preventDefault();
     AuthService.resetPassword(userId, token, password).then(
       (response) => {
-        dispatch(setSuccess(`${response.data.message}`));
+        enqueueSnackbar(`${response.data.message}`, {
+          variant: "success",
+        });
+        setSuccess(true);
       },
       (error) => {
         if (!error.response) {

@@ -3,7 +3,8 @@ import React from "react";
 import { Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
-import PropTypes from "prop-types";
+
+import usePatientContext from "../../../../hooks/usePatientContext";
 
 const useStyles = makeStyles((theme) => ({
   text12: {
@@ -19,9 +20,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const BillingContent = (props) => {
+const BillingContent = () => {
   const classes = useStyles();
-  const { data } = props;
+
+  const { state } = usePatientContext();
+  const { data } = state.billing;
+
 
   return (
     <>
@@ -83,10 +87,6 @@ const BillingContent = (props) => {
       ))}
     </>
   );
-};
-
-BillingContent.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default BillingContent;

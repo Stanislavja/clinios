@@ -153,7 +153,7 @@ exports.sendPasswordResetEmail = async (req, res) => {
 
     // update user table for password reset token and expires time
     const userUpdate = await db.query(
-      `UPDATE user SET reset_password_token='${token}', reset_password_expires='${token_expires}', updated= now(), updated_user_id='${req.user_id}' WHERE id =${user.id}`
+      `UPDATE user SET reset_password_token='${token}', reset_password_expires='${token_expires}', updated= now() WHERE id =${user.id}`
     );
     if (userUpdate.affectedRows) {
       sendRecoveryEmail(user, res);
@@ -197,7 +197,7 @@ exports.receiveNewPassword = async (req, res) => {
   const hashedPassword = bcrypt.hashSync(password, 8);
 
   const updateUserResponse = await db.query(
-    `UPDATE user SET password='${hashedPassword}', reset_password_token=NULL, reset_password_expires=NULL, updated= now(), updated_user_id='${req.user_id}' WHERE id =${user.id}`
+    `UPDATE user SET password='${hashedPassword}', reset_password_token=NULL, reset_password_expires=NULL, updated= now() WHERE id =${user.id}`
   );
 
   if (updateUserResponse.affectedRows) {

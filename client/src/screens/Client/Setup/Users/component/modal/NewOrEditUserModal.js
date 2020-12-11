@@ -18,11 +18,10 @@ import {
 import { green, grey } from "@material-ui/core/colors";
 import Alert from "@material-ui/lab/Alert";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
 
 import UserService from "../../../../../../services/users.service";
-import { setSuccess } from "../../../../../../store/common/actions";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -106,7 +105,7 @@ const NewOrEditUserModal = ({
   ...props
 }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const [user, setUser] = useState([]);
   const [errors, setErrors] = useState([]);
   const [errorChecking, setErrorChecking] = useState(errorsInitialState);
@@ -212,7 +211,9 @@ const NewOrEditUserModal = ({
         UserService.createNewUser(payload).then(
           (response) => {
             setTimeout(() => {
-              dispatch(setSuccess(response.data.message));
+              enqueueSnackbar(`${response.data.message}`, {
+                variant: "success",
+              });
             }, 300);
           },
           (error) => {
@@ -225,7 +226,9 @@ const NewOrEditUserModal = ({
         UserService.updateUser(authUser.id, user.id, payload).then(
           (response) => {
             setTimeout(() => {
-              dispatch(setSuccess(response.data.message));
+              enqueueSnackbar(`${response.data.message}`, {
+                variant: "success",
+              });
             }, 300);
           },
           (error) => {

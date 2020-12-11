@@ -15,11 +15,13 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
 
 import CountrySelect from "../../../../components/common/CountrySelect";
 import RegionSelect from "../../../../components/common/RegionSelect";
+import usePatientContext from "../../../../hooks/usePatientContext";
+import { togglePatientInfoDialog } from "../../../../providers/Patient/actions";
 import PatientService from "../../../../services/patient.service";
 import {
   BasicInfoForm,
@@ -27,7 +29,6 @@ import {
   Pharmacies,
   PaymentData,
 } from "../../../../static/patientBasicInfoForm";
-import { setError, setSuccess } from "../../../../store/common/actions";
 import { calculateAge } from "../../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
@@ -57,12 +58,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function BasicInfo(props) {
+const BasicInfo = (props) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const {
-    formData, reloadData, patientId, onClose,
-  } = props;
+  const { enqueueSnackbar } = useSnackbar();
+  const { state, dispatch } = usePatientContext();
+  const formData = state.patientInfo.data;
+  const { patientId } = state;
+  const { reloadData } = props;
   const FirstRow = BasicInfoForm.firstRow;
   const SecondRow = BasicInfoForm.secondRow;
   const ThirdRow = BasicInfoForm.thirdRow;
@@ -120,22 +122,16 @@ export default function BasicInfo(props) {
     };
     PatientService.updatePatient(patientId, reqBody)
       .then((response) => {
-        dispatch(setSuccess(`${response.data.message}`));
+        enqueueSnackbar(`${response.data.message}`, { variant: "success" });
         reloadData();
-        onClose();
+        dispatch(togglePatientInfoDialog());
       })
       .catch((error) => {
         const resMessage = (error.response && error.response.data
           && error.response.data.message)
           || error.message
           || error.toString();
-        const severity = "error";
-        dispatch(
-          setError({
-            severity,
-            message: resMessage,
-          }),
-        );
+        enqueueSnackbar(`${resMessage}`, { variant: "error" });
       });
   };
 
@@ -447,17 +443,16 @@ export default function BasicInfo(props) {
         <Button onClick={() => onFormSubmit()} variant="outlined">
           Save
         </Button>
-        <Button onClick={() => onClose()} variant="outlined">
+        <Button onClick={() => dispatch(togglePatientInfoDialog())} variant="outlined">
           Cancel
         </Button>
       </Grid>
     </>
   );
-}
+};
 
 BasicInfo.propTypes = {
-  formData: PropTypes.objectOf(PropTypes.any).isRequired,
-  patientId: PropTypes.string.isRequired,
   reloadData: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
 };
+
+export default BasicInfo;
