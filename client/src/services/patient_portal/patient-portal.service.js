@@ -130,7 +130,16 @@ class PatientPortalService {
       .then((res) => res.data);
   }
 
-  // getPrescriptions
+  // Handouts
+  getHandouts() {
+    return axios
+      .get(`${API_BASE}/client-portal/handouts`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  // Prescriptions
   getPrescriptions() {
     return axios
       .get(`${API_BASE}/client-portal/prescription`, {
