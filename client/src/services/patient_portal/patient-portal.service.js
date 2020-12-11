@@ -129,6 +129,15 @@ class PatientPortalService {
       })
       .then((res) => res.data);
   }
+
+  // getPrescriptions
+  getPrescriptions() {
+    return axios
+      .get(`${API_BASE}/client-portal/prescription`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
 }
 
 export default new PatientPortalService();
