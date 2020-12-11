@@ -27,7 +27,7 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
 import Alert from "@material-ui/lab/Alert";
-import { KeyboardDateTimePicker } from "@material-ui/pickers";
+import { KeyboardDatePicker, KeyboardTimePicker } from "@material-ui/pickers";
 import clsx from "clsx";
 import moment from "moment";
 import PropTypes from "prop-types";
@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
   },
   startdatePicker: {
-    marginRight: theme.spacing(4),
+    marginRight: theme.spacing(2),
     maxWidth: "165px",
   },
   statuses: {
@@ -171,7 +171,7 @@ const NewOrEditEvent = ({
       setProvider(selectedProvider);
     }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps, react/destructuring-assignment
+    // eslint-disable-next-line react-hooks/exhaustive-deps, react/destructuring-assignment
   }, [props.event, isNewEvent]);
   /* eslint-enable */
   const handleOnChange = (event) => {
@@ -346,12 +346,7 @@ const NewOrEditEvent = ({
           <DialogContentText id="alert-dialog-description">
             This page is used to create a new appointment
           </DialogContentText>
-          {errors
-            && (
-              <Alert severity="error">
-                {errors}
-              </Alert>
-            )}
+          {errors && <Alert severity="error">{errors}</Alert>}
           <div className={classes.root}>
             <FormControl component="div" className={classes.formControl}>
               <TextField
@@ -372,14 +367,14 @@ const NewOrEditEvent = ({
               />
             </FormControl>
             <div className={classes.datePickers}>
-              <KeyboardDateTimePicker
+              <KeyboardDatePicker
                 className={classes.startdatePicker}
                 ampm={false}
                 clearable
                 id="start-date-picker-inline"
-                label="Start"
+                label="Start Date"
                 value={calEvent.start_dt}
-                placeholder="2020/10/10 10:00"
+                variant="inline"
                 onChange={(date) => {
                   const property = "start_dt";
                   setCalEvent({
@@ -389,20 +384,19 @@ const NewOrEditEvent = ({
                 }}
                 minDate={new Date()}
                 disablePast
-                format="yyyy/MM/dd HH:mm"
+                format="EE LLL d y"
                 KeyboardButtonProps={{
                   "aria-label": "change date",
                 }}
               />
-              <KeyboardDateTimePicker
+              <KeyboardDatePicker
                 clearable
                 className={classes.startdatePicker}
                 ampm={false}
                 variant="outlined"
                 id="start-date-picker-inline"
-                label="End"
+                label="End Date"
                 value={calEvent.end_dt}
-                placeholder="2020/10/10 11:00"
                 onChange={(date) => {
                   const property = "end_dt";
                   setCalEvent({
@@ -414,7 +408,7 @@ const NewOrEditEvent = ({
                 minD
                 ate={new Date()}
                 disablePast
-                format="yyyy/MM/dd HH:mm"
+                format="EE LLL d y"
                 KeyboardButtonProps={{
                   "aria-label": "change date",
                 }}
@@ -423,8 +417,6 @@ const NewOrEditEvent = ({
                 style={{
                   whiteSpace: "nowrap",
                   maxHeight: "30px",
-                  marginLeft: "-15px",
-                  marginRight: "5px",
                   marginTop: "15px",
                 }}
                 variant="contained"
@@ -433,8 +425,7 @@ const NewOrEditEvent = ({
                   await setCalEvent({
                     ...calEvent,
                     start_dt: moment(calEvent.start_dt).add(1, "days"),
-                    end_dt: moment(calEvent.start_dt).add(1, "days").add(15, "minutes"),
-                    // moment(calEvent.start_dt).add(15, "minutes")
+                    end_dt: moment(calEvent.start_dt).add(1, "days"),
                   });
                 }}
               >
@@ -452,11 +443,124 @@ const NewOrEditEvent = ({
                   await setCalEvent({
                     ...calEvent,
                     start_dt: moment(calEvent.start_dt).subtract(1, "days"),
-                    end_dt: moment(calEvent.end_dt).subtract(1, "days").subtract(15, "minutes"),
+                    end_dt: moment(calEvent.end_dt).subtract(1, "days"),
                   });
                 }}
               >
                 Subtract Day
+              </Button>
+            </div>
+            <div className={classes.datePickers}>
+              <KeyboardTimePicker
+                className={classes.startdatePicker}
+                ampm={false}
+                clearable
+                id="start-date-picker-inline"
+                label="Start Time"
+                value={calEvent.start_dt}
+                placeholder="2020/10/10 10:00"
+                onChange={(date) => {
+                  const property = "start_dt";
+                  setCalEvent({
+                    ...calEvent,
+                    [property]: date,
+                  });
+                }}
+                minDate={new Date()}
+                disablePast
+                format="HH:mm a"
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+              />
+              <KeyboardTimePicker
+                clearable
+                ampm={false}
+                variant="outlined"
+                id="start-date-picker-inline"
+                label="End Time"
+                value={calEvent.end_dt}
+                placeholder="2020/10/10 11:00"
+                onChange={(date) => {
+                  const property = "end_dt";
+                  setCalEvent({
+                    ...calEvent,
+                    [property]: date,
+                  });
+                  calculateLength(date);
+                }}
+                minD
+                ate={new Date()}
+                disablePast
+                format="HH:mm a"
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+              />
+              <span style={{ whiteSpace: "nowrap", marginLeft: "5px", marginTop: "15px" }}>Set to</span>
+              <Button
+                style={{
+                  whiteSpace: "nowrap",
+                  maxHeight: "30px",
+                  marginTop: "15px",
+                }}
+                disableElevation
+                onClick={async () => {
+                  await setCalEvent({
+                    ...calEvent,
+                    end_dt: moment(calEvent.start_dt).add(15, "minutes"),
+                  });
+                }}
+              >
+                15 min
+              </Button>
+              <Button
+                style={{
+                  whiteSpace: "nowrap",
+                  maxHeight: "30px",
+                  marginTop: "15px",
+                }}
+                disableElevation
+                onClick={async () => {
+                  await setCalEvent({
+                    ...calEvent,
+                    end_dt: moment(calEvent.end_dt).add(30, "minutes"),
+                  });
+                }}
+              >
+                30 min
+              </Button>
+              <Button
+                style={{
+                  whiteSpace: "nowrap",
+                  maxHeight: "30px",
+                  marginTop: "15px",
+                }}
+                disableElevation
+                onClick={async () => {
+                  await setCalEvent({
+                    ...calEvent,
+                    end_dt: moment(calEvent.end_dt).add(45, "minutes"),
+                  });
+                }}
+              >
+                45 min
+              </Button>
+              <Button
+                style={{
+                  whiteSpace: "nowrap",
+                  maxHeight: "30px",
+                  marginTop: "15px",
+                }}
+                disableElevation
+                onClick={async () => {
+                  await setCalEvent({
+                    ...calEvent,
+                    end_dt: moment(calEvent.end_dt).add(60, "minutes"),
+                  });
+                }}
+              >
+                60 min
               </Button>
             </div>
             <TextField
@@ -505,10 +609,14 @@ const NewOrEditEvent = ({
               <RadioGroup
                 aria-label="status"
                 name="status"
-                value={calEvent.status ? calEvent.status : setCalEvent({
-                  ...calEvent,
-                  status: "R",
-                })}
+                value={
+                  calEvent.status
+                    ? calEvent.status
+                    : setCalEvent({
+                      ...calEvent,
+                      status: "R",
+                    })
+                }
                 onChange={(event) => handleOnChange(event)}
                 className={classes.statusList}
               >
@@ -576,7 +684,7 @@ const NewOrEditEvent = ({
             </Typography>
             <TextareaAutosize
               className={classes.textArea}
-              aria-label="minimum height"
+              aria-label="minimum hei ght"
               placeholder="Notes..."
               name="notes"
               value={calEvent.notes}
