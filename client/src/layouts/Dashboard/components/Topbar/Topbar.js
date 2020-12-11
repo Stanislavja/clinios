@@ -17,6 +17,7 @@ import { NavLink as RouterLink, useHistory } from "react-router-dom";
 
 import useAuth from "../../../../hooks/useAuth";
 import useDebounce from "../../../../hooks/useDebounce";
+import { client_pages, corporate_pages } from "../../../../static/nav-pages";
 import * as API from "../../../../utils/API";
 import { getAllowedRoutes } from "../../../../utils/helpers";
 import { SearchResults } from "./components";
@@ -131,184 +132,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const pages = [
-  {
-    id: 1,
-    title: "Home",
-    href: "/dashboard",
-  },
-  {
-    id: 2,
-    title: "Manage",
-    href: "/dashboard/manage",
-    subMenus: [
-      {
-        id: 21,
-        title: "Accounting Search",
-        href: "/manage/accounting-search",
-      },
-      {
-        id: 22,
-        title: "Email Patients",
-        href: "/manage/email-patients",
-      },
-      {
-        id: 23,
-        title: "Fax",
-        href: "/manage/fax",
-      },
-      {
-        id: 24,
-        title: "Merge Patient",
-        href: "/manage/merge-patient",
-      },
-      {
-        id: 25,
-        title: "Delete Patient",
-        href: "/manage/delete-patient",
-      },
-      {
-        id: 26,
-        title: "Patient Search",
-        href: "/manage/patient-search",
-      },
-      {
-        id: 27,
-        title: "Support Center",
-        href: "/manage/support",
-      },
-    ],
-  },
-  {
-    id: 23,
-    title: "Setup",
-    href: "/setup",
-    permission: ["ADMIN"],
-    subMenus: [
-      {
-        id: 31,
-        title: "Accounting Types",
-        href: "/setup/accounting-types",
-      },
-      {
-        id: 32,
-        title: "Appointment Types",
-        href: "/setup/appointment-types",
-      },
-      {
-        id: 33,
-        title: "Appointment Types User Assignment",
-        href: "/setup/appoinment-user-types",
-      },
-      {
-        id: 34,
-        title: "Backup",
-        href: "/setup/backup",
-      },
-      {
-        id: 35,
-        title: "Configuration",
-        href: "/setup/configuration",
-      },
-      {
-        id: 36,
-        title: "CPT Codes",
-        href: "/setup/ctp-codes",
-      },
-      {
-        id: 37,
-        title: "Drugs",
-        href: "/setup/drugs",
-      },
-      {
-        id: 38,
-        title: "Forms",
-        href: "/setup/forms",
-      },
-      {
-        id: 39,
-        title: "Handouts",
-        href: "/setup/handouts",
-      },
-      {
-        id: 310,
-        title: "ICD Codes",
-        href: "/setup/icd-codes",
-      },
-      {
-        id: 311,
-        title: "Integrations",
-        href: "/setup/integrations",
-      },
-      {
-        id: 312,
-        title: "Lab Ranges",
-        href: "/setup/lab-ranges",
-      },
-      {
-        id: 313,
-        title: "Patient Portal Header",
-        href: "/setup/patient-portal-header",
-      },
-      {
-        id: 314,
-        title: "Schedule",
-        href: "/setup/schedule",
-      },
-      {
-        id: 315,
-        title: "Users",
-        href: "/setup/users",
-      },
-    ],
-  },
-  {
-    id: 4,
-    title: "Reports",
-    href: "/reports",
-  },
-  {
-    id: 5,
-    title: "Myself",
-    href: "/myself",
-  },
-  {
-    id: 6,
-    title: "Logout",
-    href: "/",
-    logout: true,
-  },
-];
-
-
-const corporate_pages = [
-  {
-    id: 1,
-    title: "Home",
-    href: "/corporate",
-  },
-  {
-    id: 2,
-    title: "Clients",
-    href: "/corporate/clients",
-  },
-  {
-    id: 3,
-    title: "Users",
-    href: "/corporate/users",
-  },
-  {
-    id: 4,
-    title: "Myself",
-    href: "/corporate/myself",
-  },
-  {
-    id: 6,
-    title: "Logout",
-    href: "/",
-    logout: true,
-  },
-];
 
 const Topbar = (props) => {
   const {
@@ -326,7 +149,7 @@ const Topbar = (props) => {
   const [results, setResults] = useState([]);
   const [nothingFound, setNothingFound] = useState(false);
 
-  const navPages = (user.role === "CORPORATE") ? corporate_pages : pages;
+  const navPages = (user.role === "CORPORATE") ? corporate_pages : client_pages;
   const allowedPages = getAllowedRoutes(navPages, (user && user.permissions) ? user.permissions : []);
   const handleClose = () => {
     setOpen(false);
