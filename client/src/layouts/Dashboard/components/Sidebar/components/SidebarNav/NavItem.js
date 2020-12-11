@@ -153,11 +153,11 @@ const NavItem = ({
 
 NavItem.defaultProps = {
   children: null,
-  className: '',
+  className: "",
   href: null,
   icon: null,
-  info: null
-}
+  info: null,
+};
 
 NavItem.propTypes = {
   children: PropTypes.node,

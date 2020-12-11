@@ -1,7 +1,7 @@
 import React from "react";
 
 import {
-  Button, List, ListItem, Divider, ListSubheader
+  Button, List, ListItem, Divider, ListSubheader,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
@@ -64,6 +64,7 @@ function renderNavItems({
   return (
     <List disablePadding>
       {items.reduce(
+          // eslint-disable-next-line no-use-before-define
         (acc, item) => reduceChildRoutes({
           acc, item, pathname, depth,
         }),
