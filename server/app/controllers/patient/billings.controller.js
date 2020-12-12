@@ -41,6 +41,34 @@ const getBillings = async (req, res) => {
   }
 };
 
+const getBalance = async (req, res) => {
+  const db = makeDb(configuration, res);
+  const { patient_id } = req.query;
+  try {
+    const dbResponse = await db.query(
+      `select 
+          sum(t.amount) amount
+          from tran t
+          where t.patient_id=${patient_id}
+      `
+    );
+
+    if (!dbResponse) {
+      errorMessage.error = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.error = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const createBilling = async (req, res) => {
   const { dt, type_id, amount, note } = req.body.data;
   let { client_id, patient_id } = req.body.data;
@@ -87,6 +115,7 @@ const createBilling = async (req, res) => {
 const Billing = {
   getBillings,
   createBilling,
+  getBalance
 };
 
 module.exports = Billing;
