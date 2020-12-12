@@ -157,6 +157,7 @@ const PaymentMethods = () => {
                       <StyledTableCell>{paymentMethodType(item.type)}</StyledTableCell>
                       <StyledTableCell>
                         Ending in
+                        {" "}
                         {item.account_number}
                       </StyledTableCell>
                       <StyledTableCell>
