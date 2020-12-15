@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import Tooltip from "../../../../components/common/CustomTooltip";
 import usePatientContext from "../../../../hooks/usePatientContext";
 import PatientService from "../../../../services/patient.service";
+import Lab from "./Dialog/Lab";
 
 const useStyles = makeStyles((theme) => ({
   tab: {
@@ -97,6 +98,7 @@ const DocumentsContent = (props) => {
   const classes = useStyles();
   const [tabValue, setTabValue] = useState(0);
   const [tableData, setTableData] = useState([]);
+  const [isLabModalOpen, setIsLabModalOpen] = useState(false);
   const { data } = state.documents;
   const { patientId } = state;
 
@@ -210,7 +212,10 @@ const DocumentsContent = (props) => {
           <TableBody>
             {tableData.length ? (
               tableData.map((row) => (
-                <StyledTableRow key={`${row.created}_${row.filename}`}>
+                <StyledTableRow
+                  key={`${row.created}_${row.filename}`}
+                  onClick={() => setIsLabModalOpen(true)}
+                >
                   <TableCell component="th" scope="row">
                     {moment(row.created).format("MMM D YYYY")}
                   </TableCell>
@@ -265,6 +270,8 @@ const DocumentsContent = (props) => {
           </TableBody>
         </Table>
       </TableContainer>
+      {isLabModalOpen
+        && <Lab open={isLabModalOpen} handleClose={() => setIsLabModalOpen(false)} />}
     </>
   );
 };
