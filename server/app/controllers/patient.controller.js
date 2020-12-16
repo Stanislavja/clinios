@@ -9,6 +9,7 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     console.log("req:", req.body);
     const dest = process.env.LAB_UPLOAD_DIR;
+    // eslint-disable-next-line prefer-arrow-callback
     fs.access(dest, function (error) {
       if (error) {
         console.log("Directory does not exist.");
@@ -33,11 +34,16 @@ const upload = multer({
     if (file.originalname.startsWith("pid")) {
       return cb(new Error("File name should not start with pid"));
     }
-    if (file.mimetype === "application/pdf" || file.mimetype === "text/*") {
+    if (
+      file.mimetype === "application/pdf" ||
+      file.mimetype === "application/msword" ||
+      file.mimetype === "text/*" ||
+      file.mimetype === "image/png"
+    ) {
       cb(null, true);
     } else {
       cb(null, false);
-      return cb(new Error("Allowed only .pdf and text"));
+      return cb(new Error("Allowed only image, .pdf and text"));
     }
   },
 });
@@ -1061,7 +1067,7 @@ const createDocuments = async (req, res) => {
   documentUpload(req, res, async (err) => {
     if (err) {
       console.log("documentUpload Error:", err.message);
-      errorMessage.error = err.message;
+      errorMessage.message = err.message;
       return res.status(status.error).send(errorMessage);
     }
     if (!req.file) {
