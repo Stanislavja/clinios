@@ -114,7 +114,7 @@ const createBilling = async (req, res) => {
 const Billing = {
   getBillings,
   createBilling,
-  getBalance
+  getBalance,
 };
 
 module.exports = Billing;
