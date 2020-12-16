@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { makeStyles, withStyles } from "@material-ui/core";
-import { green } from "@material-ui/core/colors";
+import { green, grey } from "@material-ui/core/colors";
 import FormControl from "@material-ui/core/FormControl";
 import Grid from "@material-ui/core/Grid";
 import Switch from "@material-ui/core/Switch";
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 
 const GreenSwitch = withStyles({
   switchBase: {
-    color: green[400],
+    color: grey[400],
     "&$checked": {
       color: green[500],
     },
@@ -50,7 +50,9 @@ const GreenSwitch = withStyles({
     },
   },
   checked: {},
-  track: {},
+  track: {
+    backgroundColor: grey[500],
+  },
 })(Switch);
 
 export default function Home() {
@@ -76,16 +78,19 @@ export default function Home() {
   const [isMessageToPatientOpen, setIsMessageToPatientOpen] = useState(false);
 
   const getMapFromArray = (data) => {
-    const formedData = data.reduce((acc, item) => [
-      ...acc,
-      {
-        ...item,
-        title: item.title ? item.title : item.firstname,
-        start: item.start_dt,
-        end: item.end_dt,
-        backgroundColor: statusToColorCode(item.status),
-      },
-    ], []);
+    const formedData = data.reduce(
+      (acc, item) => [
+        ...acc,
+        {
+          ...item,
+          title: item.title ? item.title : item.firstname,
+          start: item.start_dt,
+          end: item.end_dt,
+          backgroundColor: statusToColorCode(item.status),
+        },
+      ],
+      [],
+    );
 
     return formedData;
   };
@@ -96,7 +101,6 @@ export default function Home() {
     setEvents(eventsFromAPI);
     setAppointments(data);
   }
-
 
   async function fetchEventsByProvider(provider) {
     const { data } = await Appointments.getAllByProvider(provider.id);
@@ -158,9 +162,7 @@ export default function Home() {
 
   const handleEventClick = (calEvent) => {
     setIsNewEvent(false);
-    const eventClicked = events.filter(
-      (event) => event.id === parseInt(calEvent.event.id, 10),
-    );
+    const eventClicked = events.filter((event) => event.id === parseInt(calEvent.event.id, 10));
     setSelectedEvent(eventClicked[0]);
     setIsOpen(true);
   };
@@ -201,7 +203,6 @@ export default function Home() {
     );
   };
 
-
   const fetchSingleMessage = () => !isNewMessage
     && Messages.getMessageByID(selectedMsg.id).then(
       (response) => {
@@ -232,7 +233,8 @@ export default function Home() {
           setIsMessageToPatientOpen(false);
           fetchUnreadPatientMessages(selectedProvider.id);
         },
-        () => { // on errors
+        () => {
+          // on errors
           setIsLoading(false);
           setIsMessageToPatientOpen(false);
         },
@@ -245,7 +247,8 @@ export default function Home() {
           setIsMessageToPatientOpen(false);
           fetchUnreadPatientMessages(selectedProvider.id);
         },
-        () => { // no error
+        () => {
+          // no error
           setIsLoading(false);
           setIsMessageToPatientOpen(false);
         },
@@ -274,42 +277,23 @@ export default function Home() {
   return (
     <div className={classes.root}>
       <div style={{ display: "flex" }}>
-        <Typography
-          component="h1"
-          variant="h2"
-          color="textPrimary"
-          className={classes.pageTitle}
-        >
+        <Typography component="h1" variant="h2" color="textPrimary" className={classes.pageTitle}>
           Home
           {" "}
           {selectedProvider && `- ${selectedProvider.name}`}
         </Typography>
         <FormControl component="div" className={classes.formControl}>
           <p className={classes.formHelperText}>Show canceled/rejected</p>
-          <GreenSwitch
-            size="small"
-            name="active"
-            inputProps={{ "aria-label": "primary checkbox" }}
-          />
+          <GreenSwitch size="small" name="active" inputProps={{ "aria-label": "primary checkbox" }} />
         </FormControl>
       </div>
       <Grid container spacing={8}>
         <Grid item md={7} xs={12}>
-          <Calendar
-            events={events}
-            onDayClick={handleDayClick}
-            onEventClick={handleEventClick}
-          />
+          <Calendar events={events} onDayClick={handleDayClick} onEventClick={handleEventClick} />
         </Grid>
         <Grid item md={5} xs={12}>
-          <ProviderCards
-            providers={providers}
-            handleProviderClick={handleProviderClick}
-          />
-          <ProviderDetailsCard
-            selectedProvider={selectedProvider}
-            providerDetails={providerDetails}
-          />
+          <ProviderCards providers={providers} handleProviderClick={handleProviderClick} />
+          <ProviderDetailsCard selectedProvider={selectedProvider} providerDetails={providerDetails} />
           {!!selectedProvider && (
             <>
               <MessagesUnread
@@ -328,38 +312,35 @@ export default function Home() {
           )}
         </Grid>
       </Grid>
-      {isOpen
-        && (
-          <NewOrEditEvent
-            isLoading={isLoading}
-            isNewEvent={isNewEvent}
-            event={selectedEvent && selectedEvent}
-            selectedDate={selectedDate}
-            selectedProvider={selectedProvider}
-            isOpen={isOpen}
-            onClose={() => setIsOpen(false)}
-            providers={providers}
-            onSave={handleEventCreation}
-            onEventUpdate={(payload) => handleEventUpdate(payload)}
-            errors={errors}
-            appointments={appointments}
-          />
-        )}
+      {isOpen && (
+        <NewOrEditEvent
+          isLoading={isLoading}
+          isNewEvent={isNewEvent}
+          event={selectedEvent && selectedEvent}
+          selectedDate={selectedDate}
+          selectedProvider={selectedProvider}
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          providers={providers}
+          onSave={handleEventCreation}
+          onEventUpdate={(payload) => handleEventUpdate(payload)}
+          errors={errors}
+          appointments={appointments}
+        />
+      )}
 
-      {isMessageToPatientOpen
-        && (
-          <MessageToPatient
-            isLoading={isLoading}
-            msg={selectedMsg}
-            isNewMessage={isNewMessage}
-            onModalEnter={fetchSingleMessage}
-            isOpen={isMessageToPatientOpen}
-            onSubmit={handleMessageToPatientFormSubmit}
-            onClose={() => setIsMessageToPatientOpen(false)}
-            errors={errors}
-          />
-        )}
-
+      {isMessageToPatientOpen && (
+        <MessageToPatient
+          isLoading={isLoading}
+          msg={selectedMsg}
+          isNewMessage={isNewMessage}
+          onModalEnter={fetchSingleMessage}
+          isOpen={isMessageToPatientOpen}
+          onSubmit={handleMessageToPatientFormSubmit}
+          onClose={() => setIsMessageToPatientOpen(false)}
+          errors={errors}
+        />
+      )}
     </div>
   );
 }
