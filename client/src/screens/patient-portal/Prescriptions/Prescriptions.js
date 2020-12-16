@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import { makeStyles } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
+
+import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -13,8 +15,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Prescriptions() {
+const Prescriptions = () => {
   const classes = useStyles();
+  const [prescriptions, setPrescriptions] = useState([]);
+
+  const fetchPrescriptions = useCallback(() => {
+    PatientPortalService.getPrescriptions().then((res) => {
+      setPrescriptions(res.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    fetchPrescriptions();
+  }, [fetchPrescriptions]);
+
   return (
     <div className={classes.root}>
       <Typography
@@ -25,6 +39,20 @@ export default function Prescriptions() {
       >
         Prescriptions
       </Typography>
+      {
+        prescriptions.length
+          ? prescriptions.map((item) => (
+            <Typography
+              key={item.id}
+              gutterBottom
+            >
+              {item.id}
+            </Typography>
+          ))
+          : <Typography>No prescriptions found...</Typography>
+      }
     </div>
   );
-}
+};
+
+export default Prescriptions;

@@ -10,6 +10,12 @@ router.get(
   billingsController.getBillings
 );
 
+router.get(
+  "/client-portal/balance",
+  [authJwt.verifyToken],
+  billingsController.getBalance
+);
+
 router.post(
   "/client-portal/billings",
   [authJwt.verifyToken],

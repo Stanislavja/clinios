@@ -12,6 +12,7 @@ import moment from "moment";
 
 import useAuth from "../../../hooks/useAuth";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
+import { paymentMethodType } from "../../../utils/helpers";
 import NewTransactionForm from "./NewTransactionForm";
 import ViewTransactionDetails from "./ViewTransactionDetails";
 
@@ -60,6 +61,17 @@ const StyledTableRow = withStyles(() => ({
       padding: "2px 16px 2px 2px",
       lineHeight: "14px",
     },
+    "& button": {
+      padding: 0,
+      minWidth: 48,
+      fontSize: 12,
+      lineHeight: "14px",
+      fontWeight: "normal",
+
+      "&:hover": {
+        background: "transparent",
+      },
+    },
   },
 }))(TableRow);
 
@@ -80,7 +92,11 @@ const PaymentMethods = () => {
     fetchPaymentMethods();
   }, [fetchPaymentMethods]);
 
-  const onRowClick = (item) => {
+  const onItemEdit = (item) => {
+    setSelectedPayment(item);
+  };
+
+  const onItemDelete = (item) => {
     setSelectedPayment(item);
   };
 
@@ -128,30 +144,53 @@ const PaymentMethods = () => {
             New
           </Button>
         </Grid>
-        <TableContainer className={classes.tableContainer}>
-          <Table size="small" className={classes.table}>
-            <TableBody>
-              {paymentMethods.length ? (
-                paymentMethods.map((item) => (
-                  <StyledTableRow onClick={() => onRowClick(item)} key={`${item.created}_${item.filename}`}>
-                    <StyledTableCell component="th" scope="item">
-                      {moment(item.created).format("MMM D YYYY")}
+        <Grid item sm={4} xs={12}>
+          <TableContainer className={classes.tableContainer}>
+            <Table size="small" className={classes.table}>
+              <TableBody>
+                {paymentMethods.length ? (
+                  paymentMethods.map((item) => (
+                    <StyledTableRow key={item.id}>
+                      <StyledTableCell component="th" scope="item">
+                        {moment(item.created).format("MMM D YYYY")}
+                      </StyledTableCell>
+                      <StyledTableCell>{paymentMethodType(item.type)}</StyledTableCell>
+                      <StyledTableCell>
+                        Ending in
+                        {" "}
+                        {item.account_number}
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <Button
+                          disableRipple
+                          variant="text"
+                          onClick={() => onItemEdit(item)}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          disableRipple
+                          variant="text"
+                          onClick={() => onItemDelete(item)}
+                        >
+                          Delete
+                        </Button>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))
+                ) : (
+                  <StyledTableRow>
+                    <StyledTableCell colSpan={2}>
+                      <Typography className={classes.resMessage}>
+                        No Payment Methods Found...
+                      </Typography>
                     </StyledTableCell>
-                    <StyledTableCell>{item.filename}</StyledTableCell>
                   </StyledTableRow>
-                ))
-              ) : (
-                <StyledTableRow>
-                  <StyledTableCell colSpan={2}>
-                    <Typography className={classes.resMessage}>
-                      No Payment Methods Found...
-                    </Typography>
-                  </StyledTableCell>
-                </StyledTableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
       </div>
     </>
   );

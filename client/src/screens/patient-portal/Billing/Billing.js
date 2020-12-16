@@ -11,6 +11,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import ViewIcon from "@material-ui/icons/Visibility";
+import clsx from "clsx";
 import moment from "moment";
 
 import useAuth from "../../../hooks/useAuth";
@@ -32,6 +33,12 @@ const useStyles = makeStyles((theme) => ({
   },
   centered: {
     textAlign: "center",
+  },
+  borderTop: {
+    borderTop: "1px solid",
+  },
+  shiftContent: {
+    paddingTop: "10px !important",
   },
 }));
 
@@ -69,10 +76,11 @@ const StyledTableRow = withStyles(() => ({
 
 const Billing = () => {
   const classes = useStyles();
-  const { lastVisitedPatient } = useAuth();
+  const { lastVisitedPatient, user } = useAuth();
   const [billings, setBillings] = useState([]);
   const [newPaymentDialog, setNewPaymentDialog] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
+  const [balance, setBalance] = useState(null);
 
   const fetchBillings = useCallback(() => {
     PatientPortalService.getBillings(lastVisitedPatient).then((res) => {
@@ -80,9 +88,16 @@ const Billing = () => {
     });
   }, [lastVisitedPatient]);
 
+  const fetchBalance = useCallback(() => {
+    PatientPortalService.getBalance(user).then((res) => {
+      setBalance(res.data && res.data.length ? res.data[0].amount : "");
+    });
+  }, [user]);
+
   useEffect(() => {
     fetchBillings();
-  }, [fetchBillings]);
+    fetchBalance();
+  }, [fetchBillings, fetchBalance]);
 
   return (
     <>
@@ -185,6 +200,30 @@ const Billing = () => {
                     </StyledTableCell>
                   </StyledTableRow>
                 )}
+                {(!!balance && billings.length) ? (
+                  <StyledTableRow>
+                    <StyledTableCell colSpan={4} />
+                    <StyledTableCell
+                      align="right"
+                      classes={{ body: classes.shiftContent }}
+                    >
+                      <Typography className={classes.resMessage}>
+                        Balance
+                      </Typography>
+                    </StyledTableCell>
+                    <StyledTableCell
+                      className={clsx(
+                        classes.borderTop,
+                        classes.shiftContent,
+                      )}
+                    >
+                      <Typography className={classes.resMessage}>
+                        $
+                        {balance}
+                      </Typography>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ) : null}
               </TableBody>
             </Table>
           </TableContainer>

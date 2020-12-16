@@ -161,6 +161,17 @@ export const encounterLetterToTypeConversion = (encounter) => {
   }
 };
 
+export const paymentMethodType = (type) => {
+  switch (type) {
+    case "V":
+      return "Visa";
+    case "M":
+      return "Master";
+    default:
+      return "";
+  }
+};
+
 export const isDev = () => process.env.NODE_ENV === "development";
 
 export function isArrayWithLength(arr) {

@@ -85,6 +85,18 @@ class PatientPortalService {
       .then((res) => res.data);
   }
 
+  getBalance(patient) {
+    const url = `${API_BASE}/client-portal/balance`;
+    return axios
+      .get(url, {
+        headers: authHeader(),
+        params: {
+          patient_id: patient.id,
+        },
+      })
+      .then((res) => res.data);
+  }
+
   // Payment Methods
   getPaymentMethods(patient) {
     let url = `${API_BASE}/client-portal/payment-methods`;
@@ -125,6 +137,24 @@ class PatientPortalService {
     }
     return axios
       .get(url, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  // Handouts
+  getHandouts() {
+    return axios
+      .get(`${API_BASE}/client-portal/handouts`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  // Prescriptions
+  getPrescriptions() {
+    return axios
+      .get(`${API_BASE}/client-portal/prescription`, {
         headers: authHeader(),
       })
       .then((res) => res.data);
