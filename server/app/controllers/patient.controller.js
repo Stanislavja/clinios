@@ -9,6 +9,7 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     console.log("req:", req.body);
     const dest = process.env.LAB_UPLOAD_DIR;
+    // eslint-disable-next-line prefer-arrow-callback
     fs.access(dest, function (error) {
       if (error) {
         console.log("Directory does not exist.");
