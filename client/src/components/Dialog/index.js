@@ -63,11 +63,13 @@ const DialogForm = ({
   applyButtonText,
   cancelButtonText,
   size,
+  fullScreen,
 }) => {
   const classes = useStyles();
   return (
     <div>
       <Dialog
+        fullScreen={Boolean(fullScreen)}
         open={open}
         onClose={cancelForm}
         fullWidth
@@ -147,14 +149,15 @@ const DialogForm = ({
 DialogForm.defaultProps = {
   title: "Title",
   message: null,
-  applyForm: () => {},
-  cancelForm: () => {},
+  applyForm: () => { },
+  cancelForm: () => { },
   hideActions: true,
   backAction: null,
   continueNext: null,
   applyButtonText: "Continue",
   cancelButtonText: "Cancel",
   size: "lg",
+  fullScreen: false,
 };
 
 DialogForm.propTypes = {
@@ -169,6 +172,7 @@ DialogForm.propTypes = {
   applyButtonText: PropTypes.string,
   cancelButtonText: PropTypes.string,
   size: PropTypes.string,
+  fullScreen: PropTypes.bool,
 };
 
 export default DialogForm;
