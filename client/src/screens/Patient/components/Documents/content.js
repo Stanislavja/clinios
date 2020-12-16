@@ -96,6 +96,7 @@ const DocumentsContent = (props) => {
   const { enqueueSnackbar } = useSnackbar();
   const { state } = usePatientContext();
   const classes = useStyles();
+  const [documentName, setDocumentName] = useState("");
   const [tabValue, setTabValue] = useState(0);
   const [tableData, setTableData] = useState([]);
   const [isLabModalOpen, setIsLabModalOpen] = useState(false);
@@ -145,6 +146,11 @@ const DocumentsContent = (props) => {
           || error.toString();
         enqueueSnackbar(`${resMessage}`, { variant: "error" });
       });
+  };
+
+  const handleDocumentClick = (doc) => {
+    setDocumentName(doc.filename);
+    setIsLabModalOpen(true);
   };
 
   const handleChange = (newValue) => {
@@ -214,7 +220,7 @@ const DocumentsContent = (props) => {
               tableData.map((row) => (
                 <StyledTableRow
                   key={`${row.created}_${row.filename}`}
-                  onClick={() => setIsLabModalOpen(true)}
+                  onClick={() => handleDocumentClick(row)}
                 >
                   <TableCell component="th" scope="row">
                     {moment(row.created).format("MMM D YYYY")}
@@ -271,7 +277,14 @@ const DocumentsContent = (props) => {
         </Table>
       </TableContainer>
       {isLabModalOpen
-        && <Lab open={isLabModalOpen} handleClose={() => setIsLabModalOpen(false)} />}
+        && (
+          <Lab
+            open={isLabModalOpen}
+            documentName={documentName}
+            patientId={patientId}
+            handleClose={() => setIsLabModalOpen(false)}
+          />
+        )}
     </>
   );
 };

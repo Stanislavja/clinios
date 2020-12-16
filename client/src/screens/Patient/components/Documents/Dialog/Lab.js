@@ -33,15 +33,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Lab = ({ open, handleClose }) => {
+const Lab = ({
+  open, documentName, patientId, handleClose,
+}) => {
   const classes = useStyles();
   const [file, setFile] = useState("");
   const [numPages, setNumPages] = useState(null);
 
   useEffect(() => {
-    // eslint-disable-next-line global-require
-    setFile(require("./2018.06.22_Labcorp_CMP.pdf"));
-  }, []);
+    setFile(`${process.env.REACT_APP_API_URL}static/patient/pid${patientId}_${documentName}`);
+  }, [documentName, patientId]);
 
   const onDocumentLoadSuccess = ({ totalPage }) => {
     setNumPages(totalPage);
@@ -80,6 +81,8 @@ const Lab = ({ open, handleClose }) => {
 
 Lab.propTypes = {
   open: PropTypes.bool.isRequired,
+  patientId: PropTypes.number.isRequired,
+  documentName: PropTypes.string.isRequired,
   handleClose: PropTypes.func.isRequired,
 };
 export default Lab;
