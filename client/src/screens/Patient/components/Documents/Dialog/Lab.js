@@ -7,6 +7,7 @@ import Slide from "@material-ui/core/Slide";
 import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import CloseIcon from "@material-ui/icons/Close";
+import Pagination from "@material-ui/lab/Pagination";
 import PropTypes from "prop-types";
 import { pdfjs, Document, Page } from "react-pdf";
 
@@ -26,9 +27,13 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-end",
   },
   PDFViewer: {
-    marginTop: theme.spacing(4),
+    marginTop: theme.spacing(5),
     marginBottom: theme.spacing(2),
     marginLeft: theme.spacing(2),
+  },
+  PaginationWrap: {
+    display: "flex",
+    justifyContent: "center",
   },
 }));
 
@@ -38,20 +43,26 @@ const Lab = ({
 }) => {
   const classes = useStyles();
   const [file, setFile] = useState("");
-  const [numPages, setNumPages] = useState(null);
+  const [totalPages, setTotalPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
 
   useEffect(() => {
     setFile(`${process.env.REACT_APP_API_URL}static/patient/pid${patientId}_${documentName}`);
   }, [documentName, patientId]);
 
-  const onDocumentLoadSuccess = ({ totalPage }) => {
-    setNumPages(totalPage);
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setTotalPages(numPages);
+    setPageNumber(1);
+  };
+
+  const handleChange = (event, value) => {
+    setPageNumber(value);
   };
 
   return (
     <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
       <AppBar className={classes.appBar}>
-        <Toolbar className={classes.title}>
+        <Toolbar className={classes.title} variant="dense">
           <IconButton edge="end" color="inherit" onClick={handleClose} aria-label="close">
             <CloseIcon />
           </IconButton>
@@ -62,18 +73,11 @@ const Lab = ({
           file={(file)}
           onLoadSuccess={onDocumentLoadSuccess}
         >
-          {
-            Array.from(
-              new Array(numPages),
-              (el, index) => (
-                <Page
-                  key={`page_${index + 1}`}
-                  pageNumber={index + 1}
-                />
-              ),
-            )
-          }
+          <Page pageNumber={pageNumber} />
         </Document>
+        <div className={classes.PaginationWrap}>
+          <Pagination count={totalPages} shape="rounded" onChange={handleChange} />
+        </div>
       </div>
     </Dialog>
   );
