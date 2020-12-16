@@ -33,7 +33,7 @@ const EncountersContent = () => {
     <>
       {
         data.map((item, index) => (
-          <Grid key={moment(item.dt).format("MMM D YYYY")}>
+          <Grid key={item.id}>
             <Grid className={classes.inputRow} container>
               <Typography
                 component="span"
