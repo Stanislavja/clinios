@@ -736,7 +736,7 @@ const Patient = () => {
       <input
         type="file"
         id="file"
-        accept=".pdf, .txt"
+        accept=".pdf, .txt, image/*"
         multiple
         ref={inputFile}
         className={classes.noDisplay}
