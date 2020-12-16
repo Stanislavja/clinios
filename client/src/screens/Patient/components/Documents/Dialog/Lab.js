@@ -8,7 +8,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import CloseIcon from "@material-ui/icons/Close";
 import Pagination from "@material-ui/lab/Pagination";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
+import FileViewer from "react-file-viewer";
 import { pdfjs, Document, Page } from "react-pdf";
 
 pdfjs
@@ -37,17 +39,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function checkFileExtension(fileName) {
+  const extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+  return extension;
+}
 
 const Lab = ({
   open, documentName, patientId, handleClose,
 }) => {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const [file, setFile] = useState("");
   const [totalPages, setTotalPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
+  const [type, setType] = useState("");
 
   useEffect(() => {
-    setFile(`${process.env.REACT_APP_API_URL}static/patient/pid${patientId}_${documentName}`);
+    const filePath = `${process.env.REACT_APP_API_URL}static/patient/pid${patientId}_${documentName}`;
+    setFile(filePath);
+    const fileType = checkFileExtension(filePath);
+    setType(fileType);
   }, [documentName, patientId]);
 
   const onDocumentLoadSuccess = ({ numPages }) => {
@@ -59,6 +70,12 @@ const Lab = ({
     setPageNumber(value);
   };
 
+  const onError = (e) => {
+    enqueueSnackbar(e, { variant: "error" });
+    console.error("onError", e);
+  };
+
+
   return (
     <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
       <AppBar className={classes.appBar}>
@@ -68,24 +85,34 @@ const Lab = ({
           </IconButton>
         </Toolbar>
       </AppBar>
-      <div className={classes.PDFViewer}>
-        <Document
-          file={(file)}
-          onLoadSuccess={onDocumentLoadSuccess}
-        >
-          <Page pageNumber={pageNumber} />
-        </Document>
-        <div className={classes.PaginationWrap}>
-          <Pagination count={totalPages} shape="rounded" onChange={handleChange} />
-        </div>
-      </div>
+      {type && (type === "pdf")
+        ? (
+          <div className={classes.PDFViewer}>
+            <Document
+              file={(file)}
+              onLoadSuccess={onDocumentLoadSuccess}
+            >
+              <Page pageNumber={pageNumber} />
+            </Document>
+            <div className={classes.PaginationWrap}>
+              <Pagination count={totalPages} shape="rounded" onChange={handleChange} />
+            </div>
+          </div>
+        )
+        : (
+          <FileViewer
+            fileType={type}
+            filePath={file}
+            onError={onError}
+          />
+        )}
     </Dialog>
   );
 };
 
 Lab.propTypes = {
   open: PropTypes.bool.isRequired,
-  patientId: PropTypes.number.isRequired,
+  patientId: PropTypes.string.isRequired,
   documentName: PropTypes.string.isRequired,
   handleClose: PropTypes.func.isRequired,
 };
