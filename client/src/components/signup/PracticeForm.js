@@ -63,7 +63,7 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
   const [fieldErrors, setFieldErrors] = useState([]);
 
   useEffect(() => {
-    const clientCodeAcc = getAcronym(name);
+    const clientCodeAcc = getAcronym(name.trim());
     setClientCode(clientCodeAcc);
   }, [name]);
 
