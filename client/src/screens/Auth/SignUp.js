@@ -8,10 +8,13 @@ import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useSnackbar } from "notistack";
 
-import PracticeForm from "../../components/signup/PracticeForm";
-import Success from "../../components/signup/Success";
+// import PracticeForm from "../../components/signup/PracticeForm";
+// import Success from "../../components/signup/Success";
+
 import AuthService from "../../services/auth.service";
 import EmailService from "../../services/email.service";
+import PracticeForm from "./components/PracticeForm";
+import Success from "./components/Success";
 
 
 const useStyles = makeStyles((theme) => ({
