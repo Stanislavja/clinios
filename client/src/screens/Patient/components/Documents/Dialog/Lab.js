@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+import { Button } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Dialog from "@material-ui/core/Dialog";
 import IconButton from "@material-ui/core/IconButton";
@@ -26,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     marginLeft: theme.spacing(2),
     flex: 1,
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
   },
   PDFViewer: {
     marginTop: theme.spacing(5),
@@ -36,6 +37,12 @@ const useStyles = makeStyles((theme) => ({
   PaginationWrap: {
     display: "flex",
     justifyContent: "center",
+  },
+  download: {
+    "& a": {
+      color: "#ffffff",
+      textDecoration: "none",
+    },
   },
 }));
 
@@ -80,6 +87,9 @@ const Lab = ({
     <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
       <AppBar className={classes.appBar}>
         <Toolbar className={classes.title} variant="dense">
+          <Button variant="contained" color="primary" className={classes.download}>
+            <a href={file} download>Download</a>
+          </Button>
           <IconButton edge="end" color="inherit" onClick={handleClose} aria-label="close">
             <CloseIcon />
           </IconButton>
