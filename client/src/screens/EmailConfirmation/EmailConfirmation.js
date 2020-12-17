@@ -5,10 +5,9 @@ import CardContent from "@material-ui/core/CardContent";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSnackbar } from "notistack";
 
-import Dimmer from "../components/common/Dimmer";
-import VerificationMessage from "../components/email/VerificationMessage";
-import VerificationSuccess from "../components/email/VerificationSuccess";
-import EmailService from "../services/email.service";
+import Dimmer from "../../components/common/Dimmer";
+import EmailService from "../../services/email.service";
+import { VerificationMessage, VerificationSuccess } from "./components";
 
 const useStyles = makeStyles((theme) => ({
   root: {
