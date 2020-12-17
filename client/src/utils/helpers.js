@@ -1,7 +1,7 @@
 import { intersection } from "lodash";
 
 export const getAcronym = (str) => {
-  if (!str || typeof str === "undefined") {
+  if (!str || typeof str === "undefined" || str === "") {
     return "";
   }
   const matches = str.match(/\b(\w)/g);
