@@ -3,9 +3,6 @@ import React, { useState } from "react";
 import Container from "@material-ui/core/Container";
 import PropTypes from "prop-types";
 
-// import Footer from "../../components/Footer";
-// import Header from "../../components/Header";
-// import Sidebar from "../../components/Sidebar";
 import { Header, Footer, Sidebar } from "./components";
 
 const MainLayout = ({ children }) => {
