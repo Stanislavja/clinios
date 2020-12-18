@@ -1,14 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, withStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormGroup from "@material-ui/core/FormGroup";
+import IconButton from "@material-ui/core/IconButton";
+import Paper from "@material-ui/core/Paper";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import TextField from "@material-ui/core/TextField";
+import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography";
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
+import moment from "moment";
+
+import EmailPatient from "../../../../services/manage/emailPatient.service";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,26 +53,75 @@ const useStyles = makeStyles((theme) => ({
   historyTop: {
     marginTop: "15px",
   },
-  history: {
+  tableContainer: {
+    borderRadius: 0,
     marginTop: "5px",
     display: "flex",
     border: "black solid 1px",
     padding: "5px",
     height: "300px",
     flexDirection: "row",
-    "& div": {
-      width: "16%",
-      margin: "5px",
-    },
   },
 }));
+
+const LightTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: theme.palette.common.white,
+    color: "rgba(0, 0, 0, 0.87)",
+    boxShadow: theme.shadows[1],
+    fontSize: 13,
+  },
+}))(Tooltip);
+
+
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.grey,
+    color: theme.palette.grey,
+    fontSize: "12px",
+    fontWeight: 700,
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
+
+const StyledTableRow = withStyles((theme) => ({
+  root: {
+    fontSize: 14,
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+    "& th": {
+      fontSize: 12,
+    },
+    "& td": {
+      fontSize: 12,
+    },
+  },
+}))(TableRow);
+
+const isLessThan30Minutes = (createdTime) => (moment()
+  .subtract(30, "minutes")
+  .format()
+      < moment(createdTime)
+        .format()
+);
+
 
 export default function EmailPatients() {
   const classes = useStyles();
   const [subject, setSubject] = React.useState("");
   const [message, setMessage] = React.useState("");
+  const [emailHistory, setEmailHistory] = React.useState([]);
   const [active, setActive] = React.useState(false);
   const [inActive, setInActive] = React.useState(false);
+
+  useEffect(() => {
+    EmailPatient.getEmailHistory().then((response) => {
+      setEmailHistory(response.data.data);
+    });
+  }, []);
 
   return (
     <div className={classes.root}>
@@ -141,14 +204,90 @@ export default function EmailPatients() {
         <Typography component="p" variant="body2" color="textPrimary">
           History
         </Typography>
-        <div className={classes.history}>
-          <div>Date</div>
-          <div>Subject</div>
-          <div>Message</div>
-          <div>Status</div>
-          <div>Actions</div>
-          <div>Sent By</div>
-        </div>
+        <TableContainer component={Paper} className={classes.tableContainer}>
+          <Table
+            size="small"
+            className={classes.table}
+            aria-label="a dense table"
+          >
+            <TableHead>
+              <TableRow>
+                <StyledTableCell padding="checkbox">Date</StyledTableCell>
+                <StyledTableCell padding="checkbox">Subject</StyledTableCell>
+                <StyledTableCell padding="checkbox">Message</StyledTableCell>
+                <StyledTableCell padding="checkbox">Status</StyledTableCell>
+                <StyledTableCell padding="checkbox">Sent By</StyledTableCell>
+                <StyledTableCell padding="checkbox">Actions</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {emailHistory.map((history) => (
+                <StyledTableRow key={history.created}>
+                  <TableCell
+                    style={{ whiteSpace: "nowrap" }}
+                    padding="checkbox"
+                    component="th"
+                    scope="row"
+                  >
+                    {moment(history.created).format("lll")}
+                  </TableCell>
+                  <TableCell padding="checkbox" component="th" scope="row">
+                    {history.subject}
+                  </TableCell>
+                  {history.message && history.message.length > 25 ? (
+                    <LightTooltip title={history.message}>
+                      <TableCell
+                        padding="checkbox"
+                        className={classes.overFlowControl}
+                      >
+                        {`${history.message.substring(0, 25)}...`}
+                      </TableCell>
+                    </LightTooltip>
+                  ) : (
+                    <TableCell
+                      padding="checkbox"
+                      className={classes.overFlowControl}
+                    >
+                      {history.message || ""}
+                    </TableCell>
+                  )}
+
+                  <TableCell padding="checkbox" component="th" scope="row">
+                    {history.status
+                      ? history.status === "A" ? "Active" : "InActive"
+                      : ""}
+                  </TableCell>
+                  <TableCell padding="checkbox">
+                    {history.created_user}
+                  </TableCell>
+                  <TableCell padding="checkbox" className={classes.actions}>
+                    { isLessThan30Minutes(history.created)
+                      ? (
+                        <>
+                          <IconButton
+                            aria-label="edit"
+                            className={classes.margin}
+                            onClick={() => alert("on Edit click")}
+                          >
+                            <EditIcon fontSize="default" />
+                          </IconButton>
+                          <IconButton
+                            aria-label="delete"
+                            className={classes.margin}
+                            onClick={() => alert("delete action")}
+                          >
+                            <DeleteIcon fontSize="default" />
+                          </IconButton>
+                        </>
+                      )
+                      : ""}
+
+                  </TableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
     </div>
   );

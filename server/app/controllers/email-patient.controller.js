@@ -6,7 +6,7 @@ const getHistory = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const dbResponse = await db.query(
-      `select e.created, e.message, concat(u.firstname, ' ', u.lastname) created_user, e.status, e.client_id
+      `select e.created, e.message, e.subject, concat(u.firstname, ' ', u.lastname) created_user, e.status, e.client_id
         from email_bulk_history e
         left join user u on u.id=e.created_user_id
         where e.client_id=${req.client_id}
