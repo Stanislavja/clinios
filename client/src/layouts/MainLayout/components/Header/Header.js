@@ -11,8 +11,8 @@ import InputIcon from "@material-ui/icons/Input";
 import MenuIcon from "@material-ui/icons/Menu";
 import { Link as RouterLink, useHistory } from "react-router-dom";
 
-import Logo from "../../assets/img/Logo.png";
-import useAuth from "../../hooks/useAuth";
+import Logo from "../../../../assets/img/Logo.png";
+import useAuth from "../../../../hooks/useAuth";
 
 
 const useStyles = makeStyles((theme) => ({

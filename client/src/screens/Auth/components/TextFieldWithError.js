@@ -3,7 +3,7 @@ import React from "react";
 import TextField from "@material-ui/core/TextField";
 import PropTypes from "prop-types";
 
-import Error from "../common/Error";
+import Error from "../../../components/common/Error";
 
 const TextFieldWithError = ({
   fieldName,

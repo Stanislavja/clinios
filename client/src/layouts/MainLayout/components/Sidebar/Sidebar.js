@@ -7,7 +7,7 @@ import LockOpenIcon from "@material-ui/icons/LockOpen";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../../../../hooks/useAuth";
 import { SidebarNav, GeneralSidebarNav } from "./components";
 
 const useStyles = makeStyles((theme) => ({

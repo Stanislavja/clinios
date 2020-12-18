@@ -8,8 +8,8 @@ import Alert from "@material-ui/lab/Alert";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 
-import EmailService from "../../services/email.service";
-import Dimmer from "../common/Dimmer";
+import Dimmer from "../../../components/common/Dimmer";
+import EmailService from "../../../services/email.service";
 
 
 const useStyles = makeStyles((theme) => ({

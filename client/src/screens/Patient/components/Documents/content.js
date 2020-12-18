@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import Tooltip from "../../../../components/common/CustomTooltip";
 import usePatientContext from "../../../../hooks/usePatientContext";
 import PatientService from "../../../../services/patient.service";
+import Lab from "./Dialog/Lab";
 
 const useStyles = makeStyles((theme) => ({
   tab: {
@@ -95,8 +96,10 @@ const DocumentsContent = (props) => {
   const { enqueueSnackbar } = useSnackbar();
   const { state } = usePatientContext();
   const classes = useStyles();
+  const [documentName, setDocumentName] = useState("");
   const [tabValue, setTabValue] = useState(0);
   const [tableData, setTableData] = useState([]);
+  const [isLabModalOpen, setIsLabModalOpen] = useState(false);
   const { data } = state.documents;
   const { patientId } = state;
 
@@ -143,6 +146,11 @@ const DocumentsContent = (props) => {
           || error.toString();
         enqueueSnackbar(`${resMessage}`, { variant: "error" });
       });
+  };
+
+  const handleDocumentClick = (doc) => {
+    setDocumentName(doc.filename);
+    setIsLabModalOpen(true);
   };
 
   const handleChange = (newValue) => {
@@ -210,7 +218,10 @@ const DocumentsContent = (props) => {
           <TableBody>
             {tableData.length ? (
               tableData.map((row) => (
-                <StyledTableRow key={`${row.created}_${row.filename}`}>
+                <StyledTableRow
+                  key={`${row.created}_${row.filename}`}
+                  onClick={() => handleDocumentClick(row)}
+                >
                   <TableCell component="th" scope="row">
                     {moment(row.created).format("MMM D YYYY")}
                   </TableCell>
@@ -265,6 +276,15 @@ const DocumentsContent = (props) => {
           </TableBody>
         </Table>
       </TableContainer>
+      {isLabModalOpen
+        && (
+          <Lab
+            open={isLabModalOpen}
+            documentName={documentName}
+            patientId={patientId}
+            handleClose={() => setIsLabModalOpen(false)}
+          />
+        )}
     </>
   );
 };
