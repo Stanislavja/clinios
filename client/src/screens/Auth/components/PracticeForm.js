@@ -12,8 +12,8 @@ import Alert from "@material-ui/lab/Alert";
 import _ from "lodash";
 import PropTypes from "prop-types";
 
-import AuthService from "../../services/auth.service";
-import { getAcronym } from "../../utils/helpers";
+import AuthService from "../../../services/auth.service";
+import { getAcronym } from "../../../utils/helpers";
 import TextFieldWithError from "./TextFieldWithError";
 
 const useStyles = makeStyles((theme) => ({

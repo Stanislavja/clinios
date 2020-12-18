@@ -95,21 +95,8 @@ client/src
 │   ├── ClientPortalGuard.js
 │   ├── Dialog
 │   │   └── index.js
-│   ├── Footer.js
 │   ├── GuestGuard.js
-│   ├── Header
-│   │   └── index.js
 │   ├── LoadingScreen.js
-│   ├── Sidebar
-│   │   ├── components
-│   │   │   ├── GeneralSidebarNav
-│   │   │   │   ├── GeneralSidebarNav.js
-│   │   │   │   └── index.js
-│   │   │   ├── SidebarNav
-│   │   │   │   ├── SidebarNav.js
-│   │   │   │   └── index.js
-│   │   │   └── index.js
-│   │   └── index.js
 │   ├── SlashScreen.js
 │   ├── common
 │   │   ├── Card.js
@@ -118,13 +105,6 @@ client/src
 │   │   ├── Dimmer.js
 │   │   ├── Error.js
 │   │   └── RegionSelect.js
-│   ├── email
-│   │   ├── VerificationMessage.js
-│   │   └── VerificationSuccess.js
-│   ├── signup
-│   │   ├── PracticeForm.js
-│   │   ├── Success.js
-│   │   └── TextFieldWithError.js
 │   └── videos
 │       └── Video.js
 ├── constants.js
@@ -153,6 +133,7 @@ client/src
 │   │   │   │   │   │   ├── SearchBar.js
 │   │   │   │   │   │   └── index.js
 │   │   │   │   │   ├── SidebarNav
+│   │   │   │   │   │   ├── NavItem.js
 │   │   │   │   │   │   ├── SidebarNav.js
 │   │   │   │   │   │   └── index.js
 │   │   │   │   │   └── index.js
@@ -167,6 +148,26 @@ client/src
 │   │   │   └── index.js
 │   │   └── index.js
 │   ├── MainLayout
+│   │   ├── MainLayout.js
+│   │   ├── components
+│   │   │   ├── Footer
+│   │   │   │   ├── Footer.js
+│   │   │   │   └── index.js
+│   │   │   ├── Header
+│   │   │   │   ├── Header.js
+│   │   │   │   └── index.js
+│   │   │   ├── Sidebar
+│   │   │   │   ├── Sidebar.js
+│   │   │   │   ├── components
+│   │   │   │   │   ├── GeneralSidebarNav
+│   │   │   │   │   │   ├── GeneralSidebarNav.js
+│   │   │   │   │   │   └── index.js
+│   │   │   │   │   ├── SidebarNav
+│   │   │   │   │   │   ├── SidebarNav.js
+│   │   │   │   │   │   └── index.js
+│   │   │   │   │   └── index.js
+│   │   │   │   └── index.js
+│   │   │   └── index.js
 │   │   └── index.js
 │   ├── PatientPortal
 │   │   ├── Plain
@@ -212,7 +213,11 @@ client/src
 │   ├── Agreement.js
 │   ├── Auth
 │   │   ├── Login.js
-│   │   └── SignUp.js
+│   │   ├── SignUp.js
+│   │   └── components
+│   │       ├── PracticeForm.js
+│   │       ├── Success.js
+│   │       └── TextFieldWithError.js
 │   ├── Client
 │   │   ├── Home
 │   │   │   ├── Home.js
@@ -365,7 +370,13 @@ client/src
 │   │   │   └── index.js
 │   │   └── index.js
 │   ├── Contact.js
-│   ├── EmailConfirmation.js
+│   ├── EmailConfirmation
+│   │   ├── EmailConfirmation.js
+│   │   ├── components
+│   │   │   ├── VerificationMessage.js
+│   │   │   ├── VerificationSuccess.js
+│   │   │   └── index.js
+│   │   └── index.js
 │   ├── ForgetPassword
 │   │   ├── Success.js
 │   │   └── index.js
@@ -427,6 +438,8 @@ client/src
 │   │   │   │   ├── details.js
 │   │   │   │   └── index.js
 │   │   │   ├── Documents
+│   │   │   │   ├── Dialog
+│   │   │   │   │   └── Lab.js
 │   │   │   │   ├── content.js
 │   │   │   │   └── index.js
 │   │   │   └── Handouts
@@ -555,6 +568,7 @@ client/src
 │   ├── patient_portal
 │   │   ├── auth.service.js
 │   │   ├── home.service.js
+│   │   ├── messages.service.js
 │   │   └── patient-portal.service.js
 │   ├── reportFinance.service.js
 │   ├── reportFinanceDetail.service.js
@@ -565,6 +579,8 @@ client/src
 ├── static
 │   ├── encountersForm.js
 │   ├── expandForm.js
+│   ├── nav-pages
+│   │   └── index.js
 │   ├── patient-portal
 │   │   └── appointments.js
 │   ├── patient.js
