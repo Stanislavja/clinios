@@ -5,8 +5,8 @@ import PropTypes from "prop-types";
 
 // import Footer from "../../components/Footer";
 // import Header from "../../components/Header";
-import Sidebar from "../../components/Sidebar";
-import { Header, Footer } from "./components";
+// import Sidebar from "../../components/Sidebar";
+import { Header, Footer, Sidebar } from "./components";
 
 const MainLayout = ({ children }) => {
   const [openSidebar, setOpenSidebar] = useState(false);
