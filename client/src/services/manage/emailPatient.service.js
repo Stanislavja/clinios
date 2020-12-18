@@ -9,6 +9,15 @@ class EmailPatient {
       headers: authHeader(),
     });
   }
+
+  deleteEmailHistory(date) {
+    return axios.delete(
+      `${API_BASE}/email/history/${date}`,
+      {
+        headers: authHeader(),
+      },
+    );
+  }
 }
 
 export default new EmailPatient();

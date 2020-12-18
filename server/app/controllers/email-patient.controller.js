@@ -77,7 +77,7 @@ const deleteHistory = async (req, res) => {
     );
 
     if (!deleteResponse.affectedRows) {
-      errorMessage.error = "Deletion not successful";
+      errorMessage.message = "Deletion not successful";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -86,7 +86,7 @@ const deleteHistory = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Delete not successful";
+    errorMessage.message = "Delete not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();

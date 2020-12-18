@@ -21,6 +21,7 @@ import Typography from "@material-ui/core/Typography";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 
 import EmailPatient from "../../../../services/manage/emailPatient.service";
 
@@ -111,17 +112,32 @@ const isLessThan30Minutes = (createdTime) => (moment()
 
 export default function EmailPatients() {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const [subject, setSubject] = React.useState("");
   const [message, setMessage] = React.useState("");
   const [emailHistory, setEmailHistory] = React.useState([]);
   const [active, setActive] = React.useState(false);
   const [inActive, setInActive] = React.useState(false);
 
-  useEffect(() => {
+
+  const fetchEmailHistory = () => {
     EmailPatient.getEmailHistory().then((response) => {
       setEmailHistory(response.data.data);
     });
+  };
+
+  useEffect(() => {
+    fetchEmailHistory();
   }, []);
+
+  const handleEmailHistoryDeletion = (createdDate) => {
+    EmailPatient.deleteEmailHistory(moment(createdDate).format("YYYY-MM-DD HH:mm:ss")).then((response) => {
+      enqueueSnackbar(`${response.data.message}`, {
+        variant: "success",
+      });
+      fetchEmailHistory();
+    });
+  };
 
   return (
     <div className={classes.root}>
@@ -274,7 +290,7 @@ export default function EmailPatients() {
                           <IconButton
                             aria-label="delete"
                             className={classes.margin}
-                            onClick={() => alert("delete action")}
+                            onClick={() => handleEmailHistoryDeletion(history.created)}
                           >
                             <DeleteIcon fontSize="default" />
                           </IconButton>
