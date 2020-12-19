@@ -53,6 +53,8 @@ const AccordionSummary = withStyles({
 const AccordionDetails = withStyles((theme) => ({
   root: {
     display: "block",
+    maxHeight: 300,
+    overflowY: "scroll",
     padding: theme.spacing(2),
   },
 }))(MuiAccordionDetails);
