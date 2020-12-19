@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import MuiAccordion from "@material-ui/core/Accordion";
 import MuiAccordionDetails from "@material-ui/core/AccordionDetails";
 import MuiAccordionSummary from "@material-ui/core/AccordionSummary";
+import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
@@ -74,7 +75,7 @@ const CardsAccordion = () => {
   };
 
   return (
-    <>
+    <Grid>
       <Accordion square expanded={expanded.diagnoses} onChange={() => handleChange("diagnoses")}>
         <AccordionSummary aria-controls="panel1d-content" id="panel1d-header" expandIcon={<ExpandMoreIcon />}>
           <Typography variant="h6">Diagnoses</Typography>
@@ -123,7 +124,7 @@ const CardsAccordion = () => {
           <MedicalNotes />
         </AccordionDetails>
       </Accordion>
-    </>
+    </Grid>
   );
 };
 export default CardsAccordion;
