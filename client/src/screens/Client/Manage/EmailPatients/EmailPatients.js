@@ -25,6 +25,7 @@ import { useSnackbar } from "notistack";
 
 import ConfirmEmail from './Dialog/ConfirmEmail'
 import EmailPatient from "../../../../services/manage/emailPatient.service";
+import EditEmail from "./Dialog/EditEmail";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -120,7 +121,8 @@ export default function EmailPatients() {
   const [active, setActive] = useState(false);
   const [inActive, setInActive] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isConfirmView, setIsConfirmView] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedEmail, setSelectedEmail] = useState({});
 
 
   const fetchEmailHistory = () => {
@@ -144,10 +146,11 @@ export default function EmailPatients() {
 
   const handleNextClick = () => {
     setIsModalOpen(true);
-    setIsConfirmView(true);
-   console.log('active', active);
-   console.log('subject', subject);
-   console.log('message', message);
+  }
+
+  const handleOnEdit = (selectedEmail) => {
+    setIsEditModalOpen(true);
+    setSelectedEmail(selectedEmail)
   }
 
   return (
@@ -167,7 +170,6 @@ export default function EmailPatients() {
         <Typography component="p" variant="body2" color="textPrimary">
           Patient Status:
         </Typography>
-
         <FormControl component="fieldset">
           <FormGroup aria-label="position" row>
             <FormControlLabel
@@ -189,7 +191,6 @@ export default function EmailPatients() {
           </FormGroup>
         </FormControl>
       </div>
-
       <div className={classes.fields}>
         <TextField
           className={classes.subject}
@@ -295,7 +296,7 @@ export default function EmailPatients() {
                           <IconButton
                             aria-label="edit"
                             className={classes.margin}
-                            onClick={() => alert("on Edit click")}
+                            onClick={() => handleOnEdit(history)}
                           >
                             <EditIcon fontSize="default" />
                           </IconButton>
@@ -327,6 +328,13 @@ export default function EmailPatients() {
           "status": active,
           "message": message,
         }}
+      />
+    }
+    {isEditModalOpen && 
+      <EditEmail 
+        isOpen={isEditModalOpen} 
+        onClose={() => setIsEditModalOpen(false)} 
+        selectedEmail={selectedEmail}
       />
     }
     </div>
