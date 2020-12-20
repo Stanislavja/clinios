@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { makeStyles, withStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
@@ -23,6 +23,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 
+import ConfirmEmail from './Dialog/ConfirmEmail'
 import EmailPatient from "../../../../services/manage/emailPatient.service";
 
 const useStyles = makeStyles((theme) => ({
@@ -113,11 +114,13 @@ const isLessThan30Minutes = (createdTime) => (moment()
 export default function EmailPatients() {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  const [subject, setSubject] = React.useState("");
-  const [message, setMessage] = React.useState("");
-  const [emailHistory, setEmailHistory] = React.useState([]);
-  const [active, setActive] = React.useState(false);
-  const [inActive, setInActive] = React.useState(false);
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+  const [emailHistory, setEmailHistory] = useState([]);
+  const [active, setActive] = useState(false);
+  const [inActive, setInActive] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConfirmView, setIsConfirmView] = useState(false);
 
 
   const fetchEmailHistory = () => {
@@ -138,6 +141,14 @@ export default function EmailPatients() {
       fetchEmailHistory();
     });
   };
+
+  const handleNextClick = () => {
+    setIsModalOpen(true);
+    setIsConfirmView(true);
+   console.log('active', active);
+   console.log('subject', subject);
+   console.log('message', message);
+  }
 
   return (
     <div className={classes.root}>
@@ -212,6 +223,7 @@ export default function EmailPatients() {
           variant="contained"
           color="primary"
           className={classes.next}
+          onClick={() => handleNextClick()}
         >
           Next
         </Button>
@@ -305,6 +317,18 @@ export default function EmailPatients() {
           </Table>
         </TableContainer>
       </div>
+    
+    {isModalOpen && 
+      <ConfirmEmail 
+        isOpen = {isModalOpen}  
+        onClose={() => setIsModalOpen(false)}
+        emailData={{
+          "subject": subject,
+          "status": active,
+          "message": message,
+        }}
+      />
+    }
     </div>
   );
 }
