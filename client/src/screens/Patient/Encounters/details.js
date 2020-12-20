@@ -8,6 +8,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import Typography from "@material-ui/core/Typography";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import moment from "moment";
@@ -111,33 +112,43 @@ const EncountersDetails = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row) => (
-            <StyledTableRow key={row.dt}>
-              <TableCell component="th" scope="row">
-                {moment(row.dt).format("MMM D YYYY")}
-              </TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.title}</TableCell>
-              <TableCell>{row.encounter_type}</TableCell>
-              <TableCell>{row.notes || ""}</TableCell>
-              <TableCell>{row.paymentPlan || ""}</TableCell>
+          {!!data && data.length
+            ? data.map((row) => (
+              <StyledTableRow key={row.id}>
+                <TableCell component="th" scope="row">
+                  {moment(row.dt).format("MMM D YYYY")}
+                </TableCell>
+                <TableCell>{row.name}</TableCell>
+                <TableCell>{row.title}</TableCell>
+                <TableCell>{row.encounter_type}</TableCell>
+                <TableCell>{row.notes || ""}</TableCell>
+                <TableCell>{row.paymentPlan || ""}</TableCell>
 
-              <TableCell className={classes.actions}>
-                <IconButton
-                  className={classes.button}
-                  onClick={() => onItemEdit(row)}
-                >
-                  <EditIcon fontSize="small" />
-                </IconButton>
-                <IconButton
-                  className={classes.button}
-                  onClick={() => deleteItemHandler(row)}
-                >
-                  <DeleteIcon fontSize="small" />
-                </IconButton>
-              </TableCell>
-            </StyledTableRow>
-          ))}
+                <TableCell className={classes.actions}>
+                  <IconButton
+                    className={classes.button}
+                    onClick={() => onItemEdit(row)}
+                  >
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+                  <IconButton
+                    className={classes.button}
+                    onClick={() => deleteItemHandler(row)}
+                  >
+                    <DeleteIcon fontSize="small" />
+                  </IconButton>
+                </TableCell>
+              </StyledTableRow>
+            ))
+            : (
+              <StyledTableRow>
+                <TableCell colSpan={7}>
+                  <Typography align="center" variant="body1">
+                    No Records Found...
+                  </Typography>
+                </TableCell>
+              </StyledTableRow>
+            )}
         </TableBody>
       </Table>
     </TableContainer>

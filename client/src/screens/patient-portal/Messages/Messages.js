@@ -76,7 +76,7 @@ export default function Messages() {
 
       <div className={classes.content}>
         {messages.map((msg) => (
-          <Grid container spacing={4} alignItems="flex-start">
+          <Grid key={msg.id} container spacing={4} alignItems="flex-start">
             <Grid item xs={4}>
               <Typography component="p" variant="body2" color="textPrimary">
                 <span style={{ fontWeight: "bold" }}>Time: </span>

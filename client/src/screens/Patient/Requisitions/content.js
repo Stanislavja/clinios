@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
   block: {
     width: 90,
+    minWidth: 90,
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",
@@ -55,7 +56,7 @@ const RequisitionsContent = () => {
               {item.id}
             </Typography>
             {
-              !!item.cpt_name && item.cpt_name.length > 40
+              !!item.cpt_name && item.cpt_name.length > 30
                 ? (
                   <Tooltip title={item.cpt_name}>
                     <Typography

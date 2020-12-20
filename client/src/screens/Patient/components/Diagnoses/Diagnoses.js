@@ -1,22 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import {
   Grid,
   Typography,
   Button,
-  List,
-  ListItem,
-  ListItemText,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import Select from "react-select";
 
 import usePatientContext from "../../../../hooks/usePatientContext";
 import { toggleDiagnosesDialog } from "../../../../providers/Patient/actions";
 import PatientService from "../../../../services/patient.service";
-import SelectCustomStyles from "../../../../styles/SelectCustomStyles";
+import DiagnosesSelectList from "./DiagnosesSelectList";
 
 const useStyles = makeStyles((theme) => ({
   inputRow: {
@@ -41,21 +37,10 @@ const Diagnoses = (props) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const { reloadData } = props;
-  const [diagnosis, setDiagnosis] = useState([]);
   const [selectedDiagnosis, setSelectedDiagnoses] = useState([]);
 
   const { state, dispatch } = usePatientContext();
   const { patientId } = state;
-
-  const fetchDiagnosis = (searchText) => {
-    PatientService.searchICD(searchText).then((res) => {
-      setDiagnosis(res.data);
-    });
-  };
-
-  useEffect(() => {
-    fetchDiagnosis("");
-  }, []);
 
   const onFormSubmit = (e) => {
     e.preventDefault();
@@ -80,6 +65,10 @@ const Diagnoses = (props) => {
       });
   };
 
+  const getSelectedDiagnosis = (value) => {
+    setSelectedDiagnoses(value);
+  };
+
   return (
     <>
       <Grid className={classes.heading} container justify="space-between">
@@ -91,28 +80,9 @@ const Diagnoses = (props) => {
       <Grid container spacing={1}>
         <Grid item lg={4}>
           <Grid className={`${classes.border} ${classes.height100}`}>
-            <Select
-              value={selectedDiagnosis}
-              options={diagnosis.length ? diagnosis : []}
-              getOptionLabel={(option) => option.name}
-              getOptionValue={(option) => option.id}
-              onChange={(value) => setSelectedDiagnoses(value)}
-              styles={SelectCustomStyles}
-              isClearable
+            <DiagnosesSelectList
+              getSelectedDiagnosis={(diagnosis) => getSelectedDiagnosis(diagnosis)}
             />
-
-            <List component="ul">
-              {diagnosis.map((diagnose) => (
-                <ListItem
-                  onClick={() => setSelectedDiagnoses(diagnose)}
-                  key={diagnose.id}
-                  disableGutters
-                  button
-                >
-                  <ListItemText primary={diagnose.name} />
-                </ListItem>
-              ))}
-            </List>
           </Grid>
         </Grid>
         <Grid item lg={8}>
