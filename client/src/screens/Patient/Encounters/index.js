@@ -12,21 +12,16 @@ import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 
-import Card from "../../../components/common/Card";
 import useAuth from "../../../hooks/useAuth";
 import usePatientContext from "../../../hooks/usePatientContext";
 import {
   resetEncounter,
   toggleEncountersDialog,
-  toggleNewTransactionDialog,
 } from "../../../providers/Patient/actions";
 import PatientService from "../../../services/patient.service";
-import {
-  EncountersFormFields,
-  EncountersCards,
-} from "../../../static/encountersForm";
+import { EncountersFormFields } from "../../../static/encountersForm";
 import { encounterTypeToLetterConversion, encounterLetterToTypeConversion } from "../../../utils/helpers";
-import DiagnosesSelectList from "../components/Diagnoses/DiagnosesSelectList";
+import CardsList from "./CardsAccordion";
 
 const useStyles = makeStyles((theme) => ({
   btnsContainer: {
@@ -36,14 +31,15 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2, 0),
   },
   card: {
-    border: "1px solid rgba(38, 38, 38, 0.12)",
+    border: "1px solid rgba(0, 0, 0, .125)",
     borderRadius: 4,
     padding: theme.spacing(1),
+    marginTop: theme.spacing(2),
   },
   cardsContainer: {
     padding: theme.spacing(0, 2),
 
-    [theme.breakpoints.down("msmd")]: {
+    [theme.breakpoints.down("sm")]: {
       padding: 0,
       width: "100%",
     },
@@ -71,7 +67,6 @@ const Encounters = (props) => {
   const { user } = useAuth();
   const { patientId } = state;
   const encounter = state.encounters.selectedEncounter;
-  const billings = state.billing.data;
 
   const updateFields = () => {
     formFields.title = encounter.title;
@@ -153,25 +148,6 @@ const Encounters = (props) => {
             || error.toString();
           enqueueSnackbar(`${resMessage}`, { variant: "error" });
         });
-    }
-  };
-
-  const BillingList = () => billings.map((item) => (
-    <Typography key={item.dt}>
-      {item.tran_type}
-      {" "}
-      {item.amount}
-    </Typography>
-  ));
-
-  const renderCardContent = (name) => {
-    switch (name) {
-      case "Diagnose":
-        return <DiagnosesSelectList />;
-      case "Billing":
-        return <BillingList />;
-      default:
-        return name;
     }
   };
 
@@ -280,21 +256,7 @@ const Encounters = (props) => {
           </form>
         </Grid>
         <Grid item lg={3} md={4} sm={12} className={classes.cardsContainer}>
-          {EncountersCards.map((item) => (
-            <Grid key={item.title} className={classes.cardOuter}>
-              <Card
-                title={item.title}
-                showActions={item.showActions}
-                showSearch={item.showSearch}
-                icon={item.icon}
-                data={renderCardContent(item.title)}
-                primaryButtonText={item.primaryButtonText}
-                secondaryButtonText={item.secondaryButtonText}
-                iconHandler={() => dispatch(toggleNewTransactionDialog())}
-                hasMinHeight
-              />
-            </Grid>
-          ))}
+          <CardsList />
 
           <Grid className={classes.card}>
             <Grid className={classes.btnsContainer} container justify="space-between">
