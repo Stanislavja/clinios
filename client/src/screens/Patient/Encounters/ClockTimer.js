@@ -45,9 +45,11 @@ const Clock = () => {
           {hours}
           {" "}
           :
+          {" "}
           {minutes}
           {" "}
           :
+          {" "}
           {pad(seconds % 60)}
         </Typography>
       </Box>
