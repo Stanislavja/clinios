@@ -15,6 +15,11 @@ router.post(
   [authJwt.verifyToken, validation.validate("createEmailHistory")],
   patientEmailController.createEmailHistory
 );
+router.put(
+  "/email/history",
+  [authJwt.verifyToken],
+  patientEmailController.updateEmailHistory
+);
 router.delete(
   "/email/history/:date",
   [authJwt.verifyToken],

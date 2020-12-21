@@ -1,3 +1,4 @@
+const moment = require("moment");
 const { validationResult } = require("express-validator");
 const { configuration, makeDb } = require("../db/db.js");
 const { errorMessage, successMessage, status } = require("../helpers/status");
@@ -59,6 +60,35 @@ const createEmailHistory = async (req, res) => {
   }
 };
 
+const updateEmailHistory = async (req, res) => {
+  const { date } = req.params;
+  const {emailData} = req.body.data;
+
+  const db = makeDb(configuration, res);
+  try {
+    let $sql = `update email_bulk_history set message='${emailData.message}',
+     subject='${emailData.subject}', status='${emailData.status}'
+      where client_id='${emailData.client_id}' and created='${moment(emailData.created).format("YYYY-MM-DD HH:mm:ss")}'`;
+
+    const updateResponse = await db.query($sql);
+
+    if (!updateResponse.affectedRows) {
+      errorMessage.message = "Update not successful";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = updateResponse;
+    successMessage.message = "Update successful";
+    return res.status(status.success).send(successMessage);
+  } catch (error) {
+    console.error(error);
+    errorMessage.message = "Update not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+
 const deleteHistory = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -96,6 +126,7 @@ const deleteHistory = async (req, res) => {
 const appointmentTypes = {
   getHistory,
   createEmailHistory,
+  updateEmailHistory,
   deleteHistory,
 };
 

@@ -93,7 +93,7 @@ const EditEmail = ({
   const { user } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const { savedAppointments } = props;
-  const [emaildata, setEmailData] = useState([]);
+  const [emailData, setEmailData] = useState([]);
   const [errors, setErrors] = useState([]);
   const [nameError, setNameError] = useState(false);
   const [typeError, setTypeError] = useState(false);
@@ -107,9 +107,11 @@ const EditEmail = ({
     // Duplicate names
   };
 
+  console.log('emailData:', emailData)
+
   const handleOnChange = (event) => {
     setEmailData({
-      ...emaildata,
+      ...emailData,
       [event.target.name]: event.target.value.trim(),
     });
   };
@@ -151,7 +153,7 @@ const EditEmail = ({
                 id="subject"
                 autoComplete="subject"
                 onChange={(event) => handleOnChange(event)}
-                value={emaildata.subject}
+                value={emailData.subject}
                 size="small"
                 error={typeError}
                 helperText={typeError ? "You entered a duplicate type" : ""}
@@ -165,7 +167,7 @@ const EditEmail = ({
                 <RadioGroup 
                   aria-label="status" 
                   name="status" 
-                  value={emaildata.status} 
+                  value={emailData.status} 
                   onChange={handleOnChange} 
                   className={classes.status}
                 >
@@ -189,7 +191,7 @@ const EditEmail = ({
                   inputComponent: TextareaAutosize,
                   rows: 8,
                 }}
-                value={emaildata.message}
+                value={emailData.message}
                 onChange={(event) => handleOnChange(event)}
               />
             </FormControl>
@@ -225,7 +227,7 @@ EditEmail.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   isConfirmView: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  emaildata: PropTypes.shape({
+  selectedEmail: PropTypes.shape({
     id: PropTypes.number,
     created: PropTypes.string,
     created_user: PropTypes.string,
