@@ -218,7 +218,7 @@ const Encounters = (props) => {
                   <Grid item lg={2} xs={3}>
                     Timer
                   </Grid>
-                  <Grid id="timer" item lg={10} xs={9}>
+                  <Grid item lg={10} xs={9}>
                     <ClockTimer />
                   </Grid>
                 </Grid>
