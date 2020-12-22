@@ -46,15 +46,7 @@ const Clock = () => {
     >
       <Box pr={1} pl={1}>
         <Typography variant="body1">
-          {hours}
-          {" "}
-          :
-          {" "}
-          {minutes}
-          {" "}
-          :
-          {" "}
-          {pad(seconds % 60)}
+          {`${hours} : ${minutes} : ${pad(seconds % 60)}`}
         </Typography>
       </Box>
       {
