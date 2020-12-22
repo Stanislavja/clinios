@@ -37,7 +37,7 @@ const Clock = () => {
   const pad = (val) => (val > 9 ? val : `0${val}`);
 
   const minutes = pad(Math.floor((seconds / 60) % 60));
-  const hours = pad(Math.floor(minutes / 60));
+  const hours = pad(Math.floor(seconds / 60 / 60));
 
   return (
     <Grid
