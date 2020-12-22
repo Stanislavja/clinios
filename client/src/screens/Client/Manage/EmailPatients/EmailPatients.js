@@ -23,8 +23,8 @@ import EditIcon from "@material-ui/icons/Edit";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 
-import ConfirmEmail from './Dialog/ConfirmEmail'
 import EmailPatient from "../../../../services/manage/emailPatient.service";
+import ConfirmEmail from "./Dialog/ConfirmEmail";
 import EditEmail from "./Dialog/EditEmail";
 
 const useStyles = makeStyles((theme) => ({
@@ -146,12 +146,12 @@ export default function EmailPatients() {
 
   const handleNextClick = () => {
     setIsModalOpen(true);
-  }
+  };
 
-  const handleOnEdit = (selectedEmail) => {
+  const handleOnEdit = (data) => {
     setIsEditModalOpen(true);
-    setSelectedEmail(selectedEmail)
-  }
+    setSelectedEmail(data);
+  };
 
   return (
     <div className={classes.root}>
@@ -318,25 +318,28 @@ export default function EmailPatients() {
           </Table>
         </TableContainer>
       </div>
-    
-    {isModalOpen && 
-      <ConfirmEmail 
-        isOpen = {isModalOpen}  
-        onClose={() => setIsModalOpen(false)}
-        emailData={{
-          "subject": subject,
-          "status": active,
-          "message": message,
-        }}
-      />
-    }
-    {isEditModalOpen && 
-      <EditEmail 
-        isOpen={isEditModalOpen} 
-        onClose={() => setIsEditModalOpen(false)} 
-        selectedEmail={selectedEmail}
-      />
-    }
+
+      {isModalOpen
+      && (
+        <ConfirmEmail
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          emailData={{
+            subject,
+            status: active,
+            message,
+          }}
+        />
+      )}
+      {isEditModalOpen
+      && (
+        <EditEmail
+          isOpen={isEditModalOpen}
+          onUpdate={() => fetchEmailHistory()}
+          onClose={() => setIsEditModalOpen(false)}
+          selectedEmail={selectedEmail}
+        />
+      )}
     </div>
   );
 }

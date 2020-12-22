@@ -2,24 +2,23 @@ import React, { useEffect, useState } from "react";
 
 import { colors } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
 import { makeStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import TextField from "@material-ui/core/TextField";
-import Alert from "@material-ui/lab/Alert";
+import Typography from "@material-ui/core/Typography";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 
-import useAuth from "../../../../../hooks/useAuth";
+import EmailPatient from "../../../../../services/manage/emailPatient.service";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -37,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     display: "block",
   },
   status: {
-    display: 'inline'
+    display: "inline",
   },
   formControl: {
     display: "flex",
@@ -87,59 +86,52 @@ const useStyles = makeStyles((theme) => ({
 const EditEmail = ({
   isOpen,
   onClose,
+  onUpdate,
   ...props
 }) => {
   const classes = useStyles();
-  const { user } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
-  const { savedAppointments } = props;
   const [emailData, setEmailData] = useState([]);
-  const [errors, setErrors] = useState([]);
-  const [nameError, setNameError] = useState(false);
-  const [typeError, setTypeError] = useState(false);
 
   useEffect(() => {
-    setEmailData(props.selectedEmail)
+    setEmailData(props.selectedEmail);
     // eslint-disable-next-line react/destructuring-assignment
   }, [props.selectedEmail]);
 
   const handleFormSubmission = () => {
-    // Duplicate names
+    EmailPatient.updateEmailHistory({ data: { emailData } }).then((response) => {
+      enqueueSnackbar(`${response.data.message}`, {
+        variant: "success",
+      });
+      onUpdate();
+      onClose();
+    });
   };
-
-  console.log('emailData:', emailData)
 
   const handleOnChange = (event) => {
     setEmailData({
       ...emailData,
-      [event.target.name]: event.target.value.trim(),
+      [event.target.name]: event.target.value,
     });
   };
 
   return (
     <div>
       <Dialog
-        fullWidth={true}
-        maxWidth='sm'
+        fullWidth
+        maxWidth="sm"
         open={isOpen}
         onClose={onClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title" className={classes.title}>
-           Edit Email
+          Edit Email
         </DialogTitle>
         <DialogContent className={classes.content}>
           <DialogContentText id="alert-dialog-description">
             Edit the following for this email
           </DialogContentText>
-          {errors
-            && errors.map((error, index) => (
-               // eslint-disable-next-line react/no-array-index-key
-              <Alert severity="error" key={index}>
-                {error.msg}
-              </Alert>
-            ))}
           <div className={classes.root}>
             <FormControl component="div" className={classes.formControl}>
               <TextField
@@ -155,8 +147,6 @@ const EditEmail = ({
                 onChange={(event) => handleOnChange(event)}
                 value={emailData.subject}
                 size="small"
-                error={typeError}
-                helperText={typeError ? "You entered a duplicate type" : ""}
               />
             </FormControl>
             <div className={classes.statusWrapper}>
@@ -164,11 +154,11 @@ const EditEmail = ({
                 Patient Status:
               </Typography>
               <FormControl component="fieldset">
-                <RadioGroup 
-                  aria-label="status" 
-                  name="status" 
-                  value={emailData.status} 
-                  onChange={handleOnChange} 
+                <RadioGroup
+                  aria-label="status"
+                  name="status"
+                  value={emailData.status}
+                  onChange={handleOnChange}
                   className={classes.status}
                 >
                   <FormControlLabel value="A" control={<Radio />} label="Active" />
@@ -227,6 +217,7 @@ EditEmail.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   isConfirmView: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired,
   selectedEmail: PropTypes.shape({
     id: PropTypes.number,
     created: PropTypes.string,
