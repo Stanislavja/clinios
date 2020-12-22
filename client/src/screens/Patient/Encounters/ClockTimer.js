@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import { Box, Typography, Button } from "@material-ui/core";
+import {
+  Box, Typography, Button, Grid,
+} from "@material-ui/core";
 
 const Clock = () => {
   const [seconds, setSeconds] = useState(0);
   const [isTimerOn, setIsTimerOn] = useState(false);
+  const [showReset, setShowReset] = useState(false);
   const interval = useRef(null);
 
   useEffect(() => () => {
@@ -13,12 +16,15 @@ const Clock = () => {
 
   const start = () => {
     setIsTimerOn(true);
+    setShowReset(true);
     interval.current = setInterval(() => {
       setSeconds((prevState) => prevState + 1);
     }, 1000);
   };
 
   const reset = () => {
+    setShowReset(false);
+    setIsTimerOn(false);
     setSeconds(0);
     clearInterval(interval.current);
   };
@@ -28,19 +34,17 @@ const Clock = () => {
     clearInterval(interval.current);
   };
 
-  const restart = () => {
-    reset();
-    start();
-  };
-
   const pad = (val) => (val > 9 ? val : `0${val}`);
 
   const minutes = pad(Math.floor((seconds / 60) % 60));
   const hours = pad(Math.floor(minutes / 60));
 
   return (
-    <>
-      <Box pr={2} pl={2}>
+    <Grid
+      container
+      alignItems="center"
+    >
+      <Box pr={1} pl={1}>
         <Typography variant="body1">
           {hours}
           {" "}
@@ -58,9 +62,12 @@ const Clock = () => {
           ? <Button variant="text" onClick={() => pause()}>Pause</Button>
           : <Button variant="text" onClick={() => start()}>Start</Button>
       }
-      <Button variant="text" onClick={() => reset()}>Reset</Button>
-      <Button variant="text" onClick={() => restart()}>Restart</Button>
-    </>
+      {
+        showReset && (
+          <Button variant="text" onClick={() => reset()}>Reset</Button>
+        )
+      }
+    </Grid>
   );
 };
 
