@@ -20,6 +20,12 @@ class EmailPatient {
     );
   }
 
+  createEmailHistory(payload) {
+    return axios.post(`${API_BASE}/email/history`, payload, {
+      headers: authHeader(),
+    });
+  }
+
   deleteEmailHistory(date) {
     return axios.delete(
       `${API_BASE}/email/history/${date}`,

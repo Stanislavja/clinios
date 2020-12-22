@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.light,
     "& h2": {
       color: "#fff",
-      fontSize: '16px'
+      fontSize: "16px",
     },
   },
   content: {
@@ -25,23 +25,23 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(6),
     fontSize: "18px",
     "& p": {
-      fontSize: '16px'
-    }
+      fontSize: "16px",
+    },
   },
   emailDataWrap: {
     paddingTop: theme.spacing(2),
   },
   record: {
-    display: 'flex',
+    display: "flex",
     marginBottom: theme.spacing(1),
-    fontSize: '16px',
-    lineHeight: '24px',
+    fontSize: "16px",
+    lineHeight: "24px",
     "& p:first-child": {
-      fontWeight: '600',
-      fontSize: '18px',
-      minWidth: '87px',
+      fontWeight: "600",
+      fontSize: "18px",
+      minWidth: "87px",
       marginRight: theme.spacing(1),
-    }
+    },
   },
   modalAction: {
     borderTop: `1px solid ${theme.palette.background.default}`,
@@ -57,25 +57,25 @@ const useStyles = makeStyles((theme) => ({
 const ConfirmEmail = ({
   isOpen,
   onClose,
+  onSave,
   ...props
 }) => {
   const classes = useStyles();
-  const [emaildata, setEmailData] = useState([]);
+  const [emailData, setEmailData] = useState([]);
   useEffect(() => {
     setEmailData(props.emailData);
     // eslint-disable-next-line react/destructuring-assignment
   }, [props.emailData]);
 
   const handleFormSubmission = () => {
-    // Duplicate names
+    onSave({ data: emailData });
   };
-
 
   return (
     <div>
       <Dialog
-        fullWidth={true}
-        maxWidth='sm'
+        fullWidth
+        maxWidth="sm"
         open={isOpen}
         onClose={onClose}
         aria-labelledby="alert-dialog-title"
@@ -90,24 +90,24 @@ const ConfirmEmail = ({
           </DialogContentText>
           <div className={classes.emailDataWrap}>
             {
-              emaildata && (
+              emailData && (
                 <>
                   <div className={classes.record}>
                     <p>Status:</p>
-                    <p>{emaildata.status ? 'Active' : 'InActive'}</p>
+                    <p>{emailData.emailStatus === "U" ? "Active" : "InActive"}</p>
                   </div>
                   <div className={classes.record}>
                     <p>Subject:</p>
-                    <p>{emaildata.subject}</p>
+                    <p>{emailData.subject}</p>
                   </div>
                   <div className={classes.record}>
                     <p>message:</p>
-                    <p>{emaildata.message}</p>
+                    <p>{emailData.message}</p>
                   </div>
                 </>
               )
             }
-  
+
           </div>
         </DialogContent>
         <DialogActions className={classes.modalAction}>
@@ -139,8 +139,9 @@ const ConfirmEmail = ({
 ConfirmEmail.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
   emailData: PropTypes.shape({
-    status: PropTypes.string,
+    emailStatus: PropTypes.string,
     subject: PropTypes.string,
     message: PropTypes.string,
   }).isRequired,

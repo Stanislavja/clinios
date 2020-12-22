@@ -161,8 +161,8 @@ const EditEmail = ({
                   onChange={handleOnChange}
                   className={classes.status}
                 >
-                  <FormControlLabel value="A" control={<Radio />} label="Active" />
-                  <FormControlLabel value="I" control={<Radio />} label="Inactive" />
+                  <FormControlLabel value="U" control={<Radio />} label="Active" />
+                  <FormControlLabel value="R" control={<Radio />} label="Inactive" />
                 </RadioGroup>
               </FormControl>
             </div>

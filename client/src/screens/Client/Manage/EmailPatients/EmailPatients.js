@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 
 import { makeStyles, withStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import Checkbox from "@material-ui/core/Checkbox";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormGroup from "@material-ui/core/FormGroup";
 import IconButton from "@material-ui/core/IconButton";
 import Paper from "@material-ui/core/Paper";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -35,6 +35,17 @@ const useStyles = makeStyles((theme) => ({
   title: {
     paddingBottom: theme.spacing(0.5),
   },
+  statusWrapper: {
+    display: "flex",
+    alignItems: "center",
+    "& p": {
+      marginRight: theme.spacing(2),
+    },
+  },
+  emailStatus: {
+    display: "inline",
+  },
+
   status: {
     display: "flex",
     alignItems: "center",
@@ -64,6 +75,10 @@ const useStyles = makeStyles((theme) => ({
     padding: "5px",
     height: "300px",
     flexDirection: "row",
+  },
+  noRecords: {
+    marginTop: theme.spacing(1),
+    marginLeft: theme.spacing(1),
   },
 }));
 
@@ -118,8 +133,7 @@ export default function EmailPatients() {
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [emailHistory, setEmailHistory] = useState([]);
-  const [active, setActive] = useState(false);
-  const [inActive, setInActive] = useState(false);
+  const [emailStatus, setEmailStatus] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedEmail, setSelectedEmail] = useState({});
@@ -141,6 +155,16 @@ export default function EmailPatients() {
         variant: "success",
       });
       fetchEmailHistory();
+    });
+  };
+
+  const handleSave = (data) => {
+    EmailPatient.createEmailHistory(data).then((response) => {
+      enqueueSnackbar(`${response.data.message}`, {
+        variant: "success",
+      });
+      fetchEmailHistory();
+      setIsModalOpen();
     });
   };
 
@@ -166,29 +190,21 @@ export default function EmailPatients() {
       <Typography component="p" variant="body2" color="textPrimary">
         This pages send a message to all patients
       </Typography>
-      <div className={classes.status}>
+      <div className={classes.statusWrapper}>
         <Typography component="p" variant="body2" color="textPrimary">
           Patient Status:
         </Typography>
         <FormControl component="fieldset">
-          <FormGroup aria-label="position" row>
-            <FormControlLabel
-              value="active"
-              control={<Checkbox color="primary" />}
-              label="Active"
-              labelPlacement="start"
-              disabled={inActive}
-              onChange={(event) => setActive(event.target.checked)}
-            />
-            <FormControlLabel
-              value="inactive"
-              control={<Checkbox color="primary" />}
-              label="Inactive"
-              labelPlacement="start"
-              onChange={(event) => setInActive(event.target.checked)}
-              disabled={active}
-            />
-          </FormGroup>
+          <RadioGroup
+            aria-label="status"
+            name="status"
+            value={emailStatus}
+            onChange={(e) => setEmailStatus(e.target.value)}
+            className={classes.emailStatus}
+          >
+            <FormControlLabel value="U" control={<Radio />} label="Active" />
+            <FormControlLabel value="R" control={<Radio />} label="Inactive" />
+          </RadioGroup>
         </FormControl>
       </div>
       <div className={classes.fields}>
@@ -250,6 +266,10 @@ export default function EmailPatients() {
               </TableRow>
             </TableHead>
             <TableBody>
+              {
+                (emailHistory && emailHistory.length === 0)
+                  && <p className={classes.noRecords}>No records....</p>
+              }
               {emailHistory.map((history) => (
                 <StyledTableRow key={history.created}>
                   <TableCell
@@ -283,7 +303,7 @@ export default function EmailPatients() {
 
                   <TableCell padding="checkbox" component="th" scope="row">
                     {history.status
-                      ? history.status === "A" ? "Active" : "InActive"
+                      ? history.status === "U" ? "Active" : "InActive"
                       : ""}
                   </TableCell>
                   <TableCell padding="checkbox">
@@ -320,26 +340,27 @@ export default function EmailPatients() {
       </div>
 
       {isModalOpen
-      && (
-        <ConfirmEmail
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          emailData={{
-            subject,
-            status: active,
-            message,
-          }}
-        />
-      )}
+        && (
+          <ConfirmEmail
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            onSave={(data) => handleSave(data)}
+            emailData={{
+              subject,
+              emailStatus,
+              message,
+            }}
+          />
+        )}
       {isEditModalOpen
-      && (
-        <EditEmail
-          isOpen={isEditModalOpen}
-          onUpdate={() => fetchEmailHistory()}
-          onClose={() => setIsEditModalOpen(false)}
-          selectedEmail={selectedEmail}
-        />
-      )}
+        && (
+          <EditEmail
+            isOpen={isEditModalOpen}
+            onUpdate={() => fetchEmailHistory()}
+            onClose={() => setIsEditModalOpen(false)}
+            selectedEmail={selectedEmail}
+          />
+        )}
     </div>
   );
 }

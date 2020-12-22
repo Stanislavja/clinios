@@ -32,20 +32,16 @@ const getHistory = async (req, res) => {
 };
 
 const createEmailHistory = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    errorMessage.message = errors.array();
-    return res.status(status.bad).send(errorMessage);
-  }
-  const { subject, message, emailStatus } = req.body.data;
+  const { subject, message } = req.body.data;
+  const { emailStatus } = req.body.data;
   const db = makeDb(configuration, res);
   try {
     const insertResponse = await db.query(
-      `insert into email_bulk_history (client_id, subject, message, status, created, created_user_id) values (${req.client_id}, '${subject}', '${message}', '${emailStatus}', 'now()', ${req.user_id})`
+      `insert into email_bulk_history (client_id, subject, message, status, created, created_user_id) values (${req.client_id}, '${subject}', '${message}', '${emailStatus}', now(), ${req.user_id})`
     );
 
     if (!insertResponse.affectedRows) {
-      errorMessage.error = "Insert not successful";
+      errorMessage.message = "Insert not successful";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = insertResponse;
@@ -53,7 +49,7 @@ const createEmailHistory = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Insert not successful";
+    errorMessage.message = "Insert not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -61,14 +57,15 @@ const createEmailHistory = async (req, res) => {
 };
 
 const updateEmailHistory = async (req, res) => {
-  const { date } = req.params;
-  const {emailData} = req.body.data;
+  const { emailData } = req.body.data;
 
   const db = makeDb(configuration, res);
   try {
-    let $sql = `update email_bulk_history set message='${emailData.message}',
+    const $sql = `update email_bulk_history set message='${emailData.message}',
      subject='${emailData.subject}', status='${emailData.status}'
-      where client_id='${emailData.client_id}' and created='${moment(emailData.created).format("YYYY-MM-DD HH:mm:ss")}'`;
+      where client_id='${emailData.client_id}' and created='${moment(
+      emailData.created
+    ).format("YYYY-MM-DD HH:mm:ss")}'`;
 
     const updateResponse = await db.query($sql);
 
@@ -87,7 +84,6 @@ const updateEmailHistory = async (req, res) => {
     await db.close();
   }
 };
-
 
 const deleteHistory = async (req, res) => {
   const errors = validationResult(req);
