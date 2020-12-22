@@ -4,6 +4,9 @@ import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import { Redirect } from "react-router-dom";
+
+import useAuth from "../hooks/useAuth";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -12,6 +15,12 @@ const useStyles = makeStyles((theme) => ({
 
 const Home = () => {
   const classes = useStyles();
+  const { isAuthenticated } = useAuth();
+
+  // TODO: This might be changed as per requirements
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
   return (
     <>
       <CssBaseline />
