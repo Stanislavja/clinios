@@ -22,6 +22,7 @@ import PatientService from "../../../services/patient.service";
 import { EncountersFormFields } from "../../../static/encountersForm";
 import { encounterTypeToLetterConversion, encounterLetterToTypeConversion } from "../../../utils/helpers";
 import CardsList from "./CardsAccordion";
+import ClockTimer from "./ClockTimer";
 
 const useStyles = makeStyles((theme) => ({
   btnsContainer: {
@@ -162,7 +163,7 @@ const Encounters = (props) => {
           <form id="encounters-form" onSubmit={onFormSubmit}>
             <Grid container spacing={4}>
               {EncountersFormFields.map((item) => (
-                <Grid key={item.label} item md={4} xs={12}>
+                <Grid key={item.label} item md={3} xs={12}>
                   <Grid
                     key={item.label}
                     container
@@ -208,6 +209,20 @@ const Encounters = (props) => {
                   </Grid>
                 </Grid>
               ))}
+              <Grid item md={3} xs={12}>
+                <Grid
+                  container
+                  alignItems="center"
+                  className={classes.formInput}
+                >
+                  <Grid item lg={2} xs={3}>
+                    Timer
+                  </Grid>
+                  <Grid item lg={10} xs={9}>
+                    <ClockTimer />
+                  </Grid>
+                </Grid>
+              </Grid>
             </Grid>
 
             <Grid className={classes.formInput}>

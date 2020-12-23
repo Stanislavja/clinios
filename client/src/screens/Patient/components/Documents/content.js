@@ -127,7 +127,8 @@ const DocumentsContent = (props) => {
     fetchDocuments(tabValue);
   }, [data, tabValue, fetchDocuments]);
 
-  const updateDocumentStatusHandler = (selectedItemId, status) => {
+  const updateDocumentStatusHandler = (selectedItemId, status, e) => {
+    e.stopPropagation();
     const reqBody = {
       data: {
         type: status,
@@ -250,14 +251,14 @@ const DocumentsContent = (props) => {
                       ? (
                         <RestoreIcon
                           className={classes.icon}
-                          onClick={() => updateDocumentStatusHandler(row.id, "A")}
+                          onClick={(e) => updateDocumentStatusHandler(row.id, "A", e)}
                           fontSize="small"
                         />
                       )
                       : (
                         <DeleteIcon
                           className={classes.icon}
-                          onClick={() => updateDocumentStatusHandler(row.id, "D")}
+                          onClick={(e) => updateDocumentStatusHandler(row.id, "D", e)}
                           fontSize="small"
                         />
                       )}
