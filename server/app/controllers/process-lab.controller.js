@@ -132,11 +132,42 @@ const getLabUserHistory = async (req, res) => {
   }
 };
 
+const getLabValues = async (req, res) => {
+  const db = makeDb(configuration, res);
+  const { labId } = req.params;
+
+  try {
+    const dbResponse = await db.query(
+      `select c.id, c.name, lc.value, lc.range_low, lc.range_high, lc.unit
+      from lab_cpt lc
+      left join cpt c on c.id=lc.cpt_id
+      where lc.lab_id=${labId}
+      and lc.client_id=${req.client_id}
+      order by lc.line_nbr
+      limit 200`
+    );
+
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const processLab = {
   getAll,
   getLabById,
   getLabHistory,
-  getLabUserHistory
+  getLabUserHistory,
+  getLabValues,
 };
 
 module.exports = processLab;
