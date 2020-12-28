@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 
 import { makeStyles } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
@@ -6,6 +6,8 @@ import Typography from "@material-ui/core/Typography";
 import { useParams } from "react-router-dom";
 
 import Video from "../../components/videos/Video";
+import ProcessLabService from "../../services/process-lab.service";
+
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -13,9 +15,21 @@ const useStyles = makeStyles(() => ({
     padding: "40px 0px",
   },
 }));
+
 const ProcessLab = () => {
   const classes = useStyles();
-  const { userId } = useParams();
+  const { userId, labId } = useParams();
+  const [resportDetails, setReportDetails] = useState();
+
+
+  useEffect(() => {
+    ProcessLabService.getLabById(userId, labId).then((response) => {
+      setReportDetails(response.data.data);
+      console.info("resportDetails:", resportDetails);
+    });
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId, labId]);
+
   return (
     <div className={classes.root}>
       <Typography

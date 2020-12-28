@@ -1,7 +1,6 @@
 const { configuration, makeDb } = require("../db/db.js");
 const { errorMessage, successMessage, status } = require("../helpers/status");
 
-
 const getLabById = async (req, res) => {
   const db = makeDb(configuration, res);
   const { labId } = req.params;
@@ -12,7 +11,8 @@ const getLabById = async (req, res) => {
       from lab l
       left join lab_company lc on lc.id=l.lab_company_id
       left join patient p on p.id=l.patient_id
-      where l.id=${labId}`);
+      where l.id=${labId}`
+    );
 
     if (!dbResponse) {
       errorMessage.message = "None found";
@@ -43,7 +43,7 @@ const getAll = async (req, res) => {
         and l.status = 'R'
         order by l.created
         limit 1`
-      );
+    );
 
     if (!dbResponse) {
       errorMessage.message = "None found";
@@ -62,7 +62,7 @@ const getAll = async (req, res) => {
 
 const processLab = {
   getAll,
-  getLabById
+  getLabById,
 };
 
 module.exports = processLab;
