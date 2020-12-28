@@ -99,10 +99,44 @@ const getLabHistory = async (req, res) => {
   }
 };
 
+const getLabUserHistory = async (req, res) => {
+  const db = makeDb(configuration, res);
+  const { userId } = req.params;
+
+  try {
+    const dbResponse = await db.query(
+      `select lh.created
+      , concat(u.firstname, ' ', u.lastname) created_name
+      , concat(u2.firstname, ' ', u2.lastname) assigned_name
+      , lh.patient_id, lh.type, lh.note, lh.note_assign, lh.status
+      from lab_history lh
+      left join user u on u.id=lh.created_user_id
+      left join user u2 on u2.id=lh.user_id
+      where lh.created_user_id=${userId}
+      order by lh.created desc
+      limit 50`
+    );
+
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const processLab = {
   getAll,
   getLabById,
-  getLabHistory
+  getLabHistory,
+  getLabUserHistory
 };
 
 module.exports = processLab;
