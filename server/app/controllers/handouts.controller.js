@@ -144,9 +144,47 @@ const addHandouts = async (req, res) => {
   });
 };
 
+const deleteHandout = async (req, res) => {
+  const { id } = req.params;
+
+  const db = makeDb(configuration, res);
+  try {
+    // Call DB query without assigning into a variable
+    const deletePatientHandoutResponse = await db.query(`delete
+    from patient_handout
+    where handout_id=${id}
+    `);
+
+    const deleteHandoutResponse = await db.query(`delete
+    from handout
+    where id=${id}
+    `);
+
+    if (!deletePatientHandoutResponse.affectedRows) {
+      errorMessage.error = "Patient Handout deletion not successful";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    if (!deleteHandoutResponse.affectedRows) {
+      errorMessage.error = "Handout deletion not successful";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = deleteHandoutResponse;
+    successMessage.message = "Delete successful";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log(err)
+    errorMessage.error = "Delete not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const handouts = {
   getAll,
-  addHandouts
+  addHandouts,
+  deleteHandout
 };
 
 module.exports = handouts;
