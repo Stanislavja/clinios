@@ -185,3 +185,8 @@ export function getAllowedRoutes(routes, roles) {
     return intersection(permission, roles).length;
   });
 }
+
+export function checkFileExtension(fileName) {
+  const extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+  return extension;
+}
