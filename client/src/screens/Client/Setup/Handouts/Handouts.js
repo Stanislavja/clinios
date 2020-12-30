@@ -12,6 +12,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 
 import Video from "../../../../components/videos/Video";
 import HandoutService from "../../../../services/setup/handouts.service";
@@ -47,13 +48,28 @@ const useStyles = makeStyles((theme) => ({
 
 const Handouts = () => {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const [handouts, setHandouts] = useState([]);
 
-  useEffect(() => {
+  const fetchHandouts = () => {
     HandoutService.getHandouts().then((response) => {
       setHandouts(response.data.data);
     });
+  };
+
+  useEffect(() => {
+    fetchHandouts();
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleDelete = (id) => {
+    HandoutService.deleteHandout(id).then((response) => {
+      fetchHandouts();
+      enqueueSnackbar(`${response.data.message}`, {
+        variant: "success",
+      });
+    });
+  };
 
   return (
     <div className={classes.root}>
@@ -87,7 +103,9 @@ const Handouts = () => {
                     <TableCell component="th" scope="row">
                       {handout.filename}
                     </TableCell>
-                    <TableCell align="right"><Button>Default</Button></TableCell>
+                    <TableCell align="right">
+                      <Button onClick={() => handleDelete(handout.id)}>Delete</Button>
+                    </TableCell>
                     <TableCell align="right">{moment(handout.created).format("ll")}</TableCell>
                     <TableCell align="right">{handout.name}</TableCell>
                   </TableRow>

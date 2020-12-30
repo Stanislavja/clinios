@@ -9,6 +9,12 @@ class HandoutService {
       headers: authHeader(),
     });
   }
+
+  deleteHandout(id) {
+    return axios.delete(`${API_BASE}/handouts/${id}`, {
+      headers: authHeader(),
+    });
+  }
 }
 
 export default new HandoutService();

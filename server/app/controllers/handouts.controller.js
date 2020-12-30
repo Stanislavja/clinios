@@ -11,7 +11,7 @@ const getAll = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select h.filename, h.created, concat(u.firstname, ' ', u.lastname) name, h.client_id
+      `select h.id, h.filename, h.created, concat(u.firstname, ' ', u.lastname) name, h.client_id
       from handout h
       left join user u on u.id=h.created_user_id
       where h.client_id=${req.client_id}
@@ -161,11 +161,11 @@ const deleteHandout = async (req, res) => {
     `);
 
     if (!deletePatientHandoutResponse.affectedRows) {
-      errorMessage.error = "Patient Handout deletion not successful";
+      errorMessage.message = "Patient Handout deletion not successful";
       return res.status(status.notfound).send(errorMessage);
     }
     if (!deleteHandoutResponse.affectedRows) {
-      errorMessage.error = "Handout deletion not successful";
+      errorMessage.message = "Handout deletion not successful";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -174,7 +174,7 @@ const deleteHandout = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log(err)
-    errorMessage.error = "Delete not successful";
+    errorMessage.message = "Delete not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
