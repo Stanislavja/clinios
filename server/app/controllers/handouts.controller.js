@@ -1,13 +1,10 @@
 const multer = require("multer");
-const moment = require("moment");
 const fs = require("fs");
 const { configuration, makeDb } = require("../db/db.js");
 const { errorMessage, successMessage, status } = require("../helpers/status");
 
-
 const getAll = async (req, res) => {
   const db = makeDb(configuration, res);
-  const { userId } = req.params;
 
   try {
     const dbResponse = await db.query(
@@ -113,9 +110,8 @@ const addHandouts = async (req, res) => {
         return res.status(status.error).send(errorMessage);
       }
 
-      //TODO:: id field should be auto_incremented and refactor this sql
       const insertResponse = await db.query(
-        `insert into handout (id, client_id, filename, notes, created, created_user_id) values (3, ${req.client_id}, '${uploadedFilename}', '${notes}', now(), ${req.user_id})`
+        `insert into handout (client_id, filename, notes, created, created_user_id) values (${req.client_id}, '${uploadedFilename}', '${notes}', now(), ${req.user_id})`
       );
 
       if (!insertResponse.affectedRows) {
@@ -135,7 +131,7 @@ const addHandouts = async (req, res) => {
       successMessage.message = "Insert successful";
       return res.status(status.created).send(successMessage);
     } catch (excepErr) {
-      console.log('excepErr', excepErr)
+      console.log("excepErr", excepErr);
       errorMessage.error = "Insert not successful";
       return res.status(status.error).send(errorMessage);
     } finally {
@@ -173,7 +169,7 @@ const deleteHandout = async (req, res) => {
     successMessage.message = "Delete successful";
     return res.status(status.created).send(successMessage);
   } catch (err) {
-    console.log(err)
+    console.log(err);
     errorMessage.message = "Delete not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
@@ -184,7 +180,7 @@ const deleteHandout = async (req, res) => {
 const handouts = {
   getAll,
   addHandouts,
-  deleteHandout
+  deleteHandout,
 };
 
 module.exports = handouts;
