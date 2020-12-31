@@ -87,6 +87,13 @@ const routes = [
   },
   {
     exact: true,
+    guard: AuthGuard,
+    layout: DashboardLayout,
+    path: "/lab/:userId",
+    component: lazy(() => import("./screens/Lab")),
+  },
+  {
+    exact: true,
     guard: GuestGuard,
     layout: DashboardLayout,
     path: "/contact",
