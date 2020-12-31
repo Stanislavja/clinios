@@ -10,6 +10,12 @@ class HandoutService {
     });
   }
 
+  createHandouts(data) {
+    return axios.post(`${API_BASE}/handouts/`, data, {
+      headers: authHeader(),
+    });
+  }
+
   deleteHandout(id) {
     return axios.delete(`${API_BASE}/handouts/${id}`, {
       headers: authHeader(),

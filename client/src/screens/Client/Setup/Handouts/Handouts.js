@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   titleButtonWrap: {
     display: "flex",
     marginBottom: theme.spacing(2),
-    "& button": {
+    "& label": {
       marginLeft: theme.spacing(4),
     },
   },
@@ -62,6 +62,29 @@ const Handouts = () => {
      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const createHandout = (reqBody) => {
+    HandoutService.createHandouts(reqBody)
+      .then((response) => {
+        enqueueSnackbar(`${response.data.message}`, { variant: "success" });
+        fetchHandouts();
+      })
+      .catch((error) => {
+        const resMessage = (error.response
+          && error.response.data
+          && error.response.data.message)
+          || error.message
+          || error.toString();
+        enqueueSnackbar(`${resMessage}`, { variant: "error" });
+      });
+  };
+
+  const handleHandoutsFile = (e) => {
+    const { files } = e.target;
+    const fd = new FormData();
+    fd.append("file", files[0]);
+    createHandout(fd);
+  };
+
   const handleDelete = (id) => {
     HandoutService.deleteHandout(id).then((response) => {
       fetchHandouts();
@@ -84,7 +107,19 @@ const Handouts = () => {
             >
               Handouts
             </Typography>
-            <Button variant="outlined">Add</Button>
+            <Button
+              variant="outlined"
+              component="label"
+            >
+              Add
+              <input
+                type="file"
+                id="file"
+                accept=".pdf, .txt, .doc, .docx, image/*"
+                hidden
+                onChange={(e) => handleHandoutsFile(e)}
+              />
+            </Button>
           </div>
           <p>These are files we give to patients about specific topics.</p>
           <TableContainer component={Paper} className={classes.handoutTable}>
