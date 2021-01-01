@@ -146,19 +146,16 @@ const deleteHandout = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     // Call DB query without assigning into a variable
-    const deletePatientHandoutResponse = await db.query(`delete
-    from patient_handout
-    where handout_id=${id}
-    `);
+    const deletePatientHandoutResponse = await db.query(
+      `delete from patient_handout where handout_id=${id}`
+    );
 
-    const deleteHandoutResponse = await db.query(`delete
-    from handout
-    where id=${id}
-    `);
+    const deleteHandoutResponse = await db.query(
+      `delete from handout where id=${id}`
+    );
 
     if (!deletePatientHandoutResponse.affectedRows) {
-      errorMessage.message = "Patient Handout deletion not successful";
-      return res.status(status.notfound).send(errorMessage);
+      console.info("Patient Handout deletion not successful");
     }
     if (!deleteHandoutResponse.affectedRows) {
       errorMessage.message = "Handout deletion not successful";
