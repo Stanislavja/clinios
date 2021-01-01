@@ -72,6 +72,9 @@ const useStyles = makeStyles((theme) => ({
 
 const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
   const classes = useStyles();
+  const patientLabsCount = !!providerDetails
+    && providerDetails.patientLabs
+    && providerDetails.patientLabs["count(l.id)"];
 
   return (
     <Card className={classes.providerDetails} variant="outlined">
@@ -95,29 +98,58 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
             <div>Since</div>
           </li>
           <li>
-            <Link
-              to={
-                selectedProvider ? `/process-lab/${selectedProvider.id}` : "#"
-              }
-            >
-              <div>Patient Labs</div>
-              <div className={classes.count}>
-                {!!providerDetails
-                  && providerDetails.patientLabs
-                  && providerDetails.patientLabs["count(l.id)"]}
-              </div>
-              <div>
-                {!!providerDetails
-                  && providerDetails.patientLabs
-                  && `${moment(
-                    providerDetails.patientLabs["min(l.created)"],
-                  ).format("ll")} (${moment(
-                    providerDetails.patientLabs["min(l.created)"],
-                  )
-                    .startOf("day")
-                    .fromNow()})`}
-              </div>
-            </Link>
+            {/* we will redirect only if the patient labs count is > 0 */}
+            {
+              patientLabsCount
+                ? (
+                  <Link
+                  // to={
+                  //   selectedProvider ? `/process-lab/${selectedProvider.id}` : "#"
+                  // }
+                    to={{
+                      pathname: `/lab/${selectedProvider.id}`,
+                      state: {
+                        fromHome: true,
+                      },
+                    }}
+                  >
+                    <div>Patient Labs</div>
+                    <div className={classes.count}>
+                      {patientLabsCount}
+                    </div>
+                    <div>
+                      {!!providerDetails
+                      && providerDetails.patientLabs
+                      && `${moment(
+                        providerDetails.patientLabs["min(l.created)"],
+                      ).format("ll")} (${moment(
+                        providerDetails.patientLabs["min(l.created)"],
+                      )
+                        .startOf("day")
+                        .fromNow()})`}
+                    </div>
+                  </Link>
+                )
+                : (
+                  <>
+                    <div>Patient Labs</div>
+                    <div className={classes.count}>
+                      {patientLabsCount}
+                    </div>
+                    <div>
+                      {!!providerDetails
+                      && providerDetails.patientLabs
+                      && `${moment(
+                        providerDetails.patientLabs["min(l.created)"],
+                      ).format("ll")} (${moment(
+                        providerDetails.patientLabs["min(l.created)"],
+                      )
+                        .startOf("day")
+                        .fromNow()})`}
+                    </div>
+                  </>
+                )
+            }
           </li>
 
           <li>
@@ -150,10 +182,10 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
             </div>
             <div>
               {!!providerDetails
-              && providerDetails.messageToPatientsNotRead
-              && providerDetails.messageToPatientsNotRead[
-                "min(m.unread_notify_dt)"
-              ]
+                && providerDetails.messageToPatientsNotRead
+                && providerDetails.messageToPatientsNotRead[
+                  "min(m.unread_notify_dt)"
+                ]
                 ? `${moment(
                   providerDetails.messageToPatientsNotRead[
                     "min(m.unread_notify_dt)"
@@ -177,10 +209,10 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
             </div>
             <div>
               {!!providerDetails
-              && providerDetails.patientAppointmentRequest
-              && providerDetails.patientAppointmentRequest[
-                "min(m.unread_notify_dt)"
-              ]
+                && providerDetails.patientAppointmentRequest
+                && providerDetails.patientAppointmentRequest[
+                  "min(m.unread_notify_dt)"
+                ]
                 ? `${moment(
                   providerDetails.patientAppointmentRequest[
                     "min(m.unread_notify_dt)"
