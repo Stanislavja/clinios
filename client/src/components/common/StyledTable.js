@@ -4,8 +4,19 @@ import {
   withStyles,
 } from "@material-ui/core";
 
+export const StyledTableCellLg = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.grey,
+    color: theme.palette.grey,
+    fontSize: "12px",
+    fontWeight: 700,
+  },
+  body: {
+    fontSize: 14,
+  },
+}))(TableCell);
 
-export const StyledTableCell = withStyles(() => ({
+export const StyledTableCellSm = withStyles(() => ({
   head: {
     whiteSpace: "nowrap",
     fontSize: "12px",
@@ -19,20 +30,37 @@ export const StyledTableCell = withStyles(() => ({
   },
 }))(TableCell);
 
-export const StyledTableRow = withStyles(() => ({
+export const StyledTableRowSm = withStyles((theme) => ({
   root: {
     fontSize: 14,
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
     "& th": {
       fontSize: 12,
       whiteSpace: "nowrap",
       padding: "2px 16px 2px 2px",
-      lineHeight: "14px",
     },
     "& td": {
       fontSize: 12,
       whiteSpace: "nowrap",
       padding: "2px 16px 2px 2px",
-      lineHeight: "14px",
+    },
+  },
+}))(TableRow);
+
+export const StyledTableRowLg = withStyles((theme) => ({
+  root: {
+    fontSize: 14,
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+    "& th": {
+      fontSize: 12,
+    },
+    "& td": {
+      fontSize: 12,
+      height: "50px",
     },
   },
 }))(TableRow);
