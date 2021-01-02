@@ -1,15 +1,15 @@
 export const DocumentOptions = [
   {
-    label: "Physician",
-    value: "physician Bill",
+    label: "Lab",
+    value: "L",
   },
   {
-    label: "Patient",
-    value: "patient Bill",
+    label: "Imaging",
+    value: "I",
   },
   {
-    label: "Insurance",
-    value: "insurance Bill",
+    label: "Misc",
+    value: "M",
   },
 ];
 
