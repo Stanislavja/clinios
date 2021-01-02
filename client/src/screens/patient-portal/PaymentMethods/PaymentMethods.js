@@ -144,7 +144,7 @@ const PaymentMethods = () => {
             New
           </Button>
         </Grid>
-        <Grid item sm={4} xs={12}>
+        <Grid item md={6} sm={8} xs={12}>
           <TableContainer className={classes.tableContainer}>
             <Table size="small" className={classes.table}>
               <TableBody>
