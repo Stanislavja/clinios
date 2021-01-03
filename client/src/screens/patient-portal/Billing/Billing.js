@@ -150,7 +150,7 @@ const Billing = () => {
           This page is used to view billings.
         </Typography>
 
-        <Grid item md={7} sm={12} xs={12}>
+        <Grid item md={10} sm={12} xs={12}>
           <TableContainer className={classes.tableContainer}>
             <Table size="small" className={classes.table}>
               <TableHead>
