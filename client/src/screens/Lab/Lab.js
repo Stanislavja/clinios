@@ -7,6 +7,10 @@ import {
   Button,
   TextField,
   MenuItem,
+  Paper,
+  List,
+  ListItem,
+  ListItemText,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Pagination from "@material-ui/lab/Pagination";
@@ -15,8 +19,10 @@ import FileViewer from "react-file-viewer";
 import { pdfjs, Document, Page } from "react-pdf";
 import { useParams, useLocation } from "react-router-dom";
 
+import useDebounce from "../../hooks/useDebounce";
 import LabService from "../../services/lab.service";
 import { DocumentOptions } from "../../static/lab";
+import * as API from "../../utils/API";
 import { checkFileExtension } from "../../utils/helpers";
 import Interpretation from "./components/Interpretation";
 import LabHistory from "./components/LabHistory";
@@ -68,6 +74,17 @@ const useStyles = makeStyles((theme) => ({
       textDecoration: "none",
     },
   },
+  relativePosition: {
+    position: "relative",
+  },
+  resultsContainer: {
+    position: "absolute",
+    zIndex: 2,
+    width: "calc(100% - 8px)",
+    background: theme.palette.common.white,
+    maxHeight: 150,
+    overflow: "scroll",
+  },
 }));
 
 const Lab = () => {
@@ -79,6 +96,7 @@ const Lab = () => {
   // states
   // const [labData, setLabData] = useState(null);
   const [patientText, setPatientText] = useState("");
+  const [patientSearchResults, setPatientSearchResults] = useState(null);
   const [docType, setDocType] = useState("L");
   const [docNote, setDocNote] = useState("");
   const [docAssignTo, setDocAssignTo] = useState("");
@@ -124,6 +142,22 @@ const Lab = () => {
 
   const toggleUserHistoryDialog = () => {
     setShowUserHistory((prevState) => !prevState);
+  };
+
+  const debouncedSearchTerm = useDebounce(patientText, 500);
+
+  useEffect(() => {
+    if (debouncedSearchTerm) {
+      if (debouncedSearchTerm.length > 2) {
+        API.search(debouncedSearchTerm).then((res) => {
+          setPatientSearchResults(res.data);
+        });
+      }
+    }
+  }, [debouncedSearchTerm]);
+
+  const handlePatientChange = (patient) => {
+    setPatientText(`${patient.firstname} ${patient.lastname}`);
   };
 
   return (
@@ -321,6 +355,7 @@ const Lab = () => {
                   item
                   sm={6}
                   xs={12}
+                  className={classes.relativePosition}
                 >
                   <TextField
                     required
@@ -331,6 +366,24 @@ const Lab = () => {
                     value={patientText}
                     onChange={(e) => setPatientText(e.target.value)}
                   />
+                  {
+                    (!!patientSearchResults && patientSearchResults.length) ? (
+                      <Paper className={classes.resultsContainer}>
+                        <List>
+                          {patientSearchResults.map((patient) => (
+                            <ListItem
+                              button
+                              onClick={() => handlePatientChange(patient)}
+                              key={patient.id}
+                            >
+                              <ListItemText primary={`${patient.firstname} ${patient.lastname}`} />
+                            </ListItem>
+                          ))}
+                        </List>
+                      </Paper>
+                    )
+                      : null
+                  }
                 </Grid>
 
                 <Grid
