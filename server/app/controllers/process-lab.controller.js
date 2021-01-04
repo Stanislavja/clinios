@@ -62,16 +62,16 @@ const getAll = async (req, res) => {
 
 const createLab = async (req, res) => {
   const { lab_id, patient_id, user_id } = req.body.data;
-  let { type, note_assign } = req.body.data;
+  let { type, note_assign, note } = req.body.data;
 
   const db = makeDb(configuration, res);
   try {
     // Call DB query without assigning into a variable
     if (typeof type === "undefined") {
-      type = null
+      type = null;
     }
     if (typeof note_assign === "undefined") {
-      note_assign = null
+      note_assign = null;
     }
 
     await db.query(
@@ -91,9 +91,7 @@ const createLab = async (req, res) => {
       $sql += `, note_assign='${note_assign}'`;
     }
 
-    $sql += `, updated=now(), updated_user_id=${req.user_id} where user_id=${
-      req.user_id
-    } and id=${lab_id}`;
+    $sql += `, updated=now(), updated_user_id=${req.user_id} where user_id=${req.user_id} and id=${lab_id}`;
 
     const updateResponse = await db.query($sql);
 
