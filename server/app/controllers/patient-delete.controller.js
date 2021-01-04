@@ -20,7 +20,9 @@ const deletePatient = async (req, res) => {
   const { id } = req.params;
   const db = makeDb(configuration, res);
   try {
+    // eslint-disable-next-line no-restricted-syntax, guard-for-in
     for (const key in tables) {
+      // eslint-disable-next-line no-await-in-loop
       const dbResponse = await db.query(
         `select 1
         from ${key}
@@ -32,18 +34,21 @@ const deletePatient = async (req, res) => {
         errorMessage.message = `Patient can't be deleted because there is ${tables[key]} data for this patient`;
         return res.status(status.error).send(errorMessage);
       }
+      // eslint-disable-next-line no-await-in-loop
       const deleteResponse = await db.query(
         `delete
           from patient
           where id=${id}`
       );
 
+      // eslint-disable-next-line no-await-in-loop
       await db.query(
         `delete
           from user_log
           where patient_id=${id}`
       );
 
+      // eslint-disable-next-line no-await-in-loop
       await db.query(
         `insert into user_log values (${req.client_id}, ${req.user_id}, now(), null, 'Deleted patient {patient.id} {patient.firstname} {patient.lastname}')`
       );
