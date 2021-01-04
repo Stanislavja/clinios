@@ -61,8 +61,8 @@ const getAll = async (req, res) => {
 };
 
 const createLab = async (req, res) => {
-  const { lab_id, patient_id, user_id } = req.body.data;
-  let { type, note_assign, note } = req.body.data;
+  const { lab_id, patient_id, user_id, note } = req.body.data;
+  let { type, note_assign } = req.body.data;
 
   const db = makeDb(configuration, res);
   try {
@@ -96,7 +96,7 @@ const createLab = async (req, res) => {
     const updateResponse = await db.query($sql);
 
     if (!updateResponse.affectedRows) {
-      errorMessage.error = "Update not successful";
+      errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -105,7 +105,7 @@ const createLab = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Update not successful";
+    errorMessage.message = "Update not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
