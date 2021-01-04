@@ -61,32 +61,39 @@ const getAll = async (req, res) => {
 };
 
 const createLab = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    errorMessage.message = errors.array();
-    return res.status(status.bad).send(errorMessage);
-  }
-  const { patient_id, type, user_id, note_assign } = req.body.data;
-  const { labId } = req.params;
+  const { lab_id, patient_id, user_id } = req.body.data;
+  let { type, note_assign } = req.body.data;
 
   const db = makeDb(configuration, res);
   try {
     // Call DB query without assigning into a variable
+    if (typeof type === "undefined") {
+      type = null
+    }
+    if (typeof note_assign === "undefined") {
+      note_assign = null
+    }
+
     await db.query(
-      `insert into lab_history (id, patient_id, type, user_id, note_assign, created, created_user_id) values (${labId}, ${patient_id}, ${type}, ${user_id}, ${note_assign}, now(), ${req.user_id})`
+      `insert into lab_history (id, patient_id, type, user_id, note_assign, created, created_user_id) values (${lab_id}, ${patient_id}, '${type}', ${user_id}, '${note_assign}', now(), ${req.user_id})`
     );
 
     let $sql;
-    $sql = `update lab set firstname='${firstname}', lastname='${lastname}', email='${email}' `;
+    $sql = `update lab set patient_id='${patient_id}'`;
 
-    if (typeof middlename !== "undefined") {
-      $sql += `, middlename='${middlename}'`;
+    if (typeof type !== "undefined") {
+      $sql += `, type='${type}'`;
     }
-    $sql += `, updated='${moment().format(
-      "YYYY-MM-DD HH:mm:ss"
-    )}', updated_user_id=${req.user_id} where user_id=${
+    if (typeof note !== "undefined") {
+      $sql += `, note='${note}'`;
+    }
+    if (typeof note_assign !== "undefined") {
+      $sql += `, note_assign='${note_assign}'`;
+    }
+
+    $sql += `, updated=now(), updated_user_id=${req.user_id} where user_id=${
       req.user_id
-    } and id=${labId}`;
+    } and id=${lab_id}`;
 
     const updateResponse = await db.query($sql);
 
