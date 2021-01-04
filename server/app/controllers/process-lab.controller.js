@@ -60,6 +60,80 @@ const getAll = async (req, res) => {
   }
 };
 
+const createLab = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    errorMessage.message = errors.array();
+    return res.status(status.bad).send(errorMessage);
+  }
+  const { patient_id, type, user_id, note_assign } = req.body.data;
+  const { labId } = req.params;
+
+  const db = makeDb(configuration, res);
+  try {
+    // Call DB query without assigning into a variable
+    await db.query(
+      `insert into lab_history (id, patient_id, type, user_id, note_assign, created, created_user_id) values (${labId}, ${patient_id}, ${type}, ${user_id}, ${note_assign}, now(), ${req.user_id})`
+    );
+
+    let $sql;
+    $sql = `update lab set firstname='${firstname}', lastname='${lastname}', email='${email}' `;
+
+    if (typeof middlename !== "undefined") {
+      $sql += `, middlename='${middlename}'`;
+    }
+    $sql += `, updated='${moment().format(
+      "YYYY-MM-DD HH:mm:ss"
+    )}', updated_user_id=${req.user_id} where user_id=${
+      req.user_id
+    } and id=${labId}`;
+
+    const updateResponse = await db.query($sql);
+
+    if (!updateResponse.affectedRows) {
+      errorMessage.error = "Update not successful";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = updateResponse;
+    successMessage.message = "Update successful";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.error = "Update not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+const updateLab = async (req, res) => {
+  const { labId } = req.params;
+  const { labStatus } = req.body.data;
+
+  const db = makeDb(configuration, res);
+
+  try {
+    const $sql = `update lab set status='${labStatus}', updated=now(), updated_user_id=${req.user_id} where user_id=${req.user_id} and id=${labId}`;
+    const updateResponse = await db.query($sql);
+
+    if (!updateResponse.affectedRows) {
+      errorMessage.message = "Update not successful";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = updateResponse;
+    successMessage.message = "Update successful";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Update not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const getLabHistory = async (req, res) => {
   const db = makeDb(configuration, res);
   const { labId } = req.params;
@@ -193,6 +267,8 @@ const getAssignUser = async (req, res) => {
 const processLab = {
   getAll,
   getLabById,
+  createLab,
+  updateLab,
   getLabHistory,
   getLabUserHistory,
   getLabValues,
