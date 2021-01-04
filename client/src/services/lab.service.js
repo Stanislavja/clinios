@@ -39,6 +39,15 @@ class LabService {
       })
       .then((res) => res.data);
   }
+
+  // Assignee Users
+  getAssigneeUsers() {
+    return axios
+      .get(`${API_BASE}/lab/assign-user`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
 }
 
 export default new LabService();
