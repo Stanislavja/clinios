@@ -4,8 +4,11 @@ const ProcessLab = require("../controllers/process-lab.controller.js");
 
 const router = express.Router();
 
+router.get("/lab/assign-user", [authJwt.verifyToken], ProcessLab.getAssignUser);
 router.get("/lab/:userId/:labId", [authJwt.verifyToken], ProcessLab.getLabById);
 router.get("/lab/:userId", [authJwt.verifyToken], ProcessLab.getAll);
+router.post("/lab", [authJwt.verifyToken], ProcessLab.createLab);
+router.put("/lab/:labId", [authJwt.verifyToken], ProcessLab.updateLab);
 router.get(
   "/lab/histroy/:labId",
   [authJwt.verifyToken],
