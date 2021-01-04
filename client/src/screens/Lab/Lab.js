@@ -98,6 +98,7 @@ const Lab = () => {
   const [patientText, setPatientText] = useState("");
   const [patientSearchResults, setPatientSearchResults] = useState(null);
   const [docType, setDocType] = useState("L");
+  const [assigneeUsers, setAssigneeUsers] = useState([]);
   const [docNote, setDocNote] = useState("");
   const [docAssignTo, setDocAssignTo] = useState("");
   const [assignmentNote, setAssignmentNote] = useState("");
@@ -115,9 +116,20 @@ const Lab = () => {
     });
   }, [documentId]);
 
+  const fetchAssigneeUsers = useCallback(() => {
+    LabService.getAssigneeUsers()
+      .then((res) => {
+        setAssigneeUsers(res.data);
+      })
+      .catch(() => {
+        setAssigneeUsers([]);
+      });
+  }, []);
+
   useEffect(() => {
     fetchLabDataByID();
-  }, [fetchLabDataByID]);
+    fetchAssigneeUsers();
+  }, [fetchLabDataByID, fetchAssigneeUsers]);
 
   useEffect(() => {
     const filePath = `${process.env.REACT_APP_API_URL}static/patient/pid${userId}_${documentName}`;
@@ -457,11 +469,17 @@ const Lab = () => {
                     value={docAssignTo}
                     onChange={(e) => setDocAssignTo(e.target.value)}
                   >
-                    {DocumentOptions.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
+                    {assigneeUsers.length
+                      ? assigneeUsers.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))
+                      : (
+                        <MenuItem value="">
+                          No Items Available
+                        </MenuItem>
+                      )}
                   </TextField>
                 </Grid>
               </Box>
