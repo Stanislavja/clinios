@@ -4,6 +4,10 @@ import { makeStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
+import { useSnackbar } from "notistack";
+
+import mergePatientService from "../../../../services/manage/mergePatient.service";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,8 +29,26 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MergePatient() {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const [patientIdKeep, setPatientIdKeep] = useState("");
   const [patientIdDelete, setPatientIdDelete] = useState("");
+
+  const onFormSubmit = () => {
+    const formData = {
+      data: {
+        patient_id_to_keep: patientIdKeep,
+        patient_id_to_delete: patientIdDelete,
+      },
+    };
+    mergePatientService.mergePatient(formData).then((response) => {
+      enqueueSnackbar(`${response.data.message}`, {
+        variant: "success",
+      });
+      setPatientIdKeep("");
+      setPatientIdDelete("");
+    });
+  };
+
   return (
     <div className={classes.root}>
       <Typography
@@ -70,7 +92,7 @@ export default function MergePatient() {
           variant="contained"
           color="primary"
           className={classes.submit}
-          // onClick={(event) => onFormSubmit(event, login)}
+          onClick={() => onFormSubmit()}
           size="small"
         >
           Merge

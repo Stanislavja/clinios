@@ -57,6 +57,7 @@ app.use(baseAPIPath, require("./app/routes/accounting-types.routes"));
 app.use(baseAPIPath, require("./app/routes/report-finance-detail.routes"));
 app.use(baseAPIPath, require("./app/routes/patient-portal-header.routes"));
 app.use(baseAPIPath, require("./app/routes/patient-delete.routes"));
+app.use(baseAPIPath, require("./app/routes/patient-merge.routes"));
 
 // Patient Portal
 app.use(baseAPIPath, require("./app/routes/patient/signup.routes"));
