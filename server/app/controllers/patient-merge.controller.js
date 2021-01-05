@@ -31,9 +31,6 @@ const mergePatient = async (req, res) => {
     );
     const patientToDelete = patientToDeleteResponse[0];
 
-    console.log("patientToKeep:", patientToKeep);
-    console.log("patientToDelete:", patientToDelete);
-
     if (!patientToKeep || !patientToDelete) {
       errorMessage.message = `We couldn't find both or one of them patient.`;
       return res.status(status.error).send(errorMessage);
