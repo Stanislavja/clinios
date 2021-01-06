@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 
 import {
   Button, Divider, Grid, makeStyles, TextField,
+  colors,
 } from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
@@ -19,6 +22,13 @@ const useStyles = makeStyles((theme) => ({
   title: {
     paddingBottom: theme.spacing(1),
   },
+  modalTitle: {
+    backgroundColor: theme.palette.primary.light,
+    "& h2": {
+      color: "#fff",
+      fontSize: "16px",
+    },
+  },
   titleSection: {
     display: "flex",
     alignItems: "center",
@@ -31,9 +41,28 @@ const useStyles = makeStyles((theme) => ({
   content: {
     marginTop: "30px",
   },
+  modalContent: {
+    paddingLeft: theme.spacing(3),
+    paddingTop: theme.spacing(3),
+    paddingRight: theme.spacing(3),
+    paddingBottom: theme.spacing(6),
+    fontSize: "18px",
+    "& p": {
+      fontSize: "16px",
+    },
+  },
   divider: {
     margin: "10px 0",
     maxWidth: "520px",
+  },
+  modalAction: {
+    borderTop: `1px solid ${theme.palette.background.default}`,
+    display: "flex",
+    justifyContent: "space-between",
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    paddingLeft: theme.spacing(3),
+    paddingRight: theme.spacing(3),
   },
 }));
 
@@ -47,12 +76,15 @@ export default function Messages() {
     const msg = await MessagesService.getMessages();
     setMessages(msg.data.data);
   };
+
   useEffect(() => {
     fetchMessages();
   }, []);
+
   const handleClose = () => {
     setOpen(false);
   };
+
   return (
     <div className={classes.root}>
       <div className={classes.titleSection}>
@@ -120,13 +152,16 @@ export default function Messages() {
         ))}
       </div>
       <Dialog
+        maxWidth="sm"
         open={open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogContent style={{ minWidth: "600px" }}>
-          <Typography variant="h2">Send A Secure Message</Typography>
+        <DialogTitle id="alert-dialog-title" className={classes.modalTitle}>
+          Send A Secure Message
+        </DialogTitle>
+        <DialogContent className={classes.modalContent} style={{ minWidth: "600px" }}>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <TextField fullWidth margin="normal" variant="outlined" label="To" />
             <TextField fullWidth margin="normal" variant="outlined" label="Subject" />
@@ -145,12 +180,28 @@ export default function Messages() {
               size="small"
             />
           </div>
-
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button>Send</Button>
-          </div>
         </DialogContent>
+        <DialogActions className={classes.modalAction}>
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={handleClose}
+            style={{
+              borderColor: colors.orange[600],
+              color: colors.orange[600],
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            onClick={() => alert("alert goes here")}
+          >
+            Send
+          </Button>
+        </DialogActions>
       </Dialog>
     </div>
   );
