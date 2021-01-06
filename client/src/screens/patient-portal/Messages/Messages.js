@@ -78,6 +78,7 @@ export default function Messages() {
   const [selectedUser, setSelectedUser] = useState("");
   const [messages, setMessages] = useState([]);
   const [open, setOpen] = useState(false);
+  const [isNewView, setIsNewView] = useState(false);
   const [message, setMessage] = useState("");
   const [subject, setSubject] = useState("");
 
@@ -101,6 +102,11 @@ export default function Messages() {
     setOpen(false);
   };
 
+  const onNewMessageButton = () => {
+    setIsNewView(true);
+    setOpen(true);
+  };
+
   const handleMessageSubmission = () => {
     const formData = {
       data: {
@@ -118,6 +124,14 @@ export default function Messages() {
     });
   };
 
+  const handleOnEditClick = (msg) => {
+    setIsNewView(false);
+    setSubject(msg.subject);
+    setMessage(msg.message);
+    setSelectedUser(msg.user_id_to);
+    setOpen(true);
+  };
+
   return (
     <div className={classes.root}>
       <div className={classes.titleSection}>
@@ -126,7 +140,7 @@ export default function Messages() {
         </Typography>
         <Button
           className={classes.newMessage}
-          onClick={() => setOpen(true)}
+          onClick={() => onNewMessageButton()}
           size="small"
           variant="contained"
           color="primary"
@@ -170,7 +184,7 @@ export default function Messages() {
                   </Button>
                 </Grid>
                 <Grid item>
-                  <Button size="small" variant="outlined">
+                  <Button size="small" variant="outlined" onClick={() => handleOnEditClick(msg)}>
                     Edit
                   </Button>
                 </Grid>
@@ -192,7 +206,7 @@ export default function Messages() {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title" className={classes.modalTitle}>
-          Send A Secure Message
+          {isNewView ? "Send A Secure Message" : "Edit Message"}
         </DialogTitle>
         <DialogContent className={classes.modalContent} style={{ minWidth: "600px" }}>
           <div style={{ display: "flex", flexDirection: "column" }}>
@@ -228,6 +242,7 @@ export default function Messages() {
               variant="outlined"
               label="Subject"
               size="small"
+              value={subject}
               onChange={(event) => setSubject(event.target.value)}
             />
             <TextField
@@ -258,14 +273,30 @@ export default function Messages() {
           >
             Cancel
           </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            size="small"
-            onClick={() => handleMessageSubmission()}
-          >
-            Send
-          </Button>
+          {
+            isNewView
+              ? (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  onClick={() => handleMessageSubmission()}
+                >
+                  Send
+                </Button>
+              )
+              : (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  onClick={() => alert("Update Alert!")}
+                >
+                  Update
+                </Button>
+              )
+          }
+
         </DialogActions>
       </Dialog>
     </div>
