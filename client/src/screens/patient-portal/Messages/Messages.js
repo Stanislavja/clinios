@@ -8,11 +8,16 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 
 import MessagesService from "../../../services/patient_portal/messages.service";
+import UsersService from "../../../services/users.service";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,9 +39,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   newMessage: {
-    fontSize: "16px",
-    marginLeft: "40px",
-    marginBottom: "10px",
+    fontSize: "14px",
+    marginLeft: theme.spacing(4),
+    marginBottom: theme.spacing(1),
   },
   content: {
     marginTop: "30px",
@@ -68,21 +73,49 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Messages() {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
+  const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState("");
   const [messages, setMessages] = useState([]);
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
+  const [subject, setSubject] = useState("");
 
   const fetchMessages = async () => {
     const msg = await MessagesService.getMessages();
     setMessages(msg.data.data);
   };
 
+  const fetchUsers = () => {
+    UsersService.getAllUsers().then((res) => {
+      setUsers(res.data.data);
+    });
+  };
+
   useEffect(() => {
     fetchMessages();
+    fetchUsers();
   }, []);
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleMessageSubmission = () => {
+    const formData = {
+      data: {
+        user_id_to: selectedUser,
+        subject,
+        message,
+      },
+    };
+    MessagesService.createMessage(formData).then((response) => {
+      enqueueSnackbar(`${response.data.message}`, {
+        variant: "success",
+      });
+      fetchMessages();
+      handleClose();
+    });
   };
 
   return (
@@ -163,13 +196,45 @@ export default function Messages() {
         </DialogTitle>
         <DialogContent className={classes.modalContent} style={{ minWidth: "600px" }}>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <TextField fullWidth margin="normal" variant="outlined" label="To" />
-            <TextField fullWidth margin="normal" variant="outlined" label="Subject" />
+            <FormControl
+              variant="outlined"
+              className={classes.customSelect}
+              size="small"
+            >
+              <InputLabel htmlFor="age-native-simple">To</InputLabel>
+              <Select
+                native
+                value={selectedUser}
+                onChange={(event) => setSelectedUser(event.target.value)}
+                inputProps={{
+                  name: "type",
+                  id: "age-native-simple",
+                }}
+                label="User"
+              >
+                <option aria-label="None" value="" />
+                {users.map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.firstname}
+                    {" "}
+                    {user.lastname}
+                  </option>
+                ))}
+              </Select>
+            </FormControl>
+            <TextField
+              fullWidth
+              margin="normal"
+              variant="outlined"
+              label="Subject"
+              size="small"
+              onChange={(event) => setSubject(event.target.value)}
+            />
             <TextField
               fullWidth
               variant="outlined"
               label="Message"
-              className={classes.texArea}
+              className={classes.textArea}
               InputProps={{
                 classes: classes.normalOutline,
                 inputComponent: TextareaAutosize,
@@ -197,7 +262,7 @@ export default function Messages() {
             variant="contained"
             color="primary"
             size="small"
-            onClick={() => alert("alert goes here")}
+            onClick={() => handleMessageSubmission()}
           >
             Send
           </Button>
