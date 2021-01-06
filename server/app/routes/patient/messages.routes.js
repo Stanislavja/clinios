@@ -19,6 +19,11 @@ router.put(
   [authJwt.verifyToken],
   messagesController.updateMessage
 );
+router.delete(
+  "/client-portal/messages/:messageId",
+  [authJwt.verifyToken],
+  messagesController.deleteMessage
+);
 router.get(
   "/client-portal/messages/:messageId",
   [authJwt.verifyToken],

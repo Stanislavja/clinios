@@ -15,6 +15,10 @@ class MessagesService {
   updateMessage = (data) => axios.put(`${API_BASE}/client-portal/messages/${data.data.id}`, data, {
     headers: authHeader(),
   });
+
+  deleteMessage = (id) => axios.delete(`${API_BASE}/client-portal/messages/${id}`, {
+    headers: authHeader(),
+  });
 }
 
 export default new MessagesService();

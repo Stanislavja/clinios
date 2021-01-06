@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
   },
   divider: {
     margin: "10px 0",
-    maxWidth: "520px",
+    marginBottom: theme.spacing(2),
   },
   modalAction: {
     borderTop: `1px solid ${theme.palette.background.default}`,
@@ -152,6 +152,15 @@ export default function Messages() {
     });
   };
 
+  const handleMessageDeletion = (msg) => {
+    MessagesService.deleteMessage(msg.id).then((response) => {
+      enqueueSnackbar(`${response.data.message}`, {
+        variant: "success",
+      });
+      fetchMessages();
+    });
+  };
+
   return (
     <div className={classes.root}>
       <div className={classes.titleSection}>
@@ -174,49 +183,52 @@ export default function Messages() {
       </Typography>
 
       <div className={classes.content}>
-        {messages.map((msg) => (
-          <Grid key={msg.id} container spacing={4} alignItems="flex-start">
-            <Grid item xs={4}>
-              <Typography component="p" variant="body2" color="textPrimary">
-                <span style={{ fontWeight: "bold" }}>Time: </span>
-                {" "}
-                {moment(msg.created).format("ll, h:mm")}
-                {" "}
-                <span style={{ fontWeight: "bold" }}>Subject: </span>
-                {" "}
-                {msg.subject}
-                {" "}
-                <span style={{ fontWeight: "bold" }}>From: </span>
-                {msg.user_to_from}
-                {" "}
-                <span style={{ fontWeight: "bold" }}>To: </span>
-                {msg.user_to_name ? msg.user_to_name : "You"}
-                <br />
-                {msg.message}
-              </Typography>
-              <Divider className={classes.divider} />
-            </Grid>
-            <Grid item xs={4}>
-              <Grid container spacing={2}>
-                <Grid item>
-                  <Button size="small" variant="outlined">
-                    Reply
-                  </Button>
-                </Grid>
-                <Grid item>
-                  <Button size="small" variant="outlined" onClick={() => handleOnEditClick(msg)}>
-                    Edit
-                  </Button>
-                </Grid>
-                <Grid item>
-                  <Button size="small" variant="outlined">
-                    Delete
-                  </Button>
+        { messages.map((msg) => (
+          <div key={msg.id}>
+            <Grid container spacing={4} alignItems="flex-start">
+              <Grid item xs={6}>
+                <Typography component="p" variant="body2" color="textPrimary">
+                  <span style={{ fontWeight: "bold" }}>Time: </span>
+                  {" "}
+                  {moment(msg.created).format("ll, h:mm")}
+                  {" "}
+                  <span style={{ fontWeight: "bold" }}>Subject: </span>
+                  {" "}
+                  {msg.subject}
+                  {" "}
+                  <span style={{ fontWeight: "bold" }}>From: </span>
+                  {msg.user_to_from}
+                  {" "}
+                  <span style={{ fontWeight: "bold" }}>To: </span>
+                  {msg.user_to_name ? msg.user_to_name : "You"}
+                  <br />
+                  {msg.message}
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Grid container spacing={2}>
+                  <Grid item>
+                    <Button size="small" variant="outlined">
+                      Reply
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <Button size="small" variant="outlined" onClick={() => handleOnEditClick(msg)}>
+                      Edit
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <Button size="small" variant="outlined" onClick={() => handleMessageDeletion(msg)}>
+                      Delete
+                    </Button>
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
+            <Divider className={classes.divider} />
+          </div>
         ))}
+        {messages.length === 0 && <p>No records found!</p>}
       </div>
       <Dialog
         maxWidth="sm"
@@ -316,7 +328,6 @@ export default function Messages() {
                 </Button>
               )
           }
-
         </DialogActions>
       </Dialog>
     </div>
