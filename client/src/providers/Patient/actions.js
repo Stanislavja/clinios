@@ -3,6 +3,7 @@ import {
   RESET_SELECTED_ENCOUNTER,
   SET_EDITOR_TEXT,
   RESET_EDITOR_TEXT,
+  SAVE_LAYOUT,
 
   // Setters
   SET_PATIENT_ID,
@@ -72,6 +73,11 @@ export const setEditorText = (value) => ({
 
 export const resetEditorText = () => ({
   type: RESET_EDITOR_TEXT,
+});
+
+export const saveLayout = (value) => ({
+  type: SAVE_LAYOUT,
+  payload: value,
 });
 
 // data setters starts here
