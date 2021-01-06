@@ -15,7 +15,7 @@ const getAllMessages = async (req, res) => {
   let $sql;
 
   try {
-    $sql = `select m.id, m.created
+    $sql = `select m.id, m.user_id_to, m.created
     , concat(u.firstname, ' ', u.lastname) user_to_from
     , concat(u2.firstname, ' ', u2.lastname) user_to_name
     , m.subject , m.message
@@ -43,11 +43,11 @@ const getAllMessages = async (req, res) => {
 };
 
 const createMessage = async (req, res) => {
-  const { user_id_to } = req.body.data;
+  const { user_id_to, subject, message } = req.body.data;
   const db = makeDb(configuration, res);
   try {
     const insertResponse = await db.query(
-      `insert into message (client_id, user_id_to, patient_id_from, status, created) values (${req.client_id}, ${user_id_to}, ${req.user_id}, 'O', now())`
+      `insert into message (client_id, user_id_to, patient_id_from, subject, message,  status, created) values (${req.client_id}, ${user_id_to}, ${req.user_id}, '${subject}', '${message}', 'O', now())`
     );
     if (!insertResponse.affectedRows) {
       errorMessage.error = "Insert not successful";
@@ -101,6 +101,38 @@ const updateMessage = async (req, res) => {
   }
 };
 
+const deleteMessage = async (req, res) => {
+  const { messageId } = req.params;
+  const db = makeDb(configuration, res);
+  try {
+    await db.query(`
+      delete 
+      from message_history 
+      where id=${messageId}
+    `);
+    const deleteResponse = await db.query(`
+      delete 
+      from message 
+      where id=${messageId}
+    `);
+
+    if (!deleteResponse.affectedRows) {
+      errorMessage.message = "Deletion not successful";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = deleteResponse;
+    successMessage.message = "Delete successful";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Delete not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const getSingleMessage = async (req, res) => {
   const db = makeDb(configuration, res);
   let $sql;
@@ -129,6 +161,7 @@ const Messages = {
   getAllMessages,
   createMessage,
   updateMessage,
+  deleteMessage,
   getSingleMessage,
 };
 

@@ -1664,6 +1664,7 @@ const deleteMedications = async (req, res) => {
     await db.close();
   }
 };
+
 const getRequisitions = async (req, res) => {
   const db = makeDb(configuration, res);
   const { encounter_id } = req.query;
