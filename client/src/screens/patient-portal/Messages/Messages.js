@@ -77,6 +77,7 @@ export default function Messages() {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
   const [messages, setMessages] = useState([]);
+  const [selectedMessage, setSelectedMessage] = useState("");
   const [open, setOpen] = useState(false);
   const [isNewView, setIsNewView] = useState(false);
   const [message, setMessage] = useState("");
@@ -126,10 +127,29 @@ export default function Messages() {
 
   const handleOnEditClick = (msg) => {
     setIsNewView(false);
+    setSelectedMessage(msg);
     setSubject(msg.subject);
     setMessage(msg.message);
     setSelectedUser(msg.user_id_to);
     setOpen(true);
+  };
+
+  const handleMessageUpdate = () => {
+    const formData = {
+      data: {
+        id: selectedMessage.id,
+        user_id_to: selectedUser,
+        subject,
+        message,
+      },
+    };
+    MessagesService.updateMessage(formData).then((response) => {
+      enqueueSnackbar(`${response.data.message}`, {
+        variant: "success",
+      });
+      fetchMessages();
+      handleClose();
+    });
   };
 
   return (
@@ -290,7 +310,7 @@ export default function Messages() {
                   variant="contained"
                   color="primary"
                   size="small"
-                  onClick={() => alert("Update Alert!")}
+                  onClick={() => handleMessageUpdate()}
                 >
                   Update
                 </Button>

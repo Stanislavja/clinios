@@ -11,6 +11,10 @@ class MessagesService {
   createMessage = (data) => axios.post(`${API_BASE}/client-portal/messages`, data, {
     headers: authHeader(),
   });
+
+  updateMessage = (data) => axios.put(`${API_BASE}/client-portal/messages/${data.data.id}`, data, {
+    headers: authHeader(),
+  });
 }
 
 export default new MessagesService();

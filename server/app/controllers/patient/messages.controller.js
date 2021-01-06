@@ -15,7 +15,7 @@ const getAllMessages = async (req, res) => {
   let $sql;
 
   try {
-    $sql = `select m.id, m.created
+    $sql = `select m.id, m.user_id_to, m.created
     , concat(u.firstname, ' ', u.lastname) user_to_from
     , concat(u2.firstname, ' ', u2.lastname) user_to_name
     , m.subject , m.message
