@@ -75,3 +75,82 @@ export const EncountersCards = [
     icon: "AddIcon",
   },
 ];
+
+
+export const NewDrugFormFields = [
+  {
+    name: "type",
+    id: "type",
+    label: "Type",
+    baseType: "input",
+    type: "text",
+    options: [],
+  },
+  {
+    name: "frequency",
+    id: "frequency",
+    label: "Frequency",
+    baseType: "input",
+    type: "text",
+    options: [],
+  },
+  {
+    name: "startDate",
+    id: "startDate",
+    label: "Start Date",
+    baseType: "input",
+    type: "date",
+    options: [],
+  },
+  {
+    name: "expires",
+    id: "expires",
+    label: "Expires (Days)",
+    baseType: "input",
+    type: "number",
+    options: [],
+  },
+  {
+    name: "amount",
+    id: "amount",
+    label: "Amount",
+    baseType: "input",
+    type: "number",
+    options: [],
+  },
+  {
+    name: "refills",
+    id: "refills",
+    label: "Refills",
+    baseType: "input",
+    type: "number",
+    options: [],
+  },
+  {
+    name: "patientInstructions",
+    id: "patientInstructions",
+    label: "Patient Instructions",
+    baseType: "input",
+    type: "text",
+    options: [],
+  },
+  {
+    name: "pharmacyInstructions",
+    id: "pharmacyInstructions",
+    label: "Pharmacy Instructions",
+    baseType: "input",
+    type: "text",
+    options: [],
+  },
+];
+
+export const GenericOptions = [
+  {
+    label: "Generic Yes",
+    value: "yes",
+  },
+  {
+    label: "Generic No",
+    value: "no",
+  },
+];
