@@ -19,6 +19,14 @@ import { useSnackbar } from "notistack";
 import MessagesService from "../../../services/patient_portal/messages.service";
 import UsersService from "../../../services/users.service";
 
+
+const isLessThan60Minutes = (createdTime) => (moment()
+  .subtract(60, "minutes")
+  .format()
+      < moment(createdTime)
+        .format()
+);
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -208,20 +216,30 @@ export default function Messages() {
               <Grid item xs={6}>
                 <Grid container spacing={2}>
                   <Grid item>
-                    <Button size="small" variant="outlined">
-                      Reply
-                    </Button>
+                    {!msg.user_to_from
+                      && (
+                        <Button size="small" variant="outlined">
+                          Reply
+                        </Button>
+                      )}
                   </Grid>
-                  <Grid item>
-                    <Button size="small" variant="outlined" onClick={() => handleOnEditClick(msg)}>
-                      Edit
-                    </Button>
-                  </Grid>
-                  <Grid item>
-                    <Button size="small" variant="outlined" onClick={() => handleMessageDeletion(msg)}>
-                      Delete
-                    </Button>
-                  </Grid>
+                  {
+                    isLessThan60Minutes(msg.created) && (
+                      <>
+                        <Grid item>
+                          <Button size="small" variant="outlined" onClick={() => handleOnEditClick(msg)}>
+                            Edit
+                          </Button>
+                        </Grid>
+                        <Grid item>
+                          <Button size="small" variant="outlined" onClick={() => handleMessageDeletion(msg)}>
+                            Delete
+                          </Button>
+                        </Grid>
+                      </>
+                    )
+                  }
+
                 </Grid>
               </Grid>
             </Grid>
