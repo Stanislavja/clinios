@@ -1,10 +1,9 @@
 import React from "react";
 
-import { green, grey } from "@material-ui/core/colors";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Switch from "@material-ui/core/Switch";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
@@ -42,20 +41,6 @@ const useStyles = makeStyles((theme) => ({
     width: "80px",
   },
 }));
-
-const GreenSwitch = withStyles({
-  switchBase: {
-    color: grey[300],
-    "&$checked": {
-      color: green[500],
-    },
-    "&$checked + $track": {
-      backgroundColor: green[500],
-    },
-  },
-  checked: {},
-  track: {},
-})(Switch);
 
 export default function AppointmentTypesUser() {
   const classes = useStyles();
@@ -102,7 +87,7 @@ export default function AppointmentTypesUser() {
                   label="Fee"
                   value="100"
                 />
-                <GreenSwitch
+                <Switch
                   checked
                   onChange={() => {}}
                   name="active"
@@ -120,7 +105,7 @@ export default function AppointmentTypesUser() {
                   label="Fee"
                   value="100"
                 />
-                <GreenSwitch
+                <Switch
                   checked={false}
                   onChange={() => {}}
                   name="active"
@@ -138,7 +123,7 @@ export default function AppointmentTypesUser() {
                   label="Fee"
                   value="100"
                 />
-                <GreenSwitch
+                <Switch
                   checked
                   onChange={() => {}}
                   name="active"
