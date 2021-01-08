@@ -13,9 +13,11 @@ import RestoreIcon from "@material-ui/icons/RestorePage";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
+import { useHistory } from "react-router-dom";
 
 import Tooltip from "../../../../components/common/CustomTooltip";
 import usePatientContext from "../../../../hooks/usePatientContext";
+// import useAuth from "../../../../hooks/useAuth";
 import PatientService from "../../../../services/patient.service";
 import Lab from "./Dialog/Lab";
 
@@ -74,6 +76,7 @@ const StyledTableCell = withStyles((theme) => ({
 
 const StyledTableRow = withStyles((theme) => ({
   root: {
+    cursor: "pointer",
     fontSize: 14,
     "&:nth-of-type(odd)": {
       backgroundColor: theme.palette.action.hover,
@@ -102,6 +105,8 @@ const DocumentsContent = (props) => {
   const [isLabModalOpen, setIsLabModalOpen] = useState(false);
   const { data } = state.documents;
   const { patientId } = state;
+  const history = useHistory();
+  // const { user } = useAuth();
 
   const fetchDocuments = useCallback((selectedTab) => {
     if (selectedTab === 0) { // (All)
@@ -151,7 +156,12 @@ const DocumentsContent = (props) => {
 
   const handleDocumentClick = (doc) => {
     setDocumentName(doc.filename);
-    setIsLabModalOpen(true);
+    // setIsLabModalOpen(true);
+    history.push(`/lab/${patientId}`, { // user.id as per documentation
+      fromHome: false,
+      documentName: doc.filename,
+      documentId: doc.id,
+    });
   };
 
   const handleChange = (newValue) => {

@@ -4,6 +4,7 @@ import {
   RESET_SELECTED_ENCOUNTER,
   SET_EDITOR_TEXT,
   RESET_EDITOR_TEXT,
+  SAVE_LAYOUT,
 
   // Setters
   SET_PATIENT_ID,
@@ -85,6 +86,11 @@ const reducer = (state = initialState, action) => {
         editorText: "",
       };
     // editor case ends here...
+    case SAVE_LAYOUT:
+      return {
+        ...state,
+        layout: action.payload,
+      };
 
     // data setter starts here...
     case SET_PATIENT_ID:

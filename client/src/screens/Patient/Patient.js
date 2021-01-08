@@ -21,6 +21,7 @@ import Dialog from "../../components/Dialog";
 import useAuth from "../../hooks/useAuth";
 import PatientReducer from "../../providers/Patient";
 import {
+  saveLayout,
   resetEditorText,
   setPatientId,
   setPatientData,
@@ -192,6 +193,7 @@ const Patient = () => {
           layout: JSON.stringify(layoutResponse),
         };
         setLayoutToSave(tempLayout);
+        dispatch(saveLayout(tempLayout));
       }
     });
   };
@@ -263,6 +265,14 @@ const Patient = () => {
       documentslayout,
       testslayout,
     ]);
+    dispatch(saveLayout([
+      ...firstlayout,
+      encounterslayout,
+      ...thirdlayout,
+      ...fourthlayout,
+      documentslayout,
+      testslayout,
+    ]));
   };
 
   const updateCardsLayout = () => {

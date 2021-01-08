@@ -172,6 +172,34 @@ export const paymentMethodType = (type) => {
   }
 };
 
+export const labStatusType = (type) => {
+  switch (type) {
+    case "R":
+      return "Requested";
+    case "A":
+      return "Approved";
+    case "D":
+      return "Declined";
+    default:
+      return "";
+  }
+};
+
+export const labSourceType = (type) => {
+  switch (type) {
+    case "P":
+      return "Patient";
+    case "U":
+      return "User";
+    case "L":
+      return "Lab Company";
+    case "F":
+      return "Fax";
+    default:
+      return "";
+  }
+};
+
 export const isDev = () => process.env.NODE_ENV === "development";
 
 export function isArrayWithLength(arr) {
@@ -184,4 +212,13 @@ export function getAllowedRoutes(routes, roles) {
     if (!isArrayWithLength(permission)) return true;
     return intersection(permission, roles).length;
   });
+}
+
+export function checkFileExtension(fileName) {
+  const extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+  return extension;
+}
+
+export function noOp() {
+
 }
