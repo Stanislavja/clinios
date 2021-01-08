@@ -267,11 +267,11 @@ export default function Home() {
         </Typography>
         <FormControl component="div" className={classes.formControl}>
           <p className={classes.formHelperText}>Show canceled/rejected</p>
-          <Switch 
-            size="small" 
-            name="active" 
-            color="primary" 
-            inputProps={{ "aria-label": "primary checkbox" }} 
+          <Switch
+            size="small"
+            name="active"
+            color="primary"
+            inputProps={{ "aria-label": "primary checkbox" }}
           />
         </FormControl>
       </div>
