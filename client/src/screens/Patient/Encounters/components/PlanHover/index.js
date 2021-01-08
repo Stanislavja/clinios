@@ -6,11 +6,16 @@ import PropTypes from "prop-types";
 
 import Dialog from "../../../../../components/Dialog";
 import NewRequisitions from "../../../Requisitions";
+import FaxLab from "../FaxLab";
+import FaxPrescription from "../FaxPrescription";
 import NewPrescription from "../NewPrescription";
 
 const useStyles = makeStyles(() => ({
   keyText: {
     fontSize: 14,
+  },
+  textButton: {
+    cursor: "pointer",
   },
 }));
 
@@ -19,6 +24,8 @@ const PlanHover = (props) => {
   const { closePopover } = props;
   const [showNewPrescriptionDialog, setShowNewPrescriptionDialog] = useState(false);
   const [showNewRequisitionDialog, setShowNewRequisitionDialog] = useState(false);
+  const [showFaxPrescriptionDialog, setShowFaxPrescriptionDialog] = useState(false);
+  const [showFaxLabRequisitionDialog, setShowFaxLabRequisitionDialog] = useState(false);
 
   const toggleNewPrescriptionDialog = () => {
     setShowNewPrescriptionDialog((prevState) => !prevState);
@@ -26,6 +33,14 @@ const PlanHover = (props) => {
 
   const toggleNewRequisitionDialog = () => {
     setShowNewRequisitionDialog((prevState) => !prevState);
+  };
+
+  const toggleFaxPrescriptionDialog = () => {
+    setShowFaxPrescriptionDialog((prevState) => !prevState);
+  };
+
+  const toggleFaxLabRequisitionDialog = () => {
+    setShowFaxLabRequisitionDialog((prevState) => !prevState);
   };
 
   useEffect(() => {
@@ -54,6 +69,16 @@ const PlanHover = (props) => {
     closePopover();
   };
 
+  const closeFaxPrescriptionDialogWithPopover = () => {
+    setShowFaxPrescriptionDialog(false);
+    closePopover();
+  };
+
+  const closeFaxLabRequisitionDialogWithPopover = () => {
+    setShowFaxLabRequisitionDialog(false);
+    closePopover();
+  };
+
   return (
     <>
       {!!showNewPrescriptionDialog && (
@@ -78,25 +103,67 @@ const PlanHover = (props) => {
           size="lg"
         />
       )}
-      <Typography variant="h5" gutterBottom>
+      {!!showFaxPrescriptionDialog && (
+        <Dialog
+          open={showFaxPrescriptionDialog}
+          title="Fax Prescription"
+          message={<FaxPrescription onClose={closeFaxPrescriptionDialogWithPopover} />}
+          applyForm={() => toggleFaxPrescriptionDialog()}
+          cancelForm={() => closeFaxPrescriptionDialogWithPopover()}
+          hideActions
+          size="lg"
+        />
+      )}
+      {!!showFaxLabRequisitionDialog && (
+        <Dialog
+          open={showFaxLabRequisitionDialog}
+          title="Fax Lab Requisition"
+          message={<FaxLab onClose={closeFaxLabRequisitionDialogWithPopover} />}
+          applyForm={() => toggleFaxLabRequisitionDialog()}
+          cancelForm={() => closeFaxLabRequisitionDialogWithPopover()}
+          hideActions
+          size="lg"
+        />
+      )}
+      <Typography
+        variant="h5"
+        gutterBottom
+        className={classes.textButton}
+        onClick={() => toggleNewPrescriptionDialog()}
+      >
         New Prescription&nbsp;
         <span className={classes.keyText}>
           (P on keyboard)
         </span>
       </Typography>
 
-      <Typography variant="h5" gutterBottom>
+      <Typography
+        variant="h5"
+        gutterBottom
+        className={classes.textButton}
+        onClick={() => toggleNewRequisitionDialog()}
+      >
         New Lab Requisitions&nbsp;
         <span className={classes.keyText}>
           (L on keyboard)
         </span>
       </Typography>
 
-      <Typography variant="h5" gutterBottom>
+      <Typography
+        variant="h5"
+        gutterBottom
+        className={classes.textButton}
+        onClick={() => toggleFaxPrescriptionDialog()}
+      >
         Fax Prescription
       </Typography>
 
-      <Typography variant="h5" gutterBottom>
+      <Typography
+        variant="h5"
+        gutterBottom
+        className={classes.textButton}
+        onClick={() => toggleFaxLabRequisitionDialog()}
+      >
         Fax Lab Requisitions
       </Typography>
     </>
