@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 12,
   },
   block: {
-    width: 90,
+    width: 80,
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",
