@@ -13,7 +13,6 @@ import {
   withStyles,
   FormControlLabel,
 } from "@material-ui/core";
-import { green, grey } from "@material-ui/core/colors";
 import Alert from "@material-ui/lab/Alert";
 import moment from "moment";
 import { useSnackbar } from "notistack";
@@ -66,19 +65,6 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-const GreenSwitch = withStyles({
-  switchBase: {
-    color: grey[300],
-    "&$checked": {
-      color: green[500],
-    },
-    "&$checked + $track": {
-      backgroundColor: green[500],
-    },
-  },
-  checked: {},
-  track: {},
-})(Switch);
 
 const Drugstable = ({ result, fetchSearchDrugs }) => {
   const classes = useStyles();
@@ -166,10 +152,11 @@ const Drugstable = ({ result, fetchSearchDrugs }) => {
                 <TableCell padding="checkbox">
                   <FormControlLabel
                     control={(
-                      <GreenSwitch
+                      <Switch
                         size="small"
                         checked={Boolean(drug.favorite)}
                         name="switchBox"
+                        color="primary"
                         onChange={(e) => {
                           changeHandler(e, drug.id);
                           setTimeout(() => {
