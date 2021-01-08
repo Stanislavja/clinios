@@ -20,34 +20,41 @@ import {
 } from "../../../providers/Patient/actions";
 import PatientService from "../../../services/patient.service";
 import { EncountersFormFields } from "../../../static/encountersForm";
+import {
+  FirstColumnPatientCards,
+  ThirdColumnPatientCards,
+  FourthColumnPatientCards,
+} from "../../../static/patient";
 import { encounterTypeToLetterConversion, encounterLetterToTypeConversion } from "../../../utils/helpers";
-import CardsList from "./CardsAccordion";
-import ClockTimer from "./ClockTimer";
+import { AdminNotesCardContent } from "../components/AdminNotes";
+import { AllergiesCardContent } from "../components/Allergies";
+import { PatientCardContent } from "../components/BasicInfo";
+import { BillingCardContent } from "../components/Billing";
+import { DiagnosesCardContent } from "../components/Diagnoses";
+import DiagnosesSelectList from "../components/Diagnoses/DiagnosesSelectList";
+import { DocumentsCardContent } from "../components/Documents";
+import { HandoutsCardContent } from "../components/Handouts";
+import FormCardContent from "../Form/content";
+import MedicalNotesCardContent from "../MedicalNotes/content";
+import MedicationsCardContent from "../Medications/content";
+import MessagesCardContent from "../Messages/content";
+import RequisitionsCardContent from "../Requisitions/content";
+import TestsCardContent from "../Tests/content";
+import Card from "./components/Card";
+import ClockTimer from "./components/ClockTimer";
 
 const useStyles = makeStyles((theme) => ({
   btnsContainer: {
     margin: theme.spacing(1, 0, 2, 0),
   },
   formInput: {
-    margin: theme.spacing(2, 0),
+    margin: theme.spacing(2, 0, 1, 0),
   },
   card: {
     border: "1px solid rgba(0, 0, 0, .125)",
     borderRadius: 4,
     padding: theme.spacing(1),
     marginTop: theme.spacing(2),
-  },
-  cardsContainer: {
-    padding: theme.spacing(0, 2),
-
-    [theme.breakpoints.down("sm")]: {
-      padding: 0,
-      width: "100%",
-    },
-  },
-  cardOuter: {
-    maxHeight: 250,
-    overflowY: "scroll",
   },
 }));
 
@@ -152,160 +159,267 @@ const Encounters = (props) => {
     }
   };
 
+  const renderCardData = (value) => {
+    switch (value) {
+      case "Patient":
+        return <PatientCardContent />;
+      case "Admin Notes":
+        return <AdminNotesCardContent />;
+      case "Forms":
+        return <FormCardContent />;
+      case "Billing":
+        return <BillingCardContent />;
+      case "Allergies":
+        return <AllergiesCardContent />;
+      case "Medical Notes":
+        return <MedicalNotesCardContent />;
+      case "Handouts":
+        return <HandoutsCardContent />;
+      case "Messages":
+        return <MessagesCardContent />;
+      case "Medications":
+        return <MedicationsCardContent />;
+      case "Diagnoses":
+        return <DiagnosesCardContent />;
+      case "Requisitions":
+        return <RequisitionsCardContent />;
+      default:
+        return <div />;
+    }
+  };
+
   return (
     <>
-      <Typography variant="h3" color="textSecondary">
-        Encounters Form
-      </Typography>
-
-      <Grid container>
-        <Grid item lg={9} md={8} sm={12}>
-          <form id="encounters-form" onSubmit={onFormSubmit}>
-            <Grid container spacing={4}>
-              {EncountersFormFields.map((item) => (
-                <Grid key={item.label} item md={3} xs={12}>
-                  <Grid
-                    key={item.label}
-                    container
-                    alignItems="center"
-                    className={classes.formInput}
-                  >
-                    <Grid item lg={2} xs={3}>
-                      <label htmlFor={item.name} variant="h4" color="textSecondary">
-                        {item.label}
-                      </label>
-                    </Grid>
-                    <Grid item lg={10} xs={9}>
-                      {item.baseType === "input" ? (
-                        <TextField
-                          variant="standard"
-                          name={item.name}
-                          id={item.id}
-                          type={item.type}
-                          value={formFields[item.name]}
-                          fullWidth
-                          onChange={(e) => handleInputChnage(e)}
-                          required
-                        />
-                      ) : (
-                        <TextField
-                          select
-                          placeholder={item.label}
-                          id={item.id}
-                          name={item.name}
-                          value={formFields[item.name]}
-                          fullWidth
-                          onChange={(e) => handleInputChnage(e)}
-                          required
-                        >
-                          {item.options.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      )}
-                    </Grid>
-                  </Grid>
-                </Grid>
-              ))}
-              <Grid item md={3} xs={12}>
-                <Grid
-                  container
-                  alignItems="center"
-                  className={classes.formInput}
-                >
-                  <Grid item lg={2} xs={3}>
-                    Timer
-                  </Grid>
-                  <Grid item lg={10} xs={9}>
-                    <ClockTimer />
-                  </Grid>
-                </Grid>
-              </Grid>
+      <Grid container spacing={1}>
+        <Grid
+          item
+          lg={2}
+        >
+          {FirstColumnPatientCards.map((item) => (
+            <Grid key={item.title}>
+              <Card
+                title={item.title}
+                data={renderCardData(item.title)}
+              />
             </Grid>
-
-            <Grid className={classes.formInput}>
-              <Grid item lg={6}>
-                <Typography gutterBottom variant="h5" color="textPrimary">
-                  Internal Notes (Not Visible to Patients)
-                </Typography>
-              </Grid>
-              <Grid item md={12}>
-                <TextField
-                  variant="outlined"
-                  name="notes"
-                  id="notes"
-                  type="text"
-                  fullWidth
-                  value={formFields.notes}
-                  onChange={(e) => handleInputChnage(e)}
-                  multiline
-                  rows={15}
-                  required
-                />
-              </Grid>
-            </Grid>
-
-            <Grid className={classes.formInput}>
-              <Grid item lg={6}>
-                <Typography gutterBottom variant="h5" color="textPrimary">
-                  Treatment Plan (Not Visible to Patients)
-                </Typography>
-              </Grid>
-              <Grid item md={12}>
-                <TextField
-                  variant="outlined"
-                  name="treatment"
-                  id="treatment"
-                  type="text"
-                  fullWidth
-                  value={formFields.treatment}
-                  onChange={(e) => handleInputChnage(e)}
-                  multiline
-                  rows={15}
-                  required
-                />
-              </Grid>
-            </Grid>
-          </form>
+          ))}
         </Grid>
-        <Grid item lg={3} md={4} sm={12} className={classes.cardsContainer}>
-          <CardsList />
+        <Grid
+          item
+          lg={6}
+        >
+          <>
+            <Typography variant="h3" color="textSecondary">
+              Encounters Form
+            </Typography>
 
-          <Grid className={classes.card}>
-            <Grid className={classes.btnsContainer} container justify="space-between">
-              <Grid item xs={5}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  type="submit"
-                  form="encounters-form"
-                >
-                  Save
-                </Button>
+            <Grid container spacing={1}>
+              <Grid item lg={9} md={8} sm={12}>
+                <form id="encounters-form" onSubmit={onFormSubmit}>
+                  <Grid container spacing={2}>
+                    {EncountersFormFields.map((item) => (
+                      <Grid key={item.label} item md={6} xs={12}>
+                        <Grid
+                          key={item.label}
+                          container
+                          alignItems="center"
+                          className={classes.formInput}
+                        >
+                          <Grid item lg={3} xs={4}>
+                            <label htmlFor={item.name} variant="h4" color="textSecondary">
+                              {item.label}
+                            </label>
+                          </Grid>
+                          <Grid item lg={9} xs={8}>
+                            {item.baseType === "input" ? (
+                              <TextField
+                                variant="standard"
+                                name={item.name}
+                                id={item.id}
+                                type={item.type}
+                                value={formFields[item.name]}
+                                fullWidth
+                                onChange={(e) => handleInputChnage(e)}
+                                required
+                              />
+                            ) : (
+                              <TextField
+                                select
+                                placeholder={item.label}
+                                id={item.id}
+                                name={item.name}
+                                value={formFields[item.name]}
+                                fullWidth
+                                onChange={(e) => handleInputChnage(e)}
+                                required
+                              >
+                                {item.options.map((option) => (
+                                  <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                  </MenuItem>
+                                ))}
+                              </TextField>
+                            )}
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    ))}
+                    <Grid item md={6} xs={12}>
+                      <Grid
+                        container
+                        alignItems="center"
+                        className={classes.formInput}
+                      >
+                        <Grid item lg={3} xs={4}>
+                          Timer
+                        </Grid>
+                        <Grid item lg={9} xs={8}>
+                          <ClockTimer />
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+
+                  <Grid className={classes.formInput}>
+                    <Grid item lg={6}>
+                      <Typography gutterBottom variant="h5" color="textPrimary">
+                        Internal Notes (Not Visible to Patients)
+                      </Typography>
+                    </Grid>
+                    <Grid item md={12}>
+                      <TextField
+                        variant="outlined"
+                        name="notes"
+                        id="notes"
+                        type="text"
+                        fullWidth
+                        value={formFields.notes}
+                        onChange={(e) => handleInputChnage(e)}
+                        multiline
+                        rows={15}
+                        required
+                      />
+                    </Grid>
+                  </Grid>
+
+                  <Grid className={classes.formInput}>
+                    <Grid item lg={6}>
+                      <Typography gutterBottom variant="h5" color="textPrimary">
+                        Treatment Plan (Not Visible to Patients)
+                      </Typography>
+                    </Grid>
+                    <Grid item md={12}>
+                      <TextField
+                        variant="outlined"
+                        name="treatment"
+                        id="treatment"
+                        type="text"
+                        fullWidth
+                        value={formFields.treatment}
+                        onChange={(e) => handleInputChnage(e)}
+                        multiline
+                        rows={15}
+                        required
+                      />
+                    </Grid>
+                  </Grid>
+                </form>
               </Grid>
-              <Grid item xs={5}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  onClick={() => dispatch(toggleEncountersDialog())}
-                >
-                  Exit
-                </Button>
+              <Grid item lg={3} md={4} sm={12}>
+                {/* <CardsList /> */}
+                <Card
+                  title="Diagnose"
+                  data={<DiagnosesSelectList />}
+                  icon
+                />
+                <Card
+                  title="Plan"
+                  data=""
+                  icon
+                />
+                <Card
+                  title="Billing"
+                  data=""
+                  icon
+                />
+
+                <Grid className={classes.card}>
+                  <Grid className={classes.btnsContainer} container justify="space-between">
+                    <Grid item xs={5}>
+                      <Button
+                        fullWidth
+                        variant="outlined"
+                        type="submit"
+                        form="encounters-form"
+                      >
+                        Save
+                      </Button>
+                    </Grid>
+                    <Grid item xs={5}>
+                      <Button
+                        fullWidth
+                        variant="outlined"
+                        onClick={() => dispatch(toggleEncountersDialog())}
+                      >
+                        Exit
+                      </Button>
+                    </Grid>
+                  </Grid>
+                  <Typography gutterBottom>
+                    Created
+                    {" "}
+                    {moment().format("MMM D YYYY hh:mm A")}
+                  </Typography>
+                  <Typography gutterBottom>
+                    Created By
+                    {" "}
+                    {!!user && `${user.firstname} ${user.lastname}`}
+                  </Typography>
+                </Grid>
               </Grid>
             </Grid>
-            <Typography gutterBottom>
-              Created
-              {" "}
-              {moment().format("MMM D YYYY hh:mm A")}
-            </Typography>
-            <Typography gutterBottom>
-              Created By
-              {" "}
-              {!!user && `${user.firstname} ${user.lastname}`}
-            </Typography>
-          </Grid>
+          </>
+        </Grid>
+
+        <Grid
+          item
+          lg={2}
+        >
+          {ThirdColumnPatientCards.map((item) => (
+            <Grid key={item.title}>
+              <Card
+                title={item.title}
+                data={renderCardData(item.title)}
+              />
+            </Grid>
+          ))}
+        </Grid>
+        <Grid
+          item
+          lg={2}
+        >
+          {FourthColumnPatientCards.map((item) => (
+            <Grid key={item.title}>
+              <Card
+                title={item.title}
+                data={renderCardData(item.title)}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Grid>
+      <Grid container spacing={1}>
+        <Grid item md={6} sm={12}>
+          <Card
+            title="Documents"
+            data={<DocumentsCardContent reloadData={() => { }} />}
+          />
+        </Grid>
+        <Grid item md={6} sm={12}>
+          <Card
+            title="Tests"
+            data={<TestsCardContent />}
+          />
         </Grid>
       </Grid>
     </>
