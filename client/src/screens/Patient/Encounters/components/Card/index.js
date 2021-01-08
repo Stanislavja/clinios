@@ -13,6 +13,7 @@ import PropTypes from "prop-types";
 import Colors from "../../../../../theme/colors";
 import { noOp } from "../../../../../utils/helpers";
 import BillingHover from "../BillingHover";
+import DiagnoseHover from "../DiagnoseHover";
 import PlanHover from "../PlanHover";
 
 const useStyles = makeStyles((theme) => ({
@@ -43,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
   },
   popover: {
-    pointerEvents: "none",
   },
   paper: {
     padding: theme.spacing(1, 2),
@@ -56,7 +56,6 @@ const PatientCard = (props) => {
     data,
     title,
     icon,
-    onIconClick,
   } = props;
   const [anchorEl, setAnchorEl] = useState(null);
   const [hoveredCard, setHoveredCard] = useState(null);
@@ -75,8 +74,10 @@ const PatientCard = (props) => {
 
   const renderPopOverContent = () => {
     switch (hoveredCard) {
+      case "Diagnose":
+        return <DiagnoseHover />;
       case "Plan":
-        return <PlanHover />;
+        return <PlanHover closePopover={handlePopoverClose} />;
       case "Billing":
         return <BillingHover />;
       default:
@@ -117,7 +118,7 @@ const PatientCard = (props) => {
           alignItems="center"
           className={classes.titleContainer}
           onMouseEnter={(e) => (icon ? handlePopoverOpen(e, title) : noOp)}
-          onMouseLeave={icon ? handlePopoverClose : noOp}
+        // onMouseLeave={() => icon ? handlePopoverClose() : noOp}
         >
           <Typography className={classes.title}>
             {title}
@@ -127,7 +128,6 @@ const PatientCard = (props) => {
             <AddIcon
               className={classes.icon}
               fontSize="small"
-              onClick={onIconClick}
             />
           )}
         </Grid>
@@ -140,14 +140,12 @@ const PatientCard = (props) => {
 PatientCard.defaultProps = {
   title: "Title",
   icon: false,
-  onIconClick: () => { },
 };
 
 PatientCard.propTypes = {
   title: PropTypes.string,
   data: PropTypes.node.isRequired,
   icon: PropTypes.bool,
-  onIconClick: PropTypes.func,
 };
 
 export default PatientCard;
