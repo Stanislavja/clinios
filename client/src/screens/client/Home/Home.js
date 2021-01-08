@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { makeStyles, withStyles } from "@material-ui/core";
-import { green, grey } from "@material-ui/core/colors";
+import { makeStyles } from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
 import Grid from "@material-ui/core/Grid";
 import Switch from "@material-ui/core/Switch";
@@ -38,22 +37,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "15px",
   },
 }));
-
-const GreenSwitch = withStyles({
-  switchBase: {
-    color: grey[400],
-    "&$checked": {
-      color: green[500],
-    },
-    "&$checked + $track": {
-      backgroundColor: green[500],
-    },
-  },
-  checked: {},
-  track: {
-    backgroundColor: grey[500],
-  },
-})(Switch);
 
 export default function Home() {
   const classes = useStyles();
@@ -284,7 +267,12 @@ export default function Home() {
         </Typography>
         <FormControl component="div" className={classes.formControl}>
           <p className={classes.formHelperText}>Show canceled/rejected</p>
-          <GreenSwitch size="small" name="active" inputProps={{ "aria-label": "primary checkbox" }} />
+          <Switch 
+            size="small" 
+            name="active" 
+            color="primary" 
+            inputProps={{ "aria-label": "primary checkbox" }} 
+          />
         </FormControl>
       </div>
       <Grid container spacing={8}>
