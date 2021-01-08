@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import { useHistory } from "react-router-dom";
 import { Typography, Grid } from "@material-ui/core";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -14,10 +13,11 @@ import RestoreIcon from "@material-ui/icons/RestorePage";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
+import { useHistory } from "react-router-dom";
 
 import Tooltip from "../../../../components/common/CustomTooltip";
 import usePatientContext from "../../../../hooks/usePatientContext";
-import useAuth from "../../../../hooks/useAuth";
+// import useAuth from "../../../../hooks/useAuth";
 import PatientService from "../../../../services/patient.service";
 import Lab from "./Dialog/Lab";
 
@@ -106,7 +106,7 @@ const DocumentsContent = (props) => {
   const { data } = state.documents;
   const { patientId } = state;
   const history = useHistory();
-  const { user } = useAuth();
+  // const { user } = useAuth();
 
   const fetchDocuments = useCallback((selectedTab) => {
     if (selectedTab === 0) { // (All)
@@ -155,13 +155,13 @@ const DocumentsContent = (props) => {
   };
 
   const handleDocumentClick = (doc) => {
-    // setDocumentName(doc.filename);
+    setDocumentName(doc.filename);
     // setIsLabModalOpen(true);
-    history.push(`/lab/${patientId}`, { //user.id as per documentation
+    history.push(`/lab/${patientId}`, { // user.id as per documentation
       fromHome: false,
       documentName: doc.filename,
-      documentId: doc.id
-    })
+      documentId: doc.id,
+    });
   };
 
   const handleChange = (newValue) => {
@@ -276,14 +276,14 @@ const DocumentsContent = (props) => {
                 </StyledTableRow>
               ))
             ) : (
-                <StyledTableRow>
-                  <TableCell colSpan={10}>
-                    <Typography className={classes.resMessage} align="center">
-                      No Documents Found...
+              <StyledTableRow>
+                <TableCell colSpan={10}>
+                  <Typography className={classes.resMessage} align="center">
+                    No Documents Found...
                   </Typography>
-                  </TableCell>
-                </StyledTableRow>
-              )}
+                </TableCell>
+              </StyledTableRow>
+            )}
           </TableBody>
         </Table>
       </TableContainer>
