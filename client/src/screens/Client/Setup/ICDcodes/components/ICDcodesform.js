@@ -6,28 +6,8 @@ import {
   FormControlLabel,
   makeStyles,
   TextField,
-  withStyles,
 } from "@material-ui/core";
-import { green, grey } from "@material-ui/core/colors";
 import PropTypes from "prop-types";
-
-const GreenSwitch = withStyles({
-  switchBase: {
-    color: grey[400],
-    "&$checked": {
-      color: green[500],
-    },
-    "&$checked + $track": {
-      backgroundColor: green[500],
-      // color: grey[500]
-      "&$checked": {
-        color: grey[500],
-      },
-    },
-  },
-  checked: {},
-  track: {},
-})(Switch);
 
 
 const useStyles = makeStyles((theme) => ({
@@ -81,7 +61,7 @@ const ICDcodesform = ({
       />
       <FormControlLabel
         control={(
-          <GreenSwitch
+          <Switch
             onChange={checkBoxChangeHandler}
             color="primary"
             onKeyUp={(event) => handleKeyUp(event)}
