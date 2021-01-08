@@ -2,10 +2,12 @@ import React, { useState } from "react";
 
 import { makeStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-// import Video from "./../../../../components/videos/Video";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
+import { useSnackbar } from "notistack";
+
+import deletePatientService from "../../../../services/manage/deletePatient.service";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,7 +29,18 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DeletePatient() {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const [patientId, setPatientId] = useState("");
+
+  const onFormSubmit = () => {
+    deletePatientService.deletePatient(patientId).then((response) => {
+      enqueueSnackbar(`${response.data.message}`, {
+        variant: "success",
+      });
+      setPatientId("");
+    });
+  };
+
   return (
     <div className={classes.root}>
       <Grid container spacing={10} direction="column">
@@ -63,7 +76,7 @@ export default function DeletePatient() {
               color="primary"
               className={classes.delete}
               size="small"
-              // onClick={(event) => onFormSubmit(event, login)}
+              onClick={() => onFormSubmit()}
             >
               Delete
             </Button>

@@ -7,9 +7,7 @@ import {
   FormControlLabel,
   makeStyles,
   Switch,
-  withStyles,
 } from "@material-ui/core";
-import { green, grey } from "@material-ui/core/colors";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import _ from "lodash";
@@ -37,19 +35,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const GreenSwitch = withStyles({
-  switchBase: {
-    color: grey[300],
-    "&$checked": {
-      color: green[500],
-    },
-    "&$checked + $track": {
-      backgroundColor: green[500],
-    },
-  },
-  checked: {},
-  track: {},
-})(Switch);
 
 const Users = () => {
   const classes = useStyles();
@@ -115,10 +100,11 @@ const Users = () => {
           </Typography>
           <FormControlLabel
             control={(
-              <GreenSwitch
+              <Switch
                 checked={isShowDeleted}
                 size="small"
                 name="active"
+                color="primary"
                 onChange={() => setIsShowDeleted(!isShowDeleted)}
               />
             )}

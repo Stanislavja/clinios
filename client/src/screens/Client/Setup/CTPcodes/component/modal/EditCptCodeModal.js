@@ -4,14 +4,13 @@ import {
   colors, FormControlLabel, FormGroup, Grid,
 } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import { green, grey } from "@material-ui/core/colors";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControl from "@material-ui/core/FormControl";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Switch from "@material-ui/core/Switch";
 import TextField from "@material-ui/core/TextField";
 import PropTypes from "prop-types";
@@ -66,19 +65,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const GreenSwitch = withStyles({
-  switchBase: {
-    color: grey[300],
-    "&$checked": {
-      color: green[500],
-    },
-    "&$checked + $track": {
-      backgroundColor: green[500],
-    },
-  },
-  checked: {},
-  track: {},
-})(Switch);
 
 function NumberFormatCustom(props) {
   const { inputRef, onChange, ...other } = props;
@@ -205,8 +191,9 @@ const EditCptCodeModal = ({
             <FormGroup>
               <FormControlLabel
                 control={(
-                  <GreenSwitch
+                  <Switch
                     checked={Boolean(cpt_favorite)}
+                    color="primary"
                     size="small"
                     name="switchBox"
                     onChange={handleChangeFavorite}
@@ -218,9 +205,10 @@ const EditCptCodeModal = ({
               />
               <FormControlLabel
                 control={(
-                  <GreenSwitch
+                  <Switch
                     checked={Boolean(cpt_billable)}
                     size="small"
+                    color="primary"
                     name="switchBox"
                     onChange={handleChangeBillable}
                     onKeyUp={handleKeyUp}
