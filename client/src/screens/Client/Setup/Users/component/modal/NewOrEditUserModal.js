@@ -13,9 +13,7 @@ import {
   makeStyles,
   Switch,
   TextField,
-  withStyles,
 } from "@material-ui/core";
-import { green, grey } from "@material-ui/core/colors";
 import Alert from "@material-ui/lab/Alert";
 import moment from "moment";
 import { useSnackbar } from "notistack";
@@ -72,19 +70,6 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(3),
   },
 }));
-const GreenSwitch = withStyles({
-  switchBase: {
-    color: grey[300],
-    "&$checked": {
-      color: green[500],
-    },
-    "&$checked + $track": {
-      backgroundColor: green[500],
-    },
-  },
-  checked: {},
-  track: {},
-})(Switch);
 
 const errorsInitialState = {
   one: "",
@@ -591,10 +576,11 @@ const NewOrEditUserModal = ({
                 <FormControlLabel
                   className={classes.formLabel}
                   control={(
-                    <GreenSwitch
+                    <Switch
                       checked={Boolean(user.appointments)}
                       size="small"
                       name="appointments"
+                      color="primary"
                       onChange={handleOnChange}
                     />
                   )}
@@ -603,10 +589,11 @@ const NewOrEditUserModal = ({
                 <FormControlLabel
                   className={classes.formLabel}
                   control={(
-                    <GreenSwitch
+                    <Switch
                       checked={Boolean(user.admin)}
                       size="small"
                       name="admin"
+                      color="primary"
                       onChange={handleOnChange}
                     />
                   )}

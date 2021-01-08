@@ -14,9 +14,7 @@ import {
   makeStyles,
   Switch,
   TextField,
-  withStyles,
 } from "@material-ui/core";
-import { green, grey } from "@material-ui/core/colors";
 import Alert from "@material-ui/lab/Alert";
 import { KeyboardDatePicker, KeyboardTimePicker } from "@material-ui/pickers";
 import moment from "moment";
@@ -78,20 +76,6 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(3),
   },
 }));
-const GreenSwitch = withStyles({
-  switchBase: {
-    color: grey[300],
-    "&$checked": {
-      color: green[500],
-    },
-    "&$checked + $track": {
-      backgroundColor: green[500],
-    },
-  },
-
-  checked: {},
-  track: {},
-})(Switch);
 
 const NewOrEditSchedule = ({
   isNewSchedule,
@@ -376,10 +360,11 @@ const NewOrEditSchedule = ({
             </FormControl>
             <FormControlLabel
               control={(
-                <GreenSwitch
+                <Switch
                   checked={Boolean(schedule.active)}
                   size="small"
                   name="active"
+                  color="primary"
                   onChange={(e) => setSchedule({
                     ...schedule,
                     active: e.target.checked,
