@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import { colors, withStyles } from "@material-ui/core";
+import { colors } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import { green } from "@material-ui/core/colors";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -21,19 +20,7 @@ import useAuth from "../../../../../../hooks/useAuth";
 import AppointmentService from "../../../../../../services/appointmentType.service";
 import { removeEmpty } from "../../../../../../utils/helpers";
 
-const GreenSwitch = withStyles({
-  switchBase: {
-    color: green[400],
-    "&$checked": {
-      color: green[500],
-    },
-    "&$checked + $track": {
-      backgroundColor: green[500],
-    },
-  },
-  checked: {},
-  track: {},
-})(Switch);
+
 const useStyles = makeStyles((theme) => ({
   title: {
     backgroundColor: theme.palette.primary.light,
@@ -278,7 +265,7 @@ const NewOrEditAppointment = ({
               </p>
             </FormControl>
             <FormControl component="div" className={classes.formControl}>
-              <GreenSwitch
+              <Switch
                 size="small"
                 checked={appointment.allow_patients_schedule}
                 onChange={(event) => setAppointment({
@@ -286,6 +273,7 @@ const NewOrEditAppointment = ({
                   [event.target.name]: !appointment.allow_patients_schedule,
                 })}
                 name="allow_patients_schedule"
+                color="primary"
                 inputProps={{ "aria-label": "primary checkbox" }}
               />
               <p className={classes.formHelperText}>
@@ -312,7 +300,7 @@ const NewOrEditAppointment = ({
             </FormControl>
 
             <FormControl component="div" className={classes.formControl}>
-              <GreenSwitch
+              <Switch
                 size="small"
                 checked={appointment.active}
                 onChange={(event) => setAppointment({
@@ -320,6 +308,7 @@ const NewOrEditAppointment = ({
                   [event.target.name]: !appointment.active,
                 })}
                 name="active"
+                color="primary"
                 inputProps={{ "aria-label": "primary checkbox" }}
               />
               <p className={classes.formHelperText}>
