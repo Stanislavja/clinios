@@ -8,6 +8,7 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { KeyboardDatePicker } from "@material-ui/pickers";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
@@ -48,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1, 0, 2, 0),
   },
   formInput: {
-    margin: theme.spacing(2, 0, 1, 0),
+    margin: theme.spacing(1, 0),
   },
   card: {
     border: "1px solid rgba(0, 0, 0, .125)",
@@ -56,10 +57,16 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     marginTop: theme.spacing(2),
   },
+  dateInput: {
+    "& button": {
+      padding: 4,
+    },
+  },
 }));
 
 const Encounters = (props) => {
   const classes = useStyles();
+  const currentDate = new Date();
   const { enqueueSnackbar } = useSnackbar();
   const { state, dispatch } = usePatientContext();
   const { reloadData } = props;
@@ -67,7 +74,7 @@ const Encounters = (props) => {
     title: "",
     encounter_type: "",
     name: "",
-    date: "",
+    date: currentDate,
     notes: "",
     treatment: "",
   });
@@ -99,6 +106,14 @@ const Encounters = (props) => {
     setFormFields({
       ...formFields,
       [name]: value,
+    });
+  };
+
+  const handleDateChange = (date) => {
+    const name = "date";
+    setFormFields({
+      ...formFields,
+      [name]: date,
     });
   };
 
@@ -213,76 +228,87 @@ const Encounters = (props) => {
               Encounters Form
             </Typography>
 
-            <Grid container spacing={1}>
-              <Grid item lg={9} md={8} sm={12}>
-                <form id="encounters-form" onSubmit={onFormSubmit}>
-                  <Grid container spacing={2}>
-                    {EncountersFormFields.map((item) => (
-                      <Grid key={item.label} item md={6} xs={12}>
-                        <Grid
-                          key={item.label}
-                          container
-                          alignItems="center"
-                          className={classes.formInput}
-                        >
-                          <Grid item lg={3} xs={4}>
-                            <label htmlFor={item.name} variant="h4" color="textSecondary">
-                              {item.label}
-                            </label>
-                          </Grid>
-                          <Grid item lg={9} xs={8}>
-                            {item.baseType === "input" ? (
-                              <TextField
-                                variant="standard"
-                                name={item.name}
-                                id={item.id}
-                                type={item.type}
-                                value={formFields[item.name]}
-                                fullWidth
-                                onChange={(e) => handleInputChnage(e)}
-                                required
-                              />
-                            ) : (
-                              <TextField
-                                select
-                                placeholder={item.label}
-                                id={item.id}
-                                name={item.name}
-                                value={formFields[item.name]}
-                                fullWidth
-                                onChange={(e) => handleInputChnage(e)}
-                                required
-                              >
-                                {item.options.map((option) => (
-                                  <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                  </MenuItem>
-                                ))}
-                              </TextField>
-                            )}
-                          </Grid>
-                        </Grid>
+            <form id="encounters-form" onSubmit={onFormSubmit}>
+              <Grid container spacing={2} alignItems="center">
+                {EncountersFormFields.map((item) => (
+                  <Grid item lg={3}>
+                    <Grid container spacing={2} alignItems="center">
+                      <Grid item lg={3} xs={4}>
+                        <label htmlFor={item.name} variant="h4" color="textSecondary">
+                          {item.label}
+                        </label>
                       </Grid>
-                    ))}
-                    <Grid item md={6} xs={12}>
-                      <Grid
-                        container
-                        alignItems="center"
-                        className={classes.formInput}
-                      >
-                        <Grid item lg={3} xs={4}>
-                          Timer
-                        </Grid>
-                        <Grid item lg={9} xs={8}>
-                          <ClockTimer />
-                        </Grid>
+                      <Grid item lg={9} xs={8}>
+                        {item.baseType === "input" ? (
+                          <TextField
+                            variant="standard"
+                            name={item.name}
+                            id={item.id}
+                            type={item.type}
+                            value={formFields[item.name]}
+                            fullWidth
+                            onChange={(e) => handleInputChnage(e)}
+                            required
+                          />
+                        ) : (
+                          <TextField
+                            select
+                            placeholder={item.label}
+                            id={item.id}
+                            name={item.name}
+                            value={formFields[item.name]}
+                            fullWidth
+                            onChange={(e) => handleInputChnage(e)}
+                            required
+                          >
+                            {item.options.map((option) => (
+                              <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                              </MenuItem>
+                            ))}
+                          </TextField>
+                        )}
                       </Grid>
                     </Grid>
                   </Grid>
+                ))}
 
+                <Grid item lg={2} className={classes.dateInput}>
+                  <KeyboardDatePicker
+                    key="date"
+                    margin="dense"
+                    inputVariant="standard"
+                    name="date"
+                    id="date"
+                    format="dd/MM/yyyy"
+                    value={formFields.date}
+                    onChange={handleDateChange}
+                    fullWidth
+                    required
+                  />
+                </Grid>
+
+                <Grid item md={4} xs={12}>
+                  <Grid
+                    container
+                    alignItems="center"
+                    className={classes.formInput}
+                  >
+                    <Grid item lg={2} xs={4}>
+                      Timer
+                    </Grid>
+                    <Grid item lg={10} xs={8}>
+                      <ClockTimer />
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={1}>
+                <Grid item lg={9} md={8} sm={12}>
                   <Grid className={classes.formInput}>
                     <Grid item lg={6}>
-                      <Typography gutterBottom variant="h5" color="textPrimary">
+                      <Typography gutterBottom variant="h6" color="textPrimary">
                         Internal Notes (Not Visible to Patients)
                       </Typography>
                     </Grid>
@@ -304,7 +330,7 @@ const Encounters = (props) => {
 
                   <Grid className={classes.formInput}>
                     <Grid item lg={6}>
-                      <Typography gutterBottom variant="h5" color="textPrimary">
+                      <Typography gutterBottom variant="h6" color="textPrimary">
                         Treatment Plan (Not Visible to Patients)
                       </Typography>
                     </Grid>
@@ -323,61 +349,61 @@ const Encounters = (props) => {
                       />
                     </Grid>
                   </Grid>
-                </form>
-              </Grid>
-              <Grid item lg={3} md={4} sm={12}>
-                {/* <CardsList /> */}
-                <Card
-                  title="Diagnose"
-                  data={<DiagnosesSelectList />}
-                  icon
-                />
-                <Card
-                  title="Plan"
-                  data=""
-                  icon
-                />
-                <Card
-                  title="Billing"
-                  data=""
-                  icon
-                />
+                </Grid>
+                <Grid item lg={3} md={4} sm={12}>
+                  {/* <CardsList /> */}
+                  <Card
+                    title="Diagnose"
+                    data={<DiagnosesSelectList />}
+                    icon
+                  />
+                  <Card
+                    title="Plan"
+                    data=""
+                    icon
+                  />
+                  <Card
+                    title="Billing"
+                    data=""
+                    icon
+                  />
 
-                <Grid className={classes.card}>
-                  <Grid className={classes.btnsContainer} container justify="space-between">
-                    <Grid item xs={5}>
-                      <Button
-                        fullWidth
-                        variant="outlined"
-                        type="submit"
-                        form="encounters-form"
-                      >
-                        Save
-                      </Button>
+                  <Grid className={classes.card}>
+                    <Grid className={classes.btnsContainer} container justify="space-between">
+                      <Grid item xs={5}>
+                        <Button
+                          fullWidth
+                          variant="outlined"
+                          type="submit"
+                          form="encounters-form"
+                        >
+                          Save
+                        </Button>
+                      </Grid>
+                      <Grid item xs={5}>
+                        <Button
+                          fullWidth
+                          variant="outlined"
+                          onClick={() => dispatch(toggleEncountersDialog())}
+                        >
+                          Exit
+                        </Button>
+                      </Grid>
                     </Grid>
-                    <Grid item xs={5}>
-                      <Button
-                        fullWidth
-                        variant="outlined"
-                        onClick={() => dispatch(toggleEncountersDialog())}
-                      >
-                        Exit
-                      </Button>
-                    </Grid>
+                    <Typography gutterBottom>
+                      Created
+                      {" "}
+                      {moment().format("MMM D YYYY hh:mm A")}
+                    </Typography>
+                    <Typography gutterBottom>
+                      Created By
+                      {" "}
+                      {!!user && `${user.firstname} ${user.lastname}`}
+                    </Typography>
                   </Grid>
-                  <Typography gutterBottom>
-                    Created
-                    {" "}
-                    {moment().format("MMM D YYYY hh:mm A")}
-                  </Typography>
-                  <Typography gutterBottom>
-                    Created By
-                    {" "}
-                    {!!user && `${user.firstname} ${user.lastname}`}
-                  </Typography>
                 </Grid>
               </Grid>
-            </Grid>
+            </form>
           </>
         </Grid>
 

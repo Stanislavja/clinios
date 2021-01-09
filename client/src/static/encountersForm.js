@@ -36,14 +36,6 @@ export const EncountersFormFields = [
       },
     ],
   },
-  {
-    name: "date",
-    id: "date",
-    label: "Date",
-    baseType: "input",
-    type: "date",
-    options: [],
-  },
 ];
 
 export const EncountersCards = [
