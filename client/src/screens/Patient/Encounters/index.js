@@ -8,6 +8,7 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { KeyboardDatePicker } from "@material-ui/pickers";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
@@ -105,6 +106,14 @@ const Encounters = (props) => {
     setFormFields({
       ...formFields,
       [name]: value,
+    });
+  };
+
+  const handleDateChange = (date) => {
+    const name = "startDate";
+    setFormFields({
+      ...formFields,
+      [name]: date,
     });
   };
 
@@ -263,6 +272,21 @@ const Encounters = (props) => {
                     </Grid>
                   </Grid>
                 ))}
+
+                <Grid item lg={2} className={classes.dateInput}>
+                  <KeyboardDatePicker
+                    key="date"
+                    margin="dense"
+                    inputVariant="standard"
+                    name="date"
+                    id="date"
+                    format="dd/MM/yyyy"
+                    value={formFields.date}
+                    onChange={handleDateChange}
+                    fullWidth
+                    required
+                  />
+                </Grid>
 
                 <Grid item md={4} xs={12}>
                   <Grid
