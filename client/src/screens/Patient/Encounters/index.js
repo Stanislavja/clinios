@@ -110,7 +110,7 @@ const Encounters = (props) => {
   };
 
   const handleDateChange = (date) => {
-    const name = "startDate";
+    const name = "date";
     setFormFields({
       ...formFields,
       [name]: date,
