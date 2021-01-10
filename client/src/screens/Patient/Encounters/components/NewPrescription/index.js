@@ -61,9 +61,9 @@ const NewPrescription = (props) => {
         New Drug
       </Typography>
       <Grid container>
-        <Grid item lg={4}>
+        <Grid item lg={4} md={4} xs={12}>
           <form>
-            <Grid item lg={10}>
+            <Grid item lg={10} md={10} xs={12}>
               {NewDrugFormFields.map((item) => (
                 <Box mb={1} key={item.id}>
                   {item.type === "date"
@@ -133,7 +133,7 @@ const NewPrescription = (props) => {
             </Grid>
           </form>
         </Grid>
-        <Grid item lg={8}>
+        <Grid item lg={8} md={8} xs={12}>
           <Typography variant="h5" gutterBottom>
             Recent selections, click to populate
           </Typography>
