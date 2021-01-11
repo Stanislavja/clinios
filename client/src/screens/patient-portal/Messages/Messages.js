@@ -205,7 +205,7 @@ export default function Messages() {
                   {msg.subject}
                   {" "}
                   <span style={{ fontWeight: "bold" }}>From: </span>
-                  {msg.user_to_from}
+                  {msg.user_to_from || msg.patient_to_from}
                   {" "}
                   <span style={{ fontWeight: "bold" }}>To: </span>
                   {msg.user_to_name ? msg.user_to_name : "You"}
@@ -239,7 +239,6 @@ export default function Messages() {
                       </>
                     )
                   }
-
                 </Grid>
               </Grid>
             </Grid>
