@@ -5,6 +5,7 @@ const homeController = require("../controllers/home.controller.js");
 const router = express.Router();
 
 router.get("/appointments", [authJwt.verifyToken], homeController.getAll);
+router.get("/appointments/patients/:patientId", [authJwt.verifyToken], homeController.getPatientsById);
 router.get(
   "/appointments/:providerId",
   [authJwt.verifyToken],
