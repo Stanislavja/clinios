@@ -223,9 +223,8 @@ const updatePatient = async (req, res) => {
     }
     $sql += `, updated='${moment().format(
       "YYYY-MM-DD HH:mm:ss"
-    )}', updated_user_id=${req.user_id} where user_id=${
-      req.user_id
-    } and id=${patient_id}`;
+    )}', updated_user_id=${req.user_id} where user_id=${req.user_id
+      } and id=${patient_id}`;
 
     const updateResponse = await db.query($sql);
     if (!updateResponse.affectedRows) {
@@ -1150,6 +1149,40 @@ const getEncounters = async (req, res) => {
   }
 };
 
+const getEncountersPrescriptions = async (req, res) => {
+  const db = makeDb(configuration, res);
+
+  try {
+    const dbResponse = await db.query(
+      `select d.name, concat(ds.strength, ds.unit) strength
+      , case when ds.form='T' then 'Tablets' end form
+      , pd.created
+      , case when df.drug_id then true end favorite
+      from patient_drug pd
+      join drug d on d.id=pd.drug_id
+      left join client_drug df on df.client_id=${req.client_id}
+          and df.drug_id=d.id
+      join drug_strength ds on ds.drug_id=d.id and ds.id=pd.drug_strength_id
+      where pd.user_id=${req.user_id}
+      order by pd.created desc
+      limit 20`
+    );
+    if (!dbResponse) {
+      errorMessage.error = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.error = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const createEncounter = async (req, res) => {
   const { patient_id } = req.params;
   const { title } = req.body.data;
@@ -1244,9 +1277,8 @@ const updateEncounter = async (req, res) => {
 
     $sql += `, updated='${moment().format(
       "YYYY-MM-DD HH:mm:ss"
-    )}', updated_user_id=${
-      req.user_id
-    } where patient_id=${patient_id} and id=${id}`;
+    )}', updated_user_id=${req.user_id
+      } where patient_id=${patient_id} and id=${id}`;
 
     const updateResponse = await db.query($sql);
     if (!updateResponse.affectedRows) {
@@ -1925,6 +1957,7 @@ const appointmentTypes = {
   checkDocument,
   createDocuments,
   getEncounters,
+  getEncountersPrescriptions,
   createEncounter,
   updateEncounter,
   deleteEncounter,
