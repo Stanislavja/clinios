@@ -87,7 +87,8 @@ export default function Messages() {
   const [messages, setMessages] = useState([]);
   const [selectedMessage, setSelectedMessage] = useState("");
   const [open, setOpen] = useState(false);
-  const [isNewView, setIsNewView] = useState(false);
+
+  const [modalView, setModalView] = useState("new");
   const [message, setMessage] = useState("");
   const [subject, setSubject] = useState("");
 
@@ -112,7 +113,16 @@ export default function Messages() {
   };
 
   const onNewMessageButton = () => {
-    setIsNewView(true);
+    setModalView("new");
+    setOpen(true);
+  };
+
+  const onHandleReplyClick = (msg) => {
+    setModalView("reply");
+    setSelectedMessage(msg);
+    setSubject(msg.subject);
+    setMessage(msg.message);
+    setSelectedUser(msg.user_id_to);
     setOpen(true);
   };
 
@@ -134,7 +144,7 @@ export default function Messages() {
   };
 
   const handleOnEditClick = (msg) => {
-    setIsNewView(false);
+    setModalView("edit");
     setSelectedMessage(msg);
     setSubject(msg.subject);
     setMessage(msg.message);
@@ -166,6 +176,9 @@ export default function Messages() {
         variant: "success",
       });
       fetchMessages();
+      setMessage("");
+      setSubject("");
+      setSelectedUser("");
     });
   };
 
@@ -216,9 +229,9 @@ export default function Messages() {
               <Grid item xs={6}>
                 <Grid container spacing={2}>
                   <Grid item>
-                    {!msg.user_to_from
+                    {msg.user_id_from
                       && (
-                        <Button size="small" variant="outlined">
+                        <Button size="small" variant="outlined" onClick={() => onHandleReplyClick(msg)}>
                           Reply
                         </Button>
                       )}
@@ -255,7 +268,9 @@ export default function Messages() {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title" className={classes.modalTitle}>
-          {isNewView ? "Send A Secure Message" : "Edit Message"}
+          {modalView === "new" && "Send A Secure Message"}
+          {modalView === "edit" && `Edit Message || ${subject}`}
+          {modalView === "reply" && `Reply Message || ${subject}`}
         </DialogTitle>
         <DialogContent className={classes.modalContent} style={{ minWidth: "600px" }}>
           <div style={{ display: "flex", flexDirection: "column" }}>
@@ -323,7 +338,7 @@ export default function Messages() {
             Cancel
           </Button>
           {
-            isNewView
+            modalView === "new"
               ? (
                 <Button
                   variant="contained"
