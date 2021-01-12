@@ -94,9 +94,18 @@ class Patient {
       .then((res) => res.data);
   }
 
+  // encounters apis
   getEncounters(patientId) {
     return axios
       .get(`${API_BASE}/patient/${patientId}/encounters`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  getEncountersPrescriptions() {
+    return axios
+      .get(`${API_BASE}/patient/encounters/prescriptions`, {
         headers: authHeader(),
       })
       .then((res) => res.data);
