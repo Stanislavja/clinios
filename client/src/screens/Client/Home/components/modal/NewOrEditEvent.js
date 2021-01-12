@@ -176,7 +176,7 @@ const NewOrEditEvent = ({
       setPatientSearchTerm("");
     } else {
       setCalEvent(props.event);
-      setPatientSearchTerm(`${props.event.firstname} ${props.event.firstname}`);
+      setPatientSearchTerm(`${props.event.firstname} ${props.event.lastname}`);
       setProvider(selectedProvider);
     }
 
@@ -764,6 +764,7 @@ NewOrEditEvent.propTypes = {
   }).isRequired,
   event: PropTypes.shape({
     firstname: PropTypes.string,
+    lastname: PropTypes.string,
   }).isRequired,
   providers: PropTypes.arrayOf(
     PropTypes.shape({
