@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 import {
   TextField,
@@ -21,12 +21,13 @@ import {
 import PropTypes from "prop-types";
 
 import { StyledTableCellSm, StyledTableRowSm } from "../../../../../components/common/StyledTable";
+import PatientService from "../../../../../services/patient.service";
 import { NewDrugFormFields, GenericOptions } from "../../../../../static/encountersForm";
 
 const NewPrescription = (props) => {
   const { onClose } = props;
   const currentDate = new Date();
-  const [recentSelections] = useState([]);
+  const [recentSelections, setRecentSelections] = useState([]);
   const [formFields, setFormFields] = useState({
     type: "",
     frequency: "",
@@ -38,6 +39,17 @@ const NewPrescription = (props) => {
     pharmacyInstructions: "",
     generic: "yes",
   });
+
+  const fetchRecentPrescriptions = useCallback(() => {
+    PatientService.getEncountersPrescriptions()
+      .then((response) => {
+        setRecentSelections(response.data);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetchRecentPrescriptions();
+  }, [fetchRecentPrescriptions]);
 
   const handleInputChange = (e) => {
     const { value, name } = e.target;
