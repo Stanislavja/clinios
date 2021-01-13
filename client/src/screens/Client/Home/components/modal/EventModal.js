@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
+import Grid from '@material-ui/core/Grid';
 import CardContent from "@material-ui/core/CardContent";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Dialog from "@material-ui/core/Dialog";
@@ -65,6 +66,7 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     width: "100%",
+    marginBottom: theme.spacing(1),
     color: theme.palette.text.secondary,
     "& .MuiSelect-select": {
       minWidth: 220,
@@ -77,6 +79,11 @@ const useStyles = makeStyles((theme) => ({
   startdatePicker: {
     marginRight: theme.spacing(2),
     maxWidth: "165px",
+  },
+  AddSubButtons: {
+    marginRight: theme.spacing(0),
+    maxWidth: "180px",
+    display: "flex"
   },
   statuses: {
     marginTop: theme.spacing(2),
@@ -375,82 +382,86 @@ const EventModal = ({
                 helperText={errorText.title.length > 0 && errorText.title}
               />
             </FormControl>
-            <div className={classes.datePickers}>
-              <KeyboardDatePicker
-                className={classes.startdatePicker}
-                ampm={false}
-                clearable
-                id="start-date-picker-inline"
-                label="Start Date"
-                value={calEvent.start_dt}
-                variant="inline"
-                onChange={(date) => {
-                  const property = "start_dt";
-                  setCalEvent({
-                    ...calEvent,
-                    [property]: date,
-                  });
-                }}
-                minDate={new Date()}
-                disablePast
-                format="EE LLL d y"
-                KeyboardButtonProps={{
-                  "aria-label": "change date",
-                }}
-              />
-              <KeyboardDatePicker
-                clearable
-                className={classes.startdatePicker}
-                ampm={false}
-                variant="outlined"
-                id="start-date-picker-inline"
-                label="End Date"
-                value={calEvent.end_dt}
-                onChange={(date) => {
-                  const property = "end_dt";
-                  setCalEvent({
-                    ...calEvent,
-                    [property]: date,
-                  });
-                  calculateLength(date);
-                }}
-                minD
-                ate={new Date()}
-                disablePast
-                format="EE LLL d y"
-                KeyboardButtonProps={{
-                  "aria-label": "change date",
-                }}
-              />
-              <Button
-                className={classes.Button}
-                variant="contained"
-                disableElevation
-                onClick={async () => {
-                  await setCalEvent({
-                    ...calEvent,
-                    start_dt: moment(calEvent.start_dt).add(1, "days"),
-                    end_dt: moment(calEvent.start_dt).add(1, "days"),
-                  });
-                }}
-              >
-                Add day
-              </Button>
-              <Button
-                variant="contained"
-                className={classes.Button}
-                disableElevation
-                onClick={async () => {
-                  await setCalEvent({
-                    ...calEvent,
-                    start_dt: moment(calEvent.start_dt).subtract(1, "days"),
-                    end_dt: moment(calEvent.end_dt).subtract(1, "days"),
-                  });
-                }}
-              >
-                Subtract Day
-              </Button>
-            </div>
+            <FormControl component="div" className={classes.formControl}>
+              <Grid container justify="space-around">
+                <KeyboardDatePicker
+                    className={classes.startdatePicker}
+                    ampm={false}
+                    clearable
+                    id="start-date-picker-inline"
+                    label="Start Date"
+                    value={calEvent.start_dt}
+                    variant="inline"
+                    onChange={(date) => {
+                      const property = "start_dt";
+                      setCalEvent({
+                        ...calEvent,
+                        [property]: date,
+                      });
+                    }}
+                    minDate={new Date()}
+                    disablePast
+                    format="EE LLL d y"
+                    KeyboardButtonProps={{
+                      "aria-label": "change date",
+                    }}
+                  />
+                <KeyboardDatePicker
+                  clearable
+                  className={classes.startdatePicker}
+                  ampm={false}
+                  variant="outlined"
+                  id="start-date-picker-inline"
+                  label="End Date"
+                  value={calEvent.end_dt}
+                  onChange={(date) => {
+                    const property = "end_dt";
+                    setCalEvent({
+                      ...calEvent,
+                      [property]: date,
+                    });
+                    calculateLength(date);
+                  }}
+                  minD
+                  ate={new Date()}
+                  disablePast
+                  format="EE LLL d y"
+                  KeyboardButtonProps={{
+                    "aria-label": "change date",
+                  }}
+                />
+                <div  className={classes.AddSubButtons}>
+                <Button
+                  className={classes.Button}
+                  variant="contained"
+                  disableElevation
+                  onClick={async () => {
+                    await setCalEvent({
+                      ...calEvent,
+                      start_dt: moment(calEvent.start_dt).add(1, "days"),
+                      end_dt: moment(calEvent.start_dt).add(1, "days"),
+                    });
+                  }}
+                >
+                  Add day
+                </Button>
+                <Button
+                  variant="contained"
+                  className={classes.Button}
+                  disableElevation
+                  onClick={async () => {
+                    await setCalEvent({
+                      ...calEvent,
+                      start_dt: moment(calEvent.start_dt).subtract(1, "days"),
+                      end_dt: moment(calEvent.end_dt).subtract(1, "days"),
+                    });
+                  }}
+                >
+                  Subtract Day
+                </Button>
+                </div>
+              </Grid>
+            </FormControl>
             <div className={classes.datePickers}>
               <KeyboardTimePicker
                 className={classes.startdatePicker}
