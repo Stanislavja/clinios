@@ -1154,10 +1154,7 @@ const getEncountersPrescriptions = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select d.name, concat(ds.strength, ds.unit) strength
-      , case when ds.form='T' then 'Tablets' end form
-      , pd.created
-      , case when df.drug_id then true end favorite
+      `select d.name, concat(ds.strength, ds.unit) strength, case when ds.form='T' then 'Tablets' end form, pd.created, case when df.drug_id then true end favorite
       from patient_drug pd
       join drug d on d.id=pd.drug_id
       left join client_drug df on df.client_id=${req.client_id}
