@@ -97,6 +97,15 @@ const useStyles = makeStyles((theme) => ({
       padding: 0,
     },
   },
+  setTo: {
+    whiteSpace: "nowrap",
+    marginBottom: "8px",
+    marginLeft: "5px",
+    fontSize: "15px",
+    alignItems: "flex-end",
+    display: "flex",
+    fontWeight: "500",
+  },
   modalAction: {
     borderTop: `1px solid ${theme.palette.background.default}`,
     display: "flex",
@@ -497,7 +506,7 @@ const NewOrEditEvent = ({
                   "aria-label": "change date",
                 }}
               />
-              <span style={{ whiteSpace: "nowrap", marginLeft: "5px", marginTop: "15px" }}>Set to</span>
+              <span className={classes.setTo}>Set to: </span>
               <Button
                 style={{
                   whiteSpace: "nowrap",

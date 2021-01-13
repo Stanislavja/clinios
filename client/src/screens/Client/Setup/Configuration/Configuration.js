@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   form: {
     display: "flex",
     flexDirection: "column",
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(3),
   },
   formElments: {
     display: "flex",
@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "440px",
   },
   customSelect: {
-    width: "200px",
+    width: "100%",
   },
   type: {
     marginTop: "20px",
@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "456px",
   },
   textField: {
-    width: "200px",
+    width: "100%",
   },
   amount: {
     marginTop: "18px",
@@ -286,44 +286,275 @@ export default function Configuration() {
       <ConfigModal modal={modalHistory} setModal={setModalHistory} />
       <Error errors={errors} />
       <form className={classes.form} noValidate onSubmit={() => {}}>
-        <Grid container spacing={2}>
-          <Grid item sm={5}>
-            <div className={classes.paper}>
-              <Grid container spacing={2}>
-                <Grid item xs={6} sm={6}>
-                  <TextField
-                    value={formParams.clientId}
-                    variant="outlined"
-                    onKeyPress={(e) => onKeyPress(e)}
-                    size="small"
-                    disabled
-                    id="clientId"
-                    label="Client ID"
-                    name="clientId"
-                    className={`${classes.textField} `}
-                    autoComplete="clientId"
-                    onChange={(e) => _onChangeInput(e)}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    value={formParams.clientCode}
-                    variant="outlined"
-                    onKeyPress={(e) => onKeyPress(e)}
-                    size="small"
-                    id="clientCode"
-                    label="Client Code"
-                    disabled
-                    className={`${classes.textField} `}
-                    name="clientCode"
-                    autoComplete="clientCode"
-                    onChange={(e) => _onChangeInput(e)}
-                  />
-                </Grid>
+        <Grid container spacing={4}>
+          <Grid item xs={6} sm={6}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  value={formParams.clientId}
+                  variant="outlined"
+                  onKeyPress={(e) => onKeyPress(e)}
+                  size="small"
+                  disabled
+                  id="clientId"
+                  label="Client ID"
+                  name="clientId"
+                  className={`${classes.textField} `}
+                  autoComplete="clientId"
+                  onChange={(e) => _onChangeInput(e)}
+                />
               </Grid>
-            </div>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  value={formParams.clientCode}
+                  variant="outlined"
+                  onKeyPress={(e) => onKeyPress(e)}
+                  size="small"
+                  id="clientCode"
+                  label="Client Code"
+                  disabled
+                  className={`${classes.textField} `}
+                  name="clientCode"
+                  autoComplete="clientCode"
+                  onChange={(e) => _onChangeInput(e)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  value={formParams.name}
+                  variant="outlined"
+                  onKeyPress={(e) => onKeyPress(e)}
+                  size="small"
+                  id="name"
+                  disabled
+                  label="Name"
+                  className={classes.textField}
+                  name="name"
+                  autoComplete="name"
+                  onChange={(e) => _onChangeInput(e)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  value={formParams.patientPortal}
+                  variant="outlined"
+                  onKeyPress={(e) => onKeyPress(e)}
+                  size="small"
+                  id="patientPortal"
+                  disabled
+                  label="Patient Portal Login"
+                  className={`${classes.textField} `}
+                  name="patientPortal"
+                  autoComplete="patientPortal"
+                  onChange={(e) => _onChangeInput(e)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  value={formParams.address}
+                  variant="outlined"
+                  onKeyPress={(e) => onKeyPress(e)}
+                  size="small"
+                  id="address"
+                  label="Address"
+                  className={`${classes.textField} `}
+                  name="address"
+                  autoComplete="address"
+                  onChange={(e) => _onChangeInput(e)}
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  value={formParams.clientWebsite}
+                  variant="outlined"
+                  onKeyPress={(e) => onKeyPress(e)}
+                  size="small"
+                  id="clientWebsite"
+                  label="Website"
+                  className={`${classes.textField} `}
+                  name="clientWebsite"
+                  autoComplete="clientWebsite"
+                  onChange={(e) => _onChangeInput(e)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  value={formParams.addressLineTwo}
+                  variant="outlined"
+                  onKeyPress={(e) => onKeyPress(e)}
+                  size="small"
+                  id="addressLineTwo"
+                  label="Address Line 2"
+                  className={`${classes.textField} `}
+                  name="addressLineTwo"
+                  autoComplete="addressLineTwo"
+                  onChange={(e) => _onChangeInput(e)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  value={formParams.email}
+                  variant="outlined"
+                  onKeyPress={(e) => onKeyPress(e)}
+                  size="small"
+                  id="email"
+                  label="Email"
+                  className={`${classes.textField} `}
+                  name="email"
+                  autoComplete="email"
+                  onChange={(e) => _onChangeInput(e)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  value={formParams.city}
+                  variant="outlined"
+                  onKeyPress={(e) => onKeyPress(e)}
+                  size="small"
+                  id="city"
+                  label="City"
+                  className={`${classes.textField} `}
+                  name="city"
+                  autoComplete="city"
+                  onChange={(e) => _onChangeInput(e)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  value={formParams.ein}
+                  variant="outlined"
+                  onKeyPress={(e) => onKeyPress(e)}
+                  size="small"
+                  id="ein"
+                  label="EIN"
+                  className={`${classes.textField} `}
+                  name="ein"
+                  autoComplete="ein"
+                  onChange={(e) => _onChangeInput(e)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormControl
+                  variant="outlined"
+                  onKeyPress={(e) => onKeyPress(e)}
+                  className={classes.customSelect}
+                  size="small"
+                >
+                  <InputLabel htmlFor="age-native-simple">State</InputLabel>
+                  <Select
+                    native
+                    value={formParams.state}
+                    onChange={(e) => _onChangeInput(e)}
+                    inputProps={{
+                      name: "state",
+                      id: "age-native-simple",
+                    }}
+                    label="State"
+                  >
+                    <option aria-label="None" value="" />
+                    {StateData.map((v) => (
+                      <option key={`state${v.code}`} value={v.code}>
+                        {v.name}
+                      </option>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  value={formParams.npi}
+                  variant="outlined"
+                  onKeyPress={(e) => onKeyPress(e)}
+                  size="small"
+                  id="npi"
+                  label="NPI"
+                  className={`${classes.textField} `}
+                  name="npi"
+                  autoComplete="npi"
+                  onChange={(e) => _onChangeInput(e)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  value={formParams.zipcode}
+                  variant="outlined"
+                  onKeyPress={(e) => onKeyPress(e)}
+                  size="small"
+                  id="zipcode"
+                  label="Zipcode"
+                  className={`${classes.textField} `}
+                  name="zipcode"
+                  autoComplete="zipcode"
+                  onChange={(e) => _onChangeInput(e)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <KeyboardTimePicker
+                  inputVariant="outlined"
+                  KeyboardButtonProps={{
+                    "aria-label": "change time",
+                  }}
+                  id="calendarStartTime"
+                  name="calendarStartTime"
+                  label="Calendar Start Time"
+                  value={calendarStartTime}
+                  className={classes.textField}
+                  onChange={(date) => setCalendarStartTime(date)}
+                  size="small"
+                  autoOk
+                  mask="__:__ _M"
+                  keyboardIcon
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  value={formParams.phone}
+                  variant="outlined"
+                  onKeyPress={(e) => onKeyPress(e)}
+                  size="small"
+                  id="phone"
+                  label="Phone"
+                  className={`${classes.textField}`}
+                  name="phone"
+                  autoComplete="phone"
+                  onChange={(e) => _onChangeInput(e)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  value={formParams.fax}
+                  variant="outlined"
+                  onKeyPress={(e) => onKeyPress(e)}
+                  size="small"
+                  id="fax"
+                  label="Fax"
+                  className={`${classes.textField}`}
+                  name="fax"
+                  autoComplete="fax"
+                  onChange={(e) => _onChangeInput(e)}
+                />
+              </Grid>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Button
+                size="small"
+                type="button"
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                onClick={() => {
+                  if (!isSubmitting) {
+                    _onSubmitConfig();
+                  }
+                }}
+              >
+                {isSubmitting ? `Saving...` : `Save`}
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={6} style={{ marginLeft: "-80px" }}>
+          <Grid item xs={6} sm={6}>
             <div>
               <input
                 accept="image/*"
@@ -356,301 +587,6 @@ export default function Configuration() {
             </div>
           </Grid>
         </Grid>
-        <div className={classes.paper}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                value={formParams.name}
-                variant="outlined"
-                onKeyPress={(e) => onKeyPress(e)}
-                size="small"
-                id="name"
-                disabled
-                label="Name"
-                className={classes.textField}
-                name="name"
-                autoComplete="name"
-                onChange={(e) => _onChangeInput(e)}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                value={formParams.patientPortal}
-                variant="outlined"
-                onKeyPress={(e) => onKeyPress(e)}
-                size="small"
-                id="patientPortal"
-                disabled
-                label="Patient Portal Login"
-                className={`${classes.textField} `}
-                name="patientPortal"
-                autoComplete="patientPortal"
-                onChange={(e) => _onChangeInput(e)}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                value={formParams.address}
-                variant="outlined"
-                onKeyPress={(e) => onKeyPress(e)}
-                size="small"
-                id="address"
-                label="Address"
-                className={`${classes.textField} `}
-                name="address"
-                autoComplete="address"
-                onChange={(e) => _onChangeInput(e)}
-                autoFocus
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                value={formParams.clientWebsite}
-                variant="outlined"
-                onKeyPress={(e) => onKeyPress(e)}
-                size="small"
-                id="clientWebsite"
-                label="Website"
-                className={`${classes.textField} `}
-                name="clientWebsite"
-                autoComplete="clientWebsite"
-                onChange={(e) => _onChangeInput(e)}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                value={formParams.addressLineTwo}
-                variant="outlined"
-                onKeyPress={(e) => onKeyPress(e)}
-                size="small"
-                id="addressLineTwo"
-                label="Address Line 2"
-                className={`${classes.textField} `}
-                name="addressLineTwo"
-                autoComplete="addressLineTwo"
-                onChange={(e) => _onChangeInput(e)}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                value={formParams.email}
-                variant="outlined"
-                onKeyPress={(e) => onKeyPress(e)}
-                size="small"
-                id="email"
-                label="Email"
-                className={`${classes.textField} `}
-                name="email"
-                autoComplete="email"
-                onChange={(e) => _onChangeInput(e)}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                value={formParams.city}
-                variant="outlined"
-                onKeyPress={(e) => onKeyPress(e)}
-                size="small"
-                id="city"
-                label="City"
-                className={`${classes.textField} `}
-                name="city"
-                autoComplete="city"
-                onChange={(e) => _onChangeInput(e)}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                value={formParams.ein}
-                variant="outlined"
-                onKeyPress={(e) => onKeyPress(e)}
-                size="small"
-                id="ein"
-                label="EIN"
-                className={`${classes.textField} `}
-                name="ein"
-                autoComplete="ein"
-                onChange={(e) => _onChangeInput(e)}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <FormControl
-                variant="outlined"
-                onKeyPress={(e) => onKeyPress(e)}
-                className={classes.customSelect}
-                size="small"
-              >
-                <InputLabel htmlFor="age-native-simple">State</InputLabel>
-                <Select
-                  native
-                  value={formParams.state}
-                  onChange={(e) => _onChangeInput(e)}
-                  inputProps={{
-                    name: "state",
-                    id: "age-native-simple",
-                  }}
-                  label="State"
-                >
-                  <option aria-label="None" value="" />
-                  {StateData.map((v) => (
-                    <option key={`state${v.code}`} value={v.code}>
-                      {v.name}
-                    </option>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                value={formParams.npi}
-                variant="outlined"
-                onKeyPress={(e) => onKeyPress(e)}
-                size="small"
-                id="npi"
-                label="NPI"
-                className={`${classes.textField} `}
-                name="npi"
-                autoComplete="npi"
-                onChange={(e) => _onChangeInput(e)}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                value={formParams.zipcode}
-                variant="outlined"
-                onKeyPress={(e) => onKeyPress(e)}
-                size="small"
-                id="zipcode"
-                label="Zipcode"
-                className={`${classes.textField} `}
-                name="zipcode"
-                autoComplete="zipcode"
-                onChange={(e) => _onChangeInput(e)}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <KeyboardTimePicker
-                inputVariant="outlined"
-                KeyboardButtonProps={{
-                  "aria-label": "change time",
-                }}
-                id="calendarStartTime"
-                name="calendarStartTime"
-                label="Calendar Start Time"
-                value={calendarStartTime}
-                className={classes.textField}
-                onChange={(date) => setCalendarStartTime(date)}
-                size="small"
-                autoOk
-                mask="__:__ _M"
-                keyboardIcon
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <FormControl
-                variant="outlined"
-                onKeyPress={(e) => onKeyPress(e)}
-                className={classes.customSelect}
-                size="small"
-              >
-                <InputLabel htmlFor="age-native-simple">Country</InputLabel>
-                <Select
-                  native
-                  value={formParams.country}
-                  onChange={(e) => _onChangeInput(e)}
-                  inputProps={{
-                    name: "country",
-                    id: "age-native-simple",
-                  }}
-                  label="Country"
-                >
-                  <option aria-label="None" value="US">
-                    United States
-                  </option>
-                </Select>
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <KeyboardTimePicker
-                inputVariant="outlined"
-                KeyboardButtonProps={{
-                  "aria-label": "change time",
-                }}
-                id="calendarEndTime"
-                name="calendarEndTime"
-                label="Calendar End Time"
-                value={calendarEndTime}
-                className={classes.textField}
-                onChange={(date) => setCalendarEndTime(date)}
-                size="small"
-                autoOk
-                mask="__:__ _M"
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                value={formParams.phone}
-                variant="outlined"
-                onKeyPress={(e) => onKeyPress(e)}
-                size="small"
-                id="phone"
-                label="Phone"
-                className={`${classes.textField} `}
-                name="phone"
-                autoComplete="phone"
-                onChange={(e) => _onChangeInput(e)}
-              />
-            </Grid>
-
-            <Grid xs="hidden" md={6} xl="hidden" />
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                value={formParams.fax}
-                variant="outlined"
-                onKeyPress={(e) => onKeyPress(e)}
-                size="small"
-                id="fax"
-                label="Fax"
-                className={`${classes.textField} `}
-                name="fax"
-                autoComplete="fax"
-                onChange={(e) => _onChangeInput(e)}
-              />
-            </Grid>
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <Button
-              size="small"
-              type="button"
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              onClick={() => {
-                if (!isSubmitting) {
-                  _onSubmitConfig();
-                }
-              }}
-            >
-              {isSubmitting ? `Saving...` : `Save`}
-            </Button>
-          </Grid>
-        </div>
       </form>
     </div>
   );
