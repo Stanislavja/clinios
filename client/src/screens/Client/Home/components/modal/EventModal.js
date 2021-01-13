@@ -225,6 +225,13 @@ const EventModal = ({
       ...calEvent,
       [event.target.name]: event.target.value,
     });
+
+    if(event.target.name === 'title'){
+      setErrorText({
+        ...errorText,
+        title: "",
+      });
+    }
   };
 
   const debouncedSearchTerm = useDebounce(patientSearchTerm, 500);
@@ -263,6 +270,10 @@ const EventModal = ({
     const sp = patients.filter((p) => p.id === patient.id);
     setSelectedPatient(sp[0]);
     setPatientSearchTerm(`${patient.firstname} ${patient.lastname}`);
+    setErrorText({
+      ...errorText,
+      patient: "",
+    });
   };
   
   const handleProviderChange = (event) => {
