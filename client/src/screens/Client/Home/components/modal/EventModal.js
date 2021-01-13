@@ -93,6 +93,9 @@ const useStyles = makeStyles((theme) => ({
       padding: '5px !important'
     }
   },
+  lengthWrap: {
+    textAlign: 'center'
+  },
   AddSubButtons: {
     marginRight: theme.spacing(0),
     maxWidth: "180px",
@@ -148,7 +151,7 @@ const useStyles = makeStyles((theme) => ({
   },
   appointmentLength: {
     maxWidth: "150px",
-    margin: "15px 5px 0",
+    margin: "5px 5px 0",
   },
 }));
 
@@ -579,47 +582,49 @@ const EventModal = ({
                   </Grid>
               </Grid>
             </FormControl>
-            <TextField
-              value={appointmentLengthDays}
-              variant="outlined"
-              margin="dense"
-              className={classes.appointmentLength}
-              size="small"
-              id="appointmentLength"
-              label="Length days"
-              name="appointmentLength"
-              autoComplete="appointmentLength"
-              onChange={(event) => handleOnChange(event)}
-              disabled
-              defaultValue={`${appointmentLengthDays === 0 ? "Same day" : `${appointmentLength} day`}`}
-            />
-            <TextField
-              value={appointmentLength}
-              variant="outlined"
-              margin="dense"
-              className={classes.appointmentLength}
-              size="small"
-              id="appointmentLength"
-              label="Length minutes"
-              name="appointmentLength"
-              autoComplete="appointmentLength"
-              onChange={(event) => handleOnChange(event)}
-              disabled
-            />
-            <TextField
-              value={currentDayLength}
-              variant="outlined"
-              margin="dense"
-              className={classes.appointmentLength}
-              size="small"
-              id="appointmentLength"
-              label="In days"
-              name="appointmentLength"
-              autoComplete="appointmentLength"
-              onChange={(event) => handleOnChange(event)}
-              disabled
-              defaultValue={`${currentDayLength === 0 ? "Today" : `In ${appointmentLength} days`}`}
-            />
+            <div className={classes.lengthWrap}>
+              <TextField
+                value={appointmentLengthDays}
+                variant="outlined"
+                margin="dense"
+                className={classes.appointmentLength}
+                size="small"
+                id="appointmentLength"
+                label="Length days"
+                name="appointmentLength"
+                autoComplete="appointmentLength"
+                onChange={(event) => handleOnChange(event)}
+                disabled
+                defaultValue={`${appointmentLengthDays === 0 ? "Same day" : `${appointmentLength} day`}`}
+              />
+              <TextField
+                value={appointmentLength}
+                variant="outlined"
+                margin="dense"
+                className={classes.appointmentLength}
+                size="small"
+                id="appointmentLength"
+                label="Length minutes"
+                name="appointmentLength"
+                autoComplete="appointmentLength"
+                onChange={(event) => handleOnChange(event)}
+                disabled
+              />
+              <TextField
+                value={currentDayLength}
+                variant="outlined"
+                margin="dense"
+                className={classes.appointmentLength}
+                size="small"
+                id="appointmentLength"
+                label="In days"
+                name="appointmentLength"
+                autoComplete="appointmentLength"
+                onChange={(event) => handleOnChange(event)}
+                disabled
+                defaultValue={`${currentDayLength === 0 ? "Today" : `In ${appointmentLength} days`}`}
+              />
+            </div>
             <FormControl className={classes.statuses}>
               <FormLabel component="legend">Status</FormLabel>
               <RadioGroup
@@ -741,7 +746,7 @@ const EventModal = ({
             size="small"
             onClick={() => handleSaveOrUpdate()}
           >
-            "Save"
+            Save
           </Button>
         </div>
       </DialogActions>
