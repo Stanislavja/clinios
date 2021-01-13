@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     width: "100%",
-    marginBottom: theme.spacing(1),
+    marginBottom: theme.spacing(3/2),
     color: theme.palette.text.secondary,
     "& .MuiSelect-select": {
       minWidth: 220,
@@ -76,9 +76,22 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     marginTop: theme.spacing(2),
   },
+  timePickers: {
+    display: 'flex',
+  },
+  timePickersButtons: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
   startdatePicker: {
     marginRight: theme.spacing(2),
     maxWidth: "165px",
+  },
+  startTimePicker: {
+    marginRight: theme.spacing(1),
+    "& button" :{
+      padding: '5px !important'
+    }
   },
   AddSubButtons: {
     marginRight: theme.spacing(0),
@@ -462,103 +475,110 @@ const EventModal = ({
                 </div>
               </Grid>
             </FormControl>
-            <div className={classes.datePickers}>
-              <KeyboardTimePicker
-                className={classes.startdatePicker}
-                ampm={false}
-                clearable
-                id="start-date-picker-inline"
-                label="Start Time"
-                value={calEvent.start_dt}
-                placeholder="2020/10/10 10:00"
-                onChange={(date) => {
-                  const property = "start_dt";
-                  setCalEvent({
-                    ...calEvent,
-                    [property]: date,
-                  });
-                }}
-                minDate={new Date()}
-                disablePast
-                format="HH:mm a"
-                KeyboardButtonProps={{
-                  "aria-label": "change date",
-                }}
-              />
-              <KeyboardTimePicker
-                clearable
-                ampm={false}
-                variant="outlined"
-                id="start-date-picker-inline"
-                label="End Time"
-                value={calEvent.end_dt}
-                placeholder="2020/10/10 11:00"
-                onChange={(date) => {
-                  const property = "end_dt";
-                  setCalEvent({
-                    ...calEvent,
-                    [property]: date,
-                  });
-                  calculateLength(date);
-                }}
-                minD
-                ate={new Date()}
-                disablePast
-                format="HH:mm a"
-                KeyboardButtonProps={{
-                  "aria-label": "change date",
-                }}
-              />
-              <span className={classes.setTo}>Set to: </span>
-              <Button
-                className={classes.Button}
-                disableElevation
-                onClick={async () => {
-                  await setCalEvent({
-                    ...calEvent,
-                    end_dt: moment(calEvent.start_dt).add(15, "minutes"),
-                  });
-                }}
-              >
-                15 min
-              </Button>
-              <Button
-                className={classes.Button}
-                disableElevation
-                onClick={async () => {
-                  await setCalEvent({
-                    ...calEvent,
-                    end_dt: moment(calEvent.end_dt).add(30, "minutes"),
-                  });
-                }}
-              >
-                30 min
-              </Button>
-              <Button
-               className={classes.Button}
-                disableElevation
-                onClick={async () => {
-                  await setCalEvent({
-                    ...calEvent,
-                    end_dt: moment(calEvent.end_dt).add(45, "minutes"),
-                  });
-                }}
-              >
-                45 min
-              </Button>
-              <Button
-                className={classes.Button}
-                disableElevation
-                onClick={async () => {
-                  await setCalEvent({
-                    ...calEvent,
-                    end_dt: moment(calEvent.end_dt).add(60, "minutes"),
-                  });
-                }}
-              >
-                60 min
-              </Button>
-            </div>
+            <FormControl component="div" className={classes.formControl}>
+              <Grid container spacing={0}>
+              <Grid item xs={12} sm={5} className={classes.timePickers}>
+                <KeyboardTimePicker
+                  className={classes.startTimePicker}
+                  ampm={false}
+                  clearable
+                  id="start-date-picker-inline"
+                  label="Start Time"
+                  value={calEvent.start_dt}
+                  placeholder="2020/10/10 10:00"
+                  onChange={(date) => {
+                    const property = "start_dt";
+                    setCalEvent({
+                      ...calEvent,
+                      [property]: date,
+                    });
+                  }}
+                  minDate={new Date()}
+                  disablePast
+                  format="HH:mm a"
+                  KeyboardButtonProps={{
+                    "aria-label": "change date",
+                  }}
+                />
+                <KeyboardTimePicker
+                  clearable
+                  ampm={false}
+                  variant="outlined"
+                  id="start-date-picker-inline"
+                  label="End Time"
+                  value={calEvent.end_dt}
+                  placeholder="2020/10/10 11:00"
+                  onChange={(date) => {
+                    const property = "end_dt";
+                    setCalEvent({
+                      ...calEvent,
+                      [property]: date,
+                    });
+                    calculateLength(date);
+                  }}
+                  minD
+                  ate={new Date()}
+                  disablePast
+                  format="HH:mm a"
+                  KeyboardButtonProps={{
+                    "aria-label": "change date",
+                  }}
+                />
+                </Grid>
+              <Grid item xs={12} sm={7} className={classes.timePickersButtons}>
+                
+                  <span className={classes.setTo}>Set to: </span>
+                  <Button
+                    className={classes.Button}
+                    disableElevation
+                    onClick={async () => {
+                      await setCalEvent({
+                        ...calEvent,
+                        end_dt: moment(calEvent.start_dt).add(15, "minutes"),
+                      });
+                    }}
+                  >
+                    15 min
+                  </Button>
+                  <Button
+                    className={classes.Button}
+                    disableElevation
+                    onClick={async () => {
+                      await setCalEvent({
+                        ...calEvent,
+                        end_dt: moment(calEvent.end_dt).add(30, "minutes"),
+                      });
+                    }}
+                  >
+                    30 min
+                  </Button>
+                  <Button
+                  className={classes.Button}
+                    disableElevation
+                    onClick={async () => {
+                      await setCalEvent({
+                        ...calEvent,
+                        end_dt: moment(calEvent.end_dt).add(45, "minutes"),
+                      });
+                    }}
+                  >
+                    45 min
+                  </Button>
+                  <Button
+                    className={classes.Button}
+                    disableElevation
+                    onClick={async () => {
+                      await setCalEvent({
+                        ...calEvent,
+                        end_dt: moment(calEvent.end_dt).add(60, "minutes"),
+                      });
+                    }}
+                  >
+                    60 min
+                  </Button>
+                  </Grid>
+              </Grid>
+            </FormControl>
             <TextField
               value={appointmentLengthDays}
               variant="outlined"
