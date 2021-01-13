@@ -169,8 +169,8 @@ const EventModal = ({
   const { appointments, providers, errors } = props;
   const classes = useStyles();
   const history = useHistory();
-  const [patients, setPatients] = React.useState([]);
-  const [selectedPatient, setSelectedPatient] = React.useState("");
+  const [patients, setPatients] = useState([]);
+  const [selectedPatient, setSelectedPatient] = useState("");
   const [patientSearchTerm, setPatientSearchTerm] = useState("");
   const [calEvent, setCalEvent] = useState("");
   const [appointmentLength, setAppointmentLeangth] = useState(" ");
@@ -181,9 +181,9 @@ const EventModal = ({
     patient: "",
     error: "",
   });
-
+  
   const [indexP, setIndex] = useState(0);
-  const [provider, setProvider] = React.useState(providers[indexP]);
+  const [provider, setProvider] = useState(providers[indexP]);
   const { user } = useAuth();
 
   const calculateLength = async () => {
@@ -194,8 +194,6 @@ const EventModal = ({
     setAppointmentLengthDays(length2);
     setAppointmentLeangth(length);
   };
-
-  console.log('isNewEvent:', isNewEvent)
   
   useEffect(() => {
     if (isNewEvent) {
@@ -203,22 +201,20 @@ const EventModal = ({
       setProvider("selectedProvider");
       setPatientSearchTerm("");
     } else {
-      console.log('ddd:', props.event)
       setCalEvent(props.event);
       setSelectedPatient({
-        email: props.event,
+        email: props.event.email,
         firstname: props.event.firstname,
         id: props.event.patient_id,
         lastname: props.event.lastname,
-      })
+      });
+
       setPatientSearchTerm(`${props.event.firstname} ${props.event.lastname}`);
       setProvider(selectedProvider);
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps, react/destructuring-assignment
   }, [props.event, isNewEvent]);
 
-  console.log('selectedPatient:', selectedPatient)
   /* eslint-enable */
   const handleOnChange = (event) => {
     setCalEvent({
@@ -256,7 +252,6 @@ const EventModal = ({
         );
       } else {
         setPatients([]);
-        setSelectedPatient("");
       }
     },
     // This is the useEffect input array
@@ -281,7 +276,49 @@ const EventModal = ({
     setProvider(pd[0]);
   };
 
+  const validateFormFields = () => {
+
+    if (!calEvent.title) {
+      setErrorText(
+        prevErrorText => {
+          return { 
+            ...prevErrorText, 
+            title: "Enter your title",
+          }
+        });
+    }
+    console.log('!calEvent.title:', !calEvent.title)
+    console.log('selectedPatient.length === 0:', selectedPatient.length === 0)
+
+    if (selectedPatient.length === 0) {
+      setErrorText(
+        prevErrorText => {
+          return { 
+            ...prevErrorText, 
+            patient: "Please select from here",
+          }
+        });
+    }
+
+    const startTimeExist = appointments
+    // eslint-disable-next-line
+    .map((appointment) => calEvent.start_dt == appointment.start_dt)
+    .includes(true);
+
+    if (startTimeExist) {
+      setErrorText(
+        prevErrorText => {
+          return { 
+            ...prevErrorText, 
+            error: "This time is not available"
+          }
+        });
+    }
+
+  }
+
   const handleSaveOrUpdate = () => {
+    validateFormFields();
     const submitData = () => {
       if (isNewEvent) {
         const payload = {
@@ -323,33 +360,10 @@ const EventModal = ({
         onEventUpdate(payload);
       }
     };
-    const existPatientID = appointments
-      .map((appointment) => selectedPatient.id === appointment.patient_id)
-      .includes(true);
 
-      console.log('existPatientID:', existPatientID);
-
-    const startTimeExist = appointments
-      // eslint-disable-next-line
-      .map((appointment) => calEvent.start_dt == appointment.start_dt)
-      .includes(true);
-
-      if (calEvent) {
-        setErrorText({
-          ...errorText,
-          title: "Enter your title",
-        });
-      }
-
-      if (selectedPatient.length === 0) {
-        setErrorText({
-          ...errorText,
-          patient: "Please select from here",
-        });
-      }
-      if (startTimeExist) {
-        setErrorText({ ...errorText, error: "This time is not available" });
-      }
+   if(calEvent.title && (selectedPatient.length !== 0)){
+    submitData();
+   }
   };
 
   useEffect(() => {
