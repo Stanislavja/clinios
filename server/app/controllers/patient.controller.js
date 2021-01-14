@@ -1179,6 +1179,45 @@ const getEncountersPrescriptions = async (req, res) => {
   }
 };
 
+const searchDrug = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    errorMessage.message = errors.array();
+    return res.status(status.bad).send(errorMessage);
+  }
+  const { text } = req.body.data;
+
+  const db = makeDb(configuration, res);
+  try {
+    const dbResponse = await db.query(
+      `select d.name, concat(ds.strength, ds.unit) strength
+      , case when ds.form='T' then 'Tablets' end form
+      , cd.favorite
+      from drug d
+      left join client_drug cd on cd.client_id=${req.client_id}
+      and cd.drug_id=d.id
+      left join drug_strength ds on ds.drug_id=d.id
+      where d.name like '${text}%'
+      order by d.name, ds.strength
+      limit 50`
+    );
+
+    if (!dbResponse) {
+      errorMessage.error = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.error = "Search not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const createEncounter = async (req, res) => {
   const { patient_id } = req.params;
   const { title } = req.body.data;
@@ -1954,6 +1993,7 @@ const appointmentTypes = {
   createDocuments,
   getEncounters,
   getEncountersPrescriptions,
+  searchDrug,
   createEncounter,
   updateEncounter,
   deleteEncounter,
