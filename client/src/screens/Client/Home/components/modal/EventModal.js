@@ -189,8 +189,8 @@ const EventModal = ({
   const calculateLength = async () => {
     const length = await moment(calEvent.end_dt).diff(calEvent.start_dt, "minutes");
     const length2 = await moment(calEvent.end_dt).diff(calEvent.start_dt, "days");
-    const lengthFromCuurrentDay = await moment(calEvent.start_dt).diff(moment(), "days");
-    setCurrentDayLength(lengthFromCuurrentDay);
+    const lengthFromCurrentDay = await moment(calEvent.start_dt).diff(moment(), "days");
+    setCurrentDayLength(lengthFromCurrentDay);
     setAppointmentLengthDays(length2);
     setAppointmentLeangth(length);
   };
@@ -707,7 +707,7 @@ const EventModal = ({
                 error={errorText.patient.length > 0}
                 helperText={errorText.patient.length > 0 && errorText.patient}
               />
-              {patients.length > 0 && !selectedPatient && (
+              {patients.length > 0 && (
                 <Card className={classes.patientListCard}>
                   <CardContent className={classes.patientListContent}>
                     <List component="nav" aria-label="secondary mailbox folder">
@@ -761,7 +761,7 @@ const EventModal = ({
       </DialogContent>
       <DialogActions className={classes.modalAction}>
         <Button size="small" variant="outlined" onClick={() => onClose()}>
-          close
+          Close
         </Button>
         <div>
           <Button
