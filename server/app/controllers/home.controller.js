@@ -137,23 +137,7 @@ const createAppointment = async (req, res) => {
       moment(start_dt).format("YYYY-MM-DD HH:mm:ss"),
       provider
     );
-    if (process.env.NODE_ENV === "development") {
-      const info = await transporter.sendMail(emailTemplate);
-      console.info("Email for new appointment has bees sent!", info);
-    } else {
-      console.log("process.env.SENDGRID_API_KEY", process.env.SENDGRID_API_KEY);
-      sgMail.send(emailTemplate).then(
-        (info) => {
-          console.log(`** Email for new appointment has bees sent! **`, info);
-        },
-        (error) => {
-          console.error(error);
-          if (error.response) {
-            console.error("error.response.body:", error.response.body);
-          }
-        }
-      );
-    }
+    sendEmailonAppointmentCreation(emailTemplate); // Call to send email notifcation
     successMessage.data = insertResponse;
     successMessage.message = "Insert successful";
     return res.status(status.created).send(successMessage);
@@ -165,6 +149,26 @@ const createAppointment = async (req, res) => {
     await db.close();
   }
 };
+
+const sendEmailonAppointmentCreation = async (emailTemplate) => {
+  if (process.env.NODE_ENV === "development") {
+    const info = await transporter.sendMail(emailTemplate);
+    console.info("Email for new appointment has bees sent!", info);
+  } else {
+    console.log("process.env.SENDGRID_API_KEY", process.env.SENDGRID_API_KEY);
+    sgMail.send(emailTemplate).then(
+      (info) => {
+        console.log(`** Email for new appointment has bees sent! **`, info);
+      },
+      (error) => {
+        console.error(error);
+        if (error.response) {
+          console.error("error.response.body:", error.response.body);
+        }
+      }
+    );
+  }
+}
 
 const cancelAppointment = async (req, res) => {
   const errors = validationResult(req);
