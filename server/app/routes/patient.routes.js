@@ -137,6 +137,11 @@ router.get(
   [authJwt.verifyToken],
   Patient.getEncountersPrescriptions
 );
+router.get(
+  "/patient/encounters/prescriptions/search-drug",
+  [authJwt.verifyToken],
+  Patient.searchDrug
+);
 router.post(
   "/patient/:patient_id/encounters",
   [authJwt.verifyToken],
