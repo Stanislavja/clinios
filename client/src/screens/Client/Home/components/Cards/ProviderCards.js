@@ -74,7 +74,6 @@ const useStyles = makeStyles((theme) => ({
 
 const ProviderCards = ({ providers, handleProviderClick }) => {
   const classes = useStyles();
-
   return (
     <Card className={classes.root} variant="outlined">
       <Grid

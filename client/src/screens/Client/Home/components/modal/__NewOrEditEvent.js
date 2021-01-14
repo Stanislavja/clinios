@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
-import Grid from '@material-ui/core/Grid';
 import CardContent from "@material-ui/core/CardContent";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Dialog from "@material-ui/core/Dialog";
@@ -37,6 +36,7 @@ import { useHistory } from "react-router-dom";
 import useAuth from "../../../../../hooks/useAuth";
 import useDebounce from "../../../../../hooks/useDebounce";
 import * as API from "../../../../../utils/API";
+// import { AuthConsumer } from "../../../../../contexts/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -51,14 +51,6 @@ const useStyles = makeStyles((theme) => ({
     top: theme.spacing(1 / 2),
     color: "#ffffff",
   },
-  CircularProgress: {
-    textAlign: 'center',
-  },
-  Button: {
-    whiteSpace: "nowrap",
-    maxHeight: "30px",
-    marginTop: "15px",
-  },
   content: {
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
@@ -66,7 +58,6 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     width: "100%",
-    marginBottom: theme.spacing(3/2),
     color: theme.palette.text.secondary,
     "& .MuiSelect-select": {
       minWidth: 220,
@@ -76,30 +67,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     marginTop: theme.spacing(2),
   },
-  timePickers: {
-    display: 'flex',
-  },
-  timePickersButtons: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-  },
   startdatePicker: {
     marginRight: theme.spacing(2),
     maxWidth: "165px",
-  },
-  startTimePicker: {
-    marginRight: theme.spacing(1),
-    "& button" :{
-      padding: '5px !important'
-    }
-  },
-  lengthWrap: {
-    textAlign: 'center'
-  },
-  AddSubButtons: {
-    marginRight: theme.spacing(0),
-    maxWidth: "180px",
-    display: "flex"
   },
   statuses: {
     marginTop: theme.spacing(2),
@@ -151,11 +121,11 @@ const useStyles = makeStyles((theme) => ({
   },
   appointmentLength: {
     maxWidth: "150px",
-    margin: "5px 5px 0",
+    margin: "15px 5px 0",
   },
 }));
 
-const EventModal = ({
+const NewOrEditEvent = ({
   isOpen,
   onClose,
   selectedDate,
@@ -169,8 +139,10 @@ const EventModal = ({
   const { appointments, providers, errors } = props;
   const classes = useStyles();
   const history = useHistory();
-  const [patients, setPatients] = useState([]);
-  const [selectedPatient, setSelectedPatient] = useState("");
+  // const { providers, errors } = props;
+  // const [provider, setProvider] = React.useState("");
+  const [patients, setPatients] = React.useState([]);
+  const [selectedPatient, setSelectedPatient] = React.useState("");
   const [patientSearchTerm, setPatientSearchTerm] = useState("");
   const [calEvent, setCalEvent] = useState("");
   const [appointmentLength, setAppointmentLeangth] = useState(" ");
@@ -181,54 +153,41 @@ const EventModal = ({
     patient: "",
     error: "",
   });
-  
-  console.log('props.event:', props.event);
+  // const user = JSON.parse(localStorage.getItem("user"));
+  // const index = providers.findIndex((provider) => provider.id === user.id);
+  // Test message
 
   const [indexP, setIndex] = useState(0);
-  const [provider, setProvider] = useState("");
+  const [provider, setProvider] = React.useState(providers[indexP]);
   const { user } = useAuth();
 
   const calculateLength = async () => {
     const length = await moment(calEvent.end_dt).diff(calEvent.start_dt, "minutes");
     const length2 = await moment(calEvent.end_dt).diff(calEvent.start_dt, "days");
-    const lengthFromCurrentDay = await moment(calEvent.start_dt).diff(moment(), "days");
-    setCurrentDayLength(lengthFromCurrentDay);
+    const lengthFromCuurrentDay = await moment(calEvent.start_dt).diff(moment(), "days");
+    setCurrentDayLength(lengthFromCuurrentDay);
     setAppointmentLengthDays(length2);
     setAppointmentLeangth(length);
   };
-  
   useEffect(() => {
     if (isNewEvent) {
       setCalEvent("");
+      setProvider("selectedProvider");
       setPatientSearchTerm("");
     } else {
       setCalEvent(props.event);
-      setSelectedPatient({
-        email: props.event.email,
-        firstname: props.event.firstname,
-        id: props.event.patient_id,
-        lastname: props.event.lastname,
-      });
-
       setPatientSearchTerm(`${props.event.firstname} ${props.event.lastname}`);
+      setProvider(selectedProvider);
     }
-    setProvider(selectedProvider);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps, react/destructuring-assignment
   }, [props.event, isNewEvent]);
-
   /* eslint-enable */
   const handleOnChange = (event) => {
     setCalEvent({
       ...calEvent,
       [event.target.name]: event.target.value,
     });
-
-    if(event.target.name === 'title'){
-      setErrorText({
-        ...errorText,
-        title: "",
-      });
-    }
   };
 
   const debouncedSearchTerm = useDebounce(patientSearchTerm, 500);
@@ -253,6 +212,7 @@ const EventModal = ({
         );
       } else {
         setPatients([]);
+        setSelectedPatient("");
       }
     },
     // This is the useEffect input array
@@ -266,67 +226,19 @@ const EventModal = ({
     const sp = patients.filter((p) => p.id === patient.id);
     setSelectedPatient(sp[0]);
     setPatientSearchTerm(`${patient.firstname} ${patient.lastname}`);
-    setErrorText({
-      ...errorText,
-      patient: "",
-    });
   };
-  
   const handleProviderChange = (event) => {
     const pd = providers.filter((p) => p.id === event.target.value);
     setProvider(pd[0]);
   };
 
-  const validateFormFields = () => {
-
-    if (!calEvent.title) {
-      setErrorText(
-        prevErrorText => {
-          return { 
-            ...prevErrorText, 
-            title: "Enter your title",
-          }
-        });
-    }
-
-    console.log('!calEvent.title:', !calEvent.title)
-    console.log('selectedPatient.length === 0:', selectedPatient.length === 0)
-
-    if (selectedPatient.length === 0) {
-      setErrorText(
-        prevErrorText => {
-          return { 
-            ...prevErrorText, 
-            patient: "Please select from here",
-          }
-        });
-    }
-
-    const startTimeExist = appointments
-    // eslint-disable-next-line
-    .map((appointment) => calEvent.start_dt == appointment.start_dt)
-    .includes(true);
-
-    if (startTimeExist) {
-      setErrorText(
-        prevErrorText => {
-          return { 
-            ...prevErrorText, 
-            error: "This time is not available"
-          }
-        });
-    }
-
-  }
-
   const handleSaveOrUpdate = () => {
-    validateFormFields();
     const submitData = () => {
       if (isNewEvent) {
         const payload = {
           data: {
             title: calEvent.title,
-            provider: provider,
+            provider: provider === "selectedProvider" ? providers[indexP] : provider,
             patient: selectedPatient,
             ApptStatus: calEvent.status,
             notes: calEvent.notes,
@@ -362,21 +274,53 @@ const EventModal = ({
         onEventUpdate(payload);
       }
     };
+    const existPatientID = appointments
+      .map((appointment) => selectedPatient.id === appointment.patient_id)
+      .includes(true);
 
-   if(calEvent.title && (selectedPatient.length !== 0)){
-    submitData();
-   }
+    const startTimeExist = appointments
+      // eslint-disable-next-line
+      .map((appointment) => calEvent.start_dt == appointment.start_dt)
+      .includes(true);
+
+    if (!calEvent.title || selectedPatient.length === 0) {
+      if (!calEvent.title && selectedPatient.length === 0) {
+        setErrorText({
+          ...errorText,
+          title: "Enter your title",
+          patient: "Please select from here",
+        });
+      } else {
+        if (!calEvent.title) {
+          setErrorText({
+            ...errorText,
+            title: "Enter your title",
+            patient: "",
+          });
+        }
+        if (selectedPatient.length === 0) {
+          setErrorText({
+            ...errorText,
+            patient: "Please select from here",
+            title: "",
+          });
+        }
+      }
+    } else if (existPatientID) {
+      if (startTimeExist) {
+        setErrorText({ ...errorText, error: "This time is not available" });
+      } else {
+        submitData();
+      }
+    } else {
+      submitData();
+    }
   };
 
   useEffect(() => {
     const index2 = providers.findIndex((pd) => pd.id === user.id);
     setIndex(index2);
   }, [providers, user]);
-
-
-  console.log('errorText:', errorText);
-
-
   return (
     <Dialog
       open={isOpen}
@@ -386,13 +330,19 @@ const EventModal = ({
     >
       <DialogTitle id="alert-dialog-title" className={classes.title}>
         {isNewEvent ? `New Appointment - ${moment(selectedDate).format("YYYY.MM.DD")}` : "Edit Appointment"}
-        <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
+        {onClose ? (
+          <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
             <CloseIcon />
-        </IconButton>
+          </IconButton>
+        ) : null}
       </DialogTitle>
       <DialogContent className={classes.content}>
         {isLoading && (
-          <div className={classes.CircularProgress}>
+          <div
+            style={{
+              textAlign: "center",
+            }}
+          >
             <CircularProgress />
           </div>
         )}
@@ -425,233 +375,244 @@ const EventModal = ({
                 helperText={errorText.title.length > 0 && errorText.title}
               />
             </FormControl>
-            <FormControl component="div" className={classes.formControl}>
-              <Grid container justify="space-around">
-                <KeyboardDatePicker
-                    className={classes.startdatePicker}
-                    ampm={false}
-                    clearable
-                    id="start-date-picker-inline"
-                    label="Start Date"
-                    value={calEvent.start_dt}
-                    variant="inline"
-                    onChange={(date) => {
-                      const property = "start_dt";
-                      setCalEvent({
-                        ...calEvent,
-                        [property]: date,
-                      });
-                    }}
-                    minDate={new Date()}
-                    disablePast
-                    format="EE LLL d y"
-                    KeyboardButtonProps={{
-                      "aria-label": "change date",
-                    }}
-                  />
-                <KeyboardDatePicker
-                  clearable
-                  className={classes.startdatePicker}
-                  ampm={false}
-                  variant="outlined"
-                  id="start-date-picker-inline"
-                  label="End Date"
-                  value={calEvent.end_dt}
-                  onChange={(date) => {
-                    const property = "end_dt";
-                    setCalEvent({
-                      ...calEvent,
-                      [property]: date,
-                    });
-                    calculateLength(date);
-                  }}
-                  minD
-                  ate={new Date()}
-                  disablePast
-                  format="EE LLL d y"
-                  KeyboardButtonProps={{
-                    "aria-label": "change date",
-                  }}
-                />
-                <div  className={classes.AddSubButtons}>
-                <Button
-                  className={classes.Button}
-                  variant="contained"
-                  disableElevation
-                  onClick={async () => {
-                    await setCalEvent({
-                      ...calEvent,
-                      start_dt: moment(calEvent.start_dt).add(1, "days"),
-                      end_dt: moment(calEvent.start_dt).add(1, "days"),
-                    });
-                  }}
-                >
-                  Add day
-                </Button>
-                <Button
-                  variant="contained"
-                  className={classes.Button}
-                  disableElevation
-                  onClick={async () => {
-                    await setCalEvent({
-                      ...calEvent,
-                      start_dt: moment(calEvent.start_dt).subtract(1, "days"),
-                      end_dt: moment(calEvent.end_dt).subtract(1, "days"),
-                    });
-                  }}
-                >
-                  Subtract Day
-                </Button>
-                </div>
-              </Grid>
-            </FormControl>
-            <FormControl component="div" className={classes.formControl}>
-              <Grid container spacing={0}>
-              <Grid item xs={12} sm={5} className={classes.timePickers}>
-                <KeyboardTimePicker
-                  className={classes.startTimePicker}
-                  ampm={false}
-                  clearable
-                  id="start-date-picker-inline"
-                  label="Start Time"
-                  value={calEvent.start_dt}
-                  placeholder="2020/10/10 10:00"
-                  onChange={(date) => {
-                    const property = "start_dt";
-                    setCalEvent({
-                      ...calEvent,
-                      [property]: date,
-                    });
-                  }}
-                  minDate={new Date()}
-                  disablePast
-                  format="HH:mm a"
-                  KeyboardButtonProps={{
-                    "aria-label": "change date",
-                  }}
-                />
-                <KeyboardTimePicker
-                  clearable
-                  ampm={false}
-                  variant="outlined"
-                  id="start-date-picker-inline"
-                  label="End Time"
-                  value={calEvent.end_dt}
-                  placeholder="2020/10/10 11:00"
-                  onChange={(date) => {
-                    const property = "end_dt";
-                    setCalEvent({
-                      ...calEvent,
-                      [property]: date,
-                    });
-                    calculateLength(date);
-                  }}
-                  minD
-                  ate={new Date()}
-                  disablePast
-                  format="HH:mm a"
-                  KeyboardButtonProps={{
-                    "aria-label": "change date",
-                  }}
-                />
-                </Grid>
-              <Grid item xs={12} sm={7} className={classes.timePickersButtons}>
-                
-                  <span className={classes.setTo}>Set to: </span>
-                  <Button
-                    className={classes.Button}
-                    disableElevation
-                    onClick={async () => {
-                      await setCalEvent({
-                        ...calEvent,
-                        end_dt: moment(calEvent.start_dt).add(15, "minutes"),
-                      });
-                    }}
-                  >
-                    15 min
-                  </Button>
-                  <Button
-                    className={classes.Button}
-                    disableElevation
-                    onClick={async () => {
-                      await setCalEvent({
-                        ...calEvent,
-                        end_dt: moment(calEvent.end_dt).add(30, "minutes"),
-                      });
-                    }}
-                  >
-                    30 min
-                  </Button>
-                  <Button
-                  className={classes.Button}
-                    disableElevation
-                    onClick={async () => {
-                      await setCalEvent({
-                        ...calEvent,
-                        end_dt: moment(calEvent.end_dt).add(45, "minutes"),
-                      });
-                    }}
-                  >
-                    45 min
-                  </Button>
-                  <Button
-                    className={classes.Button}
-                    disableElevation
-                    onClick={async () => {
-                      await setCalEvent({
-                        ...calEvent,
-                        end_dt: moment(calEvent.end_dt).add(60, "minutes"),
-                      });
-                    }}
-                  >
-                    60 min
-                  </Button>
-                  </Grid>
-              </Grid>
-            </FormControl>
-            <div className={classes.lengthWrap}>
-              <TextField
-                value={appointmentLengthDays}
-                variant="outlined"
-                margin="dense"
-                className={classes.appointmentLength}
-                size="small"
-                id="appointmentLength"
-                label="Length days"
-                name="appointmentLength"
-                autoComplete="appointmentLength"
-                onChange={(event) => handleOnChange(event)}
-                disabled
-                defaultValue={`${appointmentLengthDays === 0 ? "Same day" : `${appointmentLength} day`}`}
+            <div className={classes.datePickers}>
+              <KeyboardDatePicker
+                className={classes.startdatePicker}
+                ampm={false}
+                clearable
+                id="start-date-picker-inline"
+                label="Start Date"
+                value={calEvent.start_dt}
+                variant="inline"
+                onChange={(date) => {
+                  const property = "start_dt";
+                  setCalEvent({
+                    ...calEvent,
+                    [property]: date,
+                  });
+                }}
+                minDate={new Date()}
+                disablePast
+                format="EE LLL d y"
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
               />
-              <TextField
-                value={appointmentLength}
+              <KeyboardDatePicker
+                clearable
+                className={classes.startdatePicker}
+                ampm={false}
                 variant="outlined"
-                margin="dense"
-                className={classes.appointmentLength}
-                size="small"
-                id="appointmentLength"
-                label="Length minutes"
-                name="appointmentLength"
-                autoComplete="appointmentLength"
-                onChange={(event) => handleOnChange(event)}
-                disabled
+                id="start-date-picker-inline"
+                label="End Date"
+                value={calEvent.end_dt}
+                onChange={(date) => {
+                  const property = "end_dt";
+                  setCalEvent({
+                    ...calEvent,
+                    [property]: date,
+                  });
+                  calculateLength(date);
+                }}
+                minD
+                ate={new Date()}
+                disablePast
+                format="EE LLL d y"
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
               />
-              <TextField
-                value={currentDayLength}
-                variant="outlined"
-                margin="dense"
-                className={classes.appointmentLength}
-                size="small"
-                id="appointmentLength"
-                label="In days"
-                name="appointmentLength"
-                autoComplete="appointmentLength"
-                onChange={(event) => handleOnChange(event)}
-                disabled
-                defaultValue={`${currentDayLength === 0 ? "Today" : `In ${appointmentLength} days`}`}
-              />
+              <Button
+                style={{
+                  whiteSpace: "nowrap",
+                  maxHeight: "30px",
+                  marginTop: "15px",
+                }}
+                variant="contained"
+                disableElevation
+                onClick={async () => {
+                  await setCalEvent({
+                    ...calEvent,
+                    start_dt: moment(calEvent.start_dt).add(1, "days"),
+                    end_dt: moment(calEvent.start_dt).add(1, "days"),
+                  });
+                }}
+              >
+                Add day
+              </Button>
+              <Button
+                variant="contained"
+                style={{
+                  whiteSpace: "nowrap",
+                  maxHeight: "30px",
+                  marginTop: "15px",
+                }}
+                disableElevation
+                onClick={async () => {
+                  await setCalEvent({
+                    ...calEvent,
+                    start_dt: moment(calEvent.start_dt).subtract(1, "days"),
+                    end_dt: moment(calEvent.end_dt).subtract(1, "days"),
+                  });
+                }}
+              >
+                Subtract Day
+              </Button>
             </div>
+            <div className={classes.datePickers}>
+              <KeyboardTimePicker
+                className={classes.startdatePicker}
+                ampm={false}
+                clearable
+                id="start-date-picker-inline"
+                label="Start Time"
+                value={calEvent.start_dt}
+                placeholder="2020/10/10 10:00"
+                onChange={(date) => {
+                  const property = "start_dt";
+                  setCalEvent({
+                    ...calEvent,
+                    [property]: date,
+                  });
+                }}
+                minDate={new Date()}
+                disablePast
+                format="HH:mm a"
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+              />
+              <KeyboardTimePicker
+                clearable
+                ampm={false}
+                variant="outlined"
+                id="start-date-picker-inline"
+                label="End Time"
+                value={calEvent.end_dt}
+                placeholder="2020/10/10 11:00"
+                onChange={(date) => {
+                  const property = "end_dt";
+                  setCalEvent({
+                    ...calEvent,
+                    [property]: date,
+                  });
+                  calculateLength(date);
+                }}
+                minD
+                ate={new Date()}
+                disablePast
+                format="HH:mm a"
+                KeyboardButtonProps={{
+                  "aria-label": "change date",
+                }}
+              />
+              <span className={classes.setTo}>Set to: </span>
+              <Button
+                style={{
+                  whiteSpace: "nowrap",
+                  maxHeight: "30px",
+                  marginTop: "15px",
+                }}
+                disableElevation
+                onClick={async () => {
+                  await setCalEvent({
+                    ...calEvent,
+                    end_dt: moment(calEvent.start_dt).add(15, "minutes"),
+                  });
+                }}
+              >
+                15 min
+              </Button>
+              <Button
+                style={{
+                  whiteSpace: "nowrap",
+                  maxHeight: "30px",
+                  marginTop: "15px",
+                }}
+                disableElevation
+                onClick={async () => {
+                  await setCalEvent({
+                    ...calEvent,
+                    end_dt: moment(calEvent.end_dt).add(30, "minutes"),
+                  });
+                }}
+              >
+                30 min
+              </Button>
+              <Button
+                style={{
+                  whiteSpace: "nowrap",
+                  maxHeight: "30px",
+                  marginTop: "15px",
+                }}
+                disableElevation
+                onClick={async () => {
+                  await setCalEvent({
+                    ...calEvent,
+                    end_dt: moment(calEvent.end_dt).add(45, "minutes"),
+                  });
+                }}
+              >
+                45 min
+              </Button>
+              <Button
+                style={{
+                  whiteSpace: "nowrap",
+                  maxHeight: "30px",
+                  marginTop: "15px",
+                }}
+                disableElevation
+                onClick={async () => {
+                  await setCalEvent({
+                    ...calEvent,
+                    end_dt: moment(calEvent.end_dt).add(60, "minutes"),
+                  });
+                }}
+              >
+                60 min
+              </Button>
+            </div>
+            <TextField
+              value={appointmentLengthDays}
+              variant="outlined"
+              margin="dense"
+              className={classes.appointmentLength}
+              size="small"
+              id="appointmentLength"
+              label="Length days"
+              name="appointmentLength"
+              autoComplete="appointmentLength"
+              onChange={(event) => handleOnChange(event)}
+              disabled
+              defaultValue={`${appointmentLengthDays === 0 ? "Same day" : `${appointmentLength} day`}`}
+            />
+            <TextField
+              value={appointmentLength}
+              variant="outlined"
+              margin="dense"
+              className={classes.appointmentLength}
+              size="small"
+              id="appointmentLength"
+              label="Length minutes"
+              name="appointmentLength"
+              autoComplete="appointmentLength"
+              onChange={(event) => handleOnChange(event)}
+              disabled
+            />
+            <TextField
+              value={currentDayLength}
+              variant="outlined"
+              margin="dense"
+              className={classes.appointmentLength}
+              size="small"
+              id="appointmentLength"
+              label="In days"
+              name="appointmentLength"
+              autoComplete="appointmentLength"
+              onChange={(event) => handleOnChange(event)}
+              disabled
+              defaultValue={`${currentDayLength === 0 ? "Today" : `In ${appointmentLength} days`}`}
+            />
             <FormControl className={classes.statuses}>
               <FormLabel component="legend">Status</FormLabel>
               <RadioGroup
@@ -681,7 +642,7 @@ const EventModal = ({
                 value={!!provider && provider.id}
                 onChange={handleProviderChange}
                 label="Provider"
-                defaultValue={selectedProvider?.id}
+                defaultValue={providers[indexP]?.id}
               >
                 <MenuItem value="">
                   <em>None</em>
@@ -709,7 +670,7 @@ const EventModal = ({
                 error={errorText.patient.length > 0}
                 helperText={errorText.patient.length > 0 && errorText.patient}
               />
-              {patients.length > 0 && (
+              {patients.length > 0 && !selectedPatient && (
                 <Card className={classes.patientListCard}>
                   <CardContent className={classes.patientListContent}>
                     <List component="nav" aria-label="secondary mailbox folder">
@@ -763,7 +724,7 @@ const EventModal = ({
       </DialogContent>
       <DialogActions className={classes.modalAction}>
         <Button size="small" variant="outlined" onClick={() => onClose()}>
-          Close
+          close
         </Button>
         <div>
           <Button
@@ -773,7 +734,7 @@ const EventModal = ({
             size="small"
             onClick={() => handleSaveOrUpdate()}
           >
-            Save
+            {isNewEvent ? "Save" : "Update"}
           </Button>
         </div>
       </DialogActions>
@@ -781,7 +742,7 @@ const EventModal = ({
   );
 };
 
-EventModal.propTypes = {
+NewOrEditEvent.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   appointments: PropTypes.arrayOf(
     PropTypes.arrayOf({
@@ -820,4 +781,4 @@ EventModal.propTypes = {
   errors: PropTypes.string.isRequired,
 };
 
-export default EventModal;
+export default NewOrEditEvent;

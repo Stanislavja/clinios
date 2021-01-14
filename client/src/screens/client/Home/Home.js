@@ -17,7 +17,6 @@ import {
   MessagesUnread,
   MessageToPatient,
   NewOrEditEvent,
-  EventModal,
   ProviderCards,
   ProviderDetailsCard,
 } from "./components";
@@ -67,6 +66,7 @@ export default function Home() {
         ...acc,
         {
           ...item,
+         // title: item.title ? `${item.title.substring(0, 10)}...` : item.firstname,
           title: item.title ? item.title : item.firstname,
           start: item.start_dt,
           end: item.end_dt,
@@ -302,24 +302,8 @@ export default function Home() {
           )}
         </Grid>
       </Grid>
-  {/*     {isOpen && (
-        <NewOrEditEvent
-          isLoading={isLoading}
-          isNewEvent={isNewEvent}
-          event={selectedEvent && selectedEvent}
-          selectedDate={selectedDate}
-          selectedProvider={selectedProvider}
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          providers={providers}
-          onSave={handleEventCreation}
-          onEventUpdate={(payload) => handleEventUpdate(payload)}
-          errors={errors}
-          appointments={appointments}
-        />
-      )} */}
       {isOpen && (
-        <EventModal
+        <NewOrEditEvent
           isLoading={isLoading}
           isNewEvent={isNewEvent}
           event={selectedEvent && selectedEvent}
