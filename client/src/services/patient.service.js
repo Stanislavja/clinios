@@ -111,6 +111,14 @@ class Patient {
       .then((res) => res.data);
   }
 
+  searchEncountersPrescriptionsDrugs() {
+    return axios
+      .get(`${API_BASE}/patient/encounters/prescriptions`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
   getMedicalNotes(patientId) {
     return axios
       .get(`${API_BASE}/patient/${patientId}/medical-notes/history`, {
