@@ -17,6 +17,7 @@ import {
   MessagesUnread,
   MessageToPatient,
   NewOrEditEvent,
+  EventModal,
   ProviderCards,
   ProviderDetailsCard,
 } from "./components";
@@ -107,6 +108,7 @@ export default function Home() {
     setIsNewEvent(true);
     setIsOpen(true);
     setSelectedDate(date);
+    setErrors(null)
   };
 
   useEffect(() => {
@@ -115,7 +117,6 @@ export default function Home() {
       setProviders(data);
       if (data.length > 0) {
         setSelectedProvider(data[0]);
-        fetchEventsByProvider(data[0]);
       }
     }
 
@@ -147,6 +148,7 @@ export default function Home() {
     setIsNewEvent(false);
     const eventClicked = events.filter((event) => event.id === parseInt(calEvent.event.id, 10));
     setSelectedEvent(eventClicked[0]);
+    setErrors(null);
     setIsOpen(true);
   };
 
@@ -300,8 +302,24 @@ export default function Home() {
           )}
         </Grid>
       </Grid>
-      {isOpen && (
+  {/*     {isOpen && (
         <NewOrEditEvent
+          isLoading={isLoading}
+          isNewEvent={isNewEvent}
+          event={selectedEvent && selectedEvent}
+          selectedDate={selectedDate}
+          selectedProvider={selectedProvider}
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          providers={providers}
+          onSave={handleEventCreation}
+          onEventUpdate={(payload) => handleEventUpdate(payload)}
+          errors={errors}
+          appointments={appointments}
+        />
+      )} */}
+      {isOpen && (
+        <EventModal
           isLoading={isLoading}
           isNewEvent={isNewEvent}
           event={selectedEvent && selectedEvent}

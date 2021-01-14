@@ -182,8 +182,10 @@ const EventModal = ({
     error: "",
   });
   
+  console.log('props.event:', props.event);
+
   const [indexP, setIndex] = useState(0);
-  const [provider, setProvider] = useState(providers[indexP]);
+  const [provider, setProvider] = useState("");
   const { user } = useAuth();
 
   const calculateLength = async () => {
@@ -198,7 +200,6 @@ const EventModal = ({
   useEffect(() => {
     if (isNewEvent) {
       setCalEvent("");
-      setProvider("selectedProvider");
       setPatientSearchTerm("");
     } else {
       setCalEvent(props.event);
@@ -210,8 +211,8 @@ const EventModal = ({
       });
 
       setPatientSearchTerm(`${props.event.firstname} ${props.event.lastname}`);
-      setProvider(selectedProvider);
     }
+    setProvider(selectedProvider);
     // eslint-disable-next-line react-hooks/exhaustive-deps, react/destructuring-assignment
   }, [props.event, isNewEvent]);
 
@@ -287,6 +288,7 @@ const EventModal = ({
           }
         });
     }
+
     console.log('!calEvent.title:', !calEvent.title)
     console.log('selectedPatient.length === 0:', selectedPatient.length === 0)
 
@@ -324,7 +326,7 @@ const EventModal = ({
         const payload = {
           data: {
             title: calEvent.title,
-            provider: provider === "selectedProvider" ? providers[indexP] : provider,
+            provider: provider,
             patient: selectedPatient,
             ApptStatus: calEvent.status,
             notes: calEvent.notes,
@@ -679,7 +681,7 @@ const EventModal = ({
                 value={!!provider && provider.id}
                 onChange={handleProviderChange}
                 label="Provider"
-                defaultValue={providers[indexP]?.id}
+                defaultValue={selectedProvider?.id}
               >
                 <MenuItem value="">
                   <em>None</em>
