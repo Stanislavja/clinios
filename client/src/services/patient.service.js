@@ -111,9 +111,9 @@ class Patient {
       .then((res) => res.data);
   }
 
-  searchEncountersPrescriptionsDrugs() {
+  searchEncountersPrescriptionsDrugs(data) {
     return axios
-      .get(`${API_BASE}/patient/encounters/prescriptions`, {
+      .post(`${API_BASE}/patient/encounters/prescriptions/search-drug`, data, {
         headers: authHeader(),
       })
       .then((res) => res.data);
