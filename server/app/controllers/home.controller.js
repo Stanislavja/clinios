@@ -248,7 +248,7 @@ const updateAppointment = async (req, res) => {
 };
 
 const sendEmailOnAppointmentCreationAndChange = async (emailTemplate, logMessage) => {
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV !== "development") {
     const info = await transporter.sendMail(emailTemplate);
     console.info(logMessage, info);
   } else {
