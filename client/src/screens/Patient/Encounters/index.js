@@ -236,7 +236,7 @@ const Encounters = (props) => {
             <form id="encounters-form" onSubmit={onFormSubmit}>
               <Grid container spacing={2} alignItems="center">
                 {EncountersFormFields.map((item) => (
-                  <Grid item lg={3}>
+                  <Grid item lg={3} key={item.label}>
                     <Grid container spacing={2} alignItems="center">
                       <Grid item lg={3} xs={4}>
                         <label htmlFor={item.name} variant="h4" color="textSecondary">
