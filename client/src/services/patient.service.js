@@ -105,7 +105,7 @@ class Patient {
 
   getEncountersPrescriptions() {
     return axios
-      .get(`${API_BASE}/patient/encounters/prescriptions`, {
+      .get(`${API_BASE}/patient/encounters/recent-prescriptions`, {
         headers: authHeader(),
       })
       .then((res) => res.data);
