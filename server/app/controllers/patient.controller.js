@@ -221,10 +221,9 @@ const updatePatient = async (req, res) => {
     if (typeof weight !== "undefined") {
       $sql += `, weight='${weight}'`;
     }
-    $sql += `, updated='${moment().format(
-      "YYYY-MM-DD HH:mm:ss"
-    )}', updated_user_id=${req.user_id} where user_id=${req.user_id
-      } and id=${patient_id}`;
+    $sql += `, updated='${moment().format("YYYY-MM-DD HH:mm:ss")}',
+    updated_user_id=${req.user_id}
+    where user_id=${req.user_id} and id=${patient_id}`;
 
     const updateResponse = await db.query($sql);
     if (!updateResponse.affectedRows) {
@@ -1335,10 +1334,9 @@ const updateEncounter = async (req, res) => {
       $sql += `, lab_bill_to=${lab_bill_to}`;
     }
 
-    $sql += `, updated='${moment().format(
-      "YYYY-MM-DD HH:mm:ss"
-    )}', updated_user_id=${req.user_id
-      } where patient_id=${patient_id} and id=${id}`;
+    $sql += `, updated='${moment().format("YYYY-MM-DD HH:mm:ss")}',
+    updated_user_id=${req.user_id}
+    where patient_id=${patient_id} and id=${id}`;
 
     const updateResponse = await db.query($sql);
     if (!updateResponse.affectedRows) {
