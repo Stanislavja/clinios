@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 import {
   Box,
@@ -6,6 +6,8 @@ import {
   Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+
+import PatientService from "../../../../../services/patient.service";
 
 const useStyles = makeStyles(() => ({
   text: {
@@ -15,6 +17,20 @@ const useStyles = makeStyles(() => ({
 
 const DiagnoseHover = () => {
   const classes = useStyles();
+  const [recentICDs, setRecentICDs] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchRecentICDs = useCallback(() => {
+    PatientService.getEncountersRecentDiagnoses().then((response) => {
+      setRecentICDs(response.data);
+      setIsLoading(false);
+    });
+  }, []);
+
+  useEffect(() => {
+    fetchRecentICDs();
+  }, [fetchRecentICDs]);
+
   return (
     <Box minWidth={425}>
       <Grid container>
@@ -22,25 +38,24 @@ const DiagnoseHover = () => {
           <Typography variant="h5" gutterBottom>
             Recent ICDs
           </Typography>
-          {[1, 2, 3, 4, 5].map((item) => (
-            <Grid key={item}>
+          {recentICDs.length
+            ? recentICDs.map((item) => (
+              <Grid key={item}>
+                <Typography gutterBottom variant="body1" className={classes.text}>
+                  {item.name}
+                </Typography>
+              </Grid>
+            ))
+            : (
               <Typography gutterBottom variant="body1" className={classes.text}>
-                Chronic Fatigue (Un-specified)
+                {isLoading ? "Loading..." : "No ICDs found..."}
               </Typography>
-            </Grid>
-          ))}
+            )}
         </Grid>
         <Grid item lg={6}>
           <Typography variant="h5" gutterBottom>
             Recommended ICDs
           </Typography>
-          {[1, 2, 3, 4, 5].map((item) => (
-            <Grid key={item}>
-              <Typography gutterBottom variant="body1">
-                Chronic Fatigue (Un-specified)
-              </Typography>
-            </Grid>
-          ))}
         </Grid>
       </Grid>
     </Box>
