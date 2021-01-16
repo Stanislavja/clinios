@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -43,21 +43,25 @@ const PlanHover = (props) => {
     setShowFaxLabRequisitionDialog((prevState) => !prevState);
   };
 
+  const handleKeyPress = useCallback((event) => {
+    if (event.code === "KeyP") {
+      setShowNewPrescriptionDialog((prevState) => !prevState);
+      window.removeEventListener("keydown", handleKeyPress);
+    }
+    if (event.code === "KeyL") {
+      setShowNewRequisitionDialog((prevState) => !prevState);
+      window.removeEventListener("keydown", handleKeyPress);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
-    const handleKeyPress = (event) => {
-      if (event.code === "KeyP") {
-        toggleNewPrescriptionDialog();
-      }
-      if (event.code === "KeyL") {
-        toggleNewRequisitionDialog();
-      }
-    };
     window.addEventListener("keydown", handleKeyPress);
 
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, []);
+  }, [handleKeyPress]);
 
   const closePrescriptionDialogWithPopover = () => {
     setShowNewPrescriptionDialog(false);
@@ -77,6 +81,10 @@ const PlanHover = (props) => {
   const closeFaxLabRequisitionDialogWithPopover = () => {
     setShowFaxLabRequisitionDialog(false);
     closePopover();
+  };
+
+  const removeKeyListener = () => {
+    window.removeEventListener("keydown", handleKeyPress);
   };
 
   return (
@@ -129,7 +137,10 @@ const PlanHover = (props) => {
         variant="h5"
         gutterBottom
         className={classes.textButton}
-        onClick={() => toggleNewPrescriptionDialog()}
+        onClick={() => {
+          toggleNewPrescriptionDialog();
+          removeKeyListener();
+        }}
       >
         New Prescription&nbsp;
         <span className={classes.keyText}>
@@ -141,7 +152,10 @@ const PlanHover = (props) => {
         variant="h5"
         gutterBottom
         className={classes.textButton}
-        onClick={() => toggleNewRequisitionDialog()}
+        onClick={() => {
+          toggleNewRequisitionDialog();
+          removeKeyListener();
+        }}
       >
         New Lab Requisitions&nbsp;
         <span className={classes.keyText}>

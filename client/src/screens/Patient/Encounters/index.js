@@ -62,6 +62,9 @@ const useStyles = makeStyles((theme) => ({
       padding: 4,
     },
   },
+  w100: {
+    width: "100%",
+  },
 }));
 
 const Encounters = (props) => {
@@ -209,6 +212,7 @@ const Encounters = (props) => {
         <Grid
           item
           lg={2}
+          md={2}
         >
           {FirstColumnPatientCards.map((item) => (
             <Grid key={item.title}>
@@ -222,6 +226,7 @@ const Encounters = (props) => {
         <Grid
           item
           lg={6}
+          md={6}
         >
           <>
             <Typography variant="h3" color="textSecondary">
@@ -231,7 +236,7 @@ const Encounters = (props) => {
             <form id="encounters-form" onSubmit={onFormSubmit}>
               <Grid container spacing={2} alignItems="center">
                 {EncountersFormFields.map((item) => (
-                  <Grid item lg={3}>
+                  <Grid item lg={3} key={item.label}>
                     <Grid container spacing={2} alignItems="center">
                       <Grid item lg={3} xs={4}>
                         <label htmlFor={item.name} variant="h4" color="textSecondary">
@@ -305,7 +310,7 @@ const Encounters = (props) => {
               </Grid>
 
               <Grid container spacing={1}>
-                <Grid item lg={9} md={8} sm={12}>
+                <Grid item lg={9} md={8} xs={12}>
                   <Grid className={classes.formInput}>
                     <Grid item lg={6}>
                       <Typography gutterBottom variant="h6" color="textPrimary">
@@ -350,7 +355,7 @@ const Encounters = (props) => {
                     </Grid>
                   </Grid>
                 </Grid>
-                <Grid item lg={3} md={4} sm={12}>
+                <Grid item lg={3} md={4} xs={12}>
                   {/* <CardsList /> */}
                   <Card
                     title="Diagnose"
@@ -410,6 +415,7 @@ const Encounters = (props) => {
         <Grid
           item
           lg={2}
+          md={2}
         >
           {ThirdColumnPatientCards.map((item) => (
             <Grid key={item.title}>
@@ -423,6 +429,7 @@ const Encounters = (props) => {
         <Grid
           item
           lg={2}
+          md={2}
         >
           {FourthColumnPatientCards.map((item) => (
             <Grid key={item.title}>
@@ -435,13 +442,13 @@ const Encounters = (props) => {
         </Grid>
       </Grid>
       <Grid container spacing={1}>
-        <Grid item md={6} sm={12}>
+        <Grid item md={6} sm={12} className={classes.w100}>
           <Card
             title="Documents"
             data={<DocumentsCardContent reloadData={() => { }} />}
           />
         </Grid>
-        <Grid item md={6} sm={12}>
+        <Grid item md={6} sm={12} className={classes.w100}>
           <Card
             title="Tests"
             data={<TestsCardContent />}

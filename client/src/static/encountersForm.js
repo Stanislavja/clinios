@@ -82,7 +82,7 @@ export const NewDrugFormFields = [
     name: "frequency",
     id: "frequency",
     label: "Frequency",
-    baseType: "input",
+    baseType: "select",
     type: "text",
     options: [],
   },

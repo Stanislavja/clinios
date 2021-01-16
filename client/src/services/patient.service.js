@@ -94,9 +94,42 @@ class Patient {
       .then((res) => res.data);
   }
 
+  // encounters apis
   getEncounters(patientId) {
     return axios
       .get(`${API_BASE}/patient/${patientId}/encounters`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  getEncountersPrescriptions() {
+    return axios
+      .get(`${API_BASE}/patient/encounters/recent-prescriptions`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  getEncountersRecentDiagnoses() {
+    return axios
+      .get(`${API_BASE}/patient/encounters/diagnoses/recent-diagnoses`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  searchEncountersPrescriptionsDrugs(data) {
+    return axios
+      .post(`${API_BASE}/patient/encounters/prescriptions/search-drug`, data, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  getEncountersPrescriptionsDrugsFrequencies() {
+    return axios
+      .get(`${API_BASE}/patient/encounters/prescriptions/frequencies`, {
         headers: authHeader(),
       })
       .then((res) => res.data);
