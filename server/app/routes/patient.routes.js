@@ -256,6 +256,12 @@ router.delete(
   Patient.deleteLayout
 );
 
+router.get(
+  "/patient/encounters/diagnoses/recent-diagnoses",
+  [authJwt.verifyToken],
+  Patient.getRecentDiagnoses
+);
+
 router.get("/drug/search", [authJwt.verifyToken], Patient.getDrugs);
 router.get("/icd/search", [authJwt.verifyToken], Patient.getIcds);
 
