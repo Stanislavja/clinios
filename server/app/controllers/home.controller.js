@@ -42,32 +42,6 @@ const getAll = async (req, res) => {
   }
 };
 
-const getPatientsById = async (req, res) => {
-  const {patientId} = req.params;
-  const db = makeDb(configuration, res);
-  try {
-    $sql = `select id, firstname, middlename, lastname, email
-    from patient where client_id=${req.client_id} and id=${patientId}
-    order by firstname, middlename, lastname
-    limit 10`;
-
-    const dbResponse = await db.query($sql);
-
-    if (!dbResponse) {
-      errorMessage.error = "None found";
-      return res.status(status.notfound).send(errorMessage);
-    }
-    successMessage.data = dbResponse;
-    return res.status(status.created).send(successMessage);
-  } catch (err) {
-    console.log("err", err);
-    errorMessage.error = "Select not successful";
-    return res.status(status.error).send(errorMessage);
-  } finally {
-    await db.close();
-  }
-}
-
 const getEventsByProvider = async (req, res) => {
   const db = makeDb(configuration, res);
   const { providerId } = req.params;
@@ -450,7 +424,6 @@ const getProviderDetails = async (req, res) => {
 
 const appointmentTypes = {
   getAll,
-  getPatientsById,
   getEventsByProvider,
   createAppointment,
   cancelAppointment,

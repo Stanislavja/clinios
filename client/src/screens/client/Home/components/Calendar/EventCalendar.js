@@ -18,7 +18,7 @@ function renderEventContent(eventInfo) {
           padding: "3px 5px",
           borderRadius: "3px",
           cursor: "pointer",
-          whiteSpace: 'normal'
+          whiteSpace: "normal",
         }}
       >
         {eventInfo.timeText}

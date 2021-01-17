@@ -66,7 +66,6 @@ export default function Home() {
         ...acc,
         {
           ...item,
-         // title: item.title ? `${item.title.substring(0, 10)}...` : item.firstname,
           title: item.title ? item.title : item.firstname,
           start: item.start_dt,
           end: item.end_dt,
@@ -108,7 +107,7 @@ export default function Home() {
     setIsNewEvent(true);
     setIsOpen(true);
     setSelectedDate(date);
-    setErrors(null)
+    setErrors(null);
   };
 
   useEffect(() => {
