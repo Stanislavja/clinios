@@ -20,12 +20,6 @@ const useStyles = makeStyles((theme) => ({
     bottom: theme.spacing(1),
     width: `calc(100% - ${theme.spacing(4 * 2)}px)`, // 2 x 2 sides = 4
   },
-  textButton: {
-    cursor: "pointer",
-  },
-  minWidth100: {
-    minWidth: 100,
-  },
 }));
 
 const SampleDocViewer = () => {
