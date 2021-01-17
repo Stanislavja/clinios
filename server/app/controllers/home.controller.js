@@ -72,6 +72,29 @@ const getEventsByProvider = async (req, res) => {
   }
 };
 
+const sendEmailOnAppointmentCreationAndChange = async (
+  emailTemplate,
+  logMessage
+) => {
+  if (process.env.NODE_ENV !== "development") {
+    const info = await transporter.sendMail(emailTemplate);
+    console.info(logMessage, info);
+  } else {
+    console.log("process.env.SENDGRID_API_KEY", process.env.SENDGRID_API_KEY);
+    sgMail.send(emailTemplate).then(
+      (info) => {
+        console.log(`** ${logMessage}! **`, info);
+      },
+      (error) => {
+        console.error(error);
+        if (error.response) {
+          console.error("error.response.body:", error.response.body);
+        }
+      }
+    );
+  }
+};
+
 const createAppointment = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -148,7 +171,10 @@ const cancelAppointment = async (req, res) => {
       providerName
     );
     // Call to send email notifcation
-    sendEmailOnAppointmentCreationAndChange(emailTemplate, "Email for cancel appointment has bees sent!");
+    sendEmailOnAppointmentCreationAndChange(
+      emailTemplate,
+      "Email for cancel appointment has bees sent!"
+    );
     successMessage.data = updateResponse;
     successMessage.message = "Cancel successful";
     return res.status(status.created).send(successMessage);
@@ -205,9 +231,12 @@ const updateAppointment = async (req, res) => {
         moment(new_start_dt).format("YYYY-MM-DD HH:mm:ss")
       );
     }
-    
+
     // Call to send email notifcation
-    sendEmailOnAppointmentCreationAndChange(emailTemplate, "Email for update appointment has bees sent!");
+    sendEmailOnAppointmentCreationAndChange(
+      emailTemplate,
+      "Email for update appointment has bees sent!"
+    );
 
     successMessage.data = updateResponse;
     successMessage.message = "Update successful";
@@ -220,26 +249,6 @@ const updateAppointment = async (req, res) => {
     await db.close();
   }
 };
-
-const sendEmailOnAppointmentCreationAndChange = async (emailTemplate, logMessage) => {
-  if (process.env.NODE_ENV !== "development") {
-    const info = await transporter.sendMail(emailTemplate);
-    console.info(logMessage, info);
-  } else {
-    console.log("process.env.SENDGRID_API_KEY", process.env.SENDGRID_API_KEY);
-    sgMail.send(emailTemplate).then(
-      (info) => {
-        console.log(`** ${logMessage}! **`, info);
-      },
-      (error) => {
-        console.error(error);
-        if (error.response) {
-          console.error("error.response.body:", error.response.body);
-        }
-      }
-    );
-  }
-}
 
 const getAppointmentRequest = async (req, res) => {
   const db = makeDb(configuration, res);
