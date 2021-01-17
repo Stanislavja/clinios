@@ -40,7 +40,8 @@ const DiagnoseHover = () => {
           </Typography>
           {recentICDs.length
             ? recentICDs.map((item) => (
-              <Grid key={item}>
+              <Grid key={`${item.id}_${Math.random()}`}>
+                {/* Math.random was used intentionally to get unique keys */}
                 <Typography gutterBottom variant="body1" className={classes.text}>
                   {item.name}
                 </Typography>
