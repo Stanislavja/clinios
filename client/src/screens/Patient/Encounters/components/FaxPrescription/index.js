@@ -8,6 +8,8 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
+import SampleDocumentViewer from "../SampleDocViewer";
+
 const useStyles = makeStyles(() => ({
   text: {
     fontSize: 14,
@@ -63,6 +65,9 @@ const FaxPrescription = () => {
           </Button>
         </Grid>
       </Grid>
+
+      {/* sample document for the time being */}
+      <SampleDocumentViewer />
     </>
   );
 };

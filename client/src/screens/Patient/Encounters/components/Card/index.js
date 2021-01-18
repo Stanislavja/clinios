@@ -79,7 +79,7 @@ const PatientCard = (props) => {
       case "Plan":
         return <PlanHover closePopover={handlePopoverClose} />;
       case "Billing":
-        return <BillingHover />;
+        return <BillingHover closePopover={handlePopoverClose} />;
       default:
         return "";
     }
