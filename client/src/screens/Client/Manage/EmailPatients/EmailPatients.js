@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { makeStyles, withStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
@@ -80,6 +80,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
     marginLeft: theme.spacing(1),
   },
+  marginRight: {
+    marginRight: theme.spacing(1),
+  },
 }));
 
 const LightTooltip = withStyles((theme) => ({
@@ -119,11 +122,12 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-const isLessThan30Minutes = (createdTime) => (moment()
-  .subtract(30, "minutes")
-  .format()
-      < moment(createdTime)
-        .format()
+const isLessThan30Minutes = (createdTime) => (
+  moment()
+    .subtract(30, "minutes")
+    .format()
+  < moment(createdTime)
+    .format()
 );
 
 
@@ -138,16 +142,15 @@ export default function EmailPatients() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedEmail, setSelectedEmail] = useState({});
 
-
-  const fetchEmailHistory = () => {
+  const fetchEmailHistory = useCallback(() => {
     EmailPatient.getEmailHistory().then((response) => {
       setEmailHistory(response.data.data);
     });
-  };
+  }, []);
 
   useEffect(() => {
     fetchEmailHistory();
-  }, []);
+  }, [fetchEmailHistory]);
 
   const handleEmailHistoryDeletion = (createdDate) => {
     EmailPatient.deleteEmailHistory(moment(createdDate).format("YYYY-MM-DD HH:mm:ss")).then((response) => {
@@ -253,7 +256,6 @@ export default function EmailPatients() {
           <Table
             size="small"
             className={classes.table}
-            aria-label="a dense table"
           >
             <TableHead>
               <TableRow>
@@ -266,74 +268,79 @@ export default function EmailPatients() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {
-                (emailHistory && emailHistory.length === 0)
-                  && <p className={classes.noRecords}>No records....</p>
-              }
-              {emailHistory.map((history) => (
-                <StyledTableRow key={history.created}>
-                  <TableCell
-                    style={{ whiteSpace: "nowrap" }}
-                    padding="checkbox"
-                    component="th"
-                    scope="row"
-                  >
-                    {moment(history.created).format("lll")}
-                  </TableCell>
-                  <TableCell padding="checkbox" component="th" scope="row">
-                    {history.subject}
-                  </TableCell>
-                  {history.message && history.message.length > 25 ? (
-                    <LightTooltip title={history.message}>
+              {emailHistory.length
+                ? emailHistory.map((history) => (
+                  <StyledTableRow key={history.created}>
+                    <TableCell
+                      style={{ whiteSpace: "nowrap" }}
+                      padding="checkbox"
+                      component="th"
+                      scope="row"
+                    >
+                      {moment(history.created).format("lll")}
+                    </TableCell>
+                    <TableCell padding="checkbox" component="th" scope="row">
+                      {history.subject}
+                    </TableCell>
+                    {history.message && history.message.length > 25 ? (
+                      <LightTooltip title={history.message}>
+                        <TableCell
+                          padding="checkbox"
+                          className={classes.overFlowControl}
+                        >
+                          {`${history.message.substring(0, 25)}...`}
+                        </TableCell>
+                      </LightTooltip>
+                    ) : (
                       <TableCell
                         padding="checkbox"
                         className={classes.overFlowControl}
                       >
-                        {`${history.message.substring(0, 25)}...`}
+                        {history.message || ""}
                       </TableCell>
-                    </LightTooltip>
-                  ) : (
-                    <TableCell
-                      padding="checkbox"
-                      className={classes.overFlowControl}
-                    >
-                      {history.message || ""}
+                    )}
+
+                    <TableCell padding="checkbox" component="th" scope="row">
+                      {history.status
+                        ? history.status === "U" ? "Active" : "InActive"
+                        : ""}
                     </TableCell>
-                  )}
+                    <TableCell padding="checkbox">
+                      {history.created_user}
+                    </TableCell>
+                    <TableCell padding="checkbox" className={classes.actions}>
+                      {isLessThan30Minutes(history.created)
+                        ? (
+                          <>
+                            <IconButton
+                              aria-label="edit"
+                              className={classes.marginRight}
+                              onClick={() => handleOnEdit(history)}
+                            >
+                              <EditIcon fontSize="small" />
+                            </IconButton>
+                            <IconButton
+                              aria-label="delete"
+                              onClick={() => handleEmailHistoryDeletion(history.created)}
+                            >
+                              <DeleteIcon fontSize="small" />
+                            </IconButton>
+                          </>
+                        )
+                        : ""}
 
-                  <TableCell padding="checkbox" component="th" scope="row">
-                    {history.status
-                      ? history.status === "U" ? "Active" : "InActive"
-                      : ""}
-                  </TableCell>
-                  <TableCell padding="checkbox">
-                    {history.created_user}
-                  </TableCell>
-                  <TableCell padding="checkbox" className={classes.actions}>
-                    { isLessThan30Minutes(history.created)
-                      ? (
-                        <>
-                          <IconButton
-                            aria-label="edit"
-                            className={classes.margin}
-                            onClick={() => handleOnEdit(history)}
-                          >
-                            <EditIcon fontSize="default" />
-                          </IconButton>
-                          <IconButton
-                            aria-label="delete"
-                            className={classes.margin}
-                            onClick={() => handleEmailHistoryDeletion(history.created)}
-                          >
-                            <DeleteIcon fontSize="default" />
-                          </IconButton>
-                        </>
-                      )
-                      : ""}
-
-                  </TableCell>
-                </StyledTableRow>
-              ))}
+                    </TableCell>
+                  </StyledTableRow>
+                ))
+                : (
+                  <StyledTableRow>
+                    <TableCell colSpan={6}>
+                      <Typography align="center" variant="body1">
+                        No Records Found...
+                      </Typography>
+                    </TableCell>
+                  </StyledTableRow>
+                )}
             </TableBody>
           </Table>
         </TableContainer>
