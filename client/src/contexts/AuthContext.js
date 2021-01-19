@@ -93,7 +93,7 @@ const AuthContext = createContext({
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(isDev() ? logger(reducer) : reducer, initialAuthState);
-  const [cookies] = useCookies(["last_viewed_patient_id"]);
+  const [cookies, removeCookie] = useCookies(["last_viewed_patient_id"]);
 
   const login = async (email, password) => {
     const response = await axios.post(`${API_BASE}/auth/login`, { email, password });
@@ -153,6 +153,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setSession(null);
     dispatch({ type: "LOGOUT" });
+    removeCookie("last_viewed_patient_id");
   };
 
   useEffect(() => {
@@ -176,7 +177,7 @@ export const AuthProvider = ({ children }) => {
           const { user } = response.data.data;
           const patientId = cookies.last_viewed_patient_id;
           let lastVisitedPatient = null;
-          if (patientId && (decoded.role === "CLIENT")) {
+          if (patientId && patientId !== "undefined" && (decoded.role === "CLIENT")) {
             const lastPatentRes = await axios.get(`${API_BASE}/user/last-visited-patient/${patientId}`,
               { headers: authHeader() });
             lastVisitedPatient = lastPatentRes.data.data;
