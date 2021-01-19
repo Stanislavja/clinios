@@ -36,6 +36,10 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "5px",
     fontSize: "15px",
   },
+  headerWrap: {
+    display: "flex",
+    justifyContent: "space-between"
+  }
 }));
 
 export default function Home() {
@@ -260,7 +264,8 @@ export default function Home() {
 
   return (
     <div className={classes.root}>
-      <div style={{ display: "flex" }}>
+      <Grid container spacing={8}>
+        <Grid item md={7} xs={12} className={classes.headerWrap}>
         <Typography component="h1" variant="h2" color="textPrimary" className={classes.pageTitle}>
           Home
           {" "}
@@ -275,7 +280,9 @@ export default function Home() {
             inputProps={{ "aria-label": "primary checkbox" }}
           />
         </FormControl>
-      </div>
+      
+        </Grid>
+      </Grid>
       <Grid container spacing={8}>
         <Grid item md={7} xs={12}>
           <Calendar events={events} onDayClick={handleDayClick} onEventClick={handleEventClick} />
