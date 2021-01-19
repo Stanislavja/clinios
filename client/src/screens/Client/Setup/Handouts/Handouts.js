@@ -94,7 +94,7 @@ const Handouts = () => {
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={8}>
+      <Grid container>
         <Grid item md={6} xs={12}>
           <div className={classes.titleButtonWrap}>
             <Typography
