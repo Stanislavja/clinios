@@ -10,7 +10,7 @@ import { useSnackbar } from "notistack";
 import Appointments from "../../../services/appointments.service";
 import DashboardHome from "../../../services/DashboardHome.service";
 import Messages from "../../../services/message-to-patient.service";
-import { statusToColorCode } from "../../../utils/helpers";
+import { statusToColorCode, isEmpty } from "../../../utils/helpers";
 import {
   AppointmentRequests,
   Calendar,
@@ -60,8 +60,6 @@ export default function Home() {
   const [isNewEvent, setIsNewEvent] = useState(true);
   const [isNewMessage, setIsNewMessage] = useState(true);
   const [patient_id_to, setPatient_id_to] = useState(null);
-  const [appointments, setAppointments] = useState([]);
-
   const [isMessageToPatientOpen, setIsMessageToPatientOpen] = useState(false);
 
   const getMapFromArray = (data) => {
@@ -82,18 +80,11 @@ export default function Home() {
     return formedData;
   };
 
-  async function fetchAppointments() {
-    const { data } = await Appointments.getAll();
-    const eventsFromAPI = getMapFromArray(data);
-    setEvents(eventsFromAPI);
-    setAppointments(data);
-  }
-
   async function fetchEventsByProvider(provider) {
     const { data } = await Appointments.getAllByProvider(provider.id);
     const eventsFromAPI = getMapFromArray(data);
     setEvents(eventsFromAPI);
-  }
+  }  
 
   async function fetchProviderDetails() {
     const { data } = await DashboardHome.getProviderDetails();
@@ -114,6 +105,13 @@ export default function Home() {
     setErrors(null);
   };
 
+  useEffect(()=> {
+    if(!isEmpty(selectedProvider)){
+      fetchEventsByProvider(selectedProvider);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[selectedProvider])
+
   useEffect(() => {
     async function fetchProviders() {
       const { data } = await DashboardHome.getProviders();
@@ -124,7 +122,6 @@ export default function Home() {
     }
 
     fetchProviders();
-    fetchAppointments();
     fetchProviderDetails();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -321,7 +318,6 @@ export default function Home() {
           onSave={handleEventCreation}
           onEventUpdate={(payload) => handleEventUpdate(payload)}
           errors={errors}
-          appointments={appointments}
         />
       )}
 

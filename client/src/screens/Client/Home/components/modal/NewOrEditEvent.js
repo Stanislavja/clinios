@@ -34,6 +34,7 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 
+import useAuth from "../../../../../hooks/useAuth";
 import useDebounce from "../../../../../hooks/useDebounce";
 import * as API from "../../../../../utils/API";
 
@@ -180,7 +181,10 @@ const EventModal = ({
     patient: "",
     error: "",
   });
-  const [provider, setProvider] = useState("");
+
+  const [indexP, setIndex] = useState(0);
+  const [provider, setProvider] = React.useState(providers[indexP]);
+  const { user } = useAuth();
 
   const calculateLength = async () => {
     const length = await moment(calEvent.end_dt).diff(calEvent.start_dt, "minutes");
@@ -190,7 +194,7 @@ const EventModal = ({
     setAppointmentLengthDays(length2);
     setAppointmentLeangth(length);
   };
-
+  
   useEffect(() => {
     if (isNewEvent) {
       setCalEvent("");
@@ -290,6 +294,7 @@ const EventModal = ({
       );
     }
 
+    //TODO:: Remove appointment
     const startTimeExist = appointments
     // eslint-disable-next-line
     .map((appointment) => calEvent.start_dt == appointment.start_dt)
@@ -353,6 +358,11 @@ const EventModal = ({
       submitData();
     }
   };
+
+  useEffect(() => {
+    const index2 = providers.findIndex((pd) => pd.id === user.id);
+    setIndex(index2);
+  }, [providers, user]);
 
 
   return (
