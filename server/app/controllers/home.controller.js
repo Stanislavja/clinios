@@ -45,7 +45,6 @@ const getAll = async (req, res) => {
 const getEventsByProvider = async (req, res) => {
   const db = makeDb(configuration, res);
   const { providerId } = req.params;
-  const {cancelled} = req.query;
 
   try {
     let $sql;
@@ -56,9 +55,6 @@ const getEventsByProvider = async (req, res) => {
     left join user u on u.id=uc.user_id
     where uc.client_id=${req.client_id}
         and uc.user_id=${providerId}`;
-    if (cancelled === 'no') {
-      $sql += ` and uc.status <> 'D'`;
-    }
 
     const dbResponse = await db.query($sql);
 
