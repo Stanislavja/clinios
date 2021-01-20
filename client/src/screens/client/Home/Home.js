@@ -108,6 +108,7 @@ export default function Home() {
   useEffect(()=> {
     if(!isEmpty(selectedProvider)){
       fetchEventsByProvider(selectedProvider);
+      fetchPatientApptRequests(selectedProvider.id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[selectedProvider])
