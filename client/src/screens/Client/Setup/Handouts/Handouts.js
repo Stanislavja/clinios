@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { makeStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
@@ -14,7 +14,6 @@ import Typography from "@material-ui/core/Typography";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 
-import Video from "../../../../components/videos/Video";
 import HandoutService from "../../../../services/setup/handouts.service";
 
 
@@ -51,16 +50,15 @@ const Handouts = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [handouts, setHandouts] = useState([]);
 
-  const fetchHandouts = () => {
+  const fetchHandouts = useCallback(() => {
     HandoutService.getHandouts().then((response) => {
       setHandouts(response.data.data);
     });
-  };
+  }, []);
 
   useEffect(() => {
     fetchHandouts();
-     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fetchHandouts]);
 
   const createHandout = (reqBody) => {
     HandoutService.createHandouts(reqBody)
@@ -96,7 +94,7 @@ const Handouts = () => {
 
   return (
     <div className={classes.root}>
-      <Grid container justify="center" spacing={8}>
+      <Grid container>
         <Grid item md={6} xs={12}>
           <div className={classes.titleButtonWrap}>
             <Typography
@@ -122,7 +120,7 @@ const Handouts = () => {
             </Button>
           </div>
           <p>These are files we give to patients about specific topics.</p>
-          <TableContainer component={Paper} className={classes.handoutTable}>
+          <TableContainer component={Paper} elevation={0} className={classes.handoutTable}>
             <Table className={classes.table} size="small" aria-label="a dense table">
               <TableHead className={classes.tableHead}>
                 <TableRow>
@@ -148,9 +146,6 @@ const Handouts = () => {
               </TableBody>
             </Table>
           </TableContainer>
-        </Grid>
-        <Grid item md={6} xs={12}>
-          <Video url="https://www.youtube.com/watch?v=ysz5S6PUM-U" />
         </Grid>
       </Grid>
     </div>
