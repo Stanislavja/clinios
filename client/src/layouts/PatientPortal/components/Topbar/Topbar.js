@@ -19,7 +19,7 @@ const useStyles = makeStyles(() => ({
     width: "100%",
     "& img": {
       width: "auto",
-      height: "65px",
+      height: "50px",
     },
   },
 }));
