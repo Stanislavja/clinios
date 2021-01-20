@@ -294,20 +294,6 @@ const EventModal = ({
       );
     }
 
-    //TODO:: Remove appointment
-    const startTimeExist = appointments
-    // eslint-disable-next-line
-    .map((appointment) => calEvent.start_dt == appointment.start_dt)
-      .includes(true);
-
-    if (startTimeExist) {
-      setErrorText(
-        (prevErrorText) => ({
-          ...prevErrorText,
-          error: "This time is not available",
-        }),
-      );
-    }
   };
 
   const handleSaveOrUpdate = () => {
