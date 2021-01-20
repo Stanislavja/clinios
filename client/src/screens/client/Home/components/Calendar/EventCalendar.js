@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 // eslint-disable-next-line import/order
 import FullCalendar from "@fullcalendar/react"; // this import should be at the top
@@ -29,26 +29,40 @@ function renderEventContent(eventInfo) {
   );
 }
 
-const EventCalendar = ({ events, onDayClick, onEventClick }) => (
-  <FullCalendar
-    plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-    headerToolbar={{
-      left: "prev,next today",
-      center: "title",
-      right: "dayGridMonth,timeGridWeek,timeGridDay",
-    }}
-    initialView="dayGridMonth"
-    weekends
-    events={events}
-    eventContent={renderEventContent}
-    dateClick={(arg) => onDayClick(arg.dateStr)}
-    eventClick={(info) => onEventClick(info)}
-  />
-);
+const EventCalendar = ({ filter, onDayClick, onEventClick, ...props }) => {
+  const [filteredEvents, setFilteredEvent] = useState([])
+  
+  useEffect(()=>{
+    if(!filter){
+      const eventsAfterFilter = props.events.filter(e => e.status !== 'D')
+      setFilteredEvent(eventsAfterFilter);
+    }else {
+      setFilteredEvent(props.events)
+    }
+    // eslint-disable-next-line react/destructuring-assignment
+  },[props.events, filter])
+
+  return (
+    <FullCalendar
+      plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+      headerToolbar={{
+        left: "prev,next today",
+        center: "title",
+        right: "dayGridMonth,timeGridWeek,timeGridDay",
+      }}
+      initialView="dayGridMonth"
+      weekends
+      events={filteredEvents}
+      eventContent={renderEventContent}
+      dateClick={(arg) => onDayClick(arg.dateStr)}
+      eventClick={(info) => onEventClick(info)}
+    />
+)};
 
 EventCalendar.propTypes = {
   onDayClick: PropTypes.func.isRequired,
   onEventClick: PropTypes.func.isRequired,
+  filter: PropTypes.bool.isRequired,
   events: PropTypes.arrayOf(
     PropTypes.shape({
       start_dt: PropTypes.string.isRequired,

@@ -61,6 +61,8 @@ export default function Home() {
   const [isNewMessage, setIsNewMessage] = useState(true);
   const [patient_id_to, setPatient_id_to] = useState(null);
   const [isMessageToPatientOpen, setIsMessageToPatientOpen] = useState(false);
+  const [isCancelEventsVisible, setIsCancelEventsVisible] = useState(false);
+
 
   const getMapFromArray = (data) => {
     const formedData = data.reduce(
@@ -84,7 +86,7 @@ export default function Home() {
     const { data } = await Appointments.getAllByProvider(provider.id);
     const eventsFromAPI = getMapFromArray(data);
     setEvents(eventsFromAPI);
-  }  
+  }
 
   async function fetchProviderDetails() {
     const { data } = await DashboardHome.getProviderDetails();
@@ -111,7 +113,7 @@ export default function Home() {
       fetchPatientApptRequests(selectedProvider.id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[selectedProvider])
+  },[selectedProvider]) 
 
   useEffect(() => {
     async function fetchProviders() {
@@ -121,11 +123,10 @@ export default function Home() {
         setSelectedProvider(data[0]);
       }
     }
-
     fetchProviders();
     fetchProviderDetails();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); 
 
   const handleEventCreation = (payload) => {
     setIsLoading(true);
@@ -242,7 +243,7 @@ export default function Home() {
     }
   };
 
-  const handleProviderClick = async (provider) => {
+  const handleProviderClick = (provider) => {
     setSelectedProvider(provider);
     fetchEventsByProvider(provider);
     fetchUnreadPatientMessages(provider.id);
@@ -260,6 +261,10 @@ export default function Home() {
     setSelectedMsg(msg);
   };
 
+ const handleEventsType = async (event) => {
+    setIsCancelEventsVisible(event.target.checked);
+  } 
+
   return (
     <div className={classes.root}>
       <Grid container spacing={8}>
@@ -272,10 +277,12 @@ export default function Home() {
         <FormControl component="div" className={classes.formControl}>
           <p className={classes.formHelperText}>Show canceled/rejected</p>
           <Switch
+            checked={isCancelEventsVisible}
             size="small"
             name="active"
             color="primary"
             inputProps={{ "aria-label": "primary checkbox" }}
+            onChange={handleEventsType}
           />
         </FormControl>
       
@@ -283,7 +290,12 @@ export default function Home() {
       </Grid>
       <Grid container spacing={8}>
         <Grid item md={7} xs={12}>
-          <Calendar events={events} onDayClick={handleDayClick} onEventClick={handleEventClick} />
+          <Calendar 
+            events={events}
+            filter={isCancelEventsVisible}
+            onDayClick={handleDayClick}
+            onEventClick={handleEventClick}
+          />
         </Grid>
         <Grid item md={5} xs={12}>
           <ProviderCards providers={providers} handleProviderClick={handleProviderClick} />
@@ -303,7 +315,7 @@ export default function Home() {
                 onReject={(payload) => handleEventCancellation(payload)}
               />
             </>
-          )}
+          )} 
         </Grid>
       </Grid>
       {isOpen && (
@@ -333,7 +345,7 @@ export default function Home() {
           onClose={() => setIsMessageToPatientOpen(false)}
           errors={errors}
         />
-      )}
+      )} 
     </div>
   );
 }
