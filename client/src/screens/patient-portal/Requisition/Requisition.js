@@ -66,11 +66,17 @@ const Encounters = () => {
             value={selectedRequisition}
             onChange={(e) => setSelectedRequisition(e.target.value)}
           >
-            {requisitions.map((option) => (
-              <MenuItem key={option.id} value={option.id}>
-                {option.lab}
-              </MenuItem>
-            ))}
+            {requisitions.length
+              ? requisitions.map((option) => (
+                <MenuItem key={option.id} value={option.id}>
+                  {option.lab}
+                </MenuItem>
+              ))
+              : (
+                <MenuItem value="">
+                  No Requisitions available
+                </MenuItem>
+              )}
           </TextField>
         </form>
       </Grid>
