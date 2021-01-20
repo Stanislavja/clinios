@@ -40,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
   shiftContent: {
     paddingTop: "10px !important",
   },
+  textButton: {
+    cursor: "pointer",
+  },
 }));
 
 const StyledTableCell = withStyles(() => ({
@@ -76,7 +79,7 @@ const StyledTableRow = withStyles(() => ({
 
 const Billing = () => {
   const classes = useStyles();
-  const { lastVisitedPatient, user } = useAuth();
+  const { lastVisitedPatient } = useAuth();
   const [billings, setBillings] = useState([]);
   const [newPaymentDialog, setNewPaymentDialog] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
@@ -89,10 +92,10 @@ const Billing = () => {
   }, [lastVisitedPatient]);
 
   const fetchBalance = useCallback(() => {
-    PatientPortalService.getBalance(user).then((res) => {
+    PatientPortalService.getBalance(lastVisitedPatient).then((res) => {
       setBalance(res.data && res.data.length ? res.data[0].amount : "");
     });
-  }, [user]);
+  }, [lastVisitedPatient]);
 
   useEffect(() => {
     fetchBillings();
@@ -162,7 +165,7 @@ const Billing = () => {
                   <StyledTableCell>Encounter Type</StyledTableCell>
                   <StyledTableCell>Amount</StyledTableCell>
                   <StyledTableCell>Invoice/Receipt</StyledTableCell>
-                  <StyledTableCell>View</StyledTableCell>
+                  <StyledTableCell align="center">View</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -173,14 +176,22 @@ const Billing = () => {
                         {moment(item.dt).format("MMM D YYYY")}
                       </StyledTableCell>
                       <StyledTableCell>{item.tran_type}</StyledTableCell>
-                      <StyledTableCell>{item.cpt_procedure}</StyledTableCell>
-                      <StyledTableCell>{item.account_num}</StyledTableCell>
-                      <StyledTableCell>{item.encounter_title}</StyledTableCell>
+                      <StyledTableCell>{item.payment_type || "-"}</StyledTableCell>
+                      <StyledTableCell>{item.account_num || "-"}</StyledTableCell>
+                      <StyledTableCell>{item.encounter_type || "-"}</StyledTableCell>
                       <StyledTableCell>
                         $
                         {item.amount}
                       </StyledTableCell>
-                      <StyledTableCell>{item.filename}</StyledTableCell>
+                      <StyledTableCell>
+                        <Typography variant="text" className={classes.textButton}>
+                          Invoice
+                        </Typography>
+                        {" / "}
+                        <Typography variant="text" className={classes.textButton}>
+                          Receipt
+                        </Typography>
+                      </StyledTableCell>
                       <StyledTableCell
                         className={classes.centered}
                       >
