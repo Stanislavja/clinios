@@ -166,7 +166,7 @@ const EventModal = ({
   isLoading,
   ...props
 }) => {
-  const { appointments, providers, errors } = props;
+  const { providers, errors } = props;
   const classes = useStyles();
   const history = useHistory();
   const [patients, setPatients] = useState([]);
@@ -194,7 +194,7 @@ const EventModal = ({
     setAppointmentLengthDays(length2);
     setAppointmentLeangth(length);
   };
-  
+
   useEffect(() => {
     if (isNewEvent) {
       setCalEvent("");
@@ -293,7 +293,6 @@ const EventModal = ({
         }),
       );
     }
-
   };
 
   const handleSaveOrUpdate = () => {

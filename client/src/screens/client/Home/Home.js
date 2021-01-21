@@ -38,8 +38,8 @@ const useStyles = makeStyles((theme) => ({
   },
   headerWrap: {
     display: "flex",
-    justifyContent: "space-between"
-  }
+    justifyContent: "space-between",
+  },
 }));
 
 export default function Home() {
@@ -107,13 +107,13 @@ export default function Home() {
     setErrors(null);
   };
 
-  useEffect(()=> {
-    if(!isEmpty(selectedProvider)){
+  useEffect(() => {
+    if (!isEmpty(selectedProvider)) {
       fetchEventsByProvider(selectedProvider);
       fetchPatientApptRequests(selectedProvider.id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[selectedProvider]) 
+  }, [selectedProvider]);
 
   useEffect(() => {
     async function fetchProviders() {
@@ -126,7 +126,7 @@ export default function Home() {
     fetchProviders();
     fetchProviderDetails();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); 
+  }, []);
 
   const handleEventCreation = (payload) => {
     setIsLoading(true);
@@ -261,36 +261,36 @@ export default function Home() {
     setSelectedMsg(msg);
   };
 
- const handleEventsType = async (event) => {
+  const handleEventsType = async (event) => {
     setIsCancelEventsVisible(event.target.checked);
-  } 
+  };
 
   return (
     <div className={classes.root}>
       <Grid container spacing={8}>
         <Grid item md={7} xs={12} className={classes.headerWrap}>
-        <Typography component="h1" variant="h2" color="textPrimary" className={classes.pageTitle}>
-          Home
-          {" "}
-          {selectedProvider && `- ${selectedProvider.name}`}
-        </Typography>
-        <FormControl component="div" className={classes.formControl}>
-          <p className={classes.formHelperText}>Show canceled/rejected</p>
-          <Switch
-            checked={isCancelEventsVisible}
-            size="small"
-            name="active"
-            color="primary"
-            inputProps={{ "aria-label": "primary checkbox" }}
-            onChange={handleEventsType}
-          />
-        </FormControl>
-      
+          <Typography component="h1" variant="h2" color="textPrimary" className={classes.pageTitle}>
+            Home
+            {" "}
+            {selectedProvider && `- ${selectedProvider.name}`}
+          </Typography>
+          <FormControl component="div" className={classes.formControl}>
+            <p className={classes.formHelperText}>Show canceled/rejected</p>
+            <Switch
+              checked={isCancelEventsVisible}
+              size="small"
+              name="active"
+              color="primary"
+              inputProps={{ "aria-label": "primary checkbox" }}
+              onChange={handleEventsType}
+            />
+          </FormControl>
+
         </Grid>
       </Grid>
       <Grid container spacing={8}>
         <Grid item md={7} xs={12}>
-          <Calendar 
+          <Calendar
             events={events}
             filter={isCancelEventsVisible}
             onDayClick={handleDayClick}
@@ -315,7 +315,7 @@ export default function Home() {
                 onReject={(payload) => handleEventCancellation(payload)}
               />
             </>
-          )} 
+          )}
         </Grid>
       </Grid>
       {isOpen && (
@@ -345,7 +345,7 @@ export default function Home() {
           onClose={() => setIsMessageToPatientOpen(false)}
           errors={errors}
         />
-      )} 
+      )}
     </div>
   );
 }

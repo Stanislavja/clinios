@@ -29,18 +29,20 @@ function renderEventContent(eventInfo) {
   );
 }
 
-const EventCalendar = ({ filter, onDayClick, onEventClick, ...props }) => {
-  const [filteredEvents, setFilteredEvent] = useState([])
-  
-  useEffect(()=>{
-    if(!filter){
-      const eventsAfterFilter = props.events.filter(e => e.status !== 'D')
+const EventCalendar = ({
+  filter, onDayClick, onEventClick, ...props
+}) => {
+  const [filteredEvents, setFilteredEvent] = useState([]);
+
+  useEffect(() => {
+    if (!filter) {
+      const eventsAfterFilter = props.events.filter((e) => e.status !== "D");
       setFilteredEvent(eventsAfterFilter);
-    }else {
-      setFilteredEvent(props.events)
+    } else {
+      setFilteredEvent(props.events);
     }
     // eslint-disable-next-line react/destructuring-assignment
-  },[props.events, filter])
+  }, [props.events, filter]);
 
   return (
     <FullCalendar
@@ -57,7 +59,8 @@ const EventCalendar = ({ filter, onDayClick, onEventClick, ...props }) => {
       dateClick={(arg) => onDayClick(arg.dateStr)}
       eventClick={(info) => onEventClick(info)}
     />
-)};
+  );
+};
 
 EventCalendar.propTypes = {
   onDayClick: PropTypes.func.isRequired,
