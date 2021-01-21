@@ -43,7 +43,7 @@ const Forms = () => {
   const [forms, setForms] = useState([]);
 
   const fetchForms = useCallback(() => {
-    FormsService.getForms(1).then((res) => {
+    FormsService.getForms().then((res) => {
       setForms(res.data);
     });
   }, []);
