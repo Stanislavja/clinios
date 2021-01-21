@@ -17,7 +17,7 @@ import {
 import moment from "moment";
 
 import { StyledTableCellLg, StyledTableRowLg } from "../../../../components/common/StyledTable";
-import PatientService from "../../../../services/patient.service";
+import FormsService from "../../../../services/setup/forms.service";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,7 +43,7 @@ const Forms = () => {
   const [forms, setForms] = useState([]);
 
   const fetchForms = useCallback(() => {
-    PatientService.getForms(1).then((res) => {
+    FormsService.getForms(1).then((res) => {
       setForms(res.data);
     });
   }, []);
