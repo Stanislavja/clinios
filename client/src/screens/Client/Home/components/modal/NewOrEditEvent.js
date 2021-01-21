@@ -7,7 +7,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -197,7 +196,10 @@ const EventModal = ({
 
   useEffect(() => {
     if (isNewEvent) {
-      setCalEvent("");
+      setCalEvent({
+        ...calEvent,
+        end_dt: moment().add(30, "minutes"),
+      });
       setPatientSearchTerm("");
     } else {
       setCalEvent(props.event);
@@ -375,29 +377,8 @@ const EventModal = ({
             [classes.contentWithLoading]: isLoading, // only when isLoading === true
           })}
         >
-          <DialogContentText id="alert-dialog-description">
-            This page is used to create a new appointment
-          </DialogContentText>
           {errors && <Alert severity="error">{errors}</Alert>}
           <div className={classes.root}>
-            <FormControl component="div" className={classes.formControl}>
-              <TextField
-                value={calEvent.title}
-                variant="outlined"
-                margin="normal"
-                size="small"
-                required
-                fullWidth
-                id="title"
-                label="Title"
-                name="title"
-                autoComplete="title"
-                autoFocus
-                onChange={(event) => handleOnChange(event)}
-                error={errorText.title.length > 0}
-                helperText={errorText.title.length > 0 && errorText.title}
-              />
-            </FormControl>
             <FormControl component="div" className={classes.formControl}>
               <Grid container justify="space-around">
                 <KeyboardDatePicker
@@ -645,6 +626,24 @@ const EventModal = ({
                 <FormControlLabel value="A" control={<Radio />} label="Approved" />
                 <FormControlLabel value="D" control={<Radio />} label="Declined" />
               </RadioGroup>
+            </FormControl>
+            <FormControl component="div" className={classes.formControl}>
+              <TextField
+                value={calEvent.title}
+                variant="outlined"
+                margin="normal"
+                size="small"
+                required
+                fullWidth
+                id="title"
+                label="Title"
+                name="title"
+                autoComplete="title"
+                autoFocus
+                onChange={(event) => handleOnChange(event)}
+                error={errorText.title.length > 0}
+                helperText={errorText.title.length > 0 && errorText.title}
+              />
             </FormControl>
             <FormControl variant="outlined" size="small" className={classes.formControl}>
               <InputLabel id="provider-select-outlined-label">Provider</InputLabel>
