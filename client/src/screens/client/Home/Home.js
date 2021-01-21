@@ -10,7 +10,7 @@ import { useSnackbar } from "notistack";
 import Appointments from "../../../services/appointments.service";
 import DashboardHome from "../../../services/DashboardHome.service";
 import Messages from "../../../services/message-to-patient.service";
-import { statusToColorCode } from "../../../utils/helpers";
+import { statusToColorCode, isEmpty } from "../../../utils/helpers";
 import {
   AppointmentRequests,
   Calendar,
@@ -36,6 +36,10 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "5px",
     fontSize: "15px",
   },
+  headerWrap: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
 }));
 
 export default function Home() {
@@ -56,9 +60,9 @@ export default function Home() {
   const [isNewEvent, setIsNewEvent] = useState(true);
   const [isNewMessage, setIsNewMessage] = useState(true);
   const [patient_id_to, setPatient_id_to] = useState(null);
-  const [appointments, setAppointments] = useState([]);
-
   const [isMessageToPatientOpen, setIsMessageToPatientOpen] = useState(false);
+  const [isCancelEventsVisible, setIsCancelEventsVisible] = useState(false);
+
 
   const getMapFromArray = (data) => {
     const formedData = data.reduce(
@@ -77,13 +81,6 @@ export default function Home() {
 
     return formedData;
   };
-
-  async function fetchAppointments() {
-    const { data } = await Appointments.getAll();
-    const eventsFromAPI = getMapFromArray(data);
-    setEvents(eventsFromAPI);
-    setAppointments(data);
-  }
 
   async function fetchEventsByProvider(provider) {
     const { data } = await Appointments.getAllByProvider(provider.id);
@@ -111,6 +108,14 @@ export default function Home() {
   };
 
   useEffect(() => {
+    if (!isEmpty(selectedProvider)) {
+      fetchEventsByProvider(selectedProvider);
+      fetchPatientApptRequests(selectedProvider.id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedProvider]);
+
+  useEffect(() => {
     async function fetchProviders() {
       const { data } = await DashboardHome.getProviders();
       setProviders(data);
@@ -118,9 +123,7 @@ export default function Home() {
         setSelectedProvider(data[0]);
       }
     }
-
     fetchProviders();
-    fetchAppointments();
     fetchProviderDetails();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -240,7 +243,7 @@ export default function Home() {
     }
   };
 
-  const handleProviderClick = async (provider) => {
+  const handleProviderClick = (provider) => {
     setSelectedProvider(provider);
     fetchEventsByProvider(provider);
     fetchUnreadPatientMessages(provider.id);
@@ -258,27 +261,41 @@ export default function Home() {
     setSelectedMsg(msg);
   };
 
+  const handleEventsType = async (event) => {
+    setIsCancelEventsVisible(event.target.checked);
+  };
+
   return (
     <div className={classes.root}>
-      <div style={{ display: "flex" }}>
-        <Typography component="h1" variant="h2" color="textPrimary" className={classes.pageTitle}>
-          Home
-          {" "}
-          {selectedProvider && `- ${selectedProvider.name}`}
-        </Typography>
-        <FormControl component="div" className={classes.formControl}>
-          <p className={classes.formHelperText}>Show canceled/rejected</p>
-          <Switch
-            size="small"
-            name="active"
-            color="primary"
-            inputProps={{ "aria-label": "primary checkbox" }}
-          />
-        </FormControl>
-      </div>
+      <Grid container spacing={8}>
+        <Grid item md={7} xs={12} className={classes.headerWrap}>
+          <Typography component="h1" variant="h2" color="textPrimary" className={classes.pageTitle}>
+            Home
+            {" "}
+            {selectedProvider && `- ${selectedProvider.name}`}
+          </Typography>
+          <FormControl component="div" className={classes.formControl}>
+            <p className={classes.formHelperText}>Show canceled/rejected</p>
+            <Switch
+              checked={isCancelEventsVisible}
+              size="small"
+              name="active"
+              color="primary"
+              inputProps={{ "aria-label": "primary checkbox" }}
+              onChange={handleEventsType}
+            />
+          </FormControl>
+
+        </Grid>
+      </Grid>
       <Grid container spacing={8}>
         <Grid item md={7} xs={12}>
-          <Calendar events={events} onDayClick={handleDayClick} onEventClick={handleEventClick} />
+          <Calendar
+            events={events}
+            filter={isCancelEventsVisible}
+            onDayClick={handleDayClick}
+            onEventClick={handleEventClick}
+          />
         </Grid>
         <Grid item md={5} xs={12}>
           <ProviderCards providers={providers} handleProviderClick={handleProviderClick} />
@@ -314,7 +331,6 @@ export default function Home() {
           onSave={handleEventCreation}
           onEventUpdate={(payload) => handleEventUpdate(payload)}
           errors={errors}
-          appointments={appointments}
         />
       )}
 

@@ -45,17 +45,17 @@ const getAll = async (req, res) => {
 const getEventsByProvider = async (req, res) => {
   const db = makeDb(configuration, res);
   const { providerId } = req.params;
+
   try {
-    const dbResponse = await db.query(
-      `select uc.id, uc.user_id, uc.patient_id, uc.start_dt, uc.end_dt, uc.status, uc.title, uc.notes, uc.client_id
-        , p.firstname, p.lastname, p.email, concat(u.firstname, ' ', u.lastname) provider_name
-        from user_calendar uc
-        left join patient p on p.id=uc.patient_id
-        left join user u on u.id=uc.user_id
-        where uc.client_id=${req.client_id}
-            and uc.user_id=${providerId}
-      `
-    );
+    const $sql = `select uc.id, uc.user_id, uc.patient_id, uc.start_dt, uc.end_dt, uc.status, uc.title, uc.notes, uc.client_id
+    , p.firstname, p.lastname, p.email, concat(u.firstname, ' ', u.lastname) provider_name
+    from user_calendar uc
+    left join patient p on p.id=uc.patient_id
+    left join user u on u.id=uc.user_id
+    where uc.client_id=${req.client_id}
+        and uc.user_id=${providerId}`;
+
+    const dbResponse = await db.query($sql);
 
     if (!dbResponse) {
       errorMessage.error = "None found";
