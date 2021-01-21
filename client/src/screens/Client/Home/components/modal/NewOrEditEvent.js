@@ -57,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
     whiteSpace: "nowrap",
     maxHeight: "30px",
     marginTop: "15px",
+    color: "#2979ff",
   },
   content: {
     paddingTop: theme.spacing(2),
@@ -99,6 +100,16 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(0),
     maxWidth: "180px",
     display: "flex",
+  },
+  providerWrap: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  providerSelect: {
+    flex: 1,
+    "& div": {
+      width: "100%",
+    },
   },
   statuses: {
     marginTop: theme.spacing(2),
@@ -277,6 +288,11 @@ const EventModal = ({
     setProvider(pd[0]);
   };
 
+  const handleSetToSelf = () => {
+    const loggedInUserAsProvider = providers.filter((p) => p.id === user.id);
+    setProvider(loggedInUserAsProvider[0]);
+  }
+
   const validateFormFields = () => {
     if (!calEvent.title) {
       setErrorText(
@@ -350,7 +366,6 @@ const EventModal = ({
     const index2 = providers.findIndex((pd) => pd.id === user.id);
     setIndex(index2);
   }, [providers, user]);
-
 
   return (
     <Dialog
@@ -646,24 +661,35 @@ const EventModal = ({
               />
             </FormControl>
             <FormControl variant="outlined" size="small" className={classes.formControl}>
-              <InputLabel id="provider-select-outlined-label">Provider</InputLabel>
-              <Select
-                labelId="provider-select-outlined-label"
-                id="provider-select-outlined-label"
-                value={!!provider && provider.id}
-                onChange={handleProviderChange}
-                label="Provider"
-                defaultValue={selectedProvider?.id}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {providers.map((pd) => (
-                  <MenuItem key={pd.id} value={pd.id}>
-                    {pd.name}
-                  </MenuItem>
-                ))}
-              </Select>
+              <div className={classes.providerWrap}>
+                <div className={classes.providerSelect}>
+                  <InputLabel id="provider-select-outlined-label">Provider</InputLabel>
+                  <Select
+                    labelId="provider-select-outlined-label"
+                    id="provider-select-outlined-label"
+                    value={!!provider && provider.id}
+                    onChange={handleProviderChange}
+                    label="Provider"
+                    defaultValue={selectedProvider?.id}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    {providers.map((pd) => (
+                      <MenuItem key={pd.id} value={pd.id}>
+                        {pd.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </div>
+                <Button
+                  className={classes.Button}
+                  disableElevation
+                  onClick={() => handleSetToSelf()}
+                >
+                  Set to Self
+                </Button>
+              </div>
             </FormControl>
             <FormControl component="div" className={classes.formControl}>
               <TextField
