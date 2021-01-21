@@ -164,8 +164,8 @@ const NewOrEditEvent = ({
   const calculateLength = async () => {
     const length = await moment(calEvent.end_dt).diff(calEvent.start_dt, "minutes");
     const length2 = await moment(calEvent.end_dt).diff(calEvent.start_dt, "days");
-    const lengthFromCuurrentDay = await moment(calEvent.start_dt).diff(moment(), "days");
-    setCurrentDayLength(lengthFromCuurrentDay);
+    const lengthFromCurrentDay = await moment(calEvent.start_dt).diff(moment(), "days");
+    setCurrentDayLength(lengthFromCurrentDay);
     setAppointmentLengthDays(length2);
     setAppointmentLeangth(length);
   };
