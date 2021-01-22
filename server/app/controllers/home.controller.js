@@ -17,11 +17,15 @@ const getAll = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select uc.id, uc.user_id, uc.patient_id, uc.start_dt, uc.end_dt, uc.status, uc.title, uc.notes, uc.client_id
+      `select uc.id, uc.user_id, uc.patient_id, uc.start_dt, uc.end_dt, uc.status, uc.title, uc.notes, uc.client_id, uc.approved, uc.declined
+        , concat(au.firstname, ' ', au.lastname) approved_user
+        , concat(du.firstname, ' ', du.lastname) declined_user
         , p.firstname, p.lastname, p.email, concat(u.firstname, ' ', u.lastname) provider_name
         from user_calendar uc
         left join patient p on p.id=uc.patient_id
         left join user u on u.id=uc.user_id
+        left join user au on au.id=uc.approved_user_id
+        left join user du on du.id=uc.declined_user_id
         where uc.client_id=${req.client_id}
           and uc.user_id=${req.user_id}
       `
@@ -47,11 +51,15 @@ const getEventsByProvider = async (req, res) => {
   const { providerId } = req.params;
 
   try {
-    const $sql = `select uc.id, uc.user_id, uc.patient_id, uc.start_dt, uc.end_dt, uc.status, uc.title, uc.notes, uc.client_id
+    const $sql = `select uc.id, uc.user_id, uc.patient_id, uc.start_dt, uc.end_dt, uc.status, uc.title, uc.notes, uc.client_id, uc.approved, uc.declined
+    , concat(au.firstname, ' ', au.lastname) approved_user
+    , concat(du.firstname, ' ', du.lastname) declined_user
     , p.firstname, p.lastname, p.email, concat(u.firstname, ' ', u.lastname) provider_name
     from user_calendar uc
     left join patient p on p.id=uc.patient_id
     left join user u on u.id=uc.user_id
+    left join user au on au.id=uc.approved_user_id
+    left join user du on du.id=uc.declined_user_id
     where uc.client_id=${req.client_id}
         and uc.user_id=${providerId}`;
 
@@ -76,7 +84,7 @@ const sendEmailOnAppointmentCreationAndChange = async (
   emailTemplate,
   logMessage
 ) => {
-  if (process.env.NODE_ENV !== "development") {
+  if (process.env.NODE_ENV === "development") {
     const info = await transporter.sendMail(emailTemplate);
     console.info(logMessage, info);
   } else {
@@ -198,6 +206,7 @@ const updateAppointment = async (req, res) => {
     title,
     notes,
     patient,
+    provider,
     providerName,
     ApptStatus,
     new_start_dt,
@@ -207,11 +216,21 @@ const updateAppointment = async (req, res) => {
 
   const db = makeDb(configuration, res);
   try {
-    const updateResponse = await db.query(
-      `update user_calendar
-        set title='${title}', notes='${notes}', status='${ApptStatus}', start_dt='${new_start_dt}', end_dt='${new_end_dt}', updated= now(), updated_user_id='${req.user_id}'
-        where id=${id}`
-    );
+    let $sql = `update user_calendar
+    set title='${title}', user_id=${provider.id}, notes='${notes}', status='${ApptStatus}', start_dt='${new_start_dt}', end_dt='${new_end_dt}'`;
+
+    if (ApptStatus === "D") {
+      $sql += `, declined=now(), declined_user_id=${req.user_id}`;
+    }
+
+    if (ApptStatus === "A") {
+      $sql += `, approved=now(), approved_user_id=${req.user_id}`;
+    }
+
+    $sql += `, updated= now(), updated_user_id='${req.user_id}'
+    where id=${id}`;
+
+    const updateResponse = await db.query($sql);
     if (!updateResponse.affectedRows) {
       errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
