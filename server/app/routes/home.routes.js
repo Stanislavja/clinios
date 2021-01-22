@@ -25,7 +25,6 @@ router.put(
   [authJwt.verifyToken],
   homeController.updateAppointment
 );
-
 router.get(
   "/appointment-requests/:providerId",
   [authJwt.verifyToken],

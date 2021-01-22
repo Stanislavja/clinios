@@ -76,7 +76,7 @@ const sendEmailOnAppointmentCreationAndChange = async (
   emailTemplate,
   logMessage
 ) => {
-  if (process.env.NODE_ENV !== "development") {
+  if (process.env.NODE_ENV === "development") {
     const info = await transporter.sendMail(emailTemplate);
     console.info(logMessage, info);
   } else {
@@ -208,11 +208,21 @@ const updateAppointment = async (req, res) => {
 
   const db = makeDb(configuration, res);
   try {
-    const updateResponse = await db.query(
-      `update user_calendar
-        set title='${title}', user_id=${provider.id}, notes='${notes}', status='${ApptStatus}', start_dt='${new_start_dt}', end_dt='${new_end_dt}', updated= now(), updated_user_id='${req.user_id}'
-        where id=${id}`
-    );
+    let $sql = `update user_calendar
+    set title='${title}', user_id=${provider.id}, notes='${notes}', status='${ApptStatus}', start_dt='${new_start_dt}', end_dt='${new_end_dt}'`;
+
+    if(ApptStatus === 'D'){
+        $sql += `, declined=now(), declined_user_id=${req.user_id}`
+    }
+
+    if(ApptStatus === 'A'){
+        $sql += `, approved=now(), approved_user_id=${req.user_id}`
+    }
+
+    $sql += `, updated= now(), updated_user_id='${req.user_id}'
+    where id=${id}`
+
+    const updateResponse = await db.query($sql);
     if (!updateResponse.affectedRows) {
       errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
