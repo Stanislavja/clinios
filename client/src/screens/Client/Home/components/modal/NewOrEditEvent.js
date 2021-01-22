@@ -146,6 +146,10 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     fontWeight: "500",
   },
+  eventStatusInfo: {
+    fontSize: "14px",
+    marginTop: "5px",
+  },
   modalAction: {
     borderTop: `1px solid ${theme.palette.background.default}`,
     display: "flex",
@@ -206,10 +210,16 @@ const EventModal = ({
   };
 
   useEffect(() => {
+    const selectedTime = user && user.calendar_start_time;
+    let initialDateTime = selectedDate;
+    if (selectedTime) {
+      initialDateTime = `${selectedDate} ${selectedTime}`;
+    }
     if (isNewEvent) {
       setCalEvent({
         ...calEvent,
-        end_dt: moment().add(30, "minutes"),
+        start_dt: moment(initialDateTime).format(),
+        end_dt: moment(initialDateTime).add(30, "minutes"),
       });
       setPatientSearchTerm("");
     } else {
@@ -225,7 +235,7 @@ const EventModal = ({
     }
     setProvider(selectedProvider);
     // eslint-disable-next-line react-hooks/exhaustive-deps, react/destructuring-assignment
-  }, [props.event, isNewEvent]);
+  }, [props.event, isNewEvent, selectedDate]);
 
   /* eslint-enable */
   const handleOnChange = (event) => {
@@ -291,7 +301,7 @@ const EventModal = ({
   const handleSetToSelf = () => {
     const loggedInUserAsProvider = providers.filter((p) => p.id === user.id);
     setProvider(loggedInUserAsProvider[0]);
-  }
+  };
 
   const validateFormFields = () => {
     if (!calEvent.title) {
@@ -737,7 +747,7 @@ const EventModal = ({
               onChange={(event) => handleOnChange(event)}
             />
           </div>
-          <div>
+          <div className={classes.eventMeta}>
             <Typography
               onClick={() => history.push(`/patients/${selectedPatient}`)}
               component="p"
@@ -756,6 +766,22 @@ const EventModal = ({
             >
               Go to patient page in new tab
             </Typography>
+            {calEvent.status === "A" && (
+              <p className={classes.eventStatusInfo}>
+                Approved:
+                {moment(calEvent.approved).format("ll")}
+                ,
+                {calEvent.approved_user}
+              </p>
+            )}
+            {calEvent.status === "D" && (
+              <p className={classes.eventStatusInfo}>
+                Rejected:
+                {moment(calEvent.declined).format("ll")}
+                ,
+                {calEvent.declined_user}
+              </p>
+            )}
           </div>
         </div>
       </DialogContent>

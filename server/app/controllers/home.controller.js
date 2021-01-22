@@ -17,11 +17,15 @@ const getAll = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select uc.id, uc.user_id, uc.patient_id, uc.start_dt, uc.end_dt, uc.status, uc.title, uc.notes, uc.client_id
+      `select uc.id, uc.user_id, uc.patient_id, uc.start_dt, uc.end_dt, uc.status, uc.title, uc.notes, uc.client_id, uc.approved, uc.declined
+        , concat(au.firstname, ' ', au.lastname) approved_user
+        , concat(du.firstname, ' ', du.lastname) declined_user
         , p.firstname, p.lastname, p.email, concat(u.firstname, ' ', u.lastname) provider_name
         from user_calendar uc
         left join patient p on p.id=uc.patient_id
         left join user u on u.id=uc.user_id
+        left join user au on au.id=uc.approved_user_id
+        left join user du on du.id=uc.declined_user_id
         where uc.client_id=${req.client_id}
           and uc.user_id=${req.user_id}
       `
@@ -47,11 +51,15 @@ const getEventsByProvider = async (req, res) => {
   const { providerId } = req.params;
 
   try {
-    const $sql = `select uc.id, uc.user_id, uc.patient_id, uc.start_dt, uc.end_dt, uc.status, uc.title, uc.notes, uc.client_id
+    const $sql = `select uc.id, uc.user_id, uc.patient_id, uc.start_dt, uc.end_dt, uc.status, uc.title, uc.notes, uc.client_id, uc.approved, uc.declined
+    , concat(au.firstname, ' ', au.lastname) approved_user
+    , concat(du.firstname, ' ', du.lastname) declined_user
     , p.firstname, p.lastname, p.email, concat(u.firstname, ' ', u.lastname) provider_name
     from user_calendar uc
     left join patient p on p.id=uc.patient_id
     left join user u on u.id=uc.user_id
+    left join user au on au.id=uc.approved_user_id
+    left join user du on du.id=uc.declined_user_id
     where uc.client_id=${req.client_id}
         and uc.user_id=${providerId}`;
 
