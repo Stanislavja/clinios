@@ -4,8 +4,11 @@ const { errorMessage, successMessage, status } = require("../helpers/status");
 const getUser = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
-    const dbResponse = await db.query(`SELECT u.id, u.client_id, u.firstname, u.lastname, u.email, u.admin, u.sign_dt,
-    u.email_confirm_dt FROM user u WHERE u.id=${req.user_id}`);
+    const $sql = `SELECT u.id, u.admin, u.client_id, u.firstname, u.lastname, u.email, u.sign_dt, u.email_confirm_dt,
+    c.name, c.calendar_start_time, c.calendar_end_time FROM user u
+    left join client c on c.id=u.client_id WHERE u.id=${req.user_id}`
+
+    const dbResponse = await db.query($sql);
 
     if (!dbResponse) {
       errorMessage.error = "None found";
