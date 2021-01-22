@@ -219,16 +219,16 @@ const updateAppointment = async (req, res) => {
     let $sql = `update user_calendar
     set title='${title}', user_id=${provider.id}, notes='${notes}', status='${ApptStatus}', start_dt='${new_start_dt}', end_dt='${new_end_dt}'`;
 
-    if(ApptStatus === 'D'){
-        $sql += `, declined=now(), declined_user_id=${req.user_id}`
+    if (ApptStatus === "D") {
+      $sql += `, declined=now(), declined_user_id=${req.user_id}`;
     }
 
-    if(ApptStatus === 'A'){
-        $sql += `, approved=now(), approved_user_id=${req.user_id}`
+    if (ApptStatus === "A") {
+      $sql += `, approved=now(), approved_user_id=${req.user_id}`;
     }
 
     $sql += `, updated= now(), updated_user_id='${req.user_id}'
-    where id=${id}`
+    where id=${id}`;
 
     const updateResponse = await db.query($sql);
     if (!updateResponse.affectedRows) {
