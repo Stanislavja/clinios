@@ -198,6 +198,7 @@ const updateAppointment = async (req, res) => {
     title,
     notes,
     patient,
+    provider,
     providerName,
     ApptStatus,
     new_start_dt,
@@ -209,7 +210,7 @@ const updateAppointment = async (req, res) => {
   try {
     const updateResponse = await db.query(
       `update user_calendar
-        set title='${title}', notes='${notes}', status='${ApptStatus}', start_dt='${new_start_dt}', end_dt='${new_end_dt}', updated= now(), updated_user_id='${req.user_id}'
+        set title='${title}', user_id=${provider.id}, notes='${notes}', status='${ApptStatus}', start_dt='${new_start_dt}', end_dt='${new_end_dt}', updated= now(), updated_user_id='${req.user_id}'
         where id=${id}`
     );
     if (!updateResponse.affectedRows) {
