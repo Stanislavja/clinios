@@ -10,6 +10,12 @@ class LabRangeService {
     });
   }
 
+  searchLabs(data) {
+    return axios.post(`${API_BASE}/lab-range/`, data, {
+      headers: authHeader(),
+    });
+  }
+
   createLabRange(data) {
     return axios.post(`${API_BASE}/lab-range/`, data, {
       headers: authHeader(),
