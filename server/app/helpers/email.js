@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 
 let mailConfig;
-if (process.env.NODE_ENV !== "production") {
+if (process.env.NODE_ENV === "production") {
   // all emails are delivered to destination
   mailConfig = {
     host: "smtp.sendgrid.net",
