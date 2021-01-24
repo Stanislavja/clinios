@@ -72,6 +72,13 @@ const useStyles = makeStyles((theme) => ({
       minWidth: 220,
     },
   },
+  providerFormControl: {
+    width: "100%",
+    color: theme.palette.text.secondary,
+    "& .MuiSelect-select": {
+      minWidth: 220,
+    },
+  },
   datePickers: {
     display: "flex",
     marginTop: theme.spacing(2),
@@ -113,7 +120,6 @@ const useStyles = makeStyles((theme) => ({
   },
   statuses: {
     marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
   },
   statusList: {
     flexDirection: "row",
@@ -145,6 +151,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "flex-end",
     display: "flex",
     fontWeight: "500",
+    color: "#2979ff",
   },
   eventStatusInfo: {
     fontSize: "14px",
@@ -670,7 +677,7 @@ const EventModal = ({
                 helperText={errorText.title.length > 0 && errorText.title}
               />
             </FormControl>
-            <FormControl variant="outlined" size="small" className={classes.formControl}>
+            <FormControl variant="outlined" size="small" className={classes.providerFormControl}>
               <div className={classes.providerWrap}>
                 <div className={classes.providerSelect}>
                   <InputLabel id="provider-select-outlined-label">Provider</InputLabel>
