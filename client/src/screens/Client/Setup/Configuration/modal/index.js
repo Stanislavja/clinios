@@ -51,27 +51,15 @@ const StyledTableRow = withStyles((theme) => ({
     },
     "& th": {
       fontSize: 12,
+      whiteSpace: "nowrap",
     },
     "& td": {
       fontSize: 12,
+      whiteSpace: "nowrap",
     },
   },
 }))(TableRow);
 
-// const GetConfigTime = ({ timeStart, timeEnd }) => {
-//   const _timeStart = moment(timeStart, "HH:mm:ss: A").diff(
-//     moment().startOf("day"),
-//     "seconds"
-//   );
-//   const _timeEnd = moment(timeEnd, "HH:mm:ss: A").diff(
-//     moment().startOf("day"),
-//     "seconds"
-//   );
-//   const _time = moment
-//     .duration(_timeEnd - _timeStart, "seconds")
-//     .format("hh:mm:ss");
-//   return _time;
-// };
 
 export default function ConfigModal({ modal, setModal }) {
   const classes = useStyles();
