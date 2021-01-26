@@ -62,6 +62,19 @@ class PatientPortalService {
       .then((res) => res.data);
   }
 
+  createLabDocuments(patient, reqBody) {
+    let url = `${API_BASE}/client-portal/labs`;
+    if (patient) {
+      // eslint-disable-next-line max-len
+      url = `${API_BASE}/client-portal/labs/?patient_id=${patient.id}&client_id=${patient.client_id}`;
+    }
+    return axios
+      .post(url, reqBody, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
   // Billings
   getBillings(patient) {
     let url = `${API_BASE}/client-portal/billings`;
