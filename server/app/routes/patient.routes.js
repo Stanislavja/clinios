@@ -133,6 +133,11 @@ router.get(
   Patient.getEncounters
 );
 router.get(
+  "/patient/:patient_id/encounters/:encounter_id/plan",
+  [authJwt.verifyToken],
+  Patient.getEncountersPlan
+);
+router.get(
   "/patient/encounters/recent-prescriptions",
   [authJwt.verifyToken],
   Patient.getEncountersPrescriptions
