@@ -8,14 +8,19 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
+import PdfFilePath from "../../../../../assets/docs/sample.pdf";
 import SampleDocumentViewer from "../SampleDocViewer";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   text: {
     fontSize: 14,
   },
   button: {
     minWidth: 100,
+    "& a": {
+      color: theme.palette.text.primary,
+      textDecoration: "none",
+    },
   },
 }));
 
@@ -55,7 +60,14 @@ const FaxPrescription = () => {
             className={classes.button}
             variant="outlined"
           >
-            Download
+            <a
+              download
+              href={PdfFilePath}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Download
+            </a>
           </Button>
           <Button
             className={classes.button}
