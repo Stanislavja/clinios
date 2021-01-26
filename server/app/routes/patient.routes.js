@@ -127,6 +127,7 @@ router.post(
   [authJwt.verifyToken],
   Patient.createDocuments
 );
+/** encounters */
 router.get(
   "/patient/:patient_id/encounters",
   [authJwt.verifyToken],
