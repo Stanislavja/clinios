@@ -43,6 +43,7 @@ import RequisitionsCardContent from "../Requisitions/content";
 import TestsCardContent from "../Tests/content";
 import Card from "./components/Card";
 import ClockTimer from "./components/ClockTimer";
+import PlanCard from "./components/PlanCard";
 
 const useStyles = makeStyles((theme) => ({
   btnsContainer: {
@@ -364,7 +365,7 @@ const Encounters = (props) => {
                   />
                   <Card
                     title="Plan"
-                    data=""
+                    data={<PlanCard />}
                     icon
                   />
                   <Card
