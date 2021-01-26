@@ -76,6 +76,10 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
     && providerDetails.patientLabs
     && providerDetails.patientLabs["count(l.id)"];
 
+  const patientLabsDate = !!providerDetails
+    && providerDetails.patientLabs
+    && providerDetails.patientLabs["min(l.created)"];
+
   return (
     <Card className={classes.providerDetails} variant="outlined">
       <Grid
@@ -103,9 +107,6 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
               patientLabsCount
                 ? (
                   <Link
-                  // to={
-                  //   selectedProvider ? `/process-lab/${selectedProvider.id}` : "#"
-                  // }
                     to={{
                       pathname: `/lab/${selectedProvider.id}`,
                       state: {
@@ -118,15 +119,9 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
                       {patientLabsCount}
                     </div>
                     <div>
-                      {!!providerDetails
-                      && providerDetails.patientLabs
-                      && `${moment(
-                        providerDetails.patientLabs["min(l.created)"],
-                      ).format("ll")} (${moment(
-                        providerDetails.patientLabs["min(l.created)"],
-                      )
-                        .startOf("day")
-                        .fromNow()})`}
+                      {(patientLabsDate !== undefined && patientLabsDate)
+                        ? moment(patientLabsDate).format("ll")
+                        : "-"}
                     </div>
                   </Link>
                 )
@@ -137,15 +132,9 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
                       {patientLabsCount}
                     </div>
                     <div>
-                      {!!providerDetails
-                      && providerDetails.patientLabs
-                      && `${moment(
-                        providerDetails.patientLabs["min(l.created)"],
-                      ).format("ll")} (${moment(
-                        providerDetails.patientLabs["min(l.created)"],
-                      )
-                        .startOf("day")
-                        .fromNow()})`}
+                      {(patientLabsDate !== undefined && patientLabsDate)
+                        ? moment(patientLabsDate).format("ll")
+                        : "-"}
                     </div>
                   </>
                 )
@@ -257,4 +246,5 @@ ProviderDetailsCard.propTypes = {
     }),
   }).isRequired,
 };
+
 export default ProviderDetailsCard;

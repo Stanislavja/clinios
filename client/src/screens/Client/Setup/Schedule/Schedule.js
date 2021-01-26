@@ -36,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
   },
+  noContent: {
+    marginTop: theme.spacing(2),
+  },
 }));
 
 const Schedule = () => {
@@ -43,14 +46,13 @@ const Schedule = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isNewSchedule, setIsNewSchedule] = useState(true);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
   const [userList, setUserList] = useState([]);
   const [userId, setUserId] = useState("");
-
   const [selectedScheduleValues, setSelectedScheduleValues] = useState("");
   const [selectedScheduleId, setSelectedScheduleId] = useState("");
-
   const [searchResult, setSearchResult] = useState([]);
+  const [fetchingCompleted, setFetchingCompleted] = useState(false);
+
   const payload = {
     userId,
   };
@@ -60,6 +62,7 @@ const Schedule = () => {
       setUserList(res.data.data);
     });
   };
+
   useEffect(() => {
     getUserList();
   }, []);
@@ -67,6 +70,7 @@ const Schedule = () => {
   const fetchScheduleSearch = () => {
     ScheduleService.search(payload).then((res) => {
       setSearchResult(res.data.data);
+      setFetchingCompleted(true);
     });
   };
 
@@ -131,14 +135,16 @@ const Schedule = () => {
                 handleChangeOfUserId={handleChangeOfUserId}
                 fetchScheduleSearch={fetchScheduleSearch}
               />
-              {searchResult.length > 0 && (
-                <ScheduleSearchResultTable
-                  handleOnEditClick={handleOnEditClick}
-                  searchResult={searchResult}
-                  fetchScheduleSearch={fetchScheduleSearch}
-                  handleDeleteSchedule={handleDeleteSchedule}
-                />
-              )}
+              {searchResult.length > 0
+                ? (
+                  <ScheduleSearchResultTable
+                    handleOnEditClick={handleOnEditClick}
+                    searchResult={searchResult}
+                    fetchScheduleSearch={fetchScheduleSearch}
+                    handleDeleteSchedule={handleDeleteSchedule}
+                  />
+                )
+                : fetchingCompleted && <p className={classes.noContent}>No result found!</p>}
             </Grid>
           </Grid>
           <NewOrEditSchedule
