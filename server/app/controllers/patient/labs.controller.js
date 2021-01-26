@@ -64,7 +64,7 @@ const createLabs = async (req, res) => {
       return res.status(status.error).send(errorMessage);
     }
 
-    let { patient_id } = req.params;
+    let { patient_id } = req.query;
     const uploadedFilename = req.file.originalname;
 
     if (typeof patient_id === "undefined") {
