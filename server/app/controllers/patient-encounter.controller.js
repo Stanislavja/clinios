@@ -318,6 +318,32 @@ const searchDrug = async (req, res) => {
   }
 };
 
+const createEncounter_ICD = async (req, res) => {
+  const { patient_id } = req.params;
+  const { icd_id } = req.body.data;
+  const db = makeDb(configuration, res);
+  try {
+    const insertResponse = await db.query(
+      `insert into patient_icd (patient_id, icd_id, active, client_id, user_id, encounter_id, created, created_user_id)
+       values (${patient_id}, '${icd_id}', true, ${req.client_id}, ${req.user_id}, 1, now(), ${req.user_id})`
+    );
+
+    if (!insertResponse.affectedRows) {
+      errorMessage.message = "Insert not successful";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = insertResponse;
+    successMessage.message = "Insert successful";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Insert not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const patientEncounter = {
   getEncounters,
   getEncountersPrescriptions,
@@ -327,7 +353,8 @@ const patientEncounter = {
   deleteEncounter,
   getEncounterTypes,
   getRecentDiagnoses,
-  searchDrug
+  searchDrug,
+  createEncounter_ICD
 };
 
 module.exports = patientEncounter;

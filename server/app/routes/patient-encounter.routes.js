@@ -50,5 +50,10 @@ router.get(
   [authJwt.verifyToken],
   PatientEncounter.getEncountersPrescriptionsFrequencies
 );
+router.post(
+  "/patient/:patient_id/encounters-icd",
+  [authJwt.verifyToken],
+  PatientEncounter.createEncounter_ICD
+);
 
 module.exports = router;
