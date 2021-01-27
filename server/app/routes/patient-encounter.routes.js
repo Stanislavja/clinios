@@ -55,5 +55,10 @@ router.post(
   [authJwt.verifyToken],
   PatientEncounter.createEncounter_ICD
 );
+router.get(
+  "/patient/encounters/plan",
+  [authJwt.verifyToken],
+  PatientEncounter.getEncounterPlan
+);
 
 module.exports = router;
