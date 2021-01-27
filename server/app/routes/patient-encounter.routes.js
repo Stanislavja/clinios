@@ -26,9 +26,9 @@ router.delete(
   PatientEncounter.deleteEncounter
 );
 router.get(
-  "/patient/encounters/diagnoses/recent-diagnoses",
+  "/patient/:patient_id/encounter-types",
   [authJwt.verifyToken],
-  PatientEncounter.getRecentDiagnoses
+  PatientEncounter.getEncounterTypes
 );
 
 

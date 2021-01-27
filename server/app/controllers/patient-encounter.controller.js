@@ -228,13 +228,42 @@ const deleteEncounter = async (req, res) => {
   }
 };
 
+const getEncounterTypes = async (req, res) => {
+  const db = makeDb(configuration, res);
+  const { patient_id } = req.params;
+
+  try {
+    const dbResponse = await db.query(
+      `select et.id, et.name
+      from encounter_type et
+      where (et.client_id is null or et.client_id=1)
+      order by et.sort_order
+      limit 100`
+    );
+    if (!dbResponse) {
+      errorMessage.error = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.error = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const patientEncounter = {
   getEncounters,
   getEncountersPrescriptions,
   getEncountersPrescriptionsFrequencies,
   createEncounter,
   updateEncounter,
-  deleteEncounter
+  deleteEncounter,
+  getEncounterTypes
 };
 
 module.exports = patientEncounter;
