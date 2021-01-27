@@ -40,5 +40,10 @@ router.post(
   [authJwt.verifyToken],
   PatientEncounter.searchDrug
 );
+router.get(
+  "/patient/encounters/recent-prescriptions",
+  [authJwt.verifyToken],
+  PatientEncounter.getEncountersPrescriptions
+);
 
 module.exports = router;
