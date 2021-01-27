@@ -1943,7 +1943,7 @@ const appointmentTypes = {
   saveLayout,
   deleteLayout,
   getDrugs,
-  getIcds
+  getIcds,
 };
 
 module.exports = appointmentTypes;

@@ -1,5 +1,4 @@
 const moment = require("moment");
-const fs = require("fs");
 const { configuration, makeDb } = require("../db/db.js");
 const { errorMessage, successMessage, status } = require("../helpers/status");
 
@@ -18,7 +17,7 @@ const getEncounters = async (req, res) => {
       limit 50`
     );
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -26,7 +25,7 @@ const getEncounters = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -56,7 +55,7 @@ const getEncountersPrescriptions = async (req, res) => {
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -81,7 +80,7 @@ const getEncountersPrescriptionsFrequencies = async (req, res) => {
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -132,8 +131,7 @@ const createEncounter = async (req, res) => {
     );
 
     if (!insertResponse.affectedRows) {
-      removeFile(req.file);
-      errorMessage.error = "Insert not successful";
+      errorMessage.message = "Insert not successful";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -141,7 +139,7 @@ const createEncounter = async (req, res) => {
     successMessage.message = "Insert successful";
     return res.status(status.created).send(successMessage);
   } catch (excepErr) {
-    errorMessage.error = "Insert not successful";
+    errorMessage.message = "Insert not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -195,7 +193,7 @@ const updateEncounter = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Update not successful";
+    errorMessage.message = "Update not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -221,7 +219,7 @@ const deleteEncounter = async (req, res) => {
     successMessage.message = "Delete successful";
     return res.status(status.created).send(successMessage);
   } catch (err) {
-    errorMessage.error = "Delete not successful";
+    errorMessage.message = "Delete not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -230,8 +228,6 @@ const deleteEncounter = async (req, res) => {
 
 const getEncounterTypes = async (req, res) => {
   const db = makeDb(configuration, res);
-  const { patient_id } = req.params;
-
   try {
     const dbResponse = await db.query(
       `select et.id, et.name
@@ -241,7 +237,7 @@ const getEncounterTypes = async (req, res) => {
       limit 100`
     );
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -249,7 +245,7 @@ const getEncounterTypes = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -270,14 +266,14 @@ const getRecentDiagnoses = async (req, res) => {
       limit 20`
     );
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -379,7 +375,6 @@ const getEncounterPlan = async (req, res) => {
     await db.close();
   }
 };
-
 
 const patientEncounter = {
   getEncounters,

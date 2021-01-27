@@ -60,5 +60,9 @@ router.get(
   [authJwt.verifyToken],
   PatientEncounter.getEncounterPlan
 );
-
+router.get(
+  "/patient/encounters/prescription/search",
+  [authJwt.verifyToken],
+  PatientEncounter.getEncounterPlan
+);
 module.exports = router;
