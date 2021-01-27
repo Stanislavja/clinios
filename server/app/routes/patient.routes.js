@@ -143,11 +143,6 @@ router.get(
   [authJwt.verifyToken],
   Patient.getEncountersPrescriptions
 );
-router.post(
-  "/patient/encounters/prescriptions/search-drug",
-  [authJwt.verifyToken],
-  Patient.searchDrug
-);
 router.get(
   "/patient/encounters/prescriptions/frequencies",
   [authJwt.verifyToken],
@@ -260,12 +255,6 @@ router.delete(
   "/patient-layout/:user_id",
   [authJwt.verifyToken],
   Patient.deleteLayout
-);
-
-router.get(
-  "/patient/encounters/diagnoses/recent-diagnoses",
-  [authJwt.verifyToken],
-  Patient.getRecentDiagnoses
 );
 
 router.get("/drug/search", [authJwt.verifyToken], Patient.getDrugs);

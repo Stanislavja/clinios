@@ -30,6 +30,15 @@ router.get(
   [authJwt.verifyToken],
   PatientEncounter.getEncounterTypes
 );
-
+router.get(
+  "/patient/encounters/diagnoses/recent-diagnoses",
+  [authJwt.verifyToken],
+  PatientEncounter.getRecentDiagnoses
+);
+router.post(
+  "/patient/encounters/prescriptions/search-drug",
+  [authJwt.verifyToken],
+  PatientEncounter.searchDrug
+);
 
 module.exports = router;
