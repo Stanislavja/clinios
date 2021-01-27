@@ -14,7 +14,7 @@ import { useSnackbar } from "notistack";
 
 import Logo from "../../../../assets/img/Logo.png";
 import Error from "../../../../components/common/Error";
-import AuthService from "../../../../services/auth.service";
+import useAuth from "../../../../hooks/useAuth";
 import ConfigurationService from "../../../../services/configuration.service";
 import StateData from "./data/state";
 import ConfigModal from "./modal";
@@ -80,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Configuration() {
   const { enqueueSnackbar } = useSnackbar();
-  const currentUser = AuthService.getCurrentUser() || {};
+  const { user } = useAuth();
   const classes = useStyles();
   const [isSubmitting, setSubmitting] = useState(false);
 
@@ -88,7 +88,7 @@ export default function Configuration() {
   const [modalHistory, setModalHistory] = useState({
     isOpen: false,
     data: [],
-    currentUser,
+    user,
   });
   const logoRef = React.useRef(null);
 
@@ -187,7 +187,7 @@ export default function Configuration() {
         fax: formParams.fax,
       };
       const response = await ConfigurationService.updateConfig(
-        currentUser.id,
+        user.id,
         _params,
       );
       setSubmitting(false);
@@ -208,7 +208,7 @@ export default function Configuration() {
       try {
         const formData = new FormData();
         formData.append("file", e.target.files[0]);
-        await ConfigurationService.updateLogo(currentUser.id, formData);
+        await ConfigurationService.updateLogo(user.id, formData);
       } catch (err) {
         console.error(err);
       }
@@ -245,18 +245,6 @@ export default function Configuration() {
       [e.target.name]: e.target.value,
     });
   };
-  // const _onTimeChangeStart = (date) => {
-  //   setFormParams({
-  //     ...formParams,
-  //     calendarStartTime: date,
-  //   });
-  // };
-  // const _onTimeChangeEnd = (date) => {
-  //   setFormParams({
-  //     ...formParams,
-  //     calendarEndTime: date,
-  //   });
-  // };
 
   return (
     <div className={classes.root}>

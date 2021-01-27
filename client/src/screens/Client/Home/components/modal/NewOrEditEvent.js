@@ -7,7 +7,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -58,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
     whiteSpace: "nowrap",
     maxHeight: "30px",
     marginTop: "15px",
+    color: "#2979ff",
   },
   content: {
     paddingTop: theme.spacing(2),
@@ -67,6 +67,13 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     width: "100%",
     marginBottom: theme.spacing(3 / 2),
+    color: theme.palette.text.secondary,
+    "& .MuiSelect-select": {
+      minWidth: 220,
+    },
+  },
+  providerFormControl: {
+    width: "100%",
     color: theme.palette.text.secondary,
     "& .MuiSelect-select": {
       minWidth: 220,
@@ -101,9 +108,18 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "180px",
     display: "flex",
   },
+  providerWrap: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  providerSelect: {
+    flex: 1,
+    "& div": {
+      width: "100%",
+    },
+  },
   statuses: {
     marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
   },
   statusList: {
     flexDirection: "row",
@@ -135,6 +151,11 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "flex-end",
     display: "flex",
     fontWeight: "500",
+    color: "#2979ff",
+  },
+  eventStatusInfo: {
+    fontSize: "14px",
+    marginTop: "5px",
   },
   modalAction: {
     borderTop: `1px solid ${theme.palette.background.default}`,
@@ -196,8 +217,17 @@ const EventModal = ({
   };
 
   useEffect(() => {
+    const selectedTime = user && user.calendar_start_time;
+    let initialDateTime = selectedDate;
+    if (selectedTime) {
+      initialDateTime = `${selectedDate} ${selectedTime}`;
+    }
     if (isNewEvent) {
-      setCalEvent("");
+      setCalEvent({
+        ...calEvent,
+        start_dt: moment(initialDateTime).format(),
+        end_dt: moment(initialDateTime).add(30, "minutes"),
+      });
       setPatientSearchTerm("");
     } else {
       setCalEvent(props.event);
@@ -212,7 +242,7 @@ const EventModal = ({
     }
     setProvider(selectedProvider);
     // eslint-disable-next-line react-hooks/exhaustive-deps, react/destructuring-assignment
-  }, [props.event, isNewEvent]);
+  }, [props.event, isNewEvent, selectedDate]);
 
   /* eslint-enable */
   const handleOnChange = (event) => {
@@ -273,6 +303,11 @@ const EventModal = ({
   const handleProviderChange = (event) => {
     const pd = providers.filter((p) => p.id === event.target.value);
     setProvider(pd[0]);
+  };
+
+  const handleSetToSelf = () => {
+    const loggedInUserAsProvider = providers.filter((p) => p.id === user.id);
+    setProvider(loggedInUserAsProvider[0]);
   };
 
   const validateFormFields = () => {
@@ -349,7 +384,6 @@ const EventModal = ({
     setIndex(index2);
   }, [providers, user]);
 
-
   return (
     <Dialog
       open={isOpen}
@@ -375,29 +409,8 @@ const EventModal = ({
             [classes.contentWithLoading]: isLoading, // only when isLoading === true
           })}
         >
-          <DialogContentText id="alert-dialog-description">
-            This page is used to create a new appointment
-          </DialogContentText>
           {errors && <Alert severity="error">{errors}</Alert>}
           <div className={classes.root}>
-            <FormControl component="div" className={classes.formControl}>
-              <TextField
-                value={calEvent.title}
-                variant="outlined"
-                margin="normal"
-                size="small"
-                required
-                fullWidth
-                id="title"
-                label="Title"
-                name="title"
-                autoComplete="title"
-                autoFocus
-                onChange={(event) => handleOnChange(event)}
-                error={errorText.title.length > 0}
-                helperText={errorText.title.length > 0 && errorText.title}
-              />
-            </FormControl>
             <FormControl component="div" className={classes.formControl}>
               <Grid container justify="space-around">
                 <KeyboardDatePicker
@@ -589,7 +602,7 @@ const EventModal = ({
                 margin="dense"
                 className={classes.appointmentLength}
                 size="small"
-                id="appointmentLength"
+                id="appointmentLengthDays"
                 label="Length days"
                 name="appointmentLength"
                 autoComplete="appointmentLength"
@@ -616,7 +629,7 @@ const EventModal = ({
                 margin="dense"
                 className={classes.appointmentLength}
                 size="small"
-                id="appointmentLength"
+                id="currentDayLength"
                 label="In days"
                 name="appointmentLength"
                 autoComplete="appointmentLength"
@@ -646,25 +659,54 @@ const EventModal = ({
                 <FormControlLabel value="D" control={<Radio />} label="Declined" />
               </RadioGroup>
             </FormControl>
-            <FormControl variant="outlined" size="small" className={classes.formControl}>
-              <InputLabel id="provider-select-outlined-label">Provider</InputLabel>
-              <Select
-                labelId="provider-select-outlined-label"
-                id="provider-select-outlined-label"
-                value={!!provider && provider.id}
-                onChange={handleProviderChange}
-                label="Provider"
-                defaultValue={selectedProvider?.id}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {providers.map((pd) => (
-                  <MenuItem key={pd.id} value={pd.id}>
-                    {pd.name}
-                  </MenuItem>
-                ))}
-              </Select>
+            <FormControl component="div" className={classes.formControl}>
+              <TextField
+                value={calEvent.title}
+                variant="outlined"
+                margin="normal"
+                size="small"
+                required
+                fullWidth
+                id="title"
+                label="Title"
+                name="title"
+                autoComplete="title"
+                autoFocus
+                onChange={(event) => handleOnChange(event)}
+                error={errorText.title.length > 0}
+                helperText={errorText.title.length > 0 && errorText.title}
+              />
+            </FormControl>
+            <FormControl variant="outlined" size="small" className={classes.providerFormControl}>
+              <div className={classes.providerWrap}>
+                <div className={classes.providerSelect}>
+                  <InputLabel id="provider-select-outlined-label">Provider</InputLabel>
+                  <Select
+                    labelId="provider-select-outlined-label"
+                    id="provider-select-outlined-label"
+                    value={!!provider && provider.id}
+                    onChange={handleProviderChange}
+                    label="Provider"
+                    defaultValue={selectedProvider?.id}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    {providers.map((pd) => (
+                      <MenuItem key={pd.id} value={pd.id}>
+                        {pd.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </div>
+                <Button
+                  className={classes.Button}
+                  disableElevation
+                  onClick={() => handleSetToSelf()}
+                >
+                  Set to Self
+                </Button>
+              </div>
             </FormControl>
             <FormControl component="div" className={classes.formControl}>
               <TextField
@@ -712,7 +754,7 @@ const EventModal = ({
               onChange={(event) => handleOnChange(event)}
             />
           </div>
-          <div>
+          <div className={classes.eventMeta}>
             <Typography
               onClick={() => history.push(`/patients/${selectedPatient}`)}
               component="p"
@@ -731,6 +773,22 @@ const EventModal = ({
             >
               Go to patient page in new tab
             </Typography>
+            {calEvent.status === "A" && (
+              <p className={classes.eventStatusInfo}>
+                Approved:
+                {moment(calEvent.approved).format("ll")}
+                ,
+                {calEvent.approved_user}
+              </p>
+            )}
+            {calEvent.status === "D" && (
+              <p className={classes.eventStatusInfo}>
+                Rejected:
+                {moment(calEvent.declined).format("ll")}
+                ,
+                {calEvent.declined_user}
+              </p>
+            )}
           </div>
         </div>
       </DialogContent>

@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from "react";
 
 import {
-  makeStyles, withStyles, Typography, Grid,
+  makeStyles, withStyles, Typography, Grid, Button,
 } from "@material-ui/core";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -10,6 +10,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 
 import useAuth from "../../../hooks/useAuth";
 import useDidMountEffect from "../../../hooks/useDidMountEffect";
@@ -26,28 +27,31 @@ const useStyles = makeStyles((theme) => ({
   tab: {
     paddingBottom: 5,
     margin: "5px 16px 5px 0",
-    fontSize: 12,
+    fontSize: 14,
     cursor: "pointer",
   },
   tabSelected: {
     paddingBottom: 5,
     margin: "5px 16px 5px 0",
-    fontSize: 12,
+    fontSize: 14,
     cursor: "pointer",
     borderBottom: `2px solid ${theme.palette.primary.main}`,
+  },
+  w100: {
+    minWidth: 100,
   },
 }));
 
 const StyledTableCell = withStyles(() => ({
   head: {
     whiteSpace: "nowrap",
-    fontSize: "12px",
+    fontSize: 16,
     fontWeight: 700,
     padding: "6px 24px 6px 2px",
     borderBottom: "unset",
   },
   body: {
-    fontSize: 12,
+    fontSize: 14,
     borderBottom: "unset",
   },
 }))(TableCell);
@@ -56,22 +60,23 @@ const StyledTableRow = withStyles(() => ({
   root: {
     fontSize: 14,
     "& th": {
-      fontSize: 12,
+      fontSize: 14,
       whiteSpace: "nowrap",
       padding: "2px 16px 2px 2px",
-      lineHeight: "14px",
+      lineHeight: "16px",
     },
     "& td": {
-      fontSize: 12,
+      fontSize: 14,
       whiteSpace: "nowrap",
       padding: "2px 16px 2px 2px",
-      lineHeight: "14px",
+      lineHeight: "16px",
     },
   },
 }))(TableRow);
 
 const Labs = () => {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const { lastVisitedPatient } = useAuth();
   const [labDocuments, setLabDocuments] = useState([]);
   const [tabValue, setTabValue] = useState(0);
@@ -116,16 +121,64 @@ const Labs = () => {
     setTabValue(newValue);
   };
 
+  const handleLabsFile = (e) => {
+    const { files } = e.target;
+    if (!!files && files.length) {
+      const fd = new FormData();
+      fd.append("file", files[0]);
+
+      PatientPortalService.createLabDocuments(lastVisitedPatient, fd)
+        .then((response) => {
+          enqueueSnackbar(`${response.message}`, { variant: "success" });
+          fetchLabDocuments();
+        })
+        .catch((error) => {
+          const resMessage = (error.response
+            && error.response.data
+            && error.response.data.message)
+            || error.message
+            || error.toString();
+          enqueueSnackbar(`${resMessage}`, { variant: "error" });
+        });
+    }
+  };
+
   return (
     <div className={classes.root}>
-      <Typography
-        component="h1"
-        variant="h2"
-        color="textPrimary"
-        className={classes.title}
+
+      <Grid
+        item
+        sm={6}
+        xs={12}
       >
-        Labs/Documents
-      </Typography>
+        <Grid
+          container
+          justify="space-between"
+        >
+          <Typography
+            component="h1"
+            variant="h2"
+            color="textPrimary"
+            className={classes.title}
+          >
+            Labs/Documents
+          </Typography>
+          <Button
+            component="label"
+            variant="outlined"
+            className={classes.w100}
+          >
+            New
+            <input
+              type="file"
+              id="file"
+              accept=".pdf, .txt, .doc, .docx, image/*"
+              hidden
+              onChange={(e) => handleLabsFile(e)}
+            />
+          </Button>
+        </Grid>
+      </Grid>
 
       <Grid container>
         <Typography

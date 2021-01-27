@@ -128,7 +128,7 @@ const ViewTransactionDetails = (props) => {
               </Grid>
               <Grid item md={4}>
                 <Typography component="div" variant="h5">
-                  {data.account_number}
+                  {data.account_number || "-"}
                 </Typography>
               </Grid>
             </Grid>
