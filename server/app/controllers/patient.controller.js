@@ -1148,6 +1148,42 @@ const getEncounters = async (req, res) => {
   }
 };
 
+const getEncountersPlan = async (req, res) => {
+  const db = makeDb(configuration, res);
+  const { encounter_id } = req.params;
+
+  try {
+    const dbResponse = await db.query(
+      `select type, name, strength, unit from (
+        select 1 sort, 'Rx' type, d.name, ds.strength, ds.unit
+        from patient_drug pd
+        left join drug d on d.id=pd.drug_id
+        left join drug_strength ds on ds.id=pd.drug_strength_id
+        where pd.encounter_id=${encounter_id}
+        union
+        select 2 sort, 'Lab' type, c.name, null, null
+        from patient_cpt pc
+        join cpt c on c.id=pc.cpt_id
+        where pc.encounter_id=${encounter_id}
+      ) d
+      order by sort
+      limit 50`
+    );
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    errorMessage.error = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const getEncountersPrescriptions = async (req, res) => {
   const db = makeDb(configuration, res);
 
@@ -2043,6 +2079,7 @@ const appointmentTypes = {
   checkDocument,
   createDocuments,
   getEncounters,
+  getEncountersPlan,
   getEncountersPrescriptions,
   searchDrug,
   getEncountersPrescriptionsFrequencies,
