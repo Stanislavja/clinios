@@ -45,5 +45,10 @@ router.get(
   [authJwt.verifyToken],
   PatientEncounter.getEncountersPrescriptions
 );
+router.get(
+  "/patient/encounters/prescriptions/frequencies",
+  [authJwt.verifyToken],
+  PatientEncounter.getEncountersPrescriptionsFrequencies
+);
 
 module.exports = router;
