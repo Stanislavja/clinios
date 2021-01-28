@@ -71,13 +71,19 @@ router.get(
   PatientEncounter.getEncounterPlan
 );
 router.get(
+  "/patient/encounters/prescription/search",
+  [authJwt.verifyToken],
+  PatientEncounter.getEncounterPlan
+);
+router.get(
   "/patient/encounters/drug-order",
   [authJwt.verifyToken],
   PatientEncounter.getDrugOrder
 );
 router.get(
-  "/patient/encounters/prescription/search",
+  "/patient/encounters/drug-order/prescriptions",
   [authJwt.verifyToken],
-  PatientEncounter.getEncounterPlan
+  PatientEncounter.getDrugOrderPrescriptions
 );
+
 module.exports = router;
