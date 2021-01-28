@@ -85,5 +85,30 @@ router.get(
   [authJwt.verifyToken],
   PatientEncounter.getDrugOrderPrescriptions
 );
+router.get(
+  "/patient/encounters/new-lab/diagnoses",
+  [authJwt.verifyToken],
+  PatientEncounter.getNewLabDiagnoses
+);
+router.get(
+  "/patient/encounters/new-lab/test-ordered",
+  [authJwt.verifyToken],
+  PatientEncounter.getOrderedTests
+);
+router.delete(
+  "/patient/encounters/new-lab/test-ordered/:id",
+  [authJwt.verifyToken],
+  PatientEncounter.deleteOrderedTests
+);
+router.get(
+  "/patient/encounters/new-lab/laboratories",
+  [authJwt.verifyToken],
+  PatientEncounter.getNewLabLaboratories
+);
+router.get(
+  "/patient/encounters/new-lab/favorites",
+  [authJwt.verifyToken],
+  PatientEncounter.getNewLabFavorites
+);
 
 module.exports = router;
