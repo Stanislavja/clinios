@@ -127,30 +127,11 @@ router.post(
   [authJwt.verifyToken],
   Patient.createDocuments
 );
+/** encounters */
 router.get(
   "/patient/:patient_id/encounters",
   [authJwt.verifyToken],
   Patient.getEncounters
-);
-router.get(
-  "/patient/:patient_id/encounters/:encounter_id/plan",
-  [authJwt.verifyToken],
-  Patient.getEncountersPlan
-);
-router.get(
-  "/patient/encounters/recent-prescriptions",
-  [authJwt.verifyToken],
-  Patient.getEncountersPrescriptions
-);
-router.post(
-  "/patient/encounters/prescriptions/search-drug",
-  [authJwt.verifyToken],
-  Patient.searchDrug
-);
-router.get(
-  "/patient/encounters/prescriptions/frequencies",
-  [authJwt.verifyToken],
-  Patient.getEncountersPrescriptionsFrequencies
 );
 router.post(
   "/patient/:patient_id/encounters",
@@ -259,12 +240,6 @@ router.delete(
   "/patient-layout/:user_id",
   [authJwt.verifyToken],
   Patient.deleteLayout
-);
-
-router.get(
-  "/patient/encounters/diagnoses/recent-diagnoses",
-  [authJwt.verifyToken],
-  Patient.getRecentDiagnoses
 );
 
 router.get("/drug/search", [authJwt.verifyToken], Patient.getDrugs);

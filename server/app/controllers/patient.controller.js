@@ -1148,136 +1148,6 @@ const getEncounters = async (req, res) => {
   }
 };
 
-const getEncountersPlan = async (req, res) => {
-  const db = makeDb(configuration, res);
-  const { encounter_id } = req.params;
-
-  try {
-    const dbResponse = await db.query(
-      `select type, name, strength, unit from (
-        select 1 sort, 'Rx' type, d.name, ds.strength, ds.unit
-        from patient_drug pd
-        left join drug d on d.id=pd.drug_id
-        left join drug_strength ds on ds.id=pd.drug_strength_id
-        where pd.encounter_id=${encounter_id}
-        union
-        select 2 sort, 'Lab' type, c.name, null, null
-        from patient_cpt pc
-        join cpt c on c.id=pc.cpt_id
-        where pc.encounter_id=${encounter_id}
-      ) d
-      order by sort
-      limit 50`
-    );
-    if (!dbResponse) {
-      errorMessage.message = "None found";
-      return res.status(status.notfound).send(errorMessage);
-    }
-
-    successMessage.data = dbResponse;
-    return res.status(status.created).send(successMessage);
-  } catch (err) {
-    errorMessage.error = "Select not successful";
-    return res.status(status.error).send(errorMessage);
-  } finally {
-    await db.close();
-  }
-};
-
-const getEncountersPrescriptions = async (req, res) => {
-  const db = makeDb(configuration, res);
-
-  try {
-    const dbResponse = await db.query(
-      `select d.name, concat(ds.strength, ds.unit) strength, case when ds.form='T' then 'Tablets' end form, pd.created, case when df.drug_id then true end favorite
-      from patient_drug pd
-      join drug d on d.id=pd.drug_id
-      left join client_drug df on df.client_id=${req.client_id}
-          and df.drug_id=d.id
-      join drug_strength ds on ds.drug_id=d.id and ds.id=pd.drug_strength_id
-      where pd.user_id=${req.user_id}
-      order by pd.created desc
-      limit 20`
-    );
-    if (!dbResponse) {
-      errorMessage.message = "None found";
-      return res.status(status.notfound).send(errorMessage);
-    }
-
-    successMessage.data = dbResponse;
-    return res.status(status.created).send(successMessage);
-  } catch (err) {
-    errorMessage.error = "Select not successful";
-    return res.status(status.error).send(errorMessage);
-  } finally {
-    await db.close();
-  }
-};
-
-const searchDrug = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    errorMessage.message = errors.array();
-    return res.status(status.bad).send(errorMessage);
-  }
-  const { text } = req.body.data;
-
-  const db = makeDb(configuration, res);
-  try {
-    const dbResponse = await db.query(
-      `select d.name, concat(ds.strength, ds.unit) strength
-      , case when ds.form='T' then 'Tablets' end form
-      , cd.favorite
-      from drug d
-      left join client_drug cd on cd.client_id=${req.client_id}
-      and cd.drug_id=d.id
-      left join drug_strength ds on ds.drug_id=d.id
-      where d.name like '${text}%'
-      order by d.name, ds.strength
-      limit 50`
-    );
-
-    if (!dbResponse) {
-      errorMessage.error = "None found";
-      return res.status(status.notfound).send(errorMessage);
-    }
-
-    successMessage.data = dbResponse;
-    return res.status(status.created).send(successMessage);
-  } catch (err) {
-    console.log("err", err);
-    errorMessage.error = "Search not successful";
-    return res.status(status.error).send(errorMessage);
-  } finally {
-    await db.close();
-  }
-};
-
-const getEncountersPrescriptionsFrequencies = async (req, res) => {
-  const db = makeDb(configuration, res);
-
-  try {
-    const dbResponse = await db.query(
-      `select id, descr
-      from drug_frequency
-      order by id
-      limit 100`
-    );
-    if (!dbResponse) {
-      errorMessage.message = "None found";
-      return res.status(status.notfound).send(errorMessage);
-    }
-
-    successMessage.data = dbResponse;
-    return res.status(status.created).send(successMessage);
-  } catch (err) {
-    errorMessage.error = "Select not successful";
-    return res.status(status.error).send(errorMessage);
-  } finally {
-    await db.close();
-  }
-};
-
 const createEncounter = async (req, res) => {
   const { patient_id } = req.params;
   const { title } = req.body.data;
@@ -2023,34 +1893,6 @@ const getIcds = async (req, res) => {
   }
 };
 
-const getRecentDiagnoses = async (req, res) => {
-  const db = makeDb(configuration, res);
-
-  try {
-    const dbResponse = await db.query(
-      `select i.name, concat('(', pi.icd_id, ' ICD-10)') id
-      from patient_icd pi
-      join icd i on i.id=pi.icd_id
-      where pi.encounter_id<>2
-      and pi.user_id=${req.client_id}
-      order by pi.created desc
-      limit 20`
-    );
-    if (!dbResponse) {
-      errorMessage.error = "None found";
-      return res.status(status.notfound).send(errorMessage);
-    }
-
-    successMessage.data = dbResponse;
-    return res.status(status.created).send(successMessage);
-  } catch (err) {
-    errorMessage.error = "Select not successful";
-    return res.status(status.error).send(errorMessage);
-  } finally {
-    await db.close();
-  }
-};
-
 const appointmentTypes = {
   getPatient,
   updatePatient,
@@ -2079,10 +1921,6 @@ const appointmentTypes = {
   checkDocument,
   createDocuments,
   getEncounters,
-  getEncountersPlan,
-  getEncountersPrescriptions,
-  searchDrug,
-  getEncountersPrescriptionsFrequencies,
   createEncounter,
   updateEncounter,
   deleteEncounter,
@@ -2106,7 +1944,6 @@ const appointmentTypes = {
   deleteLayout,
   getDrugs,
   getIcds,
-  getRecentDiagnoses,
 };
 
 module.exports = appointmentTypes;
