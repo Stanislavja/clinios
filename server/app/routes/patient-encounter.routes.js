@@ -100,5 +100,10 @@ router.delete(
   [authJwt.verifyToken],
   PatientEncounter.deleteOrderedTests
 );
+router.get(
+  "/patient/encounters/new-lab/laboratories",
+  [authJwt.verifyToken],
+  PatientEncounter.getNewLabLaboratories
+);
 
 module.exports = router;

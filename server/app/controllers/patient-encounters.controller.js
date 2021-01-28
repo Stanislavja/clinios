@@ -589,6 +589,32 @@ const deleteOrderedTests = async (req, res) => {
   }
 };
 
+const getNewLabLaboratories = async (req, res) => {
+  const db = makeDb(configuration, res);
+
+  try {
+    const dbResponse = await db.query(
+      `select id, name 
+      from lab_company
+      order by name
+      limit 100`
+    );
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const patientEncounter = {
   getEncounters,
   getEncountersPrescriptions,
@@ -608,6 +634,7 @@ const patientEncounter = {
   getNewLabDiagnoses,
   getOrderedTests,
   deleteOrderedTests,
+  getNewLabLaboratories,
 };
 
 module.exports = patientEncounter;
