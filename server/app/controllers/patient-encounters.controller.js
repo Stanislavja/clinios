@@ -615,6 +615,41 @@ const getNewLabLaboratories = async (req, res) => {
   }
 };
 
+const getNewLabFavorites = async (req, res) => {
+  const db = makeDb(configuration, res);
+  const { tab } = req.query;
+
+  try {
+    let $sql;
+
+    $sql = `select c.id, lc.name lab_name, c.name, case when cc.cpt_id<>'' then true end favorite
+    from cpt c
+    join client_cpt cc on cc.client_id=1
+        and cc.cpt_id=c.id
+    left join lab_company lc on lc.id=c.lab_company_id \n`;
+
+    if (tab !== "All") {
+      $sql += "where lc.id in (7,8,9) \n";
+    }
+    $sql += `order by lc.name, c.name limit 50`;
+
+    const dbResponse = await db.query($sql);
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const patientEncounter = {
   getEncounters,
   getEncountersPrescriptions,
@@ -635,6 +670,7 @@ const patientEncounter = {
   getOrderedTests,
   deleteOrderedTests,
   getNewLabLaboratories,
+  getNewLabFavorites,
 };
 
 module.exports = patientEncounter;
