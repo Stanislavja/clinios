@@ -87,6 +87,37 @@ const getEncountersPrescriptionsFrequencies = async (req, res) => {
   }
 };
 
+const encountersPrescriptionsEdit = async (req, res) => {
+  const db = makeDb(configuration, res);
+
+  try {
+    const dbResponse = await db.query(
+      `select d.name, concat(ds.strength, ds.unit) strength, case when ds.form='T' then 'Tablets' end form
+      , df.descr, pd.start_dt, pd.expires, pd.amount, pd.refills
+      , pd.generic, pd.patient_instructions, pd.pharmacy_instructions
+      from patient_drug pd
+      left join drug d on d.id=pd.drug_id
+      left join drug_strength ds on ds.drug_id=d.id 
+        and ds.id=pd.drug_strength_id left join drug_frequency df on df.id=pd.drug_frequency_id
+      where pd.encounter_id=1
+      and pd.drug_id=1
+      and pd.drug_strength_id=1`
+    );
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const createEncounter = async (req, res) => {
   const { patient_id } = req.params;
   const { title } = req.body.data;
@@ -380,6 +411,7 @@ const patientEncounter = {
   getEncounters,
   getEncountersPrescriptions,
   getEncountersPrescriptionsFrequencies,
+  encountersPrescriptionsEdit,
   createEncounter,
   updateEncounter,
   deleteEncounter,
@@ -387,7 +419,7 @@ const patientEncounter = {
   getRecentDiagnoses,
   searchDrug,
   createEncounter_ICD,
-  getEncounterPlan
+  getEncounterPlan,
 };
 
 module.exports = patientEncounter;

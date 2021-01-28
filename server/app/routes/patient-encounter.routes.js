@@ -50,6 +50,11 @@ router.get(
   [authJwt.verifyToken],
   PatientEncounter.getEncountersPrescriptionsFrequencies
 );
+router.get(
+  "/patient/encounters/prescriptions/edit",
+  [authJwt.verifyToken],
+  PatientEncounter.encountersPrescriptionsEdit
+);
 router.post(
   "/patient/:patient_id/encounters-icd",
   [authJwt.verifyToken],
