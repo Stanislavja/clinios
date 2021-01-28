@@ -71,6 +71,11 @@ router.get(
   PatientEncounter.getEncounterPlan
 );
 router.get(
+  "/patient/encounters/drug-order",
+  [authJwt.verifyToken],
+  PatientEncounter.getDrugOrder
+);
+router.get(
   "/patient/encounters/prescription/search",
   [authJwt.verifyToken],
   PatientEncounter.getEncounterPlan
