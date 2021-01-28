@@ -535,6 +535,34 @@ const getNewLabDiagnoses = async (req, res) => {
   }
 };
 
+const getOrderedTests = async (req, res) => {
+  const db = makeDb(configuration, res);
+
+  try {
+    const dbResponse = await db.query(
+      `select c.name, c.id
+      from patient_cpt pc
+      join cpt c on c.id=pc.cpt_id
+      where pc.encounter_id=1
+      order by c.name
+      limit 100`
+    );
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const patientEncounter = {
   getEncounters,
   getEncountersPrescriptions,
@@ -552,6 +580,7 @@ const patientEncounter = {
   getDrugOrder,
   getDrugOrderPrescriptions,
   getNewLabDiagnoses,
+  getOrderedTests,
 };
 
 module.exports = patientEncounter;
