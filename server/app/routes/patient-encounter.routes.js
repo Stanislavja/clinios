@@ -1,6 +1,6 @@
 const express = require("express");
 const { authJwt } = require("../middlewares");
-const PatientEncounter = require("../controllers/patient-encounter.controller.js");
+const PatientEncounter = require("../controllers/patient-encounters.controller.js");
 
 const router = express.Router();
 
