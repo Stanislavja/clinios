@@ -85,5 +85,10 @@ router.get(
   [authJwt.verifyToken],
   PatientEncounter.getDrugOrderPrescriptions
 );
+router.get(
+  "/patient/encounters/new-lab/diagnoses",
+  [authJwt.verifyToken],
+  PatientEncounter.getNewLabDiagnoses
+);
 
 module.exports = router;
