@@ -563,6 +563,32 @@ const getOrderedTests = async (req, res) => {
   }
 };
 
+const deleteOrderedTests = async (req, res) => {
+  const db = makeDb(configuration, res);
+  try {
+    const deleteOrderTestsResponse = await db.query(
+      `delete
+      from patient_cpt
+      where encounter_id=1
+      and cpt_id='${req.params.id}'`
+    );
+
+    if (!deleteOrderTestsResponse.affectedRows) {
+      errorMessage.message = "Deletion not successful";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = deleteOrderTestsResponse;
+    successMessage.message = "Deletion successful";
+    return res.status(status.success).send(successMessage);
+  } catch (error) {
+    console.log("error", error);
+    errorMessage.message = "Deletion not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const patientEncounter = {
   getEncounters,
   getEncountersPrescriptions,
@@ -581,6 +607,7 @@ const patientEncounter = {
   getDrugOrderPrescriptions,
   getNewLabDiagnoses,
   getOrderedTests,
+  deleteOrderedTests,
 };
 
 module.exports = patientEncounter;
