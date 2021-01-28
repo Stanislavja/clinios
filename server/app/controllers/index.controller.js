@@ -55,6 +55,29 @@ const getPatient = async (req, res) => {
   }
 };
 
+const getClient = async (req, res) => {
+  const db = makeDb(configuration, res);
+  try {
+    const dbResponse = await db.query(
+      `select * from client where id=${req.client_id}`
+    );
+
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    const client = dbResponse[0];
+    successMessage.data = { client };
+    return res.status(status.created).send(successMessage);
+  } catch (error) {
+    console.log("error:", error);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const getCorporateUser = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
@@ -84,6 +107,7 @@ const getCorporateUser = async (req, res) => {
 
 const users = {
   getUser,
+  getClient,
   getPatient,
   getCorporateUser,
 };

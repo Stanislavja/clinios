@@ -75,4 +75,15 @@ router.get(
   [authJwt.verifyToken],
   PatientEncounter.getEncounterPlan
 );
+router.get(
+  "/patient/encounters/drug-order",
+  [authJwt.verifyToken],
+  PatientEncounter.getDrugOrder
+);
+router.get(
+  "/patient/encounters/drug-order/prescriptions",
+  [authJwt.verifyToken],
+  PatientEncounter.getDrugOrderPrescriptions
+);
+
 module.exports = router;
