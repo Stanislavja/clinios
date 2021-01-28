@@ -1,6 +1,6 @@
 const express = require("express");
 const { authJwt } = require("../middlewares");
-const PatientEncounter = require("../controllers/patient-encounter.controller.js");
+const PatientEncounter = require("../controllers/patient-encounters.controller.js");
 
 const router = express.Router();
 
@@ -54,6 +54,11 @@ router.get(
   "/patient/encounters/prescriptions/edit",
   [authJwt.verifyToken],
   PatientEncounter.encountersPrescriptionsEdit
+);
+router.get(
+  "/patient/encounters/recent-profiles",
+  [authJwt.verifyToken],
+  PatientEncounter.encountersRecentProfiles
 );
 router.post(
   "/patient/:patient_id/encounters-icd",
