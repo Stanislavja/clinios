@@ -135,5 +135,10 @@ router.get(
   [authJwt.verifyToken],
   PatientEncounter.getBillingProcedsures
 );
+router.get(
+  "/patient/:patient_id/encounters/billing/payment",
+  [authJwt.verifyToken],
+  PatientEncounter.getBillingPayment
+);
 
 module.exports = router;

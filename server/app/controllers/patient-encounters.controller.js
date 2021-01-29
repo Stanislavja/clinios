@@ -804,6 +804,34 @@ const getBillingProcedsures = async (req, res) => {
   }
 };
 
+const getBillingPayment = async (req, res) => {
+  const db = makeDb(configuration, res);
+
+  try {
+    const $sql = `select t.dt, t.amount, t.payment_type, pm.account_number
+    from tran t
+    left join payment_method pm on pm.id=t.payment_method_id
+    where t.patient_id=1
+    and t.encounter_id=1
+    and t.type_id=3 /*3=Payment*/`;
+
+    const dbResponse = await db.query($sql);
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const patientEncounter = {
   getEncounters,
   getEncountersPrescriptions,
@@ -830,6 +858,7 @@ const patientEncounter = {
   getBilling,
   getBillingDiagnoses,
   getBillingProcedsures,
+  getBillingPayment,
 };
 
 module.exports = patientEncounter;
