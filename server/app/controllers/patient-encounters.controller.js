@@ -650,6 +650,45 @@ const getNewLabFavorites = async (req, res) => {
   }
 };
 
+const getNewLabSearch = async (req, res) => {
+  const { text } = req.body.data;
+  const { tab } = req.query;
+  const db = makeDb(configuration, res);
+  try {
+    let $sql;
+
+    $sql = `select c.id, lc.name lab_name, c.name, case when cc.cpt_id<>'' then true end favorite, group_concat(ci.cpt2_id) cpt_items
+    from cpt c
+    left join client_cpt cc on cc.client_id=1
+        and cc.cpt_id=c.id
+    left join lab_company lc on lc.id=c.lab_company_id
+    left join cpt_item ci on ci.cpt_id=c.id
+    where c.type='L' /*L=Lab*/
+    and c.name like '%${text}%'`;
+
+    if (tab !== "All") {
+      $sql += `and lc.id in (7,8,9) \n`;
+    }
+    $sql += `group by c.id, lc.name, c.name
+    order by lc.name, c.name
+    limit 20`;
+
+    const dbResponse = await db.query($sql);
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const patientEncounter = {
   getEncounters,
   getEncountersPrescriptions,
@@ -671,6 +710,7 @@ const patientEncounter = {
   deleteOrderedTests,
   getNewLabLaboratories,
   getNewLabFavorites,
+  getNewLabSearch,
 };
 
 module.exports = patientEncounter;

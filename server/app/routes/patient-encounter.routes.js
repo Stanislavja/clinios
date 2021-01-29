@@ -110,5 +110,10 @@ router.get(
   [authJwt.verifyToken],
   PatientEncounter.getNewLabFavorites
 );
+router.post(
+  "/patient/encounters/new-lab/search",
+  [authJwt.verifyToken],
+  PatientEncounter.getNewLabSearch
+);
 
 module.exports = router;
