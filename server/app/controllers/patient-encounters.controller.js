@@ -650,6 +650,188 @@ const getNewLabFavorites = async (req, res) => {
   }
 };
 
+const getNewLabSearch = async (req, res) => {
+  const { text } = req.body.data;
+  const { tab } = req.query;
+  const db = makeDb(configuration, res);
+  try {
+    let $sql;
+
+    $sql = `select c.id, lc.name lab_name, c.name, case when cc.cpt_id<>'' then true end favorite, group_concat(ci.cpt2_id) cpt_items
+    from cpt c
+    left join client_cpt cc on cc.client_id=1
+        and cc.cpt_id=c.id
+    left join lab_company lc on lc.id=c.lab_company_id
+    left join cpt_item ci on ci.cpt_id=c.id
+    where c.type='L' /*L=Lab*/
+    and c.name like '%${text}%'`;
+
+    if (tab !== "All") {
+      $sql += `and lc.id in (7,8,9) \n`;
+    }
+    $sql += `group by c.id, lc.name, c.name
+    order by lc.name, c.name
+    limit 20`;
+
+    const dbResponse = await db.query($sql);
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+const getNewLabRequestedLabs = async (req, res) => {
+  const db = makeDb(configuration, res);
+
+  try {
+    const $sql = `select pc.cpt_id, c.name
+    from patient_cpt pc
+    join cpt c on c.id=pc.cpt_id
+    where encounter_id=1
+    order by c.name
+    limit 100`;
+
+    const dbResponse = await db.query($sql);
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+const getBilling = async (req, res) => {
+  const db = makeDb(configuration, res);
+
+  try {
+    const $sql = `select c.id, c.name, t.amount
+    from tran t
+    join cpt c on c.id=t.cpt_id
+    where t.encounter_id=1
+    order by c.name
+    limit 100`;
+
+    const dbResponse = await db.query($sql);
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+const getBillingDiagnoses = async (req, res) => {
+  const db = makeDb(configuration, res);
+
+  try {
+    const $sql = `select i.name, i.id
+    from patient_icd pi
+    join icd i on i.id=pi.icd_id
+    where pi.encounter_id=1
+    and pi.active=true
+    order by i.name
+    limit 100`;
+
+    const dbResponse = await db.query($sql);
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+const getBillingProcedsures = async (req, res) => {
+  const db = makeDb(configuration, res);
+
+  try {
+    const $sql = `select c.id, c.name, t.amount, cc.fee
+    from cpt c
+    join client_cpt cc on cc.cpt_id=c.id
+    left join tran t on t.encounter_id=1 and t.cpt_id=cc.cpt_id
+    where cc.client_id=1
+    and cc.billable=true
+    order by c.id
+    limit 100`;
+
+    const dbResponse = await db.query($sql);
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+const getBillingPayment = async (req, res) => {
+  const db = makeDb(configuration, res);
+
+  try {
+    const $sql = `select t.dt, t.amount, t.payment_type, pm.account_number
+    from tran t
+    left join payment_method pm on pm.id=t.payment_method_id
+    where t.patient_id=1
+    and t.encounter_id=1
+    and t.type_id=3 /*3=Payment*/`;
+
+    const dbResponse = await db.query($sql);
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const patientEncounter = {
   getEncounters,
   getEncountersPrescriptions,
@@ -671,6 +853,12 @@ const patientEncounter = {
   deleteOrderedTests,
   getNewLabLaboratories,
   getNewLabFavorites,
+  getNewLabSearch,
+  getNewLabRequestedLabs,
+  getBilling,
+  getBillingDiagnoses,
+  getBillingProcedsures,
+  getBillingPayment,
 };
 
 module.exports = patientEncounter;

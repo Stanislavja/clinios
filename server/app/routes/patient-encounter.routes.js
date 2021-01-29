@@ -110,5 +110,35 @@ router.get(
   [authJwt.verifyToken],
   PatientEncounter.getNewLabFavorites
 );
+router.post(
+  "/patient/encounters/new-lab/search",
+  [authJwt.verifyToken],
+  PatientEncounter.getNewLabSearch
+);
+router.get(
+  "/patient/encounters/new-lab/requested-labs",
+  [authJwt.verifyToken],
+  PatientEncounter.getNewLabRequestedLabs
+);
+router.get(
+  "/patient/:patient_id/encounters/billing",
+  [authJwt.verifyToken],
+  PatientEncounter.getBilling
+);
+router.get(
+  "/patient/:patient_id/encounters/billing/diagnoses",
+  [authJwt.verifyToken],
+  PatientEncounter.getBillingDiagnoses
+);
+router.get(
+  "/patient/:patient_id/encounters/billing/procedsures",
+  [authJwt.verifyToken],
+  PatientEncounter.getBillingProcedsures
+);
+router.get(
+  "/patient/:patient_id/encounters/billing/payment",
+  [authJwt.verifyToken],
+  PatientEncounter.getBillingPayment
+);
 
 module.exports = router;
