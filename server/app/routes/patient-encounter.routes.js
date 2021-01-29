@@ -125,5 +125,15 @@ router.get(
   [authJwt.verifyToken],
   PatientEncounter.getBilling
 );
+router.get(
+  "/patient/:patient_id/encounters/billing/diagnoses",
+  [authJwt.verifyToken],
+  PatientEncounter.getBillingDiagnoses
+);
+router.get(
+  "/patient/:patient_id/encounters/billing/procedsures",
+  [authJwt.verifyToken],
+  PatientEncounter.getBillingProcedsures
+);
 
 module.exports = router;
