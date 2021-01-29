@@ -689,6 +689,34 @@ const getNewLabSearch = async (req, res) => {
   }
 };
 
+const getNewLabRequestedLabs = async (req, res) => {
+  const db = makeDb(configuration, res);
+
+  try {
+    const $sql = `select pc.cpt_id, c.name
+    from patient_cpt pc
+    join cpt c on c.id=pc.cpt_id
+    where encounter_id=1
+    order by c.name
+    limit 100`;
+
+    const dbResponse = await db.query($sql);
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const patientEncounter = {
   getEncounters,
   getEncountersPrescriptions,
@@ -711,6 +739,7 @@ const patientEncounter = {
   getNewLabLaboratories,
   getNewLabFavorites,
   getNewLabSearch,
+  getNewLabRequestedLabs,
 };
 
 module.exports = patientEncounter;
