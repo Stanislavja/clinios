@@ -3,6 +3,11 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   Box, Typography, Button, Grid,
 } from "@material-ui/core";
+import IconButton from '@material-ui/core/IconButton';
+import PauseCircleFilledOutlinedIcon from '@material-ui/icons/PauseCircleFilledOutlined';
+import ReplayOutlinedIcon from '@material-ui/icons/ReplayOutlined';
+import PlayCircleFilledOutlinedIcon from '@material-ui/icons/PlayCircleFilledOutlined';
+import WatchLaterOutlinedIcon from '@material-ui/icons/WatchLaterOutlined';
 
 const Clock = () => {
   const [seconds, setSeconds] = useState(0);
@@ -46,17 +51,29 @@ const Clock = () => {
     >
       <Box pr={1} pl={1}>
         <Typography variant="body1">
-          {`${hours} : ${minutes} : ${pad(seconds % 60)}`}
+          Time: {`${hours} : ${minutes} : ${pad(seconds % 60)}`}
         </Typography>
       </Box>
       {
         isTimerOn
+          ? <IconButton aria-label="delete" onClick={() => pause()}>
+              <PauseCircleFilledOutlinedIcon fontSize="small" />
+            </IconButton>
+        : <IconButton aria-label="delete" onClick={() => start()}>
+            <PlayCircleFilledOutlinedIcon fontSize="small" />
+          </IconButton>
+      }
+{/*       {
+        isTimerOn
           ? <Button variant="text" onClick={() => pause()}>Pause</Button>
           : <Button variant="text" onClick={() => start()}>Start</Button>
-      }
+      } */}
       {
         showReset && (
-          <Button variant="text" onClick={() => reset()}>Reset</Button>
+          <IconButton aria-label="delete" onClick={() => reset()}>
+            <ReplayOutlinedIcon fontSize="small" />
+          </IconButton>
+          //<Button variant="text" onClick={() => reset()}>Reset</Button>
         )
       }
     </Grid>
