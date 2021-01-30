@@ -22,7 +22,8 @@ const useStyles = makeStyles((theme) => ({
   text12: {
     fontSize: 12,
     fontWeight: 600,
-    marginRight: theme.spacing(1/2),
+    marginRight: theme.spacing(1 / 2),
+    whiteSpace: "wrap",
   },
   value: {
     fontWeight: "normal",
