@@ -301,10 +301,7 @@ const Encounters = (props) => {
                     alignItems="center"
                     className={classes.formInput}
                   >
-                    <Grid item lg={2} xs={4}>
-                      Timer
-                    </Grid>
-                    <Grid item lg={10} xs={8}>
+                    <Grid item lg={12} xs={10}>
                       <ClockTimer />
                     </Grid>
                   </Grid>
