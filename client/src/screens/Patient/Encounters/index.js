@@ -41,6 +41,7 @@ import MedicationsCardContent from "../Medications/content";
 import MessagesCardContent from "../Messages/content";
 import RequisitionsCardContent from "../Requisitions/content";
 import TestsCardContent from "../Tests/content";
+import BillingCard from "./components/BillingCard";
 import Card from "./components/Card";
 import ClockTimer from "./components/ClockTimer";
 import PlanCard from "./components/PlanCard";
@@ -367,7 +368,7 @@ const Encounters = (props) => {
                   />
                   <Card
                     title="Billing"
-                    data=""
+                    data={<BillingCard />}
                     icon
                   />
 

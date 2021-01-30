@@ -66,7 +66,7 @@ router.post(
   PatientEncounter.createEncounter_ICD
 );
 router.get(
-  "/patient/encounters/plan",
+  "/patient/:patient_id/encounters/:encounter_id/plan",
   [authJwt.verifyToken],
   PatientEncounter.getEncounterPlan
 );
@@ -121,7 +121,7 @@ router.get(
   PatientEncounter.getNewLabRequestedLabs
 );
 router.get(
-  "/patient/:patient_id/encounters/billing",
+  "/patient/:patient_id/encounters/:encounter_id/billing",
   [authJwt.verifyToken],
   PatientEncounter.getBilling
 );
