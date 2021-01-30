@@ -17,12 +17,15 @@ import {
 const useStyles = makeStyles((theme) => ({
   inputRow: {
     marginBottom: theme.spacing(0.5),
-    flexWrap: "nowrap",
+    flexWrap: "wrap",
   },
   text12: {
     fontSize: 12,
+    fontWeight: 600,
+    marginRight: theme.spacing(1/2),
   },
   value: {
+    fontWeight: "normal",
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",
@@ -133,7 +136,7 @@ const BasicInfoContent = () => {
           className={classes.text12}
           color="textPrimary"
         >
-          Name:&nbsp;
+          Name:
         </Typography>
         <Typography
           variant="body1"
@@ -156,7 +159,7 @@ const BasicInfoContent = () => {
           className={classes.text12}
           color="textPrimary"
         >
-          Gender:&nbsp;
+          Gender:
         </Typography>
         <Typography
           variant="body1"
@@ -177,7 +180,7 @@ const BasicInfoContent = () => {
           className={classes.text12}
           color="textPrimary"
         >
-          DOB:&nbsp;
+          DOB:
         </Typography>
         <Typography
           variant="body1"
@@ -190,7 +193,7 @@ const BasicInfoContent = () => {
         >
           {moment(data.dob).format("MMM D YYYY")}
           {" "}
-          (Age:&nbsp;
+          (Age:
           {calculateAge(data.dob)}
           )
         </Typography>
@@ -202,7 +205,7 @@ const BasicInfoContent = () => {
           className={classes.text12}
           color="textPrimary"
         >
-          Home:&nbsp;
+          Home:
         </Typography>
         <Typography
           variant="body1"
@@ -223,7 +226,7 @@ const BasicInfoContent = () => {
           className={classes.text12}
           color="textPrimary"
         >
-          Mobile:&nbsp;
+          Mobile:
         </Typography>
         <Typography
           variant="body1"
@@ -244,7 +247,7 @@ const BasicInfoContent = () => {
           className={classes.text12}
           color="textPrimary"
         >
-          Provider:&nbsp;
+          Provider:
         </Typography>
         <Typography
           variant="body1"
@@ -265,7 +268,7 @@ const BasicInfoContent = () => {
           className={classes.text12}
           color="textPrimary"
         >
-          Next Appointment:&nbsp;
+          Next Appointment:
         </Typography>
         <Typography
           variant="body1"
