@@ -30,7 +30,7 @@ const PlanCard = () => {
       {
         encounterPlans.length
           ? encounterPlans.map((plan) => (
-            <Typography gutterBottom>{plan.title}</Typography>
+            <Typography gutterBottom>{plan.name}</Typography>
           ))
           : ""
       }
