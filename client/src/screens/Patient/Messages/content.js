@@ -12,9 +12,13 @@ const useStyles = makeStyles((theme) => ({
   },
   text12: {
     fontSize: 12,
+    fontWeight: 500,
+    whiteSpace: "wrap",
   },
   label: {
-    fontWeight: 500,
+    fontWeight: 600,
+    marginRight: theme.spacing(1 / 2),
+    whiteSpace: "wrap",
   },
   divider: {
     margin: theme.spacing(1, 0),
@@ -38,7 +42,7 @@ const MessagesContent = () => {
                 className={`${classes.text12} ${classes.label}`}
                 color="textPrimary"
               >
-                Date: &nbsp;
+                Date:
               </Typography>
               <Typography
                 component="span"
@@ -58,7 +62,7 @@ const MessagesContent = () => {
                     className={`${classes.text12} ${classes.label}`}
                     color="textPrimary"
                   >
-                    From: &nbsp;
+                    From:
                   </Typography>
                   <Typography
                     component="span"
@@ -80,7 +84,7 @@ const MessagesContent = () => {
                     className={`${classes.text12} ${classes.label}`}
                     color="textPrimary"
                   >
-                    To: &nbsp;
+                    To:
                   </Typography>
                   <Typography
                     component="span"
@@ -100,7 +104,7 @@ const MessagesContent = () => {
                 className={`${classes.text12} ${classes.label}`}
                 color="textPrimary"
               >
-                Subject: &nbsp;
+                Subject:
               </Typography>
               <Typography
                 component="span"

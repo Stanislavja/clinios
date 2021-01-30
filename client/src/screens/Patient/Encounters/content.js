@@ -15,12 +15,16 @@ const useStyles = makeStyles((theme) => ({
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",
+    fontWeight: "normal",
   },
   divider: {
     margin: theme.spacing(1, 0),
   },
   text12: {
     fontSize: 12,
+  },
+  label: {
+    fontWeight: 600,
   },
 }));
 
@@ -66,7 +70,7 @@ const EncountersContent = () => {
             </Grid>
 
             <Grid className={classes.inputRow}>
-              <Typography className={classes.text12} color="textPrimary">
+              <Typography className={`${classes.text12} ${classes.label}`} color="textPrimary">
                 Notes:
               </Typography>
               <Typography className={classes.text12} color="textPrimary">
@@ -75,7 +79,7 @@ const EncountersContent = () => {
             </Grid>
 
             <Grid className={classes.inputRow}>
-              <Typography className={classes.text12} color="textPrimary">
+              <Typography className={`${classes.text12} ${classes.label}`} color="textPrimary">
                 Treatment Plan:
               </Typography>
               <Typography className={classes.text12} color="textPrimary">
