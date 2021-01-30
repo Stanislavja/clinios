@@ -409,6 +409,7 @@ const createEncounter_ICD = async (req, res) => {
 
 const getEncounterPlan = async (req, res) => {
   const db = makeDb(configuration, res);
+  const { encounter_id } = req.params;
 
   try {
     const dbResponse = await db.query(
@@ -417,12 +418,12 @@ const getEncounterPlan = async (req, res) => {
         from patient_drug pd
         left join drug d on d.id=pd.drug_id
         left join drug_strength ds on ds.id=pd.drug_strength_id
-        where pd.encounter_id=1
+        where pd.encounter_id=${encounter_id}
         union
         select 2 sort, 'Lab' type, c.name, null, null
         from patient_cpt pc
         join cpt c on c.id=pc.cpt_id
-        where pc.encounter_id=1
+        where pc.encounter_id=${encounter_id}
       ) d
       order by sort
       limit 50`
@@ -719,12 +720,13 @@ const getNewLabRequestedLabs = async (req, res) => {
 
 const getBilling = async (req, res) => {
   const db = makeDb(configuration, res);
+  const { encounter_id } = req.params;
 
   try {
     const $sql = `select c.id, c.name, t.amount
     from tran t
     join cpt c on c.id=t.cpt_id
-    where t.encounter_id=1
+    where t.encounter_id=${encounter_id}
     order by c.name
     limit 100`;
 
