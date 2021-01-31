@@ -151,6 +151,22 @@ class Patient {
       .then((res) => res.data);
   }
 
+  getFavoriteTests() {
+    return axios
+      .get(`${API_BASE}/patient/encounters/new-lab/favorites/?tab=All`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  getLabortories() {
+    return axios
+      .get(`${API_BASE}/patient/encounters/new-lab/laboratories`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
   getMedicalNotes(patientId) {
     return axios
       .get(`${API_BASE}/patient/${patientId}/medical-notes/history`, {
