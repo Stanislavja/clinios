@@ -161,7 +161,6 @@ const Requisitions = (props) => {
               >
                 <Typography variant="body1">
                   {item.name}
-&nbsp;
                 </Typography>
                 <Button>[Remove]</Button>
               </Grid>
