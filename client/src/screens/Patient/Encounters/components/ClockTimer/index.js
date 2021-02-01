@@ -58,19 +58,19 @@ const Clock = () => {
       {
         isTimerOn
           ? (
-            <IconButton aria-label="delete" onClick={() => pause()}>
+            <IconButton aria-label="puse" onClick={() => pause()}>
               <PauseCircleFilledOutlinedIcon fontSize="small" />
             </IconButton>
           )
           : (
-            <IconButton aria-label="delete" onClick={() => start()}>
+            <IconButton aria-label="start" onClick={() => start()}>
               <PlayCircleFilledOutlinedIcon fontSize="small" />
             </IconButton>
           )
       }
       {
         showReset && (
-          <IconButton aria-label="delete" onClick={() => reset()}>
+          <IconButton aria-label="reset" onClick={() => reset()}>
             <ReplayOutlinedIcon fontSize="small" />
           </IconButton>
         )
