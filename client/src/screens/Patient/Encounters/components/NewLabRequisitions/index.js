@@ -47,6 +47,9 @@ const useStyles = makeStyles((theme) => ({
   mr2: {
     marginRight: theme.spacing(2),
   },
+  removeButton: {
+    fontWeight: 600,
+  },
 }));
 
 const Requisitions = (props) => {
@@ -56,16 +59,23 @@ const Requisitions = (props) => {
   const { onClose } = props;
   const [billSelection, setBillSelection] = useState("physician");
   const [tests, setTests] = useState([]);
+  const [orderedTests, setOrderedTests] = useState([]);
   const [favoriteTests, setFavoriteTests] = useState([]);
   const [labortories, setLabortories] = useState([]);
-  const [diagnoses, setDiagnoses] = useState([]);
   const [selectedTest, setSelectedTest] = useState([]);
+  const [selectedLabs, setSelectedLabs] = useState([]);
 
   const { patientId } = state;
 
   const fetchTests = useCallback(() => {
     PatientService.getTests(patientId).then((res) => {
       setTests(res.data);
+    });
+  }, [patientId]);
+
+  const fetchOrderedTests = useCallback(() => {
+    PatientService.getOrderedTests(patientId).then((res) => {
+      setOrderedTests(res.data);
     });
   }, [patientId]);
 
@@ -81,18 +91,21 @@ const Requisitions = (props) => {
     });
   }, [patientId]);
 
-  const fetchDiagnoses = useCallback(() => {
-    PatientService.getDiagnoses(patientId, true).then((res) => {
-      setDiagnoses(res.data);
+  const deleteOrderedTestHandler = useCallback((testId) => {
+    PatientService.deleteOrderedTests(testId).then((res) => {
+      if (res.data) {
+        enqueueSnackbar(`${res.message}`, { variant: "success" });
+        fetchOrderedTests();
+      }
     });
-  }, [patientId]);
+  }, [enqueueSnackbar, fetchOrderedTests]);
 
   useEffect(() => {
     fetchTests();
+    fetchOrderedTests();
     fetchFavoriteTests();
     fetchLabortories();
-    fetchDiagnoses();
-  }, [fetchTests, fetchFavoriteTests, fetchLabortories, fetchDiagnoses]);
+  }, [fetchTests, fetchOrderedTests, fetchFavoriteTests, fetchLabortories]);
 
   const handleBillSelection = (e) => {
     setBillSelection(e.target.value);
@@ -118,6 +131,18 @@ const Requisitions = (props) => {
           || error.toString();
         enqueueSnackbar(`${resMessage}`, { variant: "error" });
       });
+  };
+
+  const onCheckBoxChangeHandler = (e) => {
+    const tempSelectedLabs = [...selectedLabs];
+    if (e.target.checked) {
+      tempSelectedLabs.push(e.target.name);
+      setSelectedLabs([...tempSelectedLabs]);
+    } else {
+      const index = selectedLabs.findIndex((x) => x === e.target.name);
+      tempSelectedLabs.splice(index, 1);
+      setSelectedLabs([...tempSelectedLabs]);
+    }
   };
 
   return (
@@ -152,19 +177,33 @@ const Requisitions = (props) => {
             <Typography gutterBottom variant="h4" color="textSecondary">
               Recommended
             </Typography>
-            {diagnoses.map((item) => (
-              <Grid
-                container
-                alignItems="center"
-                direction="row"
-                key={item.icd_id}
-              >
-                <Typography variant="body1">
-                  {item.name}
+            {orderedTests.length
+              ? orderedTests.map((item) => (
+                <Grid
+                  container
+                  alignItems="center"
+                  direction="row"
+                  key={item.id}
+                >
+                  <Typography variant="body1">
+                    {item.name}
+                  </Typography>
+                  <Button
+                    className={classes.removeButton}
+                    onClick={() => deleteOrderedTestHandler(item.id)}
+                  >
+                    [Remove]
+                  </Button>
+                </Grid>
+              ))
+              : (
+                <Typography
+                  variant="body1"
+                  gutterBottom
+                >
+                  No Tests available...
                 </Typography>
-                <Button>[Remove]</Button>
-              </Grid>
-            ))}
+              )}
           </Grid>
           <Grid item lg={9} className={classes.border}>
             <Typography
@@ -174,12 +213,29 @@ const Requisitions = (props) => {
             >
               Labortories
             </Typography>
+            <FormControlLabel
+              label="All"
+              control={(
+                <Checkbox
+                  color="primary"
+                  checked={!selectedLabs.length}
+                  onChange={() => setSelectedLabs([])}
+                />
+              )}
+            />
             {labortories.map((item) => (
-              <Grid key={`${item.label}_${item.value}`}>
+              <Grid key={item.id}>
                 <FormControlLabel
                   value={item.id}
                   label={item.name}
-                  control={<Checkbox color="primary" />}
+                  control={(
+                    <Checkbox
+                      name={item.name}
+                      color="primary"
+                      checked={selectedLabs.includes(item.name)}
+                      onChange={(e) => onCheckBoxChangeHandler(e)}
+                    />
+                  )}
                 />
               </Grid>
             ))}
@@ -221,7 +277,7 @@ const Requisitions = (props) => {
             <Grid container spacing={2}>
               <Grid item lg={6}>
                 {favoriteTests.map((item) => (
-                  <Grid key={`${item.label}_${item.value}`}>
+                  <Grid key={`${item.id}_${item.name}`}>
                     <FormControlLabel
                       value={item.id}
                       label={item.name}
