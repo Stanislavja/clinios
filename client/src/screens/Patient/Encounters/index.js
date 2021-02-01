@@ -67,6 +67,12 @@ const useStyles = makeStyles((theme) => ({
   w100: {
     width: "100%",
   },
+  pageCredit: {
+    fontSize: "11px",
+    "& span": {
+      fontWeight: 600,
+    },
+  },
 }));
 
 const Encounters = (props) => {
@@ -380,6 +386,7 @@ const Encounters = (props) => {
                           variant="outlined"
                           type="submit"
                           form="encounters-form"
+                          color="primary"
                         >
                           Save
                         </Button>
@@ -394,13 +401,13 @@ const Encounters = (props) => {
                         </Button>
                       </Grid>
                     </Grid>
-                    <Typography gutterBottom>
-                      Created
+                    <Typography gutterBottom className={classes.pageCredit}>
+                      <span>Created:</span>
                       {" "}
                       {moment().format("MMM D YYYY hh:mm A")}
                     </Typography>
-                    <Typography gutterBottom>
-                      Created By
+                    <Typography gutterBottom className={classes.pageCredit}>
+                      <span>Created By:</span>
                       {" "}
                       {!!user && `${user.firstname} ${user.lastname}`}
                     </Typography>
