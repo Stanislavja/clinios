@@ -159,6 +159,22 @@ class Patient {
       .then((res) => res.data);
   }
 
+  getOrderedTests() {
+    return axios
+      .get(`${API_BASE}/patient/encounters/new-lab/test-ordered`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  deleteOrderedTests(testId) {
+    return axios
+      .delete(`${API_BASE}/patient/encounters/new-lab/test-ordered/${testId}`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
   getLabortories() {
     return axios
       .get(`${API_BASE}/patient/encounters/new-lab/laboratories`, {
