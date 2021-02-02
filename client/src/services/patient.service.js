@@ -152,9 +152,9 @@ class Patient {
       .then((res) => res.data);
   }
 
-  getEncountersRecentDiagnoses() {
+  getEncountersRecentDiagnosesICDs(patientId) {
     return axios
-      .get(`${API_BASE}/patient/encounters/diagnoses/recent-diagnoses`, {
+      .get(`${API_BASE}/patient/${patientId}/encounters/diagnoses/recent-icds`, {
         headers: authHeader(),
       })
       .then((res) => res.data);
