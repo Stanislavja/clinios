@@ -10,19 +10,15 @@ import {
   FormControl,
   FormControlLabel,
   FormLabel,
-  List,
-  ListItem,
-  ListItemText,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import Select from "react-select";
 
+import DebounceSelect from "../../../../../components/common/DebounceSelect";
 import usePatientContext from "../../../../../hooks/usePatientContext";
 import PatientService from "../../../../../services/patient.service";
 import { BillSelectionFields } from "../../../../../static/requisitionform";
-import SelectCustomStyles from "../../../../../styles/SelectCustomStyles";
 
 const useStyles = makeStyles((theme) => ({
   inputRow: {
@@ -58,20 +54,13 @@ const Requisitions = (props) => {
   const { state } = usePatientContext();
   const { onClose } = props;
   const [billSelection, setBillSelection] = useState("physician");
-  const [tests, setTests] = useState([]);
   const [orderedTests, setOrderedTests] = useState([]);
   const [favoriteTests, setFavoriteTests] = useState([]);
   const [labortories, setLabortories] = useState([]);
-  const [selectedTest, setSelectedTest] = useState([]);
+  const [selectedLab, setSelectedLab] = useState([]);
   const [selectedLabs, setSelectedLabs] = useState([]);
 
   const { patientId } = state;
-
-  const fetchTests = useCallback(() => {
-    PatientService.getTests(patientId).then((res) => {
-      setTests(res.data);
-    });
-  }, [patientId]);
 
   const fetchOrderedTests = useCallback(() => {
     PatientService.getOrderedTests(patientId).then((res) => {
@@ -101,11 +90,10 @@ const Requisitions = (props) => {
   }, [enqueueSnackbar, fetchOrderedTests]);
 
   useEffect(() => {
-    fetchTests();
     fetchOrderedTests();
     fetchFavoriteTests();
     fetchLabortories();
-  }, [fetchTests, fetchOrderedTests, fetchFavoriteTests, fetchLabortories]);
+  }, [fetchOrderedTests, fetchFavoriteTests, fetchLabortories]);
 
   const handleBillSelection = (e) => {
     setBillSelection(e.target.value);
@@ -114,7 +102,7 @@ const Requisitions = (props) => {
   const onFormSubmit = () => {
     const reqBody = {
       data: {
-        cpt_id: selectedTest.cpt_id,
+        cpt_id: selectedLab.id,
         encounter_id: 1, // hard coded for the time being: discussion required
       },
     };
@@ -142,6 +130,15 @@ const Requisitions = (props) => {
       const index = selectedLabs.findIndex((x) => x === e.target.name);
       tempSelectedLabs.splice(index, 1);
       setSelectedLabs([...tempSelectedLabs]);
+    }
+  };
+
+  const searchLab = async (reqBody) => {
+    try {
+      const res = await PatientService.searchLabs(reqBody);
+      return res;
+    } catch (err) {
+      throw err.response;
     }
   };
 
@@ -243,30 +240,15 @@ const Requisitions = (props) => {
         </Grid>
         <Grid item lg={3}>
           <Grid item lg={8} className={classes.heading}>
-            <Select
-              value={selectedTest}
-              options={tests.length ? tests : []}
+            <DebounceSelect
+              label="Search"
+              required={false}
+              controller={(value) => searchLab(value)}
               getOptionLabel={(option) => option.name}
               getOptionValue={(option) => option.id}
-              onChange={(value) => setSelectedTest(value)}
-              styles={SelectCustomStyles}
-              isClearable
-              isLoading={!tests.length}
+              onChange={(value) => setSelectedLab(value)}
             />
           </Grid>
-
-          <List component="ul">
-            {tests.map((medication) => (
-              <ListItem
-                onClick={() => setSelectedTest(medication)}
-                key={medication.cpt_id}
-                disableGutters
-                button
-              >
-                <ListItemText primary={medication.name} />
-              </ListItem>
-            ))}
-          </List>
 
         </Grid>
         <Grid item lg={6}>
