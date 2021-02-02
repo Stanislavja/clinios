@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Button, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 
+import BillingPaymentDialog from "../BillingPayment";
 import SampleDocViewer from "../SampleDocViewer";
 
 const useStyles = makeStyles(() => ({
@@ -16,8 +17,18 @@ const BillingDialogContent = (props) => {
   const { onClose } = props;
   const classes = useStyles();
 
+  const [showPayment, setShowPayment] = useState(false);
+
+  const togglePaymentDialog = () => {
+    setShowPayment((prevState) => !prevState);
+  };
+
   return (
     <>
+      <BillingPaymentDialog
+        open={showPayment}
+        onClose={togglePaymentDialog}
+      />
       <Grid
         container
         justify="space-between"
@@ -32,6 +43,7 @@ const BillingDialogContent = (props) => {
         <Button
           variant="outlined"
           className={classes.minWidth100}
+          onClick={() => togglePaymentDialog()}
         >
           Payment
         </Button>

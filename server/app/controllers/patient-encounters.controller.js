@@ -749,12 +749,13 @@ const getBilling = async (req, res) => {
 
 const getBillingDiagnoses = async (req, res) => {
   const db = makeDb(configuration, res);
+  const { encounter_id } = req.params;
 
   try {
     const $sql = `select i.name, i.id
     from patient_icd pi
     join icd i on i.id=pi.icd_id
-    where pi.encounter_id=1
+    where pi.encounter_id=${encounter_id}
     and pi.active=true
     order by i.name
     limit 100`;
@@ -778,12 +779,13 @@ const getBillingDiagnoses = async (req, res) => {
 
 const getBillingProcedsures = async (req, res) => {
   const db = makeDb(configuration, res);
+  const { encounter_id } = req.params;
 
   try {
     const $sql = `select c.id, c.name, t.amount, cc.fee
     from cpt c
     join client_cpt cc on cc.cpt_id=c.id
-    left join tran t on t.encounter_id=1 and t.cpt_id=cc.cpt_id
+    left join tran t on t.encounter_id=${encounter_id} and t.cpt_id=cc.cpt_id
     where cc.client_id=1
     and cc.billable=true
     order by c.id
@@ -808,13 +810,14 @@ const getBillingProcedsures = async (req, res) => {
 
 const getBillingPayment = async (req, res) => {
   const db = makeDb(configuration, res);
+  const { patient_id, encounter_id } = req.params;
 
   try {
     const $sql = `select t.dt, t.amount, t.payment_type, pm.account_number
     from tran t
     left join payment_method pm on pm.id=t.payment_method_id
-    where t.patient_id=1
-    and t.encounter_id=1
+    where t.patient_id=${patient_id}
+    and t.encounter_id=${encounter_id}
     and t.type_id=3 /*3=Payment*/`;
 
     const dbResponse = await db.query($sql);

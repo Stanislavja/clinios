@@ -126,17 +126,17 @@ router.get(
   PatientEncounter.getBilling
 );
 router.get(
-  "/patient/:patient_id/encounters/billing/diagnoses",
+  "/patient/:patient_id/encounters/:encounter_id/billing/diagnoses",
   [authJwt.verifyToken],
   PatientEncounter.getBillingDiagnoses
 );
 router.get(
-  "/patient/:patient_id/encounters/billing/procedsures",
+  "/patient/:patient_id/encounters/:encounter_id/billing/procedsures",
   [authJwt.verifyToken],
   PatientEncounter.getBillingProcedsures
 );
 router.get(
-  "/patient/:patient_id/encounters/billing/payment",
+  "/patient/:patient_id/encounters/:encounter_id/billing/payment",
   [authJwt.verifyToken],
   PatientEncounter.getBillingPayment
 );
