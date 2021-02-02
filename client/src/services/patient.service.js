@@ -183,6 +183,14 @@ class Patient {
       .then((res) => res.data);
   }
 
+  searchLabs(data) {
+    return axios
+      .post(`${API_BASE}/patient/encounters/new-lab/search/?tab=All`, data, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
   getMedicalNotes(patientId) {
     return axios
       .get(`${API_BASE}/patient/${patientId}/medical-notes/history`, {
