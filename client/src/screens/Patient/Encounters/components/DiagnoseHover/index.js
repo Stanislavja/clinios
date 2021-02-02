@@ -6,26 +6,30 @@ import {
   Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { useParams } from "react-router-dom";
 
 import PatientService from "../../../../../services/patient.service";
 
 const useStyles = makeStyles(() => ({
   text: {
     fontSize: 14,
+    whiteSpace: "nowrap",
+    lineHeight: "19px",
   },
 }));
 
 const DiagnoseHover = () => {
   const classes = useStyles();
+  const { patientId } = useParams();
   const [recentICDs, setRecentICDs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchRecentICDs = useCallback(() => {
-    PatientService.getEncountersRecentDiagnoses().then((response) => {
+    PatientService.getEncountersRecentDiagnosesICDs(patientId).then((response) => {
       setRecentICDs(response.data);
       setIsLoading(false);
     });
-  }, []);
+  }, [patientId]);
 
   useEffect(() => {
     fetchRecentICDs();
@@ -33,7 +37,7 @@ const DiagnoseHover = () => {
 
   return (
     <Box minWidth={425}>
-      <Grid container>
+      <Grid container spacing={2}>
         <Grid item lg={6}>
           <Typography variant="h5" gutterBottom>
             Recent ICDs
@@ -44,6 +48,7 @@ const DiagnoseHover = () => {
                 {/* Math.random was used intentionally to get unique keys */}
                 <Typography gutterBottom variant="body1" className={classes.text}>
                   {item.name}
+                  {item.id}
                 </Typography>
               </Grid>
             ))
