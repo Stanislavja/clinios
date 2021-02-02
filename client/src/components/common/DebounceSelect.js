@@ -35,12 +35,12 @@ const DebounceSelect = (props) => {
   // states
   const [inputText, setInputText] = useState("");
   const [searchResults, setSearchResults] = useState(null);
-  const [valueSelected, setValueSelected] = useState(false);
+  const [valueSelected, setValueSelected] = useState(null);
 
   const debouncedSearchTerm = useDebounce(inputText, 500);
 
   useEffect(() => {
-    if (debouncedSearchTerm) {
+    if (debouncedSearchTerm && (valueSelected !== inputText)) {
       if (debouncedSearchTerm.length > 1) {
         const reqBody = {
           data: {
@@ -53,14 +53,15 @@ const DebounceSelect = (props) => {
           });
       }
     }
-  }, [debouncedSearchTerm, controller]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearchTerm]);
 
   const handlePatientChange = (option) => {
     const selectedValue = getOptionValue(option);
     const selectedLabel = getOptionLabel(option);
     onChange(selectedValue);
     setInputText(selectedLabel);
-    setValueSelected(true);
+    setValueSelected(selectedLabel);
   };
 
   const showOptions = !!searchResults && searchResults.length && !valueSelected;
@@ -78,7 +79,7 @@ const DebounceSelect = (props) => {
         value={inputText}
         onChange={(e) => {
           if (valueSelected) {
-            setValueSelected(false);
+            setValueSelected(null);
           }
           if (e.target.value === "") {
             setSearchResults([]);
