@@ -5,9 +5,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 
 import Dialog from "../../../../../components/Dialog";
-import NewRequisitions from "../../../Requisitions";
 import FaxLab from "../FaxLab";
 import FaxPrescription from "../FaxPrescription";
+import NewRequisitions from "../NewLabRequisitions";
 import NewPrescription from "../NewPrescription";
 
 const useStyles = makeStyles(() => ({

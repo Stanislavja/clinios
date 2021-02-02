@@ -10,6 +10,10 @@ import BillingDialogContent from "../Billng";
 const useStyles = makeStyles(() => ({
   textButton: {
     cursor: "pointer",
+    padding: "3px 5px",
+    "&:hover": {
+      backgroundColor: "#f1f1f1 !important",
+    },
   },
   minWidth100: {
     minWidth: 100,

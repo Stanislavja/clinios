@@ -151,6 +151,46 @@ class Patient {
       .then((res) => res.data);
   }
 
+  getFavoriteTests() {
+    return axios
+      .get(`${API_BASE}/patient/encounters/new-lab/favorites/?tab=All`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  getOrderedTests() {
+    return axios
+      .get(`${API_BASE}/patient/encounters/new-lab/test-ordered`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  deleteOrderedTests(testId) {
+    return axios
+      .delete(`${API_BASE}/patient/encounters/new-lab/test-ordered/${testId}`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  getLabortories() {
+    return axios
+      .get(`${API_BASE}/patient/encounters/new-lab/laboratories`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  searchLabs(data) {
+    return axios
+      .post(`${API_BASE}/patient/encounters/new-lab/search/?tab=All`, data, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
   getMedicalNotes(patientId) {
     return axios
       .get(`${API_BASE}/patient/${patientId}/medical-notes/history`, {
