@@ -111,9 +111,34 @@ class Patient {
       .then((res) => res.data);
   }
 
+  // encounters billing APIs
   getEncountersBilling(patientId, encounterId) {
     return axios
       .get(`${API_BASE}/patient/${patientId}/encounters/${encounterId}/billing`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  geEncountersBillingDiagnoses(patientId, encounterId) {
+    return axios
+      .get(`${API_BASE}/patient/${patientId}/encounters/${encounterId}/billing/diagnoses`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  geEncountersBillingProcedures(patientId, encounterId) {
+    return axios
+      .get(`${API_BASE}/patient/${patientId}/encounters/${encounterId}/billing/procedsures`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  geEncountersBillingPayments(patientId, encounterId) {
+    return axios
+      .get(`${API_BASE}/patient/${patientId}/encounters/${encounterId}/billing/payment`, {
         headers: authHeader(),
       })
       .then((res) => res.data);
