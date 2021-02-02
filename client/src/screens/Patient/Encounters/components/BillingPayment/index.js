@@ -21,7 +21,6 @@ const BillingPayment = (props) => {
   return (
     <Dialog
       open={open}
-      title=""
       message={(
         <>
           <Typography variant="h3">
