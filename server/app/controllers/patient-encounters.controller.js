@@ -347,6 +347,36 @@ const getRecentDiagnoses = async (req, res) => {
   }
 };
 
+const searchDiagnosesICDs = async (req, res) => {
+  const { text } = req.body.data;
+
+  const db = makeDb(configuration, res);
+  try {
+    const $sql = `select i.id, i.name, ci.favorite
+    from icd i
+    left join client_icd ci on ci.client_id=${req.client_id}
+        and ci.icd_id=i.id
+    where i.name like '${text}%'
+    order by i.name
+    limit 20`;
+    const dbResponse = await db.query($sql);
+
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Search not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const searchDrug = async (req, res) => {
   const { text } = req.body.data;
 
@@ -382,13 +412,13 @@ const searchDrug = async (req, res) => {
 };
 
 const createEncounter_ICD = async (req, res) => {
-  const { patient_id } = req.params;
+  const { patient_id, encounter_id } = req.params;
   const { icd_id } = req.body.data;
   const db = makeDb(configuration, res);
   try {
     const insertResponse = await db.query(
       `insert into patient_icd (patient_id, icd_id, active, client_id, user_id, encounter_id, created, created_user_id)
-       values (${patient_id}, '${icd_id}', true, ${req.client_id}, ${req.user_id}, 1, now(), ${req.user_id})`
+       values (${patient_id}, '${icd_id}', true, ${req.client_id}, ${req.user_id}, ${encounter_id}, now(), ${req.user_id})`
     );
 
     if (!insertResponse.affectedRows) {
@@ -848,6 +878,7 @@ const patientEncounter = {
   deleteEncounter,
   getEncounterTypes,
   getRecentDiagnoses,
+  searchDiagnosesICDs,
   searchDrug,
   createEncounter_ICD,
   getEncounterPlan,
