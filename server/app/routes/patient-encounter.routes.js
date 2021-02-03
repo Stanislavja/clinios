@@ -31,7 +31,7 @@ router.get(
   PatientEncounter.getEncounterTypes
 );
 router.get(
-  "/patient/:patient_id/encounters/diagnoses/recent-icds",
+  "/patient/:patient_id/encounters/:encounter_id/diagnoses/recent-icds",
   [authJwt.verifyToken],
   PatientEncounter.getRecentDiagnoses
 );
@@ -40,6 +40,7 @@ router.post(
   [authJwt.verifyToken],
   PatientEncounter.searchDiagnosesICDs
 );
+
 router.post(
   "/patient/encounters/prescriptions/search-drug",
   [authJwt.verifyToken],

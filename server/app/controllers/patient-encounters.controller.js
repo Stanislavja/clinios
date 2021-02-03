@@ -320,6 +320,7 @@ const getEncounterTypes = async (req, res) => {
 };
 
 const getRecentDiagnoses = async (req, res) => {
+  const { encounter_id } = req.params;
   const db = makeDb(configuration, res);
 
   try {
@@ -327,7 +328,7 @@ const getRecentDiagnoses = async (req, res) => {
       `select i.name, concat('(', pi.icd_id, ' ICD-10)') id
       from patient_icd pi
       join icd i on i.id=pi.icd_id
-      where pi.encounter_id<>2
+      where pi.encounter_id<>${encounter_id}
       and pi.user_id=${req.client_id}
       order by pi.created desc
       limit 20`
