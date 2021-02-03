@@ -409,6 +409,50 @@ const searchDiagnosesICDs = async (req, res) => {
   }
 };
 
+const createNewPrescription = async (req, res) => {
+  const { patient_id, encounter_id } = req.params;
+  const {
+    drug_id,
+    drug_frequency_id,
+    drug_strength_id,
+    start_dt,
+    expires,
+    amount,
+    refills,
+    generic,
+    patient_instructions,
+    pharmacy_instructions,
+  } = req.body.data;
+  const db = makeDb(configuration, res);
+
+  try {
+    const insertResponse = await db.query(
+      `insert into patient_drug (patient_id, drug_id, drug_frequency_id, drug_strength_id, start_dt, expires, amount, refills, generic,
+         patient_instructions, pharmacy_instructions, client_id, user_id, encounter_id, created, created_user_id)
+       values (${patient_id}, '${drug_id}', '${drug_frequency_id}', '${drug_strength_id}', '${moment(
+        start_dt
+      ).format("YYYY-MM-DD HH:mm:ss")}', '${expires}', '${amount}',
+       '${refills}', '${generic}', '${patient_instructions}', '${pharmacy_instructions}', ${
+        req.client_id
+      }, ${req.user_id}, ${encounter_id}, now(), ${req.user_id})`
+    );
+
+    if (!insertResponse.affectedRows) {
+      errorMessage.message = "Insert not successful";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = insertResponse;
+    successMessage.message = "Insert successful";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Insert not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const searchDrugAndType = async (req, res) => {
   const { text } = req.body.data;
 
@@ -975,6 +1019,7 @@ const patientEncounter = {
   getRecentDiagnoses,
   searchDiagnosesICDs,
   searchDrugAndType,
+  createNewPrescription,
   searchDrug,
   createEncounter_ICD,
   getEncounterPlan,

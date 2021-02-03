@@ -82,6 +82,11 @@ router.get(
   [authJwt.verifyToken],
   PatientEncounter.encountersRecentProfiles
 );
+router.post(
+  "/patient/:patient_id/encounters/:encounter_id/plan/new-prescriptions",
+  [authJwt.verifyToken],
+  PatientEncounter.createNewPrescription
+);
 
 router.post(
   "/patient/encounters/prescriptions/search-drug",
