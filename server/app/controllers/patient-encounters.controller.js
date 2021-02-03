@@ -87,7 +87,9 @@ const getEncountersPrescriptionsFrequencies = async (req, res) => {
   }
 };
 
+// TODO:: inComplete code, need to pass drug_id, drug_strength_id
 const encountersPrescriptionsEdit = async (req, res) => {
+  const { encounter_id } = req.params;
   const db = makeDb(configuration, res);
 
   try {
@@ -99,7 +101,7 @@ const encountersPrescriptionsEdit = async (req, res) => {
       left join drug d on d.id=pd.drug_id
       left join drug_strength ds on ds.drug_id=d.id 
         and ds.id=pd.drug_strength_id left join drug_frequency df on df.id=pd.drug_frequency_id
-      where pd.encounter_id=1
+      where pd.encounter_id=${encounter_id}
       and pd.drug_id=1
       and pd.drug_strength_id=1`
     );
@@ -319,7 +321,8 @@ const getEncounterTypes = async (req, res) => {
   }
 };
 
-const getRecentDiagnoses = async (req, res) => {
+const getDiagnoses = async (req, res) => {
+  const { encounter_id } = req.params;
   const db = makeDb(configuration, res);
 
   try {
@@ -327,7 +330,36 @@ const getRecentDiagnoses = async (req, res) => {
       `select i.name, concat('(', pi.icd_id, ' ICD-10)') id
       from patient_icd pi
       join icd i on i.id=pi.icd_id
-      where pi.encounter_id<>2
+      where pi.encounter_id=${encounter_id}
+      and pi.active=true
+      order by i.name
+      limit 20`
+    );
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+const getRecentDiagnoses = async (req, res) => {
+  const { encounter_id } = req.params;
+  const db = makeDb(configuration, res);
+
+  try {
+    const dbResponse = await db.query(
+      `select i.name, concat('(', pi.icd_id, ' ICD-10)') id
+      from patient_icd pi
+      join icd i on i.id=pi.icd_id
+      where pi.encounter_id<>${encounter_id}
       and pi.user_id=${req.client_id}
       order by pi.created desc
       limit 20`
@@ -360,6 +392,78 @@ const searchDiagnosesICDs = async (req, res) => {
     order by i.name
     limit 20`;
     const dbResponse = await db.query($sql);
+
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Search not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+const createNewPrescription = async (req, res) => {
+  const { patient_id, encounter_id } = req.params;
+  const {
+    drug_id,
+    drug_frequency_id,
+    drug_strength_id,
+    start_dt,
+    expires,
+    amount,
+    refills,
+    generic,
+    patient_instructions,
+    pharmacy_instructions,
+  } = req.body.data;
+  const db = makeDb(configuration, res);
+
+  try {
+    const insertResponse = await db.query(
+      `insert into patient_drug (patient_id, drug_id, drug_frequency_id, drug_strength_id, start_dt, expires, amount, refills, generic,
+         patient_instructions, pharmacy_instructions, client_id, user_id, encounter_id, created, created_user_id)
+       values (${patient_id}, '${drug_id}', '${drug_frequency_id}', '${drug_strength_id}', '${moment(
+        start_dt
+      ).format("YYYY-MM-DD HH:mm:ss")}', '${expires}', '${amount}',
+       '${refills}', '${generic}', '${patient_instructions}', '${pharmacy_instructions}', ${
+        req.client_id
+      }, ${req.user_id}, ${encounter_id}, now(), ${req.user_id})`
+    );
+
+    if (!insertResponse.affectedRows) {
+      errorMessage.message = "Insert not successful";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = insertResponse;
+    successMessage.message = "Insert successful";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Insert not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+const searchDrugAndType = async (req, res) => {
+  const { text } = req.body.data;
+
+  const db = makeDb(configuration, res);
+  try {
+    const dbResponse = await db.query(
+      `select d.name, concat(ds.strength, ds.unit) strength, case when ds.form='T' then 'Tablets' end form
+      from drug d 
+      left join drug_strength ds on ds.drug_id=d.id 
+      where d.name like '${text}%'`
+    );
 
     if (!dbResponse) {
       errorMessage.message = "None found";
@@ -468,6 +572,40 @@ const getEncounterPlan = async (req, res) => {
   } catch (err) {
     console.log("err", err);
     errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+const searchNewPrescriptionDrug = async (req, res) => {
+  const { text } = req.body.data;
+
+  const db = makeDb(configuration, res);
+  try {
+    const $sql = `select d.name, concat(ds.strength, ds.unit) strength
+    , case when ds.form='T' then 'Tablets' end form
+    , cd.favorite
+    from drug d
+    left join client_drug cd on cd.client_id=${req.client_id}
+        and cd.drug_id=d.id
+    left join drug_strength ds on ds.drug_id=d.id
+    where d.name like '${text}%'
+    order by d.name, ds.strength
+    limit 50`;
+
+    const dbResponse = await db.query($sql);
+
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Search not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -877,11 +1015,15 @@ const patientEncounter = {
   updateEncounter,
   deleteEncounter,
   getEncounterTypes,
+  getDiagnoses,
   getRecentDiagnoses,
   searchDiagnosesICDs,
+  searchDrugAndType,
+  createNewPrescription,
   searchDrug,
   createEncounter_ICD,
   getEncounterPlan,
+  searchNewPrescriptionDrug,
   getDrugOrder,
   getDrugOrderPrescriptions,
   getNewLabDiagnoses,
