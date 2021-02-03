@@ -18,11 +18,20 @@ const BillingPayment = (props) => {
   const { open, onClose } = props;
   const classes = useStyles();
 
+  const onFormSubmit = (e) => {
+    e.preventDefault();
+    /* payment submission logic goes here */
+    e.stopPropagation(); // to prevent encounters main form submission
+  };
+
   return (
     <Dialog
       open={open}
       message={(
-        <>
+        <form
+          onSubmit={onFormSubmit}
+          id="payments-form"
+        >
           <Typography variant="h3">
             Process Payment
           </Typography>
@@ -48,6 +57,8 @@ const BillingPayment = (props) => {
               New Payment method
             </Typography>
             <TextField
+              required
+              type="number"
               margin="dense"
               variant="outlined"
               label="Amount"
@@ -69,11 +80,13 @@ const BillingPayment = (props) => {
             <Button
               variant="outlined"
               className={classes.minWidth100}
+              type="submit"
+              form="payments-form"
             >
               Process Payment
             </Button>
           </Grid>
-        </>
+        </form>
       )}
       cancelForm={onClose}
       hideActions
