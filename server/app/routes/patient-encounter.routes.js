@@ -75,10 +75,10 @@ router.get(
   [authJwt.verifyToken],
   PatientEncounter.getEncounterPlan
 );
-router.get(
-  "/patient/encounters/prescription/search",
+router.post(
+  "/patient/:patient_id/encounters/:encounter_id/plan/new-prescription/search",
   [authJwt.verifyToken],
-  PatientEncounter.getEncounterPlan
+  PatientEncounter.searchNewPrescriptionDrug
 );
 router.get(
   "/patient/encounters/drug-order",
