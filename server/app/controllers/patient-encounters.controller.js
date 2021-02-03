@@ -87,7 +87,9 @@ const getEncountersPrescriptionsFrequencies = async (req, res) => {
   }
 };
 
+// TODO:: inComplete code, need to pass drug_id, drug_strength_id
 const encountersPrescriptionsEdit = async (req, res) => {
+  const { encounter_id } = req.params;
   const db = makeDb(configuration, res);
 
   try {
@@ -99,7 +101,7 @@ const encountersPrescriptionsEdit = async (req, res) => {
       left join drug d on d.id=pd.drug_id
       left join drug_strength ds on ds.drug_id=d.id 
         and ds.id=pd.drug_strength_id left join drug_frequency df on df.id=pd.drug_frequency_id
-      where pd.encounter_id=1
+      where pd.encounter_id=${encounter_id}
       and pd.drug_id=1
       and pd.drug_strength_id=1`
     );
@@ -390,6 +392,34 @@ const searchDiagnosesICDs = async (req, res) => {
     order by i.name
     limit 20`;
     const dbResponse = await db.query($sql);
+
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Search not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+const searchDrugAndType = async (req, res) => {
+  const { text } = req.body.data;
+
+  const db = makeDb(configuration, res);
+  try {
+    const dbResponse = await db.query(
+      `select d.name, concat(ds.strength, ds.unit) strength, case when ds.form='T' then 'Tablets' end form
+      from drug d 
+      left join drug_strength ds on ds.drug_id=d.id 
+      where d.name like '${text}%'`
+    );
 
     if (!dbResponse) {
       errorMessage.message = "None found";
@@ -944,6 +974,7 @@ const patientEncounter = {
   getDiagnoses,
   getRecentDiagnoses,
   searchDiagnosesICDs,
+  searchDrugAndType,
   searchDrug,
   createEncounter_ICD,
   getEncounterPlan,
