@@ -319,6 +319,35 @@ const getEncounterTypes = async (req, res) => {
   }
 };
 
+const getDiagnoses = async (req, res) => {
+  const { encounter_id } = req.params;
+  const db = makeDb(configuration, res);
+
+  try {
+    const dbResponse = await db.query(
+      `select i.name, concat('(', pi.icd_id, ' ICD-10)') id
+      from patient_icd pi
+      join icd i on i.id=pi.icd_id
+      where pi.encounter_id=${encounter_id}
+      and pi.active=true
+      order by i.name
+      limit 20`
+    );
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const getRecentDiagnoses = async (req, res) => {
   const { encounter_id } = req.params;
   const db = makeDb(configuration, res);
@@ -912,6 +941,7 @@ const patientEncounter = {
   updateEncounter,
   deleteEncounter,
   getEncounterTypes,
+  getDiagnoses,
   getRecentDiagnoses,
   searchDiagnosesICDs,
   searchDrug,

@@ -31,6 +31,11 @@ router.get(
   PatientEncounter.getEncounterTypes
 );
 router.get(
+  "/patient/:patient_id/encounters/:encounter_id/diagnoses",
+  [authJwt.verifyToken],
+  PatientEncounter.getDiagnoses
+);
+router.get(
   "/patient/:patient_id/encounters/:encounter_id/diagnoses/recent-icds",
   [authJwt.verifyToken],
   PatientEncounter.getRecentDiagnoses
