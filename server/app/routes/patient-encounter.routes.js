@@ -77,23 +77,16 @@ router.get(
   [authJwt.verifyToken],
   PatientEncounter.getEncountersPrescriptionsFrequencies
 );
+router.get(
+  "/patient/:patient_id/encounters/:encounter_id/plan/new-prescriptions/recent-profiles",
+  [authJwt.verifyToken],
+  PatientEncounter.encountersRecentProfiles
+);
 
 router.post(
   "/patient/encounters/prescriptions/search-drug",
   [authJwt.verifyToken],
   PatientEncounter.searchDrug
-);
-
-router.get(
-  "/patient/encounters/prescriptions/frequencies",
-  [authJwt.verifyToken],
-  PatientEncounter.getEncountersPrescriptionsFrequencies
-);
-
-router.get(
-  "/patient/encounters/recent-profiles",
-  [authJwt.verifyToken],
-  PatientEncounter.encountersRecentProfiles
 );
 router.post(
   "/patient/:patient_id/encounters/:encounter_id/icd",
