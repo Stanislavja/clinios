@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 
-import { Typography } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
 
@@ -8,9 +8,14 @@ import { StyledTableRowSm, StyledTableCellSm } from "../../../../../../../compon
 import usePatientContext from "../../../../../../../hooks/usePatientContext";
 import PatientService from "../../../../../../../services/patient.service";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   text: {
     fontSize: 14,
+  },
+  root: {
+    "& td": {
+      color: theme.palette.text.primary,
+    },
   },
 }));
 
@@ -36,7 +41,7 @@ const BillingPayments = () => {
   }, [fetchBillingPayments]);
 
   return (
-    <>
+    <Grid className={classes.root}>
       {billingPayments.length
         ? billingPayments.map((item) => (
           <StyledTableRowSm key={item.id}>
@@ -54,7 +59,7 @@ const BillingPayments = () => {
             {isLoading ? "Loading..." : "No Records found..."}
           </Typography>
         )}
-    </>
+    </Grid>
   );
 };
 
