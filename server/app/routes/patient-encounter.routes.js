@@ -31,49 +31,72 @@ router.get(
   PatientEncounter.getEncounterTypes
 );
 router.get(
-  "/patient/:patient_id/encounters/diagnoses/recent-icds",
+  "/patient/:patient_id/encounters/:encounter_id/diagnoses",
+  [authJwt.verifyToken],
+  PatientEncounter.getDiagnoses
+);
+router.get(
+  "/patient/:patient_id/encounters/:encounter_id/diagnoses/recent-icds",
   [authJwt.verifyToken],
   PatientEncounter.getRecentDiagnoses
 );
 router.post(
-  "/patient/encounters/prescriptions/search-drug",
+  "/patient/:patient_id/encounters/:encounter_id/diagnoses/search-icds",
   [authJwt.verifyToken],
-  PatientEncounter.searchDrug
-);
-router.get(
-  "/patient/encounters/recent-prescriptions",
-  [authJwt.verifyToken],
-  PatientEncounter.getEncountersPrescriptions
-);
-router.get(
-  "/patient/encounters/prescriptions/frequencies",
-  [authJwt.verifyToken],
-  PatientEncounter.getEncountersPrescriptionsFrequencies
-);
-router.get(
-  "/patient/encounters/prescriptions/edit",
-  [authJwt.verifyToken],
-  PatientEncounter.encountersPrescriptionsEdit
-);
-router.get(
-  "/patient/encounters/recent-profiles",
-  [authJwt.verifyToken],
-  PatientEncounter.encountersRecentProfiles
-);
-router.post(
-  "/patient/:patient_id/encounters-icd",
-  [authJwt.verifyToken],
-  PatientEncounter.createEncounter_ICD
+  PatientEncounter.searchDiagnosesICDs
 );
 router.get(
   "/patient/:patient_id/encounters/:encounter_id/plan",
   [authJwt.verifyToken],
   PatientEncounter.getEncounterPlan
 );
-router.get(
-  "/patient/encounters/prescription/search",
+router.post(
+  "/patient/:patient_id/encounters/:encounter_id/plan/new-prescription/search",
   [authJwt.verifyToken],
-  PatientEncounter.getEncounterPlan
+  PatientEncounter.searchNewPrescriptionDrug
+);
+router.get(
+  "/patient/:patient_id/encounters/:encounter_id/plan/new-prescription/recent",
+  [authJwt.verifyToken],
+  PatientEncounter.getEncountersPrescriptions
+);
+
+// TODO:: Incomplete end point
+router.get(
+  "/patient/:patient_id/encounters/:encounter_id/plan/new-prescriptions/edit",
+  [authJwt.verifyToken],
+  PatientEncounter.encountersPrescriptionsEdit
+);
+router.post(
+  "/patient/:patient_id/encounters/:encounter_id/plan/new-prescriptions/search/drug-type",
+  [authJwt.verifyToken],
+  PatientEncounter.searchDrugAndType
+);
+router.get(
+  "/patient/:patient_id/encounters/:encounter_id/plan/new-prescriptions/frequencies",
+  [authJwt.verifyToken],
+  PatientEncounter.getEncountersPrescriptionsFrequencies
+);
+router.get(
+  "/patient/:patient_id/encounters/:encounter_id/plan/new-prescriptions/recent-profiles",
+  [authJwt.verifyToken],
+  PatientEncounter.encountersRecentProfiles
+);
+router.post(
+  "/patient/:patient_id/encounters/:encounter_id/plan/new-prescriptions",
+  [authJwt.verifyToken],
+  PatientEncounter.createNewPrescription
+);
+
+router.post(
+  "/patient/encounters/prescriptions/search-drug",
+  [authJwt.verifyToken],
+  PatientEncounter.searchDrug
+);
+router.post(
+  "/patient/:patient_id/encounters/:encounter_id/icd",
+  [authJwt.verifyToken],
+  PatientEncounter.createEncounter_ICD
 );
 router.get(
   "/patient/encounters/drug-order",

@@ -31,7 +31,8 @@ const DiagnoseHover = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchRecentICDs = useCallback(() => {
-    PatientService.getEncountersRecentDiagnosesICDs(patientId).then((response) => {
+    const encounterId = 2; // hardcoded for now
+    PatientService.getEncountersRecentDiagnosesICDs(patientId, encounterId).then((response) => {
       setRecentICDs(response.data);
       setIsLoading(false);
     });
