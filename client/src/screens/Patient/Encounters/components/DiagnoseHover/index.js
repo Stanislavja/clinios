@@ -6,15 +6,21 @@ import {
   Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import clsx from "clsx";
 import { useParams } from "react-router-dom";
 
+import Tooltip from "../../../../../components/common/CustomTooltip";
 import PatientService from "../../../../../services/patient.service";
 
 const useStyles = makeStyles(() => ({
   text: {
     fontSize: 14,
-    whiteSpace: "nowrap",
     lineHeight: "19px",
+  },
+  textClip: {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
   },
 }));
 
@@ -37,7 +43,7 @@ const DiagnoseHover = () => {
   }, [fetchRecentICDs]);
 
   return (
-    <Box minWidth={425}>
+    <Box minWidth={450} maxWidth={500}>
       <Grid container spacing={2}>
         <Grid item lg={6}>
           <Typography variant="h5" gutterBottom>
@@ -47,10 +53,35 @@ const DiagnoseHover = () => {
             ? recentICDs.map((item) => (
               <Grid key={`${item.id}_${Math.random()}`}>
                 {/* Math.random was used intentionally to get unique keys */}
-                <Typography gutterBottom variant="body1" className={classes.text}>
-                  {item.name}
-                  {item.id}
-                </Typography>
+                {!!item.name && item.name.length > 20
+                  ? (
+                    <Tooltip title={`${item.name} ${item.id}`}>
+                      <Typography
+                        gutterBottom
+                        variant="body1"
+                        className={clsx(
+                          classes.text,
+                          classes.textClip,
+                        )}
+                      >
+                        {item.name}
+                        {item.id}
+                      </Typography>
+                    </Tooltip>
+                  )
+                  : (
+                    <Typography
+                      gutterBottom
+                      variant="body1"
+                      className={clsx(
+                        classes.text,
+                        classes.textClip,
+                      )}
+                    >
+                      {item.name}
+                      {item.id}
+                    </Typography>
+                  )}
               </Grid>
             ))
             : (

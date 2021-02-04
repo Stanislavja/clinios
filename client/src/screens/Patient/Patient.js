@@ -1103,6 +1103,7 @@ const Patient = () => {
           message={(
             <DocumentsCardContent
               reloadData={() => fetchDocuments()}
+              actionsEnable
             />
           )}
           applyForm={() => dispatch(toggleDocumentsExpandDialog())}
@@ -1249,6 +1250,7 @@ const Patient = () => {
                 data={(
                   <DocumentsCardContent
                     reloadData={() => fetchDocuments()}
+                    actionsEnable
                   />
                 )}
                 showActions

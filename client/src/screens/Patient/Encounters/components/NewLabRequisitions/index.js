@@ -257,28 +257,15 @@ const Requisitions = (props) => {
               Favorites
             </Typography>
             <Grid container spacing={2}>
-              <Grid item lg={6}>
-                {favoriteTests.map((item) => (
-                  <Grid key={`${item.id}_${item.name}`}>
-                    <FormControlLabel
-                      value={item.id}
-                      label={item.name}
-                      control={<Checkbox color="primary" />}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-              {/* <Grid item lg={6}>
-                {FavoritesSelectionFields.map((item) => (
-                  <Grid key={`${item.label}_${item.value}`}>
-                    <FormControlLabel
-                      value={item.value}
-                      label={item.label}
-                      control={<Checkbox color="primary" />}
-                    />
-                  </Grid>
-                ))}
-              </Grid> */}
+              {favoriteTests.map((item) => (
+                <Grid item lg={6} key={`${item.id}_${item.name}`}>
+                  <FormControlLabel
+                    value={item.id}
+                    label={item.name}
+                    control={<Checkbox color="primary" />}
+                  />
+                </Grid>
+              ))}
             </Grid>
           </Grid>
         </Grid>

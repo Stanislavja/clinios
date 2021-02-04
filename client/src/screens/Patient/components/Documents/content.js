@@ -95,7 +95,7 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 
 const DocumentsContent = (props) => {
-  const { reloadData } = props;
+  const { reloadData, actionsEnable } = props;
   const { enqueueSnackbar } = useSnackbar();
   const { state } = usePatientContext();
   const classes = useStyles();
@@ -223,7 +223,11 @@ const DocumentsContent = (props) => {
               </StyledTableCell>
               <StyledTableCell>Func Flag</StyledTableCell>
               <StyledTableCell>Notes</StyledTableCell>
-              <StyledTableCell align="center">Actions</StyledTableCell>
+              {
+                actionsEnable && (
+                  <StyledTableCell align="center">Actions</StyledTableCell>
+                )
+              }
             </TableRow>
           </TableHead>
           <TableBody>
@@ -256,23 +260,25 @@ const DocumentsContent = (props) => {
                       )
                       : <TableCell>{row.note}</TableCell>
                   }
-                  <TableCell className={classes.actions}>
-                    {row.status === "D"
-                      ? (
-                        <RestoreIcon
-                          className={classes.icon}
-                          onClick={(e) => updateDocumentStatusHandler(row.id, "A", e)}
-                          fontSize="small"
-                        />
-                      )
-                      : (
-                        <DeleteIcon
-                          className={classes.icon}
-                          onClick={(e) => updateDocumentStatusHandler(row.id, "D", e)}
-                          fontSize="small"
-                        />
-                      )}
-                  </TableCell>
+                  {actionsEnable && (
+                    <TableCell className={classes.actions}>
+                      {row.status === "D"
+                        ? (
+                          <RestoreIcon
+                            className={classes.icon}
+                            onClick={(e) => updateDocumentStatusHandler(row.id, "A", e)}
+                            fontSize="small"
+                          />
+                        )
+                        : (
+                          <DeleteIcon
+                            className={classes.icon}
+                            onClick={(e) => updateDocumentStatusHandler(row.id, "D", e)}
+                            fontSize="small"
+                          />
+                        )}
+                    </TableCell>
+                  )}
                 </StyledTableRow>
               ))
             ) : (
@@ -302,6 +308,7 @@ const DocumentsContent = (props) => {
 
 DocumentsContent.propTypes = {
   reloadData: PropTypes.func.isRequired,
+  actionsEnable: PropTypes.bool.isRequired,
 };
 
 export default DocumentsContent;

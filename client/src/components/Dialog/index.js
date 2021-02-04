@@ -147,7 +147,7 @@ const DialogForm = ({
 };
 
 DialogForm.defaultProps = {
-  title: "Title",
+  title: "",
   message: null,
   applyForm: () => { },
   cancelForm: () => { },

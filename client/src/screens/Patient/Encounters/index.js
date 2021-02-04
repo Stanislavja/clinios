@@ -451,7 +451,12 @@ const Encounters = (props) => {
         <Grid item md={6} sm={12} className={classes.w100}>
           <Card
             title="Documents"
-            data={<DocumentsCardContent reloadData={() => { }} />}
+            data={(
+              <DocumentsCardContent
+                reloadData={() => { }}
+                actionsEnable={false}
+              />
+            )}
           />
         </Grid>
         <Grid item md={6} sm={12} className={classes.w100}>

@@ -138,6 +138,12 @@ const NewPrescription = (props) => {
     }
   };
 
+  const onFormSubmit = (e) => {
+    e.preventDefault();
+    /* prescription form submission logic goes here */
+    e.stopPropagation(); // to prevent encounters main form submission
+  };
+
   return (
     <>
       <Typography variant="h3" gutterBottom>
@@ -145,7 +151,10 @@ const NewPrescription = (props) => {
       </Typography>
       <Grid container>
         <Grid item lg={4} md={4} xs={12}>
-          <form>
+          <form
+            onSubmit={onFormSubmit}
+            id="prescriptions-form"
+          >
             <Grid
               item
               lg={10}
@@ -236,7 +245,11 @@ const NewPrescription = (props) => {
                 component={Box}
                 mt={2}
               >
-                <Button variant="outlined" type="submit">
+                <Button
+                  variant="outlined"
+                  type="submit"
+                  form="prescriptions-form"
+                >
                   Save
                 </Button>
                 <Button variant="outlined" onClick={() => onClose()}>
