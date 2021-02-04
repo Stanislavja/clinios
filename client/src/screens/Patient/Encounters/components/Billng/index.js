@@ -122,6 +122,7 @@ const BillingDialogContent = (props) => {
         <Box mb={2} mt={2}>
           <Typography variant="h4" gutterBottom>
             Total Amount:
+            {" "}
             <span className={classes.text}>$100.00</span>
           </Typography>
         </Box>
