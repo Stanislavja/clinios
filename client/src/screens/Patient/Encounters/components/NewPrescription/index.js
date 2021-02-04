@@ -26,6 +26,7 @@ import PropTypes from "prop-types";
 
 import { StyledTableCellSm, StyledTableRowSm } from "../../../../../components/common/StyledTable";
 import useDebounce from "../../../../../hooks/useDebounce";
+import usePatientContext from "../../../../../hooks/usePatientContext";
 import PatientService from "../../../../../services/patient.service";
 import { NewDrugFormFields, GenericOptions } from "../../../../../static/encountersForm";
 
@@ -47,6 +48,11 @@ const useStyles = makeStyles((theme) => ({
 const NewPrescription = (props) => {
   const { onClose } = props;
   const classes = useStyles();
+  const { state } = usePatientContext();
+  const { patientId } = state;
+  const { selectedEncounter } = state.encounters;
+  const encounterId = selectedEncounter?.id || 1;
+
   const currentDate = new Date();
   const [drugSearchResults, setDrugSearchResults] = useState([]);
   const [drugFrequencies, setDrugFrequencies] = useState([]);
@@ -80,18 +86,18 @@ const NewPrescription = (props) => {
   }, [debouncedSearchTerm]);
 
   const fetchRecentPrescriptions = useCallback(() => {
-    PatientService.getEncountersPrescriptions()
+    PatientService.getEncountersPrescriptions(patientId, encounterId)
       .then((response) => {
         setRecentSelections(response.data);
       });
-  }, []);
+  }, [patientId, encounterId]);
 
   const fetchDrugFrequencies = useCallback(() => {
-    PatientService.getEncountersPrescriptionsDrugsFrequencies()
+    PatientService.getEncountersPrescriptionsDrugsFrequencies(patientId, encounterId)
       .then((response) => {
         setDrugFrequencies(response.data);
       });
-  }, []);
+  }, [patientId, encounterId]);
 
   useEffect(() => {
     fetchRecentPrescriptions();
