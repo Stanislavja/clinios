@@ -87,7 +87,46 @@ router.post(
   [authJwt.verifyToken],
   PatientEncounter.createNewPrescription
 );
-
+router.get(
+  "/patient/:patient_id/encounters/:encounter_id/plan/new-prescriptions/drug-order",
+  [authJwt.verifyToken],
+  PatientEncounter.getDrugOrder
+);
+router.get(
+  "/patient/:patient_id/encounters/:encounter_id/plan/new-prescriptions/drug-order/prescriptions",
+  [authJwt.verifyToken],
+  PatientEncounter.getDrugOrderPrescriptions
+);
+router.get(
+  "/patient/:patient_id/encounters/:encounter_id/new-lab/diagnoses",
+  [authJwt.verifyToken],
+  PatientEncounter.getNewLabDiagnoses
+);
+router.get(
+  "/patient/:patient_id/encounters/:encounter_id/new-lab/test-ordered",
+  [authJwt.verifyToken],
+  PatientEncounter.getOrderedTests
+);
+router.delete(
+  "/patient/:patient_id/encounters/:encounter_id/new-lab/test-ordered",
+  [authJwt.verifyToken],
+  PatientEncounter.deleteOrderedTests
+);
+router.get(
+  "/patient/:patient_id/encounters/:encounter_id/new-lab/laboratories",
+  [authJwt.verifyToken],
+  PatientEncounter.getNewLabLaboratories
+);
+router.get(
+  "/patient/:patient_id/encounters/:encounter_id/new-lab/favorites",
+  [authJwt.verifyToken],
+  PatientEncounter.getNewLabFavorites
+);
+router.post(
+  "/patient/:patient_id/encounters/:encounter_id/new-lab/search",
+  [authJwt.verifyToken],
+  PatientEncounter.getNewLabSearch
+);
 router.post(
   "/patient/encounters/prescriptions/search-drug",
   [authJwt.verifyToken],
@@ -97,46 +136,6 @@ router.post(
   "/patient/:patient_id/encounters/:encounter_id/icd",
   [authJwt.verifyToken],
   PatientEncounter.createEncounter_ICD
-);
-router.get(
-  "/patient/encounters/drug-order",
-  [authJwt.verifyToken],
-  PatientEncounter.getDrugOrder
-);
-router.get(
-  "/patient/encounters/drug-order/prescriptions",
-  [authJwt.verifyToken],
-  PatientEncounter.getDrugOrderPrescriptions
-);
-router.get(
-  "/patient/encounters/new-lab/diagnoses",
-  [authJwt.verifyToken],
-  PatientEncounter.getNewLabDiagnoses
-);
-router.get(
-  "/patient/encounters/new-lab/test-ordered",
-  [authJwt.verifyToken],
-  PatientEncounter.getOrderedTests
-);
-router.delete(
-  "/patient/encounters/new-lab/test-ordered/:id",
-  [authJwt.verifyToken],
-  PatientEncounter.deleteOrderedTests
-);
-router.get(
-  "/patient/encounters/new-lab/laboratories",
-  [authJwt.verifyToken],
-  PatientEncounter.getNewLabLaboratories
-);
-router.get(
-  "/patient/encounters/new-lab/favorites",
-  [authJwt.verifyToken],
-  PatientEncounter.getNewLabFavorites
-);
-router.post(
-  "/patient/encounters/new-lab/search",
-  [authJwt.verifyToken],
-  PatientEncounter.getNewLabSearch
 );
 router.get(
   "/patient/encounters/new-lab/requested-labs",
