@@ -7,8 +7,8 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
-import PdfFilePath from "../../../../../assets/docs/sample.pdf";
-import SampleDocumentViewer from "../SampleDocViewer";
+import HeadingDate from "../HeadingDate";
+import LetterHead from "../LetterHead";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -18,13 +18,23 @@ const useStyles = makeStyles((theme) => ({
       textDecoration: "none",
     },
   },
+  mb2: {
+    marginBottom: theme.spacing(2),
+  },
+  borderSection: {
+    border: "1px solid #aaa",
+    padding: theme.spacing(2),
+    marginBottom: theme.spacing(1),
+    minHeight: 270,
+    position: "relative",
+  },
 }));
 
 const FaxLab = () => {
   const classes = useStyles();
   return (
     <>
-      <Grid container spacing={2} alignItems="center">
+      <Grid container spacing={2} alignItems="center" className={classes.mb2}>
         <Grid item lg={6}>
           <Grid item lg={10}>
             <TextField
@@ -47,14 +57,7 @@ const FaxLab = () => {
               className={classes.button}
               variant="outlined"
             >
-              <a
-                download
-                href={PdfFilePath}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Download
-              </a>
+              Download
             </Button>
             <Button
               className={classes.button}
@@ -66,8 +69,12 @@ const FaxLab = () => {
         </Grid>
       </Grid>
 
-      {/* sample document for the time being */}
-      <SampleDocumentViewer />
+      <Grid className={classes.borderSection}>
+        <LetterHead />
+        <HeadingDate
+          heading="Lab Requisition"
+        />
+      </Grid>
     </>
   );
 };
