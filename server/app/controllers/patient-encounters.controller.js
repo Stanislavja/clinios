@@ -613,6 +613,7 @@ const searchNewPrescriptionDrug = async (req, res) => {
 };
 
 const getDrugOrder = async (req, res) => {
+  const { patient_id } = req.params;
   const db = makeDb(configuration, res);
 
   try {
@@ -623,7 +624,7 @@ const getDrugOrder = async (req, res) => {
       from patient p
       left join pharmacy ph on ph.id=p.pharmacy_id
       left join pharmacy ph2 on ph2.id=p.pharmacy2_id
-      where p.id=1`
+      where p.id=${patient_id}`
     );
     if (!dbResponse) {
       errorMessage.message = "None found";
