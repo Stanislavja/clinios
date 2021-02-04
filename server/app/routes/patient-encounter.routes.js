@@ -112,7 +112,21 @@ router.delete(
   [authJwt.verifyToken],
   PatientEncounter.deleteOrderedTests
 );
-
+router.get(
+  "/patient/:patient_id/encounters/:encounter_id/new-lab/laboratories",
+  [authJwt.verifyToken],
+  PatientEncounter.getNewLabLaboratories
+);
+router.get(
+  "/patient/:patient_id/encounters/:encounter_id/new-lab/favorites",
+  [authJwt.verifyToken],
+  PatientEncounter.getNewLabFavorites
+);
+router.post(
+  "/patient/:patient_id/encounters/:encounter_id/new-lab/search",
+  [authJwt.verifyToken],
+  PatientEncounter.getNewLabSearch
+);
 router.post(
   "/patient/encounters/prescriptions/search-drug",
   [authJwt.verifyToken],
@@ -122,22 +136,6 @@ router.post(
   "/patient/:patient_id/encounters/:encounter_id/icd",
   [authJwt.verifyToken],
   PatientEncounter.createEncounter_ICD
-);
-
-router.get(
-  "/patient/encounters/new-lab/laboratories",
-  [authJwt.verifyToken],
-  PatientEncounter.getNewLabLaboratories
-);
-router.get(
-  "/patient/encounters/new-lab/favorites",
-  [authJwt.verifyToken],
-  PatientEncounter.getNewLabFavorites
-);
-router.post(
-  "/patient/encounters/new-lab/search",
-  [authJwt.verifyToken],
-  PatientEncounter.getNewLabSearch
 );
 router.get(
   "/patient/encounters/new-lab/requested-labs",

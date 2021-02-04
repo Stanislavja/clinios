@@ -799,7 +799,7 @@ const getNewLabFavorites = async (req, res) => {
 
     $sql = `select c.id, lc.name lab_name, c.name, case when cc.cpt_id<>'' then true end favorite
     from cpt c
-    join client_cpt cc on cc.client_id=1
+    join client_cpt cc on cc.client_id=${req.client_id}
         and cc.cpt_id=c.id
     left join lab_company lc on lc.id=c.lab_company_id \n`;
 
@@ -833,9 +833,7 @@ const getNewLabSearch = async (req, res) => {
     let $sql;
 
     $sql = `select c.id, lc.name lab_name, c.name, case when cc.cpt_id<>'' then true end favorite, group_concat(ci.cpt2_id) cpt_items
-    from cpt c
-    left join client_cpt cc on cc.client_id=1
-        and cc.cpt_id=c.id
+    from cpt c left join client_cpt cc on cc.client_id=${req.client_id} and cc.cpt_id=c.id
     left join lab_company lc on lc.id=c.lab_company_id
     left join cpt_item ci on ci.cpt_id=c.id
     where c.type='L' /*L=Lab*/
