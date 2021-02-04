@@ -27,7 +27,7 @@ const MedicationsContent = () => {
   return (
     <>
       {data.map((item) => (
-        <Grid key={item.start_dt} container>
+        <Grid key={`${item.start_dt}_${item.name}`} container>
           <Grid item className={classes.block}>
             <Typography
               component="span"
