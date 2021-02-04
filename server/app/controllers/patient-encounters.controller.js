@@ -675,6 +675,7 @@ const getDrugOrderPrescriptions = async (req, res) => {
 };
 
 const getNewLabDiagnoses = async (req, res) => {
+  const { encounter_id } = req.params;
   const db = makeDb(configuration, res);
 
   try {
@@ -684,7 +685,7 @@ const getNewLabDiagnoses = async (req, res) => {
       join icd i on i.id=pi.icd_id
       left join patient_cpt_exception_icd pcei on pcei.encounter_id=pi.encounter_id
         and pcei.icd_id=pi.icd_id
-      where pi.encounter_id=1
+      where pi.encounter_id=${encounter_id}
       and pi.active=true
       and pcei.icd_id is null
       order by i.name
