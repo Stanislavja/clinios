@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 
 import {
-  Box, Button, Grid, Typography,
+  Box, Button, Grid, Typography, TextField,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
 import PropTypes from "prop-types";
 
-import UltraWellnessLogo from "../../../../../assets/client/c1_logo.png";
 import usePatientContext from "../../../../../hooks/usePatientContext";
+import LetterHead from "../LetterHead";
 import BillingDiagnoses from "./components/BillingDiagnoses";
 import BillingPaymentDialog from "./components/BillingPaymentDialog";
 import BillingPayment from "./components/BillingPayments";
@@ -28,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
     minHeight: 270,
     position: "relative",
   },
+  text: {
+    fontSize: 16,
+  },
 }));
 
 const BillingDialogContent = (props) => {
@@ -42,19 +45,6 @@ const BillingDialogContent = (props) => {
   const togglePaymentDialog = () => {
     setShowPayment((prevState) => !prevState);
   };
-
-  const BillingIntro = () => (
-    <>
-      <Typography gutterBottom>UltraWellness Center</Typography>
-      <Typography gutterBottom>Mark Hyman MD</Typography>
-      <Typography gutterBottom>55 PittsField Rd # 9</Typography>
-      <Typography gutterBottom>DEA #A 123456789</Typography>
-      <Typography gutterBottom>NPI # 123456789</Typography>
-      <Typography gutterBottom>Lenox, MA 01240</Typography>
-      <Typography gutterBottom>Phone (413) 637-9991</Typography>
-      <Typography gutterBottom>Fax (413) 637-9991</Typography>
-    </>
-  );
 
   return (
     <>
@@ -89,18 +79,7 @@ const BillingDialogContent = (props) => {
         </Button>
       </Grid>
       <Grid className={classes.borderSection}>
-        <Grid container justify="space-between">
-          <Grid item md={4}>
-            <img
-              alt="ultrawellness-logo"
-              src={UltraWellnessLogo}
-            />
-          </Grid>
-          <Grid item md={2}>
-            <BillingIntro />
-          </Grid>
-        </Grid>
-
+        <LetterHead />
         <Grid
           container
           justify="space-between"
@@ -156,11 +135,20 @@ const BillingDialogContent = (props) => {
         </Box>
 
         <Box mb={2} mt={2}>
-          <Typography variant="h4" gutterBottom>Total Amount</Typography>
+          <Typography variant="h4" gutterBottom>
+            Total Amount:
+            <span className={classes.text}>$100.00</span>
+          </Typography>
         </Box>
 
-        <Box mb={5} mt={2}>
+        <Box mb={2} mt={2}>
+          <Typography variant="h4" gutterBottom>Payment</Typography>
           <BillingPayment />
+        </Box>
+
+        <Box mt={5}>
+          <TextField value="Mark Hyman" disabled />
+          <Typography color="textSecondary" variant="body2">Signature</Typography>
         </Box>
       </Grid>
     </>
