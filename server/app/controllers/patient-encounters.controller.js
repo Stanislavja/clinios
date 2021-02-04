@@ -708,6 +708,7 @@ const getNewLabDiagnoses = async (req, res) => {
 };
 
 const getOrderedTests = async (req, res) => {
+  const { encounter_id } = req.params;
   const db = makeDb(configuration, res);
 
   try {
@@ -715,7 +716,7 @@ const getOrderedTests = async (req, res) => {
       `select c.name, c.id
       from patient_cpt pc
       join cpt c on c.id=pc.cpt_id
-      where pc.encounter_id=1
+      where pc.encounter_id=${encounter_id}
       order by c.name
       limit 100`
     );
