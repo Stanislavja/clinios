@@ -643,6 +643,7 @@ const getDrugOrder = async (req, res) => {
 };
 
 const getDrugOrderPrescriptions = async (req, res) => {
+  const { encounter_id } = req.params;
   const db = makeDb(configuration, res);
 
   try {
@@ -653,7 +654,7 @@ const getDrugOrderPrescriptions = async (req, res) => {
       from patient_drug pd
       join drug d on d.id=pd.drug_id
       join drug_strength ds on ds.id=pd.drug_strength_id
-      where encounter_id=1
+      where encounter_id=${encounter_id}
       order by d.name
       limit 100`
     );

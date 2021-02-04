@@ -92,6 +92,11 @@ router.get(
   [authJwt.verifyToken],
   PatientEncounter.getDrugOrder
 );
+router.get(
+  "/patient/:patient_id/encounters/:encounter_id/plan/new-prescriptions/drug-order/prescriptions",
+  [authJwt.verifyToken],
+  PatientEncounter.getDrugOrderPrescriptions
+);
 
 router.post(
   "/patient/encounters/prescriptions/search-drug",
@@ -103,11 +108,7 @@ router.post(
   [authJwt.verifyToken],
   PatientEncounter.createEncounter_ICD
 );
-router.get(
-  "/patient/encounters/drug-order/prescriptions",
-  [authJwt.verifyToken],
-  PatientEncounter.getDrugOrderPrescriptions
-);
+
 router.get(
   "/patient/encounters/new-lab/diagnoses",
   [authJwt.verifyToken],
