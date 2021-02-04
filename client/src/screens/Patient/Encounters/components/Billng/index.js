@@ -4,10 +4,10 @@ import {
   Box, Button, Grid, Typography, TextField,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import moment from "moment";
 import PropTypes from "prop-types";
 
 import usePatientContext from "../../../../../hooks/usePatientContext";
+import HeadingDate from "../HeadingDate";
 import LetterHead from "../LetterHead";
 import BillingDiagnoses from "./components/BillingDiagnoses";
 import BillingPaymentDialog from "./components/BillingPaymentDialog";
@@ -80,24 +80,9 @@ const BillingDialogContent = (props) => {
       </Grid>
       <Grid className={classes.borderSection}>
         <LetterHead />
-        <Grid
-          container
-          justify="space-between"
-          alignItems="center"
-          component={Box}
-          mt={2}
-          mb={2}
-        >
-          <Grid item md={4}>
-            <Typography variant="h3">Superbill</Typography>
-          </Grid>
-          <Grid item md={2}>
-            <Typography>
-              Date:
-              {moment().format("MMM D YYYY")}
-            </Typography>
-          </Grid>
-        </Grid>
+        <HeadingDate
+          heading="Superbill"
+        />
 
         <Grid container>
           <Grid item md={4}>
