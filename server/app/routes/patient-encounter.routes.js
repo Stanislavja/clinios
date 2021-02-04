@@ -107,6 +107,11 @@ router.get(
   [authJwt.verifyToken],
   PatientEncounter.getOrderedTests
 );
+router.delete(
+  "/patient/:patient_id/encounters/:encounter_id/new-lab/test-ordered",
+  [authJwt.verifyToken],
+  PatientEncounter.deleteOrderedTests
+);
 
 router.post(
   "/patient/encounters/prescriptions/search-drug",
@@ -119,11 +124,6 @@ router.post(
   PatientEncounter.createEncounter_ICD
 );
 
-router.delete(
-  "/patient/encounters/new-lab/test-ordered/:id",
-  [authJwt.verifyToken],
-  PatientEncounter.deleteOrderedTests
-);
 router.get(
   "/patient/encounters/new-lab/laboratories",
   [authJwt.verifyToken],

@@ -737,13 +737,15 @@ const getOrderedTests = async (req, res) => {
 };
 
 const deleteOrderedTests = async (req, res) => {
+  const { encounter_id } = req.params;
+  const { cpt_id } = req.body.data;
   const db = makeDb(configuration, res);
   try {
     const deleteOrderTestsResponse = await db.query(
       `delete
       from patient_cpt
-      where encounter_id=1
-      and cpt_id='${req.params.id}'`
+      where encounter_id=${encounter_id}
+      and cpt_id='${cpt_id}'`
     );
 
     if (!deleteOrderTestsResponse.affectedRows) {
