@@ -487,7 +487,7 @@ const searchDrug = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const dbResponse = await db.query(
-      `select d.name, concat(ds.strength, ds.unit) strength
+      `select d.name, d.id, concat(ds.strength, ds.unit) strength
       , case when ds.form='T' then 'Tablets' end form
       , cd.favorite
       from drug d
