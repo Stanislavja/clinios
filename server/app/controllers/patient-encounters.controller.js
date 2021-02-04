@@ -613,6 +613,7 @@ const searchNewPrescriptionDrug = async (req, res) => {
 };
 
 const getDrugOrder = async (req, res) => {
+  const { patient_id } = req.params;
   const db = makeDb(configuration, res);
 
   try {
@@ -623,7 +624,7 @@ const getDrugOrder = async (req, res) => {
       from patient p
       left join pharmacy ph on ph.id=p.pharmacy_id
       left join pharmacy ph2 on ph2.id=p.pharmacy2_id
-      where p.id=1`
+      where p.id=${patient_id}`
     );
     if (!dbResponse) {
       errorMessage.message = "None found";
@@ -642,6 +643,7 @@ const getDrugOrder = async (req, res) => {
 };
 
 const getDrugOrderPrescriptions = async (req, res) => {
+  const { encounter_id } = req.params;
   const db = makeDb(configuration, res);
 
   try {
@@ -652,7 +654,7 @@ const getDrugOrderPrescriptions = async (req, res) => {
       from patient_drug pd
       join drug d on d.id=pd.drug_id
       join drug_strength ds on ds.id=pd.drug_strength_id
-      where encounter_id=1
+      where encounter_id=${encounter_id}
       order by d.name
       limit 100`
     );
@@ -673,6 +675,7 @@ const getDrugOrderPrescriptions = async (req, res) => {
 };
 
 const getNewLabDiagnoses = async (req, res) => {
+  const { encounter_id } = req.params;
   const db = makeDb(configuration, res);
 
   try {
@@ -682,7 +685,7 @@ const getNewLabDiagnoses = async (req, res) => {
       join icd i on i.id=pi.icd_id
       left join patient_cpt_exception_icd pcei on pcei.encounter_id=pi.encounter_id
         and pcei.icd_id=pi.icd_id
-      where pi.encounter_id=1
+      where pi.encounter_id=${encounter_id}
       and pi.active=true
       and pcei.icd_id is null
       order by i.name
@@ -705,6 +708,7 @@ const getNewLabDiagnoses = async (req, res) => {
 };
 
 const getOrderedTests = async (req, res) => {
+  const { encounter_id } = req.params;
   const db = makeDb(configuration, res);
 
   try {
@@ -712,7 +716,7 @@ const getOrderedTests = async (req, res) => {
       `select c.name, c.id
       from patient_cpt pc
       join cpt c on c.id=pc.cpt_id
-      where pc.encounter_id=1
+      where pc.encounter_id=${encounter_id}
       order by c.name
       limit 100`
     );
@@ -733,13 +737,15 @@ const getOrderedTests = async (req, res) => {
 };
 
 const deleteOrderedTests = async (req, res) => {
+  const { encounter_id } = req.params;
+  const { cpt_id } = req.body.data;
   const db = makeDb(configuration, res);
   try {
     const deleteOrderTestsResponse = await db.query(
       `delete
       from patient_cpt
-      where encounter_id=1
-      and cpt_id='${req.params.id}'`
+      where encounter_id=${encounter_id}
+      and cpt_id='${cpt_id}'`
     );
 
     if (!deleteOrderTestsResponse.affectedRows) {
@@ -793,7 +799,7 @@ const getNewLabFavorites = async (req, res) => {
 
     $sql = `select c.id, lc.name lab_name, c.name, case when cc.cpt_id<>'' then true end favorite
     from cpt c
-    join client_cpt cc on cc.client_id=1
+    join client_cpt cc on cc.client_id=${req.client_id}
         and cc.cpt_id=c.id
     left join lab_company lc on lc.id=c.lab_company_id \n`;
 
@@ -827,9 +833,7 @@ const getNewLabSearch = async (req, res) => {
     let $sql;
 
     $sql = `select c.id, lc.name lab_name, c.name, case when cc.cpt_id<>'' then true end favorite, group_concat(ci.cpt2_id) cpt_items
-    from cpt c
-    left join client_cpt cc on cc.client_id=1
-        and cc.cpt_id=c.id
+    from cpt c left join client_cpt cc on cc.client_id=${req.client_id} and cc.cpt_id=c.id
     left join lab_company lc on lc.id=c.lab_company_id
     left join cpt_item ci on ci.cpt_id=c.id
     where c.type='L' /*L=Lab*/
