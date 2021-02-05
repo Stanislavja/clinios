@@ -12,19 +12,13 @@ const PatientInformation = () => {
   return (
     <>
       <Typography gutterBottom>
-        {patientData.firstname}
-        {" "}
-        {patientData.lastname}
+        {`${patientData.firstname} ${patientData.lastname}`}
       </Typography>
       <Typography gutterBottom>
         {patientData.address || "-"}
       </Typography>
       <Typography gutterBottom>
-        {patientData.city}
-        {" "}
-        {patientData.state}
-        {" "}
-        {patientData.postal}
+        {`${patientData.city} ${patientData.state} ${patientData.postal}`}
       </Typography>
       <Typography gutterBottom>
         DOB
