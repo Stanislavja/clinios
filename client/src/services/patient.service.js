@@ -144,9 +144,29 @@ class Patient {
       .then((res) => res.data);
   }
 
-  getEncountersPrescriptions() {
+  createEncountersPrescriptions(patientId, encounter_id, data) {
+    return axios.post(
+      `${API_BASE}/patient/${patientId}/encounters/${encounter_id}/plan/new-prescriptions`,
+      data,
+      {
+        headers: authHeader(),
+      },
+    );
+  }
+
+  editEncountersPrescriptions(patientId, encounter_id, data) {
+    return axios.post(
+      `${API_BASE}/patient/${patientId}/encounters/${encounter_id}/plan/new-prescriptions/edit`,
+      data,
+      {
+        headers: authHeader(),
+      },
+    );
+  }
+
+  getEncountersPrescriptions(patient_id, encounter_id) {
     return axios
-      .get(`${API_BASE}/patient/encounters/recent-prescriptions`, {
+      .get(`${API_BASE}/patient/${patient_id}/encounters/${encounter_id}/plan/new-prescription/recent`, {
         headers: authHeader(),
       })
       .then((res) => res.data);
@@ -168,9 +188,9 @@ class Patient {
       .then((res) => res.data);
   }
 
-  getEncountersPrescriptionsDrugsFrequencies() {
+  getEncountersPrescriptionsDrugsFrequencies(patientId, encounterId) {
     return axios
-      .get(`${API_BASE}/patient/encounters/prescriptions/frequencies`, {
+      .get(`${API_BASE}/patient/${patientId}/encounters/${encounterId}/plan/new-prescriptions/frequencies`, {
         headers: authHeader(),
       })
       .then((res) => res.data);

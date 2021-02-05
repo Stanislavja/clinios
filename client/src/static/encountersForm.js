@@ -139,10 +139,10 @@ export const NewDrugFormFields = [
 export const GenericOptions = [
   {
     label: "Generic Yes",
-    value: "yes",
+    value: "1",
   },
   {
     label: "Generic No",
-    value: "no",
+    value: "0",
   },
 ];

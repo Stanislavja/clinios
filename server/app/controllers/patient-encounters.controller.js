@@ -37,7 +37,8 @@ const getEncountersPrescriptions = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select d.name, concat(ds.strength, ds.unit) strength, case when ds.form='T' then 'Tablets' end form, pd.created, case when df.drug_id then true end favorite
+      `select d.name, d.id, pd.expires, pd.generic, pd.drug_frequency_id, pd.amount, pd.refills, pd.start_dt, pd.patient_instructions, pd.pharmacy_instructions,
+      concat(ds.strength, ds.unit) strength, case when ds.form='T' then 'Tablets' end form, pd.created, case when df.drug_id then true end favorite
       from patient_drug pd
       join drug d on d.id=pd.drug_id
       left join client_drug df on df.client_id=${req.client_id}
@@ -487,7 +488,7 @@ const searchDrug = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const dbResponse = await db.query(
-      `select d.name, concat(ds.strength, ds.unit) strength
+      `select d.name, d.id, concat(ds.strength, ds.unit) strength
       , case when ds.form='T' then 'Tablets' end form
       , cd.favorite
       from drug d

@@ -8,8 +8,8 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
-import PdfFilePath from "../../../../../assets/docs/sample.pdf";
-import SampleDocumentViewer from "../SampleDocViewer";
+import HeadingDate from "../HeadingDate";
+import LetterHead from "../LetterHead";
 
 const useStyles = makeStyles((theme) => ({
   text: {
@@ -21,6 +21,16 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.text.primary,
       textDecoration: "none",
     },
+  },
+  mb2: {
+    marginBottom: theme.spacing(2),
+  },
+  borderSection: {
+    border: "1px solid #aaa",
+    padding: theme.spacing(2),
+    marginBottom: theme.spacing(1),
+    minHeight: 270,
+    position: "relative",
   },
 }));
 
@@ -49,7 +59,7 @@ const FaxPrescription = () => {
         </Grid>
 
 
-        <Grid container justify="space-between">
+        <Grid container justify="space-between" className={classes.mb2}>
           <Button
             className={classes.button}
             variant="outlined"
@@ -60,14 +70,7 @@ const FaxPrescription = () => {
             className={classes.button}
             variant="outlined"
           >
-            <a
-              download
-              href={PdfFilePath}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Download
-            </a>
+            Download
           </Button>
           <Button
             className={classes.button}
@@ -78,8 +81,12 @@ const FaxPrescription = () => {
         </Grid>
       </Grid>
 
-      {/* sample document for the time being */}
-      <SampleDocumentViewer />
+      <Grid className={classes.borderSection}>
+        <LetterHead />
+        <HeadingDate
+          heading="Fax Prescription"
+        />
+      </Grid>
     </>
   );
 };
