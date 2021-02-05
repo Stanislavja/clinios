@@ -1,14 +1,17 @@
 import React from "react";
 
 import {
+  Box,
   Grid,
   TextField,
   Button,
+  Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 import HeadingDate from "../HeadingDate";
 import LetterHead from "../LetterHead";
+import PatientInformation from "../PatientInformation";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -74,6 +77,32 @@ const FaxLab = () => {
         <HeadingDate
           heading="Lab Requisition"
         />
+
+        <Grid container>
+          <Grid item md={4}>
+            <Typography variant="h4" gutterBottom>To</Typography>
+          </Grid>
+          <Grid item md={4}>
+            <Typography variant="h4" gutterBottom>Patient Information</Typography>
+            <PatientInformation />
+          </Grid>
+          <Grid item md={4}>
+            <Typography variant="h4" gutterBottom>Patient Insurance</Typography>
+          </Grid>
+        </Grid>
+
+        <Box mt={2} mb={2}>
+          <Typography variant="h4" gutterBottom>Diagnoses</Typography>
+        </Box>
+
+        <Box mt={2} mb={2}>
+          <Typography variant="h4" gutterBottom>Requested Labs</Typography>
+        </Box>
+
+        <Box mt={5}>
+          <TextField value="Mark Hyman MD" disabled />
+          <Typography color="textSecondary" variant="body2">Signature</Typography>
+        </Box>
       </Grid>
     </>
   );
