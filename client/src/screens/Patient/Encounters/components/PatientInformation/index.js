@@ -18,7 +18,7 @@ const PatientInformation = () => {
         {patientData.address || "-"}
       </Typography>
       <Typography gutterBottom>
-        {`${patientData.city} ${patientData.state} ${patientData.postal}`}
+        {`${patientData.city || ""} ${patientData.state || ""} ${patientData.postal || ""}`}
       </Typography>
       <Typography gutterBottom>
         DOB
