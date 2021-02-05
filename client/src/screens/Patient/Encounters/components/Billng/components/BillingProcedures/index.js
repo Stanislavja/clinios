@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import {
   Grid,
   Typography,
+  TableContainer,
   Table,
   TableHead,
   TableBody,
@@ -43,39 +44,41 @@ const BillingProcedures = () => {
 
   return (
     <Grid item xs={6}>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <StyledTableCellSm>CPT</StyledTableCellSm>
-            <StyledTableCellSm>Procedure</StyledTableCellSm>
-            <StyledTableCellSm>Fee</StyledTableCellSm>
-            <StyledTableCellSm>Amount</StyledTableCellSm>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {billingProcedures.length
-            ? billingProcedures.map((item) => (
-              <StyledTableRowSm key={item.id}>
-                <StyledTableCellSm>{item.id}</StyledTableCellSm>
-                <StyledTableCellSm>{item.name}</StyledTableCellSm>
-                <StyledTableCellSm>
-                  $
-                  {item.fee}
-                </StyledTableCellSm>
-                <StyledTableCellSm>{item.amount || "-"}</StyledTableCellSm>
-              </StyledTableRowSm>
-            ))
-            : (
-              <StyledTableRowSm>
-                <StyledTableCellSm colSpan={4}>
-                  <Typography align="center" variant="body1" className={classes.text}>
-                    {isLoading ? "Loading..." : "No Records found..."}
-                  </Typography>
-                </StyledTableCellSm>
-              </StyledTableRowSm>
-            )}
-        </TableBody>
-      </Table>
+      <TableContainer>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <StyledTableCellSm>CPT</StyledTableCellSm>
+              <StyledTableCellSm>Procedure</StyledTableCellSm>
+              <StyledTableCellSm>Fee</StyledTableCellSm>
+              <StyledTableCellSm>Amount</StyledTableCellSm>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {billingProcedures.length
+              ? billingProcedures.map((item) => (
+                <StyledTableRowSm key={item.id}>
+                  <StyledTableCellSm>{item.id}</StyledTableCellSm>
+                  <StyledTableCellSm>{item.name}</StyledTableCellSm>
+                  <StyledTableCellSm>
+                    $
+                    {item.fee}
+                  </StyledTableCellSm>
+                  <StyledTableCellSm>{item.amount || "-"}</StyledTableCellSm>
+                </StyledTableRowSm>
+              ))
+              : (
+                <StyledTableRowSm>
+                  <StyledTableCellSm colSpan={4}>
+                    <Typography align="center" variant="body1" className={classes.text}>
+                      {isLoading ? "Loading..." : "No Records found..."}
+                    </Typography>
+                  </StyledTableCellSm>
+                </StyledTableRowSm>
+              )}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Grid>
   );
 };
