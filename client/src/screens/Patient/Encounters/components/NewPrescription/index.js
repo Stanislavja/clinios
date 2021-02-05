@@ -46,6 +46,9 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: 150,
     overflow: "scroll",
   },
+  cursorPointer: {
+    cursor: "pointer",
+  },
 }));
 
 const NewPrescription = (props) => {
@@ -348,7 +351,11 @@ const NewPrescription = (props) => {
               <TableBody>
                 {recentSelections.length
                   ? recentSelections.map((row) => (
-                    <StyledTableRowSm key={row.created} onClick={() => rowClickHandler(row)}>
+                    <StyledTableRowSm
+                      key={row.created}
+                      className={classes.cursorPointer}
+                      onClick={() => rowClickHandler(row)}
+                    >
                       <StyledTableCellSm>{row.name}</StyledTableCellSm>
                       <StyledTableCellSm>{row.drug_frequency_id}</StyledTableCellSm>
                       <StyledTableCellSm>{row.expires}</StyledTableCellSm>
