@@ -22,6 +22,8 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { KeyboardDatePicker } from "@material-ui/pickers";
+import moment from "moment";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 
 import { StyledTableCellSm, StyledTableRowSm } from "../../../../../components/common/StyledTable";
@@ -48,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
 const NewPrescription = (props) => {
   const { onClose } = props;
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const { state } = usePatientContext();
   const { patientId } = state;
   const { selectedEncounter } = state.encounters;
@@ -57,8 +60,10 @@ const NewPrescription = (props) => {
   const [drugSearchResults, setDrugSearchResults] = useState([]);
   const [drugFrequencies, setDrugFrequencies] = useState([]);
   const [recentSelections, setRecentSelections] = useState([]);
+  const [selectedPrescription, setSelectedPrescription] = useState(null);
   const [formFields, setFormFields] = useState({
     type: "",
+    drug_id: "",
     frequency: "",
     startDate: currentDate,
     expires: "",
@@ -66,7 +71,7 @@ const NewPrescription = (props) => {
     refills: "",
     patientInstructions: "",
     pharmacyInstructions: "",
-    generic: "yes",
+    generic: "1",
   });
 
   const debouncedSearchTerm = useDebounce(formFields.type, 500);
@@ -82,6 +87,8 @@ const NewPrescription = (props) => {
         .then((res) => {
           setDrugSearchResults(res.data);
         });
+    } else {
+      setDrugSearchResults([]); // to clear search results dropdown
     }
   }, [debouncedSearchTerm]);
 
@@ -122,9 +129,12 @@ const NewPrescription = (props) => {
 
   const handleDrugTypeChange = (value) => {
     const name = "type";
+    const drugId = "drug_id";
+
     setFormFields({
       ...formFields,
-      [name]: `${value} `,
+      [name]: `${value.name} `,
+      [drugId]: value.id,
     });
     setDrugSearchResults([]);
   };
@@ -144,10 +154,58 @@ const NewPrescription = (props) => {
     }
   };
 
+  const prepareRequestBodyParams = () => {
+    const bodyParams = {
+      drug_id: formFields.drug_id,
+      drug_frequency_id: formFields.frequency,
+      drug_strength_id: 2,
+      start_dt: moment(formFields.startDate).format("YYYY:MM:DD"),
+      expires: Number(formFields.expires),
+      amount: Number(formFields.amount),
+      refills: Number(formFields.refills),
+      generic: Number(formFields.generic),
+      patient_instructions: formFields.patientInstructions,
+      pharmacy_instructions: formFields.pharmacyInstructions,
+    };
+    return bodyParams;
+  };
+
   const onFormSubmit = (e) => {
     e.preventDefault();
-    /* prescription form submission logic goes here */
+    if (selectedPrescription) {
+      const reqBody = {
+        data: prepareRequestBodyParams(),
+      };
+      PatientService.editEncountersPrescriptions(patientId, encounterId, reqBody)
+        .then((response) => {
+          enqueueSnackbar(`${response.data.message}`, { variant: "success" });
+          onClose();
+        });
+    } else {
+      const reqBody = {
+        data: prepareRequestBodyParams(),
+      };
+      PatientService.createEncountersPrescriptions(patientId, encounterId, reqBody)
+        .then((response) => {
+          enqueueSnackbar(`${response.data.message}`, { variant: "success" });
+          onClose();
+        });
+    }
     e.stopPropagation(); // to prevent encounters main form submission
+  };
+
+  const rowClickHandler = (row) => {
+    setSelectedPrescription(row); // selected preescription saved for editing
+    formFields.type = `${row.name} `;
+    formFields.drug_id = row.id;
+    formFields.frequency = row.drug_frequency_id;
+    formFields.expires = row.expires;
+    formFields.amount = row.amount;
+    formFields.refills = row.refills;
+    formFields.startDate = new Date(row.start_dt);
+    formFields.patientInstructions = row.patient_instructions;
+    formFields.pharmacyInstructions = row.pharmacy_instructions;
+    setFormFields({ ...formFields });
   };
 
   return (
@@ -181,9 +239,10 @@ const NewPrescription = (props) => {
                         format="dd/MM/yyyy"
                         value={formFields.startDate}
                         onChange={handleDateChange}
-                        minDate={currentDate}
                         fullWidth
                         required
+                        minDate={undefined}
+                        maxDate={undefined}
                       />
                     )
                     : (
@@ -216,7 +275,7 @@ const NewPrescription = (props) => {
                       {drugSearchResults.map((drug) => (
                         <ListItem
                           button
-                          onClick={() => handleDrugTypeChange(drug.name)}
+                          onClick={() => handleDrugTypeChange(drug)}
                           key={drug.name}
                         >
                           <ListItemText primary={drug.name} />
@@ -287,16 +346,17 @@ const NewPrescription = (props) => {
             <TableBody>
               {recentSelections.length
                 ? recentSelections.map((row) => (
-                  <StyledTableRowSm key={row.type}>
-                    <StyledTableCellSm component="th" scope="row">
-                      {row.created}
-                    </StyledTableCellSm>
-                    <StyledTableCellSm>{row.lastFour}</StyledTableCellSm>
-                    <StyledTableCellSm>{row.note}</StyledTableCellSm>
-                    <StyledTableCellSm>{row.note}</StyledTableCellSm>
-                    <StyledTableCellSm>{row.assigned_to}</StyledTableCellSm>
-                    <StyledTableCellSm>{row.patient_name}</StyledTableCellSm>
-                    <StyledTableCellSm>{row.note}</StyledTableCellSm>
+                  <StyledTableRowSm key={row.created} onClick={() => rowClickHandler(row)}>
+                    <StyledTableCellSm>{row.name}</StyledTableCellSm>
+                    <StyledTableCellSm>{row.drug_frequency_id}</StyledTableCellSm>
+                    <StyledTableCellSm>{row.expires}</StyledTableCellSm>
+                    <StyledTableCellSm>{row.amount}</StyledTableCellSm>
+                    <StyledTableCellSm>{row.refills}</StyledTableCellSm>
+                    <StyledTableCellSm>{row.generic ? "Yes" : "No"}</StyledTableCellSm>
+                    <StyledTableCellSm>{row.patient_instructions}</StyledTableCellSm>
+                    <StyledTableCellSm>{row.pharmacy_instructions}</StyledTableCellSm>
+                    <StyledTableCellSm>{row.name}</StyledTableCellSm>
+                    <StyledTableCellSm>{row.name}</StyledTableCellSm>
                   </StyledTableRowSm>
                 ))
                 : (
