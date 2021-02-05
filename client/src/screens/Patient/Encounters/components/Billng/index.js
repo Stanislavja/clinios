@@ -6,9 +6,9 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 
-import usePatientContext from "../../../../../hooks/usePatientContext";
 import HeadingDate from "../HeadingDate";
 import LetterHead from "../LetterHead";
+import PatientInformation from "../PatientInformation";
 import BillingDiagnoses from "./components/BillingDiagnoses";
 import BillingPaymentDialog from "./components/BillingPaymentDialog";
 import BillingPayment from "./components/BillingPayments";
@@ -36,9 +36,6 @@ const useStyles = makeStyles((theme) => ({
 const BillingDialogContent = (props) => {
   const { onClose } = props;
   const classes = useStyles();
-  const { state } = usePatientContext();
-  const { patientInfo } = state;
-  const patientData = patientInfo?.data || {};
 
   const [showPayment, setShowPayment] = useState(false);
 
@@ -87,27 +84,7 @@ const BillingDialogContent = (props) => {
         <Grid container>
           <Grid item md={4}>
             <Typography variant="h4" gutterBottom>Patient Information</Typography>
-            <Typography gutterBottom>
-              {patientData.firstname}
-              {" "}
-              {patientData.lastname}
-            </Typography>
-            <Typography gutterBottom>{patientData.address || "-"}</Typography>
-            <Typography gutterBottom>
-              {patientData.city}
-              {" "}
-              {patientData.state}
-              {" "}
-              {patientData.postal}
-            </Typography>
-            <Typography gutterBottom>
-              DOB
-              {patientData.dob}
-            </Typography>
-            <Typography gutterBottom>
-              Phone
-              {patientData.phone_cell}
-            </Typography>
+            <PatientInformation />
           </Grid>
           <Grid item md={4}>
             <Typography variant="h4" gutterBottom>Diagnoses</Typography>
@@ -133,7 +110,7 @@ const BillingDialogContent = (props) => {
         </Box>
 
         <Box mt={5}>
-          <TextField value="Mark Hyman" disabled />
+          <TextField value="Mark Hyman MD" disabled />
           <Typography color="textSecondary" variant="body2">Signature</Typography>
         </Box>
       </Grid>
