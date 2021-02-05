@@ -61,24 +61,26 @@ const Requisitions = (props) => {
   const [selectedLabs, setSelectedLabs] = useState([]);
 
   const { patientId } = state;
+  const { selectedEncounter } = state.encounters;
+  const encounterId = selectedEncounter?.id || 1;
 
   const fetchOrderedTests = useCallback(() => {
-    PatientService.getOrderedTests(patientId).then((res) => {
+    PatientService.getOrderedTests(patientId, encounterId).then((res) => {
       setOrderedTests(res.data);
     });
-  }, [patientId]);
+  }, [patientId, encounterId]);
 
   const fetchFavoriteTests = useCallback(() => {
-    PatientService.getFavoriteTests(patientId).then((res) => {
+    PatientService.getFavoriteTests(patientId, encounterId).then((res) => {
       setFavoriteTests(res.data);
     });
-  }, [patientId]);
+  }, [patientId, encounterId]);
 
   const fetchLabortories = useCallback(() => {
-    PatientService.getLabortories(patientId).then((res) => {
+    PatientService.getLabortories(patientId, encounterId).then((res) => {
       setLabortories(res.data);
     });
-  }, [patientId]);
+  }, [patientId, encounterId]);
 
   const deleteOrderedTestHandler = useCallback((testId) => {
     PatientService.deleteOrderedTests(testId).then((res) => {
