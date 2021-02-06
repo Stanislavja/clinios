@@ -44,10 +44,7 @@ const BillingDiagnoses = () => {
           >
             {item.name}
             <span className={classes.ml1}>
-              (
-              {item.id}
-              )
-              {" "}
+              {`(${item.id})`}
             </span>
           </Typography>
         ))
