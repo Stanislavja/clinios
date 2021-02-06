@@ -9,9 +9,12 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
+import FaxTo from "../FaxTo";
 import HeadingDate from "../HeadingDate";
 import LetterHead from "../LetterHead";
 import PatientInformation from "../PatientInformation";
+import PatientInsurance from "../PatientInsurance";
+import Prescriptions from "./components/Prescriptions";
 
 const useStyles = makeStyles((theme) => ({
   text: {
@@ -92,6 +95,7 @@ const FaxPrescription = () => {
         <Grid container>
           <Grid item md={4}>
             <Typography variant="h4" gutterBottom>To</Typography>
+            <FaxTo />
           </Grid>
           <Grid item md={4}>
             <Typography variant="h4" gutterBottom>Patient Information</Typography>
@@ -99,8 +103,13 @@ const FaxPrescription = () => {
           </Grid>
           <Grid item md={4}>
             <Typography variant="h4" gutterBottom>Patient Insurance</Typography>
+            <PatientInsurance />
           </Grid>
         </Grid>
+
+        <Box mb={3} mt={3}>
+          <Prescriptions />
+        </Box>
 
         <Box mt={5}>
           <TextField value="Mark Hyman MD" disabled />
