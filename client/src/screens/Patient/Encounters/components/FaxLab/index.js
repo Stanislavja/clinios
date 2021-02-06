@@ -9,9 +9,12 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
+import BillingDiagnoses from "../Billng/components/BillingDiagnoses";
+import FaxTo from "../FaxTo";
 import HeadingDate from "../HeadingDate";
 import LetterHead from "../LetterHead";
 import PatientInformation from "../PatientInformation";
+import PatientInsurance from "../PatientInsurance";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -81,6 +84,7 @@ const FaxLab = () => {
         <Grid container>
           <Grid item md={4}>
             <Typography variant="h4" gutterBottom>To</Typography>
+            <FaxTo />
           </Grid>
           <Grid item md={4}>
             <Typography variant="h4" gutterBottom>Patient Information</Typography>
@@ -88,11 +92,13 @@ const FaxLab = () => {
           </Grid>
           <Grid item md={4}>
             <Typography variant="h4" gutterBottom>Patient Insurance</Typography>
+            <PatientInsurance />
           </Grid>
         </Grid>
 
         <Box mt={2} mb={2}>
           <Typography variant="h4" gutterBottom>Diagnoses</Typography>
+          <BillingDiagnoses />
         </Box>
 
         <Box mt={2} mb={2}>
