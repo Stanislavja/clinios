@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 
 import {
   Box,
@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { useReactToPrint } from "react-to-print";
 
 import BillingDiagnoses from "../Billng/components/BillingDiagnoses";
 import FaxTo from "../FaxTo";
@@ -38,6 +39,13 @@ const useStyles = makeStyles((theme) => ({
 
 const FaxLab = () => {
   const classes = useStyles();
+  const componentRef = useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    bodyClass: "print-window",
+  });
+
   return (
     <>
       <Grid container spacing={2} alignItems="center" className={classes.mb2}>
@@ -68,6 +76,7 @@ const FaxLab = () => {
             <Button
               className={classes.button}
               variant="outlined"
+              onClick={handlePrint}
             >
               Print
             </Button>
@@ -75,7 +84,10 @@ const FaxLab = () => {
         </Grid>
       </Grid>
 
-      <Grid className={classes.borderSection}>
+      <Grid
+        className={classes.borderSection}
+        ref={componentRef}
+      >
         <LetterHead />
         <HeadingDate
           heading="Lab Requisition"
