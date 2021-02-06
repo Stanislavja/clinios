@@ -200,6 +200,17 @@ export const labSourceType = (type) => {
   }
 };
 
+export const drugFrequencyConversion = (frequency) => {
+  switch (frequency) {
+    case "1D":
+      return "Once a day";
+    case "2D":
+      return "Twice a day";
+    default:
+      return "";
+  }
+};
+
 export const isDev = () => process.env.NODE_ENV === "development";
 
 export function isArrayWithLength(arr) {
