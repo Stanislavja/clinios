@@ -200,7 +200,7 @@ export const labSourceType = (type) => {
   }
 };
 
-export const drugFrequencyConversion = (frequency) => {
+export const drugFrequencyCodeToLabel = (frequency) => {
   switch (frequency) {
     case "1D":
       return "Once a day";
