@@ -196,17 +196,17 @@ class Patient {
       .then((res) => res.data);
   }
 
-  getFavoriteTests() {
+  getFavoriteTests(patient_id, encounter_id) {
     return axios
-      .get(`${API_BASE}/patient/encounters/new-lab/favorites/?tab=All`, {
+      .get(`${API_BASE}/patient/${patient_id}/encounters/${encounter_id}/new-lab/favorites/?tab=All`, {
         headers: authHeader(),
       })
       .then((res) => res.data);
   }
 
-  getOrderedTests() {
+  getOrderedTests(patient_id, encounter_id) {
     return axios
-      .get(`${API_BASE}/patient/encounters/new-lab/test-ordered`, {
+      .get(`${API_BASE}/patient/${patient_id}/encounters/${encounter_id}/new-lab/test-ordered`, {
         headers: authHeader(),
       })
       .then((res) => res.data);
@@ -220,9 +220,9 @@ class Patient {
       .then((res) => res.data);
   }
 
-  getLabortories() {
+  getLabortories(patient_id, encounter_id) {
     return axios
-      .get(`${API_BASE}/patient/encounters/new-lab/laboratories`, {
+      .get(`${API_BASE}/patient/${patient_id}/encounters/${encounter_id}/new-lab/laboratories`, {
         headers: authHeader(),
       })
       .then((res) => res.data);

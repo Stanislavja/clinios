@@ -4,12 +4,14 @@ import {
   Box,
   Grid,
   TextField,
+  Typography,
   Button,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 import HeadingDate from "../HeadingDate";
 import LetterHead from "../LetterHead";
+import PatientInformation from "../PatientInformation";
 
 const useStyles = makeStyles((theme) => ({
   text: {
@@ -86,6 +88,24 @@ const FaxPrescription = () => {
         <HeadingDate
           heading="Fax Prescription"
         />
+
+        <Grid container>
+          <Grid item md={4}>
+            <Typography variant="h4" gutterBottom>To</Typography>
+          </Grid>
+          <Grid item md={4}>
+            <Typography variant="h4" gutterBottom>Patient Information</Typography>
+            <PatientInformation />
+          </Grid>
+          <Grid item md={4}>
+            <Typography variant="h4" gutterBottom>Patient Insurance</Typography>
+          </Grid>
+        </Grid>
+
+        <Box mt={5}>
+          <TextField value="Mark Hyman MD" disabled />
+          <Typography color="textSecondary" variant="body2">Signature</Typography>
+        </Box>
       </Grid>
     </>
   );

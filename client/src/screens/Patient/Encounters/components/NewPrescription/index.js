@@ -6,6 +6,7 @@ import {
   Grid,
   Button,
   Box,
+  TableContainer,
   Table,
   TableHead,
   TableBody,
@@ -44,6 +45,9 @@ const useStyles = makeStyles((theme) => ({
     background: theme.palette.common.white,
     maxHeight: 150,
     overflow: "scroll",
+  },
+  cursorPointer: {
+    cursor: "pointer",
   },
 }));
 
@@ -328,48 +332,54 @@ const NewPrescription = (props) => {
           <Typography variant="h5" gutterBottom>
             Recent selections, click to populate
           </Typography>
-          <Table size="small" aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <StyledTableCellSm>Drug and Type</StyledTableCellSm>
-                <StyledTableCellSm>Frequency</StyledTableCellSm>
-                <StyledTableCellSm>Expires</StyledTableCellSm>
-                <StyledTableCellSm>Amount</StyledTableCellSm>
-                <StyledTableCellSm>Refills</StyledTableCellSm>
-                <StyledTableCellSm>Generic</StyledTableCellSm>
-                <StyledTableCellSm>Patient Note</StyledTableCellSm>
-                <StyledTableCellSm>Pharmacy Note</StyledTableCellSm>
-                <StyledTableCellSm>Last Used</StyledTableCellSm>
-                <StyledTableCellSm>Count</StyledTableCellSm>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {recentSelections.length
-                ? recentSelections.map((row) => (
-                  <StyledTableRowSm key={row.created} onClick={() => rowClickHandler(row)}>
-                    <StyledTableCellSm>{row.name}</StyledTableCellSm>
-                    <StyledTableCellSm>{row.drug_frequency_id}</StyledTableCellSm>
-                    <StyledTableCellSm>{row.expires}</StyledTableCellSm>
-                    <StyledTableCellSm>{row.amount}</StyledTableCellSm>
-                    <StyledTableCellSm>{row.refills}</StyledTableCellSm>
-                    <StyledTableCellSm>{row.generic ? "Yes" : "No"}</StyledTableCellSm>
-                    <StyledTableCellSm>{row.patient_instructions}</StyledTableCellSm>
-                    <StyledTableCellSm>{row.pharmacy_instructions}</StyledTableCellSm>
-                    <StyledTableCellSm>{row.name}</StyledTableCellSm>
-                    <StyledTableCellSm>{row.name}</StyledTableCellSm>
-                  </StyledTableRowSm>
-                ))
-                : (
-                  <StyledTableRowSm>
-                    <StyledTableCellSm colSpan={10}>
-                      <Typography align="center" variant="body1">
-                        No Records Found...
-                      </Typography>
-                    </StyledTableCellSm>
-                  </StyledTableRowSm>
-                )}
-            </TableBody>
-          </Table>
+          <TableContainer>
+            <Table size="small" aria-label="prescriptions-table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCellSm>Drug and Type</StyledTableCellSm>
+                  <StyledTableCellSm>Frequency</StyledTableCellSm>
+                  <StyledTableCellSm>Expires</StyledTableCellSm>
+                  <StyledTableCellSm>Amount</StyledTableCellSm>
+                  <StyledTableCellSm>Refills</StyledTableCellSm>
+                  <StyledTableCellSm>Generic</StyledTableCellSm>
+                  <StyledTableCellSm>Patient Note</StyledTableCellSm>
+                  <StyledTableCellSm>Pharmacy Note</StyledTableCellSm>
+                  <StyledTableCellSm>Last Used</StyledTableCellSm>
+                  <StyledTableCellSm>Count</StyledTableCellSm>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {recentSelections.length
+                  ? recentSelections.map((row) => (
+                    <StyledTableRowSm
+                      key={row.created}
+                      className={classes.cursorPointer}
+                      onClick={() => rowClickHandler(row)}
+                    >
+                      <StyledTableCellSm>{row.name}</StyledTableCellSm>
+                      <StyledTableCellSm>{row.drug_frequency_id}</StyledTableCellSm>
+                      <StyledTableCellSm>{row.expires}</StyledTableCellSm>
+                      <StyledTableCellSm>{row.amount}</StyledTableCellSm>
+                      <StyledTableCellSm>{row.refills}</StyledTableCellSm>
+                      <StyledTableCellSm>{row.generic ? "Yes" : "No"}</StyledTableCellSm>
+                      <StyledTableCellSm>{row.patient_instructions}</StyledTableCellSm>
+                      <StyledTableCellSm>{row.pharmacy_instructions}</StyledTableCellSm>
+                      <StyledTableCellSm>{row.name}</StyledTableCellSm>
+                      <StyledTableCellSm>{row.name}</StyledTableCellSm>
+                    </StyledTableRowSm>
+                  ))
+                  : (
+                    <StyledTableRowSm>
+                      <StyledTableCellSm colSpan={10}>
+                        <Typography align="center" variant="body1">
+                          No Records Found...
+                        </Typography>
+                      </StyledTableCellSm>
+                    </StyledTableRowSm>
+                  )}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Grid>
       </Grid>
     </>

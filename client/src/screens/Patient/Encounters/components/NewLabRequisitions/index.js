@@ -61,24 +61,26 @@ const Requisitions = (props) => {
   const [selectedLabs, setSelectedLabs] = useState([]);
 
   const { patientId } = state;
+  const { selectedEncounter } = state.encounters;
+  const encounterId = selectedEncounter?.id || 1;
 
   const fetchOrderedTests = useCallback(() => {
-    PatientService.getOrderedTests(patientId).then((res) => {
+    PatientService.getOrderedTests(patientId, encounterId).then((res) => {
       setOrderedTests(res.data);
     });
-  }, [patientId]);
+  }, [patientId, encounterId]);
 
   const fetchFavoriteTests = useCallback(() => {
-    PatientService.getFavoriteTests(patientId).then((res) => {
+    PatientService.getFavoriteTests(patientId, encounterId).then((res) => {
       setFavoriteTests(res.data);
     });
-  }, [patientId]);
+  }, [patientId, encounterId]);
 
   const fetchLabortories = useCallback(() => {
-    PatientService.getLabortories(patientId).then((res) => {
+    PatientService.getLabortories(patientId, encounterId).then((res) => {
       setLabortories(res.data);
     });
-  }, [patientId]);
+  }, [patientId, encounterId]);
 
   const deleteOrderedTestHandler = useCallback((testId) => {
     PatientService.deleteOrderedTests(testId).then((res) => {
@@ -257,15 +259,26 @@ const Requisitions = (props) => {
               Favorites
             </Typography>
             <Grid container spacing={2}>
-              {favoriteTests.map((item) => (
-                <Grid item lg={6} key={`${item.id}_${item.name}`}>
-                  <FormControlLabel
-                    value={item.id}
-                    label={item.name}
-                    control={<Checkbox color="primary" />}
-                  />
-                </Grid>
-              ))}
+              {favoriteTests.length
+                ? favoriteTests.map((item) => (
+                  <Grid item lg={6} key={`${item.id}_${item.name}`}>
+                    <FormControlLabel
+                      value={item.id}
+                      label={item.name}
+                      control={<Checkbox color="primary" />}
+                    />
+                  </Grid>
+                ))
+                : (
+                  <Grid item lg={6}>
+                    <Typography
+                      variant="body1"
+                      gutterBottom
+                    >
+                      No Tests available...
+                    </Typography>
+                  </Grid>
+                )}
             </Grid>
           </Grid>
         </Grid>
