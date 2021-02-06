@@ -32,7 +32,7 @@ import useDebounce from "../../../../../hooks/useDebounce";
 import usePatientContext from "../../../../../hooks/usePatientContext";
 import PatientService from "../../../../../services/patient.service";
 import { NewDrugFormFields, GenericOptions } from "../../../../../static/encountersForm";
-import { drugFrequencyConversion } from "../../../../../utils/helpers";
+import { drugFrequencyCodeToLabel } from "../../../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
   relativePosition: {
@@ -358,7 +358,9 @@ const NewPrescription = (props) => {
                       onClick={() => rowClickHandler(row)}
                     >
                       <StyledTableCellSm>{row.name}</StyledTableCellSm>
-                      <StyledTableCellSm>{drugFrequencyConversion(row.drug_frequency_id)}</StyledTableCellSm>
+                      <StyledTableCellSm>
+                        {row.drug_frequency_id && drugFrequencyCodeToLabel(row.drug_frequency_id)}
+                      </StyledTableCellSm>
                       <StyledTableCellSm>{row.expires}</StyledTableCellSm>
                       <StyledTableCellSm>{row.amount}</StyledTableCellSm>
                       <StyledTableCellSm>{row.refills}</StyledTableCellSm>

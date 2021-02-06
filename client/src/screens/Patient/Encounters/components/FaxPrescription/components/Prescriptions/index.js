@@ -6,7 +6,7 @@ import moment from "moment";
 
 import usePatientContext from "../../../../../../../hooks/usePatientContext";
 import PatientService from "../../../../../../../services/patient.service";
-import { drugFrequencyConversion } from "../../../../../../../utils/helpers";
+import { drugFrequencyCodeToLabel } from "../../../../../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
   ml1: {
@@ -70,7 +70,7 @@ const Prescriptions = () => {
                 Frequency:
               </span>
               <span className={`${classes.ml1} ${classes.text}`}>
-                {drugFrequencyConversion(item.drug_frequency_id)}
+                {item.drug_frequency_id && drugFrequencyCodeToLabel(item.drug_frequency_id)}
               </span>
             </Typography>
             <Grid container>
