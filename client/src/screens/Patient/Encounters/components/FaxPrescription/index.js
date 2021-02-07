@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 
 import {
   Box,
@@ -8,10 +8,14 @@ import {
   Button,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { useReactToPrint } from "react-to-print";
 
+import FaxTo from "../FaxTo";
 import HeadingDate from "../HeadingDate";
 import LetterHead from "../LetterHead";
 import PatientInformation from "../PatientInformation";
+import PatientInsurance from "../PatientInsurance";
+import Prescriptions from "./components/Prescriptions";
 
 const useStyles = makeStyles((theme) => ({
   text: {
@@ -38,6 +42,13 @@ const useStyles = makeStyles((theme) => ({
 
 const FaxPrescription = () => {
   const classes = useStyles();
+  const componentRef = useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    bodyClass: "print-window",
+  });
+
   return (
     <>
       <Grid item lg={6}>
@@ -77,30 +88,40 @@ const FaxPrescription = () => {
           <Button
             className={classes.button}
             variant="outlined"
+            onClick={handlePrint}
           >
             Print
           </Button>
         </Grid>
       </Grid>
 
-      <Grid className={classes.borderSection}>
+      <Grid
+        className={classes.borderSection}
+        ref={componentRef}
+      >
         <LetterHead />
         <HeadingDate
           heading="Fax Prescription"
         />
 
         <Grid container>
-          <Grid item md={4}>
+          <Grid item lg={4} md={4}>
             <Typography variant="h4" gutterBottom>To</Typography>
+            <FaxTo />
           </Grid>
-          <Grid item md={4}>
+          <Grid item lg={4} md={4}>
             <Typography variant="h4" gutterBottom>Patient Information</Typography>
             <PatientInformation />
           </Grid>
-          <Grid item md={4}>
+          <Grid item lg={4} md={4}>
             <Typography variant="h4" gutterBottom>Patient Insurance</Typography>
+            <PatientInsurance />
           </Grid>
         </Grid>
+
+        <Box mb={3} mt={3}>
+          <Prescriptions />
+        </Box>
 
         <Box mt={5}>
           <TextField value="Mark Hyman MD" disabled />

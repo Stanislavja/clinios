@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 
 import {
   Box,
@@ -8,10 +8,14 @@ import {
   Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { useReactToPrint } from "react-to-print";
 
+import BillingDiagnoses from "../Billng/components/BillingDiagnoses";
+import FaxTo from "../FaxTo";
 import HeadingDate from "../HeadingDate";
 import LetterHead from "../LetterHead";
 import PatientInformation from "../PatientInformation";
+import PatientInsurance from "../PatientInsurance";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -35,6 +39,13 @@ const useStyles = makeStyles((theme) => ({
 
 const FaxLab = () => {
   const classes = useStyles();
+  const componentRef = useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    bodyClass: "print-window",
+  });
+
   return (
     <>
       <Grid container spacing={2} alignItems="center" className={classes.mb2}>
@@ -65,6 +76,7 @@ const FaxLab = () => {
             <Button
               className={classes.button}
               variant="outlined"
+              onClick={handlePrint}
             >
               Print
             </Button>
@@ -72,7 +84,10 @@ const FaxLab = () => {
         </Grid>
       </Grid>
 
-      <Grid className={classes.borderSection}>
+      <Grid
+        className={classes.borderSection}
+        ref={componentRef}
+      >
         <LetterHead />
         <HeadingDate
           heading="Lab Requisition"
@@ -81,6 +96,7 @@ const FaxLab = () => {
         <Grid container>
           <Grid item md={4}>
             <Typography variant="h4" gutterBottom>To</Typography>
+            <FaxTo />
           </Grid>
           <Grid item md={4}>
             <Typography variant="h4" gutterBottom>Patient Information</Typography>
@@ -88,11 +104,13 @@ const FaxLab = () => {
           </Grid>
           <Grid item md={4}>
             <Typography variant="h4" gutterBottom>Patient Insurance</Typography>
+            <PatientInsurance />
           </Grid>
         </Grid>
 
         <Box mt={2} mb={2}>
           <Typography variant="h4" gutterBottom>Diagnoses</Typography>
+          <BillingDiagnoses />
         </Box>
 
         <Box mt={2} mb={2}>

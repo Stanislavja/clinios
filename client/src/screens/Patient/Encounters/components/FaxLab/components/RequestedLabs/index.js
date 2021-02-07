@@ -12,31 +12,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BillingDiagnoses = () => {
+const RequestedLabs = () => {
   const classes = useStyles();
   const { state } = usePatientContext();
   const { patientId } = state;
   const { selectedEncounter } = state.encounters;
   const encounterId = selectedEncounter?.id || 1;
 
-  const [billingDiagnoses, setBillingDiagnoses] = useState([]);
+  const [requestedLabs, setRequestedLabs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchBillingDiagnoses = useCallback(() => {
-    PatientService.geEncountersBillingDiagnoses(patientId, encounterId).then((response) => {
-      setBillingDiagnoses(response.data);
+  const fetchRequestedLabs = useCallback(() => {
+    PatientService.geEncountersRequestedLabs(patientId, encounterId).then((response) => {
+      setRequestedLabs(response.data);
       setIsLoading(false);
     });
   }, [patientId, encounterId]);
 
   useEffect(() => {
-    fetchBillingDiagnoses();
-  }, [fetchBillingDiagnoses]);
+    fetchRequestedLabs();
+  }, [fetchRequestedLabs]);
 
   return (
     <>
-      {billingDiagnoses.length
-        ? billingDiagnoses.map((item) => (
+      {requestedLabs.length
+        ? requestedLabs.map((item) => (
           <Typography
             gutterBottom
             variant="body1"
@@ -50,11 +50,11 @@ const BillingDiagnoses = () => {
         ))
         : (
           <Typography gutterBottom variant="body1">
-            {isLoading ? "Loading..." : "No Diagnoses found..."}
+            {isLoading ? "Loading..." : "No Labs found..."}
           </Typography>
         )}
     </>
   );
 };
 
-export default BillingDiagnoses;
+export default RequestedLabs;
