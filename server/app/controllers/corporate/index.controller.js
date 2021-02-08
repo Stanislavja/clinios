@@ -29,7 +29,7 @@ const getSupports = async (req, res) => {
     const dbResponse = rows;
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = dbResponse;
