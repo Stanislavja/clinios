@@ -35,7 +35,7 @@ const sendRecoveryEmail = async (user, res) => {
     transporter.sendMail(emailTemplate, (err, info) => {
       if (err) {
         console.log(`Error occurred. ${err.message}`);
-        errorMessage.error = err.message;
+        errorMessage.message = err.message;
         return res.status(status.error).send(errorMessage);
       }
 

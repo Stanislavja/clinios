@@ -33,13 +33,13 @@ const getAllMessages = async (req, res) => {
     const dbResponse = await db.query($sql);
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -54,7 +54,7 @@ const createMessage = async (req, res) => {
       `insert into message (client_id, user_id_to, patient_id_from, subject, message,  status, created) values (${req.client_id}, ${user_id_to}, ${req.user_id}, '${subject}', '${message}', 'O', now())`
     );
     if (!insertResponse.affectedRows) {
-      errorMessage.error = "Insert not successful";
+      errorMessage.message = "Insert not successful";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = insertResponse;
@@ -62,7 +62,7 @@ const createMessage = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Insert not successful";
+    errorMessage.message = "Insert not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -89,7 +89,7 @@ const updateMessage = async (req, res) => {
     const updateResponse = await db.query($sql);
 
     if (!updateResponse.affectedRows) {
-      errorMessage.error = "Update not successful";
+      errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -98,7 +98,7 @@ const updateMessage = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Update not successful";
+    errorMessage.message = "Update not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -148,13 +148,13 @@ const getSingleMessage = async (req, res) => {
     const dbResponse = await db.query($sql);
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
