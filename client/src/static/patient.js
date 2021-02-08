@@ -6,7 +6,8 @@ export const FirstColumnPatientCards = [
     data: [],
     primaryButtonText: "History",
     secondaryButtonText: "Edit",
-    icon: "DesktopIcon",
+    // icon: "DesktopIcon",
+    icon: null,
     cardInfo: null,
   },
   {
