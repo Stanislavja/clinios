@@ -56,7 +56,7 @@ exports.verifyConfirmation = async (req, res) => {
   // Check for validation errors
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    errorMessage.error = errors.array();
+    errorMessage.message = errors.array();
     return res.status(status.error).send(errorMessage);
   }
 
@@ -94,7 +94,7 @@ exports.verifyConfirmation = async (req, res) => {
     return res.status(status.notfound).send(errorMessage);
   } catch (error) {
     // handle the error
-    errorMessage.error = error;
+    errorMessage.message = error;
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -121,7 +121,8 @@ exports.sendSignupConfirmationEmail = async (req, res) => {
   );
 
   if (rows.length < 1) {
-    errorMessage.error = "We couldn't find any record with that email address.";
+    errorMessage.message =
+      "We couldn't find any record with that email address.";
     return res.status(status.notfound).send(errorMessage);
   }
 
@@ -169,7 +170,8 @@ exports.resendSignupConfirmationEmail = async (req, res) => {
     [req.body.id]
   );
   if (userRows.length < 1) {
-    errorMessage.error = "We couldn't find any record with that email address.";
+    errorMessage.message =
+      "We couldn't find any record with that email address.";
     return res.status(status.notfound).send(errorMessage);
   }
 

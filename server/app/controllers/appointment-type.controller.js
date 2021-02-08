@@ -21,13 +21,13 @@ const getAll = async (req, res) => {
     );
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -37,7 +37,7 @@ const getAll = async (req, res) => {
 const create = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    errorMessage.error = errors.array();
+    errorMessage.message = errors.array();
     return res.status(status.bad).send(errorMessage);
   }
   const db = makeDb(configuration, res);
@@ -53,7 +53,7 @@ const create = async (req, res) => {
     );
 
     if (!dbResponse.insertId) {
-      errorMessage.error = "Creation not successful";
+      errorMessage.message = "Creation not successful";
       res.status(status.notfound).send(errorMessage);
     }
 
@@ -62,7 +62,7 @@ const create = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.error(err);
-    errorMessage.error = "Creation not successful";
+    errorMessage.message = "Creation not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -72,7 +72,7 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    errorMessage.error = errors.array();
+    errorMessage.message = errors.array();
     return res.status(status.error).send(errorMessage);
   }
 
@@ -89,7 +89,7 @@ const update = async (req, res) => {
     );
 
     if (!updateResponse.affectedRows) {
-      errorMessage.error = "Update not successful";
+      errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = updateResponse;
@@ -97,7 +97,7 @@ const update = async (req, res) => {
     return res.status(status.success).send(successMessage);
   } catch (error) {
     console.error(error);
-    errorMessage.error = "Update not successful";
+    errorMessage.message = "Update not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -107,7 +107,7 @@ const update = async (req, res) => {
 const deleteAppointment = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    errorMessage.error = errors.array();
+    errorMessage.message = errors.array();
     return res.status(status.error).send(errorMessage);
   }
   const db = makeDb(configuration, res);
@@ -121,14 +121,14 @@ const deleteAppointment = async (req, res) => {
     );
 
     if (!deleteResponse.affectedRows) {
-      errorMessage.error = "Deletion not successful";
+      errorMessage.message = "Deletion not successful";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = deleteResponse;
     successMessage.message = "Deletion successful";
     return res.status(status.success).send(successMessage);
   } catch (error) {
-    errorMessage.error = "Deletion not successful";
+    errorMessage.message = "Deletion not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
