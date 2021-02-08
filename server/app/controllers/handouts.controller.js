@@ -89,7 +89,7 @@ const addHandouts = async (req, res) => {
       return res.status(status.error).send(errorMessage);
     }
     if (!req.file) {
-      errorMessage.error = "File content can not be empty!";
+      errorMessage.message = "File content can not be empty!";
       return res.status(status.error).send(errorMessage);
     }
 
@@ -106,7 +106,7 @@ const addHandouts = async (req, res) => {
       );
       if (existingHandout.length > 0) {
         removeFile(req.file);
-        errorMessage.error = "Same file is already in our database system!";
+        errorMessage.message = "Same file is already in our database system!";
         return res.status(status.error).send(errorMessage);
       }
 
@@ -116,7 +116,7 @@ const addHandouts = async (req, res) => {
 
       if (!insertResponse.affectedRows) {
         removeFile(req.file);
-        errorMessage.error = "Insert not successful";
+        errorMessage.message = "Insert not successful";
         return res.status(status.notfound).send(errorMessage);
       }
 
@@ -132,7 +132,7 @@ const addHandouts = async (req, res) => {
       return res.status(status.created).send(successMessage);
     } catch (excepErr) {
       console.log("excepErr", excepErr);
-      errorMessage.error = "Insert not successful";
+      errorMessage.message = "Insert not successful";
       return res.status(status.error).send(errorMessage);
     } finally {
       await db.close();

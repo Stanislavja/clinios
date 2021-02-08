@@ -26,13 +26,13 @@ const search = async (req, res) => {
     const dbResponse = await db.query($sql);
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -42,7 +42,7 @@ const search = async (req, res) => {
 const addFavorite = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    errorMessage.error = errors.array();
+    errorMessage.message = errors.array();
     return res.status(status.bad).send(errorMessage);
   }
   const db = makeDb(configuration, res);
@@ -62,7 +62,7 @@ const addFavorite = async (req, res) => {
     );
 
     if (!dbResponse) {
-      errorMessage.error = "Creation not successful";
+      errorMessage.message = "Creation not successful";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -70,7 +70,7 @@ const addFavorite = async (req, res) => {
     successMessage.message = "Creation successful";
     return res.status(status.created).send(successMessage);
   } catch (err) {
-    errorMessage.error = "Creation not successful";
+    errorMessage.message = "Creation not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -80,7 +80,7 @@ const addFavorite = async (req, res) => {
 const deleteFavorite = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    errorMessage.error = errors.array();
+    errorMessage.message = errors.array();
     return res.status(status.error).send(errorMessage);
   }
   const db = makeDb(configuration, res);
@@ -89,14 +89,14 @@ const deleteFavorite = async (req, res) => {
       `delete from client_drug where client_id=${req.client_id} and drug_id=${req.params.id}`
     );
     if (!deleteResponse.affectedRows) {
-      errorMessage.error = "Deletion not successful";
+      errorMessage.message = "Deletion not successful";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = deleteResponse;
     successMessage.message = "Deletion successful";
     return res.status(status.success).send(successMessage);
   } catch (error) {
-    errorMessage.error = "Deletion not successful";
+    errorMessage.message = "Deletion not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();

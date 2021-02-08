@@ -48,13 +48,13 @@ const getInit = async (req, res) => {
     const dbResponse = await db.query($sql);
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -94,13 +94,13 @@ const getHistory = async (req, res) => {
     const dbResponse = await db.query($sql);
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -113,11 +113,11 @@ const logoUpdate = async (req, res) => {
   imageUpload(req, res, function (err) {
     if (err) {
       console.log("documentUpload Error:", err.message);
-      errorMessage.error = err.message;
+      errorMessage.message = err.message;
       return res.status(status.error).send(errorMessage);
     }
     if (!req.file) {
-      errorMessage.error = "File content can not be empty!";
+      errorMessage.message = "File content can not be empty!";
       return res.status(status.error).send(errorMessage);
     }
     return res.status(status.success).send("success");
@@ -127,7 +127,7 @@ const logoUpdate = async (req, res) => {
 const update = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    errorMessage.error = errors.array();
+    errorMessage.message = errors.array();
     return res.status(status.error).send(errorMessage);
   }
 
@@ -144,14 +144,14 @@ const update = async (req, res) => {
     );
 
     if (!updateResponse.affectedRows) {
-      errorMessage.error = "Update not successful";
+      errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = updateResponse;
     successMessage.message = "Update successful";
     return res.status(status.success).send(successMessage);
   } catch (error) {
-    errorMessage.error = "Update not successful";
+    errorMessage.message = "Update not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
