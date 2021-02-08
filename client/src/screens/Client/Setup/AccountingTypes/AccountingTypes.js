@@ -42,10 +42,10 @@ export default function AccountingTypes() {
               color="textPrimary"
               className={classes.title}
             >
-              Transaction types
+              Accounting Types
             </Typography>
             <Typography component="p" variant="body2" color="textPrimary">
-              This page is to manage transaction types
+              This page is used to manage accounting types
             </Typography>
             <AccountingTypesTable result={accountingTypes} />
           </Grid>
