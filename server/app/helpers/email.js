@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const config = require("../../config.js");
 
 let mailConfig;
 if (process.env.NODE_ENV === "production") {
@@ -17,8 +18,8 @@ if (process.env.NODE_ENV === "production") {
     host: "smtp.ethereal.email",
     port: 587,
     auth: {
-      user: process.env.ETHEREAL_EMAIL,
-      pass: process.env.ETHEREAL_PASS,
+      user: config.emailConfig.user,
+      pass: config.emailConfig.pass,
     },
   };
 }
