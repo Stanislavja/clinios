@@ -71,7 +71,9 @@ const updateMessage = async (req, res) => {
   try {
     const updateResponse = await db.query(
       `update message
-        set subject='${subject}', message='${message}', unread_notify_dt='${unread_notify_dt}', updated= now(), updated_user_id='${req.user_id}'
+        set subject='${subject}', message='${message}', unread_notify_dt='${moment(
+        unread_notify_dt
+      ).format("YYYY-MM-DD")}', updated= now(), updated_user_id='${req.user_id}'
         where id=${id}
       `
     );
