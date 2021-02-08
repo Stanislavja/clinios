@@ -32,14 +32,14 @@ const getAll = async (req, res) => {
     );
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -66,14 +66,14 @@ const getEventsByProvider = async (req, res) => {
     const dbResponse = await db.query($sql);
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -131,7 +131,7 @@ const createAppointment = async (req, res) => {
       )}', '${ApptStatus}', '${title}', '${notes}', now(), ${req.user_id})`
     );
     if (!insertResponse.affectedRows) {
-      errorMessage.error = "Insert not successful";
+      errorMessage.message = "Insert not successful";
       return res.status(status.notfound).send(errorMessage);
     }
     const emailTemplate = newAppointmentTemplate(
@@ -146,7 +146,7 @@ const createAppointment = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Insert not successful";
+    errorMessage.message = "Insert not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -170,7 +170,7 @@ const cancelAppointment = async (req, res) => {
         where id=${id}`
     );
     if (!updateResponse.affectedRows) {
-      errorMessage.error = "Update not successful";
+      errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
     }
     const emailTemplate = cancelAppointmentTemplate(
@@ -188,7 +188,7 @@ const cancelAppointment = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Cancel not successful";
+    errorMessage.message = "Cancel not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -286,14 +286,14 @@ const getAppointmentRequest = async (req, res) => {
     );
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -317,14 +317,14 @@ const getUnreadMessages = async (req, res) => {
     );
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -375,14 +375,14 @@ const getProviders = async (req, res) => {
     );
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -431,7 +431,7 @@ const getProviderDetails = async (req, res) => {
     );
 
     if (!patientLabs) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = {
@@ -443,7 +443,7 @@ const getProviderDetails = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
