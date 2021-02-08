@@ -8,6 +8,7 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     console.log("req:", req.body);
     const dest = process.env.UPLOAD_DIR;
+    // eslint-disable-next-line prefer-arrow-callback
     fs.access(dest, function (error) {
       if (error) {
         console.log("Directory does not exist.");
@@ -110,9 +111,10 @@ const getHistory = async (req, res) => {
 const imageUpload = upload.single("file");
 
 const logoUpdate = async (req, res) => {
+  // eslint-disable-next-line prefer-arrow-callback
   imageUpload(req, res, function (err) {
     if (err) {
-      console.log("documentUpload Error:", err.message);
+      console.info("documentUpload Error:", err.message);
       errorMessage.message = err.message;
       return res.status(status.error).send(errorMessage);
     }

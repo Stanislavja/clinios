@@ -86,6 +86,8 @@ exports.patientSignup = async (req, res) => {
         const dest =
           `${process.env.SIGNATURE_UPLOAD_DIR}/` +
           `signature_${patientResponse.insertId}.png`;
+
+        // eslint-disable-next-line prefer-arrow-callback
         fs.writeFile(dest, base64Data, "base64", async function (err) {
           if (err) {
             errorMessage.message = err.message;
