@@ -11,7 +11,7 @@ const getUser = async (req, res) => {
     const dbResponse = await db.query($sql);
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     const user = dbResponse[0];
@@ -23,7 +23,7 @@ const getUser = async (req, res) => {
     successMessage.data = { user };
     return res.status(status.created).send(successMessage);
   } catch (error) {
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -38,7 +38,7 @@ const getPatient = async (req, res) => {
     );
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     const user = dbResponse[0];
@@ -48,7 +48,7 @@ const getPatient = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (error) {
     console.log("error:", error);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -85,7 +85,7 @@ const getCorporateUser = async (req, res) => {
       `select id, admin, firstname, lastname, password from user where id='${req.user_id}' and client_id is null`
     );
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     const user = dbResponse[0];
@@ -98,7 +98,7 @@ const getCorporateUser = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (error) {
     console.log("error:", error);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();

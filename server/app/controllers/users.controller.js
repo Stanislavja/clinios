@@ -19,13 +19,13 @@ const getAllUsers = async (req, res) => {
         limit 100`);
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (error) {
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -42,7 +42,7 @@ const getUser = async (req, res) => {
     const dbResponse = await db.query($sql);
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     const user = dbResponse[0];
@@ -52,7 +52,7 @@ const getUser = async (req, res) => {
     successMessage.data = { user };
     return res.status(status.created).send(successMessage);
   } catch (error) {
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -67,14 +67,14 @@ const getLastVisitedPatient = async (req, res) => {
       `select id, client_id, firstname, lastname from patient where id=${patientId}`
     );
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = dbResponse[0];
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -93,13 +93,13 @@ const getForwardEmailList = async (req, res) => {
         limit 100`);
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (error) {
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -109,7 +109,7 @@ const getForwardEmailList = async (req, res) => {
 const createNewUser = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    errorMessage.error = errors.array();
+    errorMessage.message = errors.array();
     return res.status(status.bad).send(errorMessage);
   }
   const db = makeDb(configuration, res);
@@ -136,7 +136,7 @@ const createNewUser = async (req, res) => {
     const dbResponse = await db.query("insert into user set ?", user);
 
     if (!dbResponse.insertId) {
-      errorMessage.error = "Creation not successful";
+      errorMessage.message = "Creation not successful";
       res.status(status.notfound).send(errorMessage);
     }
 
@@ -145,7 +145,7 @@ const createNewUser = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log(err);
-    errorMessage.error = "Creation not successful";
+    errorMessage.message = "Creation not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -155,7 +155,7 @@ const createNewUser = async (req, res) => {
 const updateUser = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    errorMessage.error = errors.array();
+    errorMessage.message = errors.array();
     return res.status(status.error).send(errorMessage);
   }
 
@@ -184,14 +184,14 @@ const updateUser = async (req, res) => {
     );
 
     if (!updateResponse.affectedRows) {
-      errorMessage.error = "Update not successful";
+      errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = updateResponse;
     successMessage.message = "Update successful";
     return res.status(status.success).send(successMessage);
   } catch (error) {
-    errorMessage.error = "Update not successful";
+    errorMessage.message = "Update not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();

@@ -28,7 +28,7 @@ exports.getClientByCode = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -58,7 +58,7 @@ exports.patientSignup = async (req, res) => {
   );
 
   if (existingPatientRows.length > 0) {
-    errorMessage.error = [
+    errorMessage.message = [
       {
         value: JSON.stringify(patient),
         msg: "Patient is already in our system. Try with different values",
@@ -86,9 +86,11 @@ exports.patientSignup = async (req, res) => {
         const dest =
           `${process.env.SIGNATURE_UPLOAD_DIR}/` +
           `signature_${patientResponse.insertId}.png`;
+
+        // eslint-disable-next-line prefer-arrow-callback
         fs.writeFile(dest, base64Data, "base64", async function (err) {
           if (err) {
-            errorMessage.error = err.message;
+            errorMessage.message = err.message;
             return res.status(status.error).send(errorMessage);
           }
           if (!err) {
@@ -111,7 +113,7 @@ exports.patientSignup = async (req, res) => {
     }
   } catch (err) {
     // handle the error
-    errorMessage.error = err.message;
+    errorMessage.message = err.message;
     res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -126,7 +128,7 @@ exports.getClientForm = async (req, res) => {
       `select cf.id, cf.form from client_form cf where cf.client_id=${clientId} and type='S'`
     );
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -134,7 +136,7 @@ exports.getClientForm = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();

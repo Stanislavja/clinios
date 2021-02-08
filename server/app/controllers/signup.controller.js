@@ -54,7 +54,7 @@ exports.signup = async (req, res) => {
   // Check for validation errors
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    errorMessage.error = errors.array();
+    errorMessage.message = errors.array();
     return res.status(status.bad).send(errorMessage);
   }
 
@@ -75,7 +75,7 @@ exports.signup = async (req, res) => {
   );
 
   if (existingClientRows.length > 0) {
-    errorMessage.error = [
+    errorMessage.message = [
       {
         value: JSON.stringify(client),
         msg: "Client is already in our system. Try with different values",

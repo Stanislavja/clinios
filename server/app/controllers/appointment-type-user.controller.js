@@ -20,13 +20,13 @@ const getAppointmentTypesUsers = async (req, res) => {
       data: dbResponse,
     };
     if (!userResponse) {
-      errorMessage.error = "No appointment types users found.";
+      errorMessage.message = "No appointment types users found.";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = result;
     return res.status(status.created).send(successMessage);
   } catch (err) {
-    errorMessage.error =
+    errorMessage.message =
       "Operation was not successful for Appointment types User.";
     return res.status(status.error).send(errorMessage);
   } finally {

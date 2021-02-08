@@ -122,16 +122,9 @@ const BasicInfo = (props) => {
     };
     PatientService.updatePatient(patientId, reqBody)
       .then((response) => {
-        enqueueSnackbar(`${response.data.message}`, { variant: "success" });
+        enqueueSnackbar(`${response.message}`, { variant: "success" });
         reloadData();
         dispatch(togglePatientInfoDialog());
-      })
-      .catch((error) => {
-        const resMessage = (error.response && error.response.data
-          && error.response.data.message)
-          || error.message
-          || error.toString();
-        enqueueSnackbar(`${resMessage}`, { variant: "error" });
       });
   };
 
