@@ -40,13 +40,13 @@ const getAlllabs = async (req, res) => {
     const dbResponse = await db.query($sql);
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -60,7 +60,7 @@ const createLabs = async (req, res) => {
       return res.status(status.error).send(errorMessage);
     }
     if (!req.file) {
-      errorMessage.error = "File content can not be empty!";
+      errorMessage.message = "File content can not be empty!";
       return res.status(status.error).send(errorMessage);
     }
 
@@ -82,7 +82,7 @@ const createLabs = async (req, res) => {
       );
       if (existingLabDocument.length > 0) {
         removeFile(req.file);
-        errorMessage.error = "Same file is already in our database system!";
+        errorMessage.message = "Same file is already in our database system!";
         return res.status(status.error).send(errorMessage);
       }
 
@@ -92,7 +92,7 @@ const createLabs = async (req, res) => {
 
       if (!insertResponse.affectedRows) {
         removeFile(req.file);
-        errorMessage.error = "Insert not successful";
+        errorMessage.message = "Insert not successful";
         return res.status(status.notfound).send(errorMessage);
       }
 
@@ -106,7 +106,7 @@ const createLabs = async (req, res) => {
       successMessage.message = "Insert successful";
       return res.status(status.created).send(successMessage);
     } catch (excepErr) {
-      errorMessage.error = "Insert not successful";
+      errorMessage.message = "Insert not successful";
       return res.status(status.error).send(errorMessage);
     } finally {
       await db.close();

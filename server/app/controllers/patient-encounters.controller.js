@@ -254,7 +254,7 @@ const updateEncounter = async (req, res) => {
 
     const updateResponse = await db.query($sql);
     if (!updateResponse.affectedRows) {
-      errorMessage.error = "Update not successful";
+      errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -281,7 +281,7 @@ const deleteEncounter = async (req, res) => {
     `);
 
     if (!deleteResponse.affectedRows) {
-      errorMessage.error = "Deletion not successful";
+      errorMessage.message = "Deletion not successful";
       return res.status(status.notfound).send(errorMessage);
     }
 
