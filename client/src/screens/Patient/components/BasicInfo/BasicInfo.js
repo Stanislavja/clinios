@@ -125,7 +125,7 @@ const BasicInfo = (props) => {
         enqueueSnackbar(`${response.message}`, { variant: "success" });
         reloadData();
         dispatch(togglePatientInfoDialog());
-      })
+      });
   };
 
   return (
