@@ -1,3 +1,4 @@
+const moment = require("moment");
 const { configuration, makeDb } = require("../db/db.js");
 const { errorMessage, successMessage, status } = require("../helpers/status");
 
@@ -38,7 +39,12 @@ const createMessage = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const insertResponse = await db.query(
-      `insert into message (client_id, user_id_from, patient_id_to, subject, message, unread_notify_dt, created, created_user_id) values (${req.client_id}, ${user_id_from}, ${patient_id_to}, '${subject}', '${message}', '${unread_notify_dt}', now(), ${req.user_id})`
+      `insert into message (client_id, user_id_from, patient_id_to, subject, message, unread_notify_dt, created, created_user_id) values 
+      (${
+        req.client_id
+      }, ${user_id_from}, ${patient_id_to}, '${subject}', '${message}', '${moment(
+        unread_notify_dt
+      ).format("YYYY-MM-DD")}', now(), ${req.user_id})`
     );
 
     if (!insertResponse.affectedRows) {
@@ -65,7 +71,9 @@ const updateMessage = async (req, res) => {
   try {
     const updateResponse = await db.query(
       `update message
-        set subject='${subject}', message='${message}', unread_notify_dt='${unread_notify_dt}', updated= now(), updated_user_id='${req.user_id}'
+        set subject='${subject}', message='${message}', unread_notify_dt='${moment(
+        unread_notify_dt
+      ).format("YYYY-MM-DD")}', updated= now(), updated_user_id='${req.user_id}'
         where id=${id}
       `
     );
