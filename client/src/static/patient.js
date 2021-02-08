@@ -25,7 +25,7 @@ export const FirstColumnPatientCards = [
     showActions: true,
     showSearch: false,
     data: [],
-    primaryButtonText: "View",
+    primaryButtonText: null,
     secondaryButtonText: "Expand",
     icon: null,
     cardInfo: null,
