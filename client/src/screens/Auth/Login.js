@@ -62,9 +62,9 @@ const Login = () => {
 
     try {
       await login(email.trim(), password.trim()); // Call AuthProvider login
-      enqueueSnackbar("Successfully logged in!", {
-        variant: "success",
-      });
+      //enqueueSnackbar("Successfully logged in!", {
+      //  variant: "success",
+      //});
     } catch (error) {
       console.error(error);
       enqueueSnackbar("Unable to login", {
