@@ -1,6 +1,8 @@
 import React from "react";
 
-import { Typography, Divider, makeStyles } from "@material-ui/core";
+import {
+  Typography, Divider, makeStyles, Grid,
+} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -23,7 +25,7 @@ const SearchResults = (props) => {
 
   return (
     data.map((item, index) => (
-      <>
+      <Grid key={`${item.dt}_${item.Encounter}`}>
         <Typography variant="h5" gutterBottom className={classes.label}>{item.Encounter}</Typography>
         <Typography variant="body1" gutterBottom>
           <span className={classes.label}>
@@ -54,7 +56,7 @@ const SearchResults = (props) => {
             ? <Divider className={classes.divider} />
             : null
         }
-      </>
+      </Grid>
     ))
   );
 };
