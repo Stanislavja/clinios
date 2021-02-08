@@ -159,7 +159,7 @@ exports.signup = async (req, res) => {
     }
   } catch (err) {
     // handle the error
-    errorMessage.error = err.message;
+    errorMessage.message = err.message;
     res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
