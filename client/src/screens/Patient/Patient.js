@@ -2,6 +2,7 @@ import React, {
   useState,
   useEffect,
   useRef,
+  useMemo,
   useCallback,
   useReducer,
   createContext,
@@ -109,6 +110,7 @@ import {
   HandoutsCardContent,
   HandoutsDetails,
 } from "./components/Handouts";
+import SearchResults from "./components/SearchResults";
 import EncountersForm from "./Encounters";
 import EncountersCardContent from "./Encounters/content";
 import EncountersDetails from "./Encounters/details";
@@ -128,7 +130,6 @@ import RequisitionsForm from "./Requisitions";
 import RequisitionsCardContent from "./Requisitions/content";
 import RequisitionsDetails from "./Requisitions/details";
 import TestsCardContent from "./Tests/content";
-
 
 import "react-grid-layout/css/styles.css";
 // import "react-resizable/css/styles.css";
@@ -175,7 +176,7 @@ const Patient = () => {
   const [isLayoutUpdated, setIsLayoutUpdated] = useState(false);
 
   // data states
-  const [setPatients] = useState([]);
+  const [patientsSearchResults, setPatientsSearchResults] = useState([]);
   const patientData = patientInfo.data;
   const patientBalance = billing.balance;
 
@@ -445,7 +446,7 @@ const Patient = () => {
       },
     };
     PatientService.searchPatient(patientId, reqBody).then((res) => {
-      setPatients(res.data);
+      setPatientsSearchResults(res.data);
     });
   };
 
@@ -695,6 +696,10 @@ const Patient = () => {
     }
   };
 
+  const closeSearchResultsDialog = () => {
+    setPatientsSearchResults([]);
+  };
+
   const updateMinHeight = (key, newHeight) => {
     const calculatedHeight = newHeight / 40 + 0.5;
     // 40 is the row height, 0.5 is the margin
@@ -741,6 +746,13 @@ const Patient = () => {
     fetchTests,
   ]);
 
+  const showSearchResultsDialog = useMemo(() => {
+    if (patientsSearchResults.length) {
+      return true;
+    }
+    return false;
+  }, [patientsSearchResults]);
+
   return (
     <PatientContext.Provider value={{ state, dispatch }}>
       <input
@@ -752,6 +764,16 @@ const Patient = () => {
         className={classes.noDisplay}
         onChange={(e) => handleDocumentsFile(e)}
       />
+      {showSearchResultsDialog && (
+        <Dialog
+          open={showSearchResultsDialog}
+          title={" "}
+          message={<SearchResults data={patientsSearchResults} />}
+          cancelForm={() => closeSearchResultsDialog()}
+          hideActions
+          size="md"
+        />
+      )}
       {!!patientInfo.editDialog && (
         <Dialog
           open={patientInfo.editDialog}
