@@ -98,7 +98,7 @@ const BasicInfo = (props) => {
     setBasicInfo({ ...formData });
   }, [formData]);
 
-  const handleInputChnage = (e) => {
+  const handleInputChange = (e) => {
     const { value, name } = e.target;
     setBasicInfo({
       ...basicInfo,
@@ -117,7 +117,7 @@ const BasicInfo = (props) => {
   const onFormSubmit = () => {
     const reqBody = {
       data: {
-        ...formData,
+        ...basicInfo,
       },
     };
     PatientService.updatePatient(patientId, reqBody)
@@ -155,7 +155,7 @@ const BasicInfo = (props) => {
                         id={item.id}
                         type={item.type}
                         fullWidth
-                        onChange={(e) => handleInputChnage(e)}
+                        onChange={(e) => handleInputChange(e)}
                       />
                     ) : (
                       <TextField
@@ -166,7 +166,7 @@ const BasicInfo = (props) => {
                         name={item.name}
                         value={basicInfo[item.name]}
                         fullWidth
-                        onChange={(e) => handleInputChnage(e)}
+                        onChange={(e) => handleInputChange(e)}
                       >
                         {item.options.map((option) => (
                           <MenuItem key={option.value} value={option.value}>
@@ -193,7 +193,7 @@ const BasicInfo = (props) => {
                         id={item.id}
                         type={item.type}
                         fullWidth
-                        onChange={(e) => handleInputChnage(e)}
+                        onChange={(e) => handleInputChange(e)}
                       />
                     ) : (
                       <TextField
@@ -204,7 +204,7 @@ const BasicInfo = (props) => {
                         name={item.name}
                         value={basicInfo[item.name]}
                         fullWidth
-                        onChange={(e) => handleInputChnage(e)}
+                        onChange={(e) => handleInputChange(e)}
                       >
                         {item.options.map((option) => (
                           <MenuItem key={option.value} value={option.value}>
@@ -233,7 +233,7 @@ const BasicInfo = (props) => {
                         id={item.id}
                         type={item.type}
                         fullWidth
-                        onChange={(e) => handleInputChnage(e)}
+                        onChange={(e) => handleInputChange(e)}
                       />
                     ) : (
                       <TextField
@@ -244,7 +244,7 @@ const BasicInfo = (props) => {
                         name={item.name}
                         value={basicInfo[item.name]}
                         fullWidth
-                        onChange={(e) => handleInputChnage(e)}
+                        onChange={(e) => handleInputChange(e)}
                       >
                         {item.options.map((option) => (
                           <MenuItem key={option.value} value={option.value}>
@@ -267,7 +267,7 @@ const BasicInfo = (props) => {
                     id="password"
                     type="password"
                     fullWidth
-                    onChange={(e) => handleInputChnage(e)}
+                    onChange={(e) => handleInputChange(e)}
                   />
                 </Grid>
                 <Grid item md={2}>
@@ -293,7 +293,7 @@ const BasicInfo = (props) => {
                     name="address"
                     value={basicInfo.address}
                     fullWidth
-                    onChange={(e) => handleInputChnage(e)}
+                    onChange={(e) => handleInputChange(e)}
                   />
                 </Grid>
                 <Grid item lg={12}>
@@ -302,7 +302,7 @@ const BasicInfo = (props) => {
                     name="address2"
                     value={basicInfo.address2}
                     fullWidth
-                    onChange={(e) => handleInputChnage(e)}
+                    onChange={(e) => handleInputChange(e)}
                   />
                 </Grid>
                 <Grid item lg={3}>
@@ -311,7 +311,7 @@ const BasicInfo = (props) => {
                     name="city"
                     value={basicInfo.city}
                     fullWidth
-                    onChange={(e) => handleInputChnage(e)}
+                    onChange={(e) => handleInputChange(e)}
                   />
                 </Grid>
                 <Grid item lg={3}>
@@ -320,7 +320,7 @@ const BasicInfo = (props) => {
                     name="zipPostal"
                     value={basicInfo.postal}
                     fullWidth
-                    onChange={(e) => handleInputChnage(e)}
+                    onChange={(e) => handleInputChange(e)}
                   />
                 </Grid>
                 <Grid item lg={3}>
@@ -332,6 +332,7 @@ const BasicInfo = (props) => {
                     label="Country"
                     handleChange={(identifier, value) => handleCountryRegion(identifier, value)}
                     country={country}
+                    margin="dense"
                   />
                 </Grid>
                 <Grid item lg={3}>
@@ -344,6 +345,7 @@ const BasicInfo = (props) => {
                     handleChange={(identifier, value) => handleCountryRegion(identifier, value)}
                     country={country}
                     region={region}
+                    margin="dense"
                   />
                 </Grid>
               </Grid>
@@ -387,7 +389,7 @@ const BasicInfo = (props) => {
                       id={item.id}
                       type={item.type}
                       fullWidth
-                      onChange={(e) => handleInputChnage(e)}
+                      onChange={(e) => handleInputChange(e)}
                     />
                   </Grid>
                 ))}
