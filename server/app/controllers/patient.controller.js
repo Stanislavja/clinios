@@ -72,7 +72,7 @@ const getPatient = async (req, res) => {
     );
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     const resData = { ...dbResponse[0], functional_range: functionalRange };
@@ -80,7 +80,7 @@ const getPatient = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -227,7 +227,7 @@ const updatePatient = async (req, res) => {
 
     const updateResponse = await db.query($sql);
     if (!updateResponse.affectedRows) {
-      errorMessage.error = "Update not successful";
+      errorMessage.message = "Update not successful";
       return res.status(status.error).send(errorMessage);
     }
 
@@ -236,7 +236,7 @@ const updatePatient = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Update not successful";
+    errorMessage.message = "Update not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -289,7 +289,7 @@ const search = async (req, res) => {
     );
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -297,7 +297,7 @@ const search = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Search not successful";
+    errorMessage.message = "Search not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -355,7 +355,7 @@ const history = async (req, res) => {
     );
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -363,7 +363,7 @@ const history = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -385,7 +385,7 @@ const nextAppointment = async (req, res) => {
     );
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -393,7 +393,7 @@ const nextAppointment = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -413,7 +413,7 @@ const balance = async (req, res) => {
     );
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -421,7 +421,7 @@ const balance = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -444,7 +444,7 @@ const AdminNotehistory = async (req, res) => {
     );
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -452,7 +452,7 @@ const AdminNotehistory = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -482,7 +482,7 @@ const adminNoteupdate = async (req, res) => {
     );
 
     if (!updateResponse.affectedRows) {
-      errorMessage.error = "Update not successful";
+      errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -491,7 +491,7 @@ const adminNoteupdate = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Update not successful";
+    errorMessage.message = "Update not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -512,7 +512,7 @@ const getForms = async (req, res) => {
     );
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -520,7 +520,7 @@ const getForms = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Search not successful";
+    errorMessage.message = "Search not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -546,7 +546,7 @@ const getFormById = async (req, res) => {
     );
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -554,7 +554,7 @@ const getFormById = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -577,7 +577,7 @@ const handouts = async (req, res) => {
     );
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -585,7 +585,7 @@ const handouts = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -610,7 +610,7 @@ const handoutDelete = async (req, res) => {
     );
 
     if (!deleteResponse.affectedRows) {
-      errorMessage.error = "Deletion not successful";
+      errorMessage.message = "Deletion not successful";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -619,7 +619,7 @@ const handoutDelete = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Delete not successful";
+    errorMessage.message = "Delete not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -636,7 +636,7 @@ const CreatePatientHandouts = async (req, res) => {
     );
 
     if (!insertResponse.affectedRows) {
-      errorMessage.error = "Insert not successful";
+      errorMessage.message = "Insert not successful";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = insertResponse;
@@ -644,7 +644,7 @@ const CreatePatientHandouts = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Insert not successful";
+    errorMessage.message = "Insert not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -666,7 +666,7 @@ const patientHandouts = async (req, res) => {
     );
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -674,7 +674,7 @@ const patientHandouts = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -700,7 +700,7 @@ const DeletePatientHandouts = async (req, res) => {
     );
 
     if (!dbResponse.affectedRows) {
-      errorMessage.error = "Deletion not successful";
+      errorMessage.message = "Deletion not successful";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -709,7 +709,7 @@ const DeletePatientHandouts = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Deletion not successful";
+    errorMessage.message = "Deletion not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -724,7 +724,7 @@ const getTranType = async (req, res) => {
     );
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -732,7 +732,7 @@ const getTranType = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -761,7 +761,7 @@ const getBilling = async (req, res) => {
     );
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -769,7 +769,7 @@ const getBilling = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -795,7 +795,7 @@ const createBilling = async (req, res) => {
     );
 
     if (!insertResponse.affectedRows) {
-      errorMessage.error = "Insert not successful";
+      errorMessage.message = "Insert not successful";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = insertResponse;
@@ -803,7 +803,7 @@ const createBilling = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Insert not successful";
+    errorMessage.message = "Insert not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -826,7 +826,7 @@ const getAllergies = async (req, res) => {
     );
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -834,7 +834,7 @@ const getAllergies = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -857,7 +857,7 @@ const deleteAllergy = async (req, res) => {
     );
 
     if (!dbResponse.affectedRows) {
-      errorMessage.error = "Deletion not successful";
+      errorMessage.message = "Deletion not successful";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -866,7 +866,7 @@ const deleteAllergy = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Deletion not successful";
+    errorMessage.message = "Deletion not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -893,7 +893,7 @@ const searchAllergies = async (req, res) => {
     );
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -901,7 +901,7 @@ const searchAllergies = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Search not successful";
+    errorMessage.message = "Search not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -923,7 +923,7 @@ const createPatientAllergy = async (req, res) => {
     );
 
     if (!insertResponse.affectedRows) {
-      errorMessage.error = "Insert not successful";
+      errorMessage.message = "Insert not successful";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = insertResponse;
@@ -931,7 +931,7 @@ const createPatientAllergy = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Insert not successful";
+    errorMessage.message = "Insert not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -970,7 +970,7 @@ const getDocuments = async (req, res) => {
 
     const dbResponse = await db.query($sql);
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -978,7 +978,7 @@ const getDocuments = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -987,7 +987,7 @@ const getDocuments = async (req, res) => {
 
 const updateDocuments = async (req, res) => {
   if (!req.body.data) {
-    errorMessage.error = "Body content can not be empty";
+    errorMessage.message = "Body content can not be empty";
     return res.status(status.error).send(errorMessage);
   }
   const { id } = req.params;
@@ -1007,7 +1007,7 @@ const updateDocuments = async (req, res) => {
     const updateResponse = await db.query($sql);
 
     if (!updateResponse.affectedRows) {
-      errorMessage.error = "Update not successful";
+      errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -1016,7 +1016,7 @@ const updateDocuments = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Update not successful";
+    errorMessage.message = "Update not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1035,14 +1035,14 @@ const checkDocument = async (req, res) => {
         limit 1`
     );
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1068,7 +1068,7 @@ const createDocuments = async (req, res) => {
       return res.status(status.error).send(errorMessage);
     }
     if (!req.file) {
-      errorMessage.error = "File content can not be empty!";
+      errorMessage.message = "File content can not be empty!";
       return res.status(status.error).send(errorMessage);
     }
 
@@ -1085,7 +1085,7 @@ const createDocuments = async (req, res) => {
       );
       if (existingLabDocument.length > 0) {
         removeFile(req.file);
-        errorMessage.error = "Same file is already in our database system!";
+        errorMessage.message = "Same file is already in our database system!";
         return res.status(status.error).send(errorMessage);
       }
 
@@ -1095,7 +1095,7 @@ const createDocuments = async (req, res) => {
 
       if (!insertResponse.affectedRows) {
         removeFile(req.file);
-        errorMessage.error = "Insert not successful";
+        errorMessage.message = "Insert not successful";
         return res.status(status.notfound).send(errorMessage);
       }
 
@@ -1110,7 +1110,7 @@ const createDocuments = async (req, res) => {
       successMessage.message = "Insert successful";
       return res.status(status.created).send(successMessage);
     } catch (excepErr) {
-      errorMessage.error = "Insert not successful";
+      errorMessage.message = "Insert not successful";
       return res.status(status.error).send(errorMessage);
     } finally {
       await db.close();
@@ -1133,7 +1133,7 @@ const getEncounters = async (req, res) => {
       limit 50`
     );
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -1141,7 +1141,7 @@ const getEncounters = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1193,7 +1193,7 @@ const createEncounter = async (req, res) => {
 
     if (!insertResponse.affectedRows) {
       removeFile(req.file);
-      errorMessage.error = "Insert not successful";
+      errorMessage.message = "Insert not successful";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -1201,7 +1201,7 @@ const createEncounter = async (req, res) => {
     successMessage.message = "Insert successful";
     return res.status(status.created).send(successMessage);
   } catch (excepErr) {
-    errorMessage.error = "Insert not successful";
+    errorMessage.message = "Insert not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1246,7 +1246,7 @@ const updateEncounter = async (req, res) => {
 
     const updateResponse = await db.query($sql);
     if (!updateResponse.affectedRows) {
-      errorMessage.error = "Update not successful";
+      errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -1255,7 +1255,7 @@ const updateEncounter = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Update not successful";
+    errorMessage.message = "Update not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1273,7 +1273,7 @@ const deleteEncounter = async (req, res) => {
     `);
 
     if (!deleteResponse.affectedRows) {
-      errorMessage.error = "Deletion not successful";
+      errorMessage.message = "Deletion not successful";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -1281,7 +1281,7 @@ const deleteEncounter = async (req, res) => {
     successMessage.message = "Delete successful";
     return res.status(status.created).send(successMessage);
   } catch (err) {
-    errorMessage.error = "Delete not successful";
+    errorMessage.message = "Delete not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1302,7 +1302,7 @@ const getMedicalNotesHistory = async (req, res) => {
         limit 50`
     );
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -1310,7 +1310,7 @@ const getMedicalNotesHistory = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1335,7 +1335,7 @@ const medicalNotesHistoryUpdate = async (req, res) => {
     );
 
     if (!updateResponse.affectedRows) {
-      errorMessage.error = "Update not successful";
+      errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -1344,7 +1344,7 @@ const medicalNotesHistoryUpdate = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Update not successful";
+    errorMessage.message = "Update not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1368,7 +1368,7 @@ const getMessages = async (req, res) => {
         limit 50`
     );
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -1376,7 +1376,7 @@ const getMessages = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1395,7 +1395,7 @@ const createMessage = async (req, res) => {
     );
 
     if (!insertResponse.affectedRows) {
-      errorMessage.error = "Insert not successful";
+      errorMessage.message = "Insert not successful";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = insertResponse;
@@ -1403,7 +1403,7 @@ const createMessage = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Insert not successful";
+    errorMessage.message = "Insert not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1428,7 +1428,7 @@ const deleteMessage = async (req, res) => {
     `);
 
     if (!deleteMsgResponse.affectedRows) {
-      errorMessage.error = "Deletion not successful";
+      errorMessage.message = "Deletion not successful";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -1437,7 +1437,7 @@ const deleteMessage = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Delete not successful";
+    errorMessage.message = "Delete not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1466,7 +1466,7 @@ const getAllTests = async (req, res) => {
         limit 500`
     );
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -1474,7 +1474,7 @@ const getAllTests = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1497,7 +1497,7 @@ const getDiagnoses = async (req, res) => {
         limit 50`
     );
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -1505,7 +1505,7 @@ const getDiagnoses = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1531,7 +1531,7 @@ const updateDiagnose = async (req, res) => {
 
     const updateResponse = await db.query($sql);
     if (!updateResponse.affectedRows) {
-      errorMessage.error = "Update not successful";
+      errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -1540,7 +1540,7 @@ const updateDiagnose = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Update not successful";
+    errorMessage.message = "Update not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1559,7 +1559,7 @@ const deleteDiagnose = async (req, res) => {
     `);
 
     if (!deleteResponse.affectedRows) {
-      errorMessage.error = "Deletion not successful";
+      errorMessage.message = "Deletion not successful";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -1568,7 +1568,7 @@ const deleteDiagnose = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Delete not successful";
+    errorMessage.message = "Delete not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1586,7 +1586,7 @@ const createDiagnoses = async (req, res) => {
     );
 
     if (!insertResponse.affectedRows) {
-      errorMessage.error = "Insert not successful";
+      errorMessage.message = "Insert not successful";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = insertResponse;
@@ -1594,7 +1594,7 @@ const createDiagnoses = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Insert not successful";
+    errorMessage.message = "Insert not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1617,7 +1617,7 @@ const getMedications = async (req, res) => {
         limit 50`
     );
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -1625,7 +1625,7 @@ const getMedications = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1645,7 +1645,7 @@ const deleteMedications = async (req, res) => {
     `);
 
     if (!deleteResponse.affectedRows) {
-      errorMessage.error = "Deletion not successful";
+      errorMessage.message = "Deletion not successful";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -1654,7 +1654,7 @@ const deleteMedications = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Delete not successful";
+    errorMessage.message = "Delete not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1677,7 +1677,7 @@ const getRequisitions = async (req, res) => {
         limit 100`
     );
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -1685,7 +1685,7 @@ const getRequisitions = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1703,7 +1703,7 @@ const createRequisitions = async (req, res) => {
     );
 
     if (!insertResponse.affectedRows) {
-      errorMessage.error = "Insert not successful";
+      errorMessage.message = "Insert not successful";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = insertResponse;
@@ -1711,7 +1711,7 @@ const createRequisitions = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Insert not successful";
+    errorMessage.message = "Insert not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1727,7 +1727,7 @@ const deleteRequisitions = async (req, res) => {
     );
 
     if (!deleteResponse.affectedRows) {
-      errorMessage.error = "Deletion not successful";
+      errorMessage.message = "Deletion not successful";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -1736,7 +1736,7 @@ const deleteRequisitions = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Delete not successful";
+    errorMessage.message = "Delete not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1754,7 +1754,7 @@ const getLayout = async (req, res) => {
       where user_id=${user_id}`
     );
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -1762,7 +1762,7 @@ const getLayout = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "No Layout found";
+    errorMessage.message = "No Layout found";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1780,7 +1780,7 @@ const deleteLayout = async (req, res) => {
       where user_id=${user_id}`
     );
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
 
@@ -1788,7 +1788,7 @@ const deleteLayout = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Error deleting layout";
+    errorMessage.message = "Error deleting layout";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1820,7 +1820,7 @@ const saveLayout = async (req, res) => {
     );
 
     if (!insertResponse.affectedRows) {
-      errorMessage.error = "Insert not successful";
+      errorMessage.message = "Insert not successful";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = insertResponse;
@@ -1828,7 +1828,7 @@ const saveLayout = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.error = "Insert not successful";
+    errorMessage.message = "Insert not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1850,14 +1850,14 @@ const getDrugs = async (req, res) => {
     const dbResponse = await db.query($sql);
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.error("err:", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -1879,14 +1879,14 @@ const getIcds = async (req, res) => {
     const dbResponse = await db.query($sql);
 
     if (!dbResponse) {
-      errorMessage.error = "None found";
+      errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.error("err:", err);
-    errorMessage.error = "Select not successful";
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
