@@ -38,6 +38,7 @@ export const client_pages = [
         title: "Accounting Search",
         href: "/manage/accounting-search",
       },
+      /*
       {
         id: 22,
         icon: MailOutlineIcon,
@@ -62,18 +63,21 @@ export const client_pages = [
         title: "Delete Patient",
         href: "/manage/delete-patient",
       },
+      */
       {
         id: 26,
         icon: GroupAddIcon,
         title: "Patient Search",
         href: "/manage/patient-search",
       },
+      /*
       {
         id: 27,
         icon: HelpIcon,
         title: "Support Center",
         href: "/manage/support",
       },
+      */
     ],
   },
   {
@@ -100,12 +104,14 @@ export const client_pages = [
         title: "Appointment Types User Assignment",
         href: "/setup/appoinment-user-types",
       },
+      /*
       {
         id: 34,
         icon: BackupIcon,
         title: "Backup",
         href: "/setup/backup",
       },
+      */
       {
         id: 35,
         icon: TuneIcon,
@@ -130,12 +136,14 @@ export const client_pages = [
         title: "Forms",
         href: "/setup/forms",
       },
+      /*
       {
         id: 39,
         icon: CodeIcon,
         title: "Handouts",
         href: "/setup/handouts",
       },
+      */
       {
         id: 310,
         icon: CodeIcon,
@@ -148,12 +156,14 @@ export const client_pages = [
         title: "Integrations",
         href: "/setup/integrations",
       },
+      /*
       {
         id: 312,
         icon: TimelineIcon,
         title: "Lab Ranges",
         href: "/setup/lab-ranges",
       },
+      */
       {
         id: 313,
         icon: CodeIcon,
