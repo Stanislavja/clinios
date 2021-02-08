@@ -118,6 +118,8 @@ const BasicInfo = (props) => {
     const reqBody = {
       data: {
         ...basicInfo,
+        country: country[1],
+        state: region,
       },
     };
     PatientService.updatePatient(patientId, reqBody)
