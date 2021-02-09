@@ -215,10 +215,13 @@ export default function Home() {
     if (isNew) {
       // Create new message
       Messages.create(payload).then(
-        () => {
+        (response) => {
           setIsLoading(false);
           setIsMessageToPatientOpen(false);
           fetchUnreadPatientMessages(selectedProvider.id);
+          enqueueSnackbar(`${response.data.message}`, {
+            variant: "success",
+          });
         },
         () => {
           // on errors
@@ -229,10 +232,13 @@ export default function Home() {
     } else {
       // Update message
       Messages.update(payload).then(
-        () => {
+        (response) => {
           setIsLoading(false);
           setIsMessageToPatientOpen(false);
           fetchUnreadPatientMessages(selectedProvider.id);
+          enqueueSnackbar(`${response.data.message}`, {
+            variant: "success",
+          });
         },
         () => {
           // no error
@@ -275,7 +281,7 @@ export default function Home() {
             {selectedProvider && `- ${selectedProvider.name}`}
           </Typography>
           <FormControl component="div" className={classes.formControl}>
-            <p className={classes.formHelperText}>Show canceled/rejected</p>
+            <p className={classes.formHelperText}>Show Declined</p>
             <Switch
               checked={isCancelEventsVisible}
               size="small"

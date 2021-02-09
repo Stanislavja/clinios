@@ -13,4 +13,8 @@ module.exports = {
     DB: process.env.DB,
   },
   authSecret: process.env.JWT_SECRET,
+  emailConfig: {
+    user: process.env.ETHEREAL_EMAIL,
+    pass: process.env.ETHEREAL_PASS,
+  },
 };
