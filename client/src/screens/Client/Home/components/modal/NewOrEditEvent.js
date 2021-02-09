@@ -26,6 +26,7 @@ import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
+import Link from '@material-ui/core/Link';
 import Alert from "@material-ui/lab/Alert";
 import { KeyboardDatePicker, KeyboardTimePicker } from "@material-ui/pickers";
 import clsx from "clsx";
@@ -755,42 +756,48 @@ const EventModal = ({
               onChange={(event) => handleOnChange(event)}
             />
           </div>
-          <div className={classes.eventMeta}>
-            <Typography
-              onClick={() => history.push(`/patients/${selectedPatient}`)}
-              component="p"
-              variant="body2"
-              color="textPrimary"
-              className={classes.patientLink}
-            >
-              Go to patient page
-            </Typography>
-            <Typography
-              onClick={() => history.push(`/patients/${selectedPatient}`)}
-              component="p"
-              variant="body2"
-              color="textPrimary"
-              className={classes.patientLink}
-            >
-              Go to patient page in new tab
-            </Typography>
-            {calEvent.status === "A" && (
-              <p className={classes.eventStatusInfo}>
-                Approved:
-                {moment(calEvent.approved).format("ll")}
-                ,
-                {calEvent.approved_user}
-              </p>
-            )}
-            {calEvent.status === "D" && (
-              <p className={classes.eventStatusInfo}>
-                Rejected:
-                {moment(calEvent.declined).format("ll")}
-                ,
-                {calEvent.declined_user}
-              </p>
-            )}
-          </div>
+          { !isNewEvent && 
+          
+            <div className={classes.eventMeta}>
+              <Typography
+                component="p"
+                variant="body2"
+                color="textPrimary"
+                className={classes.patientLink}
+              >
+                <Link href={`/patients/${selectedPatient.id}`}>
+                  Go to patient page
+                </Link>
+              </Typography>
+              <Typography
+                component="p"
+                variant="body2"
+                color="textPrimary"
+                className={classes.patientLink}
+              >
+                <Link href={`/patients/${selectedPatient.id}`} target="_blank">
+                  Go to patient page in new tab
+                </Link>
+              </Typography>
+              {calEvent.status === "A" && (
+                <p className={classes.eventStatusInfo}>
+                  Approved:
+                  {moment(calEvent.approved).format("ll")}
+                  ,
+                  {calEvent.approved_user}
+                </p>
+              )}
+              {calEvent.status === "D" && (
+                <p className={classes.eventStatusInfo}>
+                  Rejected:
+                  {moment(calEvent.declined).format("ll")}
+                  ,
+                  {calEvent.declined_user}
+                </p>
+              )}
+            </div>
+          }
+
         </div>
       </DialogContent>
       <DialogActions className={classes.modalAction}>
