@@ -447,11 +447,18 @@ const Patient = () => {
     };
     PatientService.searchPatient(patientId, reqBody).then((res) => {
       setPatientsSearchResults(res.data);
+      if (res.data.length) {
+        enqueueSnackbar(`${res.data.length} entity(s) found`, { variant: "success" });
+      } else {
+        enqueueSnackbar(`No record found`, { variant: "error" });
+      }
     });
   };
 
   const debouncedSearchPatients = _.debounce((query) => {
-    searchPatientHandler(query);
+    if (query.length > 1) {
+      searchPatientHandler(query);
+    }
   }, 1000);
 
   const mapPrimaryButtonHandlers = (value) => {
