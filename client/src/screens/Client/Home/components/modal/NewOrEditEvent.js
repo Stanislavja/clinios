@@ -563,7 +563,7 @@ const EventModal = ({
                     onClick={async () => {
                       await setCalEvent({
                         ...calEvent,
-                        end_dt: moment(calEvent.end_dt).add(30, "minutes"),
+                        end_dt: moment(calEvent.start_dt).add(30, "minutes"),
                       });
                     }}
                   >
@@ -575,7 +575,7 @@ const EventModal = ({
                     onClick={async () => {
                       await setCalEvent({
                         ...calEvent,
-                        end_dt: moment(calEvent.end_dt).add(45, "minutes"),
+                        end_dt: moment(calEvent.start_dt).add(45, "minutes"),
                       });
                     }}
                   >
@@ -587,7 +587,7 @@ const EventModal = ({
                     onClick={async () => {
                       await setCalEvent({
                         ...calEvent,
-                        end_dt: moment(calEvent.end_dt).add(60, "minutes"),
+                        end_dt: moment(calEvent.start_dt).add(60, "minutes"),
                       });
                     }}
                   >
