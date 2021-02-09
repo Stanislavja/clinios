@@ -26,10 +26,10 @@ import PatientService from "../../../../services/patient.service";
 import {
   BasicInfoForm,
   InsuranceForm,
-  Pharmacies,
   PaymentData,
 } from "../../../../static/patientBasicInfoForm";
 import { calculateAge } from "../../../../utils/helpers";
+import PharmaciesSearch from "./components/Pharmacies";
 
 const useStyles = makeStyles((theme) => ({
   inputRow: {
@@ -354,14 +354,7 @@ const BasicInfo = (props) => {
                 Pharmacy
               </Typography>
               <Grid container spacing={1}>
-                {Pharmacies.map((pharmacy) => (
-                  <Grid key={pharmacy.name} item md={4}>
-                    <TextField label={pharmacy.name} className={classes.inputTextRow} />
-                    <Typography>{pharmacy.name}</Typography>
-                    <Typography>{pharmacy.address}</Typography>
-                    <Typography>{pharmacy.phone}</Typography>
-                  </Grid>
-                ))}
+                <PharmaciesSearch />
               </Grid>
             </Grid>
           </Paper>
