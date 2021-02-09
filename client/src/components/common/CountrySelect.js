@@ -39,7 +39,10 @@ CountryRegionMUISelectors.defaultProps = {
 
 CountryRegionMUISelectors.propTypes = {
   size: PropTypes.string,
-  country: PropTypes.string,
+  country: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]),
   handleChange: PropTypes.func.isRequired,
   outlined: PropTypes.bool,
   margin: PropTypes.string,

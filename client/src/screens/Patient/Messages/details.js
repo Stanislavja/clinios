@@ -71,6 +71,7 @@ const MessagesDetails = (props) => {
   const { state } = usePatientContext();
   const { data } = state.messages;
   const { patientId } = state;
+  const actionsEnable = false;
 
   const deleteItemHandler = (selectedItem) => {
     const messageId = selectedItem.id;
@@ -100,7 +101,9 @@ const MessagesDetails = (props) => {
             <StyledTableCell>Message</StyledTableCell>
             <StyledTableCell>From</StyledTableCell>
             <StyledTableCell>To</StyledTableCell>
-            <StyledTableCell align="center">Actions</StyledTableCell>
+            {!!actionsEnable && (
+              <StyledTableCell align="center">Actions</StyledTableCell>
+            )}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -115,15 +118,16 @@ const MessagesDetails = (props) => {
                 <TableCell>{row.message}</TableCell>
                 <TableCell>{row.user_to_from || ""}</TableCell>
                 <TableCell>{row.user_to_name || ""}</TableCell>
-
-                <TableCell className={classes.actions}>
-                  <IconButton
-                    className={classes.button}
-                    onClick={() => deleteItemHandler(row)}
-                  >
-                    <DeleteIcon fontSize="small" />
-                  </IconButton>
-                </TableCell>
+                {!!actionsEnable && (
+                  <TableCell className={classes.actions}>
+                    <IconButton
+                      className={classes.button}
+                      onClick={() => deleteItemHandler(row)}
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </TableCell>
+                )}
               </StyledTableRow>
             ))
             : (

@@ -51,7 +51,10 @@ RegionMUISelectors.propTypes = {
   label: PropTypes.string.isRequired,
   region: PropTypes.string.isRequired,
   handleChange: PropTypes.func.isRequired,
-  country: PropTypes.string.isRequired,
+  country: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]).isRequired,
   margin: PropTypes.string,
 };
 
