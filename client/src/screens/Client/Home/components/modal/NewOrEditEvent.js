@@ -432,7 +432,6 @@ const EventModal = ({
                     });
                   }}
                   minDate={new Date()}
-                  disablePast
                   format="EE LLL d y"
                   KeyboardButtonProps={{
                     "aria-label": "change date",
@@ -456,7 +455,6 @@ const EventModal = ({
                   }}
                   minD
                   ate={new Date()}
-                  disablePast
                   format="EE LLL d y"
                   KeyboardButtonProps={{
                     "aria-label": "change date",
