@@ -311,8 +311,9 @@ const BasicInfo = (props) => {
                 </Grid>
                 <Grid item lg={3}>
                   <TextField
+                    type="number"
                     label="Zip/Postal"
-                    name="zipPostal"
+                    name="postal"
                     value={basicInfo.postal}
                     fullWidth
                     onChange={(e) => handleInputChange(e)}
