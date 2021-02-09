@@ -281,7 +281,7 @@ export default function Home() {
             {selectedProvider && `- ${selectedProvider.name}`}
           </Typography>
           <FormControl component="div" className={classes.formControl}>
-            <p className={classes.formHelperText}>Show canceled/rejected</p>
+            <p className={classes.formHelperText}>Show Declined</p>
             <Switch
               checked={isCancelEventsVisible}
               size="small"
