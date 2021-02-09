@@ -11,6 +11,7 @@ import Appointments from "../../../services/appointments.service";
 import DashboardHome from "../../../services/DashboardHome.service";
 import Messages from "../../../services/message-to-patient.service";
 import { statusToColorCode, isEmpty } from "../../../utils/helpers";
+import useAuth from "../../../hooks/useAuth";
 import {
   AppointmentRequests,
   Calendar,
@@ -44,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home() {
   const classes = useStyles();
+  const { user } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const [errors, setErrors] = useState(null);
   const [selectedProvider, setSelectedProvider] = useState({});
@@ -120,7 +122,13 @@ export default function Home() {
       const { data } = await DashboardHome.getProviders();
       setProviders(data);
       if (data.length > 0) {
-        setSelectedProvider(data[0]);
+        const loggedinUserAsProvider = data.filter(d => d.id === user.id)
+        if(loggedinUserAsProvider.length > 0){
+          setSelectedProvider(loggedinUserAsProvider[0]);
+        }else {
+          setSelectedProvider(data[0]);
+        }
+     
       }
     }
     fetchProviders();
