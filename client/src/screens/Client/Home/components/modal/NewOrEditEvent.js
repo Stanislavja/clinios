@@ -101,7 +101,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   lengthWrap: {
-    textAlign: "center",
+    textAlign: "left",
   },
   AddSubButtons: {
     marginRight: theme.spacing(0),
@@ -174,6 +174,9 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "150px",
     margin: "5px 5px 0",
   },
+  firstInput: {
+    marginLeft: 0
+  }
 }));
 
 const EventModal = ({
@@ -600,7 +603,7 @@ const EventModal = ({
                 value={appointmentLengthDays}
                 variant="outlined"
                 margin="dense"
-                className={classes.appointmentLength}
+                className={`${classes.appointmentLength} ${classes.firstInput}`}
                 size="small"
                 id="appointmentLengthDays"
                 label="Length days"
