@@ -273,7 +273,7 @@ export default function Home() {
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={8}>
+      <Grid container spacing={4}>
         <Grid item md={7} xs={12} className={classes.headerWrap}>
           <Typography component="h1" variant="h2" color="textPrimary" className={classes.pageTitle}>
             Home
