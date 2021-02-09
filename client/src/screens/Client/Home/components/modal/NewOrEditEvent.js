@@ -29,6 +29,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import Link from '@material-ui/core/Link';
 import Alert from "@material-ui/lab/Alert";
 import { KeyboardDatePicker, KeyboardTimePicker } from "@material-ui/pickers";
+import FormHelperText from '@material-ui/core/FormHelperText';
 import clsx from "clsx";
 import moment from "moment";
 import PropTypes from "prop-types";
@@ -204,6 +205,7 @@ const EventModal = ({
   const [errorText, setErrorText] = useState({
     title: "",
     patient: "",
+    provider: "",
     error: "",
   });
 
@@ -329,6 +331,14 @@ const EventModal = ({
         (prevErrorText) => ({
           ...prevErrorText,
           patient: "Please select from here",
+        }),
+      );
+    }
+    if(provider === undefined) {
+      setErrorText(
+        (prevErrorText) => ({
+          ...prevErrorText,
+          provider: "Please select from here",
         }),
       );
     }
@@ -679,7 +689,10 @@ const EventModal = ({
                 helperText={errorText.title.length > 0 && errorText.title}
               />
             </FormControl>
-            <FormControl variant="outlined" size="small" className={classes.providerFormControl}>
+            <FormControl variant="outlined" size="small" 
+              className={classes.providerFormControl} 
+              error={errorText.provider.length > 0}
+            >
               <div className={classes.providerWrap}>
                 <div className={classes.providerSelect}>
                   <InputLabel id="provider-select-outlined-label">Provider</InputLabel>
@@ -691,15 +704,13 @@ const EventModal = ({
                     label="Provider"
                     defaultValue={selectedProvider?.id}
                   >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
                     {providers.map((pd) => (
                       <MenuItem key={pd.id} value={pd.id}>
                         {pd.name}
                       </MenuItem>
                     ))}
                   </Select>
+                  <FormHelperText>{errorText.provider.length > 0 && errorText.provider}</FormHelperText>
                 </div>
                 <Button
                   className={classes.Button}
@@ -757,7 +768,6 @@ const EventModal = ({
             />
           </div>
           { !isNewEvent && 
-          
             <div className={classes.eventMeta}>
               <Typography
                 component="p"
