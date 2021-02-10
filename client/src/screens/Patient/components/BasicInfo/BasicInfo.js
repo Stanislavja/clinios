@@ -86,6 +86,8 @@ const BasicInfo = (props) => {
     phone_home: "",
     phone_cell: "",
     phone_work: "",
+    phone_other: "",
+    phone_note: "",
     email: "",
     dob: "",
     otherPhone: "",
