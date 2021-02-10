@@ -109,9 +109,7 @@ const PaymentMethodsForm = (props) => {
       message={(
         <>
           <Typography variant="h3" color="textSecondary">
-            {isEdit ? "Edit" : "Add"}
-            {" "}
-            Payment Method
+            {`${isEdit ? "Edit" : "Add"} Payment Method`}
           </Typography>
           <form onSubmit={onFormSubmit}>
             <Grid className={classes.formContainer}>
