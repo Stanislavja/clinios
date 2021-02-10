@@ -246,12 +246,14 @@ export const Pharmacies = [
 export const PaymentData = [
   {
     type: "Visa",
-    lastFour: 1234,
-    expires: "31-10-2020",
+    cardNumber: "4234 5678 1234 5678",
+    expiryDate: "08/25",
+    cvv: 123,
   },
   {
     type: "Master Card",
-    lastFour: 4321,
-    expires: "20-9-2020",
+    cardNumber: "5678 1234 5678 1234",
+    expiryDate: "07/23",
+    cvv: 567,
   },
 ];
