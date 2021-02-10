@@ -90,10 +90,10 @@ const Sidebar = (props) => {
     },
     {
       id: 6,
-      title: "Labs/Requisition",
+      title: "Lab Requisitions",
       href: "/patient/labs-requisition",
       icon: (
-        <Icon path={mdiTestTube} size={1} horizontal vertical rotate={180} />
+        <Icon path={mdiFormSelect} size={1} horizontal vertical rotate={180} />
       ),
     },
     {

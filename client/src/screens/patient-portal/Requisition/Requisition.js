@@ -52,7 +52,7 @@ const Encounters = () => {
         color="textPrimary"
         className={classes.title}
       >
-        Requisition
+        Lab Requisitions
       </Typography>
       <Grid item lg={3} md={4} sm={6} xs={12}>
         <form onSubmit={onFormSubmit}>
@@ -60,7 +60,7 @@ const Encounters = () => {
             select
             required
             variant="outlined"
-            label="Lab Requisitions"
+            label="Select Lab Requisition"
             margin="dense"
             fullWidth
             value={selectedRequisition}
