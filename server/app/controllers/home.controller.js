@@ -109,24 +109,27 @@ const createAppointment = async (req, res) => {
     errorMessage.message = errors.array();
     return res.status(status.bad).send(errorMessage);
   }
-  const {
-    ApptStatus,
-    title,
-    notes,
-    patient,
-    start_dt,
-    end_dt,
-    provider,
-  } = req.body.data;
+  const { ApptStatus, patient, start_dt, end_dt, provider } = req.body.data;
+
+  let { title, notes } = req.body.data;
+  let patient_id = patient.id;
+  if (patient_id === undefined) {
+    patient_id = null;
+  }
+  if (title === undefined) {
+    title = "";
+  }
+  if (notes === undefined) {
+    notes = "";
+  }
 
   const db = makeDb(configuration, res);
   try {
     const insertResponse = await db.query(
-      `insert into user_calendar (client_id, user_id, patient_id, start_dt, end_dt, status, title, notes, created, created_user_id) values (${
-        req.client_id
-      }, ${provider.id}, ${patient.id}, '${moment(start_dt).format(
-        "YYYY-MM-DD HH:mm:ss"
-      )}', '${moment(end_dt).format(
+      `insert into user_calendar (client_id, user_id, patient_id, start_dt, end_dt, status, title, notes, created, created_user_id) values (
+        ${req.client_id}, ${provider.id}, ${patient_id}, '${moment(
+        start_dt
+      ).format("YYYY-MM-DD HH:mm:ss")}', '${moment(end_dt).format(
         "YYYY-MM-DD HH:mm:ss"
       )}', '${ApptStatus}', '${title}', '${notes}', now(), ${req.user_id})`
     );
@@ -134,13 +137,15 @@ const createAppointment = async (req, res) => {
       errorMessage.message = "Insert not successful";
       return res.status(status.notfound).send(errorMessage);
     }
-    const emailTemplate = newAppointmentTemplate(
-      patient,
-      moment(start_dt).format("YYYY-MM-DD HH:mm:ss"),
-      provider
-    );
-    const logInfo = "Email for new appointment has bees sent!";
-    sendEmailOnAppointmentCreationAndChange(emailTemplate, logInfo); // Call to send email notifcation
+    if (patient.email) {
+      const emailTemplate = newAppointmentTemplate(
+        patient,
+        moment(start_dt).format("YYYY-MM-DD HH:mm:ss"),
+        provider
+      );
+      const logInfo = "Email for new appointment has bees sent!";
+      sendEmailOnAppointmentCreationAndChange(emailTemplate, logInfo); // Call to send email notifcation
+    }
     successMessage.data = insertResponse;
     successMessage.message = "Insert successful";
     return res.status(status.created).send(successMessage);
@@ -173,16 +178,19 @@ const cancelAppointment = async (req, res) => {
       errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
     }
-    const emailTemplate = cancelAppointmentTemplate(
-      patient,
-      moment(appointmentDate).format("YYYY-MM-DD HH:mm:ss"),
-      providerName
-    );
-    // Call to send email notifcation
-    sendEmailOnAppointmentCreationAndChange(
-      emailTemplate,
-      "Email for cancel appointment has bees sent!"
-    );
+    if (patient.email) {
+      const emailTemplate = cancelAppointmentTemplate(
+        patient,
+        moment(appointmentDate).format("YYYY-MM-DD HH:mm:ss"),
+        providerName
+      );
+      // Call to send email notifcation
+      sendEmailOnAppointmentCreationAndChange(
+        emailTemplate,
+        "Email for cancel appointment has bees sent!"
+      );
+    }
+
     successMessage.data = updateResponse;
     successMessage.message = "Cancel successful";
     return res.status(status.created).send(successMessage);
@@ -219,10 +227,12 @@ const updateAppointment = async (req, res) => {
     let $sql = `update user_calendar
     set title='${title}', user_id=${provider.id}, notes='${notes}', status='${ApptStatus}', start_dt='${new_start_dt}', end_dt='${new_end_dt}'`;
 
+    if (patient.id) {
+      $sql += `, patient_id=${patient.id}`;
+    }
     if (ApptStatus === "D") {
       $sql += `, declined=now(), declined_user_id=${req.user_id}`;
     }
-
     if (ApptStatus === "A") {
       $sql += `, approved=now(), approved_user_id=${req.user_id}`;
     }
@@ -235,27 +245,28 @@ const updateAppointment = async (req, res) => {
       errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
     }
-    let emailTemplate;
-    if (ApptStatus === "D") {
-      emailTemplate = cancelAppointmentTemplate(
-        patient,
-        moment(old_start_dt).format("YYYY-MM-DD HH:mm:ss"),
-        providerName
-      );
-    } else {
-      emailTemplate = updateAppointmentTemplate(
-        patient,
-        moment(old_start_dt).format("YYYY-MM-DD HH:mm:ss"),
-        providerName,
-        moment(new_start_dt).format("YYYY-MM-DD HH:mm:ss")
+    if (patient.email) {
+      let emailTemplate;
+      if (ApptStatus === "D") {
+        emailTemplate = cancelAppointmentTemplate(
+          patient,
+          moment(old_start_dt).format("YYYY-MM-DD HH:mm:ss"),
+          providerName
+        );
+      } else {
+        emailTemplate = updateAppointmentTemplate(
+          patient,
+          moment(old_start_dt).format("YYYY-MM-DD HH:mm:ss"),
+          providerName,
+          moment(new_start_dt).format("YYYY-MM-DD HH:mm:ss")
+        );
+      }
+      // Call to send email notifcation
+      sendEmailOnAppointmentCreationAndChange(
+        emailTemplate,
+        "Email for update appointment has bees sent!"
       );
     }
-
-    // Call to send email notifcation
-    sendEmailOnAppointmentCreationAndChange(
-      emailTemplate,
-      "Email for update appointment has bees sent!"
-    );
 
     successMessage.data = updateResponse;
     successMessage.message = "Update successful";
