@@ -77,9 +77,7 @@ const Pharmacies = () => {
           {pharmacies.map((pharmacy, index) => (
             <Grid key={pharmacy.name} item md={4}>
               <Typography variant="h5" color="textPrimary">
-                Pharmacy #
-                {" "}
-                {index + 1}
+                {`Pharmacy # ${index + 1}`}
               </Typography>
               <TextField
                 id={pharmacy.id}
@@ -94,11 +92,7 @@ const Pharmacies = () => {
                     <Typography gutterBottom>{item.name}</Typography>
                     <Typography gutterBottom>{item.address}</Typography>
                     <Typography gutterBottom>
-                      {item.city}
-                      {" "}
-                      {item.state}
-                      {" "}
-                      {item.postal}
+                      {`${item.city} ${item.state} ${item.postal}`}
                     </Typography>
                     <Typography gutterBottom>
                       Phone
