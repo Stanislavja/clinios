@@ -6,20 +6,23 @@ import {
   Paper,
   TextField,
   Button,
+  IconButton,
   MenuItem,
   Table,
   TableHead,
   TableBody,
   TableRow,
-  TableCell,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 
 import CountrySelect from "../../../../components/common/CountrySelect";
 import RegionSelect from "../../../../components/common/RegionSelect";
+import { StyledTableRowLg, StyledTableCellLg } from "../../../../components/common/StyledTable";
 import usePatientContext from "../../../../hooks/usePatientContext";
 import { togglePatientInfoDialog } from "../../../../providers/Patient/actions";
 import PatientService from "../../../../services/patient.service";
@@ -94,6 +97,12 @@ const BasicInfo = (props) => {
     address: "",
     address2: "",
     city: "",
+    // insurance fields
+    insurance_name: "",
+    insurance_group: "",
+    insurance_member: "",
+    insurance_phone: "",
+    insurance_desc: "",
   });
 
   useEffect(() => {
@@ -145,6 +154,10 @@ const BasicInfo = (props) => {
   const editPaymentMethodHandler = (item) => {
     setSelectedPaymentMethod(item);
     toggleNewPaymentMethodDialog();
+  };
+
+  const resetEmailHandler = () => {
+    enqueueSnackbar(`Reset Email Sent`, { variant: "success" });
   };
 
   return (
@@ -276,7 +289,9 @@ const BasicInfo = (props) => {
               </Grid>
               <Grid container spacing={1} alignItems="flex-end">
                 <Grid item md={2}>
-                  <Typography>Last Login: Jan 1, 2020</Typography>
+                  <Typography>
+                    {`Last Login: ${moment().format("MMM D, YYYY")}`}
+                  </Typography>
                 </Grid>
                 <Grid item md={2}>
                   <TextField
@@ -289,7 +304,12 @@ const BasicInfo = (props) => {
                   />
                 </Grid>
                 <Grid item md={2}>
-                  <Button variant="outlined">Send Reset Email</Button>
+                  <Button
+                    variant="outlined"
+                    onClick={() => resetEmailHandler()}
+                  >
+                    Send Reset Email
+                  </Button>
                 </Grid>
               </Grid>
             </Grid>
@@ -400,6 +420,7 @@ const BasicInfo = (props) => {
                       name={item.name}
                       id={item.id}
                       type={item.type}
+                      value={basicInfo[item.name]}
                       fullWidth
                       onChange={(e) => handleInputChange(e)}
                     />
@@ -426,25 +447,27 @@ const BasicInfo = (props) => {
               <Table size="small" className={classes.table} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Type</TableCell>
-                    <TableCell align="center">Last Four</TableCell>
-                    <TableCell align="center">Expires</TableCell>
-                    <TableCell align="center">Actions</TableCell>
+                    <StyledTableCellLg>Type</StyledTableCellLg>
+                    <StyledTableCellLg align="center">Last Four</StyledTableCellLg>
+                    <StyledTableCellLg align="center">Expires</StyledTableCellLg>
+                    <StyledTableCellLg align="center">Actions</StyledTableCellLg>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {PaymentData.map((row) => (
-                    <TableRow key={row.type}>
-                      <TableCell component="th" scope="row">
-                        {row.type}
-                      </TableCell>
-                      <TableCell align="center">{row.cardNumber.split(" ")[3]}</TableCell>
-                      <TableCell align="center">{row.expiryDate}</TableCell>
-                      <TableCell align="center">
-                        <Button onClick={() => editPaymentMethodHandler(row)}>Edit</Button>
-                        <Button>Delete</Button>
-                      </TableCell>
-                    </TableRow>
+                    <StyledTableRowLg key={row.type}>
+                      <StyledTableCellLg>{row.type}</StyledTableCellLg>
+                      <StyledTableCellLg align="center">{row.cardNumber.split(" ")[3]}</StyledTableCellLg>
+                      <StyledTableCellLg align="center">{row.expiryDate}</StyledTableCellLg>
+                      <StyledTableCellLg align="center">
+                        <IconButton onClick={() => editPaymentMethodHandler(row)}>
+                          <EditIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton>
+                          <DeleteIcon fontSize="small" />
+                        </IconButton>
+                      </StyledTableCellLg>
+                    </StyledTableRowLg>
                   ))}
                 </TableBody>
               </Table>
