@@ -178,16 +178,19 @@ const cancelAppointment = async (req, res) => {
       errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
     }
-    const emailTemplate = cancelAppointmentTemplate(
-      patient,
-      moment(appointmentDate).format("YYYY-MM-DD HH:mm:ss"),
-      providerName
-    );
-    // Call to send email notifcation
-    sendEmailOnAppointmentCreationAndChange(
-      emailTemplate,
-      "Email for cancel appointment has bees sent!"
-    );
+    if (patient.id) {
+      const emailTemplate = cancelAppointmentTemplate(
+        patient,
+        moment(appointmentDate).format("YYYY-MM-DD HH:mm:ss"),
+        providerName
+      );
+      // Call to send email notifcation
+      sendEmailOnAppointmentCreationAndChange(
+        emailTemplate,
+        "Email for cancel appointment has bees sent!"
+      );
+    }
+
     successMessage.data = updateResponse;
     successMessage.message = "Cancel successful";
     return res.status(status.created).send(successMessage);
@@ -224,10 +227,12 @@ const updateAppointment = async (req, res) => {
     let $sql = `update user_calendar
     set title='${title}', user_id=${provider.id}, notes='${notes}', status='${ApptStatus}', start_dt='${new_start_dt}', end_dt='${new_end_dt}'`;
 
+    if (patient.id) {
+      $sql += `, patient_id=${patient.id}`;
+    }
     if (ApptStatus === "D") {
       $sql += `, declined=now(), declined_user_id=${req.user_id}`;
     }
-
     if (ApptStatus === "A") {
       $sql += `, approved=now(), approved_user_id=${req.user_id}`;
     }
@@ -240,27 +245,28 @@ const updateAppointment = async (req, res) => {
       errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
     }
-    let emailTemplate;
-    if (ApptStatus === "D") {
-      emailTemplate = cancelAppointmentTemplate(
-        patient,
-        moment(old_start_dt).format("YYYY-MM-DD HH:mm:ss"),
-        providerName
-      );
-    } else {
-      emailTemplate = updateAppointmentTemplate(
-        patient,
-        moment(old_start_dt).format("YYYY-MM-DD HH:mm:ss"),
-        providerName,
-        moment(new_start_dt).format("YYYY-MM-DD HH:mm:ss")
+    if (patient.id) {
+      let emailTemplate;
+      if (ApptStatus === "D") {
+        emailTemplate = cancelAppointmentTemplate(
+          patient,
+          moment(old_start_dt).format("YYYY-MM-DD HH:mm:ss"),
+          providerName
+        );
+      } else {
+        emailTemplate = updateAppointmentTemplate(
+          patient,
+          moment(old_start_dt).format("YYYY-MM-DD HH:mm:ss"),
+          providerName,
+          moment(new_start_dt).format("YYYY-MM-DD HH:mm:ss")
+        );
+      }
+      // Call to send email notifcation
+      sendEmailOnAppointmentCreationAndChange(
+        emailTemplate,
+        "Email for update appointment has bees sent!"
       );
     }
-
-    // Call to send email notifcation
-    sendEmailOnAppointmentCreationAndChange(
-      emailTemplate,
-      "Email for update appointment has bees sent!"
-    );
 
     successMessage.data = updateResponse;
     successMessage.message = "Update successful";

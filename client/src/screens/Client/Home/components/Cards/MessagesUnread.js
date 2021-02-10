@@ -96,7 +96,7 @@ const MessagesUnread = ({
               </li>
             ))
           ) : (
-            <p></p>
+            <p />
           )}
         </ul>
       </CardContent>

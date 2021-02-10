@@ -7,11 +7,11 @@ import Switch from "@material-ui/core/Switch";
 import Typography from "@material-ui/core/Typography";
 import { useSnackbar } from "notistack";
 
+import useAuth from "../../../hooks/useAuth";
 import Appointments from "../../../services/appointments.service";
 import DashboardHome from "../../../services/DashboardHome.service";
 import Messages from "../../../services/message-to-patient.service";
 import { statusToColorCode, isEmpty } from "../../../utils/helpers";
-import useAuth from "../../../hooks/useAuth";
 import {
   AppointmentRequests,
   Calendar,
@@ -54,7 +54,7 @@ export default function Home() {
   const [appointmentRequests, setAppointmentRequests] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [events, setEvents] = useState([]);
-  const [selectedEvent, setSelectedEvent] = useState("");
+  const [selectedEvent, setSelectedEvent] = useState({});
   const [selectedMsg, setSelectedMsg] = useState("");
   const [providers, setProviders] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -122,13 +122,12 @@ export default function Home() {
       const { data } = await DashboardHome.getProviders();
       setProviders(data);
       if (data.length > 0) {
-        const loggedinUserAsProvider = data.filter(d => d.id === user.id)
-        if(loggedinUserAsProvider.length > 0){
+        const loggedinUserAsProvider = data.filter((d) => d.id === user.id);
+        if (loggedinUserAsProvider.length > 0) {
           setSelectedProvider(loggedinUserAsProvider[0]);
-        }else {
+        } else {
           setSelectedProvider(data[0]);
         }
-     
       }
     }
     fetchProviders();
@@ -191,8 +190,7 @@ export default function Home() {
         });
         setIsOpen(false);
       },
-      (error) => {
-        //setErrors(error.response.data.message);
+      () => {
         setIsLoading(false);
       },
     );

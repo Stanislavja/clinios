@@ -10,10 +10,12 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormHelperText from "@material-ui/core/FormHelperText";
 import FormLabel from "@material-ui/core/FormLabel";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import InputLabel from "@material-ui/core/InputLabel";
+import Link from "@material-ui/core/Link";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -26,14 +28,11 @@ import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
-import Link from '@material-ui/core/Link';
 import Alert from "@material-ui/lab/Alert";
 import { KeyboardDatePicker, KeyboardTimePicker } from "@material-ui/pickers";
-import FormHelperText from '@material-ui/core/FormHelperText';
 import clsx from "clsx";
 import moment from "moment";
 import PropTypes from "prop-types";
-import { useHistory } from "react-router-dom";
 
 import useAuth from "../../../../../hooks/useAuth";
 import useDebounce from "../../../../../hooks/useDebounce";
@@ -69,10 +68,13 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     width: "100%",
     color: theme.palette.text.secondary,
-    marginBottom: theme.spacing(3/2),
+    marginBottom: theme.spacing(3 / 2),
     "& .MuiSelect-select": {
       minWidth: 220,
     },
+  },
+  patientFormControl: {
+    zIndex: 9,
   },
   textFormControl: {
     width: "100%",
@@ -186,8 +188,8 @@ const useStyles = makeStyles((theme) => ({
     margin: "5px 5px 0",
   },
   firstInput: {
-    marginLeft: 0
-  }
+    marginLeft: 0,
+  },
 }));
 
 const EventModal = ({
@@ -203,7 +205,6 @@ const EventModal = ({
 }) => {
   const { providers, errors } = props;
   const classes = useStyles();
-  const history = useHistory();
   const [patients, setPatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState("");
   const [patientSearchTerm, setPatientSearchTerm] = useState("");
@@ -252,8 +253,9 @@ const EventModal = ({
         id: props.event.patient_id,
         lastname: props.event.lastname,
       });
-      
-      (props.event.firstname || props.event.lastname ) && setPatientSearchTerm(`${props.event.firstname} ${props.event.lastname}`);
+
+      (props.event.firstname || props.event.lastname)
+        && setPatientSearchTerm(`${props.event.firstname} ${props.event.lastname}`);
     }
     setProvider(selectedProvider);
     // eslint-disable-next-line react-hooks/exhaustive-deps, react/destructuring-assignment
@@ -326,34 +328,31 @@ const EventModal = ({
   };
 
   const validateFormFields = () => {
-    if (!calEvent.title || selectedPatient.length === 0){
+    if (!calEvent.title || selectedPatient.length === 0) {
       if (!calEvent.title && selectedPatient.length === 0) {
         setErrorText({
           ...errorText,
           title: "Enter your title",
           patient: "Please select from here",
         });
-      } else {
-        console.log('selectedPatient', selectedPatient)
-        if (calEvent.title || !!selectedPatient) {
-          setErrorText(
-            (prevErrorText) => ({
-              ...prevErrorText,
-              title: "",
-              patient: "",
-            }),
-          );
-        }
+      } else if (calEvent.title || !!selectedPatient) {
+        setErrorText(
+          (prevErrorText) => ({
+            ...prevErrorText,
+            title: "",
+            patient: "",
+          }),
+        );
+      }
     }
-  }
-  if(provider === undefined) {
-    setErrorText(
-      (prevErrorText) => ({
-        ...prevErrorText,
-        provider: "Please select from here",
-      }),
-    );
-  }
+    if (provider === undefined) {
+      setErrorText(
+        (prevErrorText) => ({
+          ...prevErrorText,
+          provider: "Please select from here",
+        }),
+      );
+    }
   };
 
   const handleSaveOrUpdate = () => {
@@ -476,8 +475,7 @@ const EventModal = ({
                     });
                     calculateLength(date);
                   }}
-                  minD
-                  ate={new Date()}
+                  minDate={new Date()}
                   format="EE LLL d y"
                   KeyboardButtonProps={{
                     "aria-label": "change date",
@@ -556,8 +554,7 @@ const EventModal = ({
                       });
                       calculateLength(date);
                     }}
-                    minD
-                    ate={new Date()}
+                    minDate={new Date()}
                     disablePast
                     format="HH:mm a"
                     KeyboardButtonProps={{
@@ -683,7 +680,10 @@ const EventModal = ({
                 <FormControlLabel value="D" control={<Radio />} label="Declined" />
               </RadioGroup>
             </FormControl>
-            <FormControl component="div" className={classes.textFormControl}>
+            <FormControl
+              component="div"
+              className={`${classes.textFormControl} ${classes.patientFormControl}`}
+            >
               <TextField
                 value={patientSearchTerm}
                 variant="outlined"
@@ -735,8 +735,10 @@ const EventModal = ({
                 helperText={errorText.title.length > 0 && errorText.title}
               />
             </FormControl>
-            <FormControl variant="outlined" size="small" 
-              className={classes.providerFormControl} 
+            <FormControl
+              variant="outlined"
+              size="small"
+              className={classes.providerFormControl}
               error={errorText.provider.length > 0}
             >
               <div className={classes.providerWrap}>
@@ -779,46 +781,47 @@ const EventModal = ({
               onChange={(event) => handleOnChange(event)}
             />
           </div>
-          { !isNewEvent && 
-            <div className={classes.eventMeta}>
-              <Typography
-                component="p"
-                variant="body2"
-                color="textPrimary"
-                className={classes.patientLink}
-              >
-                <Link href={`/patients/${selectedPatient.id}`}>
-                  Go to patient page
-                </Link>
-              </Typography>
-              <Typography
-                component="p"
-                variant="body2"
-                color="textPrimary"
-                className={classes.patientLink}
-              >
-                <Link href={`/patients/${selectedPatient.id}`} target="_blank">
-                  Go to patient page in new tab
-                </Link>
-              </Typography>
-              {calEvent.status === "A" && (
-                <p className={classes.eventStatusInfo}>
-                  Approved:
-                  {moment(calEvent.approved).format("ll")}
-                  ,
-                  {calEvent.approved_user}
-                </p>
-              )}
-              {calEvent.status === "D" && (
-                <p className={classes.eventStatusInfo}>
-                  Rejected:
-                  {moment(calEvent.declined).format("ll")}
-                  ,
-                  {calEvent.declined_user}
-                </p>
-              )}
-            </div>
-          }
+          { !isNewEvent
+            && (
+              <div className={classes.eventMeta}>
+                <Typography
+                  component="p"
+                  variant="body2"
+                  color="textPrimary"
+                  className={classes.patientLink}
+                >
+                  <Link href={`/patients/${selectedPatient.id}`}>
+                    Go to patient page
+                  </Link>
+                </Typography>
+                <Typography
+                  component="p"
+                  variant="body2"
+                  color="textPrimary"
+                  className={classes.patientLink}
+                >
+                  <Link href={`/patients/${selectedPatient.id}`} target="_blank">
+                    Go to patient page in new tab
+                  </Link>
+                </Typography>
+                {calEvent.status === "A" && (
+                  <p className={classes.eventStatusInfo}>
+                    Approved:
+                    {moment(calEvent.approved).format("ll")}
+                    ,
+                    {calEvent.approved_user}
+                  </p>
+                )}
+                {calEvent.status === "D" && (
+                  <p className={classes.eventStatusInfo}>
+                    Rejected:
+                    {moment(calEvent.declined).format("ll")}
+                    ,
+                    {calEvent.declined_user}
+                  </p>
+                )}
+              </div>
+            )}
 
         </div>
       </DialogContent>
@@ -842,6 +845,12 @@ const EventModal = ({
   );
 };
 
+EventModal.defaultProps = {
+  appointments: "",
+  event: "",
+  errors: "",
+};
+
 EventModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   appointments: PropTypes.arrayOf(
@@ -858,7 +867,7 @@ EventModal.propTypes = {
       updated: PropTypes.string,
       updated_user: PropTypes.string,
     }),
-  ).isRequired,
+  ),
   selectedProvider: PropTypes.shape({
     name: PropTypes.string,
     id: PropTypes.number,
@@ -868,7 +877,7 @@ EventModal.propTypes = {
     lastname: PropTypes.string,
     email: PropTypes.string,
     patient_id: PropTypes.number,
-  }).isRequired,
+  }),
   providers: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
@@ -881,7 +890,7 @@ EventModal.propTypes = {
   onEventUpdate: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   isNewEvent: PropTypes.bool.isRequired,
-  errors: PropTypes.string.isRequired,
+  errors: PropTypes.string,
 };
 
 export default EventModal;
