@@ -68,7 +68,14 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     width: "100%",
-    marginBottom: theme.spacing(3 / 2),
+    color: theme.palette.text.secondary,
+    marginBottom: theme.spacing(3/2),
+    "& .MuiSelect-select": {
+      minWidth: 220,
+    },
+  },
+  textFormControl: {
+    width: "100%",
     color: theme.palette.text.secondary,
     "& .MuiSelect-select": {
       minWidth: 220,
@@ -77,6 +84,8 @@ const useStyles = makeStyles((theme) => ({
   providerFormControl: {
     width: "100%",
     color: theme.palette.text.secondary,
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
     "& .MuiSelect-select": {
       minWidth: 220,
     },
@@ -243,8 +252,8 @@ const EventModal = ({
         id: props.event.patient_id,
         lastname: props.event.lastname,
       });
-
-      setPatientSearchTerm(`${props.event.firstname} ${props.event.lastname}`);
+      
+      (props.event.firstname || props.event.lastname ) && setPatientSearchTerm(`${props.event.firstname} ${props.event.lastname}`);
     }
     setProvider(selectedProvider);
     // eslint-disable-next-line react-hooks/exhaustive-deps, react/destructuring-assignment
@@ -317,31 +326,34 @@ const EventModal = ({
   };
 
   const validateFormFields = () => {
-    if (!calEvent.title) {
-      setErrorText(
-        (prevErrorText) => ({
-          ...prevErrorText,
+    if (!calEvent.title || selectedPatient.length === 0){
+      if (!calEvent.title && selectedPatient.length === 0) {
+        setErrorText({
+          ...errorText,
           title: "Enter your title",
-        }),
-      );
-    }
-
-    if (selectedPatient.length === 0) {
-      setErrorText(
-        (prevErrorText) => ({
-          ...prevErrorText,
           patient: "Please select from here",
-        }),
-      );
+        });
+      } else {
+        console.log('selectedPatient', selectedPatient)
+        if (calEvent.title || !!selectedPatient) {
+          setErrorText(
+            (prevErrorText) => ({
+              ...prevErrorText,
+              title: "",
+              patient: "",
+            }),
+          );
+        }
     }
-    if(provider === undefined) {
-      setErrorText(
-        (prevErrorText) => ({
-          ...prevErrorText,
-          provider: "Please select from here",
-        }),
-      );
-    }
+  }
+  if(provider === undefined) {
+    setErrorText(
+      (prevErrorText) => ({
+        ...prevErrorText,
+        provider: "Please select from here",
+      }),
+    );
+  }
   };
 
   const handleSaveOrUpdate = () => {
@@ -388,7 +400,7 @@ const EventModal = ({
       }
     };
 
-    if (calEvent.title && (selectedPatient.length !== 0)) {
+    if (calEvent.title || (selectedPatient.length !== 0)) {
       submitData();
     }
   };
@@ -671,6 +683,40 @@ const EventModal = ({
                 <FormControlLabel value="D" control={<Radio />} label="Declined" />
               </RadioGroup>
             </FormControl>
+            <FormControl component="div" className={classes.textFormControl}>
+              <TextField
+                value={patientSearchTerm}
+                variant="outlined"
+                margin="normal"
+                size="small"
+                required
+                fullWidth
+                id="patient"
+                label="Patient"
+                name="patient"
+                autoComplete="patient"
+                onChange={(event) => setPatientSearchTerm(event.target.value)}
+                error={errorText.patient.length > 0}
+                helperText={errorText.patient.length > 0 && errorText.patient}
+              />
+              {patients.length > 0 && (
+                <Card className={classes.patientListCard}>
+                  <CardContent className={classes.patientListContent}>
+                    <List component="nav" aria-label="secondary mailbox folder">
+                      {patients.map((patient) => (
+                        <ListItem
+                          button
+                          onClick={(event) => handlePatientChange(event, patient)}
+                          key={patient.id}
+                        >
+                          <ListItemText primary={`${patient.firstname} ${patient.lastname}`} />
+                        </ListItem>
+                      ))}
+                    </List>
+                  </CardContent>
+                </Card>
+              )}
+            </FormControl>
             <FormControl component="div" className={classes.formControl}>
               <TextField
                 value={calEvent.title}
@@ -721,40 +767,6 @@ const EventModal = ({
                 </Button>
               </div>
             </FormControl>
-            <FormControl component="div" className={classes.formControl}>
-              <TextField
-                value={patientSearchTerm}
-                variant="outlined"
-                margin="normal"
-                size="small"
-                required
-                fullWidth
-                id="patient"
-                label="Patient"
-                name="patient"
-                autoComplete="patient"
-                onChange={(event) => setPatientSearchTerm(event.target.value)}
-                error={errorText.patient.length > 0}
-                helperText={errorText.patient.length > 0 && errorText.patient}
-              />
-              {patients.length > 0 && (
-                <Card className={classes.patientListCard}>
-                  <CardContent className={classes.patientListContent}>
-                    <List component="nav" aria-label="secondary mailbox folder">
-                      {patients.map((patient) => (
-                        <ListItem
-                          button
-                          onClick={(event) => handlePatientChange(event, patient)}
-                          key={patient.id}
-                        >
-                          <ListItemText primary={`${patient.firstname} ${patient.lastname}`} />
-                        </ListItem>
-                      ))}
-                    </List>
-                  </CardContent>
-                </Card>
-              )}
-            </FormControl>
             <Typography component="p" variant="body2" color="textPrimary">
               Notes
             </Typography>
@@ -763,7 +775,7 @@ const EventModal = ({
               aria-label="minimum hei ght"
               placeholder="Notes..."
               name="notes"
-              value={calEvent.notes}
+              value={calEvent.notes && calEvent.notes}
               onChange={(event) => handleOnChange(event)}
             />
           </div>

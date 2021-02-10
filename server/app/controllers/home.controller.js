@@ -109,24 +109,27 @@ const createAppointment = async (req, res) => {
     errorMessage.message = errors.array();
     return res.status(status.bad).send(errorMessage);
   }
-  const {
-    ApptStatus,
-    title,
-    notes,
-    patient,
-    start_dt,
-    end_dt,
-    provider,
-  } = req.body.data;
+  const { ApptStatus, patient, start_dt, end_dt, provider } = req.body.data;
+
+  let { title, notes } = req.body.data;
+  let patient_id = patient.id;
+  if (patient_id === undefined) {
+    patient_id = null;
+  }
+  if (title === undefined) {
+    title = null;
+  }
+  if (notes === undefined) {
+    notes = null;
+  }
 
   const db = makeDb(configuration, res);
   try {
     const insertResponse = await db.query(
-      `insert into user_calendar (client_id, user_id, patient_id, start_dt, end_dt, status, title, notes, created, created_user_id) values (${
-        req.client_id
-      }, ${provider.id}, ${patient.id}, '${moment(start_dt).format(
-        "YYYY-MM-DD HH:mm:ss"
-      )}', '${moment(end_dt).format(
+      `insert into user_calendar (client_id, user_id, patient_id, start_dt, end_dt, status, title, notes, created, created_user_id) values (
+        ${req.client_id}, ${provider.id}, ${patient_id}, '${moment(
+        start_dt
+      ).format("YYYY-MM-DD HH:mm:ss")}', '${moment(end_dt).format(
         "YYYY-MM-DD HH:mm:ss"
       )}', '${ApptStatus}', '${title}', '${notes}', now(), ${req.user_id})`
     );
@@ -134,13 +137,15 @@ const createAppointment = async (req, res) => {
       errorMessage.message = "Insert not successful";
       return res.status(status.notfound).send(errorMessage);
     }
-    const emailTemplate = newAppointmentTemplate(
-      patient,
-      moment(start_dt).format("YYYY-MM-DD HH:mm:ss"),
-      provider
-    );
-    const logInfo = "Email for new appointment has bees sent!";
-    sendEmailOnAppointmentCreationAndChange(emailTemplate, logInfo); // Call to send email notifcation
+    if (patient.email) {
+      const emailTemplate = newAppointmentTemplate(
+        patient,
+        moment(start_dt).format("YYYY-MM-DD HH:mm:ss"),
+        provider
+      );
+      const logInfo = "Email for new appointment has bees sent!";
+      sendEmailOnAppointmentCreationAndChange(emailTemplate, logInfo); // Call to send email notifcation
+    }
     successMessage.data = insertResponse;
     successMessage.message = "Insert successful";
     return res.status(status.created).send(successMessage);

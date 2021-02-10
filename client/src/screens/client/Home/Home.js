@@ -192,7 +192,7 @@ export default function Home() {
         setIsOpen(false);
       },
       (error) => {
-        setErrors(error.response.data.message);
+        //setErrors(error.response.data.message);
         setIsLoading(false);
       },
     );
