@@ -190,7 +190,7 @@ const AppointmentRequests = ({
               </li>
             ))
           ) : (
-            <p></p>
+            <p />
           )}
         </ul>
       </CardContent>

@@ -10,10 +10,12 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormHelperText from "@material-ui/core/FormHelperText";
 import FormLabel from "@material-ui/core/FormLabel";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import InputLabel from "@material-ui/core/InputLabel";
+import Link from "@material-ui/core/Link";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -31,7 +33,6 @@ import { KeyboardDatePicker, KeyboardTimePicker } from "@material-ui/pickers";
 import clsx from "clsx";
 import moment from "moment";
 import PropTypes from "prop-types";
-import { useHistory } from "react-router-dom";
 
 import useAuth from "../../../../../hooks/useAuth";
 import useDebounce from "../../../../../hooks/useDebounce";
@@ -66,7 +67,17 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     width: "100%",
+    color: theme.palette.text.secondary,
     marginBottom: theme.spacing(3 / 2),
+    "& .MuiSelect-select": {
+      minWidth: 220,
+    },
+  },
+  patientFormControl: {
+    zIndex: 9,
+  },
+  textFormControl: {
+    width: "100%",
     color: theme.palette.text.secondary,
     "& .MuiSelect-select": {
       minWidth: 220,
@@ -75,6 +86,8 @@ const useStyles = makeStyles((theme) => ({
   providerFormControl: {
     width: "100%",
     color: theme.palette.text.secondary,
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
     "& .MuiSelect-select": {
       minWidth: 220,
     },
@@ -101,7 +114,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   lengthWrap: {
-    textAlign: "center",
+    textAlign: "left",
   },
   AddSubButtons: {
     marginRight: theme.spacing(0),
@@ -174,6 +187,9 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "150px",
     margin: "5px 5px 0",
   },
+  firstInput: {
+    marginLeft: 0,
+  },
 }));
 
 const EventModal = ({
@@ -189,7 +205,6 @@ const EventModal = ({
 }) => {
   const { providers, errors } = props;
   const classes = useStyles();
-  const history = useHistory();
   const [patients, setPatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState("");
   const [patientSearchTerm, setPatientSearchTerm] = useState("");
@@ -200,6 +215,7 @@ const EventModal = ({
   const [errorText, setErrorText] = useState({
     title: "",
     patient: "",
+    provider: "",
     error: "",
   });
 
@@ -238,7 +254,9 @@ const EventModal = ({
         lastname: props.event.lastname,
       });
 
-      setPatientSearchTerm(`${props.event.firstname} ${props.event.lastname}`);
+      if (props.event.firstname || props.event.lastname) {
+        setPatientSearchTerm(`${props.event.firstname} ${props.event.lastname}`);
+      }
     }
     setProvider(selectedProvider);
     // eslint-disable-next-line react-hooks/exhaustive-deps, react/destructuring-assignment
@@ -311,20 +329,28 @@ const EventModal = ({
   };
 
   const validateFormFields = () => {
-    if (!calEvent.title) {
-      setErrorText(
-        (prevErrorText) => ({
-          ...prevErrorText,
+    if (!calEvent.title || selectedPatient.length === 0) {
+      if (!calEvent.title && selectedPatient.length === 0) {
+        setErrorText({
+          ...errorText,
           title: "Enter your title",
-        }),
-      );
+          patient: "Please select from here",
+        });
+      } else if (calEvent.title || !!selectedPatient) {
+        setErrorText(
+          (prevErrorText) => ({
+            ...prevErrorText,
+            title: "",
+            patient: "",
+          }),
+        );
+      }
     }
-
-    if (selectedPatient.length === 0) {
+    if (provider === undefined) {
       setErrorText(
         (prevErrorText) => ({
           ...prevErrorText,
-          patient: "Please select from here",
+          provider: "Please select from here",
         }),
       );
     }
@@ -374,7 +400,7 @@ const EventModal = ({
       }
     };
 
-    if (calEvent.title && (selectedPatient.length !== 0)) {
+    if (calEvent.title || (selectedPatient.length !== 0)) {
       submitData();
     }
   };
@@ -429,7 +455,6 @@ const EventModal = ({
                     });
                   }}
                   minDate={new Date()}
-                  disablePast
                   format="EE LLL d y"
                   KeyboardButtonProps={{
                     "aria-label": "change date",
@@ -451,9 +476,7 @@ const EventModal = ({
                     });
                     calculateLength(date);
                   }}
-                  minD
-                  ate={new Date()}
-                  disablePast
+                  minDate={new Date()}
                   format="EE LLL d y"
                   KeyboardButtonProps={{
                     "aria-label": "change date",
@@ -532,8 +555,7 @@ const EventModal = ({
                       });
                       calculateLength(date);
                     }}
-                    minD
-                    ate={new Date()}
+                    minDate={new Date()}
                     disablePast
                     format="HH:mm a"
                     KeyboardButtonProps={{
@@ -562,7 +584,7 @@ const EventModal = ({
                     onClick={async () => {
                       await setCalEvent({
                         ...calEvent,
-                        end_dt: moment(calEvent.end_dt).add(30, "minutes"),
+                        end_dt: moment(calEvent.start_dt).add(30, "minutes"),
                       });
                     }}
                   >
@@ -574,7 +596,7 @@ const EventModal = ({
                     onClick={async () => {
                       await setCalEvent({
                         ...calEvent,
-                        end_dt: moment(calEvent.end_dt).add(45, "minutes"),
+                        end_dt: moment(calEvent.start_dt).add(45, "minutes"),
                       });
                     }}
                   >
@@ -586,7 +608,7 @@ const EventModal = ({
                     onClick={async () => {
                       await setCalEvent({
                         ...calEvent,
-                        end_dt: moment(calEvent.end_dt).add(60, "minutes"),
+                        end_dt: moment(calEvent.start_dt).add(60, "minutes"),
                       });
                     }}
                   >
@@ -600,7 +622,7 @@ const EventModal = ({
                 value={appointmentLengthDays}
                 variant="outlined"
                 margin="dense"
-                className={classes.appointmentLength}
+                className={`${classes.appointmentLength} ${classes.firstInput}`}
                 size="small"
                 id="appointmentLengthDays"
                 label="Length days"
@@ -659,56 +681,10 @@ const EventModal = ({
                 <FormControlLabel value="D" control={<Radio />} label="Declined" />
               </RadioGroup>
             </FormControl>
-            <FormControl component="div" className={classes.formControl}>
-              <TextField
-                value={calEvent.title}
-                variant="outlined"
-                margin="normal"
-                size="small"
-                required
-                fullWidth
-                id="title"
-                label="Title"
-                name="title"
-                autoComplete="title"
-                autoFocus
-                onChange={(event) => handleOnChange(event)}
-                error={errorText.title.length > 0}
-                helperText={errorText.title.length > 0 && errorText.title}
-              />
-            </FormControl>
-            <FormControl variant="outlined" size="small" className={classes.providerFormControl}>
-              <div className={classes.providerWrap}>
-                <div className={classes.providerSelect}>
-                  <InputLabel id="provider-select-outlined-label">Provider</InputLabel>
-                  <Select
-                    labelId="provider-select-outlined-label"
-                    id="provider-select-outlined-label"
-                    value={!!provider && provider.id}
-                    onChange={handleProviderChange}
-                    label="Provider"
-                    defaultValue={selectedProvider?.id}
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    {providers.map((pd) => (
-                      <MenuItem key={pd.id} value={pd.id}>
-                        {pd.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </div>
-                <Button
-                  className={classes.Button}
-                  disableElevation
-                  onClick={() => handleSetToSelf()}
-                >
-                  Set to Self
-                </Button>
-              </div>
-            </FormControl>
-            <FormControl component="div" className={classes.formControl}>
+            <FormControl
+              component="div"
+              className={`${classes.textFormControl} ${classes.patientFormControl}`}
+            >
               <TextField
                 value={patientSearchTerm}
                 variant="outlined"
@@ -742,6 +718,58 @@ const EventModal = ({
                 </Card>
               )}
             </FormControl>
+            <FormControl component="div" className={classes.formControl}>
+              <TextField
+                value={calEvent.title}
+                variant="outlined"
+                margin="normal"
+                size="small"
+                required
+                fullWidth
+                id="title"
+                label="Title"
+                name="title"
+                autoComplete="title"
+                autoFocus
+                onChange={(event) => handleOnChange(event)}
+                error={errorText.title.length > 0}
+                helperText={errorText.title.length > 0 && errorText.title}
+              />
+            </FormControl>
+            <FormControl
+              variant="outlined"
+              size="small"
+              className={classes.providerFormControl}
+              error={errorText.provider.length > 0}
+            >
+              <div className={classes.providerWrap}>
+                <div className={classes.providerSelect}>
+                  <InputLabel id="provider-select-outlined-label">Provider</InputLabel>
+                  <Select
+                    labelId="provider-select-outlined-label"
+                    id="provider-select-outlined-label"
+                    value={!!provider && provider.id}
+                    onChange={handleProviderChange}
+                    label="Provider"
+                    defaultValue={selectedProvider?.id}
+                  >
+                    {providers.map((pd) => (
+                      <MenuItem key={pd.id} value={pd.id}>
+                        {pd.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  <FormHelperText>{errorText.provider.length > 0 && errorText.provider}</FormHelperText>
+                </div>
+                <Button
+                  className={classes.Button}
+                  disableElevation
+                  onClick={() => handleSetToSelf()}
+                >
+                  Set to Self
+                </Button>
+              </div>
+            </FormControl>
             <Typography component="p" variant="body2" color="textPrimary">
               Notes
             </Typography>
@@ -750,46 +778,52 @@ const EventModal = ({
               aria-label="minimum hei ght"
               placeholder="Notes..."
               name="notes"
-              value={calEvent.notes}
+              value={calEvent.notes && calEvent.notes}
               onChange={(event) => handleOnChange(event)}
             />
           </div>
-          <div className={classes.eventMeta}>
-            <Typography
-              onClick={() => history.push(`/patients/${selectedPatient}`)}
-              component="p"
-              variant="body2"
-              color="textPrimary"
-              className={classes.patientLink}
-            >
-              Go to patient page
-            </Typography>
-            <Typography
-              onClick={() => history.push(`/patients/${selectedPatient}`)}
-              component="p"
-              variant="body2"
-              color="textPrimary"
-              className={classes.patientLink}
-            >
-              Go to patient page in new tab
-            </Typography>
-            {calEvent.status === "A" && (
-              <p className={classes.eventStatusInfo}>
-                Approved:
-                {moment(calEvent.approved).format("ll")}
-                ,
-                {calEvent.approved_user}
-              </p>
+          { !isNewEvent
+            && (
+              <div className={classes.eventMeta}>
+                <Typography
+                  component="p"
+                  variant="body2"
+                  color="textPrimary"
+                  className={classes.patientLink}
+                >
+                  <Link href={`/patients/${selectedPatient.id}`}>
+                    Go to patient page
+                  </Link>
+                </Typography>
+                <Typography
+                  component="p"
+                  variant="body2"
+                  color="textPrimary"
+                  className={classes.patientLink}
+                >
+                  <Link href={`/patients/${selectedPatient.id}`} target="_blank">
+                    Go to patient page in new tab
+                  </Link>
+                </Typography>
+                {calEvent.status === "A" && (
+                  <p className={classes.eventStatusInfo}>
+                    Approved:
+                    {moment(calEvent.approved).format("ll")}
+                    ,
+                    {calEvent.approved_user}
+                  </p>
+                )}
+                {calEvent.status === "D" && (
+                  <p className={classes.eventStatusInfo}>
+                    Rejected:
+                    {moment(calEvent.declined).format("ll")}
+                    ,
+                    {calEvent.declined_user}
+                  </p>
+                )}
+              </div>
             )}
-            {calEvent.status === "D" && (
-              <p className={classes.eventStatusInfo}>
-                Rejected:
-                {moment(calEvent.declined).format("ll")}
-                ,
-                {calEvent.declined_user}
-              </p>
-            )}
-          </div>
+
         </div>
       </DialogContent>
       <DialogActions className={classes.modalAction}>
@@ -812,6 +846,12 @@ const EventModal = ({
   );
 };
 
+EventModal.defaultProps = {
+  appointments: "",
+  event: "",
+  errors: "",
+};
+
 EventModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   appointments: PropTypes.arrayOf(
@@ -828,7 +868,7 @@ EventModal.propTypes = {
       updated: PropTypes.string,
       updated_user: PropTypes.string,
     }),
-  ).isRequired,
+  ),
   selectedProvider: PropTypes.shape({
     name: PropTypes.string,
     id: PropTypes.number,
@@ -838,7 +878,7 @@ EventModal.propTypes = {
     lastname: PropTypes.string,
     email: PropTypes.string,
     patient_id: PropTypes.number,
-  }).isRequired,
+  }),
   providers: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
@@ -851,7 +891,7 @@ EventModal.propTypes = {
   onEventUpdate: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   isNewEvent: PropTypes.bool.isRequired,
-  errors: PropTypes.string.isRequired,
+  errors: PropTypes.string,
 };
 
 export default EventModal;

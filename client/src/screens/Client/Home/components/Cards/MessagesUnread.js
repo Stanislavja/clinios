@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     minHeight: 47,
   },
   messageToPatientsUnread: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(4),
     "& li": {
       fontSize: "13px",
       listStyle: "none",
@@ -96,7 +96,7 @@ const MessagesUnread = ({
               </li>
             ))
           ) : (
-            <p></p>
+            <p />
           )}
         </ul>
       </CardContent>

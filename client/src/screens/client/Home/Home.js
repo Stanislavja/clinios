@@ -7,6 +7,7 @@ import Switch from "@material-ui/core/Switch";
 import Typography from "@material-ui/core/Typography";
 import { useSnackbar } from "notistack";
 
+import useAuth from "../../../hooks/useAuth";
 import Appointments from "../../../services/appointments.service";
 import DashboardHome from "../../../services/DashboardHome.service";
 import Messages from "../../../services/message-to-patient.service";
@@ -44,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Home() {
   const classes = useStyles();
+  const { user } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const [errors, setErrors] = useState(null);
   const [selectedProvider, setSelectedProvider] = useState({});
@@ -52,7 +54,7 @@ export default function Home() {
   const [appointmentRequests, setAppointmentRequests] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [events, setEvents] = useState([]);
-  const [selectedEvent, setSelectedEvent] = useState("");
+  const [selectedEvent, setSelectedEvent] = useState({});
   const [selectedMsg, setSelectedMsg] = useState("");
   const [providers, setProviders] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -120,7 +122,12 @@ export default function Home() {
       const { data } = await DashboardHome.getProviders();
       setProviders(data);
       if (data.length > 0) {
-        setSelectedProvider(data[0]);
+        const loggedinUserAsProvider = data.filter((d) => d.id === user.id);
+        if (loggedinUserAsProvider.length > 0) {
+          setSelectedProvider(loggedinUserAsProvider[0]);
+        } else {
+          setSelectedProvider(data[0]);
+        }
       }
     }
     fetchProviders();
@@ -183,8 +190,7 @@ export default function Home() {
         });
         setIsOpen(false);
       },
-      (error) => {
-        setErrors(error.response.data.message);
+      () => {
         setIsLoading(false);
       },
     );
@@ -273,7 +279,7 @@ export default function Home() {
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={8}>
+      <Grid container spacing={4}>
         <Grid item md={7} xs={12} className={classes.headerWrap}>
           <Typography component="h1" variant="h2" color="textPrimary" className={classes.pageTitle}>
             Home
