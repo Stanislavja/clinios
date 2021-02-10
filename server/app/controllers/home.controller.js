@@ -117,10 +117,10 @@ const createAppointment = async (req, res) => {
     patient_id = null;
   }
   if (title === undefined) {
-    title = null;
+    title = "";
   }
   if (notes === undefined) {
-    notes = null;
+    notes = "";
   }
 
   const db = makeDb(configuration, res);
@@ -245,7 +245,7 @@ const updateAppointment = async (req, res) => {
       errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
     }
-    if (patient.id) {
+    if (patient.email) {
       let emailTemplate;
       if (ApptStatus === "D") {
         emailTemplate = cancelAppointmentTemplate(

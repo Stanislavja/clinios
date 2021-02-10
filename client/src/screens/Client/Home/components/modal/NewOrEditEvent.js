@@ -254,8 +254,9 @@ const EventModal = ({
         lastname: props.event.lastname,
       });
 
-      (props.event.firstname || props.event.lastname)
-        && setPatientSearchTerm(`${props.event.firstname} ${props.event.lastname}`);
+      if (props.event.firstname || props.event.lastname) {
+        setPatientSearchTerm(`${props.event.firstname} ${props.event.lastname}`);
+      }
     }
     setProvider(selectedProvider);
     // eslint-disable-next-line react-hooks/exhaustive-deps, react/destructuring-assignment
