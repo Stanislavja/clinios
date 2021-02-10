@@ -6,7 +6,7 @@ import InputMask from "react-input-mask";
 
 const MaskInput = (props) => {
   const {
-    className, required, type, name, label, margin, variant, value, mask, onChange,
+    className, required, fullWidth, type, name, label, margin, variant, value, mask, onChange,
   } = props;
 
   return (
@@ -19,6 +19,7 @@ const MaskInput = (props) => {
         <TextField
           {...inputProps}
           required={required}
+          fullWidth={fullWidth}
           name={name}
           label={label}
           margin={margin}
@@ -41,6 +42,7 @@ MaskInput.defaultProps = {
   value: "",
   mask: "",
   required: false,
+  fullWidth: false,
 };
 
 MaskInput.propTypes = {
@@ -53,6 +55,7 @@ MaskInput.propTypes = {
   value: PropTypes.string,
   mask: PropTypes.string,
   required: PropTypes.bool,
+  fullWidth: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
 };
 
