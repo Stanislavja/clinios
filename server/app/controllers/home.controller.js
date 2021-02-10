@@ -178,7 +178,7 @@ const cancelAppointment = async (req, res) => {
       errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
     }
-    if (patient.id) {
+    if (patient.email) {
       const emailTemplate = cancelAppointmentTemplate(
         patient,
         moment(appointmentDate).format("YYYY-MM-DD HH:mm:ss"),
