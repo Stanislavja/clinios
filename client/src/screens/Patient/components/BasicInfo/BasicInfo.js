@@ -29,6 +29,7 @@ import {
   PaymentData,
 } from "../../../../static/patientBasicInfoForm";
 import { calculateAge } from "../../../../utils/helpers";
+import PaymentMethodsForm from "./components/PaymentMethodsForm";
 import PharmaciesSearch from "./components/Pharmacies";
 
 const useStyles = makeStyles((theme) => ({
@@ -69,6 +70,8 @@ const BasicInfo = (props) => {
   const SecondRow = BasicInfoForm.secondRow;
   const ThirdRow = BasicInfoForm.thirdRow;
 
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
+  const [showPaymentMethodForm, setShowPaymentMethodForm] = useState(false);
   const [country, setCountry] = useState("");
   const [region, setRegion] = useState("");
   const [basicInfo, setBasicInfo] = useState({
@@ -130,8 +133,28 @@ const BasicInfo = (props) => {
       });
   };
 
+  const toggleNewPaymentMethodDialog = () => {
+    setShowPaymentMethodForm((prevState) => !prevState);
+    if (selectedPaymentMethod) {
+      setTimeout(() => {
+        setSelectedPaymentMethod(null);
+      }, 500);
+    }
+  };
+
+  const editPaymentMethodHandler = (item) => {
+    setSelectedPaymentMethod(item);
+    toggleNewPaymentMethodDialog();
+  };
+
   return (
     <>
+      <PaymentMethodsForm
+        isOpen={showPaymentMethodForm}
+        onClose={toggleNewPaymentMethodDialog}
+        reloadData={() => { }}
+        cardData={selectedPaymentMethod}
+      />
       <Grid container>
         <Grid item xs={12}>
           <Paper className={classes.root} variant="outlined">
@@ -395,7 +418,7 @@ const BasicInfo = (props) => {
               <Typography variant="h5" color="textPrimary">
                 Payment Methods &nbsp;&nbsp;
                 <span>
-                  <Button size="small" variant="outlined">
+                  <Button size="small" variant="outlined" onClick={() => toggleNewPaymentMethodDialog()}>
                     New
                   </Button>
                 </span>
@@ -415,10 +438,10 @@ const BasicInfo = (props) => {
                       <TableCell component="th" scope="row">
                         {row.type}
                       </TableCell>
-                      <TableCell align="center">{row.lastFour}</TableCell>
-                      <TableCell align="center">{row.expires}</TableCell>
+                      <TableCell align="center">{row.cardNumber.split(" ")[3]}</TableCell>
+                      <TableCell align="center">{row.expiryDate}</TableCell>
                       <TableCell align="center">
-                        <Button>Edit</Button>
+                        <Button onClick={() => editPaymentMethodHandler(row)}>Edit</Button>
                         <Button>Delete</Button>
                       </TableCell>
                     </TableRow>
