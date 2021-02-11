@@ -433,12 +433,11 @@ const getProviderDetails = async (req, res) => {
     );
 
     const patientAppointmentRequest = await db.query(
-      `select count(m.id), min(m.unread_notify_dt)
-        from message m
-        where m.client_id=${req.client_id}
-        and m.user_id_from=1
-        and m.read_dt is null
-        and m.unread_notify_dt<=current_date()
+      `select count(uc.client_id), min(uc.created)
+      from user_calendar uc
+      where uc.client_id=${req.client_id}
+      and uc.user_id=${providerId}
+      and uc.status='R' /*R=Requested*/
       `
     );
 
