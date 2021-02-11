@@ -257,9 +257,7 @@ export default function Home() {
 
   const handleProviderClick = (provider) => {
     setSelectedProvider(provider);
-    fetchEventsByProvider(provider);
     fetchUnreadPatientMessages(provider.id);
-    fetchPatientApptRequests(provider.id);
   };
   const handleMessageClick = (_, patientIdTo) => {
     setPatient_id_to(patientIdTo);

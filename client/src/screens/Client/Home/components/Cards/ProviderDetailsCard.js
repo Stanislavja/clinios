@@ -194,21 +194,21 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
             <div className={classes.count}>
               {!!providerDetails
                 && providerDetails.patientAppointmentRequest
-                && providerDetails.patientAppointmentRequest["count(m.id)"]}
+                && providerDetails.patientAppointmentRequest["count(uc.client_id)"]}
             </div>
             <div>
               {!!providerDetails
                 && providerDetails.patientAppointmentRequest
                 && providerDetails.patientAppointmentRequest[
-                  "min(m.unread_notify_dt)"
+                  "min(uc.created)"
                 ]
                 ? `${moment(
                   providerDetails.patientAppointmentRequest[
-                    "min(m.unread_notify_dt)"
+                    "min(uc.created)"
                   ],
                 ).format("ll")} (${moment(
                   providerDetails.messageToPatientsNotRead[
-                    "min(m.unread_notify_dt)"
+                    "min(uc.created)"
                   ],
                 )
                   .startOf("day")
