@@ -794,6 +794,7 @@ const Patient = () => {
           message={(
             <BasicInfo
               reloadData={fetchPatientData}
+              reloadPaymentMethods={fetchPaymentMethods}
             />
           )}
           applyForm={() => dispatch(togglePatientInfoDialog())}

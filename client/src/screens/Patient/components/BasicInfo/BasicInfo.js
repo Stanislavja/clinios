@@ -69,7 +69,7 @@ const BasicInfo = (props) => {
   const formData = state.patientInfo.data;
   const paymentMethodsData = state.patientInfo.paymentMethods || [];
   const { patientId } = state;
-  const { reloadData } = props;
+  const { reloadData, reloadPaymentMethods } = props;
   const FirstRow = BasicInfoForm.firstRow;
   const SecondRow = BasicInfoForm.secondRow;
   const ThirdRow = BasicInfoForm.thirdRow;
@@ -168,7 +168,7 @@ const BasicInfo = (props) => {
       <PaymentMethodsForm
         isOpen={showPaymentMethodForm}
         onClose={toggleNewPaymentMethodDialog}
-        reloadData={() => { }}
+        reloadData={reloadPaymentMethods}
         cardData={selectedPaymentMethod}
       />
       <Grid container>
@@ -509,6 +509,7 @@ const BasicInfo = (props) => {
 
 BasicInfo.propTypes = {
   reloadData: PropTypes.func.isRequired,
+  reloadPaymentMethods: PropTypes.func.isRequired,
 };
 
 export default BasicInfo;
