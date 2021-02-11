@@ -13,6 +13,7 @@ import {
   SET_FORMS,
   SET_BILLING,
   SET_BALANCE,
+  SET_PAYMENT_METHODS,
   SET_ALLERGIES,
   SET_HANDOUTS,
   SET_ENCOUNTERS,
@@ -163,6 +164,11 @@ export const setBilling = (data) => ({
 
 export const setBalance = (data) => ({
   type: SET_BALANCE,
+  payload: data,
+});
+
+export const setPaymentMethods = (data) => ({
+  type: SET_PAYMENT_METHODS,
   payload: data,
 });
 
