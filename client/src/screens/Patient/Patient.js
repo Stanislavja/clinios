@@ -41,6 +41,7 @@ import {
   setMedications,
   setBilling,
   setBalance,
+  setPaymentMethods,
   togglePatientInfoDialog,
   togglePatientHistoryDialog,
   toggleAdminHistoryDialog,
@@ -712,6 +713,12 @@ const Patient = () => {
     setLayout([...newLayout]);
   };
 
+  const fetchPaymentMethods = useCallback(() => {
+    PatientService.getPaymentMethods(patientId).then((res) => {
+      dispatch(setPaymentMethods(res.data));
+    });
+  }, [patientId]);
+
   useEffect(() => {
     if (!hasPatientIderror) {
       fetchPatientHistory();
@@ -729,6 +736,7 @@ const Patient = () => {
       fetchMedications();
       fetchRequisitions();
       fetchTests();
+      fetchPaymentMethods();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }
   }, [
@@ -748,6 +756,7 @@ const Patient = () => {
     fetchMedications,
     fetchRequisitions,
     fetchTests,
+    fetchPaymentMethods,
   ]);
 
   const showSearchResultsDialog = useMemo(() => {
