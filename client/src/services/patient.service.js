@@ -524,6 +524,12 @@ class Patient {
       })
       .then((res) => res.data);
   }
+
+  createPaymentMethod(patientId, data) {
+    return axios.post(`${API_BASE}/patient/${patientId}/payment-methods`, data, {
+      headers: authHeader(),
+    });
+  }
 }
 
 export default new Patient();
