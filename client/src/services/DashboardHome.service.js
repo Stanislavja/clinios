@@ -10,9 +10,9 @@ class DashboardHome {
       .then((res) => res.data);
   }
 
-  getProviderDetails() {
+  getProviderDetails(providerId) {
     return axios
-      .get(`${API_BASE}/providers-details`, { headers: authHeader() })
+      .get(`${API_BASE}/providers-details/${providerId}`, { headers: authHeader() })
       .then((res) => res.data);
   }
 
