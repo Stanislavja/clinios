@@ -1850,14 +1850,14 @@ const getPaymentMethods = async (req, res) => {
   const db = makeDb(configuration, res);
 
   const { patient_id } = req.params;
-  let $sql;
-  try {
-    $sql = `select id, type, account_number, exp, created
-    from payment_method
-    where patient_id=${patient_id}
-    order by 1`;
 
-    const dbResponse = await db.query($sql);
+  try {
+    const dbResponse = await db.query(
+      `select id, type, account_number, exp, created
+      from payment_method
+      where patient_id=${patient_id}
+      order by 1`
+    );
 
     if (!dbResponse) {
       errorMessage.message = "None found";
