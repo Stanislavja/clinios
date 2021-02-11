@@ -1846,6 +1846,34 @@ const saveLayout = async (req, res) => {
   }
 };
 
+const getPaymentMethods = async (req, res) => {
+  const db = makeDb(configuration, res);
+
+  const { patient_id } = req.params;
+  let $sql;
+  try {
+    $sql = `select id, type, account_number, exp, created
+    from payment_method
+    where patient_id=${patient_id}
+    order by 1`;
+
+    const dbResponse = await db.query($sql);
+
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.error("err:", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const getDrugs = async (req, res) => {
   const db = makeDb(configuration, res);
 
@@ -1953,6 +1981,7 @@ const appointmentTypes = {
   getLayout,
   saveLayout,
   deleteLayout,
+  getPaymentMethods,
   getDrugs,
   getIcds,
 };
