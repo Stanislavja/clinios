@@ -401,13 +401,14 @@ const getProviders = async (req, res) => {
 };
 
 const getProviderDetails = async (req, res) => {
+  const { providerId } = req.params;
   const db = makeDb(configuration, res);
   try {
     const patientLabs = await db.query(
       `select count(l.id), min(l.created)
             from lab l
             where l.client_id=${req.client_id}
-            and l.user_id=1
+            and l.user_id=${providerId}
             and l.status='R' /*R=Requested*/
             /*and (l.pend_dt is null or l.pend_dt<=current_date)*/
       `
@@ -416,7 +417,7 @@ const getProviderDetails = async (req, res) => {
       `select count(m.id), min(m.created)
             from message m
             where m.client_id=${req.client_id}
-            and m.user_id_to=1
+            and m.user_id_to=${providerId}
             and m.status='O' /*O=Open*/
             /*and (m.pend_dt is null or m.pend_dt<=current_date)*/
       `
@@ -425,7 +426,7 @@ const getProviderDetails = async (req, res) => {
       `select count(m.id), min(m.unread_notify_dt)
         from message m
         where m.client_id=${req.client_id}
-        and m.user_id_from=1
+        and m.user_id_from=${providerId}
         and m.read_dt is null
         and m.unread_notify_dt<=current_date()
       `
