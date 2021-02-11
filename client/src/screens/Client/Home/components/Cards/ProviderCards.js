@@ -98,7 +98,7 @@ const ProviderCards = ({ providers, handleProviderClick }) => {
               <li
                 key={provider.id}
                 onClick={() => handleProviderClick(provider)} // TODO:: Refactor and remove the eslint disable comment
-                //onKeyDown={() => handleProviderClick(provider)}
+                onKeyDown={() => handleProviderClick(provider)}
               >
                 <div>{provider.name}</div>
                 <div className={classes.count}>{provider.count}</div>

@@ -207,7 +207,7 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
                     "min(uc.created)"
                   ],
                 ).format("ll")} (${moment(
-                  providerDetails.messageToPatientsNotRead[
+                  providerDetails.patientAppointmentRequest[
                     "min(uc.created)"
                   ],
                 )
@@ -241,8 +241,8 @@ ProviderDetailsCard.propTypes = {
       "min(m.unread_notify_dt)": PropTypes.string,
     }),
     patientAppointmentRequest: PropTypes.shape({
-      "count(m.id)": PropTypes.number,
-      "min(m.unread_notify_dt)": PropTypes.string,
+      "count(uc.client_id)": PropTypes.number,
+      "min(uc.created)": PropTypes.string,
     }),
   }).isRequired,
 };
