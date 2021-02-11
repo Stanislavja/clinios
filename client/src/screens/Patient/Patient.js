@@ -142,9 +142,6 @@ const useStyles = makeStyles(() => ({
     paddingTop: "15px",
     minHeight: "calc(100vh - 163px)",
   },
-  noDisplay: {
-    display: "none",
-  },
 }));
 
 export const PatientContext = createContext(null);
@@ -768,8 +765,8 @@ const Patient = () => {
         accept=".pdf, .txt, .doc, .docx, image/*"
         multiple
         ref={inputFile}
-        className={classes.noDisplay}
         onChange={(e) => handleDocumentsFile(e)}
+        hidden
       />
       {showSearchResultsDialog && (
         <Dialog
