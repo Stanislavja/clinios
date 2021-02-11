@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   TextField, Button, Grid, Typography,
@@ -46,19 +46,20 @@ const PaymentMethodsForm = (props) => {
     expiryDate: "",
   });
 
-  const updateFields = useCallback(() => {
+  const updateFields = () => {
     formFields.cardType = paymentMethodType(cardData.type);
     formFields.cardNumber = cardData.account_number;
     // formFields.cvv = cardData.account_number;
     formFields.expiryDate = moment(cardData.exp).format("MM-YY");
     setFormFields({ ...formFields });
-  }, [formFields, cardData]);
+  };
 
   useEffect(() => {
     if (cardData) {
       updateFields();
     }
-  }, [cardData, updateFields]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cardData]);
 
   const updateFormState = (key, value) => {
     setFormFields({
