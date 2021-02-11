@@ -242,6 +242,12 @@ router.delete(
   Patient.deleteLayout
 );
 
+router.post(
+  "/patient/:patient_id/payment-methods",
+  [authJwt.verifyToken],
+  Patient.createPaymentMethod
+);
+
 router.get("/drug/search", [authJwt.verifyToken], Patient.getDrugs);
 router.get("/icd/search", [authJwt.verifyToken], Patient.getIcds);
 
