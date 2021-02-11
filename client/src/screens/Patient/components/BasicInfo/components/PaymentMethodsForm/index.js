@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 import {
   TextField, Button, Grid, Typography,
@@ -12,6 +12,7 @@ import MaskInput from "../../../../../../components/common/MaskInput";
 import Dialog from "../../../../../../components/Dialog";
 import useDidMountEffect from "../../../../../../hooks/useDidMountEffect";
 import PatientPortalService from "../../../../../../services/patient_portal/patient-portal.service";
+import { paymentMethodType } from "../../../../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
   formContainer: {
@@ -45,11 +46,19 @@ const PaymentMethodsForm = (props) => {
     expiryDate: "",
   });
 
+  const updateFields = useCallback(() => {
+    formFields.cardType = paymentMethodType(cardData.type);
+    formFields.cardNumber = cardData.account_number;
+    // formFields.cvv = cardData.account_number;
+    formFields.expiryDate = moment(cardData.exp).format("MM-YY");
+    setFormFields({ ...formFields });
+  }, [formFields, cardData]);
+
   useEffect(() => {
     if (cardData) {
-      setFormFields({ ...cardData });
+      updateFields();
     }
-  }, [cardData]);
+  }, [cardData, updateFields]);
 
   const updateFormState = (key, value) => {
     setFormFields({
@@ -168,7 +177,7 @@ const PaymentMethodsForm = (props) => {
 
             <Grid container className={classes.buttonsContainer} justify="space-between">
               <Button variant="outlined" type="submit">
-                Add Method
+                {`${isEdit ? "Edit" : "Add"} Method`}
               </Button>
               <Button variant="outlined" onClick={() => onClose()}>
                 Cancel
@@ -192,7 +201,11 @@ PaymentMethodsForm.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   reloadData: PropTypes.func.isRequired,
-  cardData: PropTypes.shape({}),
+  cardData: PropTypes.shape({
+    type: PropTypes.string,
+    exp: PropTypes.string,
+    account_number: PropTypes.string,
+  }),
 };
 
 export default PaymentMethodsForm;
