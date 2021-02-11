@@ -1,22 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
+  Box,
   TextField,
   Button,
   Grid,
   Typography,
-  FormControlLabel,
+  List,
+  ListItem,
+  ListItemText,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 import usePatientContext from "../../../../hooks/usePatientContext";
 import { togglePaymentDialog } from "../../../../providers/Patient/actions";
+import { paymentMethodType } from "../../../../utils/helpers";
+import PaymentMethodsForm from "../BasicInfo/components/PaymentMethodsForm";
 
 const useStyles = makeStyles((theme) => ({
   inputRow: {
-    margin: theme.spacing(3, 0),
-  },
-  processPaymentButton: {
     margin: theme.spacing(3, 0),
   },
   amountContainer: {
@@ -25,18 +27,38 @@ const useStyles = makeStyles((theme) => ({
   formInput: {
     marginBottom: theme.spacing(1),
   },
+  textButton: {
+    cursor: "pointer",
+    padding: "3px 0px",
+    "&:hover": {
+      backgroundColor: "#f1f1f1 !important",
+    },
+  },
 }));
 
 const PaymentForm = () => {
   const classes = useStyles();
-  const { dispatch } = usePatientContext();
+  const { state, dispatch } = usePatientContext();
+  const paymentMethodsData = state.patientInfo.paymentMethods || [];
+
+  const [showPaymentMethodForm, setShowPaymentMethodForm] = useState(false);
 
   const processPaymentHandler = () => {
     dispatch(togglePaymentDialog());
   };
 
+  const toggleNewPaymentMethodDialog = () => {
+    setShowPaymentMethodForm((prevState) => !prevState);
+  };
+
   return (
     <>
+      <PaymentMethodsForm
+        isOpen={showPaymentMethodForm}
+        onClose={toggleNewPaymentMethodDialog}
+        reloadData={() => { }}
+        cardData={null}
+      />
       <Typography variant="h3" color="textSecondary" gutterBottom>
         Process Payment
       </Typography>
@@ -50,48 +72,54 @@ const PaymentForm = () => {
           >
             Use existing payment method
           </Typography>
-          <Typography
-            className={classes.formInput}
-            variant="h5"
-            color="textPrimary"
-            gutterBottom
-          >
-            Visa 0043
-          </Typography>
-          <Typography
-            className={classes.formInput}
-            variant="h5"
-            color="textPrimary"
-            gutterBottom
-          >
-            MasterCard 0222
-          </Typography>
-          <Typography
-            className={classes.formInput}
-            variant="h5"
-            color="textPrimary"
-            gutterBottom
-          >
-            Checking 0111
-          </Typography>
+          <Grid item lg={6}>
+            <List component="ul">
+              {
+                paymentMethodsData.length
+                  ? paymentMethodsData.map((item) => (
+                    <ListItem
+                      key={item.id}
+                      disableGutters
+                      button
+                    >
+                      <ListItemText primary={`${paymentMethodType(item.type)} ${item.account_number}`} />
+                    </ListItem>
+                  ))
+                  : (
+                    <Typography
+                      className={classes.formInput}
+                      variant="h5"
+                      color="textPrimary"
+                      gutterBottom
+                    >
+                      No payment methods available...
+                    </Typography>
+                  )
+              }
+            </List>
 
-          <Typography variant="h5" color="textPrimary" gutterBottom>
-            New Payment Method
-          </Typography>
-
-          <Grid>
-            <FormControlLabel
-              className={classes.amountContainer}
-              value=""
-              control={<TextField label="" name="address" />}
-              label="Amount"
-              labelPlacement="start"
-            />
+            <Box mb={3} mt={1}>
+              <Typography
+                variant="h5"
+                color="textPrimary"
+                gutterBottom
+                className={classes.textButton}
+                onClick={() => toggleNewPaymentMethodDialog()}
+              >
+                New Payment method
+              </Typography>
+              <TextField
+                required
+                type="number"
+                margin="dense"
+                variant="outlined"
+                label="Amount"
+              />
+            </Box>
           </Grid>
 
           <Button
             onClick={() => processPaymentHandler()}
-            className={classes.processPaymentButton}
             variant="outlined"
             size="large"
           >
