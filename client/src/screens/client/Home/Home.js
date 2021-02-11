@@ -90,8 +90,8 @@ export default function Home() {
     setEvents(eventsFromAPI);
   }
 
-  async function fetchProviderDetails() {
-    const { data } = await DashboardHome.getProviderDetails();
+  async function fetchProviderDetails(providerId) {
+    const { data } = await DashboardHome.getProviderDetails(providerId);
     setProviderDetails(data);
   }
   async function fetchUnreadPatientMessages(providerId) {
@@ -113,6 +113,7 @@ export default function Home() {
     if (!isEmpty(selectedProvider)) {
       fetchEventsByProvider(selectedProvider);
       fetchPatientApptRequests(selectedProvider.id);
+      fetchProviderDetails(selectedProvider.id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedProvider]);
@@ -131,7 +132,6 @@ export default function Home() {
       }
     }
     fetchProviders();
-    fetchProviderDetails();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
