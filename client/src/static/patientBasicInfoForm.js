@@ -94,7 +94,7 @@ export const BasicInfoForm = {
   ],
   thirdRow: [
     {
-      name: "otherPhone",
+      name: "phone_other",
       id: "otherPhone",
       label: "Other Phone",
       baseType: "input",
@@ -102,11 +102,11 @@ export const BasicInfoForm = {
       options: [],
     },
     {
-      name: "phoneNotes",
+      name: "phone_note",
       id: "phoneNotes",
       label: "Phone Notes",
       baseType: "input",
-      type: "number",
+      type: "text",
       options: [],
     },
     {

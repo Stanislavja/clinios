@@ -12,6 +12,7 @@ import {
   TableHead,
   TableBody,
   TableRow,
+  TableCell,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -29,9 +30,8 @@ import PatientService from "../../../../services/patient.service";
 import {
   BasicInfoForm,
   InsuranceForm,
-  PaymentData,
 } from "../../../../static/patientBasicInfoForm";
-import { calculateAge } from "../../../../utils/helpers";
+import { calculateAge, paymentMethodType } from "../../../../utils/helpers";
 import PaymentMethodsForm from "./components/PaymentMethodsForm";
 import PharmaciesSearch from "./components/Pharmacies";
 
@@ -67,8 +67,9 @@ const BasicInfo = (props) => {
   const { enqueueSnackbar } = useSnackbar();
   const { state, dispatch } = usePatientContext();
   const formData = state.patientInfo.data;
+  const paymentMethodsData = state.patientInfo.paymentMethods || [];
   const { patientId } = state;
-  const { reloadData } = props;
+  const { reloadData, reloadPaymentMethods } = props;
   const FirstRow = BasicInfoForm.firstRow;
   const SecondRow = BasicInfoForm.secondRow;
   const ThirdRow = BasicInfoForm.thirdRow;
@@ -86,6 +87,8 @@ const BasicInfo = (props) => {
     phone_home: "",
     phone_cell: "",
     phone_work: "",
+    phone_other: "",
+    phone_note: "",
     email: "",
     dob: "",
     otherPhone: "",
@@ -165,7 +168,7 @@ const BasicInfo = (props) => {
       <PaymentMethodsForm
         isOpen={showPaymentMethodForm}
         onClose={toggleNewPaymentMethodDialog}
-        reloadData={() => { }}
+        reloadData={reloadPaymentMethods}
         cardData={selectedPaymentMethod}
       />
       <Grid container>
@@ -439,7 +442,11 @@ const BasicInfo = (props) => {
               <Typography variant="h5" color="textPrimary">
                 Payment Methods &nbsp;&nbsp;
                 <span>
-                  <Button size="small" variant="outlined" onClick={() => toggleNewPaymentMethodDialog()}>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    onClick={() => toggleNewPaymentMethodDialog()}
+                  >
                     New
                   </Button>
                 </span>
@@ -454,21 +461,33 @@ const BasicInfo = (props) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {PaymentData.map((row) => (
-                    <StyledTableRowLg key={row.type}>
-                      <StyledTableCellLg>{row.type}</StyledTableCellLg>
-                      <StyledTableCellLg align="center">{row.cardNumber.split(" ")[3]}</StyledTableCellLg>
-                      <StyledTableCellLg align="center">{row.expiryDate}</StyledTableCellLg>
-                      <StyledTableCellLg align="center">
-                        <IconButton onClick={() => editPaymentMethodHandler(row)}>
-                          <EditIcon fontSize="small" />
-                        </IconButton>
-                        <IconButton>
-                          <DeleteIcon fontSize="small" />
-                        </IconButton>
-                      </StyledTableCellLg>
-                    </StyledTableRowLg>
-                  ))}
+                  {paymentMethodsData.length
+                    ? paymentMethodsData.map((row) => (
+                      <StyledTableRowLg key={row.type}>
+                        <StyledTableCellLg>{paymentMethodType(row.type)}</StyledTableCellLg>
+                        <StyledTableCellLg align="center">{row.account_number}</StyledTableCellLg>
+                        <StyledTableCellLg align="center">
+                          {moment(row.exp).format("MMM D YYYY")}
+                        </StyledTableCellLg>
+                        <StyledTableCellLg align="center">
+                          <IconButton onClick={() => editPaymentMethodHandler(row)}>
+                            <EditIcon fontSize="small" />
+                          </IconButton>
+                          <IconButton>
+                            <DeleteIcon fontSize="small" />
+                          </IconButton>
+                        </StyledTableCellLg>
+                      </StyledTableRowLg>
+                    ))
+                    : (
+                      <StyledTableRowLg>
+                        <TableCell colSpan={4}>
+                          <Typography align="center" variant="body1">
+                            No Records Found...
+                          </Typography>
+                        </TableCell>
+                      </StyledTableRowLg>
+                    )}
                 </TableBody>
               </Table>
             </Grid>
@@ -490,6 +509,7 @@ const BasicInfo = (props) => {
 
 BasicInfo.propTypes = {
   reloadData: PropTypes.func.isRequired,
+  reloadPaymentMethods: PropTypes.func.isRequired,
 };
 
 export default BasicInfo;

@@ -41,6 +41,7 @@ import {
   setMedications,
   setBilling,
   setBalance,
+  setPaymentMethods,
   togglePatientInfoDialog,
   togglePatientHistoryDialog,
   toggleAdminHistoryDialog,
@@ -141,9 +142,6 @@ const useStyles = makeStyles(() => ({
   main: {
     paddingTop: "15px",
     minHeight: "calc(100vh - 163px)",
-  },
-  noDisplay: {
-    display: "none",
   },
 }));
 
@@ -715,6 +713,12 @@ const Patient = () => {
     setLayout([...newLayout]);
   };
 
+  const fetchPaymentMethods = useCallback(() => {
+    PatientService.getPaymentMethods(patientId).then((res) => {
+      dispatch(setPaymentMethods(res.data));
+    });
+  }, [patientId]);
+
   useEffect(() => {
     if (!hasPatientIderror) {
       fetchPatientHistory();
@@ -732,6 +736,7 @@ const Patient = () => {
       fetchMedications();
       fetchRequisitions();
       fetchTests();
+      fetchPaymentMethods();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }
   }, [
@@ -751,6 +756,7 @@ const Patient = () => {
     fetchMedications,
     fetchRequisitions,
     fetchTests,
+    fetchPaymentMethods,
   ]);
 
   const showSearchResultsDialog = useMemo(() => {
@@ -768,8 +774,8 @@ const Patient = () => {
         accept=".pdf, .txt, .doc, .docx, image/*"
         multiple
         ref={inputFile}
-        className={classes.noDisplay}
         onChange={(e) => handleDocumentsFile(e)}
+        hidden
       />
       {showSearchResultsDialog && (
         <Dialog
@@ -788,6 +794,7 @@ const Patient = () => {
           message={(
             <BasicInfo
               reloadData={fetchPatientData}
+              reloadPaymentMethods={fetchPaymentMethods}
             />
           )}
           applyForm={() => dispatch(togglePatientInfoDialog())}

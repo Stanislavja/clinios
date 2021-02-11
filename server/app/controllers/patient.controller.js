@@ -52,7 +52,7 @@ const getPatient = async (req, res) => {
   const { patient_id } = req.params;
   try {
     const dbResponse = await db.query(
-      `select p.firstname, p.middlename, p.lastname, p.gender, p.dob, p.ssn, p.preferred_name, p.referred_by, p.phone_home, p.phone_cell, p.phone_work, p.email, concat(u.firstname, ' ', u.lastname) provider, p.client_id
+      `select p.firstname, p.middlename, p.lastname, p.gender, p.dob, p.ssn, p.preferred_name, p.referred_by, p.phone_home, p.phone_cell, p.phone_work, p.phone_other, p.phone_note, p.email, concat(u.firstname, ' ', u.lastname) provider, p.client_id
         , p.admin_note, p.medical_note, p.address, p.address2, p.country, p.city, p.postal, p.state, p.emergency_firstname, p.emergency_middlename, p.emergency_lastname, p.emergency_relationship, p.emergency_email,
         p.emergency_phone, p.insurance_name, p.insurance_group, p.insurance_member, p.insurance_phone, p.insurance_desc, p.height, p.waist, p.weight, p.medical_note
         from patient p
@@ -102,6 +102,8 @@ const updatePatient = async (req, res) => {
     phone_home,
     phone_cell,
     phone_work,
+    phone_other,
+    phone_note,
     admin_note,
     medical_note,
     address,
@@ -157,6 +159,12 @@ const updatePatient = async (req, res) => {
     }
     if (typeof phone_work !== "undefined") {
       $sql += `, phone_work='${phone_work}'`;
+    }
+    if (typeof phone_other !== "undefined") {
+      $sql += `, phone_other='${phone_other}'`;
+    }
+    if (typeof phone_note !== "undefined") {
+      $sql += `, phone_note='${phone_note}'`;
     }
     if (typeof admin_note !== "undefined") {
       $sql += `, admin_note='${admin_note}'`;
@@ -1864,6 +1872,34 @@ const saveLayout = async (req, res) => {
   }
 };
 
+const getPaymentMethods = async (req, res) => {
+  const db = makeDb(configuration, res);
+
+  const { patient_id } = req.params;
+
+  try {
+    const dbResponse = await db.query(
+      `select id, type, account_number, exp, created
+      from payment_method
+      where patient_id=${patient_id}
+      order by 1`
+    );
+
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.error("err:", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const getDrugs = async (req, res) => {
   const db = makeDb(configuration, res);
 
@@ -1972,6 +2008,7 @@ const appointmentTypes = {
   getLayout,
   saveLayout,
   deleteLayout,
+  getPaymentMethods,
   getDrugs,
   getIcds,
 };

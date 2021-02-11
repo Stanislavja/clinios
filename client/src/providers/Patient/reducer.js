@@ -25,6 +25,7 @@ import {
   SET_REQUISITIONS,
   SET_DOCUMENTS,
   SET_TESTS,
+  SET_PAYMENT_METHODS,
 
   // Togglers
   TOGGLE_PATIENT_INFO_EDIT_DIALOG,
@@ -224,6 +225,14 @@ const reducer = (state = initialState, action) => {
         billing: {
           ...state.billing,
           balance: action.payload,
+        },
+      };
+    case SET_PAYMENT_METHODS:
+      return {
+        ...state,
+        patientInfo: {
+          ...state.patientInfo,
+          paymentMethods: action.payload,
         },
       };
 
