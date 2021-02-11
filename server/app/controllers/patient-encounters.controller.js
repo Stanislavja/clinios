@@ -1010,6 +1010,39 @@ const getBillingPayment = async (req, res) => {
   }
 };
 
+const createBillingPayment = async (req, res) => {
+  const { dt, type_id, amount } = req.body.data;
+  const { encounter_id, patient_id } = req.params;
+  let { payment_type } = req.body.data;
+
+  const db = makeDb(configuration, res);
+
+  if (!payment_type) {
+    payment_type = null;
+  } else {
+    payment_type = `'${payment_type}'`;
+  }
+  try {
+    const insertResponse = await db.query(
+      `insert into tran (patient_id, user_id, client_id, encounter_id, dt, type_id, amount, payment_type, created, created_user_id) values 
+        (${patient_id}, ${req.user_id}, ${req.client_id}, ${encounter_id}, '${dt}', ${type_id}, ${amount}, ${payment_type}, now(), ${req.user_id})`
+    );
+
+    if (!insertResponse.affectedRows) {
+      errorMessage.message = "Insert not successful";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = insertResponse;
+    successMessage.message = "Insert successful";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    errorMessage.message = "Insert not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const patientEncounter = {
   getEncounters,
   getEncountersPrescriptions,
@@ -1042,6 +1075,7 @@ const patientEncounter = {
   getBillingDiagnoses,
   getBillingProcedsures,
   getBillingPayment,
+  createBillingPayment,
 };
 
 module.exports = patientEncounter;
