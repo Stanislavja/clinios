@@ -516,6 +516,14 @@ class Patient {
       },
     });
   }
+
+  getPaymentMethods(patientId) {
+    return axios
+      .get(`${API_BASE}/patient/${patientId}/payment-methods`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
 }
 
 export default new Patient();
