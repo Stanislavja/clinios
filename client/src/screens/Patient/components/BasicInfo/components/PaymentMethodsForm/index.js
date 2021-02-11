@@ -11,7 +11,8 @@ import PropTypes from "prop-types";
 import MaskInput from "../../../../../../components/common/MaskInput";
 import Dialog from "../../../../../../components/Dialog";
 import useDidMountEffect from "../../../../../../hooks/useDidMountEffect";
-import PatientPortalService from "../../../../../../services/patient_portal/patient-portal.service";
+import usePatientContext from "../../../../../../hooks/usePatientContext";
+import PatientService from "../../../../../../services/patient.service";
 import { paymentMethodType } from "../../../../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
@@ -33,6 +34,8 @@ const useStyles = makeStyles((theme) => ({
 
 const PaymentMethodsForm = (props) => {
   const classes = useStyles();
+  const { state } = usePatientContext();
+  const { patientId } = state;
   const { enqueueSnackbar } = useSnackbar();
   const {
     isOpen, onClose, reloadData, cardData,
@@ -77,15 +80,12 @@ const PaymentMethodsForm = (props) => {
     e.preventDefault();
     const reqBody = {
       data: {
-        dt: moment(formFields.date).format("YYYY-MM-DD hh:mm"),
-        type_id: formFields.type,
-        payment_type: formFields.paymentType,
-        amount: formFields.amount,
-        note: formFields.notes,
-        account_number: formFields.accountNum,
+        exp: moment(formFields.expiryDate).format("YYYY-MM-DD"),
+        type: formFields.cardType[0] || "V",
+        account_number: formFields.cardNumber.replaceAll("/", "").substring(0, 4),
       },
     };
-    PatientPortalService.createBilling(reqBody).then((response) => {
+    PatientService.createPaymentMethod(patientId, reqBody).then((response) => {
       enqueueSnackbar(`${response.message}`, { variant: "success" });
       reloadData();
       onClose();
