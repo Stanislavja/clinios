@@ -213,7 +213,7 @@ const EventModal = ({
   const [appointmentLengthDays, setAppointmentLengthDays] = useState(" ");
   const [currentDayLength, setCurrentDayLength] = useState(" ");
   const [errorText, setErrorText] = useState({
-    title: "",
+    eventTitle: "",
     patient: "",
     provider: "",
     error: "",
@@ -272,7 +272,7 @@ const EventModal = ({
     if (event.target.name === "title") {
       setErrorText({
         ...errorText,
-        title: "",
+        eventTitle: "",
       });
     }
   };
@@ -329,14 +329,14 @@ const EventModal = ({
   };
 
   const validateFormFields = () => {
-    if (!calEvent.title || selectedPatient.length === 0) {
-      if (!calEvent.title && selectedPatient.length === 0) {
+    if (!calEvent.eventTitle || selectedPatient.length === 0) {
+      if (!calEvent.eventTitle && selectedPatient.length === 0) {
         setErrorText({
           ...errorText,
           title: "Enter your title",
           patient: "Please select from here",
         });
-      } else if (calEvent.title || !!selectedPatient) {
+      } else if (calEvent.eventTitle || !!selectedPatient) {
         setErrorText(
           (prevErrorText) => ({
             ...prevErrorText,
@@ -362,7 +362,7 @@ const EventModal = ({
       if (isNewEvent) {
         const payload = {
           data: {
-            title: calEvent.title,
+            title: calEvent.eventTitle,
             provider,
             patient: selectedPatient,
             ApptStatus: calEvent.status,
@@ -377,7 +377,7 @@ const EventModal = ({
         const payload = {
           data: {
             id: props.event.id,
-            title: calEvent.title,
+            title: calEvent.eventTitle,
             providerName: calEvent.provider_name,
             provider: provider,
             patient: selectedPatient
@@ -400,7 +400,7 @@ const EventModal = ({
       }
     };
 
-    if (calEvent.title || (selectedPatient.length !== 0)) {
+    if (calEvent.eventTitle || (selectedPatient.length !== 0)) {
       submitData();
     }
   };
@@ -720,7 +720,7 @@ const EventModal = ({
             </FormControl>
             <FormControl component="div" className={classes.formControl}>
               <TextField
-                value={calEvent.title}
+                value={calEvent.eventTitle}
                 variant="outlined"
                 margin="normal"
                 size="small"
@@ -728,12 +728,12 @@ const EventModal = ({
                 fullWidth
                 id="title"
                 label="Title"
-                name="title"
+                name="eventTitle"
                 autoComplete="title"
                 autoFocus
                 onChange={(event) => handleOnChange(event)}
-                error={errorText.title.length > 0}
-                helperText={errorText.title.length > 0 && errorText.title}
+                error={errorText.eventTitle.length > 0}
+                helperText={errorText.eventTitle.length > 0 && errorText.eventTitle}
               />
             </FormControl>
             <FormControl
