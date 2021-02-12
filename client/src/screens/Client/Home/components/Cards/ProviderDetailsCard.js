@@ -121,7 +121,7 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
                     <div>
                       {(patientLabsDate !== undefined && patientLabsDate)
                         ? moment(patientLabsDate).format("ll")
-                        : "-"}
+                        : ""}
                     </div>
                   </Link>
                 )
@@ -134,7 +134,7 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
                     <div>
                       {(patientLabsDate !== undefined && patientLabsDate)
                         ? moment(patientLabsDate).format("ll")
-                        : "-"}
+                        : ""}
                     </div>
                   </>
                 )
@@ -186,7 +186,7 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
                 )
                   .startOf("day")
                   .fromNow()})`
-                : "-"}
+                : ""}
             </div>
           </li>
           <li>
@@ -213,7 +213,7 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
                 )
                   .startOf("day")
                   .fromNow()})`
-                : "-"}
+                : ""}
             </div>
           </li>
         </ul>
