@@ -1832,6 +1832,59 @@ const createPaymentMethod = async (req, res) => {
   }
 };
 
+const updatePaymentMethod = async (req, res) => {
+  const { patient_id, id } = req.params;
+  const { type, account_number, exp } = req.body.data;
+  const db = makeDb(configuration, res);
+  try {
+    const $sql = `update payment_method set type='${type}', account_number=${account_number}, exp='${exp}',
+    updated= now(), updated_user_id='${req.user_id}' where patient_id=${patient_id} and id='${id}'`;
+
+    const updateResponse = await db.query($sql);
+    if (!updateResponse.affectedRows) {
+      errorMessage.message = "Update not successful";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = updateResponse;
+    successMessage.message = "Update successful";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Update not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+const deletePaymentMethod = async (req, res) => {
+  const db = makeDb(configuration, res);
+  const { patient_id, id } = req.params;
+
+  try {
+    const dbResponse = await db.query(
+      `delete
+      from payment_method
+      where id=${id} and patient_id=${patient_id}`
+    );
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    successMessage.message = "Delete successful";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Error deleting layout";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const saveLayout = async (req, res) => {
   const { user_id } = req.params;
   const { layout } = req.body;
@@ -2005,6 +2058,8 @@ const appointmentTypes = {
   getRequisitions,
   deleteRequisitions,
   createPaymentMethod,
+  updatePaymentMethod,
+  deletePaymentMethod,
   getLayout,
   saveLayout,
   deleteLayout,

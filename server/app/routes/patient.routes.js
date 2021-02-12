@@ -254,6 +254,17 @@ router.post(
   Patient.createPaymentMethod
 );
 
+router.put(
+  "/patient/:patient_id/payment-methods/:id",
+  [authJwt.verifyToken],
+  Patient.updatePaymentMethod
+);
+router.delete(
+  "/patient/:patient_id/payment-methods/:id",
+  [authJwt.verifyToken],
+  Patient.deletePaymentMethod
+);
+
 router.get("/drug/search", [authJwt.verifyToken], Patient.getDrugs);
 router.get("/icd/search", [authJwt.verifyToken], Patient.getIcds);
 
