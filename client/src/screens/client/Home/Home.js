@@ -73,6 +73,7 @@ export default function Home() {
         {
           ...item,
           title: item.title ? item.title : item.firstname,
+          eventTitle: item.title,
           start: item.start_dt,
           end: item.end_dt,
           backgroundColor: statusToColorCode(item.status),
