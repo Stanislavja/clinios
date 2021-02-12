@@ -528,7 +528,27 @@ class Patient {
   createPaymentMethod(patientId, data) {
     return axios.post(`${API_BASE}/patient/${patientId}/payment-methods`, data, {
       headers: authHeader(),
-    });
+    })
+      .then((res) => res.data);
+  }
+
+  deletePaymentMethod(patientId, paymentMethodId) {
+    return axios.delete(
+      `${API_BASE}/patient/${patientId}/payment-methods/${paymentMethodId}`,
+      {
+        headers: authHeader(),
+      },
+    );
+  }
+
+  updatePaymentMethod(patientId, paymentMethodId, data) {
+    return axios.put(
+      `${API_BASE}/patient/${patientId}/payment-methods/${paymentMethodId}`,
+      data,
+      {
+        headers: authHeader(),
+      },
+    ).then((res) => res.data);
   }
 }
 
