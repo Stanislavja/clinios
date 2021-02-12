@@ -36,14 +36,14 @@ const MessagesContent = () => {
         <Grid key={item.id}>
           <Grid container spacing={1}>
             <Grid item md={item.user_to_from ? 3 : 4}>
-              <Typography
+              {/*<Typography
                 component="span"
                 variant="body1"
                 className={`${classes.text12} ${classes.label}`}
                 color="textPrimary"
               >
                 Date:
-              </Typography>
+              </Typography>*/}
               <Typography
                 component="span"
                 variant="body1"
@@ -59,10 +59,11 @@ const MessagesContent = () => {
                   <Typography
                     component="span"
                     variant="body1"
-                    className={`${classes.text12} ${classes.label}`}
+                    //className={`${classes.text12} ${classes.label}`}
+                    className={`${classes.text12}`}
                     color="textPrimary"
                   >
-                    From:
+                    From:&nbsp;
                   </Typography>
                   <Typography
                     component="span"
@@ -81,10 +82,11 @@ const MessagesContent = () => {
                   <Typography
                     component="span"
                     variant="body1"
-                    className={`${classes.text12} ${classes.label}`}
+                    //className={`${classes.text12} ${classes.label}`}
+                    className={`${classes.text12}`}
                     color="textPrimary"
                   >
-                    To:
+                    To:&nbsp;
                   </Typography>
                   <Typography
                     component="span"
@@ -101,10 +103,11 @@ const MessagesContent = () => {
               <Typography
                 component="span"
                 variant="body1"
-                className={`${classes.text12} ${classes.label}`}
+                //className={`${classes.text12} ${classes.label}`}
+                className={`${classes.text12}`}
                 color="textPrimary"
               >
-                Subject:
+                Subject:&nbsp;
               </Typography>
               <Typography
                 component="span"
