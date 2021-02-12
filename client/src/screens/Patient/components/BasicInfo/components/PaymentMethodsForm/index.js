@@ -85,11 +85,20 @@ const PaymentMethodsForm = (props) => {
         account_number: formFields.cardNumber.replaceAll("/", "").substring(0, 4),
       },
     };
-    PatientService.createPaymentMethod(patientId, reqBody).then((response) => {
-      enqueueSnackbar(`${response.message}`, { variant: "success" });
-      reloadData();
-      onClose();
-    });
+    if (isEdit) {
+      const paymentMethodId = cardData.id;
+      PatientService.updatePaymentMethod(patientId, paymentMethodId, reqBody).then((response) => {
+        enqueueSnackbar(`${response.message}`, { variant: "success" });
+        reloadData();
+        onClose();
+      });
+    } else {
+      PatientService.createPaymentMethod(patientId, reqBody).then((response) => {
+        enqueueSnackbar(`${response.message}`, { variant: "success" });
+        reloadData();
+        onClose();
+      });
+    }
   };
 
   const getCardType = () => {
@@ -203,6 +212,7 @@ PaymentMethodsForm.propTypes = {
   onClose: PropTypes.func.isRequired,
   reloadData: PropTypes.func.isRequired,
   cardData: PropTypes.shape({
+    id: PropTypes.number,
     type: PropTypes.string,
     exp: PropTypes.string,
     account_number: PropTypes.string,
