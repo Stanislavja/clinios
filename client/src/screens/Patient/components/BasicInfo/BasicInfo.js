@@ -159,6 +159,15 @@ const BasicInfo = (props) => {
     toggleNewPaymentMethodDialog();
   };
 
+  const deletePaymentMethodHandler = (item) => {
+    const paymentMethodId = item.id;
+    PatientService.deletePaymentMethod(patientId, paymentMethodId)
+      .then((response) => {
+        enqueueSnackbar(`${response.data.message}`, { variant: "success" });
+        reloadPaymentMethods();
+      });
+  };
+
   const resetEmailHandler = () => {
     enqueueSnackbar(`Reset Email Sent`, { variant: "success" });
   };
@@ -473,7 +482,7 @@ const BasicInfo = (props) => {
                           <IconButton onClick={() => editPaymentMethodHandler(row)}>
                             <EditIcon fontSize="small" />
                           </IconButton>
-                          <IconButton>
+                          <IconButton onClick={() => deletePaymentMethodHandler(row)}>
                             <DeleteIcon fontSize="small" />
                           </IconButton>
                         </StyledTableCellLg>
