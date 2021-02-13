@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import {
   Box, Button, Grid, Typography, TextField,
@@ -6,6 +6,8 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 
+import usePatientContext from "../../../../../hooks/usePatientContext";
+import PatientService from "../../../../../services/patient.service";
 import HeadingDate from "../HeadingDate";
 import LetterHead from "../LetterHead";
 import PatientInformation from "../PatientInformation";
@@ -13,6 +15,7 @@ import BillingDiagnoses from "./components/BillingDiagnoses";
 import BillingPaymentDialog from "./components/BillingPaymentDialog";
 import BillingPayment from "./components/BillingPayments";
 import BillingProcedures from "./components/BillingProcedures";
+
 
 const useStyles = makeStyles((theme) => ({
   minWidth100: {
@@ -37,7 +40,25 @@ const BillingDialogContent = (props) => {
   const { onClose } = props;
   const classes = useStyles();
 
+  const { state } = usePatientContext();
+  const { patientId } = state;
+  const { selectedEncounter } = state.encounters;
+  const encounterId = selectedEncounter?.id || 1;
+
   const [showPayment, setShowPayment] = useState(false);
+  const [billingPayments, setBillingPayments] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchBillingPayments = useCallback(() => {
+    PatientService.geEncountersBillingPayments(patientId, encounterId).then((response) => {
+      setBillingPayments(response.data);
+      setIsLoading(false);
+    });
+  }, [patientId, encounterId]);
+
+  useEffect(() => {
+    fetchBillingPayments();
+  }, [fetchBillingPayments]);
 
   const togglePaymentDialog = () => {
     setShowPayment((prevState) => !prevState);
@@ -48,6 +69,7 @@ const BillingDialogContent = (props) => {
       <BillingPaymentDialog
         open={showPayment}
         onClose={togglePaymentDialog}
+        reloadData={fetchBillingPayments}
       />
       <Grid
         container
@@ -106,7 +128,10 @@ const BillingDialogContent = (props) => {
 
         <Box mb={2} mt={2}>
           <Typography variant="h4" gutterBottom>Payment</Typography>
-          <BillingPayment />
+          <BillingPayment
+            data={billingPayments}
+            isLoading={isLoading}
+          />
         </Box>
 
         <Box mt={5}>
