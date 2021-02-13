@@ -1679,7 +1679,7 @@ const deleteMedications = async (req, res) => {
 
 const getRequisitions = async (req, res) => {
   const db = makeDb(configuration, res);
-  const { encounter_id } = req.query;
+  const { patient_id } = req.params;
 
   try {
     const dbResponse = await db.query(
@@ -1687,7 +1687,7 @@ const getRequisitions = async (req, res) => {
         from patient_cpt pc
         left join cpt c on c.id=pc.cpt_id
         left join lab_company lc on lc.id=c.lab_company_id
-        where pc.encounter_id=${encounter_id}
+        where pc.patient_id=${patient_id}
         and pc.completed_dt is null
         order by c.name
         limit 100`
