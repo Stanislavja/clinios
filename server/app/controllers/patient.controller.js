@@ -514,7 +514,8 @@ const getForms = async (req, res) => {
       `select pf.form_id, pf.created, cf.title, pf.form
         from patient_form pf
         left join client_form cf on cf.id=pf.form_id
-        where pf.patient_id=${patient_id}
+        where pf.client_id=${req.client_id}
+        and pf.patient_id=${patient_id}
         order by pf.created
       `
     );
@@ -762,7 +763,8 @@ const getBilling = async (req, res) => {
         left join encounter e on e.id=t.encounter_id
         left join tran_type tt on tt.id=t.type_id
         left join payment_method pm on pm.id=t.payment_method_id
-        where t.patient_id=${patient_id}
+        where t.client_id=${req.client_id}
+        and t.patient_id=${patient_id}
         order by t.dt desc
         limit ${limit}
       `
@@ -960,7 +962,9 @@ const getDocuments = async (req, res) => {
       from lab l
       left join lab_cpt lc on lc.lab_id=l.id
       left join cpt c on c.id=lc.cpt_id
-      where l.patient_id=${patient_id} \n`;
+      where l.client_id=${req.client_id}
+      and l.patient_id=${patient_id} \n`;
+
     if (tab === "Labs") {
       $sql += "and l.type='L' and l.deleted=false \n";
     } else if (tab === "Imaging") {
@@ -972,6 +976,7 @@ const getDocuments = async (req, res) => {
     } else if (tab === "Trash") {
       $sql += "and l.deleted=true \n";
     }
+
     $sql += `group by l.id, l.created, l.filename, right(l.filename,3), l.lab_dt, l.physician, l.note
         order by l.created desc
         limit 200`;
