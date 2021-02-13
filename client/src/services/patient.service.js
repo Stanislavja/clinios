@@ -144,6 +144,16 @@ class Patient {
       .then((res) => res.data);
   }
 
+  createEncountersBillingPayments(patientId, encounterId, reqBody) {
+    return axios
+      .post(`${API_BASE}/patient/${patientId}/encounters/${encounterId}/billing/payment`,
+        reqBody,
+        {
+          headers: authHeader(),
+        })
+      .then((res) => res.data);
+  }
+
   createEncountersPrescriptions(patientId, encounter_id, data) {
     return axios.post(
       `${API_BASE}/patient/${patientId}/encounters/${encounter_id}/plan/new-prescriptions`,
@@ -528,7 +538,27 @@ class Patient {
   createPaymentMethod(patientId, data) {
     return axios.post(`${API_BASE}/patient/${patientId}/payment-methods`, data, {
       headers: authHeader(),
-    });
+    })
+      .then((res) => res.data);
+  }
+
+  deletePaymentMethod(patientId, paymentMethodId) {
+    return axios.delete(
+      `${API_BASE}/patient/${patientId}/payment-methods/${paymentMethodId}`,
+      {
+        headers: authHeader(),
+      },
+    );
+  }
+
+  updatePaymentMethod(patientId, paymentMethodId, data) {
+    return axios.put(
+      `${API_BASE}/patient/${patientId}/payment-methods/${paymentMethodId}`,
+      data,
+      {
+        headers: authHeader(),
+      },
+    ).then((res) => res.data);
   }
 }
 

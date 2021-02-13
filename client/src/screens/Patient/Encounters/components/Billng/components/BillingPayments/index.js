@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React from "react";
 
-import { Grid, Typography } from "@material-ui/core";
+import {
+  Grid, Typography, Table, TableBody,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
+import PropTypes from "prop-types";
 
 import { StyledTableRowSm, StyledTableCellSm } from "../../../../../../../components/common/StyledTable";
-import usePatientContext from "../../../../../../../hooks/usePatientContext";
-import PatientService from "../../../../../../../services/patient.service";
 
 const useStyles = makeStyles((theme) => ({
   text: {
@@ -19,48 +20,50 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BillingPayments = () => {
+const BillingPayments = (props) => {
   const classes = useStyles();
-  const { state } = usePatientContext();
-  const { patientId } = state;
-  const { selectedEncounter } = state.encounters;
-  const encounterId = selectedEncounter?.id || 1;
-
-  const [billingPayments, setBillingPayments] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const fetchBillingPayments = useCallback(() => {
-    PatientService.geEncountersBillingPayments(patientId, encounterId).then((response) => {
-      setBillingPayments(response.data);
-      setIsLoading(false);
-    });
-  }, [patientId, encounterId]);
-
-  useEffect(() => {
-    fetchBillingPayments();
-  }, [fetchBillingPayments]);
+  const { data: billingPayments, isLoading } = props;
 
   return (
-    <Grid className={classes.root}>
-      {billingPayments.length
-        ? billingPayments.map((item) => (
-          <StyledTableRowSm key={item.id}>
-            <StyledTableCellSm>{moment(item.created).format("MMM D YYYY hh:mm A")}</StyledTableCellSm>
-            <StyledTableCellSm>
-              $
-              {item.amount}
-            </StyledTableCellSm>
-            <StyledTableCellSm>{item.type}</StyledTableCellSm>
-            <StyledTableCellSm>{item.card_num}</StyledTableCellSm>
-          </StyledTableRowSm>
-        ))
-        : (
-          <Typography gutterBottom variant="body1" className={classes.text}>
-            {isLoading ? "Loading..." : "No Records found..."}
-          </Typography>
-        )}
+    <Grid item lg={4} className={classes.root}>
+      <Table size="small">
+        <TableBody>
+          {!!billingPayments && billingPayments.length
+            ? billingPayments.map((item) => (
+              <StyledTableRowSm key={item.dt}>
+                <StyledTableCellSm>{moment(item.dt).format("MMM D YYYY hh:mm A")}</StyledTableCellSm>
+                <StyledTableCellSm>
+                  $
+                  {item.amount}
+                </StyledTableCellSm>
+                <StyledTableCellSm>{item.type}</StyledTableCellSm>
+                <StyledTableCellSm>{item.card_num}</StyledTableCellSm>
+              </StyledTableRowSm>
+            ))
+            : (
+              <StyledTableRowSm>
+                <StyledTableCellSm colSpan={4}>
+                  <Typography align="center" variant="body1" className={classes.text}>
+                    {isLoading ? "Loading..." : "No Records found..."}
+                  </Typography>
+                </StyledTableCellSm>
+              </StyledTableRowSm>
+            )}
+        </TableBody>
+      </Table>
     </Grid>
   );
 };
+
+BillingPayments.propTypes = {
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      dt: PropTypes.string,
+      type: PropTypes.string,
+    }),
+  ).isRequired,
+  isLoading: PropTypes.bool.isRequired,
+};
+
 
 export default BillingPayments;

@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
   Box, Typography, Grid, Button, TextField,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import moment from "moment";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 
 import Dialog from "../../../../../../../components/Dialog";
+import usePatientContext from "../../../../../../../hooks/usePatientContext";
+import PatientService from "../../../../../../../services/patient.service";
 
 const useStyles = makeStyles(() => ({
   minWidth100: {
@@ -15,12 +19,31 @@ const useStyles = makeStyles(() => ({
 }));
 
 const BillingPayment = (props) => {
-  const { open, onClose } = props;
+  const { open, onClose, reloadData } = props;
   const classes = useStyles();
+  const [amount, setAmount] = useState("");
+
+  const { state } = usePatientContext();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const { patientId } = state;
+  const encounterId = state.encounters.selectedEncounter?.id || 1;
 
   const onFormSubmit = (e) => {
     e.preventDefault();
-    /* payment submission logic goes here */
+    const reqBody = {
+      data: {
+        dt: moment().format("YYYY-MM-DD hh:mm"),
+        type_id: 3,
+        payment_type: "C",
+        amount,
+      },
+    };
+    PatientService.createEncountersBillingPayments(patientId, encounterId, reqBody).then((response) => {
+      enqueueSnackbar(`${response.message}`, { variant: "success" });
+      reloadData();
+      onClose();
+    });
     e.stopPropagation(); // to prevent encounters main form submission
   };
 
@@ -62,6 +85,8 @@ const BillingPayment = (props) => {
               margin="dense"
               variant="outlined"
               label="Amount"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
               className={classes.minWidth100}
             />
           </Box>
@@ -98,7 +123,7 @@ const BillingPayment = (props) => {
 BillingPayment.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  reloadData: PropTypes.func.isRequired,
 };
-
 
 export default BillingPayment;
