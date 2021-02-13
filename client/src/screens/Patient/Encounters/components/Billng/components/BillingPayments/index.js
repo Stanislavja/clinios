@@ -58,11 +58,11 @@ const BillingPayments = (props) => {
 BillingPayments.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      dt: PropTypes.shape({}),
+      dt: PropTypes.string,
       type: PropTypes.string,
     }),
   ).isRequired,
-  isLoading: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
 };
 
 
