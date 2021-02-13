@@ -97,8 +97,8 @@ const AllergiesDetails = (props) => {
         <TableHead>
           <TableRow>
             <StyledTableCell>Created</StyledTableCell>
+            <StyledTableCell>Drug ID</StyledTableCell>
             <StyledTableCell>Name</StyledTableCell>
-            <StyledTableCell>Medical Note</StyledTableCell>
             <StyledTableCell align="center">Actions</StyledTableCell>
           </TableRow>
         </TableHead>
@@ -109,9 +109,8 @@ const AllergiesDetails = (props) => {
                 <TableCell component="th" scope="row">
                   {moment(row.created).format("MMM D YYYY")}
                 </TableCell>
+                <TableCell>{row.drug_id}</TableCell>
                 <TableCell>{row.name}</TableCell>
-                <TableCell>{row.medical_note}</TableCell>
-
                 <TableCell className={classes.actions}>
                   <IconButton
                     className={classes.button}
