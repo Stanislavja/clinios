@@ -144,6 +144,16 @@ class Patient {
       .then((res) => res.data);
   }
 
+  createEncountersBillingPayments(patientId, encounterId, reqBody) {
+    return axios
+      .post(`${API_BASE}/patient/${patientId}/encounters/${encounterId}/billing/payment`,
+        reqBody,
+        {
+          headers: authHeader(),
+        })
+      .then((res) => res.data);
+  }
+
   createEncountersPrescriptions(patientId, encounter_id, data) {
     return axios.post(
       `${API_BASE}/patient/${patientId}/encounters/${encounter_id}/plan/new-prescriptions`,
