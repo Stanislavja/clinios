@@ -225,8 +225,14 @@ const updateAppointment = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     let $sql = `update user_calendar
-    set title='${title}', user_id=${provider.id}, notes='${notes}', status='${ApptStatus}', start_dt='${new_start_dt}', end_dt='${new_end_dt}'`;
+    set user_id=${provider.id}, status='${ApptStatus}', start_dt='${new_start_dt}', end_dt='${new_end_dt}'`;
 
+    if (title && title !== undefined) {
+      $sql += `, title='${title}'`;
+    }
+    if (notes && notes !== undefined) {
+      $sql += `, notes='${notes}'`;
+    }
     if (patient.id) {
       $sql += `, patient_id=${patient.id}`;
     }
