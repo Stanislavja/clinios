@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import {
   Grid,
@@ -38,6 +38,7 @@ const Diagnoses = (props) => {
   const { enqueueSnackbar } = useSnackbar();
   const { reloadData } = props;
   const [selectedDiagnosis, setSelectedDiagnoses] = useState([]);
+  const [recentICDs, setRecentICDs] = useState([]);
 
   const { state, dispatch } = usePatientContext();
   const { patientId } = state;
@@ -69,6 +70,16 @@ const Diagnoses = (props) => {
     setSelectedDiagnoses(value);
   };
 
+  const fetchRecentICDs = useCallback(() => {
+    PatientService.getDiagnosesRecentICDs(patientId).then((response) => {
+      setRecentICDs(response.data);
+    });
+  }, [patientId]);
+
+  useEffect(() => {
+    fetchRecentICDs();
+  }, [fetchRecentICDs]);
+
   return (
     <>
       <Grid className={classes.heading} container justify="space-between">
@@ -92,25 +103,24 @@ const Diagnoses = (props) => {
                 <Typography variant="h4" color="textPrimary" gutterBottom>
                   Recent ICDs
                 </Typography>
-                {[1, 2, 3, 4, 5].map((item) => (
-                  <Grid key={item}>
-                    <Typography gutterBottom variant="body1">
-                      Chronic Fatigue (Un-specified)
+                {recentICDs.length
+                  ? recentICDs.map((item) => (
+                    <Grid key={item}>
+                      <Typography gutterBottom variant="body1">
+                        {`${item.name} ${item.id}`}
+                      </Typography>
+                    </Grid>
+                  ))
+                  : (
+                    <Typography variant="body1">
+                      No Recent ICDs Found...
                     </Typography>
-                  </Grid>
-                ))}
+                  )}
               </Grid>
               <Grid item xs={6}>
                 <Typography variant="h4" color="textPrimary" gutterBottom>
                   Recommended ICDs
                 </Typography>
-                {[1, 2, 3, 4, 5].map((item) => (
-                  <Grid key={item}>
-                    <Typography gutterBottom variant="body1">
-                      Chronic Fatigue (Un-specified)
-                    </Typography>
-                  </Grid>
-                ))}
               </Grid>
             </Grid>
           </Grid>

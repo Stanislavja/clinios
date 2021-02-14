@@ -886,7 +886,15 @@ const Patient = () => {
         <Dialog
           open={billing.newDialog}
           title={" "}
-          message={<PaymentForm />}
+          message={(
+            <PaymentForm
+              reloadData={() => {
+                fetchBillings();
+                fetchPatientBalance();
+              }}
+              reloadPaymentMethods={fetchPaymentMethods}
+            />
+          )}
           applyForm={() => dispatch(togglePaymentDialog())}
           cancelForm={() => dispatch(togglePaymentDialog())}
           hideActions

@@ -278,6 +278,14 @@ class Patient {
       .then((res) => res.data);
   }
 
+  getDiagnosesRecentICDs(patientId) {
+    return axios
+      .get(`${API_BASE}/patient/${patientId}/diagnoses/recent-icds`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
   getMedications(patientId) {
     return axios
       .get(`${API_BASE}/patient/${patientId}/medications`, {
