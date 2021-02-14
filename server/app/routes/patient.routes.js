@@ -183,6 +183,11 @@ router.get(
   [authJwt.verifyToken],
   Patient.getDiagnoses
 );
+router.get(
+  "/patient/:patient_id/diagnoses/recent-icds",
+  [authJwt.verifyToken],
+  Patient.getRecentDiagnoses
+);
 router.put(
   "/patient/:patient_id/diagnoses/:icd_id",
   [authJwt.verifyToken],
