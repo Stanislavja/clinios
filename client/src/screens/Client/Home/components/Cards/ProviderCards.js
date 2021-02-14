@@ -5,6 +5,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import clsx from "clsx";
 import moment from "moment";
 import PropTypes from "prop-types";
 
@@ -62,6 +63,15 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
+  provider: {
+    paddingLeft: '5px !important',
+  },
+  activeProvider: {
+    background: "#e6e6e6",
+    "&:hover": {
+      background: "#e6e6e6 !important",
+    },
+  },
   providersLabel: {
     fontWeight: 600,
     marginBottom: theme.spacing(1),
@@ -72,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProviderCards = ({ providers, handleProviderClick }) => {
+const ProviderCards = ({ providers, selectedProvider,  handleProviderClick }) => {
   const classes = useStyles();
   return (
     <Card className={classes.root} variant="outlined">
@@ -97,6 +107,10 @@ const ProviderCards = ({ providers, handleProviderClick }) => {
               // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
               <li
                 key={provider.id}
+                className={clsx({
+                  [classes.provider]: true,
+                  [classes.activeProvider]: selectedProvider.id === provider.id ,
+                })}
                 onClick={() => handleProviderClick(provider)} // TODO:: Refactor and remove the eslint disable comment
                 onKeyDown={() => handleProviderClick(provider)}
               >
