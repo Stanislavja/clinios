@@ -12,7 +12,8 @@ const getEncounters = async (req, res) => {
       from encounter e 
       left join encounter_type et on et.id=e.type_id
       left join user u on u.id=e.user_id
-      where e.patient_id=${patient_id}
+      where e.client_id=${req.client_id}
+      and e.patient_id=${patient_id}
       order by e.dt desc
       limit 50`
     );
