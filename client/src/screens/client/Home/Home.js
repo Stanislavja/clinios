@@ -309,7 +309,7 @@ export default function Home() {
           />
         </Grid>
         <Grid item md={5} xs={12}>
-          <ProviderCards providers={providers} handleProviderClick={handleProviderClick} />
+          <ProviderCards selectedProvider={selectedProvider} providers={providers} handleProviderClick={handleProviderClick} />
           <ProviderDetailsCard selectedProvider={selectedProvider} providerDetails={providerDetails} />
           {!!selectedProvider && (
             <>
