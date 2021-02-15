@@ -194,7 +194,7 @@ const BasicInfoContent = () => {
         >
           {moment(data.dob).format("MMM D YYYY")}
           {" "}
-          (Age:
+          (Age:&nbsp;
           {calculateAge(data.dob)}
           )
         </Typography>
