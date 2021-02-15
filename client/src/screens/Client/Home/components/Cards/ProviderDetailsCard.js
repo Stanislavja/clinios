@@ -89,8 +89,7 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
         className={classes.titleContainer}
       >
         <Typography className={classes.title}>
-          Provider Details
-          {selectedProvider && ` - ${selectedProvider.name}`}
+          {`Provider Details - ${selectedProvider && selectedProvider.name}`}
         </Typography>
       </Grid>
 
@@ -120,7 +119,8 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
                     </div>
                     <div>
                       {(patientLabsDate !== undefined && patientLabsDate)
-                        ? moment(patientLabsDate).format("ll")
+                        ? `${moment(patientLabsDate).format("ll")}
+                          (${moment(patientLabsDate).startOf("day").fromNow()})`
                         : ""}
                     </div>
                   </Link>
@@ -133,7 +133,8 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
                     </div>
                     <div>
                       {(patientLabsDate !== undefined && patientLabsDate)
-                        ? moment(patientLabsDate).format("ll")
+                        ? `${moment(patientLabsDate).format("ll")}
+                          (${moment(patientLabsDate).startOf("day").fromNow()})`
                         : ""}
                     </div>
                   </>
@@ -152,13 +153,8 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
               <div>
                 {!!providerDetails
                   && providerDetails.patientLabs
-                  && `${moment(
-                    providerDetails.patientLabs["min(m.created)"],
-                  ).format("ll")} (${moment(
-                    providerDetails.patientLabs["min(m.created)"],
-                  )
-                    .startOf("day")
-                    .fromNow()})`}
+                  && `${moment(providerDetails.patientLabs["min(m.created)"]).format("ll")} 
+                    (${moment(providerDetails.patientLabs["min(m.created)"]).startOf("day").fromNow()})`}
               </div>
             </Link>
           </li>

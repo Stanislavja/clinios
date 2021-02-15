@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   provider: {
-    paddingLeft: '5px !important',
+    paddingLeft: "5px !important",
   },
   activeProvider: {
     background: "#e6e6e6",
@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProviderCards = ({ providers, selectedProvider,  handleProviderClick }) => {
+const ProviderCards = ({ providers, selectedProvider, handleProviderClick }) => {
   const classes = useStyles();
   return (
     <Card className={classes.root} variant="outlined">
@@ -109,7 +109,7 @@ const ProviderCards = ({ providers, selectedProvider,  handleProviderClick }) =>
                 key={provider.id}
                 className={clsx({
                   [classes.provider]: true,
-                  [classes.activeProvider]: selectedProvider.id === provider.id ,
+                  [classes.activeProvider]: selectedProvider.id === provider.id,
                 })}
                 onClick={() => handleProviderClick(provider)} // TODO:: Refactor and remove the eslint disable comment
                 onKeyDown={() => handleProviderClick(provider)}
@@ -140,6 +140,10 @@ ProviderCards.propTypes = {
       dt: PropTypes.string,
     }),
   ).isRequired,
+  selectedProvider: PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+  }).isRequired,
   handleProviderClick: PropTypes.func.isRequired,
 };
 export default ProviderCards;
