@@ -810,45 +810,18 @@ const EventModal = ({
           { !isNewEvent
             && (
               <div className={classes.eventMeta}>
-                <Typography
-                  component="p"
-                  variant="body2"
-                  color="textPrimary"
-                  className={classes.patientLink}
-                >
-                  <Link href={`/patients/${selectedPatient.id}`}>
-                    Go to patient page
-                  </Link>
-                </Typography>
-                <Typography
-                  component="p"
-                  variant="body2"
-                  color="textPrimary"
-                  className={classes.patientLink}
-                >
-                  <Link href={`/patients/${selectedPatient.id}`} target="_blank">
-                    Go to patient page in new tab
-                  </Link>
-                </Typography>
                 {calEvent.status === "A" && (
                   <p className={classes.eventStatusInfo}>
-                    Approved:
-                    {moment(calEvent.approved).format("ll")}
-                    ,
-                    {calEvent.approved_user}
+                    {`Approved: ${moment(calEvent.approved).format("ll")}, ${calEvent.approved_user}`}
                   </p>
                 )}
                 {calEvent.status === "D" && (
                   <p className={classes.eventStatusInfo}>
-                    Rejected:
-                    {moment(calEvent.declined).format("ll")}
-                    ,
-                    {calEvent.declined_user}
+                    {`Rejected: ${moment(calEvent.declined).format("ll")}, ${calEvent.declined_user}`}
                   </p>
                 )}
               </div>
             )}
-
         </div>
       </DialogContent>
       <DialogActions className={classes.modalAction}>
