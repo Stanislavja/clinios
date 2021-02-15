@@ -1063,7 +1063,7 @@ const Patient = () => {
       {!!diagnoses.expandDialog && (
         <Dialog
           open={diagnoses.expandDialog}
-          title={`${diagnoses.status ? "Active" : "In-Active"} Diagnoses`}
+          title={`${diagnoses.status ? "Active" : "Inactive"} Diagnoses`}
           message={(
             <DiagnosesDetails
               reloadData={() => fetchDiagnoses(diagnoses.status)}

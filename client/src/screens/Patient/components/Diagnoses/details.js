@@ -176,7 +176,7 @@ const DiagnosesDetails = (props) => {
                         size="small"
                       />
                     )}
-                    label={activeState[row.name] ? "Active" : "In-Active"}
+                    label={activeState[row.name] ? "Active" : "Inactive"}
                   />
                 </TableCell>
               </StyledTableRow>
