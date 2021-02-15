@@ -242,8 +242,7 @@ const updateAppointment = async (req, res) => {
     if (ApptStatus === "A") {
       $sql += `, approved=now(), approved_user_id=${req.user_id}`;
     }
-
-    $sql += `, updated= now(), updated_user_id='${req.user_id}'
+    $sql += `, updated=now(), updated_user_id='${req.user_id}'
     where id=${id}`;
 
     const updateResponse = await db.query($sql);

@@ -33,6 +33,8 @@ import { KeyboardDatePicker, KeyboardTimePicker } from "@material-ui/pickers";
 import clsx from "clsx";
 import moment from "moment";
 import PropTypes from "prop-types";
+import Icon from "@mdi/react";
+import { mdiOpenInNew } from '@mdi/js';
 
 import useAuth from "../../../../../hooks/useAuth";
 import useDebounce from "../../../../../hooks/useDebounce";
@@ -169,6 +171,14 @@ const useStyles = makeStyles((theme) => ({
   eventStatusInfo: {
     fontSize: "14px",
     marginTop: "5px",
+  },
+  patientWrapper: {
+    display: 'flex',
+    alignItems: 'flex-end',
+  },
+  patientIcon: {
+    marginBottom: theme.spacing(1/2),
+    marginLeft: theme.spacing(1)
   },
   modalAction: {
     borderTop: `1px solid ${theme.palette.background.default}`,
@@ -685,21 +695,36 @@ const EventModal = ({
               component="div"
               className={`${classes.textFormControl} ${classes.patientFormControl}`}
             >
-              <TextField
-                value={patientSearchTerm}
-                variant="outlined"
-                margin="normal"
-                size="small"
-                required
-                fullWidth
-                id="patient"
-                label="Patient"
-                name="patient"
-                autoComplete="patient"
-                onChange={(event) => setPatientSearchTerm(event.target.value)}
-                error={errorText.patient.length > 0}
-                helperText={errorText.patient.length > 0 && errorText.patient}
-              />
+              <div className={classes.patientWrapper}>
+                <TextField
+                  value={patientSearchTerm}
+                  variant="outlined"
+                  margin="normal"
+                  size="small"
+                  required
+                  fullWidth
+                  id="patient"
+                  label="Patient"
+                  name="patient"
+                  autoComplete="patient"
+                  onChange={(event) => setPatientSearchTerm(event.target.value)}
+                  error={errorText.patient.length > 0}
+                  helperText={errorText.patient.length > 0 && errorText.patient}
+                />
+                <Link 
+                  href={`patients/${selectedPatient.id}`} 
+                  className={classes.patientIcon} 
+                  target="__blank"
+                >
+                  <Icon 
+                    path={mdiOpenInNew} 
+                    size={1} 
+                    horizontal 
+                    vertical 
+                    rotate={180} 
+                  />
+                </Link>
+              </div>
               {patients.length > 0 && (
                 <Card className={classes.patientListCard}>
                   <CardContent className={classes.patientListContent}>
