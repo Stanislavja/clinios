@@ -160,7 +160,7 @@ const useStyles = makeStyles((theme) => ({
   },
   setTo: {
     whiteSpace: "nowrap",
-    marginBottom: "8px",
+    marginBottom: "7px",
     marginLeft: "5px",
     fontSize: "15px",
     alignItems: "flex-end",
