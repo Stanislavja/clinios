@@ -72,7 +72,7 @@ export default function Home() {
         ...acc,
         {
           ...item,
-          title: item.title ? item.title : item.firstname,
+          title: item.title ? item.title : `${item.firstname} ${item.lastname}`,
           eventTitle: item.title,
           start: item.start_dt,
           end: item.end_dt,
