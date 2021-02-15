@@ -471,18 +471,18 @@ const BasicInfo = (props) => {
                 </TableHead>
                 <TableBody>
                   {paymentMethodsData.length
-                    ? paymentMethodsData.map((row) => (
-                      <StyledTableRowLg key={row.type}>
-                        <StyledTableCellLg>{paymentMethodType(row.type)}</StyledTableCellLg>
-                        <StyledTableCellLg align="center">{row.account_number}</StyledTableCellLg>
+                    ? paymentMethodsData.map((item) => (
+                      <StyledTableRowLg key={`${item.type}_${item.account_number}`}>
+                        <StyledTableCellLg>{paymentMethodType(item.type)}</StyledTableCellLg>
+                        <StyledTableCellLg align="center">{item.account_number}</StyledTableCellLg>
                         <StyledTableCellLg align="center">
-                          {moment(row.exp).format("MMM D YYYY")}
+                          {moment(item.exp).format("MMM D YYYY")}
                         </StyledTableCellLg>
                         <StyledTableCellLg align="center">
-                          <IconButton onClick={() => editPaymentMethodHandler(row)}>
+                          <IconButton onClick={() => editPaymentMethodHandler(item)}>
                             <EditIcon fontSize="small" />
                           </IconButton>
-                          <IconButton onClick={() => deletePaymentMethodHandler(row)}>
+                          <IconButton onClick={() => deletePaymentMethodHandler(item)}>
                             <DeleteIcon fontSize="small" />
                           </IconButton>
                         </StyledTableCellLg>
