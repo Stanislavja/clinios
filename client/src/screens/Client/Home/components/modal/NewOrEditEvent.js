@@ -30,11 +30,11 @@ import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
 import Alert from "@material-ui/lab/Alert";
 import { KeyboardDatePicker, KeyboardTimePicker } from "@material-ui/pickers";
+import { mdiOpenInNew } from "@mdi/js";
+import Icon from "@mdi/react";
 import clsx from "clsx";
 import moment from "moment";
 import PropTypes from "prop-types";
-import Icon from "@mdi/react";
-import { mdiOpenInNew } from '@mdi/js';
 
 import useAuth from "../../../../../hooks/useAuth";
 import useDebounce from "../../../../../hooks/useDebounce";
@@ -173,12 +173,12 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "5px",
   },
   patientWrapper: {
-    display: 'flex',
-    alignItems: 'flex-end',
+    display: "flex",
+    alignItems: "flex-end",
   },
   patientIcon: {
-    marginBottom: theme.spacing(1/2),
-    marginLeft: theme.spacing(1)
+    marginBottom: theme.spacing(1 / 2),
+    marginLeft: theme.spacing(1),
   },
   modalAction: {
     borderTop: `1px solid ${theme.palette.background.default}`,
@@ -464,7 +464,7 @@ const EventModal = ({
                       [property]: date,
                     });
                   }}
-                  minDate={new Date()}
+                  // minDate={new Date()}
                   format="EE LLL d y"
                   KeyboardButtonProps={{
                     "aria-label": "change date",
@@ -486,7 +486,7 @@ const EventModal = ({
                     });
                     calculateLength(date);
                   }}
-                  minDate={new Date()}
+                  // minDate={new Date()}
                   format="EE LLL d y"
                   KeyboardButtonProps={{
                     "aria-label": "change date",
@@ -680,7 +680,7 @@ const EventModal = ({
                     ? calEvent.status
                     : setCalEvent({
                       ...calEvent,
-                      status: "R",
+                      status: "A",
                     })
                 }
                 onChange={(event) => handleOnChange(event)}
@@ -711,17 +711,17 @@ const EventModal = ({
                   error={errorText.patient.length > 0}
                   helperText={errorText.patient.length > 0 && errorText.patient}
                 />
-                <Link 
-                  href={`patients/${selectedPatient.id}`} 
-                  className={classes.patientIcon} 
+                <Link
+                  href={`patients/${selectedPatient.id}`}
+                  className={classes.patientIcon}
                   target="__blank"
                 >
-                  <Icon 
-                    path={mdiOpenInNew} 
-                    size={1} 
-                    horizontal 
-                    vertical 
-                    rotate={180} 
+                  <Icon
+                    path={mdiOpenInNew}
+                    size={1}
+                    horizontal
+                    vertical
+                    rotate={180}
                   />
                 </Link>
               </div>
