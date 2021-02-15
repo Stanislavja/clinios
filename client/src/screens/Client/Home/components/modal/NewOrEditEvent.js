@@ -464,7 +464,7 @@ const EventModal = ({
                       [property]: date,
                     });
                   }}
-                  minDate={new Date()}
+                  //minDate={new Date()}
                   format="EE LLL d y"
                   KeyboardButtonProps={{
                     "aria-label": "change date",
@@ -486,7 +486,7 @@ const EventModal = ({
                     });
                     calculateLength(date);
                   }}
-                  minDate={new Date()}
+                  //minDate={new Date()}
                   format="EE LLL d y"
                   KeyboardButtonProps={{
                     "aria-label": "change date",
