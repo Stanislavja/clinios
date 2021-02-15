@@ -33,6 +33,8 @@ import { KeyboardDatePicker, KeyboardTimePicker } from "@material-ui/pickers";
 import clsx from "clsx";
 import moment from "moment";
 import PropTypes from "prop-types";
+import Icon from "@mdi/react";
+import { mdiOpenInNew } from '@mdi/js';
 
 import useAuth from "../../../../../hooks/useAuth";
 import useDebounce from "../../../../../hooks/useDebounce";
@@ -169,6 +171,14 @@ const useStyles = makeStyles((theme) => ({
   eventStatusInfo: {
     fontSize: "14px",
     marginTop: "5px",
+  },
+  patientWrapper: {
+    display: 'flex',
+    alignItems: 'flex-end',
+  },
+  patientIcon: {
+    marginBottom: theme.spacing(1/2),
+    marginLeft: theme.spacing(1)
   },
   modalAction: {
     borderTop: `1px solid ${theme.palette.background.default}`,
@@ -685,21 +695,36 @@ const EventModal = ({
               component="div"
               className={`${classes.textFormControl} ${classes.patientFormControl}`}
             >
-              <TextField
-                value={patientSearchTerm}
-                variant="outlined"
-                margin="normal"
-                size="small"
-                required
-                fullWidth
-                id="patient"
-                label="Patient"
-                name="patient"
-                autoComplete="patient"
-                onChange={(event) => setPatientSearchTerm(event.target.value)}
-                error={errorText.patient.length > 0}
-                helperText={errorText.patient.length > 0 && errorText.patient}
-              />
+              <div className={classes.patientWrapper}>
+                <TextField
+                  value={patientSearchTerm}
+                  variant="outlined"
+                  margin="normal"
+                  size="small"
+                  required
+                  fullWidth
+                  id="patient"
+                  label="Patient"
+                  name="patient"
+                  autoComplete="patient"
+                  onChange={(event) => setPatientSearchTerm(event.target.value)}
+                  error={errorText.patient.length > 0}
+                  helperText={errorText.patient.length > 0 && errorText.patient}
+                />
+                <Link 
+                  href={`patients/${selectedPatient.id}`} 
+                  className={classes.patientIcon} 
+                  target="__blank"
+                >
+                  <Icon 
+                    path={mdiOpenInNew} 
+                    size={1} 
+                    horizontal 
+                    vertical 
+                    rotate={180} 
+                  />
+                </Link>
+              </div>
               {patients.length > 0 && (
                 <Card className={classes.patientListCard}>
                   <CardContent className={classes.patientListContent}>
@@ -785,45 +810,18 @@ const EventModal = ({
           { !isNewEvent
             && (
               <div className={classes.eventMeta}>
-                <Typography
-                  component="p"
-                  variant="body2"
-                  color="textPrimary"
-                  className={classes.patientLink}
-                >
-                  <Link href={`/patients/${selectedPatient.id}`}>
-                    Go to patient page
-                  </Link>
-                </Typography>
-                <Typography
-                  component="p"
-                  variant="body2"
-                  color="textPrimary"
-                  className={classes.patientLink}
-                >
-                  <Link href={`/patients/${selectedPatient.id}`} target="_blank">
-                    Go to patient page in new tab
-                  </Link>
-                </Typography>
                 {calEvent.status === "A" && (
                   <p className={classes.eventStatusInfo}>
-                    Approved:
-                    {moment(calEvent.approved).format("ll")}
-                    ,
-                    {calEvent.approved_user}
+                    {`Approved: ${moment(calEvent.approved).format("ll")}, ${calEvent.approved_user}`}
                   </p>
                 )}
                 {calEvent.status === "D" && (
                   <p className={classes.eventStatusInfo}>
-                    Rejected:
-                    {moment(calEvent.declined).format("ll")}
-                    ,
-                    {calEvent.declined_user}
+                    {`Rejected: ${moment(calEvent.declined).format("ll")}, ${calEvent.declined_user}`}
                   </p>
                 )}
               </div>
             )}
-
         </div>
       </DialogContent>
       <DialogActions className={classes.modalAction}>
