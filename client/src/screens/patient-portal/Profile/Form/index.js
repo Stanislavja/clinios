@@ -197,9 +197,8 @@ const ProfileForm = () => {
                   </Grid>
                 ))}
                 <Grid item md={2}>
-                  <Typography>
-                    &nbsp;&nbsp;Age:
-                    {calculateAge(formFields.dob)}
+                  <Typography gutterBottom>
+                    {`Age: ${calculateAge(formFields.dob)}`}
                   </Typography>
                 </Grid>
               </Grid>

@@ -259,9 +259,8 @@ const BasicInfo = (props) => {
                   </Grid>
                 ))}
                 <Grid item md={2}>
-                  <Typography>
-                    &nbsp;&nbsp;Age:&nbsp;
-                    {calculateAge(basicInfo.dob)}
+                  <Typography gutterBottom>
+                    {`Age: ${calculateAge(basicInfo.dob)}`}
                   </Typography>
                 </Grid>
               </Grid>
