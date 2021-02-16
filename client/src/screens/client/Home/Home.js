@@ -72,7 +72,7 @@ export default function Home() {
         ...acc,
         {
           ...item,
-          title: item.title ? item.title : item.firstname,
+          title: item.title ? item.title : `${item.firstname} ${item.lastname}`,
           eventTitle: item.title,
           start: item.start_dt,
           end: item.end_dt,
@@ -309,7 +309,11 @@ export default function Home() {
           />
         </Grid>
         <Grid item md={5} xs={12}>
-          <ProviderCards selectedProvider={selectedProvider} providers={providers} handleProviderClick={handleProviderClick} />
+          <ProviderCards
+            selectedProvider={selectedProvider}
+            providers={providers}
+            handleProviderClick={handleProviderClick}
+          />
           <ProviderDetailsCard selectedProvider={selectedProvider} providerDetails={providerDetails} />
           {!!selectedProvider && (
             <>
