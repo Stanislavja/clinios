@@ -36,7 +36,7 @@ export const BasicInfoForm = {
           value: "active",
         },
         {
-          label: "In-Active",
+          label: "Inactive",
           value: "inActive",
         },
       ],

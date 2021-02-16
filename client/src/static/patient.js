@@ -2,7 +2,7 @@ export const FirstColumnPatientCards = [
   {
     title: "Patient",
     showActions: true,
-    showSearch: true,
+    showSearch: false,
     data: [],
     primaryButtonText: "History",
     secondaryButtonText: "Edit",

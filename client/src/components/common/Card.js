@@ -202,7 +202,7 @@ const PatientCard = (props) => {
             >
               Show
               {" "}
-              {contentTogglerState ? "In-Active" : "Active"}
+              {contentTogglerState ? "Inactive" : "Active"}
             </Button>
           )}
           {showEditorActions && (
@@ -280,16 +280,16 @@ PatientCard.defaultProps = {
   secondaryButtonText: "Edit",
   icon: null,
   cardInfo: null,
-  primaryButtonHandler: () => {},
-  secondaryButtonHandler: () => {},
-  iconHandler: () => {},
-  searchHandler: () => {},
-  editorSaveHandler: () => {},
-  editorCancelHandler: () => {},
-  updateLayoutHandler: () => {},
-  resetLayoutHandler: () => {},
+  primaryButtonHandler: () => { },
+  secondaryButtonHandler: () => { },
+  iconHandler: () => { },
+  searchHandler: () => { },
+  editorSaveHandler: () => { },
+  editorCancelHandler: () => { },
+  updateLayoutHandler: () => { },
+  resetLayoutHandler: () => { },
   isLayoutUpdated: false,
-  contentToggleHandler: () => {},
+  contentToggleHandler: () => { },
   hasMinHeight: false,
 };
 
