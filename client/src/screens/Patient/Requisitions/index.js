@@ -52,6 +52,9 @@ const useStyles = makeStyles((theme) => ({
   mr2: {
     marginRight: theme.spacing(2),
   },
+  ml1: {
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 const Requisitions = (props) => {
@@ -151,9 +154,8 @@ const Requisitions = (props) => {
               >
                 <Typography variant="body1">
                   {item.name}
-&nbsp;
                 </Typography>
-                <Button>[Remove]</Button>
+                <Button className={classes.ml1}>[Remove]</Button>
               </Grid>
             ))}
           </Grid>
