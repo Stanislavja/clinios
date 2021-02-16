@@ -159,7 +159,7 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
             </Link>
           </li>
           <li>
-            <div>Messages To Patient Unread</div>
+            <div>Messages To Patients Unread</div>
             <div className={classes.count}>
               {!!providerDetails
                 && providerDetails.messageToPatientsNotRead
@@ -186,7 +186,7 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
             </div>
           </li>
           <li>
-            <div>Patient Appointments Request</div>
+            <div>Patient Appointment Requests</div>
             <div className={classes.count}>
               {!!providerDetails
                 && providerDetails.patientAppointmentRequest
