@@ -9,9 +9,6 @@ import { createStyles, makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => createStyles({
-  root: {
-    backgroundColor: "transparent",
-  },
   titleContainer: {
     minHeight: 50,
     backgroundColor: theme.palette.primary.main,
@@ -49,9 +46,6 @@ const DialogForm = ({
       fullWidth
       maxWidth={size}
       disableBackdropClick
-      BackdropProps={{
-        classes: { root: classes.root },
-      }}
     >
       <DialogTitle disableTypography className={classes.titleContainer} id="form-dialog-title">
         <Typography variant="h5">{title}</Typography>
