@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -14,6 +14,7 @@ import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 
+import Alert from "../../../../components/Alert";
 import usePatientContext from "../../../../hooks/usePatientContext";
 import PatientService from "../../../../services/patient.service";
 
@@ -74,11 +75,25 @@ const AllergiesDetails = (props) => {
   const { data } = state.allergies;
   const { patientId } = state;
 
-  const deleteItemHandler = (selectedItem) => {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const openDeleteDialog = (item) => {
+    setSelectedItem(item);
+    setShowDeleteDialog((prevstate) => !prevstate);
+  };
+
+  const closeDeleteDialog = () => {
+    setSelectedItem(null);
+    setShowDeleteDialog((prevstate) => !prevstate);
+  };
+
+  const deleteItemHandler = () => {
     const allergyId = selectedItem.drug_id;
     PatientService.deleteAllergy(patientId, allergyId)
       .then((response) => {
         enqueueSnackbar(`${response.data.message}`, { variant: "success" });
+        closeDeleteDialog();
         reloadData();
       })
       .catch((error) => {
@@ -92,47 +107,58 @@ const AllergiesDetails = (props) => {
   };
 
   return (
-    <TableContainer className={classes.tableContainer}>
-      <Table size="small" className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Created</StyledTableCell>
-            <StyledTableCell>Drug ID</StyledTableCell>
-            <StyledTableCell>Name</StyledTableCell>
-            <StyledTableCell align="center">Actions</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {!!data && data.length ? (
-            data.map((row) => (
-              <StyledTableRow key={`${row.created}_${row.name}`}>
-                <TableCell component="th" scope="row">
-                  {moment(row.created).format("MMM D YYYY")}
-                </TableCell>
-                <TableCell>{row.drug_id}</TableCell>
-                <TableCell>{row.name}</TableCell>
-                <TableCell className={classes.actions}>
-                  <IconButton
-                    className={classes.button}
-                    onClick={() => deleteItemHandler(row)}
-                  >
-                    <DeleteIcon fontSize="small" />
-                  </IconButton>
+    <>
+      <Alert
+        open={showDeleteDialog}
+        title="Confirm Delete"
+        message="Are you sure you want to delete this allergy?"
+        applyButtonText="Delete"
+        cancelButtonText="Cancel"
+        applyForm={deleteItemHandler}
+        cancelForm={closeDeleteDialog}
+      />
+      <TableContainer className={classes.tableContainer}>
+        <Table size="small" className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Created</StyledTableCell>
+              <StyledTableCell>Drug ID</StyledTableCell>
+              <StyledTableCell>Name</StyledTableCell>
+              <StyledTableCell align="center">Actions</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {!!data && data.length ? (
+              data.map((row) => (
+                <StyledTableRow key={`${row.created}_${row.name}`}>
+                  <TableCell component="th" scope="row">
+                    {moment(row.created).format("MMM D YYYY")}
+                  </TableCell>
+                  <TableCell>{row.drug_id}</TableCell>
+                  <TableCell>{row.name}</TableCell>
+                  <TableCell className={classes.actions}>
+                    <IconButton
+                      className={classes.button}
+                      onClick={() => openDeleteDialog(row)}
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </TableCell>
+                </StyledTableRow>
+              ))
+            ) : (
+              <StyledTableRow>
+                <TableCell colSpan={5}>
+                  <Typography align="center" variant="body1">
+                    No Records Found...
+                  </Typography>
                 </TableCell>
               </StyledTableRow>
-            ))
-          ) : (
-            <StyledTableRow>
-              <TableCell colSpan={5}>
-                <Typography align="center" variant="body1">
-                  No Records Found...
-                </Typography>
-              </TableCell>
-            </StyledTableRow>
-          )}
-        </TableBody>
-      </Table>
-    </TableContainer>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 };
 
