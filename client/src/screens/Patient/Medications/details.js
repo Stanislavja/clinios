@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -14,6 +14,7 @@ import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 
+import Alert from "../../../components/Alert";
 import usePatientContext from "../../../hooks/usePatientContext";
 import PatientService from "../../../services/patient.service";
 
@@ -72,7 +73,20 @@ const MedicationsDetails = (props) => {
   const { data } = state.medications;
   const { patientId } = state;
 
-  const deleteItemHandler = (selectedItem) => {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const openDeleteDialog = (item) => {
+    setSelectedItem(item);
+    setShowDeleteDialog((prevstate) => !prevstate);
+  };
+
+  const closeDeleteDialog = () => {
+    setSelectedItem(null);
+    setShowDeleteDialog((prevstate) => !prevstate);
+  };
+
+  const deleteItemHandler = () => {
     const reqBody = {
       encounter_id: selectedItem.encounterId || 1,
       drug_id: selectedItem.drugId || 1,
@@ -81,6 +95,7 @@ const MedicationsDetails = (props) => {
     PatientService.deleteMedications(patientId, reqBody)
       .then((response) => {
         enqueueSnackbar(`${response.data.message}`, { variant: "success" });
+        closeDeleteDialog();
         reloadData();
       })
       .catch((error) => {
@@ -94,53 +109,64 @@ const MedicationsDetails = (props) => {
   };
 
   return (
-    <TableContainer className={classes.tableContainer}>
-      <Table size="small" className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Start Date</StyledTableCell>
-            <StyledTableCell>Name</StyledTableCell>
-            <StyledTableCell>Expires</StyledTableCell>
-            <StyledTableCell>Strength</StyledTableCell>
-            <StyledTableCell>Unit</StyledTableCell>
-            <StyledTableCell align="center">Actions</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {!!data
-            && data.length
-            ? data.map((row) => (
-              <StyledTableRow key={row.start_dt}>
-                <TableCell component="th" scope="row">
-                  {moment(row.start_dt).format("MMM D YYYY")}
-                </TableCell>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>{row.expires}</TableCell>
-                <TableCell>{row.strength}</TableCell>
-                <TableCell>{row.unit}</TableCell>
+    <>
+      <Alert
+        open={showDeleteDialog}
+        title="Confirm Delete"
+        message="Are you sure you want to delete this medication?"
+        applyButtonText="Delete"
+        cancelButtonText="Cancel"
+        applyForm={deleteItemHandler}
+        cancelForm={closeDeleteDialog}
+      />
+      <TableContainer className={classes.tableContainer}>
+        <Table size="small" className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Start Date</StyledTableCell>
+              <StyledTableCell>Name</StyledTableCell>
+              <StyledTableCell>Expires</StyledTableCell>
+              <StyledTableCell>Strength</StyledTableCell>
+              <StyledTableCell>Unit</StyledTableCell>
+              <StyledTableCell align="center">Actions</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {!!data
+              && data.length
+              ? data.map((row) => (
+                <StyledTableRow key={row.start_dt}>
+                  <TableCell component="th" scope="row">
+                    {moment(row.start_dt).format("MMM D YYYY")}
+                  </TableCell>
+                  <TableCell>{row.name}</TableCell>
+                  <TableCell>{row.expires}</TableCell>
+                  <TableCell>{row.strength}</TableCell>
+                  <TableCell>{row.unit}</TableCell>
 
-                <TableCell className={classes.actions}>
-                  <IconButton
-                    className={classes.button}
-                    onClick={() => deleteItemHandler(row)}
-                  >
-                    <DeleteIcon fontSize="small" />
-                  </IconButton>
-                </TableCell>
-              </StyledTableRow>
-            ))
-            : (
-              <StyledTableRow>
-                <TableCell colSpan={6}>
-                  <Typography align="center" variant="body1">
-                    No Records Found...
-                  </Typography>
-                </TableCell>
-              </StyledTableRow>
-            )}
-        </TableBody>
-      </Table>
-    </TableContainer>
+                  <TableCell className={classes.actions}>
+                    <IconButton
+                      className={classes.button}
+                      onClick={() => openDeleteDialog(row)}
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </TableCell>
+                </StyledTableRow>
+              ))
+              : (
+                <StyledTableRow>
+                  <TableCell colSpan={6}>
+                    <Typography align="center" variant="body1">
+                      No Records Found...
+                    </Typography>
+                  </TableCell>
+                </StyledTableRow>
+              )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 };
 
