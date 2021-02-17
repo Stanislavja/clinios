@@ -1,6 +1,6 @@
 import React from "react";
 
-import { IconButton, Button } from "@material-ui/core";
+import { IconButton, Button, Typography } from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -12,11 +12,9 @@ import CloseIcon from "@material-ui/icons/Close";
 import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => createStyles({
-  title: {
+  titleContainer: {
     textAlign: "center",
     borderBottom: "1px solid #ddd",
-    fontWeight: 600,
-    fontSize: "1.5em",
     minHeight: 53,
   },
   content: {
@@ -74,7 +72,7 @@ const DialogForm = ({
         onClose={cancelForm}
         fullWidth
         maxWidth={size}
-        disableBackdropClick
+      // disableBackdropClick //enable esc button close and backdrop click
       >
         <>
           <DialogActions
@@ -109,8 +107,8 @@ const DialogForm = ({
             )}
           </DialogActions>
         </>
-        <DialogTitle className={classes.title} id="form-dialog-title">
-          {title}
+        <DialogTitle disableTypography className={classes.titleContainer} id="form-dialog-title">
+          <Typography variant="h5">{title}</Typography>
         </DialogTitle>
         <DialogContent className={classes.content}>{message}</DialogContent>
         {hideActions ? null : (

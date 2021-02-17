@@ -102,6 +102,9 @@ const Labs = () => {
       const uncategorizedData = labDocuments.filter((x) => (x.type !== "L" && x.type !== "M"
         && x.type !== "I" && x.status !== "D"));
       setTableData([...uncategorizedData]);
+    } else if (selectedTab === 4) { // (Misc)
+      const uncategorizedData = labDocuments.filter((x) => (x.type === "M" && x.status !== "D"));
+      setTableData([...uncategorizedData]);
     }
   }, [labDocuments]);
 
@@ -201,6 +204,13 @@ const Labs = () => {
           component="span"
         >
           Imaging
+        </Typography>
+        <Typography
+          className={tabValue === 4 ? classes.tabSelected : classes.tab}
+          onClick={() => handleTabChange(4)}
+          component="span"
+        >
+          Misc
         </Typography>
         <Typography
           className={tabValue === 3 ? classes.tabSelected : classes.tab}

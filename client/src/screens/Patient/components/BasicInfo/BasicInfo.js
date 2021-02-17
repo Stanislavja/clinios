@@ -60,6 +60,9 @@ const useStyles = makeStyles((theme) => ({
   table: {
     background: "white",
   },
+  ml2: {
+    marginLeft: theme.spacing(2),
+  },
 }));
 
 const BasicInfo = (props) => {
@@ -448,8 +451,8 @@ const BasicInfo = (props) => {
           <Paper className={classes.root} variant="outlined">
             <Grid className={classes.sectionCard}>
               <Typography variant="h5" color="textPrimary">
-                Payment Methods &nbsp;&nbsp;
-                <span>
+                Payment Methods
+                <span className={classes.ml2}>
                   <Button
                     size="small"
                     variant="outlined"

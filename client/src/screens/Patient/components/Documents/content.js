@@ -52,9 +52,6 @@ const useStyles = makeStyles((theme) => ({
     overflow: "hidden",
     whiteSpace: "nowrap",
   },
-  resMessage: {
-    fontSize: 12,
-  },
   icon: {
     cursor: "pointer",
   },
@@ -125,6 +122,9 @@ const DocumentsContent = (props) => {
     } else if (selectedTab === 4) { // (Declined/Deleted)
       const deletedData = data.filter((x) => x.status === "D");
       setTableData([...deletedData]);
+    } else if (selectedTab === 5) { // (Misc)
+      const miscData = data.filter((x) => (x.type === "M" && x.status !== "D"));
+      setTableData([...miscData]);
     }
   }, [data]);
 
@@ -194,6 +194,13 @@ const DocumentsContent = (props) => {
           component="span"
         >
           Imaging
+        </Typography>
+        <Typography
+          className={tabValue === 5 ? classes.tabSelected : classes.tab}
+          onClick={() => handleChange(5)}
+          component="span"
+        >
+          Misc
         </Typography>
         <Typography
           className={tabValue === 3 ? classes.tabSelected : classes.tab}
@@ -284,8 +291,8 @@ const DocumentsContent = (props) => {
             ) : (
               <StyledTableRow>
                 <TableCell colSpan={10}>
-                  <Typography className={classes.resMessage} align="center">
-                    No Documents Found...
+                  <Typography align="center" variant="body1">
+                    No Records Found...
                   </Typography>
                 </TableCell>
               </StyledTableRow>

@@ -47,6 +47,9 @@ const useStyles = makeStyles((theme) => ({
       paddingBottom: theme.spacing(2),
     },
   },
+  ml1: {
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 const Appointments = () => {
@@ -231,8 +234,9 @@ const Appointments = () => {
                     {userSelection.date
                       ? moment(userSelection.date).format("dddd, DD")
                       : moment().format("dddd, DD")}
-&nbsp;
-                    {userSelection.time}
+                    <span className={classes.ml1}>
+                      {userSelection.time}
+                    </span>
                   </Typography>
                   {
                     timings.map((timing) => (

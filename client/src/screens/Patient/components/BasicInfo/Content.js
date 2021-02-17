@@ -87,8 +87,6 @@ const BasicInfoContent = () => {
       genderString = "Male";
     } else if (value === "F") {
       genderString = "Female";
-    } else {
-      genderString = "Not Specified";
     }
     return genderString;
   };
@@ -192,7 +190,7 @@ const BasicInfoContent = () => {
           onFocus={() => { }} // for onMouseOver
           onBlur={() => { }} // for onMouseOut
         >
-          {`${moment(data.dob).format("MMM D YYYY")} (Age: ${calculateAge(data.dob)})`}
+          {`${moment(data.dob ? data.dob : {}).format("MMM D YYYY")} (Age: ${calculateAge(data.dob)})`}
         </Typography>
       </Grid>
 

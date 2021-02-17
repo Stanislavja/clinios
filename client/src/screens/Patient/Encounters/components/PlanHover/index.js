@@ -10,9 +10,10 @@ import FaxPrescription from "../FaxPrescription";
 import NewRequisitions from "../NewLabRequisitions";
 import NewPrescription from "../NewPrescription";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   keyText: {
     fontSize: 14,
+    marginLeft: theme.spacing(1),
   },
   textButton: {
     cursor: "pointer",
@@ -146,7 +147,7 @@ const PlanHover = (props) => {
           removeKeyListener();
         }}
       >
-        New Prescription&nbsp;
+        New Prescription
         <span className={classes.keyText}>
           (P on keyboard)
         </span>
@@ -161,7 +162,7 @@ const PlanHover = (props) => {
           removeKeyListener();
         }}
       >
-        New Lab Requisitions&nbsp;
+        New Lab Requisitions
         <span className={classes.keyText}>
           (L on keyboard)
         </span>

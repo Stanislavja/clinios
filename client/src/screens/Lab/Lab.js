@@ -50,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
   label: {
     fontWeight: 600,
     marginBottom: theme.spacing(2),
+    marginRight: theme.spacing(1),
   },
   mb1: {
     marginBottom: theme.spacing(1),
@@ -261,7 +262,7 @@ const Lab = () => {
                     component="span"
                     className={`${classes.label}`}
                   >
-                    Filename: &nbsp;
+                    Filename:
                   </Typography>
                   <Typography
                     component="span"
@@ -279,7 +280,7 @@ const Lab = () => {
                     component="span"
                     className={`${classes.label}`}
                   >
-                    Created: &nbsp;
+                    Created:
                   </Typography>
                   <Typography
                     component="span"
@@ -297,7 +298,7 @@ const Lab = () => {
                     component="span"
                     className={`${classes.label}`}
                   >
-                    Status: &nbsp;
+                    Status:
                   </Typography>
                   <Typography
                     component="span"
@@ -315,7 +316,7 @@ const Lab = () => {
                     component="span"
                     className={`${classes.label}`}
                   >
-                    Lab Date: &nbsp;
+                    Lab Date:
                   </Typography>
                   <Typography
                     component="span"
@@ -333,7 +334,7 @@ const Lab = () => {
                     component="span"
                     className={`${classes.label}`}
                   >
-                    Source: &nbsp;
+                    Source:
                   </Typography>
                   <Typography
                     component="span"
@@ -351,7 +352,7 @@ const Lab = () => {
                     component="span"
                     className={`${classes.label}`}
                   >
-                    Lab Company: &nbsp;
+                    Lab Company:
                   </Typography>
                   <Typography
                     component="span"

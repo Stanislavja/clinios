@@ -11,6 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import moment from "moment";
 
 import usePatientContext from "../../../hooks/usePatientContext";
+import { calculateFunctionalRange } from "../../../utils/FunctionalRange";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -86,22 +87,25 @@ const TestsContent = () => {
         </TableHead>
         <TableBody>
           {!!data && data.length
-            ? data.map((row) => (
-              <StyledTableRow key={row.name}>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>
-                  {row.lab_dt ? moment(row.lab_dt).format("MMM D YYYY") : ""}
-                </TableCell>
-                <TableCell>{row.value}</TableCell>
-                <TableCell>{row.physician}</TableCell>
-                <TableCell>{row.physician}</TableCell>
-                <TableCell>{row.physician}</TableCell>
-                <TableCell>{row.physician}</TableCell>
-                <TableCell>{row.unit}</TableCell>
-                <TableCell>{row.count}</TableCell>
-                <TableCell>{row.detail}</TableCell>
-              </StyledTableRow>
-            ))
+            ? data.map((row) => {
+              const functionalRange = calculateFunctionalRange(row.cpt_id);
+              return (
+                <StyledTableRow key={row.name}>
+                  <TableCell>{row.name}</TableCell>
+                  <TableCell>
+                    {row.lab_dt ? moment(row.lab_dt).format("MMM D YYYY") : ""}
+                  </TableCell>
+                  <TableCell>{row.value}</TableCell>
+                  <TableCell>{row.physician}</TableCell>
+                  <TableCell>{row.physician}</TableCell>
+                  <TableCell>{`${functionalRange.low} - ${functionalRange.high}`}</TableCell>
+                  <TableCell>{row.physician}</TableCell>
+                  <TableCell>{row.unit}</TableCell>
+                  <TableCell>{row.count}</TableCell>
+                  <TableCell>{row.detail}</TableCell>
+                </StyledTableRow>
+              );
+            })
             : (
               <StyledTableRow>
                 <TableCell colSpan={10}>

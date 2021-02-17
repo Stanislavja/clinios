@@ -56,6 +56,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
     minWidth: 120,
   },
+  ml1: {
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 const ProfileForm = () => {
@@ -366,8 +369,8 @@ const ProfileForm = () => {
           <Paper className={classes.root} variant="outlined">
             <Grid className={classes.sectionCard}>
               <Typography variant="h5" color="textPrimary">
-                Payment Methods &nbsp;&nbsp;
-                <span>
+                Payment Methods
+                <span className={classes.ml1}>
                   <Button size="small" variant="outlined">
                     New
                   </Button>
