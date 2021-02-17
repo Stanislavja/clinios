@@ -52,9 +52,6 @@ const useStyles = makeStyles((theme) => ({
     overflow: "hidden",
     whiteSpace: "nowrap",
   },
-  resMessage: {
-    fontSize: 12,
-  },
   icon: {
     cursor: "pointer",
   },
@@ -284,8 +281,8 @@ const DocumentsContent = (props) => {
             ) : (
               <StyledTableRow>
                 <TableCell colSpan={10}>
-                  <Typography className={classes.resMessage} align="center">
-                    No Documents Found...
+                  <Typography align="center" variant="body1">
+                    No Records Found...
                   </Typography>
                 </TableCell>
               </StyledTableRow>
