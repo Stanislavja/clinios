@@ -72,7 +72,7 @@ const DialogForm = ({
         onClose={cancelForm}
         fullWidth
         maxWidth={size}
-        disableBackdropClick
+      // disableBackdropClick //enable esc button close and backdrop click
       >
         <>
           <DialogActions
