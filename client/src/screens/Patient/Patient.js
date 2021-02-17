@@ -790,7 +790,7 @@ const Patient = () => {
       {!!patientInfo.editDialog && (
         <Dialog
           open={patientInfo.editDialog}
-          title={" "}
+          title="Edit Patient Details"
           message={(
             <BasicInfo
               reloadData={fetchPatientData}
@@ -830,7 +830,7 @@ const Patient = () => {
       {!!forms.expandDialog && (
         <Dialog
           open={forms.expandDialog}
-          title={" "}
+          title="Forms Details"
           message={<FormDetails />}
           applyForm={() => dispatch(toggleFormsExpandDialog())}
           cancelForm={() => dispatch(toggleFormsExpandDialog())}
@@ -842,7 +842,7 @@ const Patient = () => {
       {!!forms.viewDialog && (
         <Dialog
           open={forms.viewDialog}
-          title={" "}
+          title="View Forms"
           message={<Form />}
           applyForm={() => dispatch(toggleFormsViewDialog())}
           cancelForm={() => dispatch(toggleFormsViewDialog())}
@@ -854,7 +854,7 @@ const Patient = () => {
       {!!billing.newTransactionDialog && (
         <Dialog
           open={billing.newTransactionDialog}
-          title={" "}
+          title="New Transaction"
           message={(
             <NewTransactionForm
               reloadData={() => {
@@ -873,7 +873,7 @@ const Patient = () => {
       {!!billing.expandDialog && (
         <Dialog
           open={billing.expandDialog}
-          title={" "}
+          title="Billing Details"
           message={<BillingDetails />}
           applyForm={() => dispatch(toggleBillngExpandDialog())}
           cancelForm={() => dispatch(toggleBillngExpandDialog())}
@@ -885,7 +885,7 @@ const Patient = () => {
       {!!billing.newDialog && (
         <Dialog
           open={billing.newDialog}
-          title={" "}
+          title="New Billing"
           message={(
             <PaymentForm
               reloadData={() => {
@@ -905,7 +905,7 @@ const Patient = () => {
       {!!allergies.newDialog && (
         <Dialog
           open={allergies.newDialog}
-          title={" "}
+          title="New Allergy"
           message={(
             <Allergies
               reloadData={() => fetchAllergies()}
@@ -921,7 +921,7 @@ const Patient = () => {
       {!!allergies.expandDialog && (
         <Dialog
           open={allergies.expandDialog}
-          title={" "}
+          title="Allergies Details"
           message={(
             <AllergiesDetails
               reloadData={() => fetchAllergies()}
@@ -937,7 +937,7 @@ const Patient = () => {
       {!!handouts.newDialog && (
         <Dialog
           open={handouts.newDialog}
-          title={" "}
+          title="New Handouts"
           message={(
             <HandoutsForm
               reloadData={fetchPatientHandouts}
@@ -953,7 +953,7 @@ const Patient = () => {
       {!!handouts.expandDialog && (
         <Dialog
           open={handouts.expandDialog}
-          title={" "}
+          title="Handouts Details"
           message={(
             <HandoutsDetails
               reloadData={fetchPatientHandouts}
@@ -970,7 +970,7 @@ const Patient = () => {
         <Dialog
           fullScreen
           open={encounters.newDialog}
-          title={" "}
+          title="New Encounters"
           message={(
             <EncountersForm
               reloadData={fetchEncounters}
@@ -986,7 +986,7 @@ const Patient = () => {
       {!!encounters.expandDialog && (
         <Dialog
           open={encounters.expandDialog}
-          title={" "}
+          title="Encounters Details"
           message={(
             <EncountersDetails
               toggleEncountersDialog={() => dispatch(toggleEncountersDialog())}
@@ -1003,7 +1003,7 @@ const Patient = () => {
       {!!medicalNotes.historyDialog && (
         <Dialog
           open={medicalNotes.historyDialog}
-          title={" "}
+          title="Medical Notes History"
           message={<MedicalNotesDetails />}
           applyForm={() => dispatch(toggleMedicalNotesDialog())}
           cancelForm={() => dispatch(toggleMedicalNotesDialog())}
@@ -1031,7 +1031,7 @@ const Patient = () => {
       {!!messages.expandDialog && (
         <Dialog
           open={messages.expandDialog}
-          title={" "}
+          title="Messages Details"
           message={(
             <MessagesDetails
               reloadData={fetchMessages}
@@ -1047,7 +1047,7 @@ const Patient = () => {
       {!!diagnoses.newDialog && (
         <Dialog
           open={diagnoses.newDialog}
-          title={" "}
+          title="New Diagnoses"
           message={(
             <DiagnosesForm
               reloadData={() => fetchDiagnoses(true)}
@@ -1079,7 +1079,7 @@ const Patient = () => {
       {!!medications.newDialog && (
         <Dialog
           open={medications.newDialog}
-          title={" "}
+          title="New Medications"
           message={(
             <MedicationsForm
               reloadData={fetchMedications}
@@ -1095,7 +1095,7 @@ const Patient = () => {
       {!!medications.expandDialog && (
         <Dialog
           open={medications.expandDialog}
-          title={" "}
+          title="Medications Details"
           message={(
             <MedicationsDetails
               reloadData={() => fetchMedications()}
@@ -1111,7 +1111,7 @@ const Patient = () => {
       {!!requisitions.newDialog && (
         <Dialog
           open={requisitions.newDialog}
-          title={" "}
+          title="New Requisitions"
           message={(
             <RequisitionsForm
               reloadData={fetchRequisitions}
@@ -1127,7 +1127,7 @@ const Patient = () => {
       {!!requisitions.expandDialog && (
         <Dialog
           open={requisitions.expandDialog}
-          title={" "}
+          title="Requisitions Details"
           message={(
             <RequisitionsDetails
               reloadData={fetchRequisitions}
@@ -1143,7 +1143,7 @@ const Patient = () => {
       {!!documents.expandDialog && (
         <Dialog
           open={documents.expandDialog}
-          title={" "}
+          title="Documents Details"
           message={(
             <DocumentsCardContent
               reloadData={() => fetchDocuments()}
@@ -1160,7 +1160,7 @@ const Patient = () => {
       {!!tests.expandDialog && (
         <Dialog
           open={tests.expandDialog}
-          title={" "}
+          title="Tests Details"
           message={
             <TestsCardContent />
           }
