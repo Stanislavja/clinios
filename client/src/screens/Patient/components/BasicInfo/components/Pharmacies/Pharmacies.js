@@ -14,7 +14,6 @@ import {
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    padding: theme.spacing(1, 0.5),
   },
   cardRoot: {
     border: "1px solid",
@@ -28,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(3),
   },
   halfSectionCard: {
-    padding: theme.spacing(1.5, 0, 1, 0),
+    padding: theme.spacing(0, 0, 1, 0),
   },
   ml1: {
     marginLeft: theme.spacing(1),
