@@ -481,7 +481,7 @@ const BasicInfo = (props) => {
                 </Button>
               </Grid>
               <Grid item md={4}>
-                <Typography>
+                <Typography gutterBottom>
                   {`Last Login: ${moment().format("MMM D, YYYY")}`}
                 </Typography>
               </Grid>

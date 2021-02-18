@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(3),
   },
   halfSectionCard: {
-    padding: theme.spacing(0, 0, 1, 0),
+    padding: theme.spacing(0.5),
   },
   ml1: {
     marginLeft: theme.spacing(1),
