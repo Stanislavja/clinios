@@ -83,14 +83,6 @@ export const BasicInfoForm = {
       type: "email",
       options: [],
     },
-    {
-      name: "dob",
-      id: "dob",
-      label: "  ",
-      baseType: "input",
-      type: "date",
-      options: [],
-    },
   ],
   thirdRow: [
     {
