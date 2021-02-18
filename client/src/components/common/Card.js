@@ -248,6 +248,7 @@ const PatientCard = (props) => {
             <Grid>
               {!!primaryButtonText && (
                 <Button
+                  disableFocusRipple
                   className={classes.button}
                   onClick={() => primaryButtonHandler()}
                 >
@@ -256,6 +257,7 @@ const PatientCard = (props) => {
               )}
               {!!secondaryButtonText && (
                 <Button
+                  disableFocusRipple
                   className={classes.button}
                   onClick={() => secondaryButtonHandler()}
                 >

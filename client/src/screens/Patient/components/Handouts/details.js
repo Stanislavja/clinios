@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -14,6 +14,7 @@ import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 
+import Alert from "../../../../components/Alert";
 import usePatientContext from "../../../../hooks/usePatientContext";
 import PatientService from "../../../../services/patient.service";
 
@@ -71,11 +72,25 @@ const HandoutsDetails = (props) => {
   const { data } = state.handouts;
   const { patientId } = state;
 
-  const deleteItemHandler = (selectedItem) => {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const openDeleteDialog = (item) => {
+    setSelectedItem(item);
+    setShowDeleteDialog((prevstate) => !prevstate);
+  };
+
+  const closeDeleteDialog = () => {
+    setSelectedItem(null);
+    setShowDeleteDialog((prevstate) => !prevstate);
+  };
+
+  const deleteItemHandler = () => {
     const handoutId = selectedItem.handout_id;
     PatientService.deleteHandout(patientId, handoutId)
       .then((response) => {
         enqueueSnackbar(`${response.data.message}`, { variant: "success" });
+        closeDeleteDialog();
         reloadData();
       })
       .catch((error) => {
@@ -89,48 +104,59 @@ const HandoutsDetails = (props) => {
   };
 
   return (
-    <TableContainer className={classes.tableContainer}>
-      <Table size="small" className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Created</StyledTableCell>
-            <StyledTableCell>Created By</StyledTableCell>
-            <StyledTableCell>File Name</StyledTableCell>
-            <StyledTableCell align="center">Actions</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {!!data && data.length
-            ? data.map((row) => (
-              <StyledTableRow key={`${row.created}_${row.filename}`}>
-                <TableCell component="th" scope="row">
-                  {moment(row.created).format("MMM D YYYY")}
-                </TableCell>
-                <TableCell>{row.created_by || ""}</TableCell>
-                <TableCell>{row.filename}</TableCell>
+    <>
+      <Alert
+        open={showDeleteDialog}
+        title="Confirm Delete"
+        message="Are you sure you want to delete this handout?"
+        applyButtonText="Delete"
+        cancelButtonText="Cancel"
+        applyForm={deleteItemHandler}
+        cancelForm={closeDeleteDialog}
+      />
+      <TableContainer className={classes.tableContainer}>
+        <Table size="small" className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Created</StyledTableCell>
+              <StyledTableCell>Created By</StyledTableCell>
+              <StyledTableCell>File Name</StyledTableCell>
+              <StyledTableCell align="center">Actions</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {!!data && data.length
+              ? data.map((row) => (
+                <StyledTableRow key={`${row.created}_${row.filename}`}>
+                  <TableCell component="th" scope="row">
+                    {moment(row.created).format("MMM D YYYY")}
+                  </TableCell>
+                  <TableCell>{row.created_by || ""}</TableCell>
+                  <TableCell>{row.filename}</TableCell>
 
-                <TableCell className={classes.actions}>
-                  <IconButton
-                    className={classes.button}
-                    onClick={() => deleteItemHandler(row)}
-                  >
-                    <DeleteIcon fontSize="small" />
-                  </IconButton>
-                </TableCell>
-              </StyledTableRow>
-            ))
-            : (
-              <StyledTableRow>
-                <TableCell colSpan={4}>
-                  <Typography align="center" variant="body1">
-                    No Records Found...
-                  </Typography>
-                </TableCell>
-              </StyledTableRow>
-            )}
-        </TableBody>
-      </Table>
-    </TableContainer>
+                  <TableCell className={classes.actions}>
+                    <IconButton
+                      className={classes.button}
+                      onClick={() => openDeleteDialog(row)}
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </TableCell>
+                </StyledTableRow>
+              ))
+              : (
+                <StyledTableRow>
+                  <TableCell colSpan={4}>
+                    <Typography align="center" variant="body1">
+                      No Records Found...
+                    </Typography>
+                  </TableCell>
+                </StyledTableRow>
+              )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 };
 
