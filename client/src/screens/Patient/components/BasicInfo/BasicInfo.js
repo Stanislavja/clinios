@@ -66,6 +66,9 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
     borderRadius: 0,
     borderBottom: `2px solid transparent`,
+    "&:hover": {
+      background: "transparent",
+    },
   },
   tabSelected: {
     borderBottom: `2px solid ${theme.palette.primary.main}`,
