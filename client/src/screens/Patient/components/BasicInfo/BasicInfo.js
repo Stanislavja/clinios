@@ -4,7 +4,6 @@ import {
   Box,
   Grid,
   Typography,
-  // Paper,
   TextField,
   Button,
   IconButton,
@@ -43,13 +42,6 @@ const useStyles = makeStyles((theme) => ({
   inputRow: {
     marginBottom: theme.spacing(1),
   },
-  // sectionCard: {
-  //   padding: theme.spacing(0, 1),
-  // },
-  // halfSectionCard: {
-  //   padding: theme.spacing(0, 1),
-  //   minHeight: 198,
-  // },
   root: {
     border: "1px solid",
     margin: theme.spacing(0, 0, 1, 0),
@@ -270,11 +262,6 @@ const BasicInfo = (props) => {
         <Grid>
           <Grid container>
             <Grid item xs={12}>
-              {/* <Paper className={classes.root} variant="outlined"> */}
-              {/* <Grid className={classes.sectionCard}> */}
-              {/* <Typography variant="h5" color="textPrimary" gutterBottom>
-                  Basic Information
-              </Typography> */}
               <Grid container spacing={1} className={classes.inputRow}>
                 {FirstRow.map((item) => (
                   <Grid key={item.name} item xs>
@@ -406,17 +393,10 @@ const BasicInfo = (props) => {
                   </Typography>
                 </Grid>
               </Grid>
-              {/* </Grid> */}
-              {/* </Paper> */}
             </Grid>
           </Grid>
 
           <Grid item xs={6} className={classes.inputRow}>
-            {/* <Paper className={classes.root} variant="outlined"> */}
-            {/* <Grid className={classes.halfSectionCard}> */}
-            {/* <Typography variant="h5" color="textPrimary">
-                Home Address
-              </Typography> */}
             <Grid container spacing={1}>
               <Grid item lg={12}>
                 <TextField
@@ -506,18 +486,11 @@ const BasicInfo = (props) => {
                 </Typography>
               </Grid>
             </Grid>
-            {/* </Grid> */}
-            {/* </Paper> */}
           </Grid>
         </Grid>
 
         <Grid container>
           <Grid item xs={12}>
-            {/* <Paper className={classes.root} variant="outlined"> */}
-            {/* <Grid className={classes.sectionCard}> */}
-            {/* <Typography variant="h5" color="textPrimary">
-                Insurance
-              </Typography> */}
             <Grid container spacing={1} className={classes.inputRow}>
               {InsuranceForm.map((item) => (
                 <Grid key={item.name} item xs>
@@ -533,28 +506,17 @@ const BasicInfo = (props) => {
                 </Grid>
               ))}
             </Grid>
-            {/* </Grid> */}
-            {/* </Paper> */}
           </Grid>
         </Grid>
 
         <Grid item xs={6}>
-          {/* <Paper className={classes.root} variant="outlined"> */}
-          {/* <Grid className={classes.halfSectionCard}> */}
-          {/* <Typography variant="h5" color="textPrimary">
-              Pharmacy
-              </Typography> */}
           <Grid container spacing={1}>
             <PharmaciesSearch />
           </Grid>
-          {/* </Grid> */}
-          {/* </Paper> */}
         </Grid>
 
         <Grid container>
           <Grid item xs={12}>
-            {/* <Paper className={classes.root} variant="outlined"> */}
-            {/* <Grid className={classes.sectionCard}> */}
             <Typography variant="h5" color="textPrimary">
               Payment Methods
               <span className={classes.ml2}>
@@ -606,8 +568,6 @@ const BasicInfo = (props) => {
                   )}
               </TableBody>
             </Table>
-            {/* </Grid> */}
-            {/* </Paper> */}
           </Grid>
         </Grid>
       </SwipeableViews>
