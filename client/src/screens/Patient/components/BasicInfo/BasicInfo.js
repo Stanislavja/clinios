@@ -339,7 +339,7 @@ const BasicInfo = (props) => {
                       <KeyboardDatePicker
                         required
                         id="date-picker-dialog"
-                        label="Notification Date"
+                        label="Date of Birth"
                         format="dd/MM/yyyy"
                         value={basicInfo.dob}
                         onChange={handleDateChange}
