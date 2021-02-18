@@ -11,7 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import moment from "moment";
 
 import usePatientContext from "../../../hooks/usePatientContext";
-import { calculateFunctionalRange } from "../../../utils/FunctionalRange";
+import { calculateFunctionalRange, calculateFunctionalPercentage } from "../../../utils/FunctionalRange";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -82,7 +82,7 @@ const TestsContent = () => {
             <StyledTableCell>Func Flag</StyledTableCell>
             <StyledTableCell>Units</StyledTableCell>
             <StyledTableCell>Count</StyledTableCell>
-            <StyledTableCell>Detail</StyledTableCell>
+            <StyledTableCell>Graph</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -96,8 +96,10 @@ const TestsContent = () => {
                     {row.lab_dt ? moment(row.lab_dt).format("MMM D YYYY") : ""}
                   </TableCell>
                   <TableCell>{row.value}</TableCell>
-                  <TableCell>{row.physician}</TableCell>
-                  <TableCell>{row.physician}</TableCell>
+                  <TableCell>{`${row.range_low} - ${row.range_high}`}</TableCell>
+                  <TableCell>
+                    {`${calculateFunctionalPercentage(row.range_low, row.range_high, row.value)}`}
+                  </TableCell>
                   <TableCell>{`${functionalRange.low} - ${functionalRange.high}`}</TableCell>
                   <TableCell>{row.physician}</TableCell>
                   <TableCell>{row.unit}</TableCell>
