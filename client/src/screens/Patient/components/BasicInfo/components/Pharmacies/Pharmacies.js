@@ -106,7 +106,7 @@ const Pharmacies = () => {
       </Grid>
       {
         !!patientPharmacy && (
-          <>
+          <Grid className={classes.halfSectionCard}>
             <Typography gutterBottom>{patientPharmacy.name}</Typography>
             <Typography gutterBottom>{patientPharmacy.address}</Typography>
             <Typography gutterBottom>
@@ -118,7 +118,7 @@ const Pharmacies = () => {
                 <span className={classes.ml1}>{patientPharmacy.phone}</span>
               </Typography>
             )}
-          </>
+          </Grid>
         )
       }
     </div>

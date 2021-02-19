@@ -24,6 +24,7 @@ import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 import SwipeableViews from "react-swipeable-views";
 
+import Alert from "../../../../components/Alert";
 import CountrySelect from "../../../../components/common/CountrySelect";
 import RegionSelect from "../../../../components/common/RegionSelect";
 import { StyledTableRowLg, StyledTableCellLg } from "../../../../components/common/StyledTable";
@@ -125,6 +126,18 @@ const BasicInfo = (props) => {
     insurance_phone: "",
     insurance_desc: "",
   });
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const openDeleteDialog = (item) => {
+    setSelectedItem(item);
+    setShowDeleteDialog((prevstate) => !prevstate);
+  };
+
+  const closeDeleteDialog = () => {
+    setSelectedItem(null);
+    setShowDeleteDialog((prevstate) => !prevstate);
+  };
 
   useEffect(() => {
     formData.status = formData.status ? formData.status : "active";
@@ -177,11 +190,12 @@ const BasicInfo = (props) => {
     toggleNewPaymentMethodDialog();
   };
 
-  const deletePaymentMethodHandler = (item) => {
-    const paymentMethodId = item.id;
+  const deletePaymentMethodHandler = () => {
+    const paymentMethodId = selectedItem.id;
     PatientService.deletePaymentMethod(patientId, paymentMethodId)
       .then((response) => {
         enqueueSnackbar(`${response.data.message}`, { variant: "success" });
+        closeDeleteDialog();
         reloadPaymentMethods();
       });
   };
@@ -191,9 +205,6 @@ const BasicInfo = (props) => {
   };
 
   const handleChange = (newValue) => {
-    // if (newValue !== tabValue) {
-    //   fetchDocuments(newValue);
-    // }
     setTabValue(newValue);
   };
 
@@ -212,6 +223,15 @@ const BasicInfo = (props) => {
         onClose={toggleNewPaymentMethodDialog}
         reloadData={reloadPaymentMethods}
         cardData={selectedPaymentMethod}
+      />
+      <Alert
+        open={showDeleteDialog}
+        title="Confirm Delete"
+        message="Are you sure you want to delete this payment method?"
+        applyButtonText="Delete"
+        cancelButtonText="Cancel"
+        applyForm={deletePaymentMethodHandler}
+        cancelForm={closeDeleteDialog}
       />
       <Box mb={2}>
         <Grid container>
@@ -262,140 +282,136 @@ const BasicInfo = (props) => {
         index={tabValue}
         onChangeIndex={handleChange}
       >
-        <Grid>
-          <Grid container>
-            <Grid item xs={12}>
-              <Grid container spacing={1} className={classes.inputRow}>
-                {FirstRow.map((item) => (
-                  <Grid key={item.name} item xs>
-                    {item.baseType === "input" ? (
-                      <TextField
-                        label={item.label}
-                        name={item.name}
-                        value={basicInfo[item.name]}
-                        id={item.id}
-                        type={item.type}
-                        fullWidth
-                        onChange={(e) => handleInputChange(e)}
-                      />
-                    ) : (
-                      <TextField
-                        select
-                        placeholder={item.label}
-                        label={item.label}
-                        id={item.id}
-                        name={item.name}
-                        value={basicInfo[item.name]}
-                        fullWidth
-                        onChange={(e) => handleInputChange(e)}
-                      >
-                        {item.options.map((option) => (
-                          <MenuItem key={option.value} value={option.value}>
-                            {option.label}
-                          </MenuItem>
-                        ))}
-                      </TextField>
-                    )}
-                  </Grid>
-                ))}
+        <Grid item xs={12}>
+          <Grid container spacing={2} xs={12} className={classes.inputRow}>
+            {FirstRow.map((item) => (
+              <Grid key={item.name} item xs>
+                {item.baseType === "input" ? (
+                  <TextField
+                    label={item.label}
+                    name={item.name}
+                    value={basicInfo[item.name]}
+                    id={item.id}
+                    type={item.type}
+                    fullWidth
+                    onChange={(e) => handleInputChange(e)}
+                  />
+                ) : (
+                  <TextField
+                    select
+                    placeholder={item.label}
+                    label={item.label}
+                    id={item.id}
+                    name={item.name}
+                    value={basicInfo[item.name]}
+                    fullWidth
+                    onChange={(e) => handleInputChange(e)}
+                  >
+                    {item.options.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
               </Grid>
-              <Grid container spacing={1} className={classes.inputRow} alignItems="flex-end">
-                {SecondRow.map((item) => (
-                  <Grid key={item.name} item xs>
-                    {item.baseType === "input" ? (
-                      <TextField
-                        label={item.label}
-                        name={item.name}
-                        value={
-                          item.type === "date"
-                            ? moment(basicInfo[item.name]).format("YYYY-MM-DD")
-                            : basicInfo[item.name]
-                        }
-                        id={item.id}
-                        type={item.type}
-                        fullWidth
-                        onChange={(e) => handleInputChange(e)}
-                      />
-                    ) : (
-                      <TextField
-                        select
-                        placeholder={item.label}
-                        label={item.label}
-                        id={item.id}
-                        name={item.name}
-                        value={basicInfo[item.name]}
-                        fullWidth
-                        onChange={(e) => handleInputChange(e)}
-                      >
-                        {item.options.map((option) => (
-                          <MenuItem key={option.value} value={option.value}>
-                            {option.label}
-                          </MenuItem>
-                        ))}
-                      </TextField>
-                    )}
-                  </Grid>
-                ))}
-                <Grid item xs>
-                  <Grid container spacing={1} alignItems="flex-end">
-                    <Grid item xs={8}>
-                      <KeyboardDatePicker
-                        required
-                        id="date-picker-dialog"
-                        label="Date of Birth"
-                        format="dd/MM/yyyy"
-                        value={basicInfo.dob}
-                        onChange={handleDateChange}
-                        maxDate={currentDate}
-                      />
-                    </Grid>
-                    <Grid item xs={4}>
-                      <Typography gutterBottom>
-                        {`Age: ${calculateAge(basicInfo.dob)}`}
-                      </Typography>
-                    </Grid>
-                  </Grid>
+            ))}
+          </Grid>
+          <Grid container spacing={2} xs={12} className={classes.inputRow} alignItems="flex-end">
+            {SecondRow.map((item) => (
+              <Grid key={item.name} item xs>
+                {item.baseType === "input" ? (
+                  <TextField
+                    label={item.label}
+                    name={item.name}
+                    value={
+                      item.type === "date"
+                        ? moment(basicInfo[item.name]).format("YYYY-MM-DD")
+                        : basicInfo[item.name]
+                    }
+                    id={item.id}
+                    type={item.type}
+                    fullWidth
+                    onChange={(e) => handleInputChange(e)}
+                  />
+                ) : (
+                  <TextField
+                    select
+                    placeholder={item.label}
+                    label={item.label}
+                    id={item.id}
+                    name={item.name}
+                    value={basicInfo[item.name]}
+                    fullWidth
+                    onChange={(e) => handleInputChange(e)}
+                  >
+                    {item.options.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              </Grid>
+            ))}
+            <Grid item xs>
+              <Grid container spacing={1} alignItems="flex-end">
+                <Grid item xs={8}>
+                  <KeyboardDatePicker
+                    required
+                    id="date-picker-dialog"
+                    label="Date of Birth"
+                    format="dd/MM/yyyy"
+                    value={basicInfo.dob}
+                    onChange={handleDateChange}
+                    maxDate={currentDate}
+                  />
                 </Grid>
-              </Grid>
-              <Grid container spacing={1} className={classes.inputRow} alignItems="flex-end">
-                {ThirdRow.map((item) => (
-                  <Grid key={item.name} item xs>
-                    {item.baseType === "input" ? (
-                      <TextField
-                        label={item.label}
-                        name={item.name}
-                        value={basicInfo[item.name]}
-                        id={item.id}
-                        type={item.type}
-                        fullWidth
-                        onChange={(e) => handleInputChange(e)}
-                      />
-                    ) : (
-                      <TextField
-                        select
-                        placeholder={item.label}
-                        label={item.label}
-                        id={item.id}
-                        name={item.name}
-                        value={basicInfo[item.name]}
-                        fullWidth
-                        onChange={(e) => handleInputChange(e)}
-                      >
-                        {item.options.map((option) => (
-                          <MenuItem key={option.value} value={option.value}>
-                            {option.label}
-                          </MenuItem>
-                        ))}
-                      </TextField>
-                    )}
-                  </Grid>
-                ))}
-                <Grid item xs>
+                <Grid item xs={4}>
                   <Typography gutterBottom>
-                    {`Created: ${moment().format("MMM D, YYYY")}`}
+                    {`Age: ${calculateAge(basicInfo.dob)}`}
                   </Typography>
                 </Grid>
               </Grid>
+            </Grid>
+          </Grid>
+          <Grid container spacing={2} xs={12} className={classes.inputRow} alignItems="flex-end">
+            {ThirdRow.map((item) => (
+              <Grid key={item.name} item xs>
+                {item.baseType === "input" ? (
+                  <TextField
+                    label={item.label}
+                    name={item.name}
+                    value={basicInfo[item.name]}
+                    id={item.id}
+                    type={item.type}
+                    fullWidth
+                    onChange={(e) => handleInputChange(e)}
+                  />
+                ) : (
+                  <TextField
+                    select
+                    placeholder={item.label}
+                    label={item.label}
+                    id={item.id}
+                    name={item.name}
+                    value={basicInfo[item.name]}
+                    fullWidth
+                    onChange={(e) => handleInputChange(e)}
+                  >
+                    {item.options.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              </Grid>
+            ))}
+            <Grid item xs>
+              <Typography gutterBottom>
+                {`Created: ${moment().format("MMM D, YYYY")}`}
+              </Typography>
             </Grid>
           </Grid>
 
@@ -492,24 +508,20 @@ const BasicInfo = (props) => {
           </Grid>
         </Grid>
 
-        <Grid container>
-          <Grid item xs={12}>
-            <Grid container spacing={1} className={classes.inputRow}>
-              {InsuranceForm.map((item) => (
-                <Grid key={item.name} item xs>
-                  <TextField
-                    label={item.label}
-                    name={item.name}
-                    id={item.id}
-                    type={item.type}
-                    value={basicInfo[item.name]}
-                    fullWidth
-                    onChange={(e) => handleInputChange(e)}
-                  />
-                </Grid>
-              ))}
+        <Grid container spacing={3} xs={12} className={classes.inputRow}>
+          {InsuranceForm.map((item) => (
+            <Grid key={item.name} item xs>
+              <TextField
+                label={item.label}
+                name={item.name}
+                id={item.id}
+                type={item.type}
+                value={basicInfo[item.name]}
+                fullWidth
+                onChange={(e) => handleInputChange(e)}
+              />
             </Grid>
-          </Grid>
+          ))}
         </Grid>
 
         <Grid item xs={6}>
@@ -520,18 +532,13 @@ const BasicInfo = (props) => {
 
         <Grid container>
           <Grid item xs={12}>
-            <Typography variant="h5" color="textPrimary">
-              Payment Methods
-              <span className={classes.ml2}>
-                <Button
-                  size="small"
-                  variant="outlined"
-                  onClick={() => toggleNewPaymentMethodDialog()}
-                >
-                  New
-                </Button>
-              </span>
-            </Typography>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => toggleNewPaymentMethodDialog()}
+            >
+              New
+            </Button>
             <Table size="small" className={classes.table} aria-label="simple table">
               <TableHead>
                 <TableRow>
@@ -554,7 +561,7 @@ const BasicInfo = (props) => {
                         <IconButton onClick={() => editPaymentMethodHandler(item)}>
                           <EditIcon fontSize="small" />
                         </IconButton>
-                        <IconButton onClick={() => deletePaymentMethodHandler(item)}>
+                        <IconButton onClick={() => openDeleteDialog(item)}>
                           <DeleteIcon fontSize="small" />
                         </IconButton>
                       </StyledTableCellLg>
