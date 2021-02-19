@@ -427,3 +427,17 @@ export function calculateFunctionalRange(test, gender, age) {
   }
   return true;
 }
+
+
+export function calculateFunctionalPercentage(rangeLow, rangeHigh, lastValue) {
+  let percentage = "";
+  if (lastValue < rangeLow) {
+    const percentValue = (lastValue / rangeLow) * 100;
+    percentage = `Low ${percentValue}%`;
+  }
+  if (lastValue > rangeHigh) {
+    const percentValue = (lastValue / rangeHigh) * 100;
+    percentage = `High ${percentValue}%`;
+  }
+  return percentage;
+}
