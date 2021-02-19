@@ -22,6 +22,7 @@ import clsx from "clsx";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
+import { CountryRegionData } from "react-country-region-selector";
 import SwipeableViews from "react-swipeable-views";
 
 import Alert from "../../../../components/Alert";
@@ -148,6 +149,19 @@ const BasicInfo = (props) => {
     formData.insurance_phone = checkIfNull(formData.insurance_phone) ? "" : formData.insurance_phone;
     formData.insurance_desc = checkIfNull(formData.insurance_desc) ? "" : formData.insurance_desc;
     setBasicInfo({ ...formData });
+
+    const selectedCountry = CountryRegionData.filter((countryArray) => countryArray[0] === formData.country);
+    if (selectedCountry.length) { // country and state is present in the db
+      setCountry(selectedCountry[0]);
+
+      const regions = selectedCountry[0][2].split("|").map((regionPair) => {
+        const [regionName = null, regionInShort] = regionPair.split("~");
+        return [regionName, regionInShort];
+      });
+
+      const selectedRegion = regions.filter((x) => x[1] === formData.state);
+      setRegion(selectedRegion[0][1]);
+    }
   }, [formData]);
 
   const handleInputChange = (e) => {
