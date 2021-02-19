@@ -210,8 +210,8 @@ const BasicInfo = (props) => {
     toggleNewPaymentMethodDialog();
   };
 
-  const deletePaymentMethodHandler = () => {
-    const paymentMethodId = selectedItem.id;
+  const deletePaymentMethodHandler = (item) => {
+    const paymentMethodId = item.id;
     PatientService.deletePaymentMethod(patientId, paymentMethodId)
       .then((response) => {
         enqueueSnackbar(`${response.data.message}`, { variant: "success" });
@@ -250,7 +250,7 @@ const BasicInfo = (props) => {
         message="Are you sure you want to delete this payment method?"
         applyButtonText="Delete"
         cancelButtonText="Cancel"
-        applyForm={deletePaymentMethodHandler}
+        applyForm={() => deletePaymentMethodHandler(selectedItem)}
         cancelForm={closeDeleteDialog}
       />
       <Box mb={2}>
