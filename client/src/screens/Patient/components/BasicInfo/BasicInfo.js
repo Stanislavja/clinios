@@ -35,7 +35,7 @@ import {
   BasicInfoForm,
   InsuranceForm,
 } from "../../../../static/patientBasicInfoForm";
-import { calculateAge, paymentMethodType } from "../../../../utils/helpers";
+import { calculateAge, paymentMethodType, checkIfNull } from "../../../../utils/helpers";
 import PaymentMethodsForm from "./components/PaymentMethodsForm";
 import PharmaciesSearch from "./components/Pharmacies";
 
@@ -141,6 +141,12 @@ const BasicInfo = (props) => {
 
   useEffect(() => {
     formData.status = formData.status ? formData.status : "active";
+    // insurance fields null checks
+    formData.insurance_name = checkIfNull(formData.insurance_name) ? "" : formData.insurance_name;
+    formData.insurance_group = checkIfNull(formData.insurance_group) ? "" : formData.insurance_group;
+    formData.insurance_member = checkIfNull(formData.insurance_member) ? "" : formData.insurance_member;
+    formData.insurance_phone = checkIfNull(formData.insurance_phone) ? "" : formData.insurance_phone;
+    formData.insurance_desc = checkIfNull(formData.insurance_desc) ? "" : formData.insurance_desc;
     setBasicInfo({ ...formData });
   }, [formData]);
 
@@ -508,7 +514,7 @@ const BasicInfo = (props) => {
           </Grid>
         </Grid>
 
-        <Grid container spacing={3} xs={12} className={classes.inputRow}>
+        <Grid container spacing={2} xs={12} className={classes.inputRow}>
           {InsuranceForm.map((item) => (
             <Grid key={item.name} item xs>
               <TextField

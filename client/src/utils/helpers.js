@@ -237,3 +237,10 @@ export function isEmpty(obj) {
 export function noOp() {
 
 }
+
+export function checkIfNull(value) {
+  if (value === "null" || value === null) {
+    return true;
+  }
+  return false;
+}
