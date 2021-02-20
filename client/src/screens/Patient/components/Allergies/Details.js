@@ -122,7 +122,6 @@ const AllergiesDetails = (props) => {
           <TableHead>
             <TableRow>
               <StyledTableCell>Created</StyledTableCell>
-              <StyledTableCell>Drug ID</StyledTableCell>
               <StyledTableCell>Name</StyledTableCell>
               <StyledTableCell align="center">Actions</StyledTableCell>
             </TableRow>
@@ -134,7 +133,6 @@ const AllergiesDetails = (props) => {
                   <TableCell component="th" scope="row">
                     {moment(row.created).format("MMM D YYYY")}
                   </TableCell>
-                  <TableCell>{row.drug_id}</TableCell>
                   <TableCell>{row.name}</TableCell>
                   <TableCell className={classes.actions}>
                     <IconButton
