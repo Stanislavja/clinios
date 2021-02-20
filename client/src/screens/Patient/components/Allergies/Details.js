@@ -88,8 +88,8 @@ const AllergiesDetails = (props) => {
     setShowDeleteDialog((prevstate) => !prevstate);
   };
 
-  const deleteItemHandler = () => {
-    const allergyId = selectedItem.drug_id;
+  const deleteItemHandler = (item) => {
+    const allergyId = item.drug_id;
     PatientService.deleteAllergy(patientId, allergyId)
       .then((response) => {
         enqueueSnackbar(`${response.data.message}`, { variant: "success" });
@@ -114,7 +114,7 @@ const AllergiesDetails = (props) => {
         message="Are you sure you want to delete this allergy?"
         applyButtonText="Delete"
         cancelButtonText="Cancel"
-        applyForm={deleteItemHandler}
+        applyForm={() => deleteItemHandler(selectedItem)}
         cancelForm={closeDeleteDialog}
       />
       <TableContainer className={classes.tableContainer}>

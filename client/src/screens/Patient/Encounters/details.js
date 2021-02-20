@@ -94,8 +94,8 @@ const EncountersDetails = (props) => {
     dispatch(toggleEncountersDialog());
   };
 
-  const deleteItemHandler = () => {
-    const encounterId = selectedItem.id;
+  const deleteItemHandler = (item) => {
+    const encounterId = item.id;
     PatientService.deleteEncounter(patientId, encounterId)
       .then((response) => {
         enqueueSnackbar(`${response.data.message}`, { variant: "success" });
@@ -120,7 +120,7 @@ const EncountersDetails = (props) => {
         message="Are you sure you want to delete this encounter?"
         applyButtonText="Delete"
         cancelButtonText="Cancel"
-        applyForm={deleteItemHandler}
+        applyForm={() => deleteItemHandler(selectedItem)}
         cancelForm={closeDeleteDialog}
       />
       <TableContainer className={classes.tableContainer}>

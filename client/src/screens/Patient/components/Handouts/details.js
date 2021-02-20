@@ -85,8 +85,8 @@ const HandoutsDetails = (props) => {
     setShowDeleteDialog((prevstate) => !prevstate);
   };
 
-  const deleteItemHandler = () => {
-    const handoutId = selectedItem.handout_id;
+  const deleteItemHandler = (item) => {
+    const handoutId = item.handout_id;
     PatientService.deleteHandout(patientId, handoutId)
       .then((response) => {
         enqueueSnackbar(`${response.data.message}`, { variant: "success" });
@@ -111,7 +111,7 @@ const HandoutsDetails = (props) => {
         message="Are you sure you want to delete this handout?"
         applyButtonText="Delete"
         cancelButtonText="Cancel"
-        applyForm={deleteItemHandler}
+        applyForm={() => deleteItemHandler(selectedItem)}
         cancelForm={closeDeleteDialog}
       />
       <TableContainer className={classes.tableContainer}>
