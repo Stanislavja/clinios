@@ -12,7 +12,7 @@ import {
   TableRow,
   withStyles,
 } from "@material-ui/core";
-import DeleteIcon from "@material-ui/DeleteOutline/Delete";
+import DeleteIcon from "@material-ui/icons/DeleteOutline";
 import EditIcon from "@material-ui/icons/Edit";
 import moment from "moment";
 import PropTypes from "prop-types";
