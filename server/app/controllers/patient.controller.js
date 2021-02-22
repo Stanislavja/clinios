@@ -1533,10 +1533,11 @@ const getRecentDiagnoses = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select i.name, concat('(', pi.icd_id, ' ICD-10)') id
+      `select i.name, i.id, ci.favorite
       from patient_icd pi
       join icd i on i.id=pi.icd_id
-      where pi.user_id=${req.client_id}
+      left join client_icd ci on ci.icd_id=i.id
+      where pi.user_id=${req.user_id}
       order by pi.created desc
       limit 20`
     );
