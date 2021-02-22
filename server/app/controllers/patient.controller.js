@@ -1555,6 +1555,33 @@ const getRecentDiagnoses = async (req, res) => {
   }
 };
 
+const getFavoriteDiagnoses = async (req, res) => {
+  const db = makeDb(configuration, res);
+
+  try {
+    const dbResponse = await db.query(
+      `select i.name, i.id, ci.favorite
+      from icd i
+      join client_icd ci on ci.icd_id=i.id
+      where ci.client_id=${req.client_id}
+      order by i.name
+      limit 20`
+    );
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const updateDiagnose = async (req, res) => {
   const { patient_id, icd_id } = req.params;
   const { active, is_primary } = req.body.data;
@@ -2082,6 +2109,7 @@ const appointmentTypes = {
   getAllTests,
   getDiagnoses,
   getRecentDiagnoses,
+  getFavoriteDiagnoses,
   deleteDiagnose,
   updateDiagnose,
   createDiagnoses,
