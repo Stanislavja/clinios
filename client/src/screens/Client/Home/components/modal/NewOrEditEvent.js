@@ -179,6 +179,7 @@ const useStyles = makeStyles((theme) => ({
   patientIcon: {
     marginBottom: theme.spacing(1 / 2),
     marginLeft: theme.spacing(1),
+    color: "rgba(0, 0, 0, 0.38)",
   },
   modalAction: {
     borderTop: `1px solid ${theme.palette.background.default}`,
@@ -529,7 +530,7 @@ const EventModal = ({
                 <Grid item xs={12} sm={5} className={classes.timePickers}>
                   <KeyboardTimePicker
                     className={classes.startTimePicker}
-                    ampm={false}
+                    ampm={true}
                     clearable
                     id="start-date-picker-inline"
                     label="Start Time"
@@ -551,7 +552,7 @@ const EventModal = ({
                   />
                   <KeyboardTimePicker
                     clearable
-                    ampm={false}
+                    ampm={true}
                     variant="outlined"
                     id="start-date-picker-inline"
                     label="End Time"
@@ -711,19 +712,23 @@ const EventModal = ({
                   error={errorText.patient.length > 0}
                   helperText={errorText.patient.length > 0 && errorText.patient}
                 />
-                <Link
-                  href={`patients/${selectedPatient.id}`}
-                  className={classes.patientIcon}
-                  target="__blank"
-                >
-                  <Icon
-                    path={mdiOpenInNew}
-                    size={1}
-                    horizontal
-                    vertical
-                    rotate={180}
-                  />
-                </Link>
+                {selectedPatient
+                  && (
+                    <Link
+                      href={`patients/${selectedPatient.id}`}
+                      className={classes.patientIcon}
+                      target="__blank"
+                    >
+                      <Icon
+                        path={mdiOpenInNew}
+                        size={1}
+                        horizontal
+                        vertical
+                        rotate={180}
+                      />
+                    </Link>
+                  )}
+
               </div>
               {patients.length > 0 && (
                 <Card className={classes.patientListCard}>
