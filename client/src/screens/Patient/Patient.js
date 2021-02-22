@@ -953,7 +953,7 @@ const Patient = () => {
       {!!handouts.expandDialog && (
         <Dialog
           open={handouts.expandDialog}
-          title="Handouts Details"
+          title="Handouts"
           message={(
             <HandoutsDetails
               reloadData={fetchPatientHandouts}

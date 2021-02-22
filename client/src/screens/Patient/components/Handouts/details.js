@@ -9,7 +9,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
-import DeleteIcon from "@material-ui/icons/Delete";
+import DeleteIcon from "@material-ui/icons/DeleteOutline";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
@@ -119,9 +119,8 @@ const HandoutsDetails = (props) => {
           <TableHead>
             <TableRow>
               <StyledTableCell>Created</StyledTableCell>
-              <StyledTableCell>Created By</StyledTableCell>
-              <StyledTableCell>File Name</StyledTableCell>
-              <StyledTableCell align="center">Actions</StyledTableCell>
+              <StyledTableCell>Name</StyledTableCell>
+              <StyledTableCell align="center">Delete</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -131,7 +130,6 @@ const HandoutsDetails = (props) => {
                   <TableCell component="th" scope="row">
                     {moment(row.created).format("MMM D YYYY")}
                   </TableCell>
-                  <TableCell>{row.created_by || ""}</TableCell>
                   <TableCell>{row.filename}</TableCell>
 
                   <TableCell className={classes.actions}>
