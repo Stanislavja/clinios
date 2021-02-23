@@ -272,8 +272,9 @@ class Patient {
 
   getDiagnoses(patientId, active) {
     return axios
-      .get(`${API_BASE}/patient/${patientId}/diagnoses/?active=${active}`, {
+      .get(`${API_BASE}/patient/${patientId}/diagnoses`, {
         headers: authHeader(),
+        params: { active },
       })
       .then((res) => res.data);
   }

@@ -21,6 +21,7 @@ import {
   SET_MESSAGES,
   SET_MEDICATIONS,
   SET_DIAGNOSES,
+  SET_ACTIVE_DIAGNOSES,
   SET_DIAGNOSES_STATUS,
   SET_REQUISITIONS,
   SET_DOCUMENTS,
@@ -149,6 +150,11 @@ export const setTests = (data) => ({
 
 export const setDiagnoses = (data) => ({
   type: SET_DIAGNOSES,
+  payload: data,
+});
+
+export const setActiveDiagnoses = (data) => ({
+  type: SET_ACTIVE_DIAGNOSES,
   payload: data,
 });
 

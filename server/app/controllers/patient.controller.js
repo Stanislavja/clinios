@@ -1503,15 +1503,28 @@ const getDiagnoses = async (req, res) => {
   const { active } = req.query;
 
   try {
-    const dbResponse = await db.query(
-      `select pi.created, pi.icd_id, pi.active, i.name
-        from patient_icd pi
-        left join icd i on i.id=pi.icd_id
-        where pi.patient_id=${patient_id}
-        and pi.active=${active}
-        order by i.name
-        limit 50`
-    );
+    let dbResponse;
+    if (typeof active !== "undefined") {
+      dbResponse = await db.query(
+        `select pi.created, pi.icd_id, pi.active, i.name
+          from patient_icd pi
+          left join icd i on i.id=pi.icd_id
+          where pi.patient_id=${patient_id}
+          and pi.active=${active}
+          order by i.name
+          limit 50`
+      );
+    } else {
+      dbResponse = await db.query(
+        `select pi.created, pi.icd_id, pi.active, i.name
+          from patient_icd pi
+          left join icd i on i.id=pi.icd_id
+          where pi.patient_id=${patient_id}
+          order by i.name
+          limit 50`
+      );
+    }
+
     if (!dbResponse) {
       errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
@@ -2048,11 +2061,12 @@ const getIcds = async (req, res) => {
   const { query } = req.query;
   let $sql;
   try {
-    $sql = `select id, name
-    from icd
-    where name like '%${query}%'
-    order by name
-    limit 10`;
+    $sql = `select i.name, i.id, ci.favorite
+    from icd i
+    left join client_icd ci on ci.icd_id=i.id
+    where (i.name like '%${query}%' or i.id like '%${query}%')
+    order by i.name
+    limit 20`;
 
     const dbResponse = await db.query($sql);
 
