@@ -188,6 +188,11 @@ router.get(
   [authJwt.verifyToken],
   Patient.getRecentDiagnoses
 );
+router.get(
+  "/patient/:patient_id/diagnoses/favorite-icds",
+  [authJwt.verifyToken],
+  Patient.getFavoriteDiagnoses
+);
 router.put(
   "/patient/:patient_id/diagnoses/:icd_id",
   [authJwt.verifyToken],

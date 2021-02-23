@@ -85,8 +85,8 @@ const HandoutsDetails = (props) => {
     setShowDeleteDialog((prevstate) => !prevstate);
   };
 
-  const deleteItemHandler = () => {
-    const handoutId = selectedItem.handout_id;
+  const deleteItemHandler = (item) => {
+    const handoutId = item.handout_id;
     PatientService.deleteHandout(patientId, handoutId)
       .then((response) => {
         enqueueSnackbar(`${response.data.message}`, { variant: "success" });
@@ -111,7 +111,7 @@ const HandoutsDetails = (props) => {
         message="Are you sure you want to delete this handout?"
         applyButtonText="Delete"
         cancelButtonText="Cancel"
-        applyForm={deleteItemHandler}
+        applyForm={() => deleteItemHandler(selectedItem)}
         cancelForm={closeDeleteDialog}
       />
       <TableContainer className={classes.tableContainer}>
@@ -119,9 +119,8 @@ const HandoutsDetails = (props) => {
           <TableHead>
             <TableRow>
               <StyledTableCell>Created</StyledTableCell>
-              <StyledTableCell>Created By</StyledTableCell>
-              <StyledTableCell>File Name</StyledTableCell>
-              <StyledTableCell align="center">Actions</StyledTableCell>
+              <StyledTableCell>Name</StyledTableCell>
+              <StyledTableCell align="center">Delete</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -131,7 +130,6 @@ const HandoutsDetails = (props) => {
                   <TableCell component="th" scope="row">
                     {moment(row.created).format("MMM D YYYY")}
                   </TableCell>
-                  <TableCell>{row.created_by || ""}</TableCell>
                   <TableCell>{row.filename}</TableCell>
 
                   <TableCell className={classes.actions}>

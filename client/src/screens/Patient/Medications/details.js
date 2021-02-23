@@ -86,11 +86,11 @@ const MedicationsDetails = (props) => {
     setShowDeleteDialog((prevstate) => !prevstate);
   };
 
-  const deleteItemHandler = () => {
+  const deleteItemHandler = (item) => {
     const reqBody = {
-      encounter_id: selectedItem.encounterId || 1,
-      drug_id: selectedItem.drugId || 1,
-      drug_strength_id: selectedItem.drugStrengthId || 1,
+      encounter_id: item.encounterId || 1,
+      drug_id: item.drugId || 1,
+      drug_strength_id: item.drugStrengthId || 1,
     };
     PatientService.deleteMedications(patientId, reqBody)
       .then((response) => {
@@ -116,7 +116,7 @@ const MedicationsDetails = (props) => {
         message="Are you sure you want to delete this medication?"
         applyButtonText="Delete"
         cancelButtonText="Cancel"
-        applyForm={deleteItemHandler}
+        applyForm={() => deleteItemHandler(selectedItem)}
         cancelForm={closeDeleteDialog}
       />
       <TableContainer className={classes.tableContainer}>

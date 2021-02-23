@@ -21,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     margin: theme.spacing(1, 0),
   },
+  dateText: {
+    minWidth: 80,
+  },
 }));
 
 const MessagesContent = () => {
@@ -33,7 +36,7 @@ const MessagesContent = () => {
       {data.map((item, index) => (
         <Grid key={item.id}>
           <Grid container spacing={1}>
-            <Grid item md={item.user_to_from ? 3 : 4}>
+            <Grid item className={classes.dateText}>
               {/* <Typography
                 component="span"
                 variant="body1"
@@ -51,9 +54,10 @@ const MessagesContent = () => {
                 {moment(item.created).format("MMM D YYYY")}
               </Typography>
             </Grid>
-            {
-              !!item.user_to_from && (
-                <Grid item md={item.user_to_name ? 3 : 4}>
+
+            <Grid item xs>
+              <Grid container>
+                <Grid item xs={4}>
                   <Typography
                     component="span"
                     variant="body1"
@@ -71,11 +75,7 @@ const MessagesContent = () => {
                     {item.user_to_from || ""}
                   </Typography>
                 </Grid>
-              )
-            }
-            {
-              !!item.user_to_name && (
-                <Grid item md={item.user_to_from ? 3 : 4}>
+                <Grid item xs={4}>
                   <Typography
                     component="span"
                     variant="body1"
@@ -93,25 +93,25 @@ const MessagesContent = () => {
                     {item.user_to_name || ""}
                   </Typography>
                 </Grid>
-              )
-            }
-            <Grid item>
-              <Typography
-                component="span"
-                variant="body1"
-                className={`${classes.text12} ${classes.label}`}
-                color="textPrimary"
-              >
-                Subject:
-              </Typography>
-              <Typography
-                component="span"
-                variant="body1"
-                className={classes.text12}
-                color="textPrimary"
-              >
-                {item.subject}
-              </Typography>
+                <Grid item xs={4}>
+                  <Typography
+                    component="span"
+                    variant="body1"
+                    className={`${classes.text12} ${classes.label}`}
+                    color="textPrimary"
+                  >
+                    Subject:
+                  </Typography>
+                  <Typography
+                    component="span"
+                    variant="body1"
+                    className={classes.text12}
+                    color="textPrimary"
+                  >
+                    {item.subject}
+                  </Typography>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
           <Grid key={item.id}>
