@@ -1,151 +1,166 @@
-import React from "react";
+import React, {
+  useEffect, useCallback, useState, useMemo,
+} from "react";
 
+import {
+  Box, Typography, TextField, FormControlLabel,
+} from "@material-ui/core";
 import Container from "@material-ui/core/Container";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import Switch from "@material-ui/core/Switch";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
+import _ from "lodash";
+
+import AppointmentTypeUserService from "../../../../services/appointmentTypeUser.service";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     padding: "25px 0px",
   },
-  title: {
-    marginBottom: theme.spacing(0.5),
-  },
-  forms: {
-    maxWidth: "150px",
-  },
   labels: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: "0 10px",
-    "& p": {
-      margin: 0,
-    },
+    fontWeight: 500,
+    fontSize: 15,
+    color: theme.palette.text.primary,
   },
-  gridLabels: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-  },
-  formFields: {
+  box: {
+    minHeight: 75,
     display: "flex",
     alignItems: "center",
-    justifyContent: "space-between",
   },
-  formField: {
-    width: "80px",
+  feesInput: {
+    maxWidth: 80,
   },
 }));
 
-export default function AppointmentTypesUser() {
+const AppointmentTypesUser = () => {
   const classes = useStyles();
+  const [transformedData, setTransformedData] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [appointments, setAppointments] = useState([]);
+
+  const fetchAppointmentTypes = useCallback(() => {
+    AppointmentTypeUserService.getAll().then((res) => {
+      const { data } = res.data;
+      const appointmentTypes = _.orderBy(res.data.appointment_types, "id");
+      const usersArray = res.data.user;
+
+      const groupedByUser = _.mapValues(_.groupBy(data, "user_id"));
+      setUsers([...usersArray]);
+      setAppointments([...appointmentTypes]);
+      setTransformedData({ ...groupedByUser });
+    });
+  }, []);
+
+  useEffect(() => {
+    fetchAppointmentTypes();
+  }, [fetchAppointmentTypes]);
+
+  const updateStatusHandler = (event, key, index) => {
+    const { checked } = event.target;
+    const tempData = { ...transformedData };
+    tempData[key][index].active = checked ? 1 : 0;
+    setTransformedData({ ...tempData });
+  };
+
+  const updateFeesHandler = (event, key, index) => {
+    const { value } = event.target;
+    const tempData = { ...transformedData };
+    tempData[key][index].amount = value;
+    setTransformedData({ ...tempData });
+  };
+
+  const userColumns = useMemo(() => Object.keys(transformedData), [transformedData]);
+
+  const getUserName = (usersState, key) => {
+    let name = "";
+    const nameArray = usersState.filter((x) => String(x.id) === String(key));
+    if (nameArray.length) {
+      name = nameArray[0].name;
+    }
+    return name;
+  };
 
   return (
-    <>
-      <CssBaseline />
-      <Container maxWidth={false} className={classes.root}>
+    <Container maxWidth={false} className={classes.root}>
+      <Box mb={2}>
         <Typography
           component="h1"
           variant="h2"
           color="textPrimary"
-          className={classes.title}
+          gutterBottom
         >
           Appointment Types User Assignment
         </Typography>
-        <Typography component="p" variant="body2" color="textPrimary">
+        <Typography component="p" variant="body2" color="textPrimary" gutterBottom>
           This page is used to select which appointment types are used by
           which providers
         </Typography>
-        <Grid container spacing={3}>
-          <Grid item xs={3} className={classes.gridLabels}>
-            <p>-</p>
-            <p>Initial appointment 1/2 hour</p>
-            <p>Initial appointment 1 hour</p>
-            <p>Initial appointment 2 hour</p>
-          </Grid>
-
-          <Grid item xs={3}>
-            <p>John Doe</p>
-            <div className={classes.forms}>
-              <div className={classes.labels}>
-                <p>Fee</p>
-                <p>Active</p>
-              </div>
-              <div className={classes.formFields}>
-                <TextField
-                  className={classes.formField}
-                  variant="outlined"
-                  margin="dense"
-                  name="fee"
-                  id="fee"
-                  autoComplete="fee"
-                  label="Fee"
-                  value="100"
-                />
-                <Switch
-                  checked
-                  onChange={() => {}}
-                  name="active"
-                  inputProps={{ "aria-label": "primary checkbox" }}
-                />
-              </div>
-              <div className={classes.formFields}>
-                <TextField
-                  className={classes.formField}
-                  variant="outlined"
-                  margin="dense"
-                  name="fee"
-                  id="fee"
-                  autoComplete="fee"
-                  label="Fee"
-                  value="100"
-                />
-                <Switch
-                  checked={false}
-                  onChange={() => {}}
-                  name="active"
-                  inputProps={{ "aria-label": "primary checkbox" }}
-                />
-              </div>
-              <div className={classes.formFields}>
-                <TextField
-                  className={classes.formField}
-                  variant="outlined"
-                  margin="dense"
-                  name="fee"
-                  id="fee"
-                  autoComplete="fee"
-                  label="Fee"
-                  value="100"
-                />
-                <Switch
-                  checked
-                  onChange={() => {}}
-                  name="active"
-                  inputProps={{ "aria-label": "primary checkbox" }}
-                />
-              </div>
-            </div>
-          </Grid>
-          <Grid item xs={3}>
-            <p>Max Mustermann</p>
-            <div />
-            <div />
-            <div />
-          </Grid>
-          <Grid item xs={3}>
-            <p>Tim Johnson</p>
-            <div />
-            <div />
-            <div />
-          </Grid>
+      </Box>
+      <Grid container spacing={1}>
+        <Grid item xs={2}>
+          <Grid className={classes.box} />
+          {
+            appointments.map((appt) => (
+              <Grid className={classes.box} key={appt.id || Math.random()}>
+                <Typography className={classes.labels}>{appt.appointment_type}</Typography>
+              </Grid>
+            ))
+          }
         </Grid>
-      </Container>
-    </>
+        {
+          userColumns.length
+            ? userColumns.map((key) => (
+              <Grid item xs={2} key={key}>
+                <Grid className={classes.box}>
+                  <Typography className={classes.labels}>
+                    {/* {users.filter(x => String(x.id) === String(key))[0].name} */}
+                    {getUserName(users, key)}
+                  </Typography>
+                </Grid>
+                {transformedData[key].map((item, index) => {
+                  const hasValue = item.appointment_type_id === appointments[index].id;
+                  return (
+                    hasValue
+                      ? (
+                        <Grid
+                          container
+                          alignItems="center"
+                          className={classes.box}
+                          key={`${key}_${Math.random()}`}
+                        >
+                          <TextField
+                            value={item.amount}
+                            variant="outlined"
+                            margin="dense"
+                            label="Fee"
+                            className={classes.feesInput}
+                            onChange={(e) => updateFeesHandler(e, key, index)}
+                          />
+                          <FormControlLabel
+                            value="top"
+                            control={(
+                              <Switch
+                                color="primary"
+                                checked={Boolean(item.active)}
+                                onChange={(e) => updateStatusHandler(e, key, index)}
+                              />
+                            )}
+                            label={item.active ? "Active" : "Inactive"}
+                            labelPlacement="top"
+                          />
+                        </Grid>
+                      )
+                      : ""
+                  );
+                })}
+              </Grid>
+            ))
+            : "No Data Available"
+        }
+      </Grid>
+    </Container>
   );
-}
+};
+
+export default AppointmentTypesUser;
