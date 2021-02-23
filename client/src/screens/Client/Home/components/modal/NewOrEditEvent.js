@@ -530,7 +530,7 @@ const EventModal = ({
                 <Grid item xs={12} sm={5} className={classes.timePickers}>
                   <KeyboardTimePicker
                     className={classes.startTimePicker}
-                    ampm={true}
+                    ampm
                     clearable
                     id="start-date-picker-inline"
                     label="Start Time"
@@ -552,7 +552,7 @@ const EventModal = ({
                   />
                   <KeyboardTimePicker
                     clearable
-                    ampm={true}
+                    ampm
                     variant="outlined"
                     id="start-date-picker-inline"
                     label="End Time"
