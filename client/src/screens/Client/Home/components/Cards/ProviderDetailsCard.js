@@ -152,9 +152,9 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
               </div>
               <div>
                 {!!providerDetails
-                  && providerDetails.patientLabs
-                  && `${moment(providerDetails.patientLabs["min(m.created)"]).format("ll")} 
-                    (${moment(providerDetails.patientLabs["min(m.created)"]).startOf("day").fromNow()})`}
+                  && providerDetails.messageFromPatients
+                  && `${moment(providerDetails.messageFromPatients["min(m.created)"]).format("ll")} 
+                    (${moment(providerDetails.messageFromPatients["min(m.created)"]).startOf("day").fromNow()})`}
               </div>
             </Link>
           </li>
