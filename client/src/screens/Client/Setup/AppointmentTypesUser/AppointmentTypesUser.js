@@ -114,7 +114,6 @@ const AppointmentTypesUser = () => {
               <Grid item xs={2} key={key}>
                 <Grid className={classes.box}>
                   <Typography className={classes.labels}>
-                    {/* {users.filter(x => String(x.id) === String(key))[0].name} */}
                     {getUserName(users, key)}
                   </Typography>
                 </Grid>
@@ -127,7 +126,7 @@ const AppointmentTypesUser = () => {
                           container
                           alignItems="center"
                           className={classes.box}
-                          key={`${key}_${Math.random()}`}
+                          key={`${key}_${item.appointment_type_id}`}
                         >
                           <TextField
                             value={item.amount}
@@ -156,7 +155,7 @@ const AppointmentTypesUser = () => {
                 })}
               </Grid>
             ))
-            : "No Data Available"
+            : "Fetching Data..."
         }
       </Grid>
     </Container>
