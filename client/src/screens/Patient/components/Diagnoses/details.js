@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 
+import Button from "@material-ui/core/Button";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -38,6 +39,11 @@ const useStyles = makeStyles((theme) => ({
   switchAction: {
     minWidth: 135,
   },
+  statusButton: {
+    position: "absolute",
+    right: "15%",
+    top: "5%",
+  },
 }));
 
 const StyledTableCell = withStyles((theme) => ({
@@ -72,19 +78,22 @@ const DiagnosesDetails = (props) => {
   const { reloadData } = props;
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
+  const [status, setStatus] = useState(true);
   const [activeState, setActiveState] = useState({});
 
   const { state } = usePatientContext();
-  const { data } = state.diagnoses;
+  const { data, activeData } = state.diagnoses;
+
+  const cardData = status ? activeData : data;
   const { patientId } = state;
 
   const mapStateForRows = useCallback(() => {
     const stateObj = {};
-    data.forEach((item) => {
+    cardData.forEach((item) => {
       stateObj[item.name] = !!item.active;
     });
     setActiveState({ ...stateObj });
-  }, [data]);
+  }, [cardData]);
 
   useEffect(() => {
     mapStateForRows();
@@ -120,7 +129,7 @@ const DiagnosesDetails = (props) => {
         enqueueSnackbar(`${response.data.message}`, {
           variant: "success",
         });
-        reloadData();
+        reloadData(status);
       })
       .catch((error) => {
         const resMessage = (error.response
@@ -134,65 +143,81 @@ const DiagnosesDetails = (props) => {
       });
   };
 
+  const toggleStatus = () => {
+    reloadData(!status);
+    setStatus((prevState) => !prevState);
+  };
+
   return (
-    <TableContainer className={classes.tableContainer}>
-      <Table size="small" className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Created</StyledTableCell>
-            <StyledTableCell>Name</StyledTableCell>
-            <StyledTableCell>ICD Id</StyledTableCell>
-            <StyledTableCell align="center">Actions</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {!!data
-            && data.length
-            ? data.map((row) => (
-              <StyledTableRow key={`${row.created}_${row.icd_id}`}>
-                <TableCell component="th" scope="row">
-                  {moment(row.created).format("MMM D YYYY")}
-                </TableCell>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>{row.icd_id}</TableCell>
+    <>
+      <Button
+        variant="text"
+        className={classes.statusButton}
+        onClick={() => toggleStatus()}
+      >
+        {status ? "Show " : "Hide "}
+        {" "}
+        Inactive
+      </Button>
+      <TableContainer className={classes.tableContainer}>
+        <Table size="small" className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Created</StyledTableCell>
+              <StyledTableCell>Name</StyledTableCell>
+              <StyledTableCell>ICD Id</StyledTableCell>
+              <StyledTableCell align="center">Actions</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {!!cardData
+              && cardData.length
+              ? cardData.map((row) => (
+                <StyledTableRow key={`${row.created}_${row.icd_id}`}>
+                  <TableCell component="th" scope="row">
+                    {moment(row.created).format("MMM D YYYY")}
+                  </TableCell>
+                  <TableCell>{row.name}</TableCell>
+                  <TableCell>{row.icd_id}</TableCell>
 
-                <TableCell className={classes.actions}>
-                  <IconButton
-                    className={classes.button}
-                    onClick={() => deleteItemHandler(row)}
-                  >
-                    <DeleteIcon fontSize="small" />
-                  </IconButton>
-                </TableCell>
+                  <TableCell className={classes.actions}>
+                    <IconButton
+                      className={classes.button}
+                      onClick={() => deleteItemHandler(row)}
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </TableCell>
 
-                <TableCell className={classes.switchAction}>
-                  <FormControlLabel
-                    control={(
-                      <Switch
-                        checked={!!activeState[row.name]}
-                        onChange={(e) => updateStatusHandler(e, row.icd_id)}
-                        name={row.name}
-                        color="primary"
-                        size="small"
-                      />
-                    )}
-                    label={activeState[row.name] ? "Active" : "Inactive"}
-                  />
-                </TableCell>
-              </StyledTableRow>
-            ))
-            : (
-              <StyledTableRow>
-                <TableCell colSpan={4}>
-                  <Typography align="center" variant="body1">
-                    No Records Found...
-                  </Typography>
-                </TableCell>
-              </StyledTableRow>
-            )}
-        </TableBody>
-      </Table>
-    </TableContainer>
+                  <TableCell className={classes.switchAction}>
+                    <FormControlLabel
+                      control={(
+                        <Switch
+                          checked={!!activeState[row.name]}
+                          onChange={(e) => updateStatusHandler(e, row.icd_id)}
+                          name={row.name}
+                          color="primary"
+                          size="small"
+                        />
+                      )}
+                      label={activeState[row.name] ? "Active" : "Inactive"}
+                    />
+                  </TableCell>
+                </StyledTableRow>
+              ))
+              : (
+                <StyledTableRow>
+                  <TableCell colSpan={4}>
+                    <Typography align="center" variant="body1">
+                      No Records Found...
+                    </Typography>
+                  </TableCell>
+                </StyledTableRow>
+              )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 };
 
