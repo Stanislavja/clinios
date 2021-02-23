@@ -17,6 +17,7 @@ import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 
+import Alert from "../../../../components/Alert";
 import usePatientContext from "../../../../hooks/usePatientContext";
 import PatientService from "../../../../services/patient.service";
 
@@ -87,6 +88,19 @@ const DiagnosesDetails = (props) => {
   const cardData = status ? activeData : data;
   const { patientId } = state;
 
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const openDeleteDialog = (item) => {
+    setSelectedItem(item);
+    setShowDeleteDialog((prevstate) => !prevstate);
+  };
+
+  const closeDeleteDialog = () => {
+    setSelectedItem(null);
+    setShowDeleteDialog((prevstate) => !prevstate);
+  };
+
   const mapStateForRows = useCallback(() => {
     const stateObj = {};
     cardData.forEach((item) => {
@@ -99,11 +113,12 @@ const DiagnosesDetails = (props) => {
     mapStateForRows();
   }, [mapStateForRows]);
 
-  const deleteItemHandler = (selectedItem) => {
-    const icdId = selectedItem.icd_id;
+  const deleteItemHandler = (item) => {
+    const icdId = item.icd_id;
     PatientService.deleteDiagnoses(patientId, icdId)
       .then((response) => {
         enqueueSnackbar(`${response.data.message}`, { variant: "success" });
+        closeDeleteDialog();
         reloadData();
       })
       .catch((error) => {
@@ -129,7 +144,7 @@ const DiagnosesDetails = (props) => {
         enqueueSnackbar(`${response.data.message}`, {
           variant: "success",
         });
-        reloadData(status);
+        reloadData();
       })
       .catch((error) => {
         const resMessage = (error.response
@@ -144,12 +159,21 @@ const DiagnosesDetails = (props) => {
   };
 
   const toggleStatus = () => {
-    reloadData(!status);
+    reloadData();
     setStatus((prevState) => !prevState);
   };
 
   return (
     <>
+      <Alert
+        open={showDeleteDialog}
+        title="Confirm Delete"
+        message="Are you sure you want to delete this diagnoses?"
+        applyButtonText="Delete"
+        cancelButtonText="Cancel"
+        applyForm={() => deleteItemHandler(selectedItem)}
+        cancelForm={closeDeleteDialog}
+      />
       <Button
         variant="text"
         className={classes.statusButton}
@@ -183,7 +207,7 @@ const DiagnosesDetails = (props) => {
                   <TableCell className={classes.actions}>
                     <IconButton
                       className={classes.button}
-                      onClick={() => deleteItemHandler(row)}
+                      onClick={() => openDeleteDialog(row)}
                     >
                       <DeleteIcon fontSize="small" />
                     </IconButton>
