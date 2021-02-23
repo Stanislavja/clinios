@@ -1071,7 +1071,7 @@ const Patient = () => {
           title="Diagnoses"
           message={(
             <DiagnosesDetails
-              reloadData={() => fetchDiagnoses(diagnoses.status)}
+              reloadData={(statusValue) => fetchDiagnoses(statusValue || null)}
             />
           )}
           applyForm={() => dispatch(toggleDiagnosesExpandDialog())}
