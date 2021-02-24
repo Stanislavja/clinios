@@ -1406,11 +1406,11 @@ const createMessage = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const insertResponse = await db.query(
-      `insert into message (subject, message, unread_notify_dt, client_id, user_id_to, user_id_from, created, created_user_id, patient_id_from)
+      `insert into message (subject, message, unread_notify_dt, client_id, patient_id_to, user_id_from, created, created_user_id)
          values ( '${subject}', '${message}', '${moment(
         unread_notify_dt
       ).format("YYYY-MM-DD")}', ${req.client_id}, ${patient_id},
-          ${req.user_id}, now(), ${req.user_id}, ${patient_id})`
+          ${req.user_id}, now(), ${req.user_id})`
     );
 
     if (!insertResponse.affectedRows) {
