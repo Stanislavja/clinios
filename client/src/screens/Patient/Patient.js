@@ -835,7 +835,7 @@ const Patient = () => {
       {!!forms.expandDialog && (
         <Dialog
           open={forms.expandDialog}
-          title="Forms Details"
+          title="Forms"
           message={<FormDetails />}
           applyForm={() => dispatch(toggleFormsExpandDialog())}
           cancelForm={() => dispatch(toggleFormsExpandDialog())}
@@ -878,7 +878,7 @@ const Patient = () => {
       {!!billing.expandDialog && (
         <Dialog
           open={billing.expandDialog}
-          title="Billing Details"
+          title="Billing"
           message={<BillingDetails />}
           applyForm={() => dispatch(toggleBillngExpandDialog())}
           cancelForm={() => dispatch(toggleBillngExpandDialog())}
@@ -926,7 +926,7 @@ const Patient = () => {
       {!!allergies.expandDialog && (
         <Dialog
           open={allergies.expandDialog}
-          title="Allergies Details"
+          title="Allergies"
           message={(
             <AllergiesDetails
               reloadData={() => fetchAllergies()}
@@ -991,7 +991,7 @@ const Patient = () => {
       {!!encounters.expandDialog && (
         <Dialog
           open={encounters.expandDialog}
-          title="Encounters Details"
+          title="Encounters"
           message={(
             <EncountersDetails
               toggleEncountersDialog={() => dispatch(toggleEncountersDialog())}
@@ -1036,7 +1036,7 @@ const Patient = () => {
       {!!messages.expandDialog && (
         <Dialog
           open={messages.expandDialog}
-          title="Messages Details"
+          title="Messages"
           message={(
             <MessagesDetails
               reloadData={fetchMessages}
@@ -1106,7 +1106,7 @@ const Patient = () => {
       {!!medications.expandDialog && (
         <Dialog
           open={medications.expandDialog}
-          title="Medications Details"
+          title="Medications"
           message={(
             <MedicationsDetails
               reloadData={() => fetchMedications()}
@@ -1138,7 +1138,7 @@ const Patient = () => {
       {!!requisitions.expandDialog && (
         <Dialog
           open={requisitions.expandDialog}
-          title="Requisitions Details"
+          title="Requisitions"
           message={(
             <RequisitionsDetails
               reloadData={fetchRequisitions}
@@ -1154,11 +1154,12 @@ const Patient = () => {
       {!!documents.expandDialog && (
         <Dialog
           open={documents.expandDialog}
-          title="Documents Details"
+          title="Documents"
           message={(
             <DocumentsCardContent
               reloadData={() => fetchDocuments()}
               actionsEnable
+              isDialog
             />
           )}
           applyForm={() => dispatch(toggleDocumentsExpandDialog())}
@@ -1171,9 +1172,9 @@ const Patient = () => {
       {!!tests.expandDialog && (
         <Dialog
           open={tests.expandDialog}
-          title="Tests Details"
+          title="Tests"
           message={
-            <TestsCardContent />
+            <TestsCardContent isDialog />
           }
           applyForm={() => dispatch(toggleTestsExpandDialog())}
           cancelForm={() => dispatch(toggleTestsExpandDialog())}
@@ -1310,6 +1311,7 @@ const Patient = () => {
                   <DocumentsCardContent
                     reloadData={() => fetchDocuments()}
                     actionsEnable
+                    isDialog={false}
                   />
                 )}
                 showActions
@@ -1324,7 +1326,7 @@ const Patient = () => {
             <Grid key="All Tests">
               <Card
                 title="All Tests"
-                data={<TestsCardContent />}
+                data={<TestsCardContent isDialog={false} />}
                 showActions
                 primaryButtonText="Expand"
                 secondaryButtonText={null}

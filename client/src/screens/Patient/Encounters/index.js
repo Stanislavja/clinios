@@ -455,6 +455,7 @@ const Encounters = (props) => {
               <DocumentsCardContent
                 reloadData={() => { }}
                 actionsEnable={false}
+                isDialog={false}
               />
             )}
           />
@@ -462,7 +463,7 @@ const Encounters = (props) => {
         <Grid item md={6} sm={12} className={classes.w100}>
           <Card
             title="Tests"
-            data={<TestsCardContent />}
+            data={<TestsCardContent isDialog={false} />}
           />
         </Grid>
       </Grid>
