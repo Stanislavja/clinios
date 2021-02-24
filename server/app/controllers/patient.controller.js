@@ -1501,7 +1501,7 @@ const getDiagnoses = async (req, res) => {
   const db = makeDb(configuration, res);
   const { patient_id } = req.params;
   const { active } = req.query;
-
+  // TODO::
   try {
     let dbResponse;
     if (typeof active !== "undefined") {
