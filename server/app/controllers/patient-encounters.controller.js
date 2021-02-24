@@ -163,35 +163,23 @@ const createEncounter = async (req, res) => {
   const { title } = req.body.data;
   let { dt, type_id, notes, treatment, read_dt, lab_bill_to } = req.body.data;
 
-  if (typeof dt !== "undefined") {
+  if (dt && typeof dt !== "undefined") {
     dt = `'${moment(dt).format("YYYY-MM-DD HH:mm:ss")}'`;
-  } else {
-    dt = null;
   }
-  if (typeof type_id !== "undefined") {
+  if (type_id && typeof type_id !== "undefined") {
     type_id = `'${type_id}'`;
-  } else {
-    type_id = null;
   }
-  if (typeof notes !== "undefined") {
+  if (notes && typeof notes !== "undefined") {
     notes = `'${notes}'`;
-  } else {
-    notes = null;
   }
-  if (typeof treatment !== "undefined") {
+  if (treatment && typeof treatment !== "undefined") {
     treatment = `'${treatment}'`;
-  } else {
-    treatment = null;
   }
-  if (typeof read_dt !== "undefined") {
+  if (read_dt && typeof read_dt !== "undefined") {
     read_dt = `'${moment(read_dt).format("YYYY-MM-DD HH:mm:ss")}'`;
-  } else {
-    read_dt = null;
   }
-  if (typeof lab_bill_to !== "undefined") {
+  if (lab_bill_to && typeof lab_bill_to !== "undefined") {
     lab_bill_to = `'${lab_bill_to}'`;
-  } else {
-    lab_bill_to = null;
   }
 
   const db = makeDb(configuration, res);
@@ -235,17 +223,17 @@ const updateEncounter = async (req, res) => {
 
     $sql = `update encounter set title='${title}', notes='${notes}', treatment='${treatment}' `;
 
-    if (typeof dt !== "undefined") {
+    if (dt && typeof dt !== "undefined") {
       $sql += `, dt='${moment(dt).format("YYYY-MM-DD HH:mm:ss")}'`;
     }
-    if (typeof type_id !== "undefined") {
+    if (type_id && typeof type_id !== "undefined") {
       $sql += `, type_id='${type_id}'`;
     }
-    if (typeof read_dt !== "undefined") {
+    if (read_dt && typeof read_dt !== "undefined") {
       $sql += `, read_dt='${moment(read_dt).format("YYYY-MM-DD HH:mm:ss")}'`;
     }
 
-    if (typeof lab_bill_to !== "undefined") {
+    if (lab_bill_to && typeof lab_bill_to !== "undefined") {
       $sql += `, lab_bill_to=${lab_bill_to}`;
     }
 
