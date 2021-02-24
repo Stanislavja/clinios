@@ -179,9 +179,7 @@ const DiagnosesDetails = (props) => {
         className={classes.statusButton}
         onClick={() => toggleStatus()}
       >
-        {status ? "Show " : "Hide "}
-        {" "}
-        Inactive
+        {`${status ? "Show" : "Hide"} Inactive`}
       </Button>
       <TableContainer className={classes.tableContainer}>
         <Table size="small" className={classes.table}>

@@ -200,8 +200,7 @@ const PatientCard = (props) => {
                 setContentTogglerState((prevState) => !prevState);
               }}
             >
-              {contentTogglerState ? "Show " : "Hide "}
-              Inactive
+              {`${contentTogglerState ? "Show" : "Hide"} Inactive`}
             </Button>
           )}
           {showEditorActions && (
