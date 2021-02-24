@@ -29,7 +29,7 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
 import Alert from "@material-ui/lab/Alert";
-import { KeyboardDatePicker, KeyboardTimePicker } from "@material-ui/pickers";
+import { KeyboardDateTimePicker } from "@material-ui/pickers";
 import { mdiOpenInNew } from "@mdi/js";
 import Icon from "@mdi/react";
 import clsx from "clsx";
@@ -107,7 +107,8 @@ const useStyles = makeStyles((theme) => ({
   },
   startdatePicker: {
     marginRight: theme.spacing(2),
-    maxWidth: "165px",
+    maxWidth: "260px",
+    width: "260px"
   },
   startTimePicker: {
     marginRight: theme.spacing(1),
@@ -248,6 +249,7 @@ const EventModal = ({
     setAppointmentLeangth(length);
   };
 
+
   useEffect(() => {
     const selectedTime = user && user.calendar_start_time;
     let initialDateTime = selectedDate;
@@ -268,7 +270,8 @@ const EventModal = ({
         start_dt: formatDateTime(moment(props?.event?.start)),
         end_dt: formatDateTime(moment(props?.event?.end)),
         eventTitle: props.event.eventTitle,
-        status: props.event.status
+        status: props.event.status,
+        notes: props.event.notes
       });
       // setCalEvent(props.event);
       setSelectedPatient({
@@ -464,77 +467,31 @@ const EventModal = ({
           <div className={classes.root}>
             <FormControl component="div" className={classes.formControl}>
               <Grid container spacing={0}>
-                <Grid item xs={12} sm={6} className={classes.timePickers}>
-                  <TextField
-                    id="datetime-local"
-                    label="Start Time"
-                    type="datetime-local"
-                    value={calEvent.start_dt}
-                    className={classes.textField}
-                    size='medium'
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    // variant='inline'
+                <Grid item xs={12} sm={7} className={classes.timePickers}>
+                  <KeyboardDateTimePicker
+                    variant="inline"
+                    ampm={false}
                     clearable
-                    onChange={(event) => {
+                    label="Start Time"
+                    value={calEvent.start_dt}
+                    className={classes.startdatePicker}
+                    disablePast
+                    onChange={(date) => {
                       const property = "start_dt";
                       setCalEvent({
                         ...calEvent,
-                        end_dt: formatDateTime(moment(event.target.value).add(30, "minutes")),
-                        [property]: event.target.value,
+                        end_dt: formatDateTime(moment(date).add(30, "minutes")),
+                        [property]: date,
                       });
+                      calculateLength(date);
                     }}
+                    KeyboardButtonProps={{
+                      "aria-label": "change date",
+                    }}
+                    format="EE MMMM do yyyy HH:mm a"
                   />
-
-                  {/* <KeyboardDatePicker
-                  className={classes.startdatePicker}
-                  ampm={false}
-                  clearable
-                  id="start-date-picker-inline"
-                  label="Start Date"
-                  value={calEvent.start_dt}
-                  variant="inline"
-                  onChange={(date) => {
-                    const property = "start_dt";
-                    setCalEvent({
-                      ...calEvent,
-                      [property]: date,
-                    });
-                  }}
-                  // minDate={new Date()}
-                  format="EE LLL d y"
-                  KeyboardButtonProps={{
-                    "aria-label": "change date",
-                  }}
-                /> */}
-                  {/* <KeyboardDatePicker
-                  clearable
-                  className={classes.startdatePicker}
-                  ampm={false}
-                  variant="outlined"
-                  id="start-date-picker-inline"
-                  label="End Date"
-                  value={calEvent.end_dt}
-                  onChange={(date) => {
-                    const property = "end_dt";
-                    setCalEvent({
-                      ...calEvent,
-                      [property]: date,
-                    });
-                    calculateLength(date);
-                  }}
-                  // minDate={new Date()}
-                  format="EE LLL d y"
-                  KeyboardButtonProps={{
-                    "aria-label": "change date",
-                  }}
-                /> */}
-                  {/* <div className={classes.AddSubButtons}>
-
-                </div> */}
                 </Grid>
-                <Grid item xs={12} sm={6} className={classes.timePickersButtons}>
+                <Grid item xs={12} sm={5} className={classes.timePickersButtons}>
                   <Button
                     className={classes.Button}
                     variant="contained"
@@ -543,7 +500,7 @@ const EventModal = ({
                       await setCalEvent({
                         ...calEvent,
                         start_dt: formatDateTime(moment(calEvent.start_dt).add(1, "days")),
-                        end_dt: formatDateTime(moment(calEvent.start_dt).add(1, "days"))
+                        end_dt: formatDateTime(moment(calEvent.end_dt).add(1, "days"))
                       });
                     }}
                   >
@@ -569,54 +526,15 @@ const EventModal = ({
             </FormControl>
             <FormControl component="div" className={classes.formControl}>
               <Grid container spacing={0}>
-                <Grid item xs={12} sm={6} className={classes.timePickers}>
-                  <TextField
-                    id="datetime-local"
-                    label="End Time"
-                    type="datetime-local"
-                    value={calEvent.end_dt}
-                    className={classes.textField}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    onChange={(event) => {
-                      const property = "end_dt";
-                      setCalEvent({
-                        ...calEvent,
-                        [property]: event.target.value,
-                      });
-                    }}
-                  />
-                  {/* <KeyboardTimePicker
-                    className={classes.startTimePicker}
-                    ampm
+                <Grid item xs={12} sm={7} className={classes.timePickers}>
+                  <KeyboardDateTimePicker
+                    variant="inline"
+                    ampm={false}
                     clearable
-                    id="start-date-picker-inline"
-                    label="Start Time"
-                    value={calEvent.start_dt}
-                    placeholder="2020/10/10 10:00"
-                    onChange={(date) => {
-                      const property = "start_dt";
-                      setCalEvent({
-                        ...calEvent,
-                        [property]: date,
-                      });
-                    }}
-                    minDate={new Date()}
+                    label="End Time"
+                    value={calEvent.end_dt}
+                    className={classes.startdatePicker}
                     disablePast
-                    format="HH:mm a"
-                    KeyboardButtonProps={{
-                      "aria-label": "change date",
-                    }}
-                  /> */}
-                  {/* <KeyboardTimePicker
-                    clearable
-                    ampm
-                    variant="outlined"
-                    id="start-date-picker-inline"
-                    label="End Time"
-                    value={calEvent.end_dt}
-                    placeholder="2020/10/10 11:00"
                     onChange={(date) => {
                       const property = "end_dt";
                       setCalEvent({
@@ -625,17 +543,13 @@ const EventModal = ({
                       });
                       calculateLength(date);
                     }}
-                    minDate={new Date()}
-                    disablePast
-                    format="HH:mm a"
                     KeyboardButtonProps={{
                       "aria-label": "change date",
                     }}
-                  /> */}
+                    format="EE MMMM do yyyy HH:mm a"
+                  />
                 </Grid>
-                <Grid item xs={12} sm={6} className={classes.timePickersButtons}>
-
-                  {/* <span className={classes.setTo}>Set to: </span> */}
+                <Grid item xs={12} sm={5} className={classes.timePickersButtons}>
                   <Button
                     className={classes.Button}
                     disableElevation
