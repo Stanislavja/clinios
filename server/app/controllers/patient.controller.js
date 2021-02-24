@@ -1500,29 +1500,18 @@ const getDiagnoses = async (req, res) => {
   const db = makeDb(configuration, res);
   const { patient_id } = req.params;
   const { active } = req.query;
-  // TODO::
   try {
-    let dbResponse;
-    if (typeof active !== "undefined") {
-      dbResponse = await db.query(
-        `select pi.created, pi.icd_id, pi.active, i.name
-          from patient_icd pi
-          left join icd i on i.id=pi.icd_id
-          where pi.patient_id=${patient_id}
-          and pi.active=${active}
-          order by i.name
-          limit 50`
-      );
-    } else {
-      dbResponse = await db.query(
-        `select pi.created, pi.icd_id, pi.active, i.name
-          from patient_icd pi
-          left join icd i on i.id=pi.icd_id
-          where pi.patient_id=${patient_id}
-          order by i.name
-          limit 50`
-      );
+    let $sql;
+    $sql = `select pi.created, pi.icd_id, pi.active, i.name
+    from patient_icd pi
+    left join icd i on i.id=pi.icd_id
+    where pi.patient_id=${patient_id}`;
+    if (active && typeof active !== "undefined") {
+      $sql += ` and pi.active=${active}`;
     }
+    $sql += ` order by i.name limit 50`;
+
+    const dbResponse = await db.query($sql);
 
     if (!dbResponse) {
       errorMessage.message = "None found";
