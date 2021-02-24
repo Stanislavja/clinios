@@ -133,100 +133,103 @@ const updatePatient = async (req, res) => {
 
     $sql = `update patient set firstname='${firstname}', lastname='${lastname}', email='${email}' `;
 
-    if (typeof middlename !== "undefined") {
+    if (middlename && typeof middlename !== "undefined") {
       $sql += `, middlename='${middlename}'`;
     }
-    if (typeof preferred_name !== "undefined") {
+    if (preferred_name && typeof preferred_name !== "undefined") {
       $sql += `, preferred_name='${preferred_name}'`;
     }
-    if (typeof gender !== "undefined") {
+    if (gender && typeof gender !== "undefined") {
       $sql += `, gender='${gender}'`;
     }
-    if (typeof dob !== "undefined") {
+    if (dob && typeof dob !== "undefined") {
       $sql += `, dob='${moment(dob).format("YYYY-MM-DD")}'`;
     }
-    if (typeof ssn !== "undefined") {
+    if (ssn && typeof ssn !== "undefined") {
       $sql += `, ssn='${ssn}'`;
     }
-    if (typeof referred_by !== "undefined") {
+    if (referred_by && typeof referred_by !== "undefined") {
       $sql += `, referred_by='${referred_by}'`;
     }
-    if (typeof phone_home !== "undefined") {
+    if (phone_home && typeof phone_home !== "undefined") {
       $sql += `, phone_home='${phone_home}'`;
     }
-    if (typeof phone_cell !== "undefined") {
+    if (phone_cell && typeof phone_cell !== "undefined") {
       $sql += `, phone_cell='${phone_cell}'`;
     }
-    if (typeof phone_work !== "undefined") {
+    if (phone_work && typeof phone_work !== "undefined") {
       $sql += `, phone_work='${phone_work}'`;
     }
-    if (typeof phone_other !== "undefined") {
+    if (phone_other && typeof phone_other !== "undefined") {
       $sql += `, phone_other='${phone_other}'`;
     }
-    if (typeof phone_note !== "undefined") {
+    if (phone_note && typeof phone_note !== "undefined") {
       $sql += `, phone_note='${phone_note}'`;
     }
-    if (typeof admin_note !== "undefined") {
+    if (admin_note && typeof admin_note !== "undefined") {
       $sql += `, admin_note='${admin_note}'`;
     }
-    if (typeof medical_note !== "undefined") {
+    if (medical_note && typeof medical_note !== "undefined") {
       $sql += `, medical_note='${medical_note}'`;
     }
-    if (typeof address !== "undefined") {
+    if (address && typeof address !== "undefined") {
       $sql += `, address='${address}'`;
     }
-    if (typeof address2 !== "undefined") {
+    if (address2 && typeof address2 !== "undefined") {
       $sql += `, address2='${address2}'`;
     }
-    if (typeof city !== "undefined") {
+    if (city && typeof city !== "undefined") {
       $sql += `, city='${city}'`;
     }
-    if (typeof postal !== "undefined") {
+    if (postal && typeof postal !== "undefined") {
       $sql += `, postal='${postal}'`;
     }
-    if (typeof state !== "undefined") {
+    if (state && typeof state !== "undefined") {
       $sql += `, state='${state}'`;
     }
-    if (typeof emergency_firstname !== "undefined") {
+    if (emergency_firstname && typeof emergency_firstname !== "undefined") {
       $sql += `, emergency_firstname='${emergency_firstname}'`;
     }
-    if (typeof emergency_middlename !== "undefined") {
+    if (emergency_middlename && typeof emergency_middlename !== "undefined") {
       $sql += `, emergency_middlename='${emergency_middlename}'`;
     }
-    if (typeof emergency_lastname !== "undefined") {
+    if (emergency_lastname && typeof emergency_lastname !== "undefined") {
       $sql += `, emergency_lastname='${emergency_lastname}'`;
     }
-    if (typeof emergency_relationship !== "undefined") {
+    if (
+      emergency_relationship &&
+      typeof emergency_relationship !== "undefined"
+    ) {
       $sql += `, emergency_relationship='${emergency_relationship}'`;
     }
-    if (typeof emergency_email !== "undefined") {
+    if (emergency_email && typeof emergency_email !== "undefined") {
       $sql += `, emergency_email='${emergency_email}'`;
     }
-    if (typeof emergency_phone !== "undefined") {
+    if (emergency_phone && typeof emergency_phone !== "undefined") {
       $sql += `, emergency_phone='${emergency_phone}'`;
     }
-    if (typeof insurance_name !== "undefined") {
+    if (insurance_name && typeof insurance_name !== "undefined") {
       $sql += `, insurance_name='${insurance_name}'`;
     }
-    if (typeof insurance_group !== "undefined") {
+    if (insurance_group && typeof insurance_group !== "undefined") {
       $sql += `, insurance_group='${insurance_group}'`;
     }
-    if (typeof insurance_member !== "undefined") {
+    if (insurance_member && typeof insurance_member !== "undefined") {
       $sql += `, insurance_member='${insurance_member}'`;
     }
-    if (typeof insurance_phone !== "undefined") {
+    if (insurance_phone && typeof insurance_phone !== "undefined") {
       $sql += `, insurance_phone='${insurance_phone}'`;
     }
-    if (typeof insurance_desc !== "undefined") {
+    if (insurance_desc && typeof insurance_desc !== "undefined") {
       $sql += `, insurance_desc='${insurance_desc}'`;
     }
-    if (typeof height !== "undefined") {
+    if (height && typeof height !== "undefined") {
       $sql += `, height='${height}'`;
     }
-    if (typeof waist !== "undefined") {
+    if (waist && typeof waist !== "undefined") {
       $sql += `, waist='${waist}'`;
     }
-    if (typeof weight !== "undefined") {
+    if (weight && typeof weight !== "undefined") {
       $sql += `, weight='${weight}'`;
     }
     $sql += `, updated='${moment().format("YYYY-MM-DD HH:mm:ss")}',
