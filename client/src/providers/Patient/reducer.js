@@ -21,6 +21,7 @@ import {
   SET_MESSAGES,
   SET_MEDICATIONS,
   SET_DIAGNOSES,
+  SET_ACTIVE_DIAGNOSES,
   SET_DIAGNOSES_STATUS,
   SET_REQUISITIONS,
   SET_DOCUMENTS,
@@ -201,6 +202,14 @@ const reducer = (state = initialState, action) => {
         diagnoses: {
           ...state.diagnoses,
           data: [...action.payload],
+        },
+      };
+    case SET_ACTIVE_DIAGNOSES:
+      return {
+        ...state,
+        diagnoses: {
+          ...state.diagnoses,
+          activeData: [...action.payload],
         },
       };
     case SET_MEDICATIONS:

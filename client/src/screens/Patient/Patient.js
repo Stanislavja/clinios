@@ -38,6 +38,7 @@ import {
   setRequisitions,
   setTests,
   setDiagnoses,
+  setActiveDiagnoses,
   setMedications,
   setBilling,
   setBalance,
@@ -414,7 +415,11 @@ const Patient = () => {
 
   const fetchDiagnoses = useCallback((status) => {
     PatientService.getDiagnoses(patientId, status).then((res) => {
-      dispatch(setDiagnoses(res.data));
+      if (status) {
+        dispatch(setActiveDiagnoses(res.data));
+      } else {
+        dispatch(setDiagnoses(res.data));
+      }
     });
   }, [patientId]);
 
@@ -1047,26 +1052,32 @@ const Patient = () => {
       {!!diagnoses.newDialog && (
         <Dialog
           open={diagnoses.newDialog}
-          title="New Diagnoses"
+          title="Diagnoses"
           message={(
             <DiagnosesForm
-              reloadData={() => fetchDiagnoses(true)}
+              reloadData={() => {
+                fetchDiagnoses();
+                fetchDiagnoses(true);
+              }}
             />
           )}
           applyForm={() => dispatch(toggleDiagnosesDialog())}
           cancelForm={() => dispatch(toggleDiagnosesDialog())}
           hideActions
-          size="md"
+          size="lg"
         />
       )}
 
       {!!diagnoses.expandDialog && (
         <Dialog
           open={diagnoses.expandDialog}
-          title={`${diagnoses.status ? "Active" : "Inactive"} Diagnoses`}
+          title="Diagnoses"
           message={(
             <DiagnosesDetails
-              reloadData={() => fetchDiagnoses(diagnoses.status)}
+              reloadData={() => {
+                fetchDiagnoses();
+                fetchDiagnoses(true);
+              }}
             />
           )}
           applyForm={() => dispatch(toggleDiagnosesExpandDialog())}
@@ -1283,7 +1294,11 @@ const Patient = () => {
                   contentToggleHandler={(value) => {
                     // setFetchDiagnosesStatus(value);
                     dispatch(setDiagnosesStatus(value));
-                    fetchDiagnoses(value);
+                    if (value) {
+                      fetchDiagnoses(value);
+                    } else {
+                      fetchDiagnoses();
+                    }
                   }}
                 />
               </Grid>
