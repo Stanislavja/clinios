@@ -60,6 +60,7 @@ const initialState = {
   },
   diagnoses: {
     data: [],
+    activeData: [],
     newDialog: false,
     expandDialog: false,
     status: true,

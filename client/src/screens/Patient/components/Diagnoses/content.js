@@ -35,12 +35,14 @@ const useStyles = makeStyles((theme) => ({
 const DiagnosesContent = () => {
   const classes = useStyles();
   const { state } = usePatientContext();
-  const { data } = state.diagnoses;
+  const { data, activeData, status } = state.diagnoses;
+
+  const cardData = status ? activeData : data;
 
   return (
     <>
       {
-        data.map((item) => (
+        cardData.map((item) => (
           <Grid key={item.icd_id} container className={classes.inputRow}>
             <Typography
               component="span"
@@ -65,7 +67,7 @@ const DiagnosesContent = () => {
                       className={`${classes.text12} ${classes.fullWidth}`}
                       color="textPrimary"
                     >
-                      {item.name}
+                      {`${item.name} ${item.active ? "" : "(Inactive)"}`}
                     </Typography>
                   </Tooltip>
                 )
@@ -75,7 +77,7 @@ const DiagnosesContent = () => {
                     className={`${classes.text12} ${classes.fullWidth}`}
                     color="textPrimary"
                   >
-                    {item.name}
+                    {`${item.name} ${item.active ? "" : "(Inactive)"}`}
                   </Typography>
                 )
             }
