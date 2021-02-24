@@ -186,6 +186,7 @@ export default function Home() {
       (response) => {
         setIsLoading(false);
         fetchEventsByProvider(selectedProvider);
+        fetchPatientApptRequests(selectedProvider.id);
         enqueueSnackbar(`${response.data.message}`, {
           variant: "success",
         });
@@ -326,7 +327,7 @@ export default function Home() {
                 selectedProvider={selectedProvider}
                 appointmentRequests={appointmentRequests}
                 onMessageClick={handleMessageClick}
-                onAccept={(payload) => handleEventCreation(payload)}
+                onAccept={(payload) => handleEventUpdate(payload)}
                 onReject={(payload) => handleEventCancellation(payload)}
               />
             </>

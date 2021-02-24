@@ -125,13 +125,7 @@ const AppointmentRequests = ({
   const handleAccept = (_, appt) => {
     const payload = {
       data: {
-        title: "",
-        provider: selectedProvider,
-        patient: {
-          id: appt.patient_id,
-          firstname: appt.name,
-          email: appt.patient_email,
-        },
+        id: appt.id,
         ApptStatus: "A",
         start_dt: appt.start_dt,
         end_dt: appt.end_dt,

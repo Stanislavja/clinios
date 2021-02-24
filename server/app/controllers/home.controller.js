@@ -225,16 +225,26 @@ const updateAppointment = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     let $sql = `update user_calendar
-    set user_id=${provider.id}, status='${ApptStatus}', start_dt='${new_start_dt}', end_dt='${new_end_dt}'`;
+    set status='${ApptStatus}'`;
 
     if (title && title !== undefined) {
       $sql += `, title='${title}'`;
     }
+    if (provider && provider.id) {
+      $sql += `, user_id=${provider.id}`;
+    }
+
     if (notes && notes !== undefined) {
       $sql += `, notes='${notes}'`;
     }
-    if (patient.id) {
+    if (patient && patient.id) {
       $sql += `, patient_id=${patient.id}`;
+    }
+    if (new_start_dt) {
+      $sql += `, start_dt='${new_start_dt}'`;
+    }
+    if (new_end_dt) {
+      $sql += `, end_dt='${new_end_dt}'`;
     }
     if (ApptStatus === "D") {
       $sql += `, declined=now(), declined_user_id=${req.user_id}`;
@@ -250,7 +260,7 @@ const updateAppointment = async (req, res) => {
       errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
     }
-    if (patient.email) {
+    if (patient && patient.email) {
       let emailTemplate;
       if (ApptStatus === "D") {
         emailTemplate = cancelAppointmentTemplate(
