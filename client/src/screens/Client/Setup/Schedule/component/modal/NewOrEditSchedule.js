@@ -115,13 +115,15 @@ const NewOrEditSchedule = ({
   }, [schedule]);
 
   const payload = {
-    user_id: schedule.user_id,
-    date_start: moment(schedule.date_start).format("YYYY-MM-DD"),
-    date_end: moment(schedule.date_end).format("YYYY-MM-DD"),
-    time_start: moment(schedule.time_start, "HH:mm:ss").format("HH:mm:ss"),
-    time_end: moment(schedule.time_end, "HH:mm:ss").format("HH:mm:ss"),
-    active: schedule.active,
-    note: schedule.note ? schedule.note : "",
+    data: {
+      user_id: schedule.user_id,
+      date_start: schedule.date_start ? moment(schedule.date_start).format("YYYY-MM-DD") : null,
+      date_end: schedule.date_end ? moment(schedule.date_end).format("YYYY-MM-DD") : null,
+      time_start: schedule.time_start ? moment(schedule.time_start, "HH:mm:ss").format("HH:mm:ss") : null,
+      time_end: schedule.time_end ? moment(schedule.time_end, "HH:mm:ss").format("HH:mm:ss") : null,
+      active: schedule.active,
+      note: schedule.note ? schedule.note : "",
+    }
   };
 
   const handleCreateNewOrEditSchedule = () => {
@@ -141,7 +143,7 @@ const NewOrEditSchedule = ({
         },
       );
     } else {
-      ScheduleService.updateSchedule(user.id, schedule.id, payload).then(
+      ScheduleService.updateSchedule(schedule.id, payload).then(
         (response) => {
           setTimeout(() => {
             enqueueSnackbar(`${response.data.message}`, {
