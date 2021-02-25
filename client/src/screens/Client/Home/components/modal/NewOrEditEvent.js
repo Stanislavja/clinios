@@ -209,6 +209,14 @@ function formatDateTime(date) {
   return date?.format('YYYY-MM-DDTHH:mm');
 }
 
+function formatCurrentDayLengthToApproximateDays(value) {
+  if (value && value > 0) {
+    return `In ${value} days`
+  }
+  else {
+    return `${Math.abs(value)} days ago`
+  }
+}
 const EventModal = ({
   isOpen,
   onClose,
@@ -446,7 +454,7 @@ const EventModal = ({
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title" className={classes.title}>
-        {isNewEvent ? `New Appointment - ${moment(selectedDate).format("YYYY.MM.DD")}` : "Edit Appointment"}
+        {isNewEvent ? `New Appointment` : "Edit Appointment"}
         <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
           <CloseIcon />
         </IconButton>
@@ -467,7 +475,7 @@ const EventModal = ({
           <div className={classes.root}>
             <FormControl component="div" className={classes.formControl}>
               <Grid container spacing={0}>
-                <Grid item xs={12} sm={7} className={classes.timePickers}>
+                <Grid item xs={12} sm={6} className={classes.timePickers}>
                   <KeyboardDateTimePicker
                     variant="inline"
                     ampm={false}
@@ -475,7 +483,6 @@ const EventModal = ({
                     label="Start Time"
                     value={calEvent.start_dt}
                     className={classes.startdatePicker}
-                    disablePast
                     onChange={(date) => {
                       const property = "start_dt";
                       setCalEvent({
@@ -491,7 +498,7 @@ const EventModal = ({
                     format="EE MMMM do yyyy HH:mm a"
                   />
                 </Grid>
-                <Grid item xs={12} sm={5} className={classes.timePickersButtons}>
+                <Grid item xs={12} sm={6} className={classes.timePickersButtons}>
                   <Button
                     className={classes.Button}
                     variant="contained"
@@ -526,7 +533,7 @@ const EventModal = ({
             </FormControl>
             <FormControl component="div" className={classes.formControl}>
               <Grid container spacing={0}>
-                <Grid item xs={12} sm={7} className={classes.timePickers}>
+                <Grid item xs={12} sm={6} className={classes.timePickers}>
                   <KeyboardDateTimePicker
                     variant="inline"
                     ampm={false}
@@ -534,7 +541,6 @@ const EventModal = ({
                     label="End Time"
                     value={calEvent.end_dt}
                     className={classes.startdatePicker}
-                    disablePast
                     onChange={(date) => {
                       const property = "end_dt";
                       setCalEvent({
@@ -549,7 +555,7 @@ const EventModal = ({
                     format="EE MMMM do yyyy HH:mm a"
                   />
                 </Grid>
-                <Grid item xs={12} sm={5} className={classes.timePickersButtons}>
+                <Grid item xs={12} sm={6} className={classes.timePickersButtons}>
                   <Button
                     className={classes.Button}
                     disableElevation
@@ -630,7 +636,7 @@ const EventModal = ({
                 disabled
               />
               <TextField
-                value={currentDayLength}
+                value={formatCurrentDayLengthToApproximateDays(currentDayLength)}
                 variant="outlined"
                 margin="dense"
                 className={classes.appointmentLength}
