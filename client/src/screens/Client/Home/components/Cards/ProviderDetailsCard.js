@@ -89,7 +89,7 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
         className={classes.titleContainer}
       >
         <Typography className={classes.title}>
-          {`Provider Details - ${selectedProvider && selectedProvider.name}`}
+          {`User Details - ${selectedProvider && selectedProvider.name}`}
         </Typography>
       </Grid>
 
