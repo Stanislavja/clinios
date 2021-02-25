@@ -113,6 +113,8 @@ const NewOrEditSchedule = ({
       setStatus("Current");
     }
   }, [schedule]);
+  console.log({ user })
+  console.log({ schedule })
 
   const payload = {
     user_id: schedule.user_id,
@@ -205,7 +207,7 @@ const NewOrEditSchedule = ({
                   name="user_id"
                   select
                   label="User"
-                  value={schedule.user_id}
+                  value={!isNewSchedule && schedule.user_id || user?.id}
                   onChange={(e) => setSchedule({
                     ...schedule,
                     user_id: e.target.value,
