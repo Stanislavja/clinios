@@ -233,8 +233,8 @@ const updatePatient = async (req, res) => {
       $sql += `, weight='${weight}'`;
     }
     $sql += `, updated='${moment().format("YYYY-MM-DD HH:mm:ss")}',
-    updated_user_id=${req.user_id}
-    where id=${patient_id}`;
+      updated_user_id=${req.user_id}
+      where id=${patient_id}`;
 
     const updateResponse = await db.query($sql);
     if (!updateResponse.affectedRows) {
@@ -321,47 +321,47 @@ const history = async (req, res) => {
   try {
     const dbResponse = await db.query(
       `select 
-            ph.created
-            ,concat(u.firstname, ' ', u.lastname) created_user
-            ,concat(u2.firstname, ' ', u2.lastname) provider
-            ,ph.firstname
-            ,ph.middlename
-            ,ph.lastname
-            ,ph.preferred_name
-            ,ph.address
-            ,ph.address2
-            ,ph.city
-            ,ph.state
-            ,ph.postal
-            ,ph.country
-            ,ph.phone_cell
-            ,ph.phone_home
-            ,ph.phone_work
-            ,ph.phone_other
-            ,ph.phone_note
-            ,ph.email
-            ,ph.dob
-            ,ph.ssn
-            ,ph.gender
-            ,ph.emergency_firstname
-            ,ph.emergency_middlename
-            ,ph.emergency_lastname
-            ,ph.emergency_relationship
-            ,ph.emergency_email
-            ,ph.emergency_phone
-            ,ph.insurance_name
-            ,ph.insurance_group
-            ,ph.insurance_member
-            ,ph.insurance_phone
-            ,ph.insurance_desc
-            ,ph.admin_note
-            ,ph.medical_note
-            from patient_history ph
-            left join user u on u.id=ph.created_user_id
-            left join user u2 on u2.id=ph.user_id
-            where ph.id=${patient_id}
-            order by ph.created desc
-            limit 50
+        ph.created
+        ,concat(u.firstname, ' ', u.lastname) created_user
+        ,concat(u2.firstname, ' ', u2.lastname) provider
+        ,ph.firstname
+        ,ph.middlename
+        ,ph.lastname
+        ,ph.preferred_name
+        ,ph.address
+        ,ph.address2
+        ,ph.city
+        ,ph.state
+        ,ph.postal
+        ,ph.country
+        ,ph.phone_cell
+        ,ph.phone_home
+        ,ph.phone_work
+        ,ph.phone_other
+        ,ph.phone_note
+        ,ph.email
+        ,ph.dob
+        ,ph.ssn
+        ,ph.gender
+        ,ph.emergency_firstname
+        ,ph.emergency_middlename
+        ,ph.emergency_lastname
+        ,ph.emergency_relationship
+        ,ph.emergency_email
+        ,ph.emergency_phone
+        ,ph.insurance_name
+        ,ph.insurance_group
+        ,ph.insurance_member
+        ,ph.insurance_phone
+        ,ph.insurance_desc
+        ,ph.admin_note
+        ,ph.medical_note
+        from patient_history ph
+        left join user u on u.id=ph.created_user_id
+        left join user u2 on u2.id=ph.user_id
+        where ph.id=${patient_id}
+        order by ph.created desc
+        limit 50
       `
     );
 
@@ -417,10 +417,9 @@ const balance = async (req, res) => {
   try {
     const dbResponse = await db.query(
       `select 
-          sum(t.amount) amount
-          from tran t
-          where t.patient_id=${patient_id}
-      `
+        sum(t.amount) amount
+        from tran t
+        where t.patient_id=${patient_id}`
     );
 
     if (!dbResponse) {
@@ -769,8 +768,7 @@ const getBilling = async (req, res) => {
         where t.client_id=${req.client_id}
         and t.patient_id=${patient_id}
         order by t.dt desc
-        limit ${limit}
-      `
+        limit ${limit}`
     );
 
     if (!dbResponse) {
@@ -796,9 +794,7 @@ const createBilling = async (req, res) => {
 
   const db = makeDb(configuration, res);
 
-  if (!payment_type) {
-    payment_type = null;
-  } else {
+  if (!payment_type && typeof payment_type !== "undefined") {
     payment_type = `'${payment_type}'`;
   }
   try {
@@ -1406,11 +1402,11 @@ const createMessage = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const insertResponse = await db.query(
-      `insert into message (subject, message, unread_notify_dt, client_id, user_id_to, user_id_from, created, created_user_id, patient_id_from)
+      `insert into message (subject, message, unread_notify_dt, client_id, patient_id_to, user_id_from, created, created_user_id)
          values ( '${subject}', '${message}', '${moment(
         unread_notify_dt
       ).format("YYYY-MM-DD")}', ${req.client_id}, ${patient_id},
-          ${req.user_id}, now(), ${req.user_id}, ${patient_id})`
+          ${req.user_id}, now(), ${req.user_id})`
     );
 
     if (!insertResponse.affectedRows) {
@@ -1504,29 +1500,18 @@ const getDiagnoses = async (req, res) => {
   const db = makeDb(configuration, res);
   const { patient_id } = req.params;
   const { active } = req.query;
-  // TODO::
   try {
-    let dbResponse;
-    if (typeof active !== "undefined") {
-      dbResponse = await db.query(
-        `select pi.created, pi.icd_id, pi.active, i.name
-          from patient_icd pi
-          left join icd i on i.id=pi.icd_id
-          where pi.patient_id=${patient_id}
-          and pi.active=${active}
-          order by i.name
-          limit 50`
-      );
-    } else {
-      dbResponse = await db.query(
-        `select pi.created, pi.icd_id, pi.active, i.name
-          from patient_icd pi
-          left join icd i on i.id=pi.icd_id
-          where pi.patient_id=${patient_id}
-          order by i.name
-          limit 50`
-      );
+    let $sql;
+    $sql = `select pi.created, pi.icd_id, pi.active, i.name
+    from patient_icd pi
+    left join icd i on i.id=pi.icd_id
+    where pi.patient_id=${patient_id}`;
+    if (active && typeof active !== "undefined") {
+      $sql += ` and pi.active=${active}`;
     }
+    $sql += ` order by i.name limit 50`;
+
+    const dbResponse = await db.query($sql);
 
     if (!dbResponse) {
       errorMessage.message = "None found";
