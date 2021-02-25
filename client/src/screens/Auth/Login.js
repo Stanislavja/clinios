@@ -53,7 +53,9 @@ const Login = () => {
   const [isChecked, setIsChecked] = React.useState(false);
   const [errors, setErrors] = React.useState([]);
 
-  const onFormSubmit = async () => {
+  const onFormSubmit = async (event) => {
+    event.preventDefault();
+
     if (isChecked && email !== "") {
       localStorage.username = email;
       localStorage.password = password;
@@ -101,7 +103,10 @@ const Login = () => {
         </Typography>
         <Error errors={errors} />
 
-        <form className={classes.form} noValidate>
+        <form
+          className={classes.form}
+          noValidate
+          onSubmit={(event) => onFormSubmit(event)} >
           <TextField
             value={email}
             variant="outlined"
@@ -115,11 +120,10 @@ const Login = () => {
             autoFocus
             onChange={(event) => setEmail(event.target.value)}
             inputProps={{ maxLength: 255 }}
-            helperText={`${
-              email.length >= 255
-                ? "Enter an email between 255 charecter"
-                : ""
-            }`}
+            helperText={`${email.length >= 255
+              ? "Enter an email between 255 charecter"
+              : ""
+              }`}
           />
           <TextField
             value={password}
@@ -134,11 +138,10 @@ const Login = () => {
             autoComplete="current-password"
             onChange={(event) => setPassword(event.target.value)}
             inputProps={{ maxLength: 128 }}
-            helperText={`${
-              password.length >= 128
-                ? "Enter a password between 128 charecter"
-                : ""
-            }`}
+            helperText={`${password.length >= 128
+              ? "Enter a password between 128 charecter"
+              : ""
+              }`}
           />
           <FormControlLabel
             control={(
@@ -152,12 +155,12 @@ const Login = () => {
             label="Remember me"
           />
           <Button
+            type="submit"
             disabled={!email || !password}
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={(event) => onFormSubmit(event)}
           >
             Sign In
           </Button>
