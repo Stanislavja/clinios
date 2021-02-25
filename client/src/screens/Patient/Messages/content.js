@@ -97,7 +97,7 @@ const MessagesContent = () => {
                     </Typography>
                   </Grid>
                 )}
-                <Grid item xs={4}>
+                <Grid item xs={!item.user_to_name || !item.user_to_from ? true : 4}>
                   <Typography
                     component="span"
                     variant="body1"
