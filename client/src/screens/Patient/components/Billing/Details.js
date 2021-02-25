@@ -84,7 +84,7 @@ const BillingDetails = () => {
         <TableBody>
           {billings.length
             ? billings.map((item) => (
-              <StyledTableRow key={`${item.dt}_${item.amount}_${item.tran_type}`}>
+              <StyledTableRow key={`${item.id}_${item.dt}`}>
                 <TableCell component="th" scope="item">
                   {moment(item.dt).format("MMM D YYYY")}
                 </TableCell>
