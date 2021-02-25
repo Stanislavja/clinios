@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React from "react";
 
 import { Typography } from "@material-ui/core";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
@@ -11,7 +11,6 @@ import TableRow from "@material-ui/core/TableRow";
 import moment from "moment";
 
 import usePatientContext from "../../../../hooks/usePatientContext";
-import PatientService from "../../../../services/patient.service";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -52,21 +51,8 @@ const StyledTableRow = withStyles((theme) => ({
 
 const BillingDetails = () => {
   const classes = useStyles();
-  const [billings, setBillings] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const { state } = usePatientContext();
-  const { patientId } = state;
-
-  const fetchBillings = useCallback(() => {
-    PatientService.getBillings(patientId).then((res) => {
-      setBillings(res.data);
-      setIsLoading(false);
-    });
-  }, [patientId]);
-
-  useEffect(() => {
-    fetchBillings();
-  }, [fetchBillings]);
+  const { data } = state.billing;
 
   return (
     <TableContainer className={classes.tableContainer}>
@@ -82,8 +68,8 @@ const BillingDetails = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {billings.length
-            ? billings.map((item) => (
+          {data.length
+            ? data.map((item) => (
               <StyledTableRow key={`${item.id}_${item.dt}`}>
                 <TableCell component="th" scope="item">
                   {moment(item.dt).format("MMM D YYYY")}
@@ -102,7 +88,7 @@ const BillingDetails = () => {
               <StyledTableRow>
                 <TableCell colSpan={6}>
                   <Typography align="center" variant="body1">
-                    {isLoading ? "Fetching Records" : "No Records Found..."}
+                    No Records Found...
                   </Typography>
                 </TableCell>
               </StyledTableRow>
