@@ -9,6 +9,9 @@ import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import { KeyboardTimePicker } from "@material-ui/pickers";
+import Icon from "@mdi/react";
+import Link from "@material-ui/core/Link";
+import { mdiOpenInNew } from "@mdi/js";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 
@@ -75,6 +78,11 @@ const useStyles = makeStyles((theme) => ({
   },
   fileInput: {
     display: "none",
+  },
+  patientIcon: {
+    marginBottom: theme.spacing(1 / 2),
+    marginLeft: theme.spacing(1),
+    color: "rgba(0, 0, 0, 0.38)",
   },
 }));
 
@@ -273,9 +281,9 @@ export default function Configuration() {
       </Typography>
       <ConfigModal modal={modalHistory} setModal={setModalHistory} />
       <Error errors={errors} />
-      <form className={classes.form} noValidate onSubmit={() => {}}>
+      <form className={classes.form} noValidate onSubmit={() => { }}>
         <Grid container spacing={4}>
-          <Grid item xs={6} sm={6}>
+          <Grid item xs={6} sm={7}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -322,20 +330,39 @@ export default function Configuration() {
                   onChange={(e) => _onChangeInput(e)}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  value={formParams.patientPortal}
-                  variant="outlined"
-                  onKeyPress={(e) => onKeyPress(e)}
-                  size="small"
-                  id="patientPortal"
-                  disabled
-                  label="Patient Portal Login"
-                  className={`${classes.textField} `}
-                  name="patientPortal"
-                  autoComplete="patientPortal"
-                  onChange={(e) => _onChangeInput(e)}
-                />
+              <Grid container item xs={12} sm={6} justify='center' alignItems='center'>
+                <Grid xs={11} sm={11}>
+                  <TextField
+                    value={formParams.patientPortal}
+                    variant="outlined"
+                    onKeyPress={(e) => onKeyPress(e)}
+                    size="small"
+                    id="patientPortal"
+                    disabled
+                    label="Patient Portal Login"
+                    className={`${classes.textField} `}
+                    name="patientPortal"
+                    autoComplete="patientPortal"
+                    onChange={(e) => _onChangeInput(e)}
+                  />
+                </Grid>
+                <Grid xs={1} sm={1}>
+                  {formParams.patientPortal && (
+                    <Link
+                      href={formParams.patientPortal}
+                      className={classes.patientIcon}
+                      target="_blank"
+                    >
+                      <Icon
+                        path={mdiOpenInNew}
+                        size={1}
+                        horizontal
+                        vertical
+                        rotate={180}
+                      />
+                    </Link>
+                  )}
+                </Grid>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -542,7 +569,7 @@ export default function Configuration() {
               </Button>
             </Grid>
           </Grid>
-          <Grid item xs={6} sm={6}>
+          <Grid item xs={6} sm={5}>
             <div>
               <input
                 accept="image/*"
