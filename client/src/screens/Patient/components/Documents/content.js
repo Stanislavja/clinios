@@ -10,6 +10,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import DeleteIcon from "@material-ui/icons/DeleteOutline";
 import RestoreIcon from "@material-ui/icons/RestorePage";
+import clsx from "clsx";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
@@ -22,6 +23,9 @@ import PatientService from "../../../../services/patient.service";
 import Lab from "./Dialog/Lab";
 
 const useStyles = makeStyles((theme) => ({
+  h300: {
+    minHeight: 300,
+  },
   tab: {
     paddingBottom: 5,
     margin: "5px 10px 5px 0",
@@ -54,6 +58,10 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     cursor: "pointer",
+  },
+  noRecordsMessage: {
+    lineHeight: "21px",
+    fontSize: 12,
   },
 }));
 
@@ -92,7 +100,7 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 
 const DocumentsContent = (props) => {
-  const { reloadData, actionsEnable } = props;
+  const { reloadData, actionsEnable, isDialog } = props;
   const { enqueueSnackbar } = useSnackbar();
   const { state } = usePatientContext();
   const classes = useStyles();
@@ -172,7 +180,11 @@ const DocumentsContent = (props) => {
   };
 
   return (
-    <>
+    <Grid
+      className={clsx({
+        [classes.h300]: isDialog,
+      })}
+    >
       <Grid container>
         <Typography
           className={tabValue === 0 ? classes.tabSelected : classes.tab}
@@ -223,12 +235,10 @@ const DocumentsContent = (props) => {
             <TableRow>
               <StyledTableCell>Created</StyledTableCell>
               <StyledTableCell>Filename</StyledTableCell>
-              <StyledTableCell>Type</StyledTableCell>
-              <StyledTableCell>Lab Date</StyledTableCell>
               <StyledTableCell align="center">
-                Conv Flag
+                Conventional Flag
               </StyledTableCell>
-              <StyledTableCell>Func Flag</StyledTableCell>
+              <StyledTableCell>Functional Flag</StyledTableCell>
               <StyledTableCell>Notes</StyledTableCell>
               {
                 actionsEnable && (
@@ -248,10 +258,6 @@ const DocumentsContent = (props) => {
                     {moment(row.created).format("MMM D YYYY")}
                   </TableCell>
                   <TableCell>{row.filename}</TableCell>
-                  <TableCell>{row.type}</TableCell>
-                  <TableCell>
-                    {row.lab_dt ? moment(row.lab_dt).format("MMM D YYYY") : ""}
-                  </TableCell>
                   <TableCell>{row.physician}</TableCell>
                   <TableCell>{row.physician}</TableCell>
                   {
@@ -290,8 +296,8 @@ const DocumentsContent = (props) => {
               ))
             ) : (
               <StyledTableRow>
-                <TableCell colSpan={10}>
-                  <Typography align="center" variant="body1">
+                <TableCell align="center" colSpan={10}>
+                  <Typography className={classes.noRecordsMessage} align="center" variant="body1">
                     No Records Found...
                   </Typography>
                 </TableCell>
@@ -309,13 +315,14 @@ const DocumentsContent = (props) => {
             handleClose={() => setIsLabModalOpen(false)}
           />
         )}
-    </>
+    </Grid>
   );
 };
 
 DocumentsContent.propTypes = {
   reloadData: PropTypes.func.isRequired,
   actionsEnable: PropTypes.bool.isRequired,
+  isDialog: PropTypes.bool.isRequired,
 };
 
 export default DocumentsContent;

@@ -1,5 +1,6 @@
 import React from "react";
 
+import { Grid } from "@material-ui/core";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -8,12 +9,17 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
+import clsx from "clsx";
 import moment from "moment";
+import PropTypes from "prop-types";
 
 import usePatientContext from "../../../hooks/usePatientContext";
 import { calculateFunctionalRange, calculateFunctionalPercentage } from "../../../utils/FunctionalRange";
 
 const useStyles = makeStyles((theme) => ({
+  h300: {
+    minHeight: 300,
+  },
   button: {
     padding: theme.spacing(1),
   },
@@ -27,6 +33,10 @@ const useStyles = makeStyles((theme) => ({
     "& button": {
       fontSize: "12px",
     },
+  },
+  noRecordsMessage: {
+    lineHeight: "21px",
+    fontSize: 12,
   },
 }));
 
@@ -63,64 +73,75 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-const TestsContent = () => {
+const TestsContent = (props) => {
   const classes = useStyles();
   const { state } = usePatientContext();
   const { data } = state.tests;
+  const { isDialog } = props;
 
   return (
-    <TableContainer className={classes.tableContainer}>
-      <Table size="small" className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Test</StyledTableCell>
-            <StyledTableCell>Last Date</StyledTableCell>
-            <StyledTableCell>Last Result</StyledTableCell>
-            <StyledTableCell>Conv Range</StyledTableCell>
-            <StyledTableCell>Conv Flag</StyledTableCell>
-            <StyledTableCell>Func Range</StyledTableCell>
-            <StyledTableCell>Func Flag</StyledTableCell>
-            <StyledTableCell>Units</StyledTableCell>
-            <StyledTableCell>Count</StyledTableCell>
-            <StyledTableCell>Graph</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {!!data && data.length
-            ? data.map((row) => {
-              const functionalRange = calculateFunctionalRange(row.cpt_id);
-              return (
-                <StyledTableRow key={row.name}>
-                  <TableCell>{row.name}</TableCell>
-                  <TableCell>
-                    {row.lab_dt ? moment(row.lab_dt).format("MMM D YYYY") : ""}
+    <Grid
+      className={clsx({
+        [classes.h300]: isDialog,
+      })}
+    >
+      <TableContainer className={classes.tableContainer}>
+        <Table size="small" className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Test</StyledTableCell>
+              <StyledTableCell>Last Date</StyledTableCell>
+              <StyledTableCell>Last Result</StyledTableCell>
+              <StyledTableCell>Conv Range</StyledTableCell>
+              <StyledTableCell>Conv Flag</StyledTableCell>
+              <StyledTableCell>Func Range</StyledTableCell>
+              <StyledTableCell>Func Flag</StyledTableCell>
+              <StyledTableCell>Units</StyledTableCell>
+              <StyledTableCell>Count</StyledTableCell>
+              <StyledTableCell>Graph</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {!!data && data.length
+              ? data.map((row) => {
+                const functionalRange = calculateFunctionalRange(row.cpt_id);
+                return (
+                  <StyledTableRow key={row.name}>
+                    <TableCell>{row.name}</TableCell>
+                    <TableCell>
+                      {row.lab_dt ? moment(row.lab_dt).format("MMM D YYYY") : ""}
+                    </TableCell>
+                    <TableCell>{row.value}</TableCell>
+                    <TableCell>{`${row.range_low} - ${row.range_high}`}</TableCell>
+                    <TableCell>
+                      {`${calculateFunctionalPercentage(row.range_low, row.range_high, row.value)}`}
+                    </TableCell>
+                    <TableCell>{`${functionalRange.low} - ${functionalRange.high}`}</TableCell>
+                    <TableCell>{row.physician}</TableCell>
+                    <TableCell>{row.unit}</TableCell>
+                    <TableCell>{row.count}</TableCell>
+                    <TableCell>{row.detail}</TableCell>
+                  </StyledTableRow>
+                );
+              })
+              : (
+                <StyledTableRow>
+                  <TableCell colSpan={10}>
+                    <Typography className={classes.noRecordsMessage} align="center" variant="body1">
+                      No Records Found...
+                    </Typography>
                   </TableCell>
-                  <TableCell>{row.value}</TableCell>
-                  <TableCell>{`${row.range_low} - ${row.range_high}`}</TableCell>
-                  <TableCell>
-                    {`${calculateFunctionalPercentage(row.range_low, row.range_high, row.value)}`}
-                  </TableCell>
-                  <TableCell>{`${functionalRange.low} - ${functionalRange.high}`}</TableCell>
-                  <TableCell>{row.physician}</TableCell>
-                  <TableCell>{row.unit}</TableCell>
-                  <TableCell>{row.count}</TableCell>
-                  <TableCell>{row.detail}</TableCell>
                 </StyledTableRow>
-              );
-            })
-            : (
-              <StyledTableRow>
-                <TableCell colSpan={10}>
-                  <Typography align="center" variant="body1">
-                    No Records Found...
-                  </Typography>
-                </TableCell>
-              </StyledTableRow>
-            )}
-        </TableBody>
-      </Table>
-    </TableContainer>
+              )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Grid>
   );
+};
+
+TestsContent.propTypes = {
+  isDialog: PropTypes.bool.isRequired,
 };
 
 export default TestsContent;

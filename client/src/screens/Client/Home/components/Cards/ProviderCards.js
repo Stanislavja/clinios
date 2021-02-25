@@ -92,7 +92,7 @@ const ProviderCards = ({ providers, selectedProvider, handleProviderClick }) => 
         alignItems="center"
         className={classes.titleContainer}
       >
-        <Typography className={classes.title}>Provider</Typography>
+        <Typography className={classes.title}>Users</Typography>
       </Grid>
 
       <CardContent>
