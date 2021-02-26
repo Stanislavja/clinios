@@ -4,6 +4,7 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSnackbar } from "notistack";
+import PropTypes from "prop-types";
 
 import Dimmer from "../../components/common/Dimmer";
 import EmailService from "../../services/email.service";
@@ -86,6 +87,15 @@ const EmailConfirmation = ({ ...props }) => {
       <Dimmer isOpen={isLoading} />
     </>
   );
+};
+
+EmailConfirmation.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      userId: PropTypes.number.isRequired,
+      token: PropTypes.string,
+    }),
+  }).isRequired,
 };
 
 export default EmailConfirmation;
