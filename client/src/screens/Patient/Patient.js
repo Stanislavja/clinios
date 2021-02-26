@@ -5,7 +5,6 @@ import React, {
   useMemo,
   useCallback,
   useReducer,
-  createContext,
 } from "react";
 
 import { Grid } from "@material-ui/core";
@@ -128,6 +127,7 @@ import MedicationsDetails from "./Medications/details";
 import NewMessageForm from "./Messages";
 import MessagesCardContent from "./Messages/content";
 import MessagesDetails from "./Messages/details";
+import PatientContext from "./PatientContext";
 import RequisitionsForm from "./Requisitions";
 import RequisitionsCardContent from "./Requisitions/content";
 import RequisitionsDetails from "./Requisitions/details";
@@ -146,7 +146,6 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export const PatientContext = createContext(null);
 
 const Patient = () => {
   const classes = useStyles();
