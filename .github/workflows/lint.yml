@@ -11,6 +11,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: fetch master and pr commits
+      run: |
+        git fetch --no-tags --depth=1 origin +refs/heads/${{ github.base_ref }}
+        git fetch --no-tags --depth=1 origin ${{ github.sha }}
     - name: npm install
       run: cd client/ && npm i --ignore-scripts
 
