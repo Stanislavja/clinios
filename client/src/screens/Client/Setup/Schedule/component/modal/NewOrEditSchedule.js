@@ -46,10 +46,15 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    marginBottom: "20px",
     color: theme.palette.text.secondary,
     "& .MuiSelect-select": {
       minWidth: 120,
     },
+  },
+  switchFormControl: {
+    marginBottom: "10px",
+    display: "block"
   },
   root: {
     paddingLeft: "5px",
@@ -75,6 +80,11 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(3),
     paddingRight: theme.spacing(3),
   },
+  scheduleTitle: {
+    fontWeight: "500",
+    fontSize: 15,
+    marginBottom: "20px"
+  }
 }));
 
 const NewOrEditSchedule = ({
@@ -113,8 +123,6 @@ const NewOrEditSchedule = ({
       setStatus("Current");
     }
   }, [schedule]);
-  console.log({ user })
-  console.log({ schedule })
 
   const payload = {
     data: {
@@ -124,7 +132,12 @@ const NewOrEditSchedule = ({
       time_start: schedule.time_start ? moment(schedule.time_start, "HH:mm:ss").format("HH:mm:ss") : null,
       time_end: schedule.time_end ? moment(schedule.time_end, "HH:mm:ss").format("HH:mm:ss") : null,
       active: schedule.active,
-      note: schedule.note ? schedule.note : "",
+      note: schedule.note ? schedule.note : 0,
+      monday: schedule?.monday ? 1 : 0,
+      tuesday: schedule?.tuesday ? 1 : 0,
+      wednesday: schedule?.wednesday ? 1 : 0,
+      thursday: schedule?.thursday ? 1 : 0,
+      friday: schedule?.friday ? 1 : 0,
     }
   };
 
@@ -172,6 +185,12 @@ const NewOrEditSchedule = ({
     }
   };
 
+  const getScheduleUserId = (isNewSchedule, selectedScheduleUserId, loggedInUser) => {
+    if (isNewSchedule && !selectedScheduleUserId) {
+      return loggedInUser?.id;
+    }
+    return selectedScheduleUserId
+  }
   return (
     <div>
       <Dialog
@@ -209,7 +228,7 @@ const NewOrEditSchedule = ({
                   name="user_id"
                   select
                   label="User"
-                  value={!isNewSchedule && schedule.user_id || user?.id}
+                  value={getScheduleUserId(isNewSchedule, schedule.user_id, user)}
                   onChange={(e) => setSchedule({
                     ...schedule,
                     user_id: e.target.value,
@@ -232,136 +251,221 @@ const NewOrEditSchedule = ({
               </Grid>
               <p className={classes.formHelperText}>The name shown in the Appointment</p>
             </FormControl>
-            <FormControl component="div" className={classes.formControl}>
-              <Grid item xs={12} md={4} className={classes.gridMargin}>
-                <KeyboardDatePicker
-                  required
-                  clearable
-                  autoOk
-                  KeyboardButtonProps={{
-                    "aria-label": "change date",
-                  }}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  format="yyyy/MM/dd"
-                  inputVariant="outlined"
-                  variant="outlined"
-                  id="dateStart"
-                  label="Date Start"
-                  className={classes.textField}
-                  size="small"
-                  name="date_start"
-                  value={schedule.date_start}
-                  onChange={(date) => setSchedule({
-                    ...schedule,
-                    date_start: date,
-                  })}
-                  onKeyUp={handleKeyUp}
-                  maxDate={schedule.date_end}
-                  maxDateMessage="Date start should not be after date end"
+            <Grid container xs={12} md={12} className={classes.gridMargin}>
+              <Grid item xs={12} sm={6} className={classes.gridMargin}>
+                <p className={classes.scheduleTitle}>
+                  Date and Time
+                </p>
+                <FormControl component="div" className={classes.formControl}>
+                  <KeyboardDatePicker
+                    required
+                    clearable
+                    autoOk
+                    KeyboardButtonProps={{
+                      "aria-label": "change date",
+                    }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    format="yyyy/MM/dd"
+                    inputVariant="outlined"
+                    variant="outlined"
+                    id="dateStart"
+                    label="Date Start"
+                    className={classes.textField}
+                    size="small"
+                    name="date_start"
+                    value={schedule.date_start}
+                    onChange={(date) => setSchedule({
+                      ...schedule,
+                      date_start: date,
+                    })}
+                    onKeyUp={handleKeyUp}
+                    maxDate={schedule.date_end}
+                    maxDateMessage="Date start should not be after date end"
+                  />
+                </FormControl>
+                <FormControl component="div" className={classes.formControl}>
+                  <KeyboardDatePicker
+                    required
+                    clearable
+                    autoOk
+                    KeyboardButtonProps={{
+                      "aria-label": "change date",
+                    }}
+                    format="yyyy/MM/dd"
+                    inputVariant="outlined"
+                    variant="outlined"
+                    id="dateEnd"
+                    label="Date End"
+                    className={classes.textField}
+                    size="small"
+                    name="date_end"
+                    value={schedule.date_end}
+                    onChange={(date) => setSchedule({
+                      ...schedule,
+                      date_end: date,
+                    })}
+                    onKeyUp={handleKeyUp}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    minDate={schedule.date_start}
+                    minDateMessage="Date end should not be before date start"
+                  />
+                </FormControl>
+                <FormControl component="div" className={classes.formControl}>
+                  <KeyboardTimePicker
+                    required
+                    inputVariant="outlined"
+                    KeyboardButtonProps={{
+                      "aria-label": "change time",
+                    }}
+                    id="time_start"
+                    name="time_start"
+                    label="Time Start"
+                    value={
+                      schedule.time_start
+                        ? moment(schedule.time_start, "HH:mm:ss").format("YYYY-MM-DDTHH:mm:ss")
+                        : null
+                    }
+                    className={classes.textField}
+                    onChange={(date) => setSchedule({
+                      ...schedule,
+                      time_start: date,
+                    })}
+                    size="small"
+                    autoOk
+                    mask="__:__ _M"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    maxDate={schedule.time_end}
+                    maxDateMessage="Time start should not be after time end"
+                  />
+                </FormControl>
+                <FormControl component="div" className={classes.formControl}>
+                  <KeyboardTimePicker
+                    required
+                    inputVariant="outlined"
+                    KeyboardButtonProps={{
+                      "aria-label": "change time",
+                    }}
+                    id="time_end"
+                    name="time_end"
+                    label="Time End"
+                    value={
+                      schedule.time_end
+                        ? moment(schedule.time_end, "HH:mm:ss").format("YYYY-MM-DDTHH:mm:ss")
+                        : null
+                    }
+                    className={classes.textField}
+                    onChange={(date) => setSchedule({
+                      ...schedule,
+                      time_end: date,
+                    })}
+                    size="small"
+                    autoOk
+                    mask="__:__ _M"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    minDate={schedule.time_start}
+                    minDateMessage="Date end should not be before date start"
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={6} className={classes.gridMargin}>
+                <p className={classes.scheduleTitle}>
+                  Week Plan
+                </p>
+                <FormControlLabel
+                  control={(
+                    <Switch
+                      checked={Boolean(schedule.monday)}
+                      size="small"
+                      name="active"
+                      color="primary"
+                      onChange={(e) => setSchedule({
+                        ...schedule,
+                        monday: e.target.checked,
+                      })}
+                      onKeyUp={handleKeyUp}
+                    />
+                  )}
+                  label="Monday"
+                  className={classes.switchFormControl}
+                />
+                <FormControlLabel
+                  control={(
+                    <Switch
+                      checked={Boolean(schedule.tuesday)}
+                      size="small"
+                      name="active"
+                      color="primary"
+                      onChange={(e) => setSchedule({
+                        ...schedule,
+                        tuesday: e.target.checked,
+                      })}
+                      onKeyUp={handleKeyUp}
+                    />
+                  )}
+                  label="Tuesday"
+                  className={classes.switchFormControl}
+                />
+                <FormControlLabel
+                  control={(
+                    <Switch
+                      checked={Boolean(schedule.wednesday)}
+                      size="small"
+                      name="active"
+                      color="primary"
+                      onChange={(e) => setSchedule({
+                        ...schedule,
+                        wednesday: e.target.checked,
+                      })}
+                      onKeyUp={handleKeyUp}
+                    />
+                  )}
+                  label="Wednesday"
+                  className={classes.switchFormControl}
+                />
+                <FormControlLabel
+                  control={(
+                    <Switch
+                      checked={Boolean(schedule.thursday)}
+                      size="small"
+                      name="active"
+                      color="primary"
+                      onChange={(e) => setSchedule({
+                        ...schedule,
+                        thursday: e.target.checked,
+                      })}
+                      onKeyUp={handleKeyUp}
+                    />
+                  )}
+                  label="Thursday"
+                  className={classes.switchFormControl}
+                />
+                <FormControlLabel
+                  control={(
+                    <Switch
+                      checked={Boolean(schedule.friday)}
+                      size="small"
+                      name="active"
+                      color="primary"
+                      onChange={(e) => setSchedule({
+                        ...schedule,
+                        friday: e.target.checked,
+                      })}
+                      onKeyUp={handleKeyUp}
+                    />
+                  )}
+                  label="Friday"
+                  className={classes.switchFormControl}
                 />
               </Grid>
-              <p className={classes.formHelperText}>The name shown in the Appointment</p>
-            </FormControl>
-            <FormControl component="div" className={classes.formControl}>
-              <Grid item xs={12} md={4} className={classes.gridMargin}>
-                <KeyboardDatePicker
-                  required
-                  clearable
-                  autoOk
-                  KeyboardButtonProps={{
-                    "aria-label": "change date",
-                  }}
-                  format="yyyy/MM/dd"
-                  inputVariant="outlined"
-                  variant="outlined"
-                  id="dateEnd"
-                  label="Date End"
-                  className={classes.textField}
-                  size="small"
-                  name="date_end"
-                  value={schedule.date_end}
-                  onChange={(date) => setSchedule({
-                    ...schedule,
-                    date_end: date,
-                  })}
-                  onKeyUp={handleKeyUp}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  minDate={schedule.date_start}
-                  minDateMessage="Date end should not be before date start"
-                />
-              </Grid>
-              <p className={classes.formHelperText}>The name shown in the Appointment</p>
-            </FormControl>
-            <FormControl component="div" className={classes.formControl}>
-              <Grid item xs={12} md={4} className={classes.gridMargin}>
-                <KeyboardTimePicker
-                  required
-                  inputVariant="outlined"
-                  KeyboardButtonProps={{
-                    "aria-label": "change time",
-                  }}
-                  id="time_start"
-                  name="time_start"
-                  label="Time Start"
-                  value={
-                    schedule.time_start
-                      ? moment(schedule.time_start, "HH:mm:ss").format("YYYY-MM-DDTHH:mm:ss")
-                      : null
-                  }
-                  className={classes.textField}
-                  onChange={(date) => setSchedule({
-                    ...schedule,
-                    time_start: date,
-                  })}
-                  size="small"
-                  autoOk
-                  mask="__:__ _M"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  maxDate={schedule.time_end}
-                  maxDateMessage="Time start should not be after time end"
-                />
-              </Grid>
-              <p className={classes.formHelperText}>The name shown in the Appointment</p>
-            </FormControl>
-            <FormControl component="div" className={classes.formControl}>
-              <Grid item xs={12} md={4} className={classes.gridMargin}>
-                <KeyboardTimePicker
-                  required
-                  inputVariant="outlined"
-                  KeyboardButtonProps={{
-                    "aria-label": "change time",
-                  }}
-                  id="time_end"
-                  name="time_end"
-                  label="Time End"
-                  value={
-                    schedule.time_end
-                      ? moment(schedule.time_end, "HH:mm:ss").format("YYYY-MM-DDTHH:mm:ss")
-                      : null
-                  }
-                  className={classes.textField}
-                  onChange={(date) => setSchedule({
-                    ...schedule,
-                    time_end: date,
-                  })}
-                  size="small"
-                  autoOk
-                  mask="__:__ _M"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  minDate={schedule.time_start}
-                  minDateMessage="Date end should not be before date start"
-                />
-              </Grid>
-              <p className={classes.formHelperText}>The name shown in the Appointment</p>
-            </FormControl>
+            </Grid>
             <FormControlLabel
               control={(
                 <Switch
@@ -377,7 +481,7 @@ const NewOrEditSchedule = ({
                 />
               )}
               label="Active / Inactive"
-              className={classes.root}
+              className={classes.switchFormControl}
             />
             <p className={classes.statusText}>
               <span
