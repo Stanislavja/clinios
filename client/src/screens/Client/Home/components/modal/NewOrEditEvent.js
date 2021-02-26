@@ -108,7 +108,7 @@ const useStyles = makeStyles((theme) => ({
   startdatePicker: {
     marginRight: theme.spacing(2),
     maxWidth: "260px",
-    width: "260px"
+    width: "260px",
   },
   startTimePicker: {
     marginRight: theme.spacing(1),
@@ -204,18 +204,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// helpers 
+// helpers
 function formatDateTime(date) {
-  return date?.format('YYYY-MM-DDTHH:mm');
+  return date?.format("YYYY-MM-DDTHH:mm");
 }
 
 function formatCurrentDayLengthToApproximateDays(value) {
   if (value && value > 0) {
-    return `In ${value} days`
+    return `In ${value} days`;
   }
-  else {
-    return `${Math.abs(value)} days ago`
-  }
+
+  return `${Math.abs(value)} days ago`;
 }
 const EventModal = ({
   isOpen,
@@ -279,7 +278,7 @@ const EventModal = ({
         end_dt: formatDateTime(moment(props?.event?.end)),
         eventTitle: props.event.eventTitle,
         status: props.event.status,
-        notes: props.event.notes
+        notes: props.event.notes,
       });
       // setCalEvent(props.event);
       setSelectedPatient({
@@ -354,7 +353,6 @@ const EventModal = ({
     });
   };
 
-  //TODO:: test
   const handleProviderChange = (event) => {
     const pd = providers.filter((p) => p.id === event.target.value);
     setProvider(pd[0]);
@@ -508,7 +506,7 @@ const EventModal = ({
                       await setCalEvent({
                         ...calEvent,
                         start_dt: formatDateTime(moment(calEvent.start_dt).add(1, "days")),
-                        end_dt: formatDateTime(moment(calEvent.end_dt).add(1, "days"))
+                        end_dt: formatDateTime(moment(calEvent.end_dt).add(1, "days")),
                       });
                     }}
                   >
@@ -859,6 +857,11 @@ EventModal.propTypes = {
   event: PropTypes.shape({
     firstname: PropTypes.string,
     lastname: PropTypes.string,
+    start: PropTypes.string,
+    end: PropTypes.string,
+    eventTitle: PropTypes.string,
+    status: PropTypes.string,
+    notes: PropTypes.string,
     email: PropTypes.string,
     patient_id: PropTypes.number,
   }),
