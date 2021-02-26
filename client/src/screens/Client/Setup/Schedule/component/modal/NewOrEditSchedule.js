@@ -21,7 +21,7 @@ import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 
-import useAuth from "../../../../../../hooks/useAuth";
+// import useAuth from "../../../../../../hooks/useAuth";
 import ScheduleService from "../../../../../../services/schedule.service";
 
 const useStyles = makeStyles((theme) => ({
@@ -89,7 +89,7 @@ const NewOrEditSchedule = ({
 }) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  const { user } = useAuth();
+  // const { user } = useAuth();
   const [schedule, setSchedule] = useState([]);
   const [status, setStatus] = useState("");
   const [errors, setErrors] = useState([]);
@@ -123,7 +123,7 @@ const NewOrEditSchedule = ({
       time_end: schedule.time_end ? moment(schedule.time_end, "HH:mm:ss").format("HH:mm:ss") : null,
       active: schedule.active,
       note: schedule.note ? schedule.note : "",
-    }
+    },
   };
 
   const handleCreateNewOrEditSchedule = () => {

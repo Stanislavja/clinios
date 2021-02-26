@@ -31,7 +31,7 @@ const BillingContent = () => {
     <>
       {data.map((item) => (
         <Grid
-          key={`${item.dt}_${item.amount}`}
+          key={`${item.id}_${item.dt}`}
           container
           className={classes.inputRow}
         >
