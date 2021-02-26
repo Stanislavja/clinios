@@ -36,7 +36,7 @@ import {
   BasicInfoForm,
   InsuranceForm,
 } from "../../../../static/patientBasicInfoForm";
-import { calculateAge, paymentMethodType, checkIfNull } from "../../../../utils/helpers";
+import { calculateAge, paymentMethodType } from "../../../../utils/helpers";
 import PaymentMethodsForm from "./components/PaymentMethodsForm";
 import PharmaciesSearch from "./components/Pharmacies";
 
@@ -142,12 +142,6 @@ const BasicInfo = (props) => {
 
   useEffect(() => {
     formData.status = formData.status ? formData.status : "active";
-    // insurance fields null checks
-    formData.insurance_name = checkIfNull(formData.insurance_name) ? "" : formData.insurance_name;
-    formData.insurance_group = checkIfNull(formData.insurance_group) ? "" : formData.insurance_group;
-    formData.insurance_member = checkIfNull(formData.insurance_member) ? "" : formData.insurance_member;
-    formData.insurance_phone = checkIfNull(formData.insurance_phone) ? "" : formData.insurance_phone;
-    formData.insurance_desc = checkIfNull(formData.insurance_desc) ? "" : formData.insurance_desc;
     setBasicInfo({ ...formData });
 
     const selectedCountry = CountryRegionData.filter((countryArray) => countryArray[0] === formData.country);

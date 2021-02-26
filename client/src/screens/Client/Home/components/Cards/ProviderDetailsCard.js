@@ -153,8 +153,9 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
               <div>
                 {!!providerDetails
                   && providerDetails.messageFromPatients
-                  && `${moment(providerDetails.messageFromPatients["min(m.created)"]).format("ll")} 
-                    (${moment(providerDetails.messageFromPatients["min(m.created)"]).startOf("day").fromNow()})`}
+                  && `${moment(providerDetails.messageFromPatients["min(m.created)"]).format("ll")}
+                    (${moment(providerDetails.messageFromPatients["min(m.created)"])
+      .startOf("day").fromNow()})`}
               </div>
             </Link>
           </li>
@@ -231,6 +232,7 @@ ProviderDetailsCard.propTypes = {
     }),
     messageFromPatients: PropTypes.shape({
       "count(m.id)": PropTypes.number,
+      "min(m.created)": PropTypes.number,
     }),
     messageToPatientsNotRead: PropTypes.shape({
       "count(m.id)": PropTypes.number,

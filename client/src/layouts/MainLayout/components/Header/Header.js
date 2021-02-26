@@ -9,6 +9,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import InputIcon from "@material-ui/icons/Input";
 import MenuIcon from "@material-ui/icons/Menu";
+import PropTypes from "prop-types";
 import { Link as RouterLink, useHistory } from "react-router-dom";
 
 import Logo from "../../../../assets/img/Logo.png";
@@ -111,6 +112,11 @@ const Header = ({ ...props }) => {
       </Toolbar>
     </AppBar>
   );
+};
+
+
+Header.propTypes = {
+  onSidebarOpen: PropTypes.func.isRequired,
 };
 
 export default Header;
