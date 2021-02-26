@@ -351,6 +351,11 @@ export function calculateFunctionalRange(test, gender, age) {
     range.high = 140.0;
     return range;
   }
+  if (test === "84681") { /* C‐peptide */
+    range.low = 1.2;
+    range.high = 2.1;
+    return range;
+  }
   if (test === "RHR") { /* resting heart rate */
     if (age >= 19 && age <= 25) {
       if (gender === "F") {

@@ -4,14 +4,22 @@ const Schedule = require("../controllers/schedule.controller");
 
 const router = express.Router();
 
-router.get("/users", [authJwt.verifyToken], Schedule.getAllUser);
-router.post("/schedule/search", [authJwt.verifyToken], Schedule.search);
-router.post("/schedule", [authJwt.verifyToken], Schedule.createNewSchedule);
+router.get("/setup/schedule/users", [authJwt.verifyToken], Schedule.getAllUser);
+router.post("/setup/schedule/search", [authJwt.verifyToken], Schedule.search);
+router.post(
+  "/setup/schedule",
+  [authJwt.verifyToken],
+  Schedule.createNewSchedule
+);
 router.put(
-  "/schedule/:userId/:scheduleId",
+  "/setup/schedule/:id",
   [authJwt.verifyToken],
   Schedule.updateSchedule
 );
-router.delete("/schedule/:id", [authJwt.verifyToken], Schedule.deleteSchedule);
+router.delete(
+  "/setup/schedule/:id",
+  [authJwt.verifyToken],
+  Schedule.deleteSchedule
+);
 
 module.exports = router;

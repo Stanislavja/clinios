@@ -56,24 +56,39 @@ const search = async (req, res) => {
     await db.close();
   }
 };
+
 const createNewSchedule = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    errorMessage.message = errors.array();
-    return res.status(status.bad).send(errorMessage);
-  }
   const db = makeDb(configuration, res);
-  const user_schedule = req.body;
+  const {
+    user_id,
+    date_start,
+    date_end,
+    time_start,
+    time_end,
+    monday,
+    tuesday,
+    wednesday,
+    thursday,
+    friday,
+    active,
+    note,
+  } = req.body.data;
+  const user_schedule = {};
   user_schedule.client_id = req.client_id;
-  user_schedule.user_id = req.body.user_id || req.user_id;
-  user_schedule.date_start = req.body.date_start;
-  user_schedule.date_end = req.body.date_end;
-  user_schedule.time_start = req.body.time_start;
-  user_schedule.time_end = req.body.time_end;
-  user_schedule.active = req.body.active;
-  user_schedule.note = req.body.note;
+  user_schedule.user_id = user_id || req.user_id;
+  user_schedule.date_start = date_start;
+  user_schedule.date_end = date_end;
+  user_schedule.time_start = time_start;
+  user_schedule.time_end = time_end;
+  user_schedule.monday = monday;
+  user_schedule.tuesday = tuesday;
+  user_schedule.wednesday = wednesday;
+  user_schedule.thursday = thursday;
+  user_schedule.friday = friday;
+  user_schedule.active = active;
+  user_schedule.note = note;
   user_schedule.created = new Date();
-  user_schedule.created_user_id = req.body.user_id || req.user_id;
+  user_schedule.created_user_id = user_id || req.user_id;
 
   try {
     const dbResponse = await db.query(
@@ -96,29 +111,44 @@ const createNewSchedule = async (req, res) => {
     await db.close();
   }
 };
+
 const updateSchedule = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    errorMessage.message = errors.array();
-    return res.status(status.error).send(errorMessage);
-  }
-
   const db = makeDb(configuration, res);
-  const user_schedule = req.body;
 
-  user_schedule.user_id = req.body.user_id || req.user_id;
-  user_schedule.date_start = req.body.date_start;
-  user_schedule.date_end = req.body.date_end;
-  user_schedule.time_start = req.body.time_start;
-  user_schedule.time_end = req.body.time_end;
-  user_schedule.active = req.body.active;
-  user_schedule.note = req.body.note;
-  user_schedule.updated = new Date();
-  user_schedule.updated_user_id = req.body.user_id || req.user_id;
+  const {
+    user_id,
+    date_start,
+    date_end,
+    time_start,
+    time_end,
+    monday,
+    tuesday,
+    wednesday,
+    thursday,
+    friday,
+    active,
+    note,
+  } = req.body.data;
+  const user_schedule = {};
+  user_schedule.client_id = req.client_id;
+  user_schedule.user_id = user_id || req.user_id;
+  user_schedule.date_start = date_start;
+  user_schedule.date_end = date_end;
+  user_schedule.time_start = time_start;
+  user_schedule.time_end = time_end;
+  user_schedule.monday = monday;
+  user_schedule.tuesday = tuesday;
+  user_schedule.wednesday = wednesday;
+  user_schedule.thursday = thursday;
+  user_schedule.friday = friday;
+  user_schedule.active = active;
+  user_schedule.note = note;
+  user_schedule.created = new Date();
+  user_schedule.created_user_id = user_id || req.user_id;
 
   try {
     const updateResponse = await db.query(
-      `update user_schedule set ? where id =${req.params.scheduleId}`,
+      `update user_schedule set ? where id =${req.params.id}`,
       [user_schedule]
     );
 
