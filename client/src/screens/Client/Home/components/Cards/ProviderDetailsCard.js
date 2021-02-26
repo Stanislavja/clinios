@@ -231,6 +231,7 @@ ProviderDetailsCard.propTypes = {
     }),
     messageFromPatients: PropTypes.shape({
       "count(m.id)": PropTypes.number,
+      "min(m.created)": PropTypes.number,
     }),
     messageToPatientsNotRead: PropTypes.shape({
       "count(m.id)": PropTypes.number,
