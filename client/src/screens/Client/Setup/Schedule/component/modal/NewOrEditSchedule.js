@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
   switchFormControl: {
     marginBottom: "10px",
-    display: "block"
+    display: "block",
   },
   root: {
     paddingLeft: "5px",
@@ -83,8 +83,8 @@ const useStyles = makeStyles((theme) => ({
   scheduleTitle: {
     fontWeight: "500",
     fontSize: 15,
-    marginBottom: "20px"
-  }
+    marginBottom: "20px",
+  },
 }));
 
 const NewOrEditSchedule = ({
@@ -138,7 +138,7 @@ const NewOrEditSchedule = ({
       wednesday: schedule?.wednesday ? 1 : 0,
       thursday: schedule?.thursday ? 1 : 0,
       friday: schedule?.friday ? 1 : 0,
-    }
+    },
   };
 
   const handleCreateNewOrEditSchedule = () => {
@@ -185,12 +185,13 @@ const NewOrEditSchedule = ({
     }
   };
 
-  const getScheduleUserId = (isNewSchedule, selectedScheduleUserId, loggedInUser) => {
+  const getScheduleUserId = (selectedScheduleUserId, loggedInUser) => {
     if (isNewSchedule && !selectedScheduleUserId) {
       return loggedInUser?.id;
     }
-    return selectedScheduleUserId
-  }
+    return selectedScheduleUserId;
+  };
+
   return (
     <div>
       <Dialog
@@ -228,7 +229,7 @@ const NewOrEditSchedule = ({
                   name="user_id"
                   select
                   label="User"
-                  value={getScheduleUserId(isNewSchedule, schedule.user_id, user)}
+                  value={getScheduleUserId(schedule.user_id, userId)}
                   onChange={(e) => setSchedule({
                     ...schedule,
                     user_id: e.target.value,

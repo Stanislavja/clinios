@@ -5,13 +5,13 @@ import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 import Grid from "@material-ui/core/Grid";
 import InputLabel from "@material-ui/core/InputLabel";
+import Link from "@material-ui/core/Link";
 import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import { KeyboardTimePicker } from "@material-ui/pickers";
-import Icon from "@mdi/react";
-import Link from "@material-ui/core/Link";
 import { mdiOpenInNew } from "@mdi/js";
+import Icon from "@mdi/react";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 
@@ -330,7 +330,7 @@ export default function Configuration() {
                   onChange={(e) => _onChangeInput(e)}
                 />
               </Grid>
-              <Grid container item xs={12} sm={6} justify='center' alignItems='center'>
+              <Grid container item xs={12} sm={6} justify="center" alignItems="center">
                 <Grid xs={11} sm={11}>
                   <TextField
                     value={formParams.patientPortal}
