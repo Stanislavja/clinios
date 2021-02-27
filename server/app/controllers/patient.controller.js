@@ -895,7 +895,7 @@ const searchAllergies = async (req, res) => {
     const dbResponse = await db.query(
       `select d.id, d.name
         from drug d
-        where d.name like '${text}%'
+        where d.name like '%${text}%'
         order by d.name
         limit 50
       `
