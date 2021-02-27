@@ -847,7 +847,7 @@ const Patient = () => {
       {!!forms.viewDialog && (
         <Dialog
           open={forms.viewDialog}
-          title="View Forms"
+          title="Forms"
           message={<Form />}
           applyForm={() => dispatch(toggleFormsViewDialog())}
           cancelForm={() => dispatch(toggleFormsViewDialog())}
@@ -1090,7 +1090,7 @@ const Patient = () => {
       {!!medications.newDialog && (
         <Dialog
           open={medications.newDialog}
-          title="New Medications"
+          title="New Medication"
           message={(
             <MedicationsForm
               reloadData={fetchMedications}
@@ -1172,7 +1172,7 @@ const Patient = () => {
       {!!tests.expandDialog && (
         <Dialog
           open={tests.expandDialog}
-          title="Tests"
+          title="All Tests"
           message={
             <TestsCardContent isDialog />
           }

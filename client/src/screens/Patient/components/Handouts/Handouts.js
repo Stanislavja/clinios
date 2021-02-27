@@ -78,11 +78,13 @@ const HandoutsForm = (props) => {
 
   return (
     <>
+      {/*Commented out David Feb 2021
       <Grid className={classes.mb2}>
         <Typography variant="h3" color="textSecondary" gutterBottom>
           Patient Handouts
         </Typography>
       </Grid>
+      */}
 
       <Grid container alignItems="center">
         <form onSubmit={(e) => fetchAllHandouts(e, searchText)}>
