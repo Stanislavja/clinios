@@ -15,6 +15,7 @@ import PropTypes from "prop-types";
 
 import usePatientContext from "../../../hooks/usePatientContext";
 import { calculateFunctionalRange, calculateFunctionalPercentage } from "../../../utils/FunctionalRange";
+import { calculateAge } from "../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
   h300: {
@@ -75,9 +76,11 @@ const StyledTableRow = withStyles((theme) => ({
 
 const TestsContent = (props) => {
   const classes = useStyles();
+  const { isDialog } = props;
   const { state } = usePatientContext();
   const { data } = state.tests;
-  const { isDialog } = props;
+  const { gender, dob } = state.patientInfo.data;
+  const patientAge = Number(calculateAge(dob).split(" ")[0]);
 
   return (
     <Grid
@@ -104,7 +107,7 @@ const TestsContent = (props) => {
           <TableBody>
             {!!data && data.length
               ? data.map((row) => {
-                const functionalRange = calculateFunctionalRange(row.cpt_id);
+                const functionalRange = calculateFunctionalRange(row.cpt_id, gender, patientAge);
                 return (
                   <StyledTableRow key={row.name}>
                     <TableCell>{row.name}</TableCell>
@@ -116,7 +119,11 @@ const TestsContent = (props) => {
                     <TableCell>
                       {`${calculateFunctionalPercentage(row.range_low, row.range_high, row.value)}`}
                     </TableCell>
-                    <TableCell>{`${functionalRange.low} - ${functionalRange.high}`}</TableCell>
+                    <TableCell>
+                      {!!functionalRange.low && !!functionalRange.high
+                        ? `${functionalRange.low} - ${functionalRange.high}`
+                        : ""}
+                    </TableCell>
                     <TableCell>{row.physician}</TableCell>
                     <TableCell>{row.unit}</TableCell>
                     <TableCell>{row.count}</TableCell>
