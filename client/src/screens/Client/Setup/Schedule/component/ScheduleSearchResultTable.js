@@ -12,6 +12,7 @@ import {
   TableRow,
   withStyles,
 } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
 import DeleteIcon from "@material-ui/icons/DeleteOutline";
 import EditIcon from "@material-ui/icons/Edit";
 import moment from "moment";
@@ -44,9 +45,11 @@ const StyledTableRow = withStyles((theme) => ({
     },
     "& th": {
       fontSize: 12,
+      paddingLeft: 20,
+      paddingRight: 20,
     },
     "& td": {
-      padding: "6px 16px",
+      padding: "6px 20px",
       fontSize: 12,
       height: "50px",
     },
@@ -59,9 +62,8 @@ const ScheduleSearchResultTable = ({
   handleDeleteSchedule,
 }) => {
   const classes = useStyles();
-
   return (
-    <div>
+    <Grid item xs={12}>
       <TableContainer component={Paper} className={classes.tableContainer}>
         <Table className={classes.table} aria-label="a dense table">
           <TableHead>
@@ -80,6 +82,21 @@ const ScheduleSearchResultTable = ({
               </StyledTableCell>
               <StyledTableCell padding="checkbox" align="center">
                 Time End
+              </StyledTableCell>
+              <StyledTableCell padding="checkbox" align="center">
+                Mon
+              </StyledTableCell>
+              <StyledTableCell padding="checkbox" align="center">
+                Tues
+              </StyledTableCell>
+              <StyledTableCell padding="checkbox" align="center">
+                Wed
+              </StyledTableCell>
+              <StyledTableCell padding="checkbox" align="center">
+                Thu
+              </StyledTableCell>
+              <StyledTableCell padding="checkbox" align="center">
+                Fri
               </StyledTableCell>
               <StyledTableCell padding="checkbox" align="center">
                 Active
@@ -123,6 +140,21 @@ const ScheduleSearchResultTable = ({
                   {result.time_end ? moment(result.time_end, "hh:mm:a").format("LT") : ""}
                 </TableCell>
                 <TableCell padding="checkbox" align="center">
+                  {result?.monday ? "Yes" : "No"}
+                </TableCell>
+                <TableCell padding="checkbox" align="center">
+                  {result?.tuesday ? "Yes" : "No"}
+                </TableCell>
+                <TableCell padding="checkbox" align="center">
+                  {result?.wednesday ? "Yes" : "No"}
+                </TableCell>
+                <TableCell padding="checkbox" align="center">
+                  {result?.thursday ? "Yes" : "No"}
+                </TableCell>
+                <TableCell padding="checkbox" align="center">
+                  {result?.friday ? "Yes" : "No"}
+                </TableCell>
+                <TableCell padding="checkbox" align="center">
                   {result.active ? "Yes" : "No"}
                 </TableCell>
                 <TableCell padding="checkbox" align="center">
@@ -144,7 +176,7 @@ const ScheduleSearchResultTable = ({
                 <TableCell padding="checkbox" align="center">
                   {result.updated_name}
                 </TableCell>
-                <TableCell padding="checkbox" align="center" style={{ minWidth: "120px" }}>
+                <TableCell padding="checkbox" align="center" style={{ minWidth: "100px" }}>
                   <IconButton aria-label="edit" onClick={() => handleOnEditClick(result.id)}>
                     <EditIcon fontSize="small" />
                   </IconButton>
@@ -157,7 +189,7 @@ const ScheduleSearchResultTable = ({
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </Grid>
   );
 };
 

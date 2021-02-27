@@ -695,7 +695,7 @@ const EventModal = ({
                     <Link
                       href={`patients/${selectedPatient.id}`}
                       className={classes.patientIcon}
-                      target="__blank"
+                      target="_blank"
                     >
                       <Icon
                         path={mdiOpenInNew}
