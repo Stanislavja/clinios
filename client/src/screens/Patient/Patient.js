@@ -795,7 +795,7 @@ const Patient = () => {
       {!!patientInfo.editDialog && (
         <Dialog
           open={patientInfo.editDialog}
-          title="Edit Patient Details"
+          title="Patient Edit"
           message={(
             <BasicInfo
               reloadData={fetchPatientData}
@@ -942,7 +942,7 @@ const Patient = () => {
       {!!handouts.newDialog && (
         <Dialog
           open={handouts.newDialog}
-          title="New Handouts"
+          title="New Handout"
           message={(
             <HandoutsForm
               reloadData={fetchPatientHandouts}
@@ -975,7 +975,7 @@ const Patient = () => {
         <Dialog
           fullScreen
           open={encounters.newDialog}
-          title="New Encounters"
+          title="New Encounter"
           message={(
             <EncountersForm
               reloadData={fetchEncounters}
@@ -1122,7 +1122,7 @@ const Patient = () => {
       {!!requisitions.newDialog && (
         <Dialog
           open={requisitions.newDialog}
-          title="New Requisitions"
+          title="New Requisition"
           message={(
             <RequisitionsForm
               reloadData={fetchRequisitions}
