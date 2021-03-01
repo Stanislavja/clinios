@@ -300,32 +300,28 @@ const DocumentsContent = (props) => {
                       {moment(row.created).format("MMM D YYYY")}
                     </TableCell>
                     <TableCell>{row.filename}</TableCell>
-                    <TableCell>
-                      {!!flagValue && flagValue.length > 23
-                        ? (
-                          <Tooltip title={flagValue}>
-                            <TableCell
-                              className={classes.overFlowControl}
-                            >
-                              {flagValue}
-                            </TableCell>
-                          </Tooltip>
-                        )
-                        : <TableCell>{flagValue}</TableCell>}
-                    </TableCell>
-                    <TableCell>
-                      {!!flagValue && flagValue.length > 23
-                        ? (
-                          <Tooltip title={flagValue}>
-                            <TableCell
-                              className={classes.overFlowControl}
-                            >
-                              {flagValue}
-                            </TableCell>
-                          </Tooltip>
-                        )
-                        : <TableCell>{flagValue}</TableCell>}
-                    </TableCell>
+                    {!!flagValue && flagValue.length > 23
+                      ? (
+                        <Tooltip title={flagValue}>
+                          <TableCell
+                            className={classes.overFlowControl}
+                          >
+                            {flagValue}
+                          </TableCell>
+                        </Tooltip>
+                      )
+                      : <TableCell>{flagValue}</TableCell>}
+                    {!!flagValue && flagValue.length > 23
+                      ? (
+                        <Tooltip title={flagValue}>
+                          <TableCell
+                            className={classes.overFlowControl}
+                          >
+                            {flagValue}
+                          </TableCell>
+                        </Tooltip>
+                      )
+                      : <TableCell>{flagValue}</TableCell>}
                     {
                       !!row.note && row.note.length > 10
                         ? (
