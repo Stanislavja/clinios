@@ -6,8 +6,7 @@ const {
 } = require("../../helpers/status");
 
 const getCase = async (req, res) => {
-
-  const {supportStatus} = req.query;
+  const { supportStatus } = req.query;
   const db = makeDb(configuration, res);
 
   try {
@@ -18,10 +17,10 @@ const getCase = async (req, res) => {
       left join case_status cs on cs.id=s.status_id
       left join user u on u.id=s.created_user_id
       where s.client_id=${req.client_id}`;
-    if(supportStatus){
-      $sql +=` and s.status_id = '${supportStatus}'`
+    if (supportStatus) {
+      $sql += ` and s.status_id = '${supportStatus}'`;
     }
-    $sql +=` order by s.created desc limit 100`;
+    $sql += ` order by s.created desc limit 100`;
 
     const rows = await db.query($sql);
 
@@ -34,7 +33,7 @@ const getCase = async (req, res) => {
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
-    console.error('Error:', err)
+    console.error("Error:", err);
     errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
