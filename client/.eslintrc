@@ -114,6 +114,7 @@
     "import/prefer-default-export": "off",
     "no-nested-ternary": "off",
     "no-underscore-dangle": "off",
+    "import/no-cycle": "off",
     "no-console": [
       "error",
       {
