@@ -91,7 +91,6 @@ const Allergies = (props) => {
         <form onSubmit={(e) => fetchAllergies(e, searchText)}>
           <TextField
             autoFocus
-            required
             size="small"
             variant="outlined"
             value={searchText}
