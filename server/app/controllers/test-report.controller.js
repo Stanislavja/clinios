@@ -27,11 +27,11 @@ const getFunctionalRange = async (req, res) => {
 };
 
 const getPageTitle = async (req, res) => {
-  const {cptId} = req.params;
+  const { cptId } = req.params;
 
   const db = makeDb(configuration, res);
   try {
-   const $sql = `select name
+    const $sql = `select name
     from cpt 
     where id = ${cptId}`;
 
@@ -52,11 +52,11 @@ const getPageTitle = async (req, res) => {
 };
 
 const getLabcptByLabId = async (req, res) => {
-  const {patientId, labId} = req.params;
+  const { patientId, labId } = req.params;
 
   const db = makeDb(configuration, res);
   try {
-   const $sql = `select cpt_id
+    const $sql = `select cpt_id
    from lab_cpt
    where patient_id=${req.patient_id || patientId}
    and lab_id=${labId}
@@ -80,11 +80,11 @@ const getLabcptByLabId = async (req, res) => {
 };
 
 const getLabcpt = async (req, res) => {
-  const {patientId} = req.params;
+  const { patientId } = req.params;
 
   const db = makeDb(configuration, res);
   try {
-   const $sql = `select c.id, c.name from (
+    const $sql = `select c.id, c.name from (
     select distinct lc.cpt_id
     from lab_cpt lc
     where lc.patient_id=${req.patient_id || patientId}
@@ -110,11 +110,11 @@ const getLabcpt = async (req, res) => {
 };
 
 const getTestGraph = async (req, res) => {
-  const {patientId} = req.params;
+  const { patientId } = req.params;
 
   const db = makeDb(configuration, res);
   try {
-   const $sql = `select lc.lab_id, lc.lab_dt, lc.cpt_id, lc.value, lc.range_low, lc.range_high, lc.unit, /*c.name,*/ l.filename, lc.client_id
+    const $sql = `select lc.lab_id, lc.lab_dt, lc.cpt_id, lc.value, lc.range_low, lc.range_high, lc.unit, /*c.name,*/ l.filename, lc.client_id
     from lab_cpt lc
     /*left join cpt c on c.id=lc.cpt_id*/
     left join lab l on l.id=lc.lab_id
@@ -139,13 +139,12 @@ const getTestGraph = async (req, res) => {
   }
 };
 
-
 const testReport = {
   getFunctionalRange,
   getPageTitle,
   getLabcptByLabId,
   getLabcpt,
-  getTestGraph
+  getTestGraph,
 };
 
 module.exports = testReport;
