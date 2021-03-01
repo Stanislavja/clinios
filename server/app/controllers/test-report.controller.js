@@ -28,7 +28,7 @@ const getFunctionalRange = async (req, res) => {
 
 const getPageTitle = async (req, res) => {
   const {cptId} = req.params;
-  
+
   const db = makeDb(configuration, res);
   try {
    const $sql = `select name
@@ -51,10 +51,39 @@ const getPageTitle = async (req, res) => {
   }
 };
 
+const getLabcptByLabId = async (req, res) => {
+  const {patientId, labId} = req.params;
+
+  const db = makeDb(configuration, res);
+  try {
+   const $sql = `select cpt_id
+   from lab_cpt
+   where patient_id=${req.patient_id || patientId}
+   and lab_id=${labId}
+   order by line_nbr
+   limit 200`;
+
+    const dbResponse = await db.query($sql);
+
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 
 const testReport = {
   getFunctionalRange,
-  getPageTitle
+  getPageTitle,
+  getLabcptByLabId
 };
 
 module.exports = testReport;
