@@ -1368,7 +1368,7 @@ const getMessages = async (req, res) => {
   const { patient_id } = req.params;
   try {
     const dbResponse = await db.query(
-      `select m.id, m.created
+      `select m.id, m.created, m.user_id_from
         , concat(u.firstname, ' ', u.lastname) user_to_from
         , concat(u2.firstname, ' ', u2.lastname) user_to_name
         , m.read_dt, m.subject , m.message
