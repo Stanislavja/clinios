@@ -115,16 +115,30 @@ const TestsContent = (props) => {
                       {row.lab_dt ? moment(row.lab_dt).format("MMM D YYYY") : ""}
                     </TableCell>
                     <TableCell>{row.value}</TableCell>
-                    <TableCell>{`${row.range_low} - ${row.range_high}`}</TableCell>
                     <TableCell>
-                      {`${calculateFunctionalPercentage(row.range_low, row.range_high, row.value)}`}
+                      {!!row.range_low && !!row.range_high && (
+                        `${row.range_low} - ${row.range_high}`
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {
+                        !!row.range_low && !!row.range_high && !!row.value && (
+                          `${calculateFunctionalPercentage(row.range_low, row.range_high, row.value)}`
+                        )
+                      }
                     </TableCell>
                     <TableCell>
                       {!!functionalRange.low && !!functionalRange.high
                         ? `${functionalRange.low} - ${functionalRange.high}`
                         : ""}
                     </TableCell>
-                    <TableCell>{row.physician}</TableCell>
+                    <TableCell>
+                      {
+                        !!row.range_low && !!row.range_high && !!row.value && (
+                          `${calculateFunctionalPercentage(row.range_low, row.range_high, row.value)}`
+                        )
+                      }
+                    </TableCell>
                     <TableCell>{row.unit}</TableCell>
                     <TableCell>{row.count}</TableCell>
                     <TableCell>{row.detail}</TableCell>

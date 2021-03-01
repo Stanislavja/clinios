@@ -20,6 +20,7 @@ import Tooltip from "../../../../components/common/CustomTooltip";
 import usePatientContext from "../../../../hooks/usePatientContext";
 // import useAuth from "../../../../hooks/useAuth";
 import PatientService from "../../../../services/patient.service";
+import { calculateFunctionalPercentage } from "../../../../utils/FunctionalRange";
 import Lab from "./Dialog/Lab";
 
 const useStyles = makeStyles((theme) => ({
@@ -51,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   overFlowControl: {
-    maxWidth: "30px",
+    maxWidth: "130px",
     textOverflow: "ellipsis",
     overflow: "hidden",
     whiteSpace: "nowrap",
@@ -179,6 +180,57 @@ const DocumentsContent = (props) => {
     setTabValue(newValue);
   };
 
+  const getTestsArray = (array, chunk) => {
+    let i; let j; let
+        temparray;
+    const testsArray = [];
+    for (i = 0, j = array.length; i < j; i += chunk) {
+      temparray = array.slice(i, i + chunk);
+      testsArray.push(temparray);
+    }
+    return testsArray;
+  };
+
+  const calculateFlag = (itemRow) => {
+    const testsString = !!itemRow.tests && itemRow.tests.split(",");
+    const allTestsArray = getTestsArray(testsString, 4);
+
+    const trimmedValues = !!allTestsArray && allTestsArray.length && allTestsArray.map((test) => {
+      const tests = test.map((elem, index) => {
+        if (index === 0) {
+          return elem.replace(/["]/g, ``);
+        }
+        return Number(elem.replace(/["]/g, ``));
+      });
+      return tests;
+    });
+
+    // value, range_low, range_high
+
+    let flagResults = [];
+    if (!!trimmedValues && trimmedValues.length) {
+      flagResults = trimmedValues.map((value) => {
+        const testName = value[0];
+        const resultValue = Number(value[1]);
+        const range_low = Number(value[2]);
+        const range_high = Number(value[3]);
+        const flag = calculateFunctionalPercentage(range_low, range_high, resultValue);
+        return {
+          testName,
+          flag,
+        };
+      });
+    }
+
+    let resString = "";
+    flagResults.forEach((item) => {
+      if (item.flag.length) {
+        resString += `${item.testName} (${item.flag}),`;
+      }
+    });
+    return resString.slice(0, -1); // removing last comma
+  };
+
   return (
     <Grid
       className={clsx({
@@ -235,10 +287,8 @@ const DocumentsContent = (props) => {
             <TableRow>
               <StyledTableCell>Created</StyledTableCell>
               <StyledTableCell>Filename</StyledTableCell>
-              <StyledTableCell align="center">
-                Conv Flag
-              </StyledTableCell>
-              <StyledTableCell>Func Flag</StyledTableCell>
+              <StyledTableCell>Conventional Flag</StyledTableCell>
+              <StyledTableCell>Functional Flag</StyledTableCell>
               <StyledTableCell>Notes</StyledTableCell>
               {
                 actionsEnable && (
@@ -249,51 +299,78 @@ const DocumentsContent = (props) => {
           </TableHead>
           <TableBody>
             {tableData.length ? (
-              tableData.map((row) => (
-                <StyledTableRow
-                  key={`${row.created}_${row.filename}`}
-                  onClick={() => handleDocumentClick(row)}
-                >
-                  <TableCell component="th" scope="row">
-                    {moment(row.created).format("MMM D YYYY")}
-                  </TableCell>
-                  <TableCell>{row.filename}</TableCell>
-                  <TableCell>{row.physician}</TableCell>
-                  <TableCell>{row.physician}</TableCell>
-                  {
-                    !!row.note && row.note.length > 10
-                      ? (
-                        <Tooltip title={row.note}>
-                          <TableCell
-                            className={classes.overFlowControl}
-                          >
-                            {row.note}
-                          </TableCell>
-                        </Tooltip>
-                      )
-                      : <TableCell>{row.note}</TableCell>
-                  }
-                  {actionsEnable && (
-                    <TableCell className={classes.actions}>
-                      {row.status === "D"
-                        ? (
-                          <RestoreIcon
-                            className={classes.icon}
-                            onClick={(e) => updateDocumentStatusHandler(row.id, "A", e)}
-                            fontSize="small"
-                          />
-                        )
-                        : (
-                          <DeleteIcon
-                            className={classes.icon}
-                            onClick={(e) => updateDocumentStatusHandler(row.id, "D", e)}
-                            fontSize="small"
-                          />
-                        )}
+              tableData.map((row) => {
+                const flagValue = calculateFlag(row);
+                return (
+                  <StyledTableRow
+                    key={`${row.created}_${row.filename}`}
+                    onClick={() => handleDocumentClick(row)}
+                  >
+                    <TableCell component="th" scope="row">
+                      {moment(row.created).format("MMM D YYYY")}
                     </TableCell>
-                  )}
-                </StyledTableRow>
-              ))
+                    <TableCell>{row.filename}</TableCell>
+                    <TableCell>
+                      {!!flagValue && flagValue.length > 23
+                        ? (
+                          <Tooltip title={flagValue}>
+                            <TableCell
+                              className={classes.overFlowControl}
+                            >
+                              {flagValue}
+                            </TableCell>
+                          </Tooltip>
+                        )
+                        : <TableCell>{flagValue}</TableCell>}
+                    </TableCell>
+                    <TableCell>
+                      {!!flagValue && flagValue.length > 23
+                        ? (
+                          <Tooltip title={flagValue}>
+                            <TableCell
+                              className={classes.overFlowControl}
+                            >
+                              {flagValue}
+                            </TableCell>
+                          </Tooltip>
+                        )
+                        : <TableCell>{flagValue}</TableCell>}
+                    </TableCell>
+                    {
+                      !!row.note && row.note.length > 10
+                        ? (
+                          <Tooltip title={row.note}>
+                            <TableCell
+                              className={classes.overFlowControl}
+                            >
+                              {row.note}
+                            </TableCell>
+                          </Tooltip>
+                        )
+                        : <TableCell>{row.note}</TableCell>
+                    }
+                    {actionsEnable && (
+                      <TableCell className={classes.actions}>
+                        {row.status === "D"
+                          ? (
+                            <RestoreIcon
+                              className={classes.icon}
+                              onClick={(e) => updateDocumentStatusHandler(row.id, "A", e)}
+                              fontSize="small"
+                            />
+                          )
+                          : (
+                            <DeleteIcon
+                              className={classes.icon}
+                              onClick={(e) => updateDocumentStatusHandler(row.id, "D", e)}
+                              fontSize="small"
+                            />
+                          )}
+                      </TableCell>
+                    )}
+                  </StyledTableRow>
+                );
+              })
             ) : (
               <StyledTableRow>
                 <TableCell align="center" colSpan={10}>
