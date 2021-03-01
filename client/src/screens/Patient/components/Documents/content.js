@@ -11,6 +11,7 @@ import TableRow from "@material-ui/core/TableRow";
 import DeleteIcon from "@material-ui/icons/DeleteOutline";
 import RestoreIcon from "@material-ui/icons/RestorePage";
 import clsx from "clsx";
+import { chunk } from "lodash";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
@@ -180,20 +181,9 @@ const DocumentsContent = (props) => {
     setTabValue(newValue);
   };
 
-  const getTestsArray = (array, chunk) => {
-    let i; let j; let
-        temparray;
-    const testsArray = [];
-    for (i = 0, j = array.length; i < j; i += chunk) {
-      temparray = array.slice(i, i + chunk);
-      testsArray.push(temparray);
-    }
-    return testsArray;
-  };
-
   const calculateFlag = (itemRow) => {
     const testsString = !!itemRow.tests && itemRow.tests.split(",");
-    const allTestsArray = getTestsArray(testsString, 4);
+    const allTestsArray = chunk(testsString, 4);
 
     const trimmedValues = !!allTestsArray && allTestsArray.length && allTestsArray.map((test) => {
       const tests = test.map((elem, index) => {
