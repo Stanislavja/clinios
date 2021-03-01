@@ -79,11 +79,42 @@ const getLabcptByLabId = async (req, res) => {
   }
 };
 
+const getLabcpt = async (req, res) => {
+  const {patientId} = req.params;
+
+  const db = makeDb(configuration, res);
+  try {
+   const $sql = `select c.id, c.name from (
+    select distinct lc.cpt_id
+    from lab_cpt lc
+    where lc.patient_id=${req.patient_id || patientId}
+    ) lc
+    left join cpt c on c.id=lc.cpt_id
+    order by c.name
+    limit 200`;
+
+    const dbResponse = await db.query($sql);
+
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 
 const testReport = {
   getFunctionalRange,
   getPageTitle,
-  getLabcptByLabId
+  getLabcptByLabId,
+  getLabcpt
 };
 
 module.exports = testReport;
