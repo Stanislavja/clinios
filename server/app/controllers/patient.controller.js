@@ -381,6 +381,34 @@ const history = async (req, res) => {
   }
 };
 
+const getAppointmenthistory = async (req, res) => {
+  const db = makeDb(configuration, res);
+  const { patient_id } = req.params;
+  try {
+    const dbResponse = await db.query(
+      `select concat(p.firstname, ' ', p.lastname) patient, concat(u2.firstname, ' ', u2.lastname) provider,
+       uc.start_dt, uc.end_dt, uc.status , uc.updated, concat(u.firstname, ' ', u.lastname) updated_by from user_calendar uc 
+       left join patient p on p.id=uc.patient_id left join user u on u.id=uc.updated_user_id 
+       left join user u2 on u2.id=uc.user_id where uc.patient_id=${patient_id}
+       order by uc.start_dt desc limit 40`
+    );
+
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const nextAppointment = async (req, res) => {
   const db = makeDb(configuration, res);
   const { patient_id } = req.params;
@@ -2081,6 +2109,7 @@ const appointmentTypes = {
   updatePatient,
   search,
   history,
+  getAppointmenthistory,
   balance,
   nextAppointment,
   AdminNotehistory,

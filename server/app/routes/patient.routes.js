@@ -22,6 +22,11 @@ router.get(
   Patient.history
 );
 router.get(
+  "/patient/:patient_id/appointment/history",
+  [authJwt.verifyToken],
+  Patient.getAppointmenthistory
+);
+router.get(
   "/patient/:patient_id/balance",
   [authJwt.verifyToken],
   Patient.balance
