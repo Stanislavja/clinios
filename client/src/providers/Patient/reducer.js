@@ -18,6 +18,9 @@ import {
   SET_HANDOUTS,
   SET_ENCOUNTERS,
   SET_MEDICAL_NOTES,
+  SET_SELECTED_MESSAGE,
+  RESET_SELECTED_MESSAGE,
+  SET_MESSAGE_TYPE,
   SET_MESSAGES,
   SET_MEDICATIONS,
   SET_DIAGNOSES,
@@ -178,6 +181,31 @@ const reducer = (state = initialState, action) => {
         messages: {
           ...state.messages,
           data: [...action.payload],
+        },
+      };
+    case SET_SELECTED_MESSAGE:
+      return {
+        ...state,
+        messages: {
+          ...state.messages,
+          selectedMessage: action.payload,
+        },
+      };
+    case RESET_SELECTED_MESSAGE:
+      return {
+        ...state,
+        messages: {
+          ...state.messages,
+          selectedMessage: null,
+          messageType: "New",
+        },
+      };
+    case SET_MESSAGE_TYPE:
+      return {
+        ...state,
+        messages: {
+          ...state.messages,
+          messageType: action.payload,
         },
       };
     case SET_REQUISITIONS:
