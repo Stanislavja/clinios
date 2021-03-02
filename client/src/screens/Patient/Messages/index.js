@@ -1,19 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import {
   TextField, Button, Grid, Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 
 import usePatientContext from "../../../hooks/usePatientContext";
-import { toggleMessageDialog } from "../../../providers/Patient/actions";
+import { toggleMessageDialog, resetSelectedMessage } from "../../../providers/Patient/actions";
 import PatientService from "../../../services/patient.service";
+
 
 const useStyles = makeStyles((theme) => ({
   inputRow: {
@@ -37,17 +35,31 @@ const NewMessage = (props) => {
 
   const { state, dispatch } = usePatientContext();
   const { patientId } = state;
+  const { selectedMessage, messageType } = state.messages;
 
   const [formFields, setFormFields] = useState({
     subject: "",
     message: "",
   });
-  const [selectedDate, setSelectedDate] = React.useState(null);
-  const currentDate = new Date();
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
+  const isReplyDialog = useMemo(() => {
+    if (messageType && messageType.includes("Reply")) {
+      return true;
+    }
+    return false;
+  }, [messageType]);
+
+  useEffect(() => {
+    if (selectedMessage) { // message is selected
+      if (!isReplyDialog) { // not reply message
+        formFields.message = selectedMessage.message;
+      }
+      formFields.subject = selectedMessage.subject;
+      setFormFields({ ...formFields });
+    }
+    return () => !!selectedMessage && dispatch(resetSelectedMessage());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedMessage]);
 
   const handleInputChange = (e) => {
     const { value, name } = e.target;
@@ -63,7 +75,7 @@ const NewMessage = (props) => {
       data: {
         message: formFields.message,
         subject: formFields.subject,
-        unread_notify_dt: moment(selectedDate).format("YYYY-MM-DD"),
+        unread_notify_dt: moment().format("YYYY-MM-DD"),
       },
     };
     PatientService.createMessage(patientId, reqBody)
@@ -85,7 +97,7 @@ const NewMessage = (props) => {
   return (
     <>
       <Typography variant="h3" color="textSecondary">
-        Send a Secure Message
+        {isReplyDialog ? "Reply To Message" : "Send a Secure Message"}
       </Typography>
       <form onSubmit={onMessageSend}>
         <Grid className={classes.inputRow}>
@@ -98,7 +110,11 @@ const NewMessage = (props) => {
               label="Subject"
               type="text"
               fullWidth
+              value={formFields.subject}
               onChange={(e) => handleInputChange(e)}
+              InputProps={{
+                readOnly: isReplyDialog,
+              }}
             />
           </Grid>
           <Grid item lg={2}>
@@ -114,35 +130,13 @@ const NewMessage = (props) => {
               id="message"
               type="text"
               fullWidth
+              value={formFields.message}
               onChange={(e) => handleInputChange(e)}
               multiline
               rows={5}
             />
           </Grid>
         </Grid>
-
-        <Grid className={classes.dateInput}>
-          <KeyboardDatePicker
-            required
-            margin="dense"
-            id="date-picker-dialog"
-            label="Notification Date"
-            format="dd/MM/yyyy"
-            value={selectedDate}
-            onChange={handleDateChange}
-            minDate={currentDate}
-          />
-        </Grid>
-
-        {
-          !!selectedDate && (
-            <Typography variant="h6" color="textSecondary" gutterBottom>
-              Notify me if not read by
-              {" "}
-              {moment(selectedDate).format("MMM DD, YYYY")}
-            </Typography>
-          )
-        }
 
         <Grid
           className={classes.actionContainer}
