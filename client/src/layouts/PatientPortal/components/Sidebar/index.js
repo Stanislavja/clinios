@@ -8,7 +8,7 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import {
   mdiChartBox,
   mdiAccount,
-  mdiMessage,
+  mdiMessageOutline,
   mdiHome,
   mdiTestTube,
   mdiAllergy,
@@ -64,7 +64,7 @@ const Sidebar = (props) => {
       id: 2,
       title: "Messages",
       href: "/patient/messages",
-      icon: <Icon path={mdiMessage} size={1} horizontal vertical rotate={180} />,
+      icon: <Icon path={mdiMessageOutline} size={1} horizontal vertical rotate={180} />,
     },
     {
       id: 3,

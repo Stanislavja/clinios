@@ -797,11 +797,12 @@ const createBilling = async (req, res) => {
   if (!payment_type && typeof payment_type !== "undefined") {
     payment_type = `'${payment_type}'`;
   }
+
   try {
-    const insertResponse = await db.query(
-      `insert into tran (patient_id, user_id, client_id, dt, type_id, amount, payment_type, note, created, created_user_id) values 
-        (${patient_id}, ${req.user_id}, ${req.client_id}, '${dt}', ${type_id}, ${amount}, ${payment_type}, '${note}', now(), ${req.user_id})`
-    );
+    const $sql = `insert into tran (patient_id, user_id, client_id, dt, type_id, amount, payment_type, note, created, created_user_id) values 
+    (${patient_id}, ${req.user_id}, ${req.client_id}, '${dt}', ${type_id}, ${amount}, '${payment_type}', '${note}', now(), ${req.user_id})`;
+
+    const insertResponse = await db.query($sql);
 
     if (!insertResponse.affectedRows) {
       errorMessage.message = "Insert not successful";
@@ -1102,7 +1103,8 @@ const createDocuments = async (req, res) => {
       }
 
       const insertResponse = await db.query(
-        `insert into lab (client_id, user_id, patient_id, filename, status, source, created, created_user_id) values (${req.client_id}, ${req.user_id}, ${patient_id}, '${uploadedFilename}', 'R', 'U', now(), ${req.user_id})`
+        `insert into lab (client_id, user_id, patient_id, filename, source, status, created, created_user_id) values 
+          (${req.client_id}, ${req.user_id}, ${patient_id}, '${uploadedFilename}', 'U', 'R', now(), ${req.user_id})`
       );
 
       if (!insertResponse.affectedRows) {
@@ -1402,11 +1404,12 @@ const createMessage = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const insertResponse = await db.query(
-      `insert into message (subject, message, unread_notify_dt, client_id, patient_id_to, user_id_from, created, created_user_id)
-         values ( '${subject}', '${message}', '${moment(
+      `insert into message (client_id, user_id_from, patient_id_to, subject, message, unread_notify_dt, created, created_user_id)
+         values (${req.client_id}, ${
+        req.user_id
+      }, ${patient_id}, '${subject}', '${message}', '${moment(
         unread_notify_dt
-      ).format("YYYY-MM-DD")}', ${req.client_id}, ${patient_id},
-          ${req.user_id}, now(), ${req.user_id})`
+      ).format("YYYY-MM-DD")}', now(), ${req.user_id})`
     );
 
     if (!insertResponse.affectedRows) {
@@ -1770,8 +1773,8 @@ const createRequisitions = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const insertResponse = await db.query(
-      `insert into patient_cpt (encounter_id, cpt_id, client_id, patient_id, created, created_user_id) 
-      values ('${encounter_id}', '${cpt_id}', ${req.client_id}, ${patient_id}, now(), ${req.user_id})`
+      `insert into patient_cpt (patient_id, cpt_id, client_id, encounter_id, created, created_user_id) 
+      values (${patient_id}, '${cpt_id}', ${req.client_id}, '${encounter_id}', now(), ${req.user_id})`
     );
 
     if (!insertResponse.affectedRows) {
