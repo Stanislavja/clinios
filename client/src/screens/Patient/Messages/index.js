@@ -97,9 +97,7 @@ const NewMessage = (props) => {
   return (
     <>
       <Typography variant="h3" color="textSecondary">
-        {isReplyDialog ? "Reply To" : "Send a Secure"}
-        {" "}
-        Message
+        {isReplyDialog ? "Reply To Message" : "Send a Secure Message"}
       </Typography>
       <form onSubmit={onMessageSend}>
         <Grid className={classes.inputRow}>
