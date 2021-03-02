@@ -90,6 +90,7 @@ import {
   AllergiesCardContent,
   AllergiesDetails,
 } from "./components/Allergies";
+import AppointmentHistory from "./components/AppointmentHistory";
 import {
   BasicInfo,
   PatientCardContent,
@@ -112,7 +113,6 @@ import {
   HandoutsCardContent,
   HandoutsDetails,
 } from "./components/Handouts";
-import SearchResults from "./components/SearchResults";
 import EncountersForm from "./Encounters";
 import EncountersCardContent from "./Encounters/content";
 import EncountersDetails from "./Encounters/details";
@@ -177,7 +177,7 @@ const Patient = () => {
   const [isLayoutUpdated, setIsLayoutUpdated] = useState(false);
 
   // data states
-  const [patientsSearchResults, setPatientsSearchResults] = useState([]);
+  const [patientAppointmentHistory, setPatientAppointmentHistory] = useState([]);
   const patientData = patientInfo.data;
   const patientBalance = billing.balance;
 
@@ -444,14 +444,9 @@ const Patient = () => {
     });
   }, [patientId]);
 
-  const searchPatientHandler = (searchText) => {
-    const reqBody = {
-      data: {
-        text: searchText,
-      },
-    };
-    PatientService.searchPatient(patientId, reqBody).then((res) => {
-      setPatientsSearchResults(res.data);
+  const fetchPatientAppointmentHistoryHandler = () => {
+    PatientService.getAppointmentHistory(patientId).then((res) => {
+      setPatientAppointmentHistory(res.data);
     })
       .catch((error) => {
         const resMessage = (error.response
@@ -462,12 +457,6 @@ const Patient = () => {
         enqueueSnackbar(`${resMessage}`, { variant: "error" });
       });
   };
-
-  // const debouncedSearchPatients = _.debounce((query) => {
-  //   if (query.length > 1) {
-  //     searchPatientHandler(query);
-  //   }
-  // }, 1000);
 
   const mapPrimaryButtonHandlers = (value) => {
     switch (value) {
@@ -711,8 +700,8 @@ const Patient = () => {
     }
   };
 
-  const closeSearchResultsDialog = () => {
-    setPatientsSearchResults([]);
+  const closeAppointmentHistoryDialog = () => {
+    setPatientAppointmentHistory([]);
   };
 
   const updateMinHeight = (key, newHeight) => {
@@ -769,12 +758,12 @@ const Patient = () => {
     fetchPaymentMethods,
   ]);
 
-  const showSearchResultsDialog = useMemo(() => {
-    if (patientsSearchResults.length) {
+  const showAppointmentHistoryDialog = useMemo(() => {
+    if (patientAppointmentHistory.length) {
       return true;
     }
     return false;
-  }, [patientsSearchResults]);
+  }, [patientAppointmentHistory]);
 
   return (
     <PatientContext.Provider value={{ state, dispatch }}>
@@ -787,12 +776,12 @@ const Patient = () => {
         onChange={(e) => handleDocumentsFile(e)}
         hidden
       />
-      {showSearchResultsDialog && (
+      {showAppointmentHistoryDialog && (
         <Dialog
-          open={showSearchResultsDialog}
-          title={" "}
-          message={<SearchResults data={patientsSearchResults} />}
-          cancelForm={() => closeSearchResultsDialog()}
+          open={showAppointmentHistoryDialog}
+          title="Appointment History"
+          message={<AppointmentHistory data={patientAppointmentHistory} />}
+          cancelForm={() => closeAppointmentHistoryDialog()}
           hideActions
           size="md"
         />
@@ -1230,7 +1219,7 @@ const Patient = () => {
                     item.title,
                   )}
                   iconHandler={mapIconHandlers(item.title)}
-                  searchHandler={(value) => searchPatientHandler(value)}
+                  searchHandler={(value) => fetchPatientAppointmentHistoryHandler(value)}
                   updateLayoutHandler={() => updateCardsLayout()}
                   resetLayoutHandler={() => resetCardsLayout()}
                   isLayoutUpdated={isLayoutUpdated}
