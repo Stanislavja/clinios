@@ -97,6 +97,14 @@ const Sidebar = (props) => {
       ),
     },
     {
+      id: 12,
+      title: "Appointments",
+      href: "/patient/appointments",
+      icon: (
+        <Icon path={mdiCalendar} size={1} horizontal vertical rotate={180} />
+      ),
+    },
+    {
       id: 7,
       title: "Billing",
       href: "/patient/billing",
@@ -108,12 +116,12 @@ const Sidebar = (props) => {
       href: "/patient/payment-methods",
       icon: <PaymentIcon />,
     },
-    {
-      id: 9,
-      title: "Allergies",
-      href: "/patient/allergies",
-      icon: <Icon path={mdiAllergy} size={1} horizontal vertical rotate={180} />,
-    },
+    //{
+    //id: 9,
+    //title: "Allergies",
+    //href: "/patient/allergies",
+    //icon: <Icon path={mdiAllergy} size={1} horizontal vertical rotate={180} />,
+    //},
     {
       id: 10,
       title: "Prescriptions",
@@ -134,14 +142,6 @@ const Sidebar = (props) => {
       href: "/patient/pharmacies",
       icon: (
         <Icon path={mdiPharmacy} size={1} horizontal vertical rotate={180} />
-      ),
-    },
-    {
-      id: 12,
-      title: "Appointments",
-      href: "/patient/appointments",
-      icon: (
-        <Icon path={mdiCalendar} size={1} horizontal vertical rotate={180} />
       ),
     },
     {
