@@ -33,6 +33,7 @@ import {
   // Togglers
   TOGGLE_PATIENT_INFO_EDIT_DIALOG,
   TOGGLE_PATIENT_INFO_HISORY_DIALOG,
+  TOGGLE_PATIENT_APPOINTMENT_HISORY_DIALOG,
   TOGGLE_ADMIN_NOTES_EDIT_FORM,
   TOGGLE_ADMIN_NOTES_HISTORY_DIALOG,
   TOGGLE_FORM_EXPAND_DIALOG,
@@ -203,6 +204,10 @@ export const togglePatientInfoDialog = () => ({
 
 export const togglePatientHistoryDialog = () => ({
   type: TOGGLE_PATIENT_INFO_HISORY_DIALOG,
+});
+
+export const togglePatientAppointmentHistoryDialog = () => ({
+  type: TOGGLE_PATIENT_APPOINTMENT_HISORY_DIALOG,
 });
 
 export const toggleAdminFormDialog = () => ({

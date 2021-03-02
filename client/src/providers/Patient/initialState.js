@@ -5,6 +5,7 @@ const initialState = {
   patientInfo: {
     data: {},
     history: [],
+    appointmentHistoryDialog: false,
     editDialog: false,
     historyDialog: false,
   },
