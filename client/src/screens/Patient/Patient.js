@@ -166,6 +166,8 @@ const Patient = () => {
     allergies, messages, requisitions, tests, diagnoses, medications, billing,
   } = state;
 
+  const { messageType } = messages;
+
   // patient ID authenticity
   const [hasPatientIderror, setHasPatientIderror] = useState(true);
 
@@ -450,19 +452,22 @@ const Patient = () => {
     };
     PatientService.searchPatient(patientId, reqBody).then((res) => {
       setPatientsSearchResults(res.data);
-      if (res.data.length) {
-        enqueueSnackbar(`${res.data.length} entity(s) found`, { variant: "success" });
-      } else {
-        enqueueSnackbar(`No record found`, { variant: "error" });
-      }
-    });
+    })
+      .catch((error) => {
+        const resMessage = (error.response
+          && error.response.data
+          && error.response.data.message)
+          || error.message
+          || error.toString();
+        enqueueSnackbar(`${resMessage}`, { variant: "error" });
+      });
   };
 
-  const debouncedSearchPatients = _.debounce((query) => {
-    if (query.length > 1) {
-      searchPatientHandler(query);
-    }
-  }, 1000);
+  // const debouncedSearchPatients = _.debounce((query) => {
+  //   if (query.length > 1) {
+  //     searchPatientHandler(query);
+  //   }
+  // }, 1000);
 
   const mapPrimaryButtonHandlers = (value) => {
     switch (value) {
@@ -1020,7 +1025,7 @@ const Patient = () => {
       {!!messages.newDialog && (
         <Dialog
           open={messages.newDialog}
-          title="New Message"
+          title={`${messageType} Message`}
           message={(
             <NewMessageForm
               reloadData={fetchMessages}
@@ -1225,7 +1230,7 @@ const Patient = () => {
                     item.title,
                   )}
                   iconHandler={mapIconHandlers(item.title)}
-                  searchHandler={(value) => debouncedSearchPatients(value)}
+                  searchHandler={(value) => searchPatientHandler(value)}
                   updateLayoutHandler={() => updateCardsLayout()}
                   resetLayoutHandler={() => resetCardsLayout()}
                   isLayoutUpdated={isLayoutUpdated}
