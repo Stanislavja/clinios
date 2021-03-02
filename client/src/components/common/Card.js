@@ -24,6 +24,8 @@ import clsx from "clsx";
 import PropTypes from "prop-types";
 
 import useDidMountEffect from "../../hooks/useDidMountEffect";
+import usePatientContext from "../../hooks/usePatientContext";
+import { togglePatientAppointmentHistoryDialog } from "../../providers/Patient/actions";
 import Colors from "../../theme/colors";
 
 const useStyles = makeStyles((theme) => ({
@@ -121,6 +123,7 @@ const PatientCard = (props) => {
     hasMinHeight,
   } = props;
 
+  const { dispatch } = usePatientContext();
   const [contentTogglerState, setContentTogglerState] = useState(true);
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
@@ -188,7 +191,7 @@ const PatientCard = (props) => {
               />
               <Icon
                 className={classes.icon}
-                onClick={() => searchHandler()}
+                onClick={() => dispatch(togglePatientAppointmentHistoryDialog())}
                 path={mdiCalendarBlankMultiple}
                 size={1}
               />
