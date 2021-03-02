@@ -70,6 +70,14 @@ class Patient {
       .then((res) => res.data);
   }
 
+  getAppointmentHistory(patientId) {
+    return axios
+      .get(`${API_BASE}/patient/${patientId}/appointment/history`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
   getPatientHistory(patientId) {
     return axios
       .get(`${API_BASE}/patient/${patientId}/history`, {
