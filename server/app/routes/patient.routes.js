@@ -173,6 +173,11 @@ router.post(
   [authJwt.verifyToken],
   Patient.createMessage
 );
+router.put(
+  "/patient/:patient_id/messages/:id",
+  [authJwt.verifyToken],
+  Patient.updateMessage
+);
 router.delete(
   "/patient/:patient_id/messages/:id",
   [authJwt.verifyToken],
