@@ -46,6 +46,8 @@ const initialState = {
   },
   messages: {
     data: [],
+    selectedMessage: null,
+    messageType: "New",
     newDialog: false,
     expandDialog: false,
   },
