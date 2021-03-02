@@ -17,7 +17,7 @@ import SaveIcon from "@material-ui/icons/CheckCircle";
 import CardIcon from "@material-ui/icons/CreditCard";
 import DesktopIcon from "@material-ui/icons/DesktopMac";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import SaveLayoutIcon from "@material-ui/icons/Save";
+import SaveLayoutIcon from "@material-ui/icons/SaveOutlined";
 import { mdiCalendarBlankOutline } from "@mdi/js";
 import Icon from "@mdi/react";
 import clsx from "clsx";
