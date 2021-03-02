@@ -1456,6 +1456,33 @@ const createMessage = async (req, res) => {
   }
 };
 
+const updateMessage = async (req, res) => {
+  const { subject, message, unread_notify_dt } = req.body.data;
+  const { id } = req.params;
+
+  const db = makeDb(configuration, res);
+  try {
+    const $sql = `update message set subject='${subject}', message='${message}', unread_notify_dt='${unread_notify_dt}', 
+     updated= now(), updated_user_id='${req.user_id}' where id=${id}`;
+
+    const updateResponse = await db.query($sql);
+    if (!updateResponse.affectedRows) {
+      errorMessage.message = "Update not successful";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = updateResponse;
+    successMessage.message = "Update successful";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Update not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const deleteMessage = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -2140,6 +2167,7 @@ const appointmentTypes = {
   medicalNotesHistoryUpdate,
   getMessages,
   createMessage,
+  updateMessage,
   deleteMessage,
   getAllTests,
   getDiagnoses,
