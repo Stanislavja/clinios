@@ -18,6 +18,9 @@ import {
   SET_HANDOUTS,
   SET_ENCOUNTERS,
   SET_MEDICAL_NOTES,
+  SET_SELECTED_MESSAGE,
+  RESET_SELECTED_MESSAGE,
+  SET_MESSAGE_TYPE,
   SET_MESSAGES,
   SET_MEDICATIONS,
   SET_DIAGNOSES,
@@ -137,6 +140,21 @@ export const setMessages = (data) => ({
   type: SET_MESSAGES,
   payload: data,
 });
+
+export const setSelectedMessage = (message) => ({
+  type: SET_SELECTED_MESSAGE,
+  payload: message,
+});
+
+export const resetSelectedMessage = () => ({
+  type: RESET_SELECTED_MESSAGE,
+});
+
+export const setMessageType = (message) => ({
+  type: SET_MESSAGE_TYPE,
+  payload: message,
+});
+
 
 export const setRequisitions = (data) => ({
   type: SET_REQUISITIONS,
