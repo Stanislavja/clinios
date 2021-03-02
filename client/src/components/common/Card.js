@@ -18,6 +18,8 @@ import CardIcon from "@material-ui/icons/CreditCard";
 import DesktopIcon from "@material-ui/icons/DesktopMac";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SaveLayoutIcon from "@material-ui/icons/Save";
+import { mdiCalendarBlankMultiple } from "@mdi/js";
+import Icon from "@mdi/react";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 
@@ -183,6 +185,12 @@ const PatientCard = (props) => {
               <SaveLayoutIcon
                 className={classes.icon}
                 onClick={() => updateLayoutHandler()}
+              />
+              <Icon
+                className={classes.icon}
+                onClick={() => searchHandler()}
+                path={mdiCalendarBlankMultiple}
+                size={1}
               />
             </>
           )}
