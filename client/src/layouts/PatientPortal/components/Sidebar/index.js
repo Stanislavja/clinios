@@ -11,7 +11,6 @@ import {
   mdiMessageOutline,
   mdiHome,
   mdiTestTube,
-  mdiAllergy,
   mdiPrescription,
   mdiPharmacy,
   mdiCalendar,
@@ -116,12 +115,12 @@ const Sidebar = (props) => {
       href: "/patient/payment-methods",
       icon: <PaymentIcon />,
     },
-    //{
-    //id: 9,
-    //title: "Allergies",
-    //href: "/patient/allergies",
-    //icon: <Icon path={mdiAllergy} size={1} horizontal vertical rotate={180} />,
-    //},
+    // {
+    // id: 9,
+    // title: "Allergies",
+    // href: "/patient/allergies",
+    // icon: <Icon path={mdiAllergy} size={1} horizontal vertical rotate={180} />,
+    // },
     {
       id: 10,
       title: "Prescriptions",
