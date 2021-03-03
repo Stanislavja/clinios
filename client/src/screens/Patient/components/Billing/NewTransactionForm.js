@@ -40,15 +40,6 @@ const NewTransactionForm = (props) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
-
-  const openConfirmationDialog = () => {
-    setShowConfirmationDialog((prevstate) => !prevstate);
-  };
-
-  const closeConfirmationDialog = () => {
-    setShowConfirmationDialog((prevstate) => !prevstate);
-  };
-
   const [transactionTypes, setTransactionTypes] = useState([]);
   const [paymentOptions, setPaymentOptions] = useState([]);
   const [formFields, setFormFields] = useState({
@@ -77,14 +68,6 @@ const NewTransactionForm = (props) => {
     fetchBillingPaymentOptions();
   }, [fetchBillingTransactionTypes, fetchBillingPaymentOptions]);
 
-  const handleInputChnage = (e) => {
-    const { value, name } = e.target;
-    setFormFields({
-      ...formFields,
-      [name]: value,
-    });
-  };
-
   const createBilling = () => {
     const reqBody = {
       data: {
@@ -111,6 +94,14 @@ const NewTransactionForm = (props) => {
       });
   };
 
+  const openConfirmationDialog = () => {
+    setShowConfirmationDialog((prevstate) => !prevstate);
+  };
+
+  const closeConfirmationDialog = () => {
+    setShowConfirmationDialog((prevstate) => !prevstate);
+  };
+
   const onFormSubmit = (e) => {
     e.preventDefault();
     if (formFields.type === 3 || formFields.type === 4) {
@@ -118,6 +109,14 @@ const NewTransactionForm = (props) => {
     } else {
       createBilling();
     }
+  };
+
+  const handleInputChnage = (e) => {
+    const { value, name } = e.target;
+    setFormFields({
+      ...formFields,
+      [name]: value,
+    });
   };
 
   const handleDateChange = (date) => {
