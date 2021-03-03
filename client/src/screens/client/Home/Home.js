@@ -21,6 +21,7 @@ import {
   ProviderCards,
   ProviderDetailsCard,
 } from "./components";
+import MessageHistory from "./components/modal/MessageHistory";
 
 const useStyles = makeStyles((theme) => ({
   pageTitle: {
@@ -64,6 +65,7 @@ export default function Home() {
   const [patient_id_to, setPatient_id_to] = useState(null);
   const [isMessageToPatientOpen, setIsMessageToPatientOpen] = useState(false);
   const [isCancelEventsVisible, setIsCancelEventsVisible] = useState(false);
+  const [isAppointmentHistoryOpen, setIsAppointmentHistoryOpen] = useState(false);
 
 
   const getMapFromArray = (data) => {
@@ -327,6 +329,7 @@ export default function Home() {
                 selectedProvider={selectedProvider}
                 appointmentRequests={appointmentRequests}
                 onMessageClick={handleMessageClick}
+                onHistoryClick={() => setIsAppointmentHistoryOpen(true)}
                 onAccept={(payload) => handleEventUpdate(payload)}
                 onReject={(payload) => handleEventCancellation(payload)}
               />
@@ -360,6 +363,13 @@ export default function Home() {
           onSubmit={handleMessageToPatientFormSubmit}
           onClose={() => setIsMessageToPatientOpen(false)}
           errors={errors}
+        />
+      )}
+      {isAppointmentHistoryOpen && (
+        <MessageHistory
+          isLoading={isLoading}
+          isOpen={isAppointmentHistoryOpen}
+          onClose={() => setIsAppointmentHistoryOpen(false)}
         />
       )}
     </div>

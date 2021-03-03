@@ -10,6 +10,12 @@ class Appointments {
       .then((res) => res.data);
   }
 
+  getHistory() {
+    return axios
+      .get(`${API_BASE}/appointments/history`, { headers: authHeader() })
+      .then((res) => res.data);
+  }
+
   getAllByProvider(providerId) {
     return axios
       .get(`${API_BASE}/appointments/events/${providerId}`, { headers: authHeader() })
