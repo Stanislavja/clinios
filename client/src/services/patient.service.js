@@ -48,6 +48,22 @@ class Patient {
       .then((res) => res.data);
   }
 
+  getBillingTransactionTypes(patientId) {
+    return axios
+      .get(`${API_BASE}/patient/${patientId}/billing/transactionTypes`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  getBillingPaymentOptions(patientId) {
+    return axios
+      .get(`${API_BASE}/patient/${patientId}/billing/paymentOptions`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
   getDocuments(patientId, tab) {
     return axios
       .get(`${API_BASE}/patient/${patientId}/documents/?tab=${tab}`, {
