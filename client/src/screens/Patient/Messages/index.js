@@ -78,7 +78,7 @@ const NewMessage = (props) => {
         unread_notify_dt: moment().format("YYYY-MM-DD"),
       },
     };
-    if (selectedMessage) { // edit case
+    if (selectedMessage && !isReplyDialog) { // edit case
       const messageId = selectedMessage.id;
       PatientService.updateMessage(patientId, messageId, reqBody)
         .then((response) => {
