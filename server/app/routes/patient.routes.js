@@ -87,6 +87,16 @@ router.get(
   [authJwt.verifyToken],
   Patient.getBilling
 );
+router.get(
+  "/patient/:patient_id/billing/transactionTypes",
+  [authJwt.verifyToken],
+  Patient.getBillingTransactionTypes
+);
+router.get(
+  "/patient/:patient_id/billing/paymentOptions",
+  [authJwt.verifyToken],
+  Patient.getBillingPaymentOptions
+);
 router.post(
   "/patient/:patient_id/billing",
   [authJwt.verifyToken],
