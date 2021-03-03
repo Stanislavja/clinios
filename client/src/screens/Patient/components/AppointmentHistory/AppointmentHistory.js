@@ -67,10 +67,10 @@ const AppointmentHistory = () => {
             ? appointmentHistory.map((item) => (
               <StyledTableRowLg key={`${item.start_dt}_${item.end_dt}_${item.status}`}>
                 <TableCell>
-                  {moment(item.start_dt).format("MMM D YYYY")}
+                  {moment(item.start_dt).format("MMM D YYYY hh:mm A")}
                 </TableCell>
                 <TableCell>
-                  {moment(item.end_dt).format("MMM D YYYY")}
+                  {moment(item.end_dt).format("MMM D YYYY hh:mm A")}
                 </TableCell>
                 <TableCell>{item.provider}</TableCell>
                 <TableCell>{item.patient}</TableCell>

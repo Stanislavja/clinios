@@ -815,6 +815,60 @@ const getBilling = async (req, res) => {
   }
 };
 
+const getBillingTransactionTypes = async (req, res) => {
+  const db = makeDb(configuration, res);
+  try {
+    const dbResponse = await db.query(
+      `select id, name
+      from tran_type tt
+      where (client_id is null or client_id=${req.client_id})
+      order by 1
+      limit 100`
+    );
+
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+const getBillingPaymentOptions = async (req, res) => {
+  const db = makeDb(configuration, res);
+  const { patient_id } = req.params;
+  try {
+    const dbResponse = await db.query(
+      `select id, type, account_number, exp, created
+      from payment_method
+      where patient_id=${patient_id}
+      order by 1`
+    );
+
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const createBilling = async (req, res) => {
   const { patient_id } = req.params;
   const { dt, type_id, amount, note } = req.body.data;
@@ -2150,6 +2204,8 @@ const appointmentTypes = {
   DeletePatientHandouts,
   getTranType,
   getBilling,
+  getBillingTransactionTypes,
+  getBillingPaymentOptions,
   createBilling,
   getAllergies,
   deleteAllergy,
