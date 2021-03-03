@@ -78,20 +78,30 @@ const NewMessage = (props) => {
         unread_notify_dt: moment().format("YYYY-MM-DD"),
       },
     };
-    PatientService.createMessage(patientId, reqBody)
-      .then((response) => {
-        enqueueSnackbar(`${response.data.message}`, { variant: "success" });
-        reloadData();
-        dispatch(toggleMessageDialog());
-      })
-      .catch((error) => {
-        const resMessage = (error.response
-          && error.response.data
-          && error.response.data.message)
-          || error.message
-          || error.toString();
-        enqueueSnackbar(`${resMessage}`, { variant: "error" });
-      });
+    if (selectedMessage) { // edit case
+      const messageId = selectedMessage.id;
+      PatientService.updateMessage(patientId, messageId, reqBody)
+        .then((response) => {
+          enqueueSnackbar(`${response.data.message}`, { variant: "success" });
+          reloadData();
+          dispatch(toggleMessageDialog());
+        });
+    } else {
+      PatientService.createMessage(patientId, reqBody)
+        .then((response) => {
+          enqueueSnackbar(`${response.data.message}`, { variant: "success" });
+          reloadData();
+          dispatch(toggleMessageDialog());
+        })
+        .catch((error) => {
+          const resMessage = (error.response
+            && error.response.data
+            && error.response.data.message)
+            || error.message
+            || error.toString();
+          enqueueSnackbar(`${resMessage}`, { variant: "error" });
+        });
+    }
   };
 
   return (

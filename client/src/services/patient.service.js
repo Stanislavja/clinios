@@ -403,6 +403,12 @@ class Patient {
     );
   }
 
+  updateMessage(patientId, messageId, data) {
+    return axios.put(`${API_BASE}/patient/${patientId}/messages/${messageId}`, data, {
+      headers: authHeader(),
+    });
+  }
+
   updateDiagnoses(patient_id, icd_id, data) {
     return axios.put(
       `${API_BASE}/patient/${patient_id}/diagnoses/${icd_id}`,
