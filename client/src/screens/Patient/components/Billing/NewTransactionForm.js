@@ -13,6 +13,7 @@ import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 
 import Alert from "../../../../components/Alert";
+import useDidMountEffect from "../../../../hooks/useDidMountEffect";
 import usePatientContext from "../../../../hooks/usePatientContext";
 import { toggleNewTransactionDialog } from "../../../../providers/Patient/actions";
 import PatientService from "../../../../services/patient.service";
@@ -43,7 +44,7 @@ const NewTransactionForm = (props) => {
   const [transactionTypes, setTransactionTypes] = useState([]);
   const [paymentOptions, setPaymentOptions] = useState([]);
   const [formFields, setFormFields] = useState({
-    date: null,
+    date: new Date(),
     type: "",
     paymentType: "",
     amount: "",
@@ -113,6 +114,9 @@ const NewTransactionForm = (props) => {
 
   const handleInputChnage = (e) => {
     const { value, name } = e.target;
+    if (name === "type" && (value === 3 || value === 4) && formFields.paymentType === "") {
+      formFields.paymentType = "C";
+    }
     setFormFields({
       ...formFields,
       [name]: value,
@@ -149,6 +153,26 @@ const NewTransactionForm = (props) => {
         return <div />;
     }
   };
+
+  useDidMountEffect(() => {
+    if (transactionTypes.length) {
+      const name = "type";
+      setFormFields({
+        ...formFields,
+        [name]: transactionTypes[0].id,
+      });
+    }
+  }, [transactionTypes]);
+
+  const checkIfRequired = useCallback((field) => {
+    if (field === "accountNum") {
+      if (formFields.paymentType === "C" || formFields.paymentType === "A") {
+        return true;
+      }
+      return false;
+    }
+    return true;
+  }, [formFields.paymentType]);
 
   return (
     <>
@@ -207,7 +231,7 @@ const NewTransactionForm = (props) => {
                   id={item.id}
                   name={item.name}
                   value={formFields[item.name]}
-                  required
+                  required={checkIfRequired(item.name)}
                   fullWidth
                   onChange={(e) => handleInputChnage(e)}
                 >
