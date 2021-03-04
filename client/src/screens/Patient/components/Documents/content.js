@@ -11,7 +11,7 @@ import TableRow from "@material-ui/core/TableRow";
 import DeleteIcon from "@material-ui/icons/DeleteOutline";
 import RestoreIcon from "@material-ui/icons/RestorePage";
 import clsx from "clsx";
-import { chunk } from "lodash";
+import { chunk, orderBy } from "lodash";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
@@ -195,30 +195,42 @@ const DocumentsContent = (props) => {
       return tests;
     });
 
-    // value, range_low, range_high
+    // value, rangeLow, rangeHigh
 
     let flagResults = [];
     if (!!trimmedValues && trimmedValues.length) {
       flagResults = trimmedValues.map((value) => {
         const testName = value[0];
         const resultValue = Number(value[1]);
-        const range_low = Number(value[2]);
-        const range_high = Number(value[3]);
-        const flag = calculateFunctionalPercentage(range_low, range_high, resultValue);
+        const rangeLow = Number(value[2]);
+        const rangeHigh = Number(value[3]);
+        const flag = calculateFunctionalPercentage(rangeLow, rangeHigh, resultValue);
+        let percentValue = 0;
+        if (resultValue < rangeLow) {
+          percentValue = Math.abs(Number(((resultValue / rangeLow) * 100) - 100).toFixed(1));
+        }
+        if (resultValue > rangeHigh) {
+          percentValue = Math.abs(Number(((resultValue / rangeHigh) * 100) - 100).toFixed(1));
+        }
         return {
           testName,
           flag,
+          percentValue,
         };
       });
     }
 
+    flagResults = orderBy(flagResults, ["percentValue"], ["desc"]);
+
     let resString = "";
     flagResults.forEach((item) => {
       if (item.flag.length) {
-        resString += `${item.testName} (${item.flag}),`;
+        resString += `${item.testName} (${item.flag}), `;
       }
     });
-    return resString.slice(0, -1); // removing last comma
+    resString = resString.trim(); // removing last space
+    resString = resString.slice(0, -1); // removing last comma
+    return resString;
   };
 
   return (
