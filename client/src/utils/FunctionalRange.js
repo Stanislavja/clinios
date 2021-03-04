@@ -100,6 +100,7 @@ export function calculateFunctionalRange(test, gender, age) {
   if (test === "AGRatio") { /* Albumin/Globulin Ratio */
     range.low = 1.5;
     range.high = 2.0;
+    return range;
   }
   if (test === "82247") { /* Bilirubin Total */
     range.low = 0.2;
@@ -215,6 +216,7 @@ export function calculateFunctionalRange(test, gender, age) {
   if (test === "RDW") { /* RDW */
     range.low = 0.0;
     range.high = 13.0;
+    return range;
   }
   if (test === "85049") { /* Platelets */
     range.low = 155.0;
