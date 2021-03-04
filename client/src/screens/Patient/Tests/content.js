@@ -82,12 +82,7 @@ const TestsContent = (props) => {
   const { gender, dob } = state.patientInfo.data;
   const patientAge = Number(calculateAge(dob).split(" ")[0]);
 
-  const hasValue = (value) => {
-    if (typeof value !== "undefined" && value !== null) {
-      return true;
-    }
-    return false;
-  };
+  const hasValue = (value) => !((typeof value === "undefined") || (value === null));
 
   return (
     <Grid
