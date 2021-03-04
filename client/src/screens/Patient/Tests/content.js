@@ -82,6 +82,8 @@ const TestsContent = (props) => {
   const { gender, dob } = state.patientInfo.data;
   const patientAge = Number(calculateAge(dob).split(" ")[0]);
 
+  const hasValue = (value) => !((typeof value === "undefined") || (value === null));
+
   return (
     <Grid
       className={clsx({
@@ -116,26 +118,34 @@ const TestsContent = (props) => {
                     </TableCell>
                     <TableCell>{row.value}</TableCell>
                     <TableCell>
-                      {!!row.range_low && !!row.range_high && (
+                      {hasValue(row.range_low) && hasValue(row.range_high) && (
                         `${row.range_low} - ${row.range_high}`
                       )}
                     </TableCell>
                     <TableCell>
                       {
-                        !!row.range_low && !!row.range_high && !!row.value && (
+                        hasValue(row.range_low)
+                        && hasValue(row.range_high)
+                        && hasValue(row.value) && (
                           `${calculateFunctionalPercentage(row.range_low, row.range_high, row.value)}`
                         )
                       }
                     </TableCell>
                     <TableCell>
-                      {!!functionalRange.low && !!functionalRange.high
+                      {hasValue(functionalRange.low) && hasValue(functionalRange.high)
                         ? `${functionalRange.low} - ${functionalRange.high}`
                         : ""}
                     </TableCell>
                     <TableCell>
                       {
-                        !!row.range_low && !!row.range_high && !!row.value && (
-                          `${calculateFunctionalPercentage(row.range_low, row.range_high, row.value)}`
+                        hasValue(functionalRange.low)
+                        && hasValue(functionalRange.high) && (
+                          `${calculateFunctionalPercentage(
+                            functionalRange.low,
+                            functionalRange.high,
+                            row.value,
+                          )
+                          }`
                         )
                       }
                     </TableCell>

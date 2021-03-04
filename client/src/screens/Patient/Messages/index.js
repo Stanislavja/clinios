@@ -14,9 +14,6 @@ import PatientService from "../../../services/patient.service";
 
 
 const useStyles = makeStyles((theme) => ({
-  inputRow: {
-    margin: theme.spacing(3, 0),
-  },
   formInput: {
     marginBottom: theme.spacing(4),
   },
@@ -98,46 +95,41 @@ const NewMessage = (props) => {
 
   return (
     <>
-      <Typography variant="h3" color="textSecondary">
-        {isReplyDialog ? "Reply To Message" : "Send a Secure Message"}
-      </Typography>
       <form onSubmit={onMessageSend}>
-        <Grid className={classes.inputRow}>
-          <Grid className={classes.formInput} item md={4}>
-            <TextField
-              required
-              variant="standard"
-              name="subject"
-              id="subject"
-              label="Subject"
-              type="text"
-              fullWidth
-              value={formFields.subject}
-              onChange={(e) => handleInputChange(e)}
-              InputProps={{
-                readOnly: isReplyDialog,
-              }}
-            />
-          </Grid>
-          <Grid item lg={2}>
-            <Typography gutterBottom variant="body1" color="textPrimary">
-              Message
-            </Typography>
-          </Grid>
-          <Grid className={classes.formInput} item md={12}>
-            <TextField
-              required
-              variant="outlined"
-              name="message"
-              id="message"
-              type="text"
-              fullWidth
-              value={formFields.message}
-              onChange={(e) => handleInputChange(e)}
-              multiline
-              rows={5}
-            />
-          </Grid>
+        <Grid className={classes.formInput} item md={4}>
+          <TextField
+            required
+            variant="standard"
+            name="subject"
+            id="subject"
+            label="Subject"
+            type="text"
+            fullWidth
+            value={formFields.subject}
+            onChange={(e) => handleInputChange(e)}
+            InputProps={{
+              readOnly: isReplyDialog,
+            }}
+          />
+        </Grid>
+        <Grid item lg={2}>
+          <Typography gutterBottom variant="body1" color="textPrimary">
+            Message
+          </Typography>
+        </Grid>
+        <Grid className={classes.formInput} item md={12}>
+          <TextField
+            required
+            variant="outlined"
+            name="message"
+            id="message"
+            type="text"
+            fullWidth
+            value={formFields.message}
+            onChange={(e) => handleInputChange(e)}
+            multiline
+            rows={5}
+          />
         </Grid>
 
         <Grid
@@ -147,9 +139,6 @@ const NewMessage = (props) => {
         >
           <Button variant="outlined" type="submit">
             Send
-          </Button>
-          <Button variant="outlined" onClick={() => dispatch(toggleMessageDialog())}>
-            Cancel
           </Button>
         </Grid>
       </form>
