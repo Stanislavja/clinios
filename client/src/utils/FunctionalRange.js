@@ -284,8 +284,8 @@ export function calculateFunctionalRange(test, gender, age) {
     return range;
   }
   if (test === "84480") { /* T3 Total */
-    range.low = 1.0;
-    range.high = 1.8;
+    range.low = 1000;
+    range.high = 1800;
     return range;
   }
   if (test === "84481") { /* T3 Free */
@@ -319,8 +319,8 @@ export function calculateFunctionalRange(test, gender, age) {
     return range;
   }
   if (test === "84482") { /* T3 Reverse */
-    range.low = 90.0;
-    range.high = 330.0;
+    range.low = 9.0;
+    range.high = 33.0;
     return range;
   }
   if (test === "FT4I") { /* Free T4 Index (T7) */
