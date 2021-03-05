@@ -53,9 +53,6 @@ const useStyles = makeStyles((theme) => ({
     textOverflow: "ellipsis",
     overflow: "hidden",
   },
-  resultsContainer: {
-    height: 500,
-  },
 }));
 
 const Diagnoses = (props) => {
@@ -166,7 +163,7 @@ const Diagnoses = (props) => {
 
       <Grid container spacing={4} className={classes.mb2}>
         <Grid item lg={4}>
-          <TableContainer className={classes.resultsContainer}>
+          <TableContainer>
             <Table stickyHeader size="small">
               <TableHead>
                 <TableRow>
@@ -212,7 +209,7 @@ const Diagnoses = (props) => {
           </TableContainer>
         </Grid>
         <Grid item lg={4}>
-          <TableContainer className={classes.resultsContainer}>
+          <TableContainer>
             <Table size="small">
               <TableHead>
                 <TableRow>
@@ -258,7 +255,7 @@ const Diagnoses = (props) => {
           </TableContainer>
         </Grid>
         <Grid item lg={4}>
-          <TableContainer className={classes.resultsContainer}>
+          <TableContainer>
             <Table size="small">
               <TableHead>
                 <TableRow>

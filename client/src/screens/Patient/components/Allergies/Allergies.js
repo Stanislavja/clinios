@@ -40,9 +40,6 @@ const useStyles = makeStyles((theme) => ({
   pointer: {
     cursor: "pointer",
   },
-  resultsContainer: {
-    height: 500,
-  },
 }));
 
 const Allergies = (props) => {
@@ -120,7 +117,7 @@ const Allergies = (props) => {
         </form>
       </Grid>
       <Grid className={`${classes.root} ${classes.mb2}`}>
-        <TableContainer className={classes.resultsContainer}>
+        <TableContainer>
           <Table stickyHeader size="small">
             <TableHead>
               <TableRow>
