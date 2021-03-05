@@ -980,7 +980,7 @@ const searchAllergies = async (req, res) => {
         from drug d
         where d.name like '%${text}%'
         order by d.name
-        limit 50
+        limit 15
       `
     );
 
