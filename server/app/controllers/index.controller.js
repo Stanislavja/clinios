@@ -4,9 +4,11 @@ const { errorMessage, successMessage, status } = require("../helpers/status");
 const getUser = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
-    const $sql = `SELECT u.id, u.admin, u.client_id, u.firstname, u.lastname, u.email, u.sign_dt, u.email_confirm_dt,
-    c.name, c.calendar_start_time, c.calendar_end_time FROM user u
-    left join client c on c.id=u.client_id WHERE u.id=${req.user_id}`;
+    const $sql = `select u.id, u.admin, u.client_id, u.firstname, u.lastname, u.email, u.sign_dt, u.email_confirm_dt, c.name, c.calendar_start_time, c.calendar_end_time 
+    from user u
+    left join client c on c.id=u.client_id 
+    where u.id=${req.user_id}
+    `;
 
     const dbResponse = await db.query($sql);
 
@@ -34,7 +36,11 @@ const getPatient = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const dbResponse = await db.query(
-      `select p.id, p.client_id, p.firstname, p.lastname, p.password, p.status, client.code from patient p JOIN client on p.client_id=client.id where p.id=${req.user_id}`
+      `select p.id, p.client_id, p.firstname, p.lastname, p.password, p.status, client.code 
+      from patient p 
+      join client on p.client_id=client.id 
+      where p.id=${req.user_id}
+      `
     );
 
     if (!dbResponse) {

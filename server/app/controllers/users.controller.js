@@ -35,9 +35,11 @@ const getAllUsers = async (req, res) => {
 const getUser = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
-    const $sql = `SELECT u.id, u.admin, u.client_id, u.firstname, u.lastname, u.email, u.sign_dt, u.email_confirm_dt,
-    c.name, c.calendar_start_time, c.calendar_end_time FROM user u
-    left join client c on c.id=u.client_id WHERE u.id=${req.user_id}`;
+    const $sql = `SELECT u.id, u.admin, u.client_id, u.firstname, u.lastname, u.email, u.sign_dt, u.email_confirm_dt, c.name, c.calendar_start_time, c.calendar_end_time 
+    from user u
+    left join client c on c.id=u.client_id 
+    where u.id=${req.user_id}
+    `;
 
     const dbResponse = await db.query($sql);
 
@@ -64,7 +66,10 @@ const getLastVisitedPatient = async (req, res) => {
   const { patientId } = req.params;
   try {
     const dbResponse = await db.query(
-      `select id, client_id, firstname, lastname from patient where id=${patientId}`
+      `select id, client_id, firstname, lastname 
+      from patient 
+      where id=${patientId}
+      `
     );
     if (!dbResponse) {
       errorMessage.message = "None found";

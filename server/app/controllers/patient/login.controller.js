@@ -19,7 +19,12 @@ exports.signin = async (req, res) => {
 
   const { client_id, email } = req.body;
   const rows = await db.query(
-    `select p.id, p.client_id, p.firstname, p.lastname, p.password, p.status, client.code from patient p JOIN client on p.client_id=client.id where p.client_id=${client_id} and p.email='${email}'`
+    `select p.id, p.client_id, p.firstname, p.lastname, p.password, p.status, client.code 
+     from patient p 
+     join client on p.client_id=client.id 
+     where p.client_id=${client_id} 
+     and p.email='${email}'
+     `
   );
 
   const patient = rows[0];
@@ -48,7 +53,10 @@ exports.signin = async (req, res) => {
 
   const now = moment().format("YYYY-MM-DD HH:mm:ss");
   await db.query(
-    `update patient set login_dt='${now}', updated= now() where id=${patient.id}`
+    `update patient 
+    set login_dt='${now}', updated= now() 
+    where id=${patient.id}
+    `
   );
 
   const token = jwt.sign(
