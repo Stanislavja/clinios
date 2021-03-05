@@ -1,6 +1,5 @@
 import React from "react";
 
-import { Grid } from "@material-ui/core";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -9,18 +8,13 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
-import clsx from "clsx";
 import moment from "moment";
-import PropTypes from "prop-types";
 
 import usePatientContext from "../../../hooks/usePatientContext";
 import { calculateFunctionalRange, calculateFunctionalPercentage } from "../../../utils/FunctionalRange";
 import { calculateAge } from "../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
-  h300: {
-    minHeight: 300,
-  },
   button: {
     padding: theme.spacing(1),
   },
@@ -74,9 +68,8 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-const TestsContent = (props) => {
+const TestsContent = () => {
   const classes = useStyles();
-  const { isDialog } = props;
   const { state } = usePatientContext();
   const { data } = state.tests;
   const { gender, dob } = state.patientInfo.data;
@@ -85,11 +78,7 @@ const TestsContent = (props) => {
   const hasValue = (value) => !((typeof value === "undefined") || (value === null));
 
   return (
-    <Grid
-      className={clsx({
-        [classes.h300]: isDialog,
-      })}
-    >
+    <>
       <TableContainer className={classes.tableContainer}>
         <Table size="small" className={classes.table}>
           <TableHead>
@@ -167,12 +156,11 @@ const TestsContent = (props) => {
           </TableBody>
         </Table>
       </TableContainer>
-    </Grid>
+    </>
   );
 };
 
 TestsContent.propTypes = {
-  isDialog: PropTypes.bool.isRequired,
 };
 
 export default TestsContent;
