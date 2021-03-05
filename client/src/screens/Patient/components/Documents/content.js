@@ -239,7 +239,7 @@ const DocumentsContent = (props) => {
     // calculating conventionalFlag
     let convResString = "";
     flagResults.forEach((item) => {
-      if (item.conventionalFlag.length) {
+      if (item.conventionalFlag.length && item.convPercentValue > 5) {
         convResString += `${item.testName} (${item.conventionalFlag}), `;
       }
     });
@@ -251,7 +251,7 @@ const DocumentsContent = (props) => {
     // calculating functionalFlag
     let funcResString = "";
     flagResults.forEach((item) => {
-      if (item.functionalFlag.length) {
+      if (item.functionalFlag.length && item.funcPercentValue > 5) {
         funcResString += `${item.testName} (${item.functionalFlag}), `;
       }
     });
