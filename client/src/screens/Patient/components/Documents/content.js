@@ -20,7 +20,7 @@ import Tooltip from "../../../../components/common/CustomTooltip";
 import usePatientContext from "../../../../hooks/usePatientContext";
 // import useAuth from "../../../../hooks/useAuth";
 import PatientService from "../../../../services/patient.service";
-import { calculateFunctionalPercentage, calculateFunctionalRange } from "../../../../utils/FunctionalRange";
+import { calculatePercentageFlag, calculateFunctionalRange } from "../../../../utils/FunctionalRange";
 import { calculateAge } from "../../../../utils/helpers";
 import Lab from "./Dialog/Lab";
 
@@ -207,8 +207,8 @@ const DocumentsContent = (props) => {
         const funcRange = calculateFunctionalRange(testCPTid, gender, patientAge);
         const funcRangeLow = funcRange.low;
         const funcRangeHigh = funcRange.high;
-        const conventionalFlag = calculateFunctionalPercentage(convRangeLow, convRangeHigh, resultValue);
-        const functionalFlag = calculateFunctionalPercentage(funcRangeLow, funcRangeHigh, resultValue);
+        const conventionalFlag = calculatePercentageFlag(convRangeLow, convRangeHigh, resultValue);
+        const functionalFlag = calculatePercentageFlag(funcRangeLow, funcRangeHigh, resultValue);
 
         let funcPercentValue = 0;
         let convPercentValue = 0;

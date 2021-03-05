@@ -436,7 +436,7 @@ export function calculateFunctionalRange(test, gender, age) {
 }
 
 
-export function calculateFunctionalPercentage(rangeLow, rangeHigh, lastValue) {
+export function calculatePercentageFlag(rangeLow, rangeHigh, lastValue) {
   let percentage = "";
   if (lastValue < rangeLow) {
     const percentValue = Math.abs(Number(((lastValue / rangeLow) * 100) - 100).toFixed(1));

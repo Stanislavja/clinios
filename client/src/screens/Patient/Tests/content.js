@@ -11,7 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import moment from "moment";
 
 import usePatientContext from "../../../hooks/usePatientContext";
-import { calculateFunctionalRange, calculateFunctionalPercentage } from "../../../utils/FunctionalRange";
+import { calculateFunctionalRange, calculatePercentageFlag } from "../../../utils/FunctionalRange";
 import { calculateAge } from "../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
@@ -116,7 +116,7 @@ const TestsContent = () => {
                         hasValue(row.range_low)
                         && hasValue(row.range_high)
                         && hasValue(row.value) && (
-                          `${calculateFunctionalPercentage(row.range_low, row.range_high, row.value)}`
+                          `${calculatePercentageFlag(row.range_low, row.range_high, row.value)}`
                         )
                       }
                     </TableCell>
@@ -129,7 +129,7 @@ const TestsContent = () => {
                       {
                         hasValue(functionalRange.low)
                         && hasValue(functionalRange.high) && (
-                          `${calculateFunctionalPercentage(
+                          `${calculatePercentageFlag(
                             functionalRange.low,
                             functionalRange.high,
                             row.value,
