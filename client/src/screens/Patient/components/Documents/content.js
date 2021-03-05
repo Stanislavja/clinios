@@ -194,7 +194,7 @@ const DocumentsContent = (props) => {
       return tests;
     });
 
-    // value, convRangeLow, convRangeHigh
+    // format:: cpt_id, name, value, rangeLow, rangeHigh
 
     let flagResults = [];
     if (!!trimmedValues && trimmedValues.length) {
