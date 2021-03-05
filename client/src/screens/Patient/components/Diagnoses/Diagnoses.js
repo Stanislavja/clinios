@@ -124,7 +124,7 @@ const Diagnoses = (props) => {
       </Grid>
       */}
 
-      <Grid container spacing={4} alignItems="center">
+      <Grid container spacing={5} alignItems="center">
         <Grid item xs={4}>
           <form onSubmit={(e) => fetchDiagnosis(e, searchText)}>
             <Grid container alignItems="center">
@@ -161,7 +161,7 @@ const Diagnoses = (props) => {
         </Grid>
       </Grid>
 
-      <Grid container spacing={4} className={classes.mb2}>
+      <Grid container spacing={5} className={classes.mb2}>
         <Grid item lg={4}>
           <TableContainer>
             <Table stickyHeader size="small">
