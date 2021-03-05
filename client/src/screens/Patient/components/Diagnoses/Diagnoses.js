@@ -53,6 +53,9 @@ const useStyles = makeStyles((theme) => ({
     textOverflow: "ellipsis",
     overflow: "hidden",
   },
+  resultsContainer: {
+    height: 500,
+  },
 }));
 
 const Diagnoses = (props) => {
@@ -63,6 +66,7 @@ const Diagnoses = (props) => {
   const [diagnosis, setDiagnosis] = useState([]);
   const [recentICDs, setRecentICDs] = useState([]);
   const [favoriteICDs, setFavoriteICDs] = useState([]);
+  const [hasUserSearched, setHasUserSearched] = useState(false);
 
   const { state, dispatch } = usePatientContext();
   const { patientId } = state;
@@ -102,12 +106,14 @@ const Diagnoses = (props) => {
     e.preventDefault();
     PatientService.searchICD(text).then((res) => {
       setDiagnosis(res.data);
+      setHasUserSearched(true);
     });
   };
 
   useDidMountEffect(() => {
     if (!searchText.length) {
       setDiagnosis([]);
+      setHasUserSearched(false);
     }
   }, [searchText]);
 
@@ -121,7 +127,7 @@ const Diagnoses = (props) => {
       </Grid>
       */}
 
-      <Grid container spacing={2} alignItems="center">
+      <Grid container spacing={4} alignItems="center">
         <Grid item xs={4}>
           <form onSubmit={(e) => fetchDiagnosis(e, searchText)}>
             <Grid container alignItems="center">
@@ -147,21 +153,21 @@ const Diagnoses = (props) => {
           </form>
         </Grid>
         <Grid item xs={4}>
-          <Typography variant="h4" color="textPrimary">
+          <Typography variant="h5" color="textPrimary">
             Recently Used
           </Typography>
         </Grid>
         <Grid item xs={4}>
-          <Typography variant="h4" color="textPrimary">
+          <Typography variant="h5" color="textPrimary">
             Favorites
           </Typography>
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} className={classes.mb2}>
+      <Grid container spacing={4} className={classes.mb2}>
         <Grid item lg={4}>
-          <TableContainer>
-            <Table size="small">
+          <TableContainer className={classes.resultsContainer}>
+            <Table stickyHeader size="small">
               <TableHead>
                 <TableRow>
                   <StyledTableCellSm>Name</StyledTableCellSm>
@@ -192,7 +198,7 @@ const Diagnoses = (props) => {
                       <StyledTableCellSm>{item.favorite ? "Yes" : ""}</StyledTableCellSm>
                     </StyledTableRowSm>
                   ))
-                  : (
+                  : hasUserSearched ? (
                     <StyledTableRowSm>
                       <StyledTableCellSm colSpan={4}>
                         <Typography align="center" variant="body1" className={classes.text}>
@@ -200,13 +206,13 @@ const Diagnoses = (props) => {
                         </Typography>
                       </StyledTableCellSm>
                     </StyledTableRowSm>
-                  )}
+                  ) : null}
               </TableBody>
             </Table>
           </TableContainer>
         </Grid>
         <Grid item lg={4}>
-          <TableContainer>
+          <TableContainer className={classes.resultsContainer}>
             <Table size="small">
               <TableHead>
                 <TableRow>
@@ -252,7 +258,7 @@ const Diagnoses = (props) => {
           </TableContainer>
         </Grid>
         <Grid item lg={4}>
-          <TableContainer>
+          <TableContainer className={classes.resultsContainer}>
             <Table size="small">
               <TableHead>
                 <TableRow>
