@@ -93,15 +93,18 @@ const HandoutsForm = (props) => {
       </Grid>
       */}
 
-      <Grid container alignItems="center" className={classes.mb2}>
-        <form onSubmit={(e) => fetchAllHandouts(e, searchText)}>
-          <TextField
-            autoFocus
-            size="small"
-            variant="outlined"
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-          />
+      <form onSubmit={(e) => fetchAllHandouts(e, searchText)}>
+        <Grid container alignItems="center" className={classes.mb2}>
+          <Grid item xs={8}>
+            <TextField
+              fullWidth
+              autoFocus
+              size="small"
+              variant="outlined"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+            />
+          </Grid>
           <Button
             variant="outlined"
             type="submit"
@@ -109,8 +112,8 @@ const HandoutsForm = (props) => {
           >
             Search
           </Button>
-        </form>
-      </Grid>
+        </Grid>
+      </form>
 
       <Grid className={`${classes.root} ${classes.mb2}`}>
         <TableContainer>
@@ -118,8 +121,6 @@ const HandoutsForm = (props) => {
             <TableHead>
               <TableRow>
                 <StyledTableCellSm>Name</StyledTableCellSm>
-                <StyledTableCellSm>ID</StyledTableCellSm>
-                <StyledTableCellSm>Favorite</StyledTableCellSm>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -131,8 +132,6 @@ const HandoutsForm = (props) => {
                     onClick={() => onFormSubmit(item)}
                   >
                     <StyledTableCellSm>{item.filename}</StyledTableCellSm>
-                    <StyledTableCellSm>{item.id}</StyledTableCellSm>
-                    <StyledTableCellSm>{item.favorite ? "Yes" : ""}</StyledTableCellSm>
                   </StyledTableRowSm>
                 ))
                 : hasUserSearched ? (

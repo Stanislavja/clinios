@@ -897,7 +897,7 @@ const Patient = () => {
           applyForm={() => dispatch(toggleAllergyDialog())}
           cancelForm={() => dispatch(toggleAllergyDialog())}
           hideActions
-          size="md"
+          size="sm"
           fullHeight
         />
       )}
@@ -930,7 +930,7 @@ const Patient = () => {
           applyForm={() => dispatch(toggleHandoutsDialog())}
           cancelForm={() => dispatch(toggleHandoutsDialog())}
           hideActions
-          size="md"
+          size="sm"
           fullHeight
         />
       )}

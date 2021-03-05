@@ -98,15 +98,19 @@ const Allergies = (props) => {
         </Typography>
       </Grid>
       */}
-      <Grid container alignItems="center" className={classes.mb2}>
-        <form onSubmit={(e) => fetchAllergies(e, searchText)}>
-          <TextField
-            autoFocus
-            size="small"
-            variant="outlined"
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-          />
+
+      <form onSubmit={(e) => fetchAllergies(e, searchText)}>
+        <Grid container alignItems="center" className={classes.mb2}>
+          <Grid item xs={8}>
+            <TextField
+              fullWidth
+              autoFocus
+              size="small"
+              variant="outlined"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+            />
+          </Grid>
           <Button
             variant="outlined"
             type="submit"
@@ -114,16 +118,15 @@ const Allergies = (props) => {
           >
             Search
           </Button>
-        </form>
-      </Grid>
+        </Grid>
+      </form>
+
       <Grid className={`${classes.root} ${classes.mb2}`}>
         <TableContainer>
           <Table stickyHeader size="small">
             <TableHead>
               <TableRow>
                 <StyledTableCellSm>Name</StyledTableCellSm>
-                <StyledTableCellSm>ID</StyledTableCellSm>
-                <StyledTableCellSm>Favorite</StyledTableCellSm>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -135,8 +138,6 @@ const Allergies = (props) => {
                     onClick={() => onFormSubmit(item)}
                   >
                     <StyledTableCellSm>{item.name}</StyledTableCellSm>
-                    <StyledTableCellSm>{item.id}</StyledTableCellSm>
-                    <StyledTableCellSm>{item.favorite ? "Yes" : ""}</StyledTableCellSm>
                   </StyledTableRowSm>
                 ))
                 : hasUserSearched ? (
