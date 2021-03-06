@@ -358,6 +358,28 @@ export function calculateFunctionalRange(test, gender, age) {
     range.high = 2.1;
     return range;
   }
+  if (test === "Osmolarity") { /* Calculated */
+    range.low = 288;
+    range.high = 292;
+    return range;
+  }
+  if (test === "ViscosityHS") { /* Calculated */
+    if (gender === "M") {
+      range.low = 15.3;
+      range.high = 19.1;
+      return range;
+    }
+    if (gender === "F") {
+      range.low = 14.7;
+      range.high = 18.3;
+      return range;
+    }
+  }
+  if (test === "AnionGapNaClHCO3") { /* Calculated */
+    range.low = 7;
+    range.high = 12;
+    return range;
+  }
   if (test === "RHR") { /* resting heart rate */
     if (age >= 19 && age <= 25) {
       if (gender === "F") {
