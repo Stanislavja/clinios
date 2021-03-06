@@ -363,7 +363,7 @@ export function calculateFunctionalRange(test, gender, age) {
     range.high = 292;
     return range;
   }
-  if (test === "ViscosityHS") { /* Calculated */
+  if (test === "ViscosityHighShear") { /* Calculated */
     if (gender === "M") {
       range.low = 15.3;
       range.high = 19.1;
