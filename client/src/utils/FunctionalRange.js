@@ -284,8 +284,8 @@ export function calculateFunctionalRange(test, gender, age) {
     return range;
   }
   if (test === "84480") { /* T3 Total */
-    range.low = 1000;
-    range.high = 1800;
+    range.low = 100;
+    range.high = 180;
     return range;
   }
   if (test === "84481") { /* T3 Free */
@@ -315,7 +315,7 @@ export function calculateFunctionalRange(test, gender, age) {
   }
   if (test === "86376") { /* Thyroid Peroxidase Ab */
     range.low = 0.0;
-    range.high = 9.0;
+    range.high = 15.0;
     return range;
   }
   if (test === "84482") { /* T3 Reverse */
