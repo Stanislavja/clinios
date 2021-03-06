@@ -380,6 +380,11 @@ export function calculateFunctionalRange(test, gender, age) {
     range.high = 12;
     return range;
   }
+  if (test === "UrineSG") { /* Urine Specific Gravity */
+    range.low = '1.005';
+    range.high = '1.025';
+    return range;
+  }
   if (test === "RHR") { /* resting heart rate */
     if (age >= 19 && age <= 25) {
       if (gender === "F") {
