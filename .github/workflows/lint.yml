@@ -29,6 +29,8 @@ jobs:
 
       - name: Super-Linter-on-Client
         uses: github/super-linter@v3
+      - name: Check github status
+        run: git status && git branch
         env:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: ${{ github.base_ref }}
