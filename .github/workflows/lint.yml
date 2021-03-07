@@ -11,6 +11,12 @@ jobs:
 
     steps:
       ##########################
+      # Clean Workspace #
+      ##########################
+      - name: Clean Workspace
+        uses: AutoModality/action-clean@v1.1.0
+
+      ##########################
       # Checkout the code base #
       ##########################
       - name: Checkout Code
