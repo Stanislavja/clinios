@@ -1,8 +1,10 @@
 name: Lint
 
 on:
-  pull_request:
+  push:
     branches: [master]
+  pull_request:
+    branches-ignore: []
 
 jobs:
   run-linters:
@@ -20,7 +22,7 @@ jobs:
       # Checkout the code base #
       ##########################
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
         with:
           # Full git history is needed to get a proper list of changed files within `super-linter`
           fetch-depth: 0
@@ -28,8 +30,10 @@ jobs:
         run: cd client/ && npm i --ignore-scripts
 
       - name: Super-Linter-on-Client
-        uses: github/super-linter@v3
+        uses: docker://ghcr.io/github/super-linter:latest
         env:
+          ACTIONS_RUNNER_DEBUG: true
+          ERROR_ON_MISSING_EXEC_BIT: true
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: ${{ github.base_ref }}
           DEFAULT_WORKSPACE: /client/src
