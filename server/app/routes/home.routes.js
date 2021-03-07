@@ -4,8 +4,16 @@ const homeController = require("../controllers/home.controller.js");
 
 const router = express.Router();
 
-router.get("/appointments/events", [authJwt.verifyToken], homeController.getAll);
-router.get("/appointments/history", [authJwt.verifyToken], homeController.getAppointmentHistory);
+router.get(
+  "/appointments/events",
+  [authJwt.verifyToken],
+  homeController.getAll
+);
+router.get(
+  "/appointments/history",
+  [authJwt.verifyToken],
+  homeController.getAppointmentHistory
+);
 router.get(
   "/appointments/events/:providerId",
   [authJwt.verifyToken],
