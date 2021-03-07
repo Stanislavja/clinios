@@ -284,8 +284,8 @@ export function calculateFunctionalRange(test, gender, age) {
     return range;
   }
   if (test === "84480") { /* T3 Total */
-    range.low = 1000;
-    range.high = 1800;
+    range.low = 100;
+    range.high = 180;
     return range;
   }
   if (test === "84481") { /* T3 Free */
@@ -315,7 +315,7 @@ export function calculateFunctionalRange(test, gender, age) {
   }
   if (test === "86376") { /* Thyroid Peroxidase Ab */
     range.low = 0.0;
-    range.high = 9.0;
+    range.high = 15.0;
     return range;
   }
   if (test === "84482") { /* T3 Reverse */
@@ -356,6 +356,33 @@ export function calculateFunctionalRange(test, gender, age) {
   if (test === "84681") { /* C‐peptide */
     range.low = 1.2;
     range.high = 2.1;
+    return range;
+  }
+  if (test === "Osmolarity") { /* Calculated */
+    range.low = 288;
+    range.high = 292;
+    return range;
+  }
+  if (test === "ViscosityHighShear") { /* Calculated */
+    if (gender === "M") {
+      range.low = 15.3;
+      range.high = 19.1;
+      return range;
+    }
+    if (gender === "F") {
+      range.low = 14.7;
+      range.high = 18.3;
+      return range;
+    }
+  }
+  if (test === "AnionGapNaClHCO3") { /* Calculated */
+    range.low = 7;
+    range.high = 12;
+    return range;
+  }
+  if (test === "UrineSG") { /* Urine Specific Gravity */
+    range.low = '1.005';
+    range.high = '1.025';
     return range;
   }
   if (test === "RHR") { /* resting heart rate */
