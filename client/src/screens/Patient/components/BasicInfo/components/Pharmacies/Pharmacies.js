@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from "react";
 
 import {
   makeStyles, TextField, Grid, Typography, Box, Divider,
+  List,
+  ListItem,
 } from "@material-ui/core";
 import _ from "lodash";
 
@@ -74,7 +76,7 @@ const Pharmacies = () => {
   return (
     <div className={classes.root}>
       <Grid className={classes.halfSectionCard}>
-        <Grid container>
+        <Grid container spacing={3}>
           {pharmacies.map((pharmacy, index) => (
             <Grid key={pharmacy.name} item md={4}>
               <Typography variant="h5" color="textPrimary">
@@ -87,21 +89,29 @@ const Pharmacies = () => {
                 className={classes.inputTextRow}
                 onChange={(e) => debouncedSearchPharmacies(e)}
               />
-              {
-                searchedResults[pharmacy.name].map((item) => (
-                  <Box key={item.id} mb={2}>
-                    <Typography gutterBottom>{item.name}</Typography>
-                    <Typography gutterBottom>{item.address}</Typography>
-                    <Typography gutterBottom>
-                      {`${item.city} ${item.state} ${item.postal}`}
-                    </Typography>
-                    <Typography gutterBottom>
-                      Phone
-                      <span className={classes.ml1}>{item.phone}</span>
-                    </Typography>
-                  </Box>
-                ))
-              }
+              <List component="ul">
+                {
+                  searchedResults[pharmacy.name].map((item) => (
+                    <ListItem
+                      key={item.id}
+                      disableGutters
+                      button
+                    >
+                      <Box key={item.id}>
+                        <Typography gutterBottom>{item.name}</Typography>
+                        <Typography gutterBottom>{item.address}</Typography>
+                        <Typography gutterBottom>
+                          {`${item.city} ${item.state} ${item.postal}`}
+                        </Typography>
+                        <Typography gutterBottom>
+                          Phone
+                          <span className={classes.ml1}>{item.phone}</span>
+                        </Typography>
+                      </Box>
+                    </ListItem>
+                  ))
+                }
+              </List>
             </Grid>
           ))}
         </Grid>
