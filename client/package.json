@@ -29,7 +29,6 @@
     "nprogress": "^0.2.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
-    "react-charts": "^2.0.0-beta.7",
     "react-cookie": "^4.0.3",
     "react-country-region-selector": "^3.0.0",
     "react-datepicker": "^3.1.3",
