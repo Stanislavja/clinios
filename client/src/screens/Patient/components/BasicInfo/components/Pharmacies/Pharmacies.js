@@ -14,6 +14,7 @@ import {
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    height: 400,
   },
   cardRoot: {
     border: "1px solid",
@@ -54,19 +55,17 @@ const Pharmacies = () => {
 
   const debouncedSearchPharmacies = _.debounce((event) => {
     const { name, value } = event.target;
-    if (value.length > 5) {
-      const reqBody = {
-        data: {
-          text: value,
-        },
-      };
-      PatientPortalService.searchPharmacies(reqBody).then((res) => {
-        setSearchedResults({
-          ...searchedResults,
-          [name]: res.data,
-        });
+    const reqBody = {
+      data: {
+        text: value,
+      },
+    };
+    PatientPortalService.searchPharmacies(reqBody).then((res) => {
+      setSearchedResults({
+        ...searchedResults,
+        [name]: res.data,
       });
-    }
+    });
   }, 1000);
 
   return (
