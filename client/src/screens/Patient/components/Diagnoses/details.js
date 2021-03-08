@@ -186,7 +186,7 @@ const DiagnosesDetails = (props) => {
           <TableHead>
             <TableRow>
               <StyledTableCell>Created</StyledTableCell>
-              <StyledTableCell>ICD ID</StyledTableCell>
+              <StyledTableCell>ID</StyledTableCell>
               <StyledTableCell>Name</StyledTableCell>
               <StyledTableCell>Status</StyledTableCell>
               <StyledTableCell align="center">Actions</StyledTableCell>
