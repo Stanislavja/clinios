@@ -897,7 +897,8 @@ const Patient = () => {
           applyForm={() => dispatch(toggleAllergyDialog())}
           cancelForm={() => dispatch(toggleAllergyDialog())}
           hideActions
-          size="md"
+          size="sm"
+          fullHeight
         />
       )}
 
@@ -929,7 +930,8 @@ const Patient = () => {
           applyForm={() => dispatch(toggleHandoutsDialog())}
           cancelForm={() => dispatch(toggleHandoutsDialog())}
           hideActions
-          size="md"
+          size="sm"
+          fullHeight
         />
       )}
 
@@ -1043,6 +1045,7 @@ const Patient = () => {
           cancelForm={() => dispatch(toggleDiagnosesDialog())}
           hideActions
           size="lg"
+          fullHeight
         />
       )}
 
@@ -1137,13 +1140,13 @@ const Patient = () => {
             <DocumentsCardContent
               reloadData={() => fetchDocuments()}
               actionsEnable
-              isDialog
             />
           )}
           applyForm={() => dispatch(toggleDocumentsExpandDialog())}
           cancelForm={() => dispatch(toggleDocumentsExpandDialog())}
           hideActions
           size="lg"
+          fullHeight
         />
       )}
 
@@ -1152,12 +1155,13 @@ const Patient = () => {
           open={tests.expandDialog}
           title="All Tests"
           message={
-            <TestsCardContent isDialog />
+            <TestsCardContent />
           }
           applyForm={() => dispatch(toggleTestsExpandDialog())}
           cancelForm={() => dispatch(toggleTestsExpandDialog())}
           hideActions
           size="lg"
+          fullHeight
         />
       )}
 
@@ -1289,7 +1293,6 @@ const Patient = () => {
                   <DocumentsCardContent
                     reloadData={() => fetchDocuments()}
                     actionsEnable
-                    isDialog={false}
                   />
                 )}
                 showActions
@@ -1304,7 +1307,7 @@ const Patient = () => {
             <Grid key="All Tests">
               <Card
                 title="All Tests"
-                data={<TestsCardContent isDialog={false} />}
+                data={<TestsCardContent />}
                 showActions
                 primaryButtonText="Expand"
                 secondaryButtonText={null}

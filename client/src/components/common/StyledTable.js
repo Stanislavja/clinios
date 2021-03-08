@@ -23,6 +23,7 @@ export const StyledTableCellSm = withStyles(() => ({
     fontWeight: 700,
     padding: "6px 24px 6px 2px",
     borderBottom: "unset",
+    background: "white",
   },
   body: {
     fontSize: 12,

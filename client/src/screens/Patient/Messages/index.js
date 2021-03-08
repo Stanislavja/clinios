@@ -98,6 +98,7 @@ const NewMessage = (props) => {
       <form onSubmit={onMessageSend}>
         <Grid className={classes.formInput} item md={4}>
           <TextField
+            autoFocus
             required
             variant="standard"
             name="subject"

@@ -10,7 +10,6 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import DeleteIcon from "@material-ui/icons/DeleteOutline";
 import RestoreIcon from "@material-ui/icons/RestorePage";
-import clsx from "clsx";
 import { chunk, orderBy } from "lodash";
 import moment from "moment";
 import { useSnackbar } from "notistack";
@@ -21,13 +20,11 @@ import Tooltip from "../../../../components/common/CustomTooltip";
 import usePatientContext from "../../../../hooks/usePatientContext";
 // import useAuth from "../../../../hooks/useAuth";
 import PatientService from "../../../../services/patient.service";
-import { calculateFunctionalPercentage } from "../../../../utils/FunctionalRange";
+import { calculatePercentageFlag, calculateFunctionalRange } from "../../../../utils/FunctionalRange";
+import { calculateAge } from "../../../../utils/helpers";
 import Lab from "./Dialog/Lab";
 
 const useStyles = makeStyles((theme) => ({
-  h300: {
-    minHeight: 300,
-  },
   tab: {
     paddingBottom: 5,
     margin: "5px 10px 5px 0",
@@ -102,7 +99,7 @@ const StyledTableRow = withStyles((theme) => ({
 }))(TableRow);
 
 const DocumentsContent = (props) => {
-  const { reloadData, actionsEnable, isDialog } = props;
+  const { reloadData, actionsEnable } = props;
   const { enqueueSnackbar } = useSnackbar();
   const { state } = usePatientContext();
   const classes = useStyles();
@@ -112,6 +109,8 @@ const DocumentsContent = (props) => {
   const [isLabModalOpen, setIsLabModalOpen] = useState(false);
   const { data } = state.documents;
   const { patientId } = state;
+  const { gender, dob } = state.patientInfo.data;
+  const patientAge = Number(calculateAge(dob).split(" ")[0]);
   const history = useHistory();
   // const { user } = useAuth();
 
@@ -183,11 +182,11 @@ const DocumentsContent = (props) => {
 
   const calculateFlag = (itemRow) => {
     const testsString = !!itemRow.tests && itemRow.tests.split(",");
-    const allTestsArray = chunk(testsString, 4);
+    const allTestsArray = chunk(testsString, 5);
 
     const trimmedValues = !!allTestsArray && allTestsArray.length && allTestsArray.map((test) => {
       const tests = test.map((elem, index) => {
-        if (index === 0) {
+        if (index === 0 || index === 1) { // cpt_id and name
           return elem.replace(/["]/g, ``);
         }
         return Number(elem.replace(/["]/g, ``));
@@ -195,50 +194,79 @@ const DocumentsContent = (props) => {
       return tests;
     });
 
-    // value, rangeLow, rangeHigh
+    // format:: cpt_id, name, value, rangeLow, rangeHigh
 
     let flagResults = [];
     if (!!trimmedValues && trimmedValues.length) {
       flagResults = trimmedValues.map((value) => {
-        const testName = value[0];
-        const resultValue = Number(value[1]);
-        const rangeLow = Number(value[2]);
-        const rangeHigh = Number(value[3]);
-        const flag = calculateFunctionalPercentage(rangeLow, rangeHigh, resultValue);
-        let percentValue = 0;
-        if (resultValue < rangeLow) {
-          percentValue = Math.abs(Number(((resultValue / rangeLow) * 100) - 100).toFixed(1));
+        const testCPTid = value[0];
+        const testName = value[1];
+        const resultValue = Number(value[2]);
+        const convRangeLow = Number(value[3]);
+        const convRangeHigh = Number(value[4]);
+        const funcRange = calculateFunctionalRange(testCPTid, gender, patientAge);
+        const funcRangeLow = funcRange.low;
+        const funcRangeHigh = funcRange.high;
+        const conventionalFlag = calculatePercentageFlag(convRangeLow, convRangeHigh, resultValue);
+        const functionalFlag = calculatePercentageFlag(funcRangeLow, funcRangeHigh, resultValue);
+
+        let funcPercentValue = 0;
+        let convPercentValue = 0;
+        if (resultValue < convRangeLow) {
+          convPercentValue = Math.abs(Number(((resultValue / convRangeLow) * 100) - 100).toFixed(1));
         }
-        if (resultValue > rangeHigh) {
-          percentValue = Math.abs(Number(((resultValue / rangeHigh) * 100) - 100).toFixed(1));
+        if (resultValue > convRangeHigh) {
+          convPercentValue = Math.abs(Number(((resultValue / convRangeHigh) * 100) - 100).toFixed(1));
+        }
+        if (resultValue < funcRangeLow) {
+          funcPercentValue = Math.abs(Number(((resultValue / funcRangeLow) * 100) - 100).toFixed(1));
+        }
+        if (resultValue > funcRangeHigh) {
+          funcPercentValue = Math.abs(Number(((resultValue / funcRangeHigh) * 100) - 100).toFixed(1));
         }
         return {
           testName,
-          flag,
-          percentValue,
+          conventionalFlag,
+          functionalFlag,
+          convPercentValue,
+          funcPercentValue,
         };
       });
     }
 
-    flagResults = orderBy(flagResults, ["percentValue"], ["desc"]);
+    flagResults = orderBy(flagResults, ["convPercentValue"], ["desc"]);
 
-    let resString = "";
+    // calculating conventionalFlag
+    let convResString = "";
     flagResults.forEach((item) => {
-      if (item.flag.length) {
-        resString += `${item.testName} (${item.flag}), `;
+      if (item.conventionalFlag.length && item.convPercentValue > 5) {
+        convResString += `${item.testName} (${item.conventionalFlag}), `;
       }
     });
-    resString = resString.trim(); // removing last space
-    resString = resString.slice(0, -1); // removing last comma
-    return resString;
+    convResString = convResString.trim(); // removing last space
+    convResString = convResString.slice(0, -1); // removing last comma
+
+    flagResults = orderBy(flagResults, ["funcPercentValue"], ["desc"]);
+
+    // calculating functionalFlag
+    let funcResString = "";
+    flagResults.forEach((item) => {
+      if (item.functionalFlag.length && item.funcPercentValue > 5) {
+        funcResString += `${item.testName} (${item.functionalFlag}), `;
+      }
+    });
+    funcResString = funcResString.trim(); // removing last space
+    funcResString = funcResString.slice(0, -1); // removing last comma
+
+    const flags = {};
+    flags.conventionalFlag = convResString;
+    flags.functionalFlag = funcResString;
+
+    return flags;
   };
 
   return (
-    <Grid
-      className={clsx({
-        [classes.h300]: isDialog,
-      })}
-    >
+    <>
       <Grid container>
         <Typography
           className={tabValue === 0 ? classes.tabSelected : classes.tab}
@@ -312,28 +340,28 @@ const DocumentsContent = (props) => {
                       {moment(row.created).format("MMM D YYYY")}
                     </TableCell>
                     <TableCell>{row.filename}</TableCell>
-                    {!!flagValue && flagValue.length > 23
+                    {!!flagValue.conventionalFlag && flagValue.conventionalFlag.length > 23
                       ? (
-                        <Tooltip title={flagValue}>
+                        <Tooltip title={flagValue.conventionalFlag}>
                           <TableCell
                             className={classes.overFlowControl}
                           >
-                            {flagValue}
+                            {flagValue.conventionalFlag}
                           </TableCell>
                         </Tooltip>
                       )
-                      : <TableCell>{flagValue}</TableCell>}
-                    {!!flagValue && flagValue.length > 23
+                      : <TableCell>{flagValue.conventionalFlag}</TableCell>}
+                    {!!flagValue.functionalFlag && flagValue.functionalFlag.length > 23
                       ? (
-                        <Tooltip title={flagValue}>
+                        <Tooltip title={flagValue.functionalFlag}>
                           <TableCell
                             className={classes.overFlowControl}
                           >
-                            {flagValue}
+                            {flagValue.functionalFlag}
                           </TableCell>
                         </Tooltip>
                       )
-                      : <TableCell>{flagValue}</TableCell>}
+                      : <TableCell>{flagValue.functionalFlag}</TableCell>}
                     {
                       !!row.note && row.note.length > 10
                         ? (
@@ -390,14 +418,13 @@ const DocumentsContent = (props) => {
             handleClose={() => setIsLabModalOpen(false)}
           />
         )}
-    </Grid>
+    </>
   );
 };
 
 DocumentsContent.propTypes = {
   reloadData: PropTypes.func.isRequired,
   actionsEnable: PropTypes.bool.isRequired,
-  isDialog: PropTypes.bool.isRequired,
 };
 
 export default DocumentsContent;

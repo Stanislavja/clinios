@@ -9,6 +9,7 @@ import { createStyles, makeStyles } from "@material-ui/core/styles";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import CloseIcon from "@material-ui/icons/Close";
+import clsx from "clsx";
 import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => createStyles({
@@ -19,6 +20,9 @@ const useStyles = makeStyles((theme) => createStyles({
   },
   content: {
     padding: "1rem 2rem",
+  },
+  fullHeight: {
+    minHeight: "86vh",
   },
   buttonClose: {
     position: "absolute",
@@ -62,6 +66,7 @@ const DialogForm = ({
   cancelButtonText,
   size,
   fullScreen,
+  fullHeight,
 }) => {
   const classes = useStyles();
   return (
@@ -110,7 +115,14 @@ const DialogForm = ({
         <DialogTitle disableTypography className={classes.titleContainer} id="form-dialog-title">
           <Typography variant="h5">{title}</Typography>
         </DialogTitle>
-        <DialogContent className={classes.content}>{message}</DialogContent>
+        <DialogContent
+          className={clsx({
+            [classes.content]: true, // always apply
+            [classes.fullHeight]: fullHeight, // only when fullHeight === true
+          })}
+        >
+          {message}
+        </DialogContent>
         {hideActions ? null : (
           <>
             <DialogActions align="center">
@@ -156,6 +168,7 @@ DialogForm.defaultProps = {
   cancelButtonText: "Cancel",
   size: "lg",
   fullScreen: false,
+  fullHeight: false,
 };
 
 DialogForm.propTypes = {
@@ -171,6 +184,7 @@ DialogForm.propTypes = {
   cancelButtonText: PropTypes.string,
   size: PropTypes.string,
   fullScreen: PropTypes.bool,
+  fullHeight: PropTypes.bool,
 };
 
 export default DialogForm;
