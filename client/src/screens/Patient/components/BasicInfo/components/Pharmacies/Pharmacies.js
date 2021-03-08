@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 
 import {
-  makeStyles, TextField, Grid, Typography, Box,
+  makeStyles, TextField, Grid, Typography, Box, Divider,
 } from "@material-ui/core";
 import _ from "lodash";
 
@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
   },
   ml1: {
     marginLeft: theme.spacing(1),
+  },
+  divider: {
+    margin: theme.spacing(1, 0),
   },
 }));
 
@@ -103,6 +106,12 @@ const Pharmacies = () => {
           ))}
         </Grid>
       </Grid>
+      {
+        searchedResults.pharmacy1.length || searchedResults.pharmacy2.length ? (
+          <Divider className={classes.divider} />
+        )
+          : null
+      }
       {
         !!patientPharmacy && (
           <Grid className={classes.halfSectionCard}>

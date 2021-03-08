@@ -97,7 +97,7 @@ const TestsContent = () => {
       const glucoseTest = hasTestValue("Glucose");
       const ureaTest = hasTestValue("Urea");
       if (!!sodiumTest && !!potassiumTest && !!glucoseTest && !!ureaTest) {
-        const newNode = {
+        const newTest = {
           count: 1,
           cpt_id: "Osmolarity",
           lab_dt: new Date(),
@@ -108,12 +108,12 @@ const TestsContent = () => {
           value: (1.9 * (sodiumTest.value + potassiumTest.value))
             + glucoseTest.value + (ureaTest.value * 0.5) + 5,
         };
-        tempTestsArray.push(newNode);
+        tempTestsArray.push(newTest);
       }
       const hematocritTest = hasTestValue("Hematocrit");
       const proteinTotalTest = hasTestValue("Protein Total");
       if (!!hematocritTest && !!proteinTotalTest) {
-        const newNode = {
+        const newTest = {
           count: 1,
           cpt_id: "ViscosityHighShear",
           lab_dt: new Date(),
@@ -123,12 +123,12 @@ const TestsContent = () => {
           unit: "g/dL",
           value: (0.12 * hematocritTest.value) + (0.17 * ((proteinTotalTest.value * 10) - 2.07)),
         };
-        tempTestsArray.push(newNode);
+        tempTestsArray.push(newTest);
       }
       const chlorideTest = hasTestValue("Chloride");
       const carbonDioxideTest = hasTestValue("Carbon Dioxide");
       if (!!sodiumTest && !!chlorideTest && !!carbonDioxideTest) {
-        const newNode = {
+        const newTest = {
           count: 1,
           cpt_id: "AnionGapNaClHCO3",
           lab_dt: new Date(),
@@ -138,7 +138,7 @@ const TestsContent = () => {
           unit: "g/dL",
           value: sodiumTest.value - (chlorideTest.value + carbonDioxideTest.value),
         };
-        tempTestsArray.push(newNode);
+        tempTestsArray.push(newTest);
       }
       setTests([...tempTestsArray]);
     }
