@@ -21,10 +21,10 @@ export function calculateFunctionalRange(test, gender, age) {
     return range;
   }
   if (test === "82465") { /* Cholesterol Total */
-    if (age <= 60) {
-      range.low = 120;
-      range.high = 240;
-      return range;
+    if (age <= 60) {
+      range.low = 120;
+      range.high = 240;
+      return range;
     }
     if (age > 60) {
       if (gender === "M") {
@@ -40,15 +40,15 @@ export function calculateFunctionalRange(test, gender, age) {
     }
   }
   if (test === "83721") { /* LDL Cholesterol */
-    if (age <= 60) {
-      range.low = 80;
-      range.high = 170;
-      return range;
+    if (age <= 60) {
+      range.low = 80;
+      range.high = 170;
+      return range;
     }
-    if (age > 60) {
-      range.low = 120;
-      range.high = 170;
-      return range;
+    if (age > 60) {
+      range.low = 120;
+      range.high = 170;
+      return range;
     }
   }
   if (test === "83718") { /* HDL Cholesterol */
@@ -305,15 +305,15 @@ export function calculateFunctionalRange(test, gender, age) {
       return range;
     }
     if (gender === "F") {
-      if (age <= 50) { /* later change age 50 to pre and post menopause */
-        range.low = 75;
-        range.high = 150;
-        return range;
+      if (age <= 50) { /* later change age 50 to pre and post menopause */
+        range.low = 75;
+        range.high = 150;
+        return range;
       }
-      if (age > 50) {
-        range.low = 50;
-        range.high = 125;
-        return range;
+      if (age > 50) {
+        range.low = 50;
+        range.high = 125;
+        return range;
       }
     }
   }
