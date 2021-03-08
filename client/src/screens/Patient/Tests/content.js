@@ -95,15 +95,13 @@ const TestsContent = () => {
       const sodiumTest = hasTestValue("Sodium");
       const potassiumTest = hasTestValue("Potassium");
       const glucoseTest = hasTestValue("Glucose");
-      const ureaTest = hasTestValue("Urea");
+      const ureaTest = hasTestValue("Blood Urea Nitrogen");
       if (!!sodiumTest && !!potassiumTest && !!glucoseTest && !!ureaTest) {
         const newTest = {
           count: 1,
           cpt_id: "Osmolarity",
           lab_dt: new Date(),
           name: "Osmolarity",
-          range_high: calculateFunctionalRange("Osmolarity", gender, patientAge).high,
-          range_low: calculateFunctionalRange("Osmolarity", gender, patientAge).low,
           unit: "g/dL",
           value: (1.9 * (sodiumTest.value + potassiumTest.value))
             + glucoseTest.value + (ureaTest.value * 0.5) + 5,
@@ -118,8 +116,6 @@ const TestsContent = () => {
           cpt_id: "ViscosityHighShear",
           lab_dt: new Date(),
           name: "Viscosity High Shear",
-          range_high: calculateFunctionalRange("ViscosityHighShear", gender, patientAge).high,
-          range_low: calculateFunctionalRange("ViscosityHighShear", gender, patientAge).low,
           unit: "g/dL",
           value: (0.12 * hematocritTest.value) + (0.17 * ((proteinTotalTest.value * 10) - 2.07)),
         };
@@ -133,8 +129,6 @@ const TestsContent = () => {
           cpt_id: "AnionGapNaClHCO3",
           lab_dt: new Date(),
           name: "Anion Gap Na-(Cl+HCO3)",
-          range_high: calculateFunctionalRange("AnionGapNaClHCO3", gender, patientAge).high,
-          range_low: calculateFunctionalRange("AnionGapNaClHCO3", gender, patientAge).low,
           unit: "g/dL",
           value: sodiumTest.value - (chlorideTest.value + carbonDioxideTest.value),
         };
