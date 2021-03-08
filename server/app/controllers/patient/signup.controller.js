@@ -53,7 +53,7 @@ exports.patientSignup = async (req, res) => {
 
   delete patient.imgBase64;
 
-  const existingPatientRows = db.query(
+  const existingPatientRows = await db.query(
     `SELECT 1 FROM patient WHERE client_id='${patient.client_id}' and  (email='${patient.email}' or ssn='${patient.ssn}') LIMIT 1`
   );
 
