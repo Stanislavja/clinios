@@ -102,9 +102,9 @@ const TestsContent = () => {
           cpt_id: "Osmolarity",
           lab_dt: new Date(),
           name: "Osmolarity",
-          unit: "g/dL",
-          value: (1.9 * (sodiumTest.value + potassiumTest.value))
-            + glucoseTest.value + (ureaTest.value * 0.5) + 5,
+          unit: "",
+          value: ((1.9 * (sodiumTest.value + potassiumTest.value))
+            + glucoseTest.value + (ureaTest.value * 0.5) + 5).toFixed(1),
         };
         tempTestsArray.push(newTest);
       }
@@ -116,8 +116,8 @@ const TestsContent = () => {
           cpt_id: "ViscosityHighShear",
           lab_dt: new Date(),
           name: "Viscosity High Shear",
-          unit: "g/dL",
-          value: (0.12 * hematocritTest.value) + (0.17 * ((proteinTotalTest.value * 10) - 2.07)),
+          unit: "",
+          value: ((0.12 * hematocritTest.value) + (0.17 * ((proteinTotalTest.value * 10) - 2.07))).toFixed(1),
         };
         tempTestsArray.push(newTest);
       }
@@ -129,8 +129,8 @@ const TestsContent = () => {
           cpt_id: "AnionGapNaClHCO3",
           lab_dt: new Date(),
           name: "Anion Gap Na-(Cl+HCO3)",
-          unit: "g/dL",
-          value: sodiumTest.value - (chlorideTest.value + carbonDioxideTest.value),
+          unit: "",
+          value: (sodiumTest.value - (chlorideTest.value + carbonDioxideTest.value)).toFixed(1),
         };
         tempTestsArray.push(newTest);
       }
