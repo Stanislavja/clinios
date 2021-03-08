@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   statusButton: {
     position: "absolute",
     right: "15%",
-    top: "5%",
+    top: "10px",
   },
 }));
 
