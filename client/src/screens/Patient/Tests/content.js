@@ -79,16 +79,24 @@ const TestsContent = () => {
 
   const hasValue = (value) => !((typeof value === "undefined") || (value === null));
 
-  const hasTestValue = (value) => data.filter((x) => x.name === value);
+  const hasTestValue = (value) => {
+    const matchArray = data.filter((x) => x.name === value);
+    let res = null;
+    if (matchArray.length) {
+      const [firstEl] = matchArray;
+      res = firstEl;
+    }
+    return res;
+  };
 
   const addCalculatedTests = useCallback(() => {
     if (!!data && data.length) {
       const tempTestsArray = [...data];
-      const hasSodiumTest = hasTestValue("Sodium").length ? hasTestValue("Sodium")[0] : null;
-      const hasPotassiumTest = hasTestValue("Potassium").length ? hasTestValue("Potassium")[0] : null;
-      const hasGlucoseTest = hasTestValue("Glucose").length ? hasTestValue("Glucose")[0] : null;
-      const hasUreaTest = hasTestValue("Urea").length ? hasTestValue("Urea")[0] : null;
-      if (!!hasSodiumTest && !!hasPotassiumTest && !!hasGlucoseTest && !!hasUreaTest) {
+      const sodiumTest = hasTestValue("Sodium");
+      const potassiumTest = hasTestValue("Potassium");
+      const glucoseTest = hasTestValue("Glucose");
+      const ureaTest = hasTestValue("Urea");
+      if (!!sodiumTest && !!potassiumTest && !!glucoseTest && !!ureaTest) {
         const newNode = {
           count: 1,
           cpt_id: "Osmolarity",
@@ -96,16 +104,15 @@ const TestsContent = () => {
           name: "Osmolarity",
           range_high: calculateFunctionalRange("Osmolarity", gender, patientAge).high,
           range_low: calculateFunctionalRange("Osmolarity", gender, patientAge).low,
-          unit: "ug/dL",
-          value: (1.9 * (hasSodiumTest.value + hasPotassiumTest.value))
-            + hasGlucoseTest.value + (hasUreaTest.value * 0.5) + 5,
+          unit: "g/dL",
+          value: (1.9 * (sodiumTest.value + potassiumTest.value))
+            + glucoseTest.value + (ureaTest.value * 0.5) + 5,
         };
         tempTestsArray.push(newNode);
       }
-      const hasHematocritTest = hasTestValue("Hematocrit").length ? hasTestValue("Hematocrit")[0] : null;
-      const hasProteinTotalTest = hasTestValue("Protein Total").length
-        ? hasTestValue("Protein Total")[0] : null;
-      if (!!hasHematocritTest && !!hasProteinTotalTest) {
+      const hematocritTest = hasTestValue("Hematocrit");
+      const proteinTotalTest = hasTestValue("Protein Total");
+      if (!!hematocritTest && !!proteinTotalTest) {
         const newNode = {
           count: 1,
           cpt_id: "ViscosityHighShear",
@@ -113,15 +120,14 @@ const TestsContent = () => {
           name: "Viscosity High Shear",
           range_high: calculateFunctionalRange("ViscosityHighShear", gender, patientAge).high,
           range_low: calculateFunctionalRange("ViscosityHighShear", gender, patientAge).low,
-          unit: "ug/dL",
-          value: (0.12 * hasHematocritTest.value) + (0.17 * ((hasProteinTotalTest.value * 10) - 2.07)),
+          unit: "g/dL",
+          value: (0.12 * hematocritTest.value) + (0.17 * ((proteinTotalTest.value * 10) - 2.07)),
         };
         tempTestsArray.push(newNode);
       }
-      const hasChlorideTest = hasTestValue("Chloride").length ? hasTestValue("Chloride")[0] : null;
-      const hasCarbonDioxideTest = hasTestValue("Carbon Dioxide").length
-        ? hasTestValue("Carbon Dioxide")[0] : null;
-      if (!!hasSodiumTest && !!hasChlorideTest && !!hasCarbonDioxideTest) {
+      const chlorideTest = hasTestValue("Chloride");
+      const carbonDioxideTest = hasTestValue("Carbon Dioxide");
+      if (!!sodiumTest && !!chlorideTest && !!carbonDioxideTest) {
         const newNode = {
           count: 1,
           cpt_id: "AnionGapNaClHCO3",
@@ -129,8 +135,8 @@ const TestsContent = () => {
           name: "Anion Gap Na-(Cl+HCO3)",
           range_high: calculateFunctionalRange("AnionGapNaClHCO3", gender, patientAge).high,
           range_low: calculateFunctionalRange("AnionGapNaClHCO3", gender, patientAge).low,
-          unit: "ug/dL",
-          value: hasSodiumTest.value - (hasChlorideTest.value + hasCarbonDioxideTest.value),
+          unit: "g/dL",
+          value: sodiumTest.value - (chlorideTest.value + carbonDioxideTest.value),
         };
         tempTestsArray.push(newNode);
       }
