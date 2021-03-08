@@ -186,8 +186,9 @@ const DiagnosesDetails = (props) => {
           <TableHead>
             <TableRow>
               <StyledTableCell>Created</StyledTableCell>
+              <StyledTableCell>ICD ID</StyledTableCell>
               <StyledTableCell>Name</StyledTableCell>
-              <StyledTableCell>ICD Id</StyledTableCell>
+              <StyledTableCell>Status</StyledTableCell>
               <StyledTableCell align="center">Actions</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -199,18 +200,8 @@ const DiagnosesDetails = (props) => {
                   <TableCell component="th" scope="row">
                     {moment(row.created).format("MMM D YYYY")}
                   </TableCell>
-                  <TableCell>{row.name}</TableCell>
                   <TableCell>{row.icd_id}</TableCell>
-
-                  <TableCell className={classes.actions}>
-                    <IconButton
-                      className={classes.button}
-                      onClick={() => openDeleteDialog(row)}
-                    >
-                      <DeleteIcon fontSize="small" />
-                    </IconButton>
-                  </TableCell>
-
+                  <TableCell>{row.name}</TableCell>
                   <TableCell className={classes.switchAction}>
                     <FormControlLabel
                       control={(
@@ -224,6 +215,14 @@ const DiagnosesDetails = (props) => {
                       )}
                       label={activeState[row.name] ? "Active" : "Inactive"}
                     />
+                  </TableCell>
+                  <TableCell className={classes.actions}>
+                    <IconButton
+                      className={classes.button}
+                      onClick={() => openDeleteDialog(row)}
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
                   </TableCell>
                 </StyledTableRow>
               ))
