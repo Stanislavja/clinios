@@ -611,8 +611,7 @@ const searchHandouts = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const dbResponse = await db.query(
-      `
-        select id, filename, created
+      `select id, filename, created
         from handout
         where filename like '%${text}%'
         order by filename
