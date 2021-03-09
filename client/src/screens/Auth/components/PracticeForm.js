@@ -40,23 +40,23 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
   const { errors } = props;
   const classes = useStyles();
   const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
-  const [address2, setAddress2] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [zipCode, setZipCode] = useState("");
+  // const [address, setAddress] = useState("");
+  // const [address2, setAddress2] = useState("");
+  // const [city, setCity] = useState("");
+  // const [state, setState] = useState("");
+  // const [zipCode, setZipCode] = useState("");
   const [phone, setPhone] = useState("");
-  const [fax, setFax] = useState("");
+  // const [fax, setFax] = useState("");
   const [url, setUrl] = useState("");
-  const [practiceEmail, setPracticeEmail] = useState("");
-  const [ein, setEin] = useState("");
-  const [npi, setNpi] = useState("");
+  // const [practiceEmail, setPracticeEmail] = useState("");
+  // const [ein, setEin] = useState("");
+  // const [npi, setNpi] = useState("");
   const [clientCode, setClientCode] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [personalNPI, setPersonalNPI] = useState("");
-  const [medicalLicenseNumber, setMedicalLicenseNumber] = useState("");
+  // const [personalNPI, setPersonalNPI] = useState("");
+  // const [medicalLicenseNumber, setMedicalLicenseNumber] = useState("");
   const [password, setPassword] = useState("");
   const [termsAndConditions, setTermsAndConditions] = useState(false);
 
@@ -71,25 +71,25 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
     const formData = {
       client: {
         name: name.trim(),
-        address: address.trim(),
-        address2: address2.trim(),
-        city: city.trim(),
-        state: state.trim(),
-        postal: zipCode.trim(),
+        // address: address.trim(),
+        // address2: address2.trim(),
+        // city: city.trim(),
+        // state: state.trim(),
+        // postal: zipCode.trim(),
         phone: phone.trim(),
-        fax: fax.trim(),
-        email: practiceEmail.trim(),
+        // fax: fax.trim(),
+        // email: practiceEmail.trim(),
         website: url.trim(),
-        ein: ein.trim(),
-        npi: npi.trim(),
+        // ein: ein.trim(),
+        // npi: npi.trim(),
         code: clientCode.trim(),
       },
       user: {
         firstname: firstName.trim(),
         lastname: lastName.trim(),
         email: email.trim(),
-        npi: personalNPI.trim(),
-        medical_license: medicalLicenseNumber.trim(),
+        // npi: personalNPI.trim(),
+        // medical_license: medicalLicenseNumber.trim(),
         password: password.trim(),
       },
     };
@@ -187,8 +187,7 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
         handleOnBlur={(event) => handleAjaxValidation(event)}
         errors={getFieldError("client", "name")}
         inputProps={{ maxLength: 35 }}
-        helperText={`${
-          name.length >= 35 ? "Enter a name between 35 charecter" : ""
+        helperText={`${name.length >= 35 ? "Enter a name between 35 charecter" : ""
         }`}
       />
       <TextFieldWithError
@@ -200,7 +199,7 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
         errors={getFieldError("client", "code")}
         inputProps={{ maxLength: 35 }}
       />
-      <TextField
+      {/* <TextField
         variant="outlined"
         margin="dense"
         fullWidth
@@ -214,8 +213,8 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
         helperText={`${
           address.length >= 90 ? "Enter a adress between 90 charecter" : ""
         }`}
-      />
-      <TextField
+      /> */}
+      {/* <TextField
         variant="outlined"
         margin="dense"
         fullWidth
@@ -229,8 +228,8 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
         helperText={`${
           address2.length >= 90 ? "Enter a adress between 90 charecter" : ""
         }`}
-      />
-      <TextField
+      /> */}
+      {/* <TextField
         value={city}
         variant="outlined"
         margin="dense"
@@ -244,8 +243,8 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
         helperText={`${
           city.length >= 45 ? "Enter a city between 45 charecter" : ""
         }`}
-      />
-      <TextField
+      /> */}
+      {/* <TextField
         value={state}
         variant="outlined"
         margin="dense"
@@ -259,8 +258,8 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
         helperText={`${
           state.length >= 45 ? "Enter a state between 45 charecter" : ""
         }`}
-      />
-      <TextField
+      /> */}
+      {/* <TextField
         value={zipCode}
         variant="outlined"
         margin="dense"
@@ -274,7 +273,7 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
         helperText={`${
           zipCode.length >= 20 ? "Enter a zip between 20 charecter" : ""
         }`}
-      />
+      /> */}
       <TextFieldWithError
         fieldName="phone"
         label="Practice Phone"
@@ -283,11 +282,10 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
         handleOnBlur={(event) => handleAjaxValidation(event)}
         errors={getFieldError("client", "phone")}
         inputProps={{ maxLength: 15 }}
-        helperText={`${
-          phone.length >= 15 ? "Enter a number between 15 charecter" : ""
+        helperText={`${phone.length >= 15 ? "Enter a number between 15 charecter" : ""
         }`}
       />
-      <TextFieldWithError
+      {/* <TextFieldWithError
         fieldName="fax"
         label="Practice Fax"
         value={fax}
@@ -298,7 +296,7 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
         helperText={`${
           fax.length >= 15 ? "Enter a number between 15 charecter" : ""
         }`}
-      />
+      /> */}
       <TextFieldWithError
         fieldName="website"
         label="Practice Website URL"
@@ -307,11 +305,10 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
         handleOnBlur={(event) => handleAjaxValidation(event)}
         errors={getFieldError("client", "website")}
         inputProps={{ maxLength: 1000 }}
-        helperText={`${
-          url.length >= 1000 ? "Enter an url between 1000 charecter" : ""
+        helperText={`${url.length >= 1000 ? "Enter an url between 1000 charecter" : ""
         }`}
       />
-      <TextFieldWithError
+      {/* <TextFieldWithError
         fieldName="email"
         label="Practice Email"
         value={practiceEmail}
@@ -324,8 +321,8 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
             ? "Enter an email between 255 charecter"
             : ""
         }`}
-      />
-      <TextFieldWithError
+      /> */}
+      {/* <TextFieldWithError
         fieldName="ein"
         label="Practice EIN Number"
         value={ein}
@@ -336,8 +333,8 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
         helperText={`${
           ein.length >= 15 ? "Enter a number between 15 charecter" : ""
         }`}
-      />
-      <TextFieldWithError
+      /> */}
+      {/* <TextFieldWithError
         fieldName="npi"
         label="Practice NPI Number"
         value={npi}
@@ -348,7 +345,7 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
         helperText={`${
           npi.length >= 15 ? "Enter a number between 15 charecter" : ""
         }`}
-      />
+      /> */}
       <Typography
         component="h3"
         variant="h4"
@@ -375,10 +372,9 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
         autoComplete="firstName"
         onChange={(event) => setFirstName(event.target.value)}
         inputProps={{ maxLength: 35 }}
-        helperText={`${
-          firstName.length >= 35
-            ? "Enter a first name between 35 charecter"
-            : ""
+        helperText={`${firstName.length >= 35
+          ? "Enter a first name between 35 charecter"
+          : ""
         }`}
       />
       <TextField
@@ -392,8 +388,7 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
         autoComplete="lastName"
         onChange={(event) => setLastName(event.target.value)}
         inputProps={{ maxLength: 35 }}
-        helperText={`${
-          lastName.length >= 35 ? "Enter a last name between 35 charecter" : ""
+        helperText={`${lastName.length >= 35 ? "Enter a last name between 35 charecter" : ""
         }`}
       />
       <TextFieldWithError
@@ -405,11 +400,10 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
         handleOnBlur={(event) => handleAjaxValidation(event, "user")}
         errors={getFieldError("user", "email")}
         inputProps={{ maxLength: 255 }}
-        helperText={`${
-          email.length >= 255 ? "Enter an email between 255 charecter" : ""
+        helperText={`${email.length >= 255 ? "Enter an email between 255 charecter" : ""
         }`}
       />
-      <TextFieldWithError
+      {/* <TextFieldWithError
         id="userNPI"
         fieldName="npi"
         label="Your NPI Number"
@@ -421,8 +415,8 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
         helperText={`${
           personalNPI.length >= 15 ? "Enter a number between 15 charecter" : ""
         }`}
-      />
-      <TextFieldWithError
+      /> */}
+      {/* <TextFieldWithError
         fieldName="medical_license"
         label="Your Medical License Number"
         value={medicalLicenseNumber}
@@ -435,7 +429,7 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
             ? "Enter a numbner between 35 charecter"
             : ""
         }`}
-      />
+      /> */}
       <TextFieldWithError
         fieldName="password"
         label="Your Password"
@@ -445,8 +439,7 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
         handleOnBlur={(event) => validatePassword(event)}
         errors={getFieldError("user", "password")}
         inputProps={{ maxLength: 90 }}
-        helperText={`${
-          password.length >= 90 ? "Enter a password between 90 charecter" : ""
+        helperText={`${password.length >= 90 ? "Enter a password between 90 charecter" : ""
         }`}
       />
       <FormControlLabel
@@ -486,7 +479,7 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
 };
 
 PracticeForm.defaultProps = {
-  onFormSubmit: () => {},
+  onFormSubmit: () => { },
   errors: null,
 };
 
