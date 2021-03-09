@@ -17,6 +17,7 @@ import { useParams } from "react-router-dom";
 import Error from "../../../components/common/Error";
 import useAuth from "../../../hooks/useAuth";
 import AuthService from "../../../services/patient_portal/auth.service";
+import { Image } from "./components";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -30,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
     "& img": {
       width: "100%",
-      maxWidth: "200px",
     },
     "& p": {
       fontSize: "16px",
@@ -76,11 +76,10 @@ const PatientLogin = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { patientLogin } = useAuth();
   const { clientCode } = useParams();
-  const [email, setEmail] = React.useState("");
-  const [clientId, setClientId] = React.useState(null);
-  const [password, setPassword] = React.useState("");
-  const [errors, setErrors] = React.useState([]);
-  const [isClientLogoMissing, setIsClientLogoMissing] = useState(false);
+  const [email, setEmail] = useState("");
+  const [clientId, setClientId] = useState(null);
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState([]);
 
   useEffect(() => {
     AuthService.getClientCode(clientCode).then(
@@ -142,23 +141,11 @@ const PatientLogin = () => {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.Logo}>
-        {
-          isClientLogoMissing
-            ? (
-              <p>
-                There is no logo for this client. Upload a logo at the Doctors portal, menu
-                <span>Setup -> Configuration</span>
-              </p>
-            )
-            : (
-              <img
-                src={`${process.env.REACT_APP_API_URL}static/client/c${clientId}_logo.png`}
-                alt="Client logo"
-                onError={() => setIsClientLogoMissing(true)}
-              />
-            )
-        }
-
+        <Image
+          lassName="clientLogo"
+          src={`${process.env.REACT_APP_API_URL}static/client/c${clientId}_logo.png`}
+          alt="Client Logo"
+        />
       </div>
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
