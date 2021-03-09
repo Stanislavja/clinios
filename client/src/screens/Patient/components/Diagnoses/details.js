@@ -228,7 +228,7 @@ const DiagnosesDetails = (props) => {
               ))
               : (
                 <StyledTableRow>
-                  <TableCell colSpan={4}>
+                  <TableCell colSpan={5}>
                     <Typography align="center" variant="body1">
                       No Records Found...
                     </Typography>
