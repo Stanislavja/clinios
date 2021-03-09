@@ -1522,7 +1522,7 @@ const createMessage = async (req, res) => {
   try {
     const insertResponse = await db.query(
       `insert into message (client_id, user_id_from, patient_id_to, subject, message, unread_notify_dt, created, created_user_id)
-       values (${req.client_id}, ${req.user_id
+         values (${req.client_id}, ${req.user_id
       }, ${patient_id}, '${subject}', '${message}', '${moment(
         unread_notify_dt
       ).format("YYYY-MM-DD")}', now(), ${req.user_id})`
