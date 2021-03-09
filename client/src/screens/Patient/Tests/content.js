@@ -79,8 +79,8 @@ const TestsContent = () => {
 
   const hasValue = (value) => !((typeof value === "undefined") || (value === null));
 
-  const hasTestValue = (value) => {
-    const matchArray = data.filter((x) => x.name === value);
+  const hasTestValue = (value, testsArray) => {
+    const matchArray = testsArray.filter((x) => x.name === value);
     let res = null;
     if (matchArray.length) {
       const [firstEl] = matchArray;
@@ -92,10 +92,10 @@ const TestsContent = () => {
   const addCalculatedTests = useCallback(() => {
     if (!!data && data.length) {
       const tempTestsArray = [...data];
-      const sodiumTest = hasTestValue("Sodium");
-      const potassiumTest = hasTestValue("Potassium");
-      const glucoseTest = hasTestValue("Glucose");
-      const ureaTest = hasTestValue("Blood Urea Nitrogen");
+      const sodiumTest = hasTestValue("Sodium", data);
+      const potassiumTest = hasTestValue("Potassium", data);
+      const glucoseTest = hasTestValue("Glucose", data);
+      const ureaTest = hasTestValue("Blood Urea Nitrogen", data);
       if (!!sodiumTest && !!potassiumTest && !!glucoseTest && !!ureaTest) {
         const newTest = {
           count: 1,
@@ -108,8 +108,8 @@ const TestsContent = () => {
         };
         tempTestsArray.push(newTest);
       }
-      const hematocritTest = hasTestValue("Hematocrit");
-      const proteinTotalTest = hasTestValue("Protein Total");
+      const hematocritTest = hasTestValue("Hematocrit", data);
+      const proteinTotalTest = hasTestValue("Protein Total", data);
       if (!!hematocritTest && !!proteinTotalTest) {
         const newTest = {
           count: 1,
@@ -121,8 +121,8 @@ const TestsContent = () => {
         };
         tempTestsArray.push(newTest);
       }
-      const chlorideTest = hasTestValue("Chloride");
-      const carbonDioxideTest = hasTestValue("Carbon Dioxide");
+      const chlorideTest = hasTestValue("Chloride", data);
+      const carbonDioxideTest = hasTestValue("Carbon Dioxide", data);
       if (!!sodiumTest && !!chlorideTest && !!carbonDioxideTest) {
         const newTest = {
           count: 1,
