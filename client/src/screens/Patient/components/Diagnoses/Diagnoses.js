@@ -132,7 +132,7 @@ const Diagnoses = (props) => {
                 <TextField
                   autoFocus
                   fullWidth
-                  //required
+                  // required
                   size="small"
                   variant="outlined"
                   value={searchText}
