@@ -10,8 +10,6 @@ import {
   TableContainer,
   Table,
   TableBody,
-  TableHead,
-  TableRow,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSnackbar } from "notistack";
@@ -123,11 +121,6 @@ const HandoutsForm = (props) => {
       <Grid className={`${classes.root} ${classes.mb2}`}>
         <TableContainer>
           <Table stickyHeader size="small">
-            <TableHead>
-              <TableRow>
-                <StyledTableCellSm>Name</StyledTableCellSm>
-              </TableRow>
-            </TableHead>
             <TableBody>
               {allHandouts.length
                 ? allHandouts.map((item) => (
