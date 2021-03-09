@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -26,12 +26,17 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   Logo: {
-    backgroundColor: "#ededed",
     textAlign: "center",
     marginTop: theme.spacing(2),
     "& img": {
       width: "100%",
       maxWidth: "200px",
+    },
+    "& p": {
+      fontSize: "16px",
+      "& span": {
+        fontWeight: 600,
+      },
     },
   },
   avatar: {
@@ -75,6 +80,7 @@ const PatientLogin = () => {
   const [clientId, setClientId] = React.useState(null);
   const [password, setPassword] = React.useState("");
   const [errors, setErrors] = React.useState([]);
+  const [isClientLogoMissing, setIsClientLogoMissing] = useState(false);
 
   useEffect(() => {
     AuthService.getClientCode(clientCode).then(
@@ -136,10 +142,23 @@ const PatientLogin = () => {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.Logo}>
-        <img
-          src={`${process.env.REACT_APP_API_URL}static/client/c${clientId}_logo.png`}
-          alt="Client logo"
-        />
+        {
+          isClientLogoMissing
+            ? (
+              <p>
+                There is no logo for this client. Upload a logo at the Doctors portal, menu
+                <span>Setup -> Configuration</span>
+              </p>
+            )
+            : (
+              <img
+                src={`${process.env.REACT_APP_API_URL}static/client/c${clientId}_logo.png`}
+                alt="Client logo"
+                onError={() => setIsClientLogoMissing(true)}
+              />
+            )
+        }
+
       </div>
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
