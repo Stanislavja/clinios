@@ -118,6 +118,14 @@ class Patient {
       .then((res) => res.data);
   }
 
+  searchHandouts(patientId, data) {
+    return axios
+      .post(`${API_BASE}/patient/${patientId}/handouts/search`, data, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
   // encounters apis
   getEncounters(patientId) {
     return axios
