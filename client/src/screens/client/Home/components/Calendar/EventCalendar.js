@@ -22,8 +22,8 @@ function renderEventContent(eventInfo) {
           whiteSpace: "normal",
         }}
       >
-        {moment(eventInfo?.event?.extendedProps?.start_dt)?.format("HH:mm A")}
-        {", "}
+        {moment(eventInfo?.event?.extendedProps?.start_dt)?.format("HH:mm")}
+        {" "}
         {eventInfo.event.title}
       </p>
     </>
