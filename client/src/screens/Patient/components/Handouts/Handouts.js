@@ -61,11 +61,11 @@ const HandoutsForm = (props) => {
         text,
       },
     };
-    PatientService.searchHandouts(patientId, reqBody).then((res) => {
+    PatientService.searchHandouts(reqBody).then((res) => {
       setAllHandouts(res.data);
       setHasUserSearched(true);
     });
-  }, [patientId]);
+  }, []);
 
   useDidMountEffect(() => {
     if (!searchText.length) {

@@ -606,19 +606,16 @@ const searchHandouts = async (req, res) => {
     errorMessage.message = errors.array();
     return res.status(status.bad).send(errorMessage);
   }
-  const { patient_id } = req.params;
   const { text } = req.body.data;
 
   const db = makeDb(configuration, res);
   try {
     const dbResponse = await db.query(
       `
-        select ph.created, ph.handout_id, h.filename
-        from patient_handout ph
-        left join handout h on h.id=ph.handout_id
-        where h.filename like '%${text}%' and ph.client_id=${req.client_id}
-        and ph.patient_id=${patient_id}
-        order by h.filename
+        select id, filename, created
+        from handout
+        where filename like '%${text}%'
+        order by filename
         limit 100
       `
     );

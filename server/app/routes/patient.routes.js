@@ -57,7 +57,7 @@ router.get(
   Patient.getFormById
 );
 router.post(
-  "/patient/:patient_id/handouts/search",
+  "/handouts/search",
   [authJwt.verifyToken, validation.validate("search")],
   Patient.searchHandouts
 );

@@ -118,9 +118,9 @@ class Patient {
       .then((res) => res.data);
   }
 
-  searchHandouts(patientId, data) {
+  searchHandouts(data) {
     return axios
-      .post(`${API_BASE}/patient/${patientId}/handouts/search`, data, {
+      .post(`${API_BASE}/handouts/search`, data, {
         headers: authHeader(),
       })
       .then((res) => res.data);
