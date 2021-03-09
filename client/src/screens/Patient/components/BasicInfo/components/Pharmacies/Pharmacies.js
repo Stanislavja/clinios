@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 
 import {
-  makeStyles, TextField, Grid, Typography, Box,
+  makeStyles, TextField, Grid, Typography, Box, Divider,
+  List,
+  ListItem,
 } from "@material-ui/core";
 import _ from "lodash";
 
@@ -14,6 +16,7 @@ import {
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    height: 400,
   },
   cardRoot: {
     border: "1px solid",
@@ -31,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
   },
   ml1: {
     marginLeft: theme.spacing(1),
+  },
+  divider: {
+    margin: theme.spacing(1, 0),
   },
 }));
 
@@ -54,25 +60,23 @@ const Pharmacies = () => {
 
   const debouncedSearchPharmacies = _.debounce((event) => {
     const { name, value } = event.target;
-    if (value.length > 5) {
-      const reqBody = {
-        data: {
-          text: value,
-        },
-      };
-      PatientPortalService.searchPharmacies(reqBody).then((res) => {
-        setSearchedResults({
-          ...searchedResults,
-          [name]: res.data,
-        });
+    const reqBody = {
+      data: {
+        text: value,
+      },
+    };
+    PatientPortalService.searchPharmacies(reqBody).then((res) => {
+      setSearchedResults({
+        ...searchedResults,
+        [name]: res.data,
       });
-    }
+    });
   }, 1000);
 
   return (
     <div className={classes.root}>
       <Grid className={classes.halfSectionCard}>
-        <Grid container>
+        <Grid container spacing={3}>
           {pharmacies.map((pharmacy, index) => (
             <Grid key={pharmacy.name} item md={4}>
               <Typography variant="h5" color="textPrimary">
@@ -85,25 +89,39 @@ const Pharmacies = () => {
                 className={classes.inputTextRow}
                 onChange={(e) => debouncedSearchPharmacies(e)}
               />
-              {
-                searchedResults[pharmacy.name].map((item) => (
-                  <Box key={item.id} mb={2}>
-                    <Typography gutterBottom>{item.name}</Typography>
-                    <Typography gutterBottom>{item.address}</Typography>
-                    <Typography gutterBottom>
-                      {`${item.city} ${item.state} ${item.postal}`}
-                    </Typography>
-                    <Typography gutterBottom>
-                      Phone
-                      <span className={classes.ml1}>{item.phone}</span>
-                    </Typography>
-                  </Box>
-                ))
-              }
+              <List component="ul">
+                {
+                  searchedResults[pharmacy.name].map((item) => (
+                    <ListItem
+                      key={item.id}
+                      disableGutters
+                      button
+                    >
+                      <Box key={item.id}>
+                        <Typography gutterBottom>{item.name}</Typography>
+                        <Typography gutterBottom>{item.address}</Typography>
+                        <Typography gutterBottom>
+                          {`${item.city} ${item.state} ${item.postal}`}
+                        </Typography>
+                        <Typography gutterBottom>
+                          Phone
+                          <span className={classes.ml1}>{item.phone}</span>
+                        </Typography>
+                      </Box>
+                    </ListItem>
+                  ))
+                }
+              </List>
             </Grid>
           ))}
         </Grid>
       </Grid>
+      {
+        searchedResults.pharmacy1.length || searchedResults.pharmacy2.length ? (
+          <Divider className={classes.divider} />
+        )
+          : null
+      }
       {
         !!patientPharmacy && (
           <Grid className={classes.halfSectionCard}>

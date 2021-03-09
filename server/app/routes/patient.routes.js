@@ -56,6 +56,11 @@ router.get(
   [authJwt.verifyToken, validation.validate("singleForm")],
   Patient.getFormById
 );
+router.post(
+  "/handouts/search",
+  [authJwt.verifyToken, validation.validate("search")],
+  Patient.searchHandouts
+);
 router.get(
   "/patient/:patient_id/handouts",
   [authJwt.verifyToken],

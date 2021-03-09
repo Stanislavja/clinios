@@ -600,6 +600,41 @@ const getFormById = async (req, res) => {
   }
 };
 
+const searchHandouts = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    errorMessage.message = errors.array();
+    return res.status(status.bad).send(errorMessage);
+  }
+  const { text } = req.body.data;
+
+  const db = makeDb(configuration, res);
+  try {
+    const dbResponse = await db.query(
+      `select id, filename, created
+        from handout
+        where filename like '%${text}%'
+        order by filename
+        limit 100
+      `
+    );
+
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Search not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const handouts = async (req, res) => {
   const db = makeDb(configuration, res);
   const { patient_id } = req.params;
@@ -1487,7 +1522,7 @@ const createMessage = async (req, res) => {
   try {
     const insertResponse = await db.query(
       `insert into message (client_id, user_id_from, patient_id_to, subject, message, unread_notify_dt, created, created_user_id)
-         values (${req.client_id}, ${
+       values (${req.client_id}, ${
         req.user_id
       }, ${patient_id}, '${subject}', '${message}', '${moment(
         unread_notify_dt
@@ -2197,6 +2232,7 @@ const appointmentTypes = {
   adminNoteupdate,
   getForms,
   getFormById,
+  searchHandouts,
   handouts,
   handoutDelete,
   CreatePatientHandouts,

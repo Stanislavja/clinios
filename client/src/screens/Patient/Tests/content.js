@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -75,7 +75,73 @@ const TestsContent = () => {
   const { gender, dob } = state.patientInfo.data;
   const patientAge = Number(calculateAge(dob).split(" ")[0]);
 
+  const [tests, setTests] = useState([]);
+
   const hasValue = (value) => !((typeof value === "undefined") || (value === null));
+
+  const hasTestValue = (value, testsArray) => {
+    const matchArray = testsArray.filter((x) => x.name === value);
+    let res = null;
+    if (matchArray.length) {
+      const [firstEl] = matchArray;
+      res = firstEl;
+    }
+    return res;
+  };
+
+  const addCalculatedTests = useCallback(() => {
+    if (!!data && data.length) {
+      const tempTestsArray = [...data];
+      const sodiumTest = hasTestValue("Sodium", data);
+      const potassiumTest = hasTestValue("Potassium", data);
+      const glucoseTest = hasTestValue("Glucose", data);
+      const ureaTest = hasTestValue("Blood Urea Nitrogen", data);
+      if (!!sodiumTest && !!potassiumTest && !!glucoseTest && !!ureaTest) {
+        const newTest = {
+          count: 1,
+          cpt_id: "Osmolarity",
+          lab_dt: new Date(),
+          name: "Osmolarity",
+          unit: "",
+          value: ((1.9 * (sodiumTest.value + potassiumTest.value))
+            + glucoseTest.value + (ureaTest.value * 0.5) + 5).toFixed(1),
+        };
+        tempTestsArray.push(newTest);
+      }
+      const hematocritTest = hasTestValue("Hematocrit", data);
+      const proteinTotalTest = hasTestValue("Protein Total", data);
+      if (!!hematocritTest && !!proteinTotalTest) {
+        const newTest = {
+          count: 1,
+          cpt_id: "ViscosityHighShear",
+          lab_dt: new Date(),
+          name: "Viscosity High Shear",
+          unit: "",
+          value: ((0.12 * hematocritTest.value) + (0.17 * ((proteinTotalTest.value * 10) - 2.07))).toFixed(1),
+        };
+        tempTestsArray.push(newTest);
+      }
+      const chlorideTest = hasTestValue("Chloride", data);
+      const carbonDioxideTest = hasTestValue("Carbon Dioxide", data);
+      if (!!sodiumTest && !!chlorideTest && !!carbonDioxideTest) {
+        const newTest = {
+          count: 1,
+          cpt_id: "AnionGapNaClHCO3",
+          lab_dt: new Date(),
+          name: "Anion Gap Na-(Cl+HCO3)",
+          unit: "",
+          value: (sodiumTest.value - (chlorideTest.value + carbonDioxideTest.value)).toFixed(1),
+        };
+        tempTestsArray.push(newTest);
+      }
+      setTests([...tempTestsArray]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, gender, patientAge]);
+
+  useEffect(() => {
+    addCalculatedTests();
+  }, [addCalculatedTests]);
 
   return (
     <>
@@ -96,8 +162,8 @@ const TestsContent = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {!!data && data.length
-              ? data.map((row) => {
+            {!!tests && tests.length
+              ? tests.map((row) => {
                 const functionalRange = calculateFunctionalRange(row.cpt_id, gender, patientAge);
                 return (
                   <StyledTableRow key={row.name}>

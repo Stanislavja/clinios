@@ -118,7 +118,7 @@ const HandoutsDetails = (props) => {
         <Table size="small" className={classes.table}>
           <TableHead>
             <TableRow>
-              <StyledTableCell>Created</StyledTableCell>
+              <StyledTableCell width="15%">Created</StyledTableCell>
               <StyledTableCell>Name</StyledTableCell>
               <StyledTableCell align="center">Delete</StyledTableCell>
             </TableRow>
@@ -127,7 +127,7 @@ const HandoutsDetails = (props) => {
             {!!data && data.length
               ? data.map((row) => (
                 <StyledTableRow key={`${row.created}_${row.filename}`}>
-                  <TableCell component="th" scope="row">
+                  <TableCell width="15%">
                     {moment(row.created).format("MMM D YYYY")}
                   </TableCell>
                   <TableCell>{row.filename}</TableCell>

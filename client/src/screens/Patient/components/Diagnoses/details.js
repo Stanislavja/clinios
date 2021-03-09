@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   statusButton: {
     position: "absolute",
     right: "15%",
-    top: "5%",
+    top: "10px",
   },
 }));
 
@@ -228,7 +228,7 @@ const DiagnosesDetails = (props) => {
               ))
               : (
                 <StyledTableRow>
-                  <TableCell colSpan={4}>
+                  <TableCell colSpan={5}>
                     <Typography align="center" variant="body1">
                       No Records Found...
                     </Typography>

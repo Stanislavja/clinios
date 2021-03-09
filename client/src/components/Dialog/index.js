@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => createStyles({
   },
   content: {
     padding: "1rem 2rem",
+    maxHeight: "86vh",
   },
   fullHeight: {
     minHeight: "86vh",

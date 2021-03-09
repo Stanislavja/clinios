@@ -10,8 +10,6 @@ import {
   TableContainer,
   Table,
   TableBody,
-  TableHead,
-  TableRow,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSnackbar } from "notistack";
@@ -54,9 +52,14 @@ const HandoutsForm = (props) => {
   const { state, dispatch } = usePatientContext();
   const { patientId } = state;
 
-  const fetchAllHandouts = useCallback((e) => {
+  const fetchHandouts = useCallback((e, text) => {
     e.preventDefault();
-    PatientService.getAllHandouts().then((res) => {
+    const reqBody = {
+      data: {
+        text,
+      },
+    };
+    PatientService.searchHandouts(reqBody).then((res) => {
       setAllHandouts(res.data);
       setHasUserSearched(true);
     });
@@ -93,7 +96,7 @@ const HandoutsForm = (props) => {
       </Grid>
       */}
 
-      <form onSubmit={(e) => fetchAllHandouts(e, searchText)}>
+      <form onSubmit={(e) => fetchHandouts(e, searchText)}>
         <Grid container alignItems="center" className={classes.mb2}>
           <Grid item xs={8}>
             <TextField
@@ -118,11 +121,6 @@ const HandoutsForm = (props) => {
       <Grid className={`${classes.root} ${classes.mb2}`}>
         <TableContainer>
           <Table stickyHeader size="small">
-            <TableHead>
-              <TableRow>
-                <StyledTableCellSm>Name</StyledTableCellSm>
-              </TableRow>
-            </TableHead>
             <TableBody>
               {allHandouts.length
                 ? allHandouts.map((item) => (
