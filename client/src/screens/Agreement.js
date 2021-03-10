@@ -9,6 +9,9 @@ import * as API from "../utils/API";
 
 const useStyles = makeStyles((theme) => ({
   root: { paddingTop: theme.spacing(3), minHeight: 500 },
+  pageTitle: {
+    marginBottom: theme.spacing(1),
+  },
 }));
 const Agreement = () => {
   const classes = useStyles();

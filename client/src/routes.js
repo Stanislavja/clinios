@@ -403,7 +403,6 @@ const routes = [
   },
   {
     exact: true,
-    guard: GuestGuard,
     layout: MainLayout,
     path: "/agreement",
     component: lazy(() => import("./screens/Agreement")),
