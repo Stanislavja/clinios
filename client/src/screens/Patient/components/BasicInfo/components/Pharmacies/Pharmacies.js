@@ -6,6 +6,7 @@ import {
   ListItem,
 } from "@material-ui/core";
 import _ from "lodash";
+import PropTypes from "prop-types";
 
 import PatientPortalService from "../../../../../../services/patient_portal/patient-portal.service";
 import {
@@ -40,23 +41,47 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Pharmacies = () => {
+const Pharmacies = (props) => {
   const classes = useStyles();
-  const [patientPharmacy, setPatientPharmacy] = useState(null);
+  const { onChange, pharmacy1Id, pharmacy2Id } = props;
+  const [selectedPharmacy, setSelectedPharmacy] = useState({
+    pharmacy1: null,
+    pharmacy2: null,
+  });
+  const [patientPharmacy, setPatientPharmacy] = useState({
+    pharmacy1: null,
+    pharmacy2: null,
+  });
   const [searchedResults, setSearchedResults] = useState({
     pharmacy1: [],
     pharmacy2: [],
   });
 
-  const fetchPatienPharmacy = useCallback(() => {
-    PatientPortalService.getPharmacies().then((res) => {
-      setPatientPharmacy(res.data.length ? res.data[0] : null);
+  const fetchAllPharmacies = useCallback(() => {
+    const reqBody = {
+      data: {
+        text: "",
+      },
+    };
+    PatientPortalService.searchPharmacies(reqBody).then((res) => {
+      const { data: apiData } = res;
+      if (apiData.length) {
+        const pharmacyFirst = apiData.filter((x) => x.id === pharmacy1Id);
+        const pharmacySecond = apiData.filter((x) => x.id === pharmacy2Id);
+        const pharmacy1 = pharmacyFirst.length ? pharmacyFirst[0] : null;
+        const pharmacy2 = pharmacySecond.length ? pharmacySecond[0] : null;
+        setPatientPharmacy({
+          ...patientPharmacy,
+          pharmacy1,
+          pharmacy2,
+        });
+      }
     });
-  }, []);
+  }, [patientPharmacy, pharmacy1Id, pharmacy2Id]);
 
   useEffect(() => {
-    fetchPatienPharmacy();
-  }, [fetchPatienPharmacy]);
+    fetchAllPharmacies();
+  }, [fetchAllPharmacies]);
 
   const debouncedSearchPharmacies = _.debounce((event) => {
     const { name, value } = event.target;
@@ -72,6 +97,15 @@ const Pharmacies = () => {
       });
     });
   }, 1000);
+
+  const saveSelectedPharmacy = (name, item) => {
+    const updatedState = {
+      ...selectedPharmacy,
+      [name]: item,
+    };
+    setSelectedPharmacy({ ...updatedState });
+    onChange(updatedState);
+  };
 
   return (
     <div className={classes.root}>
@@ -96,6 +130,10 @@ const Pharmacies = () => {
                       key={item.id}
                       disableGutters
                       button
+                      selected={
+                        !!selectedPharmacy[pharmacy.name] && selectedPharmacy[pharmacy.name].id === item.id
+                      }
+                      onClick={() => saveSelectedPharmacy(pharmacy.name, item)}
                     >
                       <Box key={item.id}>
                         <Typography gutterBottom>{item.name}</Typography>
@@ -112,35 +150,49 @@ const Pharmacies = () => {
                   ))
                 }
               </List>
+              {
+                searchedResults[pharmacy.name].length || searchedResults[pharmacy.name].length ? (
+                  <Divider className={classes.divider} />
+                )
+                  : null
+              }
+              {
+                !!patientPharmacy[pharmacy.name] && (
+                  <Grid className={classes.halfSectionCard}>
+                    <Typography gutterBottom>{patientPharmacy[pharmacy.name].name}</Typography>
+                    <Typography gutterBottom>{patientPharmacy[pharmacy.name].address}</Typography>
+                    <Typography gutterBottom>
+                      {`${patientPharmacy[pharmacy.name].city || ""} 
+                      ${patientPharmacy[pharmacy.name].state || ""} 
+                      ${patientPharmacy[pharmacy.name].postal || ""}`}
+                    </Typography>
+                    {patientPharmacy[pharmacy.name].phone && (
+                      <Typography gutterBottom>
+                        Phone
+                        <span className={classes.ml1}>{patientPharmacy[pharmacy.name].phone}</span>
+                      </Typography>
+                    )}
+                  </Grid>
+                )
+              }
             </Grid>
           ))}
         </Grid>
       </Grid>
-      {
-        searchedResults.pharmacy1.length || searchedResults.pharmacy2.length ? (
-          <Divider className={classes.divider} />
-        )
-          : null
-      }
-      {
-        !!patientPharmacy && (
-          <Grid className={classes.halfSectionCard}>
-            <Typography gutterBottom>{patientPharmacy.name}</Typography>
-            <Typography gutterBottom>{patientPharmacy.address}</Typography>
-            <Typography gutterBottom>
-              {`${patientPharmacy.city || ""} ${patientPharmacy.state || ""} ${patientPharmacy.postal || ""}`}
-            </Typography>
-            {patientPharmacy.phone && (
-              <Typography gutterBottom>
-                Phone
-                <span className={classes.ml1}>{patientPharmacy.phone}</span>
-              </Typography>
-            )}
-          </Grid>
-        )
-      }
     </div>
   );
+};
+
+Pharmacies.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  pharmacy1Id: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]).isRequired,
+  pharmacy2Id: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]).isRequired,
 };
 
 export default Pharmacies;
