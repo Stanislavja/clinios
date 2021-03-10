@@ -126,7 +126,7 @@ const updatePatient = async (req, res) => {
     waist,
     weight,
     pharmacy_id,
-    pharmacy2_id
+    pharmacy2_id,
   } = req.body.data;
 
   const db = makeDb(configuration, res);
