@@ -8,6 +8,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
+import { orderBy } from "lodash";
 import moment from "moment";
 
 import usePatientContext from "../../../hooks/usePatientContext";
@@ -91,7 +92,7 @@ const TestsContent = () => {
 
   const addCalculatedTests = useCallback(() => {
     if (!!data && data.length) {
-      const tempTestsArray = [...data];
+      let tempTestsArray = [...data];
       const sodiumTest = hasTestValue("Sodium", data);
       const potassiumTest = hasTestValue("Potassium", data);
       const glucoseTest = hasTestValue("Glucose", data);
@@ -101,7 +102,7 @@ const TestsContent = () => {
           count: 1,
           cpt_id: "Osmolarity",
           lab_dt: new Date(),
-          name: "Osmolarity",
+          name: "Osmolarity (Derived)",
           unit: "",
           value: ((1.9 * (sodiumTest.value + potassiumTest.value))
             + glucoseTest.value + (ureaTest.value * 0.5) + 5).toFixed(1),
@@ -115,7 +116,7 @@ const TestsContent = () => {
           count: 1,
           cpt_id: "ViscosityHighShear",
           lab_dt: new Date(),
-          name: "Viscosity High Shear",
+          name: "Viscosity High Shear (Derived)",
           unit: "",
           value: ((0.12 * hematocritTest.value) + (0.17 * ((proteinTotalTest.value * 10) - 2.07))).toFixed(1),
         };
@@ -128,12 +129,13 @@ const TestsContent = () => {
           count: 1,
           cpt_id: "AnionGapNaClHCO3",
           lab_dt: new Date(),
-          name: "Anion Gap Na-(Cl+HCO3)",
+          name: "Anion Gap Na-(Cl+HCO3) (Derived)",
           unit: "",
           value: (sodiumTest.value - (chlorideTest.value + carbonDioxideTest.value)).toFixed(1),
         };
         tempTestsArray.push(newTest);
       }
+      tempTestsArray = orderBy(tempTestsArray, (item) => item.name.toLowerCase());
       setTests([...tempTestsArray]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
