@@ -230,6 +230,17 @@ const BasicInfo = (props) => {
     });
   };
 
+  const onPharmacySelect = (value) => {
+    Object.keys(value).forEach((item) => {
+      if (item === "pharmacy1") {
+        basicInfo.pharmacy_id = value[item]?.id ? value[item].id : basicInfo.pharmacy_id;
+      } else if (item === "pharmacy2") {
+        basicInfo.pharmacy2_id = value[item]?.id ? value[item].id : basicInfo.pharmacy2_id;
+      }
+    });
+    setBasicInfo({ ...basicInfo });
+  };
+
   return (
     <>
       <PaymentMethodsForm
@@ -540,7 +551,11 @@ const BasicInfo = (props) => {
 
         <Grid item xs={6}>
           <Grid container spacing={1}>
-            <PharmaciesSearch />
+            <PharmaciesSearch
+              pharmacy1Id={basicInfo.pharmacy_id || ""}
+              pharmacy2Id={basicInfo.pharmacy2_id || ""}
+              onChange={(val) => onPharmacySelect(val)}
+            />
           </Grid>
         </Grid>
 
