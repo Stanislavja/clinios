@@ -43,6 +43,11 @@ const useStyles = makeStyles((theme) => ({
       fontWeight: 600,
     },
   },
+  actionButton: {
+    padding: 0,
+    margin: 0,
+    minWidth: 0,
+  },
 }));
 
 const Handouts = () => {
@@ -95,7 +100,7 @@ const Handouts = () => {
   return (
     <div className={classes.root}>
       <Grid container>
-        <Grid item md={6} xs={12}>
+        <Grid item md={7} xs={12}>
           <div className={classes.titleButtonWrap}>
             <Typography
               component="h1"
@@ -124,23 +129,32 @@ const Handouts = () => {
             <Table className={classes.table} size="small" aria-label="a dense table">
               <TableHead className={classes.tableHead}>
                 <TableRow>
-                  <TableCell>Filename</TableCell>
-                  <TableCell align="right">Actions</TableCell>
-                  <TableCell align="right">Created</TableCell>
-                  <TableCell align="right">CreatedBy</TableCell>
+                  <TableCell align="left" padding="none">Filename</TableCell>
+                  <TableCell align="left">Actions</TableCell>
+                  <TableCell align="left">Created</TableCell>
+                  <TableCell align="left">CreatedBy</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {handouts.map((handout) => (
                   <TableRow key={handout.filename}>
-                    <TableCell component="th" scope="row">
+                    <TableCell
+                      padding="none"
+                      component="th"
+                      scope="row"
+                    >
                       {handout.filename}
                     </TableCell>
-                    <TableCell align="right">
-                      <Button onClick={() => handleDelete(handout.id)}>Delete</Button>
+                    <TableCell align="left">
+                      <Button
+                        className={classes.actionButton}
+                        onClick={() => handleDelete(handout.id)}
+                      >
+                        Delete
+                      </Button>
                     </TableCell>
-                    <TableCell align="right">{moment(handout.created).format("ll")}</TableCell>
-                    <TableCell align="right">{handout.name}</TableCell>
+                    <TableCell align="left">{moment(handout.created).format("ll")}</TableCell>
+                    <TableCell align="left">{handout.name}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
