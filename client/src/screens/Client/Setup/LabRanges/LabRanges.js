@@ -6,7 +6,7 @@ import {
   Button,
   Switch,
   Typography,
-  TextField,
+  IconButton,
   FormControlLabel,
   TableContainer,
   Table,
@@ -15,15 +15,15 @@ import {
   TableBody,
   TableCell,
 } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/DeleteOutline";
+import EditIcon from "@material-ui/icons/Edit";
+import { isEmpty } from "lodash";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 
 import Alert from "../../../../components/Alert";
-import DropDown from "../../../../components/common/DropDown";
 import { StyledTableCellLg, StyledTableRowLg } from "../../../../components/common/StyledTable";
 import LabRangeService from "../../../../services/setup/labrange.service";
-import { AgeOptions, GenderOptions } from "../../../../static/setup/labRange";
-import Counter from "./components/Counter";
 import NewLabRange from "./components/NewLabRange";
 
 const useStyles = makeStyles((theme) => ({
@@ -46,16 +46,6 @@ const useStyles = makeStyles((theme) => ({
   },
   pointerEnable: {
     pointerEvents: "auto",
-  },
-  table: {
-    "& button": {
-      padding: 6,
-      minWidth: 40,
-      lineHeight: 1.5,
-    },
-    "& input": {
-      width: 50,
-    },
   },
 }));
 
@@ -91,21 +81,16 @@ const LabRanges = () => {
     setUseFuncRange((prevState) => !prevState);
   };
 
-  const deleteItemHandler = (index) => {
-    const labsDataClone = [...labRanges];
-    labsDataClone.splice(index, 1);
-    setLabRanges([...labsDataClone]);
+  const deleteItemHandler = (item) => {
+    const labRangeId = item.id;
+    LabRangeService.deleteLabRange(labRangeId).then((res) => {
+      enqueueSnackbar(`${res.message}`, { variant: "success" });
+    });
   };
 
   const editItemHandler = (item) => {
     setSelectedRange(item);
     setShowNewRangeDialog(true);
-  };
-
-  const dropdownChangeHandler = (index, name, value) => {
-    const labsDataClone = [...labRanges];
-    labsDataClone[index][name] = value;
-    setLabRanges([...labsDataClone]);
   };
 
   const applyResetHandler = () => {
@@ -127,7 +112,12 @@ const LabRanges = () => {
       />
       <NewLabRange
         isOpen={showNewRangeDialog}
-        onClose={() => setShowNewRangeDialog(false)}
+        onClose={() => {
+          if (!isEmpty(selectedRange)) {
+            setSelectedRange({});
+          }
+          setShowNewRangeDialog(false);
+        }}
         reloadData={fetchLabs}
         selectedItem={selectedRange}
       />
@@ -192,64 +182,27 @@ const LabRanges = () => {
             <Table size="small" className={classes.table}>
               <TableHead>
                 <TableRow>
-                  <StyledTableCellLg>Lab Test</StyledTableCellLg>
-                  <StyledTableCellLg colSpan={3}>Item</StyledTableCellLg>
+                  <StyledTableCellLg>Test</StyledTableCellLg>
+                  <StyledTableCellLg>Sequence</StyledTableCellLg>
+                  <StyledTableCellLg>Compare Item</StyledTableCellLg>
+                  <StyledTableCellLg>Operator</StyledTableCellLg>
+                  <StyledTableCellLg>Compare To</StyledTableCellLg>
                   <StyledTableCellLg>Low</StyledTableCellLg>
                   <StyledTableCellLg>High</StyledTableCellLg>
-                  <StyledTableCellLg>Delete</StyledTableCellLg>
                   <StyledTableCellLg>Created</StyledTableCellLg>
                   <StyledTableCellLg>Updated</StyledTableCellLg>
-                  <StyledTableCellLg>Differences from original</StyledTableCellLg>
+                  <StyledTableCellLg align="center">Actions</StyledTableCellLg>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {labRanges && labRanges.length
-                  ? labRanges.map((item, index) => (
+                  ? labRanges.map((item) => (
                     <StyledTableRowLg key={item.title}>
                       <TableCell>{item.title}</TableCell>
-                      <TableCell>
-                        <DropDown
-                          options={AgeOptions}
-                          name="age"
-                          label="Age"
-                          value={item.age}
-                          onSelectChange={(value) => dropdownChangeHandler(index, "age", value)}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <DropDown
-                          options={GenderOptions}
-                          name="gender"
-                          label="Gender"
-                          value={item.gender}
-                          onSelectChange={(value) => dropdownChangeHandler(index, "gender", value)}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <Counter />
-                      </TableCell>
-                      <TableCell>
-                        <TextField
-                          type="number"
-                          value={item.high}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <TextField
-                          type="number"
-                          value={item.low}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <Button variant="outlined" onClick={() => deleteItemHandler(index)}>
-                          Delete
-                        </Button>
-                      </TableCell>
-                      <TableCell>
-                        <Button variant="outlined" onClick={() => editItemHandler(item)}>
-                          Edit
-                        </Button>
-                      </TableCell>
+                      <TableCell>Sequence</TableCell>
+                      <TableCell>Compare Item</TableCell>
+                      <TableCell>Operator</TableCell>
+                      <TableCell>Compare To</TableCell>
                       <TableCell>
                         {item.created ? moment(item.created).format("MMM D YYYY") : ""}
                       </TableCell>
@@ -257,6 +210,15 @@ const LabRanges = () => {
                         {item.updated ? moment(item.updated).format("MMM D YYYY") : ""}
                       </TableCell>
                       <TableCell>{item.created_by}</TableCell>
+                      <TableCell>{item.updated_by}</TableCell>
+                      <TableCell align="center">
+                        <IconButton onClick={() => editItemHandler(item)}>
+                          <EditIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton onClick={() => deleteItemHandler(item)}>
+                          <DeleteIcon fontSize="small" />
+                        </IconButton>
+                      </TableCell>
                     </StyledTableRowLg>
                   ))
                   : (
