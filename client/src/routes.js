@@ -81,14 +81,14 @@ const routes = [
   },
   {
     exact: true,
-    guard: AuthGuard,
+    guard: ClientPortalGuard,
     layout: DashboardLayout,
     path: "/patients/:patientId",
     component: lazy(() => import("./screens/Patient")),
   },
   {
     exact: true,
-    guard: AuthGuard,
+    guard: ClientPortalGuard,
     layout: DashboardLayout,
     path: "/lab/:userId",
     component: lazy(() => import("./screens/Lab")),
@@ -269,7 +269,7 @@ const routes = [
     ],
   },
   {
-    guard: AuthGuard,
+    guard: ClientPortalGuard,
     layout: DashboardLayout,
     path: "/reports",
     routes: [
@@ -290,14 +290,14 @@ const routes = [
   },
   {
     exact: true,
-    guard: AuthGuard,
+    guard: ClientPortalGuard,
     layout: DashboardLayout,
     path: "/process-lab/:userId",
     component: lazy(() => import("./screens/ProcessLab")),
   },
   {
     exact: true,
-    guard: AuthGuard,
+    guard: ClientPortalGuard,
     layout: DashboardLayout,
     path: "/process-message/:userId",
     component: lazy(() => import("./screens/ProcessMessage")),
@@ -416,7 +416,7 @@ const routes = [
   },
   {
     exact: true,
-    guard: AuthGuard,
+    guard: ClientPortalGuard,
     layout: DashboardLayout,
     path: "/myself",
     component: lazy(() => import("./screens/Client/Myself")),
