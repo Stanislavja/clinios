@@ -137,6 +137,8 @@ const TestsContent = () => {
       }
       tempTestsArray = orderBy(tempTestsArray, (item) => item.name.toLowerCase());
       setTests([...tempTestsArray]);
+    } else {
+      setTests([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, gender, patientAge]);
