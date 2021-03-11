@@ -98,14 +98,13 @@ const NewLabRange = (props) => {
     });
   };
 
-  const patientId = 1;
-
   const searchTests = useCallback((e, text) => {
     e.preventDefault();
+    const patientId = 1; /* ::TODO search tests API will be integrated */
     PatientService.getTests(patientId, text).then((res) => {
       setSearchTestResults(res.data);
     });
-  }, [patientId]);
+  }, []);
 
   const testSelectHandler = (value) => {
     setSelectedTest(value);
