@@ -27,3 +27,60 @@ export const AgeOptions = [
     value: ">40",
   },
 ];
+
+export const CompareItemOptions = [
+  {
+    label: "Age",
+    value: "age",
+  },
+  {
+    label: "ACH",
+    value: "A",
+  },
+  {
+    label: "Cheque",
+    value: "CH",
+  },
+  {
+    label: "Other",
+    value: "O",
+  },
+];
+
+export const CompareOperatorOptions = [
+  {
+    label: ">",
+    value: "greater",
+  },
+  {
+    label: "ACH",
+    value: "A",
+  },
+  {
+    label: "Cheque",
+    value: "CH",
+  },
+  {
+    label: "Other",
+    value: "O",
+  },
+];
+
+export const CompareToOptions = [
+  {
+    label: "50",
+    value: "50",
+  },
+  {
+    label: "ACH",
+    value: "A",
+  },
+  {
+    label: "Cheque",
+    value: "CH",
+  },
+  {
+    label: "Other",
+    value: "O",
+  },
+];
