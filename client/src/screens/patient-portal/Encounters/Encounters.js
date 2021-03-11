@@ -73,61 +73,24 @@ const Encounters = () => {
           ? encounters.map((item, index) => (
             <Grid
               item
-              md={4}
+              md={5}
               key={moment(item.dt).format("MMM D YYYY")}
               className={classes.mainContainer}
             >
               <Grid className={classes.inputRow} container>
-                <Typography
-                  component="span"
-                  className={`${classes.text12} ${classes.block}`}
-                  color="textPrimary"
-                >
-                  {moment(item.dt).format("MMM D YYYY")}
-                </Typography>
-                <Typography
-                  component="span"
-                  className={`${classes.text12} ${classes.block}`}
-                  color="textPrimary"
-                >
-                  {item.encounter_type}
-                </Typography>
-                <Typography
-                  component="span"
-                  className={`${classes.text12} ${classes.block}`}
-                  color="textPrimary"
-                >
-                  {item.title}
-                </Typography>
-                <Typography
-                  component="span"
-                  className={`${classes.text12} ${classes.block}`}
-                  color="textPrimary"
-                >
-                  {item.name}
-                </Typography>
-              </Grid>
-
-              <Grid className={classes.inputRow}>
-                <Typography className={classes.text12} color="textPrimary">
-                  Notes:
-                </Typography>
-                <Typography className={classes.text12} color="textPrimary">
-                  {item.notes ? item.notes : "No notes found..."}
-                </Typography>
-              </Grid>
-
-              <Grid className={classes.inputRow}>
-                <Typography className={classes.text12} color="textPrimary">
-                  Treatment Plan:
-                </Typography>
-                <Typography className={classes.text12} color="textPrimary">
+                <Typography component="p" variant="body2" color="textPrimary">
+                  <span style={{ fontWeight: "bold" }}>Date: </span>
+                  {` ${moment(item.dt).format("ll, hh:mmA")} `}
+                  <span style={{ fontWeight: "bold" }}>From: </span>
+                  {` ${item?.user_from || item?.patient_from} `}
+                  <span style={{ fontWeight: "bold" }}>To: </span>
+                  {item?.patient_to ? item.patient_to : "You"}
+                  <br />
                   {item.treatment
                     ? item.treatment
                     : "No treatment found..."}
                 </Typography>
               </Grid>
-
               {index + 1 !== encounters.length && <Divider className={classes.divider} />}
             </Grid>
           ))
