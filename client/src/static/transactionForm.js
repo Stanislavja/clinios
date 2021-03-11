@@ -23,6 +23,10 @@ export const TransactionFormFields = [
     type: null,
     options: [
       {
+        label: "",
+        value: "",
+      },
+      {
         label: "Card",
         value: "C",
       },
