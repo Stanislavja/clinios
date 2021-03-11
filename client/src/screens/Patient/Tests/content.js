@@ -129,7 +129,7 @@ const TestsContent = () => {
           count: 1,
           cpt_id: "AnionGapNaClHCO3",
           lab_dt: new Date(),
-          name: "Anion Gap Na-(Cl+HCO3) (Derived)",
+          name: "Anion Gap (Na-Cl-HCO3) (Derived)",
           unit: "",
           value: (sodiumTest.value - (chlorideTest.value + carbonDioxideTest.value)).toFixed(1),
         };
