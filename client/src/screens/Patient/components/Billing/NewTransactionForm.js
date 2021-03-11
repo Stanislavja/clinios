@@ -31,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
   m2: {
     margin: theme.spacing(2, 0),
   },
+  menuOption: {
+    minHeight: 26,
+  },
 }));
 
 const NewTransactionForm = (props) => {
@@ -40,6 +43,7 @@ const NewTransactionForm = (props) => {
   const { patientId } = state;
   const { enqueueSnackbar } = useSnackbar();
 
+  const [hasAmountError, setHasAmountError] = useState(false);
   const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
   const [transactionTypes, setTransactionTypes] = useState([]);
   const [paymentOptions, setPaymentOptions] = useState([]);
@@ -70,29 +74,25 @@ const NewTransactionForm = (props) => {
   }, [fetchBillingTransactionTypes, fetchBillingPaymentOptions]);
 
   const createBilling = () => {
-    const reqBody = {
-      data: {
-        dt: moment(formFields.date).format("YYYY-MM-DD hh:mm"),
-        type_id: formFields.type,
-        payment_type: formFields.paymentType,
-        amount: formFields.amount,
-        note: formFields.notes,
-      },
-    };
-    PatientService.createBilling(patientId, reqBody)
-      .then((response) => {
-        enqueueSnackbar(`${response.data.message}`, { variant: "success" });
-        reloadData();
-        dispatch(toggleNewTransactionDialog());
-      })
-      .catch((error) => {
-        const resMessage = (error.response
-          && error.response.data
-          && error.response.data.message)
-          || error.message
-          || error.toString();
-        enqueueSnackbar(`${resMessage}`, { variant: "error" });
-      });
+    if (+formFields.amount > 0) { /* shorthand to convert string => number */
+      const reqBody = {
+        data: {
+          dt: moment(formFields.date).format("YYYY-MM-DD hh:mm"),
+          type_id: formFields.type,
+          payment_type: formFields.paymentType,
+          amount: formFields.amount,
+          note: formFields.notes,
+        },
+      };
+      PatientService.createBilling(patientId, reqBody)
+        .then((response) => {
+          enqueueSnackbar(`${response.data.message}`, { variant: "success" });
+          reloadData();
+          dispatch(toggleNewTransactionDialog());
+        });
+    } else {
+      setHasAmountError(true);
+    }
   };
 
   const openConfirmationDialog = () => {
@@ -132,6 +132,13 @@ const NewTransactionForm = (props) => {
   };
 
   const renderOptionsForDropdowns = (value) => {
+    const blankItem = {
+      id: "",
+      name: "",
+      account_number: null,
+      type: null,
+    };
+    const paymentTypeSelectOptionsMutated = [blankItem, ...paymentOptions];
     switch (value) {
       case "transactionTypes": {
         const transactionTypeSelectOptions = transactionTypes.map((option) => (
@@ -142,9 +149,9 @@ const NewTransactionForm = (props) => {
         return transactionTypeSelectOptions;
       }
       case "paymentOptions": {
-        const paymentTypeSelectOptions = paymentOptions.map((option) => (
-          <MenuItem key={option.id} value={option.id}>
-            {`${option.account_number} - ${option.type}`}
+        const paymentTypeSelectOptions = paymentTypeSelectOptionsMutated.map((option) => (
+          <MenuItem className={classes.menuOption} key={option.id} value={option.id}>
+            {option.account_number ? `${option.account_number} - ${option.type}` : ""}
           </MenuItem>
         ));
         return paymentTypeSelectOptions;
@@ -164,6 +171,12 @@ const NewTransactionForm = (props) => {
     }
   }, [transactionTypes]);
 
+  useDidMountEffect(() => {
+    if (hasAmountError) {
+      setHasAmountError(false);
+    }
+  }, [formFields.amount]);
+
   const checkIfRequired = useCallback((field) => {
     if (field === "accountNum") {
       if (formFields.paymentType === "C" || formFields.paymentType === "A") {
@@ -171,8 +184,14 @@ const NewTransactionForm = (props) => {
       }
       return false;
     }
+    if (field === "paymentType") {
+      if (formFields.type === 3 || formFields.type === 4) {
+        return true;
+      }
+      return false;
+    }
     return true;
-  }, [formFields.paymentType]);
+  }, [formFields.paymentType, formFields.type]);
 
   return (
     <>
@@ -221,6 +240,8 @@ const NewTransactionForm = (props) => {
                   fullWidth
                   value={formFields[item.name]}
                   onChange={(e) => handleInputChnage(e)}
+                  error={item.name === "amount" ? hasAmountError : false}
+                  helperText={hasAmountError && "Amount should be greater than 0"}
                 />
               ) : (
                 <TextField
@@ -236,7 +257,7 @@ const NewTransactionForm = (props) => {
                   onChange={(e) => handleInputChnage(e)}
                 >
                   {!!item.options && item.options.length ? item.options.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
+                    <MenuItem className={classes.menuOption} key={option.value} value={option.value}>
                       {option.label}
                     </MenuItem>
                   ))
@@ -252,7 +273,6 @@ const NewTransactionForm = (props) => {
             name="notes"
             label="Notes"
             type="text"
-            required
             fullWidth
             value={formFields.notes}
             onChange={(e) => handleInputChnage(e)}
