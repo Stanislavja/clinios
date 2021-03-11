@@ -11,6 +11,7 @@ import PieChartIcon from "@material-ui/icons/PieChart";
 import ScheduleIcon from "@material-ui/icons/Schedule";
 import SettingsEthernetIcon from "@material-ui/icons/SettingsEthernet";
 import SettingsInputComponentIcon from "@material-ui/icons/SettingsInputComponent";
+import TimelineIcon from "@material-ui/icons/Timeline";
 import TuneIcon from "@material-ui/icons/Tune";
 
 
@@ -149,14 +150,12 @@ export const client_pages = [
         title: "Integrations",
         href: "/setup/integrations",
       },
-      /*
       {
         id: 312,
         icon: TimelineIcon,
         title: "Lab Ranges",
         href: "/setup/lab-ranges",
       },
-      */
       {
         id: 313,
         icon: CodeIcon,
