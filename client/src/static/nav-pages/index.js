@@ -77,7 +77,7 @@ export const client_pages = [
     id: 23,
     title: "Setup",
     href: "/setup",
-    permission: ["ADMIN"],
+    // permission: ["ADMIN"],
     subMenus: [
       {
         id: 31,

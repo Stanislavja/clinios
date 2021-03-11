@@ -10,11 +10,12 @@ import {
   Route,
 } from "react-router-dom";
 
-import AdminGuard from "./components/AdminGuard";
+// import AdminGuard from "./components/AdminGuard"; //Might be used in future
 import AuthGuard from "./components/AuthGuard";
 import ClientPortalGuard from "./components/ClientPortalGuard";
 import GuestGuard from "./components/GuestGuard";
 import LoadingScreen from "./components/LoadingScreen";
+import PatientPortalGuard from "./components/PatientPortalGuard";
 import DashboardLayout from "./layouts/Dashboard";
 import MainLayout from "./layouts/MainLayout";
 import { WithLeftSidebar } from "./layouts/PatientPortal";
@@ -73,7 +74,7 @@ const routes = [
   },
   {
     exact: true,
-    guard: AdminGuard,
+    guard: ClientPortalGuard,
     layout: DashboardLayout,
     path: "/dashboard",
     component: lazy(() => import("./screens/Client/Home/Home")),
@@ -129,14 +130,13 @@ const routes = [
   },
   {
     path: "/test-results",
-    guard: AdminGuard,
+    guard: ClientPortalGuard,
     layout: DashboardLayout,
     component: lazy(() => import("./screens/TestGraph")),
-    permission: ["ADMIN"],
   },
   {
     path: "/manage",
-    guard: AuthGuard,
+    guard: ClientPortalGuard,
     layout: DashboardLayout,
     routes: [
       {
@@ -177,9 +177,9 @@ const routes = [
   },
   {
     path: "/setup",
-    guard: AdminGuard,
+    guard: ClientPortalGuard,
     layout: DashboardLayout,
-    permission: ["ADMIN"],
+    // permission: ["ADMIN"],
     routes: [
       {
         exact: true,
@@ -332,7 +332,7 @@ const routes = [
   },
   {
     path: "/patient",
-    guard: ClientPortalGuard,
+    guard: PatientPortalGuard,
     layout: WithLeftSidebar,
     routes: [
       {

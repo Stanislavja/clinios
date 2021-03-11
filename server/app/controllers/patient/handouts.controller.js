@@ -23,9 +23,10 @@ const getAllHandouts = async (req, res) => {
   let $sql;
 
   try {
-    $sql = `select ph.created, ph.handout_id, h.filename
+    $sql = `select ph.created, ph.handout_id, h.filename, concat(u.firstname, ' ', u.lastname) created_by
     from patient_handout ph
     left join handout h on h.id=ph.handout_id
+    left join user u on u.id=ph.created_user_id
     where ph.client_id=${client_id}
     and ph.patient_id=${patient_id}
     order by h.filename
