@@ -19,7 +19,7 @@ import useAuth from "../../../../hooks/useAuth";
 import useDebounce from "../../../../hooks/useDebounce";
 import { client_pages, corporate_pages } from "../../../../static/nav-pages";
 import * as API from "../../../../utils/API";
-import { getAllowedRoutes } from "../../../../utils/helpers";
+// import { getAllowedRoutes } from "../../../../utils/helpers";
 import { SearchResults } from "./components";
 import MenuWithDropDowns from "./components/MenuWithDropDowns";
 
@@ -150,7 +150,8 @@ const Topbar = (props) => {
   const [nothingFound, setNothingFound] = useState(false);
 
   const navPages = (user.role === "CORPORATE") ? corporate_pages : client_pages;
-  const allowedPages = getAllowedRoutes(navPages, (user && user.permissions) ? user.permissions : []);
+  // const allowedPages = getAllowedRoutes(navPages, (user && user.permissions) ? user.permissions : []); // We might use in future
+
   const handleClose = () => {
     setOpen(false);
     setSearchTerm("");
@@ -206,7 +207,7 @@ const Topbar = (props) => {
           <Hidden mdDown>
             <div className={classes.navs}>
               {
-                allowedPages.map((page) => (
+                navPages.map((page) => (
                   page.subMenus
                     ? (
                       <MenuWithDropDowns
@@ -229,7 +230,6 @@ const Topbar = (props) => {
                     )
                 ))
               }
-
             </div>
           </Hidden>
         </div>
@@ -241,9 +241,7 @@ const Topbar = (props) => {
                 {
                   lastVisitedPatient && (
                     <RouterLink to={`/patients/${lastVisitedPatient.id}`} className={classes.patientLink}>
-                      {lastVisitedPatient.firstname}
-                      {" "}
-                      {lastVisitedPatient.lastname}
+                      {`${lastVisitedPatient.firstname} ${lastVisitedPatient.lastname}`}
                     </RouterLink>
                   )
                 }
