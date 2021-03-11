@@ -27,6 +27,12 @@ class LabRangeService {
       headers: authHeader(),
     });
   }
+
+  resetLabRanges() {
+    return axios.get(`${API_BASE}/lab-range/reset`, {
+      headers: authHeader(),
+    });
+  }
 }
 
 export default new LabRangeService();
