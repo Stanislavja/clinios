@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
   buttonsContainer: {
-    margin: theme.spacing(3, 0),
+    margin: theme.spacing(0, 0, 3, 0),
   },
   w100: {
     width: 100,
