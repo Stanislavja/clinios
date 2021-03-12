@@ -354,7 +354,7 @@ const routes = [
       {
         guard: AuthGuard,
         path: "/patient/handouts",
-        component: lazy(() => import("./screens/Client/Setup/Handouts")),
+        component: lazy(() => import("./screens/patient-portal/Handouts")),
       },
       {
         guard: AuthGuard,
