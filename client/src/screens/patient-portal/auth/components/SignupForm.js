@@ -17,6 +17,7 @@ import RotateLeftTwoToneIcon from "@material-ui/icons/RotateLeftTwoTone";
 import Alert from "@material-ui/lab/Alert";
 import _ from "lodash";
 import PropTypes from "prop-types";
+import { CountryRegionData } from "react-country-region-selector";
 import SignatureCanvas from "react-signature-canvas";
 
 import CountrySelect from "../../../../components/common/CountrySelect";
@@ -81,7 +82,7 @@ const SignupForm = (props) => {
     gender: "",
     address: "",
     address2: "",
-    country: "",
+    country: CountryRegionData.find((item) => item?.[1] === "US"),
     state: "",
     city: "",
     postal: "",
@@ -334,6 +335,7 @@ const SignupForm = (props) => {
                     fullWidth
                     onChange={(e) => handleInputChange(e)}
                   >
+                    <MenuItem key={-1} value="" />
                     {item.options.map((option, i) => (
                       // eslint-disable-next-line react/no-array-index-key
                       <MenuItem key={i} value={option.value}>
@@ -547,7 +549,7 @@ const SignupForm = (props) => {
         <Divider />
         <Grid className={classes.inputRow}>
           <Typography variant="h4" color="textPrimary" gutterBottom>
-            Set Username and Password for Patient Portal
+            Set Password for Patient Portal
           </Typography>
           <Grid container spacing={1}>
             {UserNamePasswordInfo.map((item, index) => (
@@ -563,7 +565,7 @@ const SignupForm = (props) => {
                   fullWidth
                   onChange={(e) => handleInputChange(e)}
                   onBlur={(event) => (item.name === "password"
-                      || item.name === "confirmPassword")
+                    || item.name === "confirmPassword")
                     && validatePassword(event)}
                 />
                 <Error errors={getFieldError("patient", item.name)} />
@@ -644,7 +646,7 @@ const SignupForm = (props) => {
 
 SignupForm.defaultProps = {
   errors: null,
-  onFormSubmit: () => {},
+  onFormSubmit: () => { },
 };
 
 SignupForm.propTypes = {

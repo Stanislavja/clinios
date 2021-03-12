@@ -64,6 +64,10 @@ export const FormFields = {
       type: null,
       options: [
         {
+          label: "",
+          value: "",
+        },
+        {
           label: "Male",
           value: "M",
         },
@@ -274,14 +278,6 @@ export const FormFields = {
     },
   ],
   userNamePasswordDetails: [
-    {
-      name: "userName",
-      id: "userName",
-      label: "Username",
-      baseType: "input",
-      type: "text",
-      options: [],
-    },
     {
       name: "password",
       id: "password",
