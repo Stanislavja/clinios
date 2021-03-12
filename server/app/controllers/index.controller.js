@@ -111,11 +111,66 @@ const getCorporateUser = async (req, res) => {
   }
 };
 
+const getFunctionalRange = async (req, res) => {
+  const db = makeDb(configuration, res);
+  let $sql;
+
+  try {
+    $sql = `select functional_range
+      from client
+      where id=${req.client_id}`;
+
+    const dbResponse = await db.query($sql);
+
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+const updateFunctionalRange = async (req, res) => {
+  const { functional_range } = req.body.data;
+  const db = makeDb(configuration, res);
+  try {
+    const updateResponse = await db.query(
+      `update client
+        set functional_range='${functional_range}'
+        where id=${req.client_id}
+      `
+    );
+
+    if (!updateResponse.affectedRows) {
+      errorMessage.message = "Update not successful";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = updateResponse;
+    successMessage.message = "Update successful";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Update not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const users = {
   getUser,
   getClient,
   getPatient,
   getCorporateUser,
+  getFunctionalRange,
+  updateFunctionalRange,
 };
 
 module.exports = users;
