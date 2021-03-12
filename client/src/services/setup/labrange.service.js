@@ -5,33 +5,34 @@ import authHeader from "../auth-header";
 
 class LabRangeService {
   getLabRanges() {
-    return axios.get(`${API_BASE}/lab-range/`, {
+    return axios.get(`${API_BASE}/client-ranges`, {
       headers: authHeader(),
-    });
+    }).then((res) => res.data);
   }
 
   searchLabs(data) {
     return axios.post(`${API_BASE}/lab-range/`, data, {
       headers: authHeader(),
-    });
+    }).then((res) => res.data);
   }
 
   createLabRange(data) {
-    return axios.post(`${API_BASE}/lab-range/`, data, {
+    return axios.post(`${API_BASE}/client-range`, data, {
       headers: authHeader(),
-    });
+    }).then((res) => res.data);
   }
 
-  deleteLabRange(id) {
-    return axios.delete(`${API_BASE}/lab-range/${id}`, {
+  deleteLabRange(reqBody) {
+    return axios.delete(`${API_BASE}/client-range`, {
       headers: authHeader(),
-    });
+      data: reqBody,
+    }).then((res) => res.data);
   }
 
   resetLabRanges() {
-    return axios.get(`${API_BASE}/lab-range/reset`, {
+    return axios.post(`${API_BASE}/client-range/reset`, null, {
       headers: authHeader(),
-    });
+    }).then((res) => res.data);
   }
 }
 
