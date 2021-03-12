@@ -82,9 +82,18 @@ const LabRanges = () => {
   };
 
   const deleteItemHandler = (item) => {
-    const labRangeId = item.id;
-    LabRangeService.deleteLabRange(labRangeId).then((res) => {
+    const reqBody = {
+      data: {
+        cpt_id: item.cpt_id,
+        seq: item.seq,
+        compare_item: item.compare_item,
+        compare_operator: item.compare_operator,
+        compare_to: item.compare_to,
+      },
+    };
+    LabRangeService.deleteLabRange(reqBody).then((res) => {
       enqueueSnackbar(`${res.message}`, { variant: "success" });
+      fetchLabs();
     });
   };
 
@@ -196,20 +205,20 @@ const LabRanges = () => {
             <TableBody>
               {labRanges && labRanges.length
                 ? labRanges.map((item) => (
-                  <StyledTableRowLg key={item.title}>
-                    <TableCell>{item.title}</TableCell>
-                    <TableCell>Sequence</TableCell>
-                    <TableCell>Compare Item</TableCell>
-                    <TableCell>Operator</TableCell>
-                    <TableCell>Compare To</TableCell>
+                  <StyledTableRowLg key={`${item.cpt_id}_${item.cpt_name}_${item.range_low}_${item.seq}`}>
+                    <TableCell>{item.cpt_name}</TableCell>
+                    <TableCell>{item.seq}</TableCell>
+                    <TableCell>{item.compare_item}</TableCell>
+                    <TableCell>{item.compare_operator}</TableCell>
+                    <TableCell>{item.compare_to}</TableCell>
+                    <TableCell>{item.range_low}</TableCell>
+                    <TableCell>{item.range_high}</TableCell>
                     <TableCell>
                       {item.created ? moment(item.created).format("MMM D YYYY") : ""}
                     </TableCell>
                     <TableCell>
                       {item.updated ? moment(item.updated).format("MMM D YYYY") : ""}
                     </TableCell>
-                    <TableCell>{item.created_by}</TableCell>
-                    <TableCell>{item.updated_by}</TableCell>
                     <TableCell align="center">
                       <IconButton onClick={() => editItemHandler(item)}>
                         <EditIcon fontSize="small" />
