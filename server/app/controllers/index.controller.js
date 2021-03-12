@@ -170,7 +170,7 @@ const users = {
   getPatient,
   getCorporateUser,
   getFunctionalRange,
-  updateFunctionalRange
+  updateFunctionalRange,
 };
 
 module.exports = users;
