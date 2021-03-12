@@ -55,6 +55,34 @@ const deleteClientRange = async (req, res) => {
   }
 };
 
+const resetClientRange = async (req, res) => {
+  const db = makeDb(configuration, res);
+  const client_range = req.body.data;
+  client_range.created_user_id = req.user_id;
+  client_range.client_id = req.client_id;
+  client_range.created = new Date();
+
+  try {
+    await db.query(`delete from client_range where client_id=${req.client_id}`);
+    const insertResponse = await db.query(`insert into client_range
+      select ${req.client_id}, cpt_id, seq, compare_item, compare_operator, compare_to, range_low, range_high, now(), ${req.user_id}, now(), ${req.user_id}
+      from client_range 
+      where client_id=1`
+    );
+    await db.query(`insert into user_log values (${req.client_id}, ${req.user_id}, now(), null, 'Reset all custom lab ranges')`);
+
+    successMessage.data = insertResponse;
+    successMessage.message = "Insert successful";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Insert not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const createClientRange = async (req, res) => {
   const db = makeDb(configuration, res);
   const client_range = req.body.data;
@@ -88,6 +116,7 @@ const createClientRange = async (req, res) => {
 const testReport = {
   getClientRanges,
   deleteClientRange,
+  resetClientRange,
   createClientRange,
 };
 
