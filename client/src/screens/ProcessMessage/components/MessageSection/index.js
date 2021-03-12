@@ -7,6 +7,8 @@ import {
 import moment from "moment";
 import PropTypes from "prop-types";
 
+import MessageToUser from "../MessageToUser";
+
 const useStyles = makeStyles((theme) => ({
   section: {
     marginBottom: theme.spacing(2),
@@ -25,8 +27,9 @@ const useStyles = makeStyles((theme) => ({
   },
   borderSection: {
     border: "1px solid #aaa",
-    padding: theme.spacing(2),
-    minHeight: 100,
+    borderRadius: "4px",
+    padding: theme.spacing(1.5),
+    minHeight: 120,
   },
   divider: {
     margin: theme.spacing(3, 0),
@@ -51,14 +54,30 @@ const StatusSelectionFields = [
 const ProcessMessage = (props) => {
   const classes = useStyles();
   const { message, showDivider } = props;
+  const {
+    created, user_to_name, user_to_from, subject, message: messageString,
+  } = message;
+
   const [statusSelection, setStatusSelection] = useState("1");
+  const [showMessageDialog, setShowMessageDialog] = useState(false);
 
   const handleStatusSelection = (e) => {
     setStatusSelection(e.target.value);
   };
 
+  const toggleMessageDialog = () => {
+    setShowMessageDialog((prevState) => !prevState);
+  };
+
   return (
     <>
+      {!!showMessageDialog && (
+        <MessageToUser
+          isOpen={showMessageDialog}
+          onClose={toggleMessageDialog}
+          reloadData={() => { }}
+        />
+      )}
       <Grid item lg={8} xs={12}>
         <Grid container spacing={1} className={classes.gutterBottom}>
           <Grid item xs>
@@ -76,7 +95,7 @@ const ProcessMessage = (props) => {
               className={classes.text12}
               color="textPrimary"
             >
-              {moment().format("DD MMMM YYYY")}
+              {moment(created).format("DD MMMM YYYY")}
             </Typography>
           </Grid>
 
@@ -95,7 +114,7 @@ const ProcessMessage = (props) => {
               className={classes.text12}
               color="textPrimary"
             >
-              {message}
+              {user_to_from}
             </Typography>
           </Grid>
           <Grid item xs>
@@ -113,7 +132,7 @@ const ProcessMessage = (props) => {
               className={classes.text12}
               color="textPrimary"
             >
-              To
+              {user_to_name}
             </Typography>
           </Grid>
           <Grid item xs>
@@ -153,7 +172,7 @@ const ProcessMessage = (props) => {
             className={classes.text12}
             color="textPrimary"
           >
-            Subject
+            {subject}
           </Typography>
         </Grid>
       </Grid>
@@ -174,7 +193,7 @@ const ProcessMessage = (props) => {
             className={classes.text12}
             color="textPrimary"
           >
-            Message
+            {messageString}
           </Typography>
         </Grid>
       </Grid>
@@ -185,6 +204,7 @@ const ProcessMessage = (props) => {
             variant="outlined"
             color="primary"
             className={classes.mr2}
+            onClick={() => toggleMessageDialog()}
           >
             Send Message to Patient
           </Button>
@@ -244,8 +264,10 @@ const ProcessMessage = (props) => {
             rows={5}
           />
         </Grid>
-        <Grid item lg={4} xs={12} className={classes.borderSection}>
-          Message History
+        <Grid item lg={4} xs={12}>
+          <Grid className={classes.borderSection}>
+            Message History
+          </Grid>
         </Grid>
       </Grid>
       {
@@ -259,7 +281,13 @@ const ProcessMessage = (props) => {
 
 ProcessMessage.propTypes = {
   showDivider: PropTypes.bool.isRequired,
-  message: PropTypes.shape({}).isRequired,
+  message: PropTypes.shape({
+    created: PropTypes.string,
+    user_to_name: PropTypes.string,
+    user_to_from: PropTypes.string,
+    subject: PropTypes.string,
+    message: PropTypes.string,
+  }).isRequired,
 };
 
 export default ProcessMessage;

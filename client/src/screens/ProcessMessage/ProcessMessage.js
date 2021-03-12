@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import {
   Grid, Typography, makeStyles,
 } from "@material-ui/core";
+import { useParams } from "react-router-dom";
 
+import PatientService from "../../services/patient.service";
 import MessageSection from "./components/MessageSection";
 
 const useStyles = makeStyles((theme) => ({
@@ -18,7 +20,20 @@ const useStyles = makeStyles((theme) => ({
 
 const ProcessMessage = () => {
   const classes = useStyles();
-  const messages = [1, 2, 3];
+  const { userId } = useParams();
+
+  const [messages, setMessages] = useState([]);
+
+  const fetchMessages = useCallback(() => {
+    PatientService.getMessages(userId).then((res) => {
+      setMessages(res.data);
+    });
+  }, [userId]);
+
+  useEffect(() => {
+    fetchMessages();
+  }, [fetchMessages]);
+
   return (
     <div className={classes.root}>
       <Typography
@@ -31,7 +46,7 @@ const ProcessMessage = () => {
       </Typography>
       {
         messages.map(((item, index) => (
-          <Grid key={item}>
+          <Grid key={item.id}>
             <MessageSection
               message={item}
               showDivider={messages.length !== index + 1}
