@@ -32,6 +32,7 @@ const getClientRanges = async (req, res) => {
 const deleteClientRange = async (req, res) => {
   const {
     cpt_id,
+    cpt_name,
     seq,
     compare_item,
     compare_operator,
@@ -49,6 +50,8 @@ const deleteClientRange = async (req, res) => {
         and compare_operator='${compare_operator}'
         and compare_to='${compare_to}'
     `);
+
+    await db.query(`insert into user_log values (${req.client_id}, ${req.user_id}, now(), null, 'Deleted lab range ${cpt_name}')`);
 
     if (!deleteResponse.affectedRows) {
       errorMessage.message = "Deletion not successful";
