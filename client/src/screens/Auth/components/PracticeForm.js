@@ -190,7 +190,7 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
         helperText={`${name.length >= 35 ? "Enter a name between 35 charecter" : ""
         }`}
       />
-      <TextFieldWithError
+      {/* <TextFieldWithError
         fieldName="code"
         label="Practice Code"
         value={clientCode}
@@ -198,7 +198,7 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
         handleOnBlur={(event) => handleAjaxValidation(event)}
         errors={getFieldError("client", "code")}
         inputProps={{ maxLength: 35 }}
-      />
+      /> */}
       {/* <TextField
         variant="outlined"
         margin="dense"
