@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, {
+  useState, useEffect, useCallback,
+} from "react";
 
 import {
   makeStyles,
@@ -58,6 +60,17 @@ const LabRanges = () => {
   const [showResetDialog, setShowResetDialog] = useState(false);
   const [useFuncRange, setUseFuncRange] = useState(true);
   const [labRanges, setLabRanges] = useState([]);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+  const openDeleteDialog = (item) => {
+    setSelectedRange(item);
+    setShowDeleteDialog((prevstate) => !prevstate);
+  };
+
+  const closeDeleteDialog = () => {
+    setSelectedRange({});
+    setShowDeleteDialog((prevstate) => !prevstate);
+  };
 
   const openResetDialog = () => {
     setShowResetDialog((prevstate) => !prevstate);
@@ -93,6 +106,7 @@ const LabRanges = () => {
     };
     LabRangeService.deleteLabRange(reqBody).then((res) => {
       enqueueSnackbar(`${res.message}`, { variant: "success" });
+      closeDeleteDialog();
       fetchLabs();
     });
   };
@@ -119,17 +133,28 @@ const LabRanges = () => {
         applyForm={applyResetHandler}
         cancelForm={closeResetDialog}
       />
-      <NewLabRange
-        isOpen={showNewRangeDialog}
-        onClose={() => {
-          if (!isEmpty(selectedRange)) {
-            setSelectedRange({});
-          }
-          setShowNewRangeDialog(false);
-        }}
-        reloadData={fetchLabs}
-        selectedItem={selectedRange}
+      <Alert
+        open={showDeleteDialog}
+        title="Confirm Delete"
+        message="Are you sure you want to delete this functional range?"
+        applyButtonText="Delete"
+        cancelButtonText="Cancel"
+        applyForm={() => deleteItemHandler(selectedRange)}
+        cancelForm={closeDeleteDialog}
       />
+      {!!showNewRangeDialog && (
+        <NewLabRange
+          isOpen={showNewRangeDialog}
+          onClose={() => {
+            if (!isEmpty(selectedRange)) {
+              setSelectedRange({});
+            }
+            setShowNewRangeDialog(false);
+          }}
+          reloadData={fetchLabs}
+          selectedItem={selectedRange}
+        />
+      )}
       <div className={classes.root}>
         <Grid
           container
@@ -223,7 +248,7 @@ const LabRanges = () => {
                       <IconButton onClick={() => editItemHandler(item)}>
                         <EditIcon fontSize="small" />
                       </IconButton>
-                      <IconButton onClick={() => deleteItemHandler(item)}>
+                      <IconButton onClick={() => openDeleteDialog(item)}>
                         <DeleteIcon fontSize="small" />
                       </IconButton>
                     </TableCell>
