@@ -22,6 +22,12 @@ class LabRangeService {
     }).then((res) => res.data);
   }
 
+  updateLabRange(data) {
+    return axios.put(`${API_BASE}/client-range`, data, {
+      headers: authHeader(),
+    }).then((res) => res.data);
+  }
+
   deleteLabRange(reqBody) {
     return axios.delete(`${API_BASE}/client-range`, {
       headers: authHeader(),
