@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 const DebounceSelect = (props) => {
   const classes = useStyles();
   const {
-    label, required, controller, getOptionLabel, getOptionValue, onChange,
+    label, required, controller, getOptionLabel, getOptionValue, onChange, fullWidth, textRequiredLength,
   } = props;
   // states
   const [inputText, setInputText] = useState("");
@@ -41,7 +41,7 @@ const DebounceSelect = (props) => {
 
   useEffect(() => {
     if (debouncedSearchTerm && (valueSelected !== inputText)) {
-      if (debouncedSearchTerm.length > 1) {
+      if (debouncedSearchTerm.length > textRequiredLength) {
         const reqBody = {
           data: {
             text: debouncedSearchTerm,
@@ -75,7 +75,7 @@ const DebounceSelect = (props) => {
         variant="outlined"
         label={label}
         margin="dense"
-        fullWidth
+        fullWidth={fullWidth}
         value={inputText}
         onChange={(e) => {
           if (valueSelected) {
@@ -109,6 +109,11 @@ const DebounceSelect = (props) => {
   );
 };
 
+DebounceSelect.defaultProps = {
+  fullWidth: false,
+  textRequiredLength: 1,
+};
+
 DebounceSelect.propTypes = {
   controller: PropTypes.func.isRequired,
   getOptionLabel: PropTypes.func.isRequired,
@@ -116,6 +121,8 @@ DebounceSelect.propTypes = {
   onChange: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
   required: PropTypes.bool.isRequired,
+  fullWidth: PropTypes.bool,
+  textRequiredLength: PropTypes.number,
 };
 
 export default DebounceSelect;
