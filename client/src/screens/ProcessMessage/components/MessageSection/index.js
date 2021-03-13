@@ -2,11 +2,22 @@
 import React, { useState } from "react";
 
 import {
-  Grid, Typography, makeStyles, Button, FormControl, FormControlLabel, RadioGroup, Radio, TextField, Divider,
+  Grid,
+  Typography,
+  makeStyles,
+  Button,
+  FormControl,
+  FormControlLabel,
+  RadioGroup,
+  Radio,
+  TextField,
+  Divider,
 } from "@material-ui/core";
 import moment from "moment";
 import PropTypes from "prop-types";
 
+import DebounceSelect from "../../../../components/common/DebounceSelect";
+import MessageToUserService from "../../../../services/message-to-user.service";
 import MessageToUser from "../MessageToUser";
 
 const useStyles = makeStyles((theme) => ({
@@ -60,6 +71,7 @@ const ProcessMessage = (props) => {
 
   const [statusSelection, setStatusSelection] = useState("1");
   const [showMessageDialog, setShowMessageDialog] = useState(false);
+  const [assignTo, setAssignTo] = useState();
 
   const handleStatusSelection = (e) => {
     setStatusSelection(e.target.value);
@@ -67,6 +79,15 @@ const ProcessMessage = (props) => {
 
   const toggleMessageDialog = () => {
     setShowMessageDialog((prevState) => !prevState);
+  };
+
+  const searchAssignees = async (reqBody) => {
+    try {
+      const res = await MessageToUserService.searchUsers(reqBody);
+      return res;
+    } catch (err) {
+      throw err.response;
+    }
   };
 
   return (
@@ -239,17 +260,21 @@ const ProcessMessage = (props) => {
         </Grid>
       </Grid>
 
-      <Grid className={classes.section}>
-        <TextField
-          variant="outlined"
-          size="small"
+      <Grid item lg={2} className={classes.section}>
+        <DebounceSelect
+          fullWidth
           label="Assign To"
-          name="assignTo"
-          type="text"
-          required
-        // value={formFields[item.name]}
-        // onChange={(e) => handleInputChnage(e)}
+          required={false}
+          controller={(value) => searchAssignees(value)}
+          getOptionLabel={(option) => option.name}
+          getOptionValue={(option) => option.id}
+          onChange={(value) => setAssignTo(value)}
         />
+        {/* it will be removed on API integration */}
+        <span>
+          Assignee Id:
+          {assignTo}
+        </span>
       </Grid>
 
       <Grid container justify="space-between" spacing={1}>
