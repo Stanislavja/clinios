@@ -1,4 +1,6 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, {
+  useState, useEffect, useCallback, useMemo,
+} from "react";
 
 import {
   TextField, Button, Grid, Paper, List, ListItem, ListItemText, MenuItem,
@@ -56,6 +58,8 @@ const NewLabRange = (props) => {
     isOpen, onClose, reloadData, selectedItem,
   } = props;
 
+  const isNewDialog = useMemo(() => isEmpty(selectedItem), [selectedItem]);
+
   const [selectedTest, setSelectedTest] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [searchTestResults, setSearchTestResults] = useState([]);
@@ -69,6 +73,26 @@ const NewLabRange = (props) => {
     created: null,
     updated: null,
   });
+
+  const updateFields = () => {
+    formFields.sequence = selectedItem.seq;
+    formFields.compareItem = selectedItem.compare_item;
+    formFields.compareOperator = selectedItem.compare_operator;
+    formFields.compareTo = selectedItem.compare_to;
+    formFields.rangeLow = selectedItem.range_low;
+    formFields.rangeHigh = selectedItem.range_high;
+    formFields.created = moment(selectedItem.created).format("YYYY-MM-DD");
+    formFields.updated = moment(selectedItem.updated).format("YYYY-MM-DD");
+    setFormFields({ ...formFields });
+    setSearchText(selectedItem.cpt_name);
+  };
+
+  useEffect(() => {
+    if (!isNewDialog) { /* edit scenario */
+      updateFields();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isNewDialog, selectedItem]);
 
   const handleInputChnage = (e) => {
     const { value, name } = e.target;
@@ -117,8 +141,6 @@ const NewLabRange = (props) => {
       setSearchTestResults([]);
     }
   }, [searchText]);
-
-  const isNewDialog = useMemo(() => isEmpty(selectedItem), [selectedItem]);
 
   const handleDateChange = (name, date) => {
     setFormFields({
@@ -331,7 +353,17 @@ NewLabRange.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   reloadData: PropTypes.func.isRequired,
-  selectedItem: PropTypes.shape({}).isRequired,
+  selectedItem: PropTypes.shape({
+    cpt_name: PropTypes.string,
+    seq: PropTypes.number,
+    compare_item: PropTypes.string,
+    compare_operator: PropTypes.string,
+    compare_to: PropTypes.string,
+    range_low: PropTypes.string,
+    range_high: PropTypes.string,
+    created: PropTypes.string,
+    updated: PropTypes.string,
+  }).isRequired,
 };
 
 export default NewLabRange;
