@@ -80,15 +80,15 @@ const LabRanges = () => {
     setShowResetDialog((prevstate) => !prevstate);
   };
 
-  const fetchLabs = useCallback(() => {
+  const fetchLabRanges = useCallback(() => {
     LabRangeService.getLabRanges().then((res) => {
       setLabRanges(res.data);
     });
   }, []);
 
   useEffect(() => {
-    fetchLabs();
-  }, [fetchLabs]);
+    fetchLabRanges();
+  }, [fetchLabRanges]);
 
   const handleChangeFuncRange = () => {
     setUseFuncRange((prevState) => !prevState);
@@ -107,7 +107,7 @@ const LabRanges = () => {
     LabRangeService.deleteLabRange(reqBody).then((res) => {
       enqueueSnackbar(`${res.message}`, { variant: "success" });
       closeDeleteDialog();
-      fetchLabs();
+      fetchLabRanges();
     });
   };
 
@@ -151,7 +151,7 @@ const LabRanges = () => {
             }
             setShowNewRangeDialog(false);
           }}
-          reloadData={fetchLabs}
+          reloadData={fetchLabRanges}
           selectedItem={selectedRange}
         />
       )}

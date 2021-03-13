@@ -15,7 +15,7 @@ import PropTypes from "prop-types";
 import Dialog from "../../../../../../components/Dialog";
 import useDidMountEffect from "../../../../../../hooks/useDidMountEffect";
 import PatientService from "../../../../../../services/patient.service";
-import PatientPortalService from "../../../../../../services/patient_portal/patient-portal.service";
+import LabRangeService from "../../../../../../services/setup/labrange.service";
 import {
   CompareItemOptions,
   CompareOperatorOptions,
@@ -106,16 +106,16 @@ const NewLabRange = (props) => {
     e.preventDefault();
     const reqBody = {
       data: {
-        dt: moment(formFields.date).format("YYYY-MM-DD hh:mm"),
-        selectedTest: selectedTest.cpt_id,
-        type_id: formFields.type,
-        payment_type: formFields.paymentType,
-        amount: formFields.amount,
-        note: formFields.notes,
-        account_number: formFields.accountNum,
+        cpt_id: selectedTest.cpt_id,
+        seq: formFields.sequence,
+        compare_item: formFields.compareItem,
+        compare_operator: formFields.compareOperator,
+        compare_to: formFields.compareTo,
+        range_low: formFields.rangeLow,
+        range_high: formFields.rangeHigh,
       },
     };
-    PatientPortalService.createBilling(reqBody).then((response) => {
+    LabRangeService.createLabRange(reqBody).then((response) => {
       enqueueSnackbar(`${response.message}`, { variant: "success" });
       reloadData();
       onClose();
@@ -358,8 +358,8 @@ NewLabRange.propTypes = {
     seq: PropTypes.number,
     compare_item: PropTypes.string,
     compare_operator: PropTypes.string,
-    compare_to: PropTypes.string,
-    range_low: PropTypes.string,
+    compare_to: PropTypes.number,
+    range_low: PropTypes.number,
     range_high: PropTypes.string,
     created: PropTypes.string,
     updated: PropTypes.string,
