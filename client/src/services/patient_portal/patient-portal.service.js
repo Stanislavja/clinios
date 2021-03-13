@@ -4,6 +4,19 @@ import { API_BASE } from "../../utils/API_BASE";
 import authHeader from "../auth-header";
 
 class PatientPortalService {
+  // patient profile
+  getProfile() {
+    return axios
+      .get(`${API_BASE}/client-portal/patient`, { headers: authHeader() })
+      .then((res) => res.data);
+  }
+
+  updateProfile(payload, patientId) {
+    return axios.put(`${API_BASE}/client-portal/patient/${patientId}`, payload, {
+      headers: authHeader(),
+    });
+  }
+
   // appointments
   getPractitioners(patient) {
     let url = `${API_BASE}/client-portal/practitioners`;

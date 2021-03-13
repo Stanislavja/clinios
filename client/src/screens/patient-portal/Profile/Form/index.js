@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import {
   Grid,
@@ -15,10 +15,12 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 
 import CountrySelect from "../../../../components/common/CountrySelect";
 import RegionSelect from "../../../../components/common/RegionSelect";
 import useAuth from "../../../../hooks/useAuth";
+import PatientPortalService from "../../../../services/patient_portal/patient-portal.service";
 import {
   BasicInfoForm,
   InsuranceForm,
@@ -64,6 +66,8 @@ const useStyles = makeStyles((theme) => ({
 const ProfileForm = () => {
   const classes = useStyles();
   const { user } = useAuth();
+  const { enqueueSnackbar } = useSnackbar();
+
   const FirstRow = BasicInfoForm.firstRow;
   const SecondRow = BasicInfoForm.secondRow;
   const ThirdRow = BasicInfoForm.thirdRow;
@@ -92,13 +96,34 @@ const ProfileForm = () => {
     city: "",
   });
 
+  function formatformFeilds(data = {}) {
+    return {
+      ...data,
+      ...(data.status && { status: data.status && data.status === "A" ? "active" : data.status }),
+      ...(data.gender && { gender: data.gender ? data.gender : "M" }),
+      ...(data.dob && { dob: data.dob ? data.dob : moment().format("YYYY-MM-DD") }),
+    };
+  }
+
   useEffect(() => {
-    user.status = user.status && user.status === "A" ? "active" : user.status;
-    user.gender = user.gender ? user.gender : "M";
-    user.dob = user.dob ? user.dob : moment().format("YYYY-MM-DD");
-    setFormFields({ ...formFields, ...user });
+    setFormFields({ ...formFields, ...formatformFeilds(user) });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
+
+  const fetchProfile = useCallback(() => {
+    PatientPortalService.getProfile().then((res) => {
+      const profile = res.data?.[0];
+      setFormFields((formFieldValues) => ({
+        ...formFieldValues,
+        ...formatformFeilds(user),
+        ...formatformFeilds(profile),
+      }));
+    });
+  }, [user]);
+
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
 
   const handleInputChange = (e) => {
     const { value, name } = e.target;
@@ -117,6 +142,31 @@ const ProfileForm = () => {
   };
 
   const onFormSubmit = () => {
+    // ! these fields are not recognized by server
+    delete formFields.provider;
+    delete formFields.otherPhone;
+    delete formFields.phoneNotes;
+    delete formFields.code;
+    delete formFields.role;
+    delete formFields.login_url;
+    delete formFields.status;
+
+    const payload = {
+      data: formFields,
+    };
+
+    PatientPortalService.updateProfile(payload, user.id).then(
+      (res) => {
+        enqueueSnackbar(res.data.message, {
+          variant: "success",
+        });
+      },
+      () => {
+        enqueueSnackbar("Unable to update profile", {
+          variant: "error",
+        });
+      },
+    );
   };
 
   return (
