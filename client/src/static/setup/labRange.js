@@ -31,44 +31,48 @@ export const AgeOptions = [
 export const CompareItemOptions = [
   {
     label: "Age",
-    value: "age",
+    value: "A",
   },
   {
     label: "Gender",
-    value: "gender",
+    value: "G",
   },
 ];
 
 export const CompareOperatorOptions = [
   {
     label: ">",
-    value: "greater",
+    value: ">",
   },
   {
     label: "<",
-    value: "less",
+    value: "<",
   },
   {
     label: "=",
-    value: "equal",
+    value: "=",
+  },
+  {
+    label: "<=",
+    value: "<=",
+  },
+  {
+    label: ">=",
+    value: ">=",
   },
 ];
 
 export const CompareToOptions = [
   {
+    label: "Male",
+    value: "M",
+  },
+  {
+    label: "Female",
+    value: "F",
+  },
+  {
     label: "50",
-    value: "50",
-  },
-  {
-    label: "40",
-    value: "40",
-  },
-  {
-    label: "30",
-    value: "30",
-  },
-  {
-    label: "20",
-    value: "20",
+    value: "60",
   },
 ];

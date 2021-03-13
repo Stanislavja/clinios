@@ -1,4 +1,6 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, {
+  useState, useEffect, useCallback, useMemo,
+} from "react";
 
 import {
   TextField, Button, Grid, Paper, List, ListItem, ListItemText, MenuItem,
@@ -13,7 +15,7 @@ import PropTypes from "prop-types";
 import Dialog from "../../../../../../components/Dialog";
 import useDidMountEffect from "../../../../../../hooks/useDidMountEffect";
 import PatientService from "../../../../../../services/patient.service";
-import PatientPortalService from "../../../../../../services/patient_portal/patient-portal.service";
+import LabRangeService from "../../../../../../services/setup/labrange.service";
 import {
   CompareItemOptions,
   CompareOperatorOptions,
@@ -56,6 +58,8 @@ const NewLabRange = (props) => {
     isOpen, onClose, reloadData, selectedItem,
   } = props;
 
+  const isNewDialog = useMemo(() => isEmpty(selectedItem), [selectedItem]);
+
   const [selectedTest, setSelectedTest] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [searchTestResults, setSearchTestResults] = useState([]);
@@ -70,6 +74,26 @@ const NewLabRange = (props) => {
     updated: null,
   });
 
+  const updateFields = () => {
+    formFields.sequence = selectedItem.seq;
+    formFields.compareItem = selectedItem.compare_item;
+    formFields.compareOperator = selectedItem.compare_operator;
+    formFields.compareTo = selectedItem.compare_to;
+    formFields.rangeLow = selectedItem.range_low;
+    formFields.rangeHigh = selectedItem.range_high;
+    formFields.created = moment(selectedItem.created).format("YYYY-MM-DD");
+    formFields.updated = moment(selectedItem.updated).format("YYYY-MM-DD");
+    setFormFields({ ...formFields });
+    setSearchText(selectedItem.cpt_name);
+  };
+
+  useEffect(() => {
+    if (!isNewDialog) { /* edit scenario */
+      updateFields();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isNewDialog, selectedItem]);
+
   const handleInputChnage = (e) => {
     const { value, name } = e.target;
     setFormFields({
@@ -82,20 +106,28 @@ const NewLabRange = (props) => {
     e.preventDefault();
     const reqBody = {
       data: {
-        dt: moment(formFields.date).format("YYYY-MM-DD hh:mm"),
-        selectedTest: selectedTest.cpt_id,
-        type_id: formFields.type,
-        payment_type: formFields.paymentType,
-        amount: formFields.amount,
-        note: formFields.notes,
-        account_number: formFields.accountNum,
+        cpt_id: isNewDialog ? selectedTest.cpt_id : selectedItem.cpt_id,
+        seq: formFields.sequence,
+        compare_item: formFields.compareItem,
+        compare_operator: formFields.compareOperator,
+        compare_to: formFields.compareTo,
+        range_low: formFields.rangeLow,
+        range_high: formFields.rangeHigh,
       },
     };
-    PatientPortalService.createBilling(reqBody).then((response) => {
-      enqueueSnackbar(`${response.message}`, { variant: "success" });
-      reloadData();
-      onClose();
-    });
+    if (isNewDialog) {
+      LabRangeService.createLabRange(reqBody).then((response) => {
+        enqueueSnackbar(`${response.message}`, { variant: "success" });
+        reloadData();
+        onClose();
+      });
+    } else { /* edit scenario */
+      LabRangeService.updateLabRange(reqBody).then((response) => {
+        enqueueSnackbar(`${response.message}`, { variant: "success" });
+        reloadData();
+        onClose();
+      });
+    }
   };
 
   const searchTests = useCallback((e, text) => {
@@ -117,8 +149,6 @@ const NewLabRange = (props) => {
       setSearchTestResults([]);
     }
   }, [searchText]);
-
-  const isNewDialog = useMemo(() => isEmpty(selectedItem), [selectedItem]);
 
   const handleDateChange = (name, date) => {
     setFormFields({
@@ -331,7 +361,18 @@ NewLabRange.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   reloadData: PropTypes.func.isRequired,
-  selectedItem: PropTypes.shape({}).isRequired,
+  selectedItem: PropTypes.shape({
+    cpt_id: PropTypes.string,
+    cpt_name: PropTypes.string,
+    seq: PropTypes.number,
+    compare_item: PropTypes.string,
+    compare_operator: PropTypes.string,
+    compare_to: PropTypes.number,
+    range_low: PropTypes.number,
+    range_high: PropTypes.string,
+    created: PropTypes.string,
+    updated: PropTypes.string,
+  }).isRequired,
 };
 
 export default NewLabRange;

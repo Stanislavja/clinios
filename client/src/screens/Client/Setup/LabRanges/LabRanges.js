@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, {
+  useState, useEffect, useCallback,
+} from "react";
 
 import {
   makeStyles,
@@ -58,6 +60,17 @@ const LabRanges = () => {
   const [showResetDialog, setShowResetDialog] = useState(false);
   const [useFuncRange, setUseFuncRange] = useState(true);
   const [labRanges, setLabRanges] = useState([]);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+  const openDeleteDialog = (item) => {
+    setSelectedRange(item);
+    setShowDeleteDialog((prevstate) => !prevstate);
+  };
+
+  const closeDeleteDialog = () => {
+    setSelectedRange({});
+    setShowDeleteDialog((prevstate) => !prevstate);
+  };
 
   const openResetDialog = () => {
     setShowResetDialog((prevstate) => !prevstate);
@@ -67,24 +80,34 @@ const LabRanges = () => {
     setShowResetDialog((prevstate) => !prevstate);
   };
 
-  const fetchLabs = useCallback(() => {
+  const fetchLabRanges = useCallback(() => {
     LabRangeService.getLabRanges().then((res) => {
       setLabRanges(res.data);
     });
   }, []);
 
   useEffect(() => {
-    fetchLabs();
-  }, [fetchLabs]);
+    fetchLabRanges();
+  }, [fetchLabRanges]);
 
   const handleChangeFuncRange = () => {
     setUseFuncRange((prevState) => !prevState);
   };
 
   const deleteItemHandler = (item) => {
-    const labRangeId = item.id;
-    LabRangeService.deleteLabRange(labRangeId).then((res) => {
+    const reqBody = {
+      data: {
+        cpt_id: item.cpt_id,
+        seq: item.seq,
+        compare_item: item.compare_item,
+        compare_operator: item.compare_operator,
+        compare_to: item.compare_to,
+      },
+    };
+    LabRangeService.deleteLabRange(reqBody).then((res) => {
       enqueueSnackbar(`${res.message}`, { variant: "success" });
+      closeDeleteDialog();
+      fetchLabRanges();
     });
   };
 
@@ -110,130 +133,139 @@ const LabRanges = () => {
         applyForm={applyResetHandler}
         cancelForm={closeResetDialog}
       />
-      <NewLabRange
-        isOpen={showNewRangeDialog}
-        onClose={() => {
-          if (!isEmpty(selectedRange)) {
-            setSelectedRange({});
-          }
-          setShowNewRangeDialog(false);
-        }}
-        reloadData={fetchLabs}
-        selectedItem={selectedRange}
+      <Alert
+        open={showDeleteDialog}
+        title="Confirm Delete"
+        message="Are you sure you want to delete this functional range?"
+        applyButtonText="Delete"
+        cancelButtonText="Cancel"
+        applyForm={() => deleteItemHandler(selectedRange)}
+        cancelForm={closeDeleteDialog}
       />
+      {!!showNewRangeDialog && (
+        <NewLabRange
+          isOpen={showNewRangeDialog}
+          onClose={() => {
+            if (!isEmpty(selectedRange)) {
+              setSelectedRange({});
+            }
+            setShowNewRangeDialog(false);
+          }}
+          reloadData={fetchLabRanges}
+          selectedItem={selectedRange}
+        />
+      )}
       <div className={classes.root}>
-        <Grid item lg={10}>
-          <Grid
-            container
-            justify="space-between"
-            className={classes.mb2}
-          >
-            <Grid item lg={6}>
-              <Grid container justify="space-between">
-                <Typography
-                  component="h1"
-                  variant="h2"
-                  color="textPrimary"
-                  className={classes.title}
-                >
-                  Functional Lab Ranges
-                </Typography>
-                <Button
-                  variant="outlined"
-                  className={classes.w100}
-                  onClick={() => setShowNewRangeDialog(true)}
-                >
-                  New
-                </Button>
-                <FormControlLabel
-                  control={(
-                    <Switch
-                      checked={useFuncRange}
-                      color="primary"
-                      size="medium"
-                      name="switchBox"
-                      onChange={handleChangeFuncRange}
-                      inputProps={{ "aria-label": "secondary checkbox" }}
-                      className={classes.pointerEnable} // enable clicking on switch only
-                    />
-                  )}
-                  label="Use Functional Range"
-                  labelPlacement="start"
-                  classes={{
-                    label: classes.label,
-                    root: classes.labelContainer, // to disable clicking of label
-                  }}
-                />
-              </Grid>
-            </Grid>
-            <Grid item>
+        <Grid
+          container
+          justify="space-between"
+          className={classes.mb2}
+        >
+          <Grid item lg={6}>
+            <Grid container justify="space-between">
+              <Typography
+                component="h1"
+                variant="h2"
+                color="textPrimary"
+                className={classes.title}
+              >
+                Functional Lab Ranges
+              </Typography>
               <Button
                 variant="outlined"
-                component="label"
                 className={classes.w100}
-                onClick={() => openResetDialog()}
+                onClick={() => setShowNewRangeDialog(true)}
               >
-                Reset Values
+                New
               </Button>
+              <FormControlLabel
+                control={(
+                  <Switch
+                    checked={useFuncRange}
+                    color="primary"
+                    size="medium"
+                    name="switchBox"
+                    onChange={handleChangeFuncRange}
+                    inputProps={{ "aria-label": "secondary checkbox" }}
+                    className={classes.pointerEnable} // enable clicking on switch only
+                  />
+                )}
+                label="Use Functional Range"
+                labelPlacement="start"
+                classes={{
+                  label: classes.label,
+                  root: classes.labelContainer, // to disable clicking of label
+                }}
+              />
             </Grid>
           </Grid>
-
-          <TableContainer className={classes.mb2}>
-            <Table size="small" className={classes.table}>
-              <TableHead>
-                <TableRow>
-                  <StyledTableCellLg>Test</StyledTableCellLg>
-                  <StyledTableCellLg>Sequence</StyledTableCellLg>
-                  <StyledTableCellLg>Compare Item</StyledTableCellLg>
-                  <StyledTableCellLg>Operator</StyledTableCellLg>
-                  <StyledTableCellLg>Compare To</StyledTableCellLg>
-                  <StyledTableCellLg>Low</StyledTableCellLg>
-                  <StyledTableCellLg>High</StyledTableCellLg>
-                  <StyledTableCellLg>Created</StyledTableCellLg>
-                  <StyledTableCellLg>Updated</StyledTableCellLg>
-                  <StyledTableCellLg align="center">Actions</StyledTableCellLg>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {labRanges && labRanges.length
-                  ? labRanges.map((item) => (
-                    <StyledTableRowLg key={item.title}>
-                      <TableCell>{item.title}</TableCell>
-                      <TableCell>Sequence</TableCell>
-                      <TableCell>Compare Item</TableCell>
-                      <TableCell>Operator</TableCell>
-                      <TableCell>Compare To</TableCell>
-                      <TableCell>
-                        {item.created ? moment(item.created).format("MMM D YYYY") : ""}
-                      </TableCell>
-                      <TableCell>
-                        {item.updated ? moment(item.updated).format("MMM D YYYY") : ""}
-                      </TableCell>
-                      <TableCell>{item.created_by}</TableCell>
-                      <TableCell>{item.updated_by}</TableCell>
-                      <TableCell align="center">
-                        <IconButton onClick={() => editItemHandler(item)}>
-                          <EditIcon fontSize="small" />
-                        </IconButton>
-                        <IconButton onClick={() => deleteItemHandler(item)}>
-                          <DeleteIcon fontSize="small" />
-                        </IconButton>
-                      </TableCell>
-                    </StyledTableRowLg>
-                  ))
-                  : (
-                    <StyledTableRowLg>
-                      <TableCell colSpan={10}>
-                        <Typography align="center" variant="body1">
-                          No Records Found...
-                        </Typography>
-                      </TableCell>
-                    </StyledTableRowLg>
-                  )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <Grid item>
+            <Button
+              variant="outlined"
+              component="label"
+              className={classes.w100}
+              onClick={() => openResetDialog()}
+            >
+              Reset Values
+            </Button>
+          </Grid>
         </Grid>
+
+        <TableContainer className={classes.mb2}>
+          <Table size="small" className={classes.table}>
+            <TableHead>
+              <TableRow>
+                <StyledTableCellLg>Test</StyledTableCellLg>
+                <StyledTableCellLg>Sequence</StyledTableCellLg>
+                <StyledTableCellLg>Compare Item</StyledTableCellLg>
+                <StyledTableCellLg>Operator</StyledTableCellLg>
+                <StyledTableCellLg>Compare To</StyledTableCellLg>
+                <StyledTableCellLg>Low</StyledTableCellLg>
+                <StyledTableCellLg>High</StyledTableCellLg>
+                <StyledTableCellLg>Created</StyledTableCellLg>
+                <StyledTableCellLg>Updated</StyledTableCellLg>
+                <StyledTableCellLg align="center">Actions</StyledTableCellLg>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {labRanges && labRanges.length
+                ? labRanges.map((item) => (
+                  <StyledTableRowLg key={`${item.cpt_id}_${item.cpt_name}_${item.range_low}_${item.seq}`}>
+                    <TableCell>{item.cpt_name}</TableCell>
+                    <TableCell>{item.seq}</TableCell>
+                    <TableCell>{item.compare_item}</TableCell>
+                    <TableCell>{item.compare_operator}</TableCell>
+                    <TableCell>{item.compare_to}</TableCell>
+                    <TableCell>{item.range_low}</TableCell>
+                    <TableCell>{item.range_high}</TableCell>
+                    <TableCell>
+                      {item.created ? moment(item.created).format("MMM D YYYY") : ""}
+                    </TableCell>
+                    <TableCell>
+                      {item.updated ? moment(item.updated).format("MMM D YYYY") : ""}
+                    </TableCell>
+                    <TableCell align="center">
+                      <IconButton onClick={() => editItemHandler(item)}>
+                        <EditIcon fontSize="small" />
+                      </IconButton>
+                      <IconButton onClick={() => openDeleteDialog(item)}>
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </TableCell>
+                  </StyledTableRowLg>
+                ))
+                : (
+                  <StyledTableRowLg>
+                    <TableCell colSpan={10}>
+                      <Typography align="center" variant="body1">
+                        No Records Found...
+                      </Typography>
+                    </TableCell>
+                  </StyledTableRowLg>
+                )}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
     </>
   );
