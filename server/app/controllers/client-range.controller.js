@@ -1,6 +1,6 @@
+const { validationResult } = require("express-validator");
 const { configuration, makeDb } = require("../db/db.js");
 const { errorMessage, successMessage, status } = require("../helpers/status");
-const { validationResult } = require("express-validator");
 
 const getClientRanges = async (req, res) => {
   const db = makeDb(configuration, res);
