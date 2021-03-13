@@ -188,7 +188,7 @@ export function calculateFunctionalRange(test, gender, age) {
     range.high = 0.8;
     return range;
   }
-  if (test === "001073") { /* Protein Total */
+  if (test === "84155") { /* Protein Total */
     range.low = 6.59;
     range.high = 8.0;
     return range;
