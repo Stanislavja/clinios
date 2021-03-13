@@ -20,6 +20,7 @@ router.post(
   [authJwt.verifyToken],
   ClientRange.resetClientRange
 );
+router.get("/client-range", [authJwt.verifyToken], ClientRange.getClientRange);
 router.post(
   "/client-range",
   [authJwt.verifyToken],

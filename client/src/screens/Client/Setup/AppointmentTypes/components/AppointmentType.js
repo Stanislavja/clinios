@@ -79,10 +79,8 @@ const Appointments = ({ appointments, onEdit, onDelete }) => {
         <TableHead>
           <TableRow>
             <StyledTableCell padding="checkbox">Appointment Type</StyledTableCell>
-            <StyledTableCell padding="checkbox">Portal Name</StyledTableCell>
             <StyledTableCell padding="checkbox">Minutes</StyledTableCell>
             <StyledTableCell padding="checkbox">Patient Schedule</StyledTableCell>
-            <StyledTableCell padding="checkbox">Order</StyledTableCell>
             <StyledTableCell padding="checkbox" align="center">
               Note
             </StyledTableCell>
@@ -100,10 +98,8 @@ const Appointments = ({ appointments, onEdit, onDelete }) => {
               <TableCell padding="checkbox" component="th" scope="row">
                 {appointment.appointment_type}
               </TableCell>
-              <TableCell padding="checkbox">{appointment.appointment_name_portal}</TableCell>
               <TableCell padding="checkbox">{appointment.length}</TableCell>
               <TableCell padding="checkbox">{appointment.allow_patients_schedule ? "Yes" : "No"}</TableCell>
-              <TableCell padding="checkbox">{appointment.sort_order}</TableCell>
               {appointment.note && appointment.note.length > 0 ? (
                 <LightTooltip title={appointment.note}>
                   <TableCell padding="checkbox" className={classes.overflowControl} align="center">
