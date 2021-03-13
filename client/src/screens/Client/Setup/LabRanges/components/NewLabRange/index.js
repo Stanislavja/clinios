@@ -106,7 +106,7 @@ const NewLabRange = (props) => {
     e.preventDefault();
     const reqBody = {
       data: {
-        cpt_id: selectedTest.cpt_id,
+        cpt_id: isNewDialog ? selectedTest.cpt_id : selectedItem.cpt_id,
         seq: formFields.sequence,
         compare_item: formFields.compareItem,
         compare_operator: formFields.compareOperator,
@@ -115,11 +115,19 @@ const NewLabRange = (props) => {
         range_high: formFields.rangeHigh,
       },
     };
-    LabRangeService.createLabRange(reqBody).then((response) => {
-      enqueueSnackbar(`${response.message}`, { variant: "success" });
-      reloadData();
-      onClose();
-    });
+    if (isNewDialog) {
+      LabRangeService.createLabRange(reqBody).then((response) => {
+        enqueueSnackbar(`${response.message}`, { variant: "success" });
+        reloadData();
+        onClose();
+      });
+    } else { /* edit scenario */
+      LabRangeService.updateLabRange(reqBody).then((response) => {
+        enqueueSnackbar(`${response.message}`, { variant: "success" });
+        reloadData();
+        onClose();
+      });
+    }
   };
 
   const searchTests = useCallback((e, text) => {
@@ -354,6 +362,7 @@ NewLabRange.propTypes = {
   onClose: PropTypes.func.isRequired,
   reloadData: PropTypes.func.isRequired,
   selectedItem: PropTypes.shape({
+    cpt_id: PropTypes.string,
     cpt_name: PropTypes.string,
     seq: PropTypes.number,
     compare_item: PropTypes.string,
