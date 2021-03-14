@@ -26,10 +26,10 @@ router.post(
   [authJwt.verifyToken],
   ClientRange.createClientRange
 );
-router.post(
-  "/client-range/tests/search",
-  [authJwt.verifyToken, validation.validate("search")],
-  ClientRange.searchTests
+router.get(
+  "/client-range/test/search",
+  [authJwt.verifyToken],
+  ClientRange.testSearch
 );
 
 module.exports = router;

@@ -167,42 +167,32 @@ const createClientRange = async (req, res) => {
   }
 };
 
-const searchTests = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    errorMessage.message = errors.array();
-    return res.status(status.bad).send(errorMessage);
-  }
-  const { text } = req.body.data;
-
+const testSearch = async (req, res) => {
   const db = makeDb(configuration, res);
+
+  const { query } = req.query;
+  let $sql;
   try {
-    const dbResponse = await db.query(
-      `select c.id, c.name, case when cc.cpt_id<>'' then true end favorite, group_concat(ci.cpt2_id) cpt_items
+    $sql = `
+      select c.id, c.name
       from cpt c
-      left join client_cpt cc on cc.client_id=${req.client_id}
-      and cc.cpt_id=c.id
-      left join lab_company lc on lc.id=c.lab_company_id
-      left join cpt_item ci on ci.cpt_id=c.id
-      where c.type='L' /*L=Lab*/
-      and c.name like '%${text}%'
-      and lc.id is null /*Do not include a test for a specific lab???*/
-      group by c.id, c.name, favorite
-      having cpt_items is null /*Do not include a group of many lab test*/
+      where c.type='L'
+      and c.name like '%${query}%'
       order by c.name
-      limit 10`
-    );
+      limit 20
+    `;
+
+    const dbResponse = await db.query($sql);
 
     if (!dbResponse) {
       errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
-
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
-    console.log("err", err);
-    errorMessage.message = "Search not successful";
+    console.error("err:", err);
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -215,7 +205,7 @@ const testReport = {
   resetClientRange,
   getClientRange,
   createClientRange,
-  searchTests,
+  testSearch
 };
 
 module.exports = testReport;
