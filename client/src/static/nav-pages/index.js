@@ -6,7 +6,7 @@ import FindInPageIcon from "@material-ui/icons/FindInPage";
 import GroupIcon from "@material-ui/icons/Group";
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
 import InsertInvitationSharpIcon from "@material-ui/icons/InsertInvitationSharp";
-import PersonAddSharpIcon from "@material-ui/icons/PersonAddSharp";
+// import PersonAddSharpIcon from "@material-ui/icons/PersonAddSharp";
 import PieChartIcon from "@material-ui/icons/PieChart";
 import ScheduleIcon from "@material-ui/icons/Schedule";
 import SettingsEthernetIcon from "@material-ui/icons/SettingsEthernet";
@@ -92,12 +92,14 @@ export const client_pages = [
         title: "Appointment Types",
         href: "/setup/appointment-types",
       },
+      /*
       {
         id: 33,
         icon: PersonAddSharpIcon,
         title: "Appointment Types User Assignment",
         href: "/setup/appoinment-user-types",
       },
+      */
       /*
       {
         id: 34,
