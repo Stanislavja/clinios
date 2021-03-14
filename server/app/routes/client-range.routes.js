@@ -1,7 +1,6 @@
 const express = require("express");
 const { authJwt } = require("../middlewares");
 const ClientRange = require("../controllers/client-range.controller.js");
-const validation = require("../helpers/validations/patient.js");
 
 const router = express.Router();
 
