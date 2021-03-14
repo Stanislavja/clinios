@@ -919,9 +919,9 @@ const createBilling = async (req, res) => {
 
   const db = makeDb(configuration, res);
 
-  if (!payment_type && typeof payment_type !== "undefined") {
-    payment_type = `'${payment_type}'`;
-  }
+  //if (!payment_type && typeof payment_type !== "undefined") {
+  //  payment_type = `'${payment_type}'`;
+  //}
 
   //these transaction types are stored in the database as negative numbers, david march 2021
   if (type_id === 2 || type_id === 3) {
