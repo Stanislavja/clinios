@@ -1,4 +1,4 @@
-const { validationResult } = require("express-validator");
+const moment = require("moment");
 const { configuration, makeDb } = require("../db/db.js");
 const { errorMessage, successMessage, status } = require("../helpers/status");
 
@@ -97,6 +97,51 @@ const resetClientRange = async (req, res) => {
   } catch (err) {
     console.log("err", err);
     errorMessage.message = "Insert not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+const updateClientRange = async (req, res) => {
+  const {
+    cpt_id,
+    range_low,
+    range_high,
+    seq,
+    compare_item,
+    compare_operator,
+    compare_to,
+  } = req.body.data;
+
+  const db = makeDb(configuration, res);
+  try {
+    let $sql;
+
+    $sql = `update client_range set cpt_id='${cpt_id}', range_low=${range_low}, range_high=${range_high}`;
+
+    $sql += `, updated='${moment().format("YYYY-MM-DD HH:mm:ss")}',
+      updated_user_id=${req.user_id}
+      where client_id=${req.client_id}
+      and cpt_id='${cpt_id}'
+      and seq=${seq}
+      and compare_item='${compare_item}'
+      and compare_operator='${compare_operator}'
+      and compare_to='${compare_to}'
+      `;
+
+    const updateResponse = await db.query($sql);
+    if (!updateResponse.affectedRows) {
+      errorMessage.message = "Update not successful";
+      return res.status(status.error).send(errorMessage);
+    }
+
+    successMessage.data = updateResponse;
+    successMessage.message = "Update successful";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Update not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -203,9 +248,10 @@ const testReport = {
   getClientRanges,
   deleteClientRange,
   resetClientRange,
+  updateClientRange,
   getClientRange,
   createClientRange,
-  testSearch
+  testSearch,
 };
 
 module.exports = testReport;
