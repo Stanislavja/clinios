@@ -212,7 +212,7 @@ const createClientRange = async (req, res) => {
   }
 };
 
-const testSearch = async (req, res) => {
+const searchTests = async (req, res) => {
   const db = makeDb(configuration, res);
 
   const { query } = req.query;
@@ -251,7 +251,7 @@ const testReport = {
   updateClientRange,
   getClientRange,
   createClientRange,
-  testSearch,
+  searchTests,
 };
 
 module.exports = testReport;

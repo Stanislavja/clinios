@@ -34,7 +34,7 @@ router.post(
 router.get(
   "/client-range/test/search",
   [authJwt.verifyToken],
-  ClientRange.testSearch
+  ClientRange.searchTests
 );
 
 module.exports = router;
