@@ -13,7 +13,8 @@ const getClientRanges = async (req, res) => {
     left join user u on u.id=cr.created_user_id
     left join user u2 on u2.id=cr.updated_user_id
     where cr.client_id=${req.client_id}
-    order by 1,2,3,4`);
+    order by c.name, cr.seq
+    `);
 
     if (!dbResponse) {
       errorMessage.message = "None found";
