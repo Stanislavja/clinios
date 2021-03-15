@@ -14,7 +14,6 @@ import PropTypes from "prop-types";
 
 import Dialog from "../../../../../../components/Dialog";
 import useDidMountEffect from "../../../../../../hooks/useDidMountEffect";
-import PatientService from "../../../../../../services/patient.service";
 import LabRangeService from "../../../../../../services/setup/labrange.service";
 import {
   CompareItemOptions,
@@ -132,8 +131,12 @@ const NewLabRange = (props) => {
 
   const searchTests = useCallback((e, text) => {
     e.preventDefault();
-    const patientId = 1; /* ::TODO search tests API will be integrated */
-    PatientService.getTests(patientId, text).then((res) => {
+    const reqBody = {
+      data: {
+        text,
+      },
+    };
+    LabRangeService.searchTests(reqBody).then((res) => {
       setSearchTestResults(res.data);
     });
   }, []);
