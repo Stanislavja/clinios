@@ -7,6 +7,7 @@ const router = express.Router();
 router.get("/allusers", [authJwt.verifyToken], Users.getAllUsers);
 router.get("/forwardemail", [authJwt.verifyToken], Users.getForwardEmailList);
 router.get("/user", [authJwt.verifyToken], Users.getUser);
+router.get("/user/by-client-id", [authJwt.verifyToken], Users.getUserByClientId);
 router.get(
   "/user/last-visited-patient/:patientId",
   [authJwt.verifyToken],
