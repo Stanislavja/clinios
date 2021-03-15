@@ -74,7 +74,7 @@ const PatientSignUp = () => {
     const formData = data;
     formData.patient = {
       ...formData.patient,
-      client_id: client.client_id,
+      client_id: client?.client_id,
     };
     AuthService.register(formData).then(
       (response) => {
