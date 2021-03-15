@@ -54,6 +54,7 @@ yarn-error.log*
 /server/.env.development.local
 /server/.env.test.local
 /server/.env.production.local
+/server/app/static/signature
 
 # Test Routes and Controller in gitignore
 # exclude everything
