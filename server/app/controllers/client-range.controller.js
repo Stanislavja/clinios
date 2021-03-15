@@ -1,4 +1,4 @@
-const { validationResult } = require("express-validator");
+const moment = require("moment");
 const { configuration, makeDb } = require("../db/db.js");
 const { errorMessage, successMessage, status } = require("../helpers/status");
 
@@ -13,7 +13,8 @@ const getClientRanges = async (req, res) => {
     left join user u on u.id=cr.created_user_id
     left join user u2 on u2.id=cr.updated_user_id
     where cr.client_id=${req.client_id}
-    order by 1,2,3,4`);
+    order by c.name, cr.seq
+    `);
 
     if (!dbResponse) {
       errorMessage.message = "None found";
@@ -31,25 +32,14 @@ const getClientRanges = async (req, res) => {
 };
 
 const deleteClientRange = async (req, res) => {
-  const {
-    cpt_id,
-    cpt_name,
-    seq,
-    compare_item,
-    compare_operator,
-    compare_to,
-  } = req.body.data;
+  const { id } = req.params;
+  const { cpt_name } = req.body.data;
   const db = makeDb(configuration, res);
   try {
     const deleteResponse = await db.query(`
-       delete 
+      delete 
         from client_range 
-        where client_id=${req.client_id} 
-        and cpt_id='${cpt_id}'
-        and seq=${seq}
-        and compare_item='${compare_item}'
-        and compare_operator='${compare_operator}'
-        and compare_to='${compare_to}'
+        where id=${id}
     `);
 
     await db.query(
@@ -96,6 +86,59 @@ const resetClientRange = async (req, res) => {
   } catch (err) {
     console.log("err", err);
     errorMessage.message = "Insert not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+const updateClientRange = async (req, res) => {
+  const { id } = req.params;
+  const {
+    cpt_id,
+    range_low,
+    range_high,
+    seq,
+    compare_item,
+    compare_operator,
+    compare_to,
+  } = req.body.data;
+
+  const db = makeDb(configuration, res);
+  try {
+    let $sql;
+
+    $sql = `update client_range set cpt_id='${cpt_id}', range_low=${range_low}, range_high=${range_high}`;
+
+    if (seq && typeof seq !== "undefined") {
+      $sql += `, seq='${seq}'`;
+    }
+    if (compare_item && typeof compare_item !== "undefined") {
+      $sql += `, compare_item='${compare_item}'`;
+    }
+    if (compare_operator && typeof compare_operator !== "undefined") {
+      $sql += `, compare_operator='${compare_operator}'`;
+    }
+    if (compare_to && typeof compare_to !== "undefined") {
+      $sql += `, compare_to='${compare_to}'`;
+    }
+    $sql += `, updated='${moment().format("YYYY-MM-DD HH:mm:ss")}',
+      updated_user_id=${req.user_id}
+      where id=${id}
+      `;
+
+    const updateResponse = await db.query($sql);
+    if (!updateResponse.affectedRows) {
+      errorMessage.message = "Update not successful";
+      return res.status(status.error).send(errorMessage);
+    }
+
+    successMessage.data = updateResponse;
+    successMessage.message = "Update successful";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Update not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -167,41 +210,31 @@ const createClientRange = async (req, res) => {
 };
 
 const searchTests = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    errorMessage.message = errors.array();
-    return res.status(status.bad).send(errorMessage);
-  }
-  const { text } = req.body.data;
-
   const db = makeDb(configuration, res);
+
+  const { query } = req.query;
+  let $sql;
   try {
-    const dbResponse = await db.query(
-      `select c.id, c.name, case when cc.cpt_id<>'' then true end favorite, group_concat(ci.cpt2_id) cpt_items
+    $sql = `
+      select c.id, c.name
       from cpt c
-      left join client_cpt cc on cc.client_id=${req.client_id}
-      and cc.cpt_id=c.id
-      left join lab_company lc on lc.id=c.lab_company_id
-      left join cpt_item ci on ci.cpt_id=c.id
-      where c.type='L' /*L=Lab*/
-      and c.name like '%${text}%'
-      and lc.id is null /*Do not include a test for a specific lab???*/
-      group by c.id, c.name, favorite
-      having cpt_items is null /*Do not include a group of many lab test*/
+      where c.type='L'
+      and c.name like '%${query}%'
       order by c.name
-      limit 10`
-    );
+      limit 20
+    `;
+
+    const dbResponse = await db.query($sql);
 
     if (!dbResponse) {
       errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
     }
-
     successMessage.data = dbResponse;
     return res.status(status.created).send(successMessage);
   } catch (err) {
-    console.log("err", err);
-    errorMessage.message = "Search not successful";
+    console.error("err:", err);
+    errorMessage.message = "Select not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -212,6 +245,7 @@ const testReport = {
   getClientRanges,
   deleteClientRange,
   resetClientRange,
+  updateClientRange,
   getClientRange,
   createClientRange,
   searchTests,

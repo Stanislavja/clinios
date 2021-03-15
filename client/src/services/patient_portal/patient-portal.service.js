@@ -4,6 +4,19 @@ import { API_BASE } from "../../utils/API_BASE";
 import authHeader from "../auth-header";
 
 class PatientPortalService {
+  // patient profile
+  getProfile() {
+    return axios
+      .get(`${API_BASE}/client-portal/patient`, { headers: authHeader() })
+      .then((res) => res.data);
+  }
+
+  updateProfile(payload, patientId) {
+    return axios.put(`${API_BASE}/client-portal/patient/${patientId}`, payload, {
+      headers: authHeader(),
+    });
+  }
+
   // appointments
   getPractitioners(patient) {
     let url = `${API_BASE}/client-portal/practitioners`;
@@ -159,6 +172,22 @@ class PatientPortalService {
   getHandouts() {
     return axios
       .get(`${API_BASE}/client-portal/handouts`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  createHandouts() {
+    return axios
+      .post(`${API_BASE}/client-portal/handouts`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  deleteHandout(id) {
+    return axios
+      .delete(`${API_BASE}/client-portal/handouts/${id}`, {
         headers: authHeader(),
       })
       .then((res) => res.data);

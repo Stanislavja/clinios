@@ -1,7 +1,6 @@
 const express = require("express");
 const { authJwt } = require("../middlewares");
 const ClientRange = require("../controllers/client-range.controller.js");
-const validation = require("../helpers/validations/patient.js");
 
 const router = express.Router();
 
@@ -11,7 +10,7 @@ router.get(
   ClientRange.getClientRanges
 );
 router.delete(
-  "/client-range",
+  "/client-range/:id",
   [authJwt.verifyToken],
   ClientRange.deleteClientRange
 );
@@ -20,15 +19,20 @@ router.post(
   [authJwt.verifyToken],
   ClientRange.resetClientRange
 );
+router.put(
+  "/client-range/:id",
+  [authJwt.verifyToken],
+  ClientRange.updateClientRange
+);
 router.get("/client-range", [authJwt.verifyToken], ClientRange.getClientRange);
 router.post(
   "/client-range",
   [authJwt.verifyToken],
   ClientRange.createClientRange
 );
-router.post(
-  "/client-range/tests/search",
-  [authJwt.verifyToken, validation.validate("search")],
+router.get(
+  "/client-range/test/search",
+  [authJwt.verifyToken],
   ClientRange.searchTests
 );
 
