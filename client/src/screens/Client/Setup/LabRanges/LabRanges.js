@@ -105,6 +105,7 @@ const LabRanges = () => {
   };
 
   const deleteItemHandler = (item) => {
+    const deleteItemId = item.id;
     const reqBody = {
       data: {
         cpt_id: item.cpt_id,
@@ -114,7 +115,7 @@ const LabRanges = () => {
         compare_to: item.compare_to,
       },
     };
-    LabRangeService.deleteLabRange(reqBody).then((res) => {
+    LabRangeService.deleteLabRange(reqBody, deleteItemId).then((res) => {
       enqueueSnackbar(`${res.message}`, { variant: "success" });
       closeDeleteDialog();
       fetchLabRanges();

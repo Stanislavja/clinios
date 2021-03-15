@@ -28,8 +28,8 @@ class LabRangeService {
     }).then((res) => res.data);
   }
 
-  deleteLabRange(reqBody) {
-    return axios.delete(`${API_BASE}/client-range`, {
+  deleteLabRange(reqBody, id) {
+    return axios.delete(`${API_BASE}/client-range/${id}`, {
       headers: authHeader(),
       data: reqBody,
     }).then((res) => res.data);
