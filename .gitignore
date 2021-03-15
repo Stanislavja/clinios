@@ -41,6 +41,7 @@ yarn-error.log*
 /client/.env.test.local
 /client/.env.production.local
 /client/.vscode
+/client/static/signature
 
 #server
 /server/node_modules
