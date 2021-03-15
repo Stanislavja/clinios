@@ -914,20 +914,21 @@ const getBillingPaymentOptions = async (req, res) => {
 
 const createBilling = async (req, res) => {
   const { patient_id } = req.params;
-  const { dt, amount, note } = req.body.data;
-  let { payment_type, type_id } = req.body.data;
+  const { dt, note } = req.body.data;
+  let { amount } = req.body.data;
+  const { payment_type, type_id } = req.body.data;
 
   const db = makeDb(configuration, res);
 
-  //if (!payment_type && typeof payment_type !== "undefined") {
+  // if (!payment_type && typeof payment_type !== "undefined") {
   //  payment_type = `'${payment_type}'`;
-  //}
+  // }
 
-  //these transaction types are stored in the database as negative numbers, david march 2021
-  if (type_id === 2 || type_id === 3) {
-    amount = amount * -1;
+  // these transaction types are stored in the database as negative numbers, david march 2021
+  if (type_id === 2 || type_id === 3) {
+    amount *= -1;
   }
-    
+
   try {
     const $sql = `insert into tran (patient_id, user_id, client_id, dt, type_id, amount, payment_type, note, created, created_user_id) values 
     (${patient_id}, ${req.user_id}, ${req.client_id}, '${dt}', ${type_id}, ${amount}, '${payment_type}', '${note}', now(), ${req.user_id})`;
