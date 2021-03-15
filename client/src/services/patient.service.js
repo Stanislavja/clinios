@@ -503,6 +503,12 @@ class Patient {
   }
 
   // delete methods
+  deleteBilling(patientId, id) {
+    return axios.delete(`${API_BASE}/patient/${patientId}/billing/${id}`, {
+      headers: authHeader(),
+    });
+  }
+
   deleteMessages(patientId, id) {
     return axios.delete(`${API_BASE}/patient/${patientId}/messages/${id}`, {
       headers: authHeader(),
