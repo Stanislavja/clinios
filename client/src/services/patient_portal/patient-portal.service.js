@@ -177,6 +177,22 @@ class PatientPortalService {
       .then((res) => res.data);
   }
 
+  createHandouts() {
+    return axios
+      .post(`${API_BASE}/client-portal/handouts`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  deleteHandout(id) {
+    return axios
+      .delete(`${API_BASE}/client-portal/handouts/${id}`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
   // Prescriptions
   getPrescriptions() {
     return axios
