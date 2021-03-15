@@ -47,6 +47,36 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
     minWidth: 0,
   },
+  handoutContainer: {
+    display: "flex",
+  },
+  handoutCard: {
+    marginTop: "20px",
+  },
+  handout: {
+    display: "flex",
+    flexDirection: "column",
+    listStyle: "none",
+    marginRight: "25px",
+  },
+  handoutText: {
+    fontSize: "13px",
+    display: "flex",
+    justifyContent: "space-between",
+    listStyle: "none",
+    padding: "0px 0px",
+    cursor: "pointer",
+    textDecoration: "none",
+    width: "100%",
+    color: theme.palette.text.primary,
+    "&:hover": {
+      background: "#fafafa",
+    },
+  },
+  handoutLabel: {
+    fontWeight: 500,
+    marginBottom: theme.spacing(1),
+  },
 }));
 
 const Handouts = () => {
