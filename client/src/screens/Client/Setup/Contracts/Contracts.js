@@ -84,6 +84,7 @@ const Contracts = () => {
   // const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
+  // TODO: Please uncomment the code to use dynamic data for contracts
   // const [contracs, setContracts] = useState([]);
 
   // const fetchContracts = useCallback(() => {
@@ -118,7 +119,11 @@ const Contracts = () => {
           }
         </div>
       </Container>
-      <ContractDetailModal isOpen={isOpen} hendleOnClose={() => setIsOpen(false)} />
+      <ContractDetailModal
+        // TODO: ADD (filePath) necessary props
+        isOpen={isOpen}
+        hendleOnClose={() => setIsOpen(false)}
+      />
     </>
   );
 };
