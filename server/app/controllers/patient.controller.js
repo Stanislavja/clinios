@@ -914,13 +914,19 @@ const getBillingPaymentOptions = async (req, res) => {
 
 const createBilling = async (req, res) => {
   const { patient_id } = req.params;
-  const { dt, type_id, amount, note } = req.body.data;
-  let { payment_type } = req.body.data;
+  const { dt, note } = req.body.data;
+  let { amount } = req.body.data;
+  const { payment_type, type_id } = req.body.data;
 
   const db = makeDb(configuration, res);
 
-  if (!payment_type && typeof payment_type !== "undefined") {
-    payment_type = `'${payment_type}'`;
+  // if (!payment_type && typeof payment_type !== "undefined") {
+  //  payment_type = `'${payment_type}'`;
+  // }
+
+  // these transaction types are stored in the database as negative numbers, david march 2021
+  if (type_id === 2 || type_id === 3) {
+    amount *= -1;
   }
 
   try {
