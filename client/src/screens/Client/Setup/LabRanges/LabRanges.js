@@ -25,6 +25,7 @@ import { useSnackbar } from "notistack";
 
 import Alert from "../../../../components/Alert";
 import { StyledTableCellLg, StyledTableRowLg } from "../../../../components/common/StyledTable";
+import useAuth from "../../../../hooks/useAuth";
 import LabRangeService from "../../../../services/setup/labrange.service";
 import NewLabRange from "./components/NewLabRange";
 
@@ -53,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 const LabRanges = () => {
   const classes = useStyles();
+  const { user: { client_id } } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
 
   const [selectedRange, setSelectedRange] = useState({});
@@ -78,6 +80,14 @@ const LabRanges = () => {
 
   const closeResetDialog = () => {
     setShowResetDialog((prevstate) => !prevstate);
+  };
+
+  const resetButtonHandler = () => {
+    if (client_id === 1) {
+      enqueueSnackbar(`This function is not available for client #1`, { variant: "error" });
+    } else {
+      openResetDialog();
+    }
   };
 
   const fetchLabRanges = useCallback(() => {
@@ -204,7 +214,7 @@ const LabRanges = () => {
               variant="outlined"
               component="label"
               className={classes.w100}
-              onClick={() => openResetDialog()}
+              onClick={() => resetButtonHandler()}
             >
               Reset Values
             </Button>
