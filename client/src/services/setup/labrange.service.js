@@ -10,8 +10,8 @@ class LabRangeService {
     }).then((res) => res.data);
   }
 
-  searchTests(data) {
-    return axios.post(`${API_BASE}/client-range/tests/search`, data, {
+  searchTests(text) {
+    return axios.get(`${API_BASE}/client-range/test/search?query=${text}`, {
       headers: authHeader(),
     }).then((res) => res.data);
   }

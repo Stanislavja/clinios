@@ -131,12 +131,7 @@ const NewLabRange = (props) => {
 
   const searchTests = useCallback((e, text) => {
     e.preventDefault();
-    const reqBody = {
-      data: {
-        text,
-      },
-    };
-    LabRangeService.searchTests(reqBody).then((res) => {
+    LabRangeService.searchTests(text).then((res) => {
       setSearchTestResults(res.data);
     });
   }, []);
