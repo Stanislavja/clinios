@@ -10,7 +10,7 @@ router.get(
   ClientRange.getClientRanges
 );
 router.delete(
-  "/client-range",
+  "/client-range/:id",
   [authJwt.verifyToken],
   ClientRange.deleteClientRange
 );
@@ -20,7 +20,7 @@ router.post(
   ClientRange.resetClientRange
 );
 router.put(
-  "/client-range",
+  "/client-range/:id",
   [authJwt.verifyToken],
   ClientRange.updateClientRange
 );

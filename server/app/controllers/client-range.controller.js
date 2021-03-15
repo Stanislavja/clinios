@@ -32,25 +32,14 @@ const getClientRanges = async (req, res) => {
 };
 
 const deleteClientRange = async (req, res) => {
-  const {
-    cpt_id,
-    cpt_name,
-    seq,
-    compare_item,
-    compare_operator,
-    compare_to,
-  } = req.body.data;
+  const { id } = req.params;
+  const { cpt_name } = req.body.data;
   const db = makeDb(configuration, res);
   try {
     const deleteResponse = await db.query(`
-       delete 
+      delete 
         from client_range 
-        where client_id=${req.client_id} 
-        and cpt_id='${cpt_id}'
-        and seq=${seq}
-        and compare_item='${compare_item}'
-        and compare_operator='${compare_operator}'
-        and compare_to='${compare_to}'
+        where id=${id}
     `);
 
     await db.query(
@@ -104,6 +93,7 @@ const resetClientRange = async (req, res) => {
 };
 
 const updateClientRange = async (req, res) => {
+  const { id } = req.params;
   const {
     cpt_id,
     range_low,
@@ -120,14 +110,21 @@ const updateClientRange = async (req, res) => {
 
     $sql = `update client_range set cpt_id='${cpt_id}', range_low=${range_low}, range_high=${range_high}`;
 
+    if (seq && typeof seq !== "undefined") {
+      $sql += `, seq='${seq}'`;
+    }
+    if (compare_item && typeof compare_item !== "undefined") {
+      $sql += `, compare_item='${compare_item}'`;
+    }
+    if (compare_operator && typeof compare_operator !== "undefined") {
+      $sql += `, compare_operator='${compare_operator}'`;
+    }
+    if (compare_to && typeof compare_to !== "undefined") {
+      $sql += `, compare_to='${compare_to}'`;
+    }
     $sql += `, updated='${moment().format("YYYY-MM-DD HH:mm:ss")}',
       updated_user_id=${req.user_id}
-      where client_id=${req.client_id}
-      and cpt_id='${cpt_id}'
-      and seq=${seq}
-      and compare_item='${compare_item}'
-      and compare_operator='${compare_operator}'
-      and compare_to='${compare_to}'
+      where id=${id}
       `;
 
     const updateResponse = await db.query($sql);
