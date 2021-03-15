@@ -5,9 +5,10 @@ import {
 } from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import PropTypes from "prop-types";
+
+import SampleDocViewer from "../../../../Patient/Encounters/components/SampleDocViewer";
 
 const useStyles = makeStyles((theme) => ({
   gridMargin: {
@@ -55,9 +56,7 @@ const ContractDetailModal = ({
           Contract Detail
         </DialogTitle>
         <DialogContent className={classes.content}>
-          <DialogContentText id="alert-dialog-description">
-            This page is used to view contract detail
-          </DialogContentText>
+          <SampleDocViewer />
           <div className={classes.root} />
         </DialogContent>
       </Dialog>
