@@ -105,7 +105,7 @@ const NewLabRange = (props) => {
     e.preventDefault();
     const reqBody = {
       data: {
-        cpt_id: isNewDialog ? selectedTest.cpt_id : selectedItem.cpt_id,
+        cpt_id: isNewDialog ? selectedTest.id : selectedItem.cpt_id,
         seq: formFields.sequence,
         compare_item: formFields.compareItem,
         compare_operator: formFields.compareOperator,
@@ -121,7 +121,8 @@ const NewLabRange = (props) => {
         onClose();
       });
     } else { /* edit scenario */
-      LabRangeService.updateLabRange(reqBody).then((response) => {
+      const editItemId = selectedItem.id;
+      LabRangeService.updateLabRange(reqBody, editItemId).then((response) => {
         enqueueSnackbar(`${response.message}`, { variant: "success" });
         reloadData();
         onClose();
@@ -360,6 +361,7 @@ NewLabRange.propTypes = {
   onClose: PropTypes.func.isRequired,
   reloadData: PropTypes.func.isRequired,
   selectedItem: PropTypes.shape({
+    id: PropTypes.number,
     cpt_id: PropTypes.string,
     cpt_name: PropTypes.string,
     seq: PropTypes.number,

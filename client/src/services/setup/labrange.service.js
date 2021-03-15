@@ -22,8 +22,8 @@ class LabRangeService {
     }).then((res) => res.data);
   }
 
-  updateLabRange(data) {
-    return axios.put(`${API_BASE}/client-range`, data, {
+  updateLabRange(data, id) {
+    return axios.put(`${API_BASE}/client-range/${id}`, data, {
       headers: authHeader(),
     }).then((res) => res.data);
   }
