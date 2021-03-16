@@ -179,13 +179,6 @@ const NewLabRange = (props) => {
     }
   }, [searchText]);
 
-  // const handleDateChange = (name, date) => {
-  //   setFormFields({
-  //     ...formFields,
-  //     [name]: date,
-  //   });
-  // };
-
   const populateDecimalValue = (value) => {
     if (formFields[value].length) {
       setFormFields({
@@ -392,36 +385,6 @@ const NewLabRange = (props) => {
                   onChange={(e) => handleInputChnage(e)}
                   inputProps={{ readOnly: true }}
                 />
-
-                {/* <KeyboardDatePicker
-                  fullWidth
-                  required
-                  id="date-created-dialog"
-                  name="created"
-                  label="Created"
-                  format="dd/MM/yyyy"
-                  size="small"
-                  inputVariant="outlined"
-                  value={formFields.created}
-                  onChange={(date) => handleDateChange("created", date)}
-                  className={classes.gutterBottom}
-                  inputProps={{ readOnly: true }}
-                />
-
-                <KeyboardDatePicker
-                  required
-                  fullWidth
-                  id="date-updated-dialog"
-                  name="updated"
-                  label="Updated"
-                  format="dd/MM/yyyy"
-                  size="small"
-                  inputVariant="outlined"
-                  value={formFields.updated}
-                  onChange={(date) => handleDateChange("updated", date)}
-                  className={classes.gutterBottom}
-                  inputProps={{ readOnly: true }}
-                /> */}
               </Grid>
 
               <Grid container className={classes.buttonsContainer} justify="space-between">
