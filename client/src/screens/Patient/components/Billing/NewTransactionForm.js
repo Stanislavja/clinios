@@ -191,8 +191,9 @@ const NewTransactionForm = (props) => {
     }
   };
 
+  // selecting the first transaction type by default for new billing dialog
   useDidMountEffect(() => {
-    if (transactionTypes.length) {
+    if (transactionTypes.length && selectedBilling === null) { // only for new billing dialog
       const name = "type";
       setFormFields({
         ...formFields,
