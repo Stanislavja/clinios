@@ -75,6 +75,7 @@ const initialState = {
   },
   billing: {
     data: [],
+    selectedBilling: null,
     balance: 0,
     newDialog: false,
     expandDialog: false,

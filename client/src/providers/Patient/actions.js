@@ -12,6 +12,8 @@ import {
   SET_ADMIN_NOTES,
   SET_FORMS,
   SET_BILLING,
+  SET_SELECTED_BILLING,
+  RESET_SELECTED_BILLING,
   SET_BALANCE,
   SET_PAYMENT_METHODS,
   SET_ALLERGIES,
@@ -185,6 +187,15 @@ export const setMedications = (data) => ({
 export const setBilling = (data) => ({
   type: SET_BILLING,
   payload: data,
+});
+
+export const setSelectedBilling = (data) => ({
+  type: SET_SELECTED_BILLING,
+  payload: data,
+});
+
+export const resetBilling = () => ({
+  type: RESET_SELECTED_BILLING,
 });
 
 export const setBalance = (data) => ({
