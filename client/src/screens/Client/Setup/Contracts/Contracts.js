@@ -7,12 +7,10 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-// import _ from "lodash";
 
-// import useAuth from "../../../../hooks/useAuth";
-// import ContractsService from "../../../../services/setup/contracts.service";
 import ContractDetailModal from "./components/ContractDetailModal";
 
+// TODO: Remove the localContracts dummy data if dynamic data is in use.
 const localContracts = [
   {
     signed: "Jan 1 2020 1:00:00PM",
@@ -58,13 +56,14 @@ const localContracts = [
   },
 ];
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    padding: "40px 0px",
+    paddingTop: theme.spacing(5),
+    paddingBottom: theme.spacing(5),
   },
   contractListContainer: {
-    marginTop: "20px",
+    marginTop: theme.spacing(2),
   },
   contractLink: {
     display: "block",
@@ -81,6 +80,8 @@ const useStyles = makeStyles(() => ({
 
 const Contracts = () => {
   const classes = useStyles();
+
+  // TODO: Please uncomment the code to get user data
   // const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -111,6 +112,7 @@ const Contracts = () => {
               ? localContracts.map((item) => (
                 <Button key={item.signed} className={classes.contractLink}>
                   <Typography spacing={10} className={classes.contractText} onClick={() => setIsOpen(true)}>
+                    {/* TODO: Replace it with dynamic text */}
                     {`c{client_id}_u{user_id}_YYYY-MM-DD-HHMMSS_contract.pdf`}
                   </Typography>
                 </Button>

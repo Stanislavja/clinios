@@ -12,10 +12,12 @@ import SampleDocViewer from "../../../../Patient/Encounters/components/SampleDoc
 
 const useStyles = makeStyles((theme) => ({
   gridMargin: {
-    margin: "8px 0px",
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
   },
   noteMargin: {
-    margin: "15px 0px",
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
   },
   title: {
     backgroundColor: theme.palette.primary.light,
