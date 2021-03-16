@@ -16,7 +16,8 @@ const getUserMessageById = async (req, res) => {
       left join patient p on p.id=m.patient_id_from
       left join user u on u.id=m.user_id_to
       where m.id=${id}
-      `);
+      `
+    );
 
     if (!dbResponse) {
       errorMessage.message = "None found";
@@ -58,7 +59,8 @@ const getUserMessage = async (req, res) => {
       )
       order by m.created
       limit 10
-      `);
+      `
+    );
 
     if (!dbResponse) {
       errorMessage.message = "None found";
@@ -141,11 +143,18 @@ const updateMessage = async (req, res) => {
   const { message_status, user_id_to, note_assign } = req.body.data;
   const { id } = req.params;
   const db = makeDb(configuration, res);
+  const msgHistoryData = {};
+  msgHistoryData.id = id;
 
   try {
     const updateResponse = await db.query(
       `update message set user_id_to='${user_id_to}', note_assign='${note_assign}', status='${message_status}',
          updated= now(), updated_user_id='${req.user_id}' where id=${id}`
+    );
+
+    await db.query(
+      `insert into message_history (id, user_id_to, note_assign, status, created, created_user_id) 
+      values (${id}, ${user_id_to}, '${note_assign}', '${message_status}', now(), ${req.user_id});`
     );
 
     if (!updateResponse.affectedRows) {
@@ -180,7 +189,42 @@ const getUserMessageHistory = async (req, res) => {
       and mh.id=${messageId}
       order by mh.created desc
       limit 50
-      `);
+      `
+    );
+
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+const getMessageUserHistory = async (req, res) => {
+  const db = makeDb(configuration, res);
+  try {
+    const dbResponse = await db.query(
+      `select l.updated, concat(u.firstname, ' ', u.lastname) updated_name
+      , concat(p.firstname, ' ', p.lastname) patient_name
+      , concat(u2.firstname, ' ', u2.lastname) assigned_name
+      , l.note_assign, l.id
+      from message l
+      left join patient p on p.id=l.patient_id_from
+      left join user u on u.id=l.updated_user_id
+      left join user u2 on u2.id=l.user_id_to
+      where l.client_id=${req.client_id}
+      and l.updated_user_id=${req.user_id}
+      order by l.updated desc 
+      limit 50
+      `
+    );
 
     if (!dbResponse) {
       errorMessage.message = "None found";
@@ -203,7 +247,8 @@ const messageToPatient = {
   getMessageAssignUser,
   createMessage,
   updateMessage,
-  getUserMessageHistory
+  getUserMessageHistory,
+  getMessageUserHistory,
 };
 
 module.exports = messageToPatient;
