@@ -92,6 +92,11 @@ router.get(
   [authJwt.verifyToken],
   Patient.getBilling
 );
+router.put(
+  "/patient/:patient_id/billing/:id",
+  [authJwt.verifyToken],
+  Patient.updateBilling
+);
 router.get(
   "/patient/:patient_id/billing/transactionTypes",
   [authJwt.verifyToken],
