@@ -6,7 +6,7 @@ const getAllUsers = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const dbResponse = await db.query(`select u.id, u.firstname, u.lastname, u.title, u.email, u.status, u.type, u.schedule, u.appointments, u.admin, u.note
-        , u.phone, u.login_dt, u.email_forward_user_id
+        , u.phone, u.login_dt, u.email_forward_user_id, u.timezone
         , u.created, concat(u2.firstname, ' ', u2.lastname) created_user
         , u.updated, concat(u3.firstname, ' ', u3.lastname) updated_user
         , u.updated, concat(u3.firstname, ' ', u3.lastname) forward_user
