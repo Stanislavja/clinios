@@ -97,6 +97,11 @@ router.put(
   [authJwt.verifyToken],
   Patient.updateBilling
 );
+router.delete(
+  "/patient/:patient_id/billing/:id",
+  [authJwt.verifyToken],
+  Patient.deleteBilling
+);
 router.get(
   "/patient/:patient_id/billing/transactionTypes",
   [authJwt.verifyToken],
