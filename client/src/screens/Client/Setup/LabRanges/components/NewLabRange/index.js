@@ -129,34 +129,34 @@ const NewLabRange = (props) => {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
-    if (selectedTest) {
-      const reqBody = {
-        data: {
-          cpt_id: isNewDialog ? selectedTest.id : selectedItem.cpt_id,
-          seq: Number(formFields.sequence),
-          compare_item: formFields.compareItem,
-          compare_operator: formFields.compareOperator,
-          compare_to: formFields.compareTo,
-          range_low: formFields.rangeLow,
-          range_high: formFields.rangeHigh,
-        },
-      };
-      if (isNewDialog) {
+    const reqBody = {
+      data: {
+        cpt_id: isNewDialog ? selectedTest.id : selectedItem.cpt_id,
+        seq: Number(formFields.sequence),
+        compare_item: formFields.compareItem,
+        compare_operator: formFields.compareOperator,
+        compare_to: formFields.compareTo,
+        range_low: formFields.rangeLow,
+        range_high: formFields.rangeHigh,
+      },
+    };
+    if (isNewDialog) {
+      if (selectedTest) {
         LabRangeService.createLabRange(reqBody).then((response) => {
           enqueueSnackbar(`${response.message}`, { variant: "success" });
           reloadData();
           onClose();
         });
-      } else { /* edit scenario */
-        const editItemId = selectedItem.id;
-        LabRangeService.updateLabRange(reqBody, editItemId).then((response) => {
-          enqueueSnackbar(`${response.message}`, { variant: "success" });
-          reloadData();
-          onClose();
-        });
+      } else {
+        enqueueSnackbar(`Please select test`, { variant: "error" });
       }
-    } else {
-      enqueueSnackbar(`Please select test`, { variant: "error" });
+    } else { /* edit scenario */
+      const editItemId = selectedItem.id;
+      LabRangeService.updateLabRange(reqBody, editItemId).then((response) => {
+        enqueueSnackbar(`${response.message}`, { variant: "success" });
+        reloadData();
+        onClose();
+      });
     }
   };
 
