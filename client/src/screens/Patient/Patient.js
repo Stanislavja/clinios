@@ -857,7 +857,13 @@ const Patient = () => {
         <Dialog
           open={billing.expandDialog}
           title="Billing"
-          message={<BillingDetails />}
+          message={(
+            <BillingDetails reloadData={() => {
+              fetchBillings();
+              fetchPatientBalance();
+            }}
+            />
+          )}
           applyForm={() => dispatch(toggleBillngExpandDialog())}
           cancelForm={() => dispatch(toggleBillngExpandDialog())}
           hideActions
