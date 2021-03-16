@@ -56,6 +56,7 @@ const NewTransactionForm = (props) => {
     notes: "",
   });
 
+    // formFields.type = selectedBilling.tran_type;
   const fetchBillingTransactionTypes = useCallback(() => {
     PatientService.getBillingTransactionTypes(patientId).then((res) => {
       setTransactionTypes(res.data);

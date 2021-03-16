@@ -860,10 +860,10 @@ const getBilling = async (req, res) => {
 
 const updateBilling = async (req, res) => {
   const { patient_id, id } = req.params;
-  const { amount, tran_type, note, payment_type, account_number } = req.body.data;
+  const { amount, note, payment_type } = req.body.data;
   const db = makeDb(configuration, res);
   try {
-    const $sql = `update tran set amount='${amount}', note='${note}', payment_type='${payment_type}', account_number='${account_number}',
+    const $sql = `update tran set amount='${amount}', note='${note}', payment_type='${payment_type}',
     updated= now(), updated_user_id='${req.user_id}' where patient_id=${patient_id} and id='${id}'`;
 
     const updateResponse = await db.query($sql);
