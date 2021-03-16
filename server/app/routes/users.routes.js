@@ -14,6 +14,6 @@ router.get(
   Users.getLastVisitedPatient
 );
 router.post("/user", [authJwt.verifyToken], Users.createNewUser);
-router.put("/user/:userId/:id", [authJwt.verifyToken], Users.updateUser);
+router.put("/user/:id", [authJwt.verifyToken], Users.updateUser);
 
 module.exports = router;

@@ -138,18 +138,14 @@ const createMessage = async (req, res) => {
 };
 
 const updateMessage = async (req, res) => {
-  const { subject, message, unread_notify_dt } = req.body.data;
+  const { message_status, user_id_to, note_assign } = req.body.data;
   const { id } = req.params;
   const db = makeDb(configuration, res);
 
   try {
     const updateResponse = await db.query(
-      `update message
-        set subject='${subject}', message='${message}', unread_notify_dt='${moment(
-        unread_notify_dt
-      ).format("YYYY-MM-DD")}', updated= now(), updated_user_id='${req.user_id}'
-        where id=${id}
-      `
+      `update message set user_id_to='${user_id_to}', note_assign='${note_assign}', status='${message_status}',
+         updated= now(), updated_user_id='${req.user_id}' where id=${id}`
     );
 
     if (!updateResponse.affectedRows) {

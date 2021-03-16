@@ -21,7 +21,7 @@ router.get(
 );
 router.post("/user/message", [authJwt.verifyToken], userMessagesController.createMessage);
 router.put(
-  "/user/message/:id",
+  "/user/messages/:id",
   [authJwt.verifyToken],
   userMessagesController.updateMessage
 );
