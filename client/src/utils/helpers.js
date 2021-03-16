@@ -174,6 +174,21 @@ export const encounterLetterToTypeConversion = (encounter) => {
   }
 };
 
+export const convertTransactionTypes = (type) => {
+  switch (type) {
+    case "Service":
+      return 1;
+    case "Service Credit":
+      return 2;
+    case "Payment":
+      return 3;
+    case "Payment Refund":
+      return 4;
+    default:
+      return "";
+  }
+};
+
 export const paymentMethodType = (type) => {
   switch (type) {
     case "V":
