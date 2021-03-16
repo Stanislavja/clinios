@@ -427,6 +427,14 @@ class Patient {
     );
   }
 
+  updateBilling(patientId, billingId, data) {
+    return axios
+      .put(`${API_BASE}/patient/${patientId}/billing/${billingId}`, data, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
   updateMessage(patientId, messageId, data) {
     return axios.put(`${API_BASE}/patient/${patientId}/messages/${messageId}`, data, {
       headers: authHeader(),
@@ -503,6 +511,12 @@ class Patient {
   }
 
   // delete methods
+  deleteBilling(patientId, id) {
+    return axios.delete(`${API_BASE}/patient/${patientId}/billing/${id}`, {
+      headers: authHeader(),
+    });
+  }
+
   deleteMessages(patientId, id) {
     return axios.delete(`${API_BASE}/patient/${patientId}/messages/${id}`, {
       headers: authHeader(),

@@ -4,6 +4,7 @@ import { Box, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Pagination from "@material-ui/lab/Pagination";
 import { useSnackbar } from "notistack";
+import PropTypes from "prop-types";
 import { pdfjs, Document, Page } from "react-pdf";
 
 import PdfFilePath from "../../../../../assets/docs/sample.pdf";
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SampleDocViewer = () => {
+const SampleDocViewer = ({ filePath }) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const [billingDocFilePath, setBillingDocFilePath] = useState(false);
@@ -32,8 +33,8 @@ const SampleDocViewer = () => {
   });
 
   useEffect(() => {
-    setBillingDocFilePath(PdfFilePath);
-  }, []);
+    setBillingDocFilePath(filePath);
+  }, [filePath]);
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setPaginationState({
@@ -73,6 +74,14 @@ const SampleDocViewer = () => {
       </Grid>
     </Box>
   );
+};
+
+SampleDocViewer.defaultProps = {
+  filePath: PdfFilePath,
+};
+
+SampleDocViewer.propTypes = {
+  filePath: PropTypes.string,
 };
 
 export default SampleDocViewer;

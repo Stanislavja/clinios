@@ -266,6 +266,11 @@ const routes = [
         path: "/setup/users",
         component: lazy(() => import("./screens/Client/Setup/Users")),
       },
+      {
+        exact: true,
+        path: "/setup/contracts",
+        component: lazy(() => import("./screens/Client/Setup/Contracts")),
+      },
     ],
   },
   {

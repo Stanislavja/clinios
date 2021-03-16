@@ -61,6 +61,34 @@ const getUser = async (req, res) => {
   }
 };
 
+const getUserByClientId = async (req, res) => {
+  const db = makeDb(configuration, res);
+  try {
+    const $sql = `select id, firstname, lastname 
+    from user 
+    where client_id=${req.client_id} 
+    /*and status='A'*/
+    order by 1, 2
+    limit 50
+    `;
+
+    const dbResponse = await db.query($sql);
+
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    const user = dbResponse[0];
+    successMessage.data = { user };
+    return res.status(status.created).send(successMessage);
+  } catch (error) {
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const getLastVisitedPatient = async (req, res) => {
   const db = makeDb(configuration, res);
   const { patientId } = req.params;
@@ -208,6 +236,7 @@ const users = {
   getForwardEmailList,
   getLastVisitedPatient,
   getUser,
+  getUserByClientId,
   createNewUser,
   updateUser,
 };

@@ -13,6 +13,8 @@ import {
   SET_ADMIN_NOTES,
   SET_FORMS,
   SET_BILLING,
+  SET_SELECTED_BILLING,
+  RESET_SELECTED_BILLING,
   SET_BALANCE,
   SET_ALLERGIES,
   SET_HANDOUTS,
@@ -255,6 +257,22 @@ const reducer = (state = initialState, action) => {
         billing: {
           ...state.billing,
           data: [...action.payload],
+        },
+      };
+    case SET_SELECTED_BILLING:
+      return {
+        ...state,
+        billing: {
+          ...state.billing,
+          selectedBilling: action.payload,
+        },
+      };
+    case RESET_SELECTED_BILLING:
+      return {
+        ...state,
+        billing: {
+          ...state.billing,
+          selectedBilling: null,
         },
       };
     case SET_BALANCE:
