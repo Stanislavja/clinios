@@ -176,6 +176,12 @@ export const client_pages = [
         title: "Users",
         href: "/setup/users",
       },
+      {
+        id: 316,
+        icon: GroupIcon,
+        title: "Contracts",
+        href: "/setup/contracts",
+      },
     ],
   },
   {
