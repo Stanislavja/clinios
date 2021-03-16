@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
+// TODO: ADD (filePath) necessary props for SampleDocViewer to work dynamicly
 const ContractDetailModal = ({
   isOpen,
   hendleOnClose,
