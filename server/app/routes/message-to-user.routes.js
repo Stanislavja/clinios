@@ -19,11 +19,16 @@ router.get(
   [authJwt.verifyToken],
   userMessagesController.getMessageAssignUser
 );
-router.post("/user/message", [authJwt.verifyToken], userMessagesController.createMessage);
+//router.post("/user/message", [authJwt.verifyToken], userMessagesController.createMessage);
 router.put(
   "/user/messages/:id",
   [authJwt.verifyToken],
   userMessagesController.updateMessage
+);
+router.get(
+  "/user/messages/history/:messageId",
+  [authJwt.verifyToken],
+  userMessagesController.getUserMessageHistory
 );
 
 module.exports = router;

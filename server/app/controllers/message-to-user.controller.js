@@ -165,12 +165,45 @@ const updateMessage = async (req, res) => {
   }
 };
 
+const getUserMessageHistory = async (req, res) => {
+  const { messageId } = req.params;
+  const db = makeDb(configuration, res);
+  try {
+    const dbResponse = await db.query(
+      `select concat(u2.firstname, ' ', u2.lastname) assigned_to
+      , mh.status, mh.created updated
+      , concat(u.firstname, ' ', u.lastname) updated_by
+      from message_history mh
+      left join user u on u.id=mh.created_user_id
+      left join user u2 on u2.id=mh.user_id_to
+      where mh.client_id=${req.client_id}
+      and mh.id=${messageId}
+      order by mh.created desc
+      limit 50
+      `);
+
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const messageToPatient = {
   getUserMessageById,
   getUserMessage,
   getMessageAssignUser,
   createMessage,
   updateMessage,
+  getUserMessageHistory
 };
 
 module.exports = messageToPatient;
