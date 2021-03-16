@@ -75,6 +75,33 @@ const getUserMessage = async (req, res) => {
   }
 };
 
+const getMessageAssignUser = async (req, res) => {
+  const db = makeDb(configuration, res);
+  try {
+    const dbResponse = await db.query(
+      `select firstname, lastname 
+      from user 
+      where client_id=${req.client_id} 
+      /*and status='A'*/
+      order by 1, 2
+      limit 50`
+    );
+
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const createMessage = async (req, res) => {
   const {
     user_id_from,
@@ -145,6 +172,7 @@ const updateMessage = async (req, res) => {
 const messageToPatient = {
   getUserMessageById,
   getUserMessage,
+  getMessageAssignUser,
   createMessage,
   updateMessage,
 };

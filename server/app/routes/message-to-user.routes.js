@@ -14,6 +14,11 @@ router.get(
   [authJwt.verifyToken],
   userMessagesController.getUserMessage
 );
+router.get(
+  "/user/assign-to",
+  [authJwt.verifyToken],
+  userMessagesController.getMessageAssignUser
+);
 router.post("/user/message", [authJwt.verifyToken], userMessagesController.createMessage);
 router.put(
   "/user/message/:id",
