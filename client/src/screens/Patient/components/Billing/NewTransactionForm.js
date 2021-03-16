@@ -15,9 +15,10 @@ import PropTypes from "prop-types";
 import Alert from "../../../../components/Alert";
 import useDidMountEffect from "../../../../hooks/useDidMountEffect";
 import usePatientContext from "../../../../hooks/usePatientContext";
-import { toggleNewTransactionDialog } from "../../../../providers/Patient/actions";
+import { toggleNewTransactionDialog, resetBilling } from "../../../../providers/Patient/actions";
 import PatientService from "../../../../services/patient.service";
 import { TransactionFormFields } from "../../../../static/transactionForm";
+import { convertTransactionTypes } from "../../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
   formInput: {
@@ -56,7 +57,25 @@ const NewTransactionForm = (props) => {
     notes: "",
   });
 
-    // formFields.type = selectedBilling.tran_type;
+  const { selectedBilling } = state.billing;
+
+  const updateFields = () => {
+    formFields.date = moment(selectedBilling.dt).format("YYYY-MM-DD");
+    formFields.type = convertTransactionTypes(selectedBilling.tran_type);
+    formFields.paymentType = selectedBilling.payment_type;
+    formFields.amount = selectedBilling.amount;
+    formFields.notes = selectedBilling.note;
+    setFormFields({ ...formFields });
+  };
+
+  useEffect(() => {
+    if (selectedBilling) {
+      updateFields();
+    }
+    return () => !!selectedBilling && dispatch(resetBilling());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedBilling]);
+
   const fetchBillingTransactionTypes = useCallback(() => {
     PatientService.getBillingTransactionTypes(patientId).then((res) => {
       setTransactionTypes(res.data);
@@ -85,12 +104,22 @@ const NewTransactionForm = (props) => {
           note: formFields.notes,
         },
       };
-      PatientService.createBilling(patientId, reqBody)
-        .then((response) => {
-          enqueueSnackbar(`${response.data.message}`, { variant: "success" });
-          reloadData();
-          dispatch(toggleNewTransactionDialog());
-        });
+      if (selectedBilling) { // edit scenario
+        const billingId = selectedBilling.id;
+        PatientService.updateBilling(patientId, billingId, reqBody)
+          .then((response) => {
+            enqueueSnackbar(`${response.message}`, { variant: "success" });
+            reloadData();
+            dispatch(toggleNewTransactionDialog());
+          });
+      } else {
+        PatientService.createBilling(patientId, reqBody)
+          .then((response) => {
+            enqueueSnackbar(`${response.data.message}`, { variant: "success" });
+            reloadData();
+            dispatch(toggleNewTransactionDialog());
+          });
+      }
     } else {
       setHasAmountError(true);
     }
