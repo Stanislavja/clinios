@@ -10,8 +10,8 @@ class LabRangeService {
     }).then((res) => res.data);
   }
 
-  searchTests(data) {
-    return axios.post(`${API_BASE}/client-range/tests/search`, data, {
+  searchTests(text) {
+    return axios.get(`${API_BASE}/client-range/test/search?query=${text}`, {
       headers: authHeader(),
     }).then((res) => res.data);
   }
@@ -22,14 +22,14 @@ class LabRangeService {
     }).then((res) => res.data);
   }
 
-  updateLabRange(data) {
-    return axios.put(`${API_BASE}/client-range`, data, {
+  updateLabRange(data, id) {
+    return axios.put(`${API_BASE}/client-range/${id}`, data, {
       headers: authHeader(),
     }).then((res) => res.data);
   }
 
-  deleteLabRange(reqBody) {
-    return axios.delete(`${API_BASE}/client-range`, {
+  deleteLabRange(reqBody, id) {
+    return axios.delete(`${API_BASE}/client-range/${id}`, {
       headers: authHeader(),
       data: reqBody,
     }).then((res) => res.data);

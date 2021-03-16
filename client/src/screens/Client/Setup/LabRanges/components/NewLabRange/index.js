@@ -6,7 +6,6 @@ import {
   TextField, Button, Grid, Paper, List, ListItem, ListItemText, MenuItem,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { KeyboardDatePicker } from "@material-ui/pickers";
 import { isEmpty } from "lodash";
 import moment from "moment";
 import { useSnackbar } from "notistack";
@@ -14,11 +13,11 @@ import PropTypes from "prop-types";
 
 import Dialog from "../../../../../../components/Dialog";
 import useDidMountEffect from "../../../../../../hooks/useDidMountEffect";
-import PatientService from "../../../../../../services/patient.service";
 import LabRangeService from "../../../../../../services/setup/labrange.service";
 import {
   CompareItemOptions,
-  CompareOperatorOptions,
+  AgeCompareOperatorOptions,
+  GenderCompareOperatorOptions,
   CompareToOptions,
 } from "../../../../../../static/setup/labRange";
 
@@ -49,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: 150,
     overflow: "scroll",
   },
+  menuOption: {
+    minHeight: 26,
+  },
 }));
 
 const NewLabRange = (props) => {
@@ -64,25 +66,28 @@ const NewLabRange = (props) => {
   const [searchText, setSearchText] = useState("");
   const [searchTestResults, setSearchTestResults] = useState([]);
   const [formFields, setFormFields] = useState({
-    sequence: "",
+    sequence: 1,
     compareItem: "",
     compareOperator: "",
     compareTo: "",
     rangeLow: "",
     rangeHigh: "",
-    created: null,
-    updated: null,
+    created: moment().format("MMM DD YYYY"),
+    updated: moment().format("MMM DD YYYY"),
   });
 
   const updateFields = () => {
+    const createdDate = moment(selectedItem.created).format("MMM DD YYYY");
+    const updatedDate = moment(selectedItem.updated).format("MMM DD YYYY");
+    // populate form fields
     formFields.sequence = selectedItem.seq;
     formFields.compareItem = selectedItem.compare_item;
     formFields.compareOperator = selectedItem.compare_operator;
     formFields.compareTo = selectedItem.compare_to;
     formFields.rangeLow = selectedItem.range_low;
     formFields.rangeHigh = selectedItem.range_high;
-    formFields.created = moment(selectedItem.created).format("YYYY-MM-DD");
-    formFields.updated = moment(selectedItem.updated).format("YYYY-MM-DD");
+    formFields.created = `${createdDate} ${selectedItem.created_user || ""}`;
+    formFields.updated = `${updatedDate} ${selectedItem.updated_user || ""}`;
     setFormFields({ ...formFields });
     setSearchText(selectedItem.cpt_name);
   };
@@ -98,16 +103,36 @@ const NewLabRange = (props) => {
     const { value, name } = e.target;
     setFormFields({
       ...formFields,
-      [name]: value,
+      [name]: name === "compareTo" ? value.substring(0, 2) : value,
     });
+  };
+
+  const onSequenceInputChange = (e) => {
+    const { value, name } = e.target;
+    // eslint-disable-next-line
+    const parsedInt = parseInt(value);
+
+    if (parsedInt) {
+      setFormFields({
+        ...formFields,
+        [name]: parsedInt,
+      });
+    } else if (value === "") {
+      setFormFields({
+        ...formFields,
+        [name]: value,
+      });
+    }
+
+    return null;
   };
 
   const onFormSubmit = (e) => {
     e.preventDefault();
     const reqBody = {
       data: {
-        cpt_id: isNewDialog ? selectedTest.cpt_id : selectedItem.cpt_id,
-        seq: formFields.sequence,
+        cpt_id: isNewDialog ? selectedTest.id : selectedItem.cpt_id,
+        seq: Number(formFields.sequence),
         compare_item: formFields.compareItem,
         compare_operator: formFields.compareOperator,
         compare_to: formFields.compareTo,
@@ -116,13 +141,18 @@ const NewLabRange = (props) => {
       },
     };
     if (isNewDialog) {
-      LabRangeService.createLabRange(reqBody).then((response) => {
-        enqueueSnackbar(`${response.message}`, { variant: "success" });
-        reloadData();
-        onClose();
-      });
+      if (selectedTest) {
+        LabRangeService.createLabRange(reqBody).then((response) => {
+          enqueueSnackbar(`${response.message}`, { variant: "success" });
+          reloadData();
+          onClose();
+        });
+      } else {
+        enqueueSnackbar(`Please select test`, { variant: "error" });
+      }
     } else { /* edit scenario */
-      LabRangeService.updateLabRange(reqBody).then((response) => {
+      const editItemId = selectedItem.id;
+      LabRangeService.updateLabRange(reqBody, editItemId).then((response) => {
         enqueueSnackbar(`${response.message}`, { variant: "success" });
         reloadData();
         onClose();
@@ -132,8 +162,7 @@ const NewLabRange = (props) => {
 
   const searchTests = useCallback((e, text) => {
     e.preventDefault();
-    const patientId = 1; /* ::TODO search tests API will be integrated */
-    PatientService.getTests(patientId, text).then((res) => {
+    LabRangeService.searchTests(text).then((res) => {
       setSearchTestResults(res.data);
     });
   }, []);
@@ -150,11 +179,13 @@ const NewLabRange = (props) => {
     }
   }, [searchText]);
 
-  const handleDateChange = (name, date) => {
-    setFormFields({
-      ...formFields,
-      [name]: date,
-    });
+  const populateDecimalValue = (value) => {
+    if (formFields[value].length) {
+      setFormFields({
+        ...formFields,
+        [value]: Number(formFields[value]).toFixed(2),
+      });
+    }
   };
 
   return (
@@ -169,12 +200,15 @@ const NewLabRange = (props) => {
                 <Grid item xs={8} className={classes.relativePosition}>
                   <TextField
                     fullWidth
-                    autoFocus
+                    autoFocus={!!isNewDialog}
                     label="Test"
                     size="small"
                     variant="outlined"
                     value={searchText}
                     onChange={(e) => setSearchText(e.target.value)}
+                    inputProps={{
+                      readOnly: !isNewDialog,
+                    }}
                   />
                   {
                     searchTestResults.length ? (
@@ -195,13 +229,15 @@ const NewLabRange = (props) => {
                       : null
                   }
                 </Grid>
-                <Button
-                  variant="outlined"
-                  type="submit"
-                  className={classes.ml2}
-                >
-                  Search
-                </Button>
+                {isNewDialog && (
+                  <Button
+                    variant="outlined"
+                    type="submit"
+                    className={classes.ml2}
+                  >
+                    Search
+                  </Button>
+                )}
               </Grid>
             </form>
 
@@ -218,7 +254,7 @@ const NewLabRange = (props) => {
                   fullWidth
                   className={classes.gutterBottom}
                   value={formFields.sequence}
-                  onChange={(e) => handleInputChnage(e)}
+                  onChange={(e) => onSequenceInputChange(e)}
                 />
 
                 <TextField
@@ -236,7 +272,7 @@ const NewLabRange = (props) => {
                   onChange={(e) => handleInputChnage(e)}
                 >
                   {CompareItemOptions.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
+                    <MenuItem key={option.value} value={option.value} className={classes.menuOption}>
                       {option.label}
                     </MenuItem>
                   ))}
@@ -256,15 +292,21 @@ const NewLabRange = (props) => {
                   value={formFields.compareOperator}
                   onChange={(e) => handleInputChnage(e)}
                 >
-                  {CompareOperatorOptions.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
+                  {formFields.compareItem === "A"
+                    ? AgeCompareOperatorOptions.map((option) => (
+                      <MenuItem key={option.value} value={option.value} className={classes.menuOption}>
+                        {option.label}
+                      </MenuItem>
+                    ))
+                    : GenderCompareOperatorOptions.map((option) => (
+                      <MenuItem key={option.value} value={option.value} className={classes.menuOption}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
                 </TextField>
 
                 <TextField
-                  select
+                  select={formFields.compareItem === "G"}
                   variant="outlined"
                   name="compareTo"
                   id="compareTo"
@@ -278,7 +320,7 @@ const NewLabRange = (props) => {
                   onChange={(e) => handleInputChnage(e)}
                 >
                   {CompareToOptions.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
+                    <MenuItem key={option.value} value={option.value} className={classes.menuOption}>
                       {option.label}
                     </MenuItem>
                   ))}
@@ -296,6 +338,7 @@ const NewLabRange = (props) => {
                   className={classes.gutterBottom}
                   value={formFields.rangeLow}
                   onChange={(e) => handleInputChnage(e)}
+                  onBlur={() => populateDecimalValue("rangeLow")}
                 />
 
                 <TextField
@@ -310,34 +353,37 @@ const NewLabRange = (props) => {
                   className={classes.gutterBottom}
                   value={formFields.rangeHigh}
                   onChange={(e) => handleInputChnage(e)}
+                  onBlur={() => populateDecimalValue("rangeHigh")}
                 />
 
-                <KeyboardDatePicker
-                  fullWidth
-                  required
-                  id="date-created-dialog"
+                <TextField
+                  variant="outlined"
                   name="created"
+                  id="created"
+                  type="text"
                   label="Created"
-                  format="dd/MM/yyyy"
                   size="small"
-                  inputVariant="outlined"
-                  value={formFields.created}
-                  onChange={(date) => handleDateChange("created", date)}
-                  className={classes.gutterBottom}
-                />
-
-                <KeyboardDatePicker
                   required
                   fullWidth
-                  id="date-updated-dialog"
-                  name="updated"
-                  label="Updated"
-                  format="dd/MM/yyyy"
-                  size="small"
-                  inputVariant="outlined"
-                  value={formFields.updated}
-                  onChange={(date) => handleDateChange("updated", date)}
                   className={classes.gutterBottom}
+                  value={formFields.created}
+                  onChange={(e) => handleInputChnage(e)}
+                  inputProps={{ readOnly: true }}
+                />
+
+                <TextField
+                  variant="outlined"
+                  name="updated"
+                  id="updated"
+                  type="text"
+                  label="Updated"
+                  size="small"
+                  required
+                  fullWidth
+                  className={classes.gutterBottom}
+                  value={formFields.updated}
+                  onChange={(e) => handleInputChnage(e)}
+                  inputProps={{ readOnly: true }}
                 />
               </Grid>
 
@@ -362,6 +408,7 @@ NewLabRange.propTypes = {
   onClose: PropTypes.func.isRequired,
   reloadData: PropTypes.func.isRequired,
   selectedItem: PropTypes.shape({
+    id: PropTypes.number,
     cpt_id: PropTypes.string,
     cpt_name: PropTypes.string,
     seq: PropTypes.number,
@@ -372,6 +419,8 @@ NewLabRange.propTypes = {
     range_high: PropTypes.string,
     created: PropTypes.string,
     updated: PropTypes.string,
+    created_user: PropTypes.string,
+    updated_user: PropTypes.string,
   }).isRequired,
 };
 

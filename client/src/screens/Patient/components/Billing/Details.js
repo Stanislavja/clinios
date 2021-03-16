@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Typography } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -8,9 +9,16 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import DeleteIcon from "@material-ui/icons/DeleteOutline";
+import EditIcon from "@material-ui/icons/Edit";
 import moment from "moment";
+import { useSnackbar } from "notistack";
+import PropTypes from "prop-types";
 
+import Alert from "../../../../components/Alert";
 import usePatientContext from "../../../../hooks/usePatientContext";
+import { toggleNewTransactionDialog, setSelectedBilling } from "../../../../providers/Patient/actions";
+import PatientService from "../../../../services/patient.service";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -49,54 +57,111 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-const BillingDetails = () => {
+const BillingDetails = (props) => {
   const classes = useStyles();
-  const { state } = usePatientContext();
+  const { reloadData } = props;
+  const { enqueueSnackbar } = useSnackbar();
+  const { state, dispatch } = usePatientContext();
+  const { patientId } = state;
   const { data } = state.billing;
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const openDeleteDialog = (item) => {
+    setSelectedItem(item);
+    setShowDeleteDialog((prevstate) => !prevstate);
+  };
+
+  const closeDeleteDialog = () => {
+    setSelectedItem(null);
+    setShowDeleteDialog((prevstate) => !prevstate);
+  };
+
+  const editBillingHandler = (item) => {
+    dispatch(setSelectedBilling(item));
+    dispatch(toggleNewTransactionDialog());
+  };
+
+  const deleteItemHandler = (item) => {
+    const billingId = item.id;
+    PatientService.deleteBilling(patientId, billingId)
+      .then((response) => {
+        enqueueSnackbar(`${response.data.message}`, { variant: "success" });
+        closeDeleteDialog();
+        reloadData();
+      });
+  };
 
   return (
-    <TableContainer className={classes.tableContainer}>
-      <Table size="small" className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Date</StyledTableCell>
-            <StyledTableCell>Amount</StyledTableCell>
-            <StyledTableCell>Transaction Type</StyledTableCell>
-            <StyledTableCell>Encounter Title</StyledTableCell>
-            <StyledTableCell>CPT Procedure</StyledTableCell>
-            <StyledTableCell>Notes</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.length
-            ? data.map((item) => (
-              <StyledTableRow key={`${item.id}_${item.dt}`}>
-                <TableCell component="th" scope="item">
-                  {moment(item.dt).format("MMM D YYYY")}
-                </TableCell>
-                <TableCell>
-                  $
-                  {item.amount}
-                </TableCell>
-                <TableCell>{item.tran_type}</TableCell>
-                <TableCell>{item.encounter_title}</TableCell>
-                <TableCell>{item.cpt_procedure || ""}</TableCell>
-                <TableCell>{item.note || ""}</TableCell>
-              </StyledTableRow>
-            ))
-            : (
-              <StyledTableRow>
-                <TableCell colSpan={6}>
-                  <Typography align="center" variant="body1">
-                    No Records Found...
-                  </Typography>
-                </TableCell>
-              </StyledTableRow>
-            )}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <>
+      <Alert
+        open={showDeleteDialog}
+        title="Confirm Delete"
+        message="Are you sure you want to delete this billing?"
+        applyButtonText="Delete"
+        cancelButtonText="Cancel"
+        applyForm={() => deleteItemHandler(selectedItem)}
+        cancelForm={closeDeleteDialog}
+      />
+      <TableContainer className={classes.tableContainer}>
+        <Table size="small" className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Date</StyledTableCell>
+              <StyledTableCell>Amount</StyledTableCell>
+              <StyledTableCell>Transaction Type</StyledTableCell>
+              <StyledTableCell>Encounter Title</StyledTableCell>
+              <StyledTableCell>CPT Procedure</StyledTableCell>
+              <StyledTableCell>Notes</StyledTableCell>
+              <StyledTableCell align="center">Actions</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.length
+              ? data.map((item) => (
+                <StyledTableRow key={`${item.id}_${item.dt}`}>
+                  <TableCell component="th" scope="item">
+                    {moment(item.dt).format("MMM D YYYY")}
+                  </TableCell>
+                  <TableCell>
+                    $
+                    {item.amount}
+                  </TableCell>
+                  <TableCell>{item.tran_type}</TableCell>
+                  <TableCell>{item.encounter_title}</TableCell>
+                  <TableCell>{item.cpt_procedure || ""}</TableCell>
+                  <TableCell>{item.note || ""}</TableCell>
+                  <TableCell align="center">
+                    <IconButton onClick={() => editBillingHandler(item)}>
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                    <IconButton
+                      disabled={(item.payment_type === "C" || item.payment_type === "A")}
+                      onClick={() => openDeleteDialog(item)}
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </TableCell>
+                </StyledTableRow>
+              ))
+              : (
+                <StyledTableRow>
+                  <TableCell colSpan={6}>
+                    <Typography align="center" variant="body1">
+                      No Records Found...
+                    </Typography>
+                  </TableCell>
+                </StyledTableRow>
+              )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
+};
+
+BillingDetails.propTypes = {
+  reloadData: PropTypes.func.isRequired,
 };
 
 export default BillingDetails;

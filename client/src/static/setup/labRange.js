@@ -30,6 +30,10 @@ export const AgeOptions = [
 
 export const CompareItemOptions = [
   {
+    label: "",
+    value: "",
+  },
+  {
     label: "Age",
     value: "A",
   },
@@ -39,7 +43,22 @@ export const CompareItemOptions = [
   },
 ];
 
-export const CompareOperatorOptions = [
+export const GenderCompareOperatorOptions = [
+  {
+    label: "",
+    value: "",
+  },
+  {
+    label: "=",
+    value: "=",
+  },
+];
+
+export const AgeCompareOperatorOptions = [
+  {
+    label: "",
+    value: "",
+  },
   {
     label: ">",
     value: ">",
@@ -64,15 +83,15 @@ export const CompareOperatorOptions = [
 
 export const CompareToOptions = [
   {
+    label: "",
+    value: "",
+  },
+  {
     label: "Male",
     value: "M",
   },
   {
     label: "Female",
     value: "F",
-  },
-  {
-    label: "50",
-    value: "60",
   },
 ];
