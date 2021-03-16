@@ -216,6 +216,7 @@ const LabRanges = () => {
               component="label"
               className={classes.w100}
               onClick={() => resetButtonHandler()}
+              disabled={!labRanges.length}
             >
               Reset Values
             </Button>
