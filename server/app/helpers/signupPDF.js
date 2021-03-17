@@ -12,10 +12,8 @@ To set file permissions in Linux or a Mac
 
 const signupPDF = async (content, user, client) => {
   try {
-    const pdfPath = path.join(
-      process.env.CONTRACT_UPLOAD_DIR,
-      `c${user.client_id}_u${user.id}_${moment().format('YYYY-MM-DD-HHMMSS')}_contract.pdf`
-    );
+    const fileName = `c${user.client_id}_u${user.id}_${moment().format('YYYY-MM-DD-HHMMSS')}_contract.pdf`;
+    const pdfPath = path.join(process.env.CONTRACT_UPLOAD_DIR, fileName);
     const pdfDoc = new PDFDocument({ size: "A4", margin: 50 });
     pdfDoc.text(content);
 
@@ -32,7 +30,10 @@ const signupPDF = async (content, user, client) => {
     const writeStream = fs.createWriteStream(pdfPath);
     pdfDoc.pipe(writeStream);
 
-    return pdfPath;
+    return {
+      filePath: pdfPath,
+      fileName: fileName
+      };
   } catch (error) {
     console.error("pdfDoc >>>:", error);
     return false;

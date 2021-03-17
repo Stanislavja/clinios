@@ -139,7 +139,7 @@ exports.signup = async (req, res) => {
         );
         if(pdf){
           await db.query(
-            `UPDATE user set contract_file_path='${pdf}' where id=${userResponse.insertId}`
+            `UPDATE user set contract_file_name='${pdf.fileName}' where id=${userResponse.insertId}`
           )
         }
         responseData.contractLink = pdf;
