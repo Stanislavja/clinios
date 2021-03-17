@@ -1,70 +1,42 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import { makeStyles } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
-import { useSnackbar } from "notistack";
 
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
+import HandoutDocumentViewer from "./components/modal/HandoutDocumentViewer";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    padding: "25px 0px",
+    paddingTop: theme.spacing(5),
+    paddingBottom: theme.spacing(5),
   },
-  table: {
-    minWidth: 650,
+  title: {
+    marginBottom: theme.spacing(1),
   },
-  titleButtonWrap: {
-    display: "flex",
-    marginBottom: theme.spacing(2),
-    "& label": {
-      marginLeft: theme.spacing(4),
-    },
-  },
-  contentWrap: {
-    display: "flex",
-  },
-  handoutTable: {
-    marginTop: theme.spacing(4),
-  },
-  tableHead: {
-    "& th": {
-      fontWeight: 600,
-    },
-  },
-  actionButton: {
-    padding: 0,
-    margin: 0,
-    minWidth: 0,
+  subTitle: {
+    marginBottom: theme.spacing(3.5),
   },
   handoutContainer: {
     display: "flex",
   },
   handoutCard: {
-    marginTop: "20px",
+    marginTop: theme.spacing(2.5),
   },
   handout: {
     display: "flex",
     flexDirection: "column",
     listStyle: "none",
-    marginRight: "25px",
+    marginRight: theme.spacing(3.2),
   },
   handoutText: {
     fontSize: "13px",
     display: "flex",
     justifyContent: "space-between",
     listStyle: "none",
-    padding: "0px 0px",
+    padding: theme.spacing(0),
     cursor: "pointer",
     textDecoration: "none",
     width: "100%",
@@ -81,12 +53,13 @@ const useStyles = makeStyles((theme) => ({
 
 const Handouts = () => {
   const classes = useStyles();
-  const { enqueueSnackbar } = useSnackbar();
   const [handouts, setHandouts] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [filePath, setFilePath] = useState("");
 
   const fetchHandouts = useCallback(() => {
-    PatientPortalService.getHandouts().then((response) => {
-      setHandouts(response.data);
+    PatientPortalService.getHandouts().then((res) => {
+      setHandouts(res.data);
     });
   }, []);
 
@@ -94,105 +67,66 @@ const Handouts = () => {
     fetchHandouts();
   }, [fetchHandouts]);
 
-  const createHandout = (reqBody) => {
-    // ! This a boilerplate: patient-portal - handouts - createHandout API is yet to be implemented.
-    PatientPortalService.createHandouts(reqBody)
-      .then((response) => {
-        enqueueSnackbar(`${response.data.message}`, { variant: "success" });
-        fetchHandouts();
-      })
-      .catch((error) => {
-        const resMessage = (error.response
-          && error.response.data
-          && error.response.data.message)
-          || error.message
-          || error.toString();
-        enqueueSnackbar(`${resMessage}`, { variant: "error" });
-      });
-  };
-
-  const handleHandoutsFile = (e) => {
-    const { files } = e.target;
-    const fd = new FormData();
-    fd.append("file", files[0]);
-    createHandout(fd);
-  };
-
-  const handleDelete = (id) => {
-    // ! This a boilerplate: patient-portal - handouts - deleteHandout API is yet to be implemented.
-    PatientPortalService.deleteHandout(id).then((response) => {
-      fetchHandouts();
-      enqueueSnackbar(`${response.data.message}`, {
-        variant: "success",
-      });
-    });
-  };
+  const getHandoutColumn = (handoutItem, label, index, fileName) => handoutItem && (
+    <ul className={classes.handout}>
+      {index === 0 && (
+        <li className={classes.handoutLabel}>
+          {label}
+        </li>
+      )}
+      <li
+        className={classes.handoutText}
+      >
+        <Typography
+          variant="body1"
+          color="textPrimary"
+          onClick={() => {
+            setFilePath(`${process.env.REACT_APP_API_URL}static/patient/${fileName}`);
+            setIsOpen(true);
+          }}
+        >
+          {label === "Created" ? moment(handoutItem).format("MMM Do YYYY") : handoutItem}
+        </Typography>
+      </li>
+    </ul>
+  );
 
   return (
     <div className={classes.root}>
-      <Grid container>
-        <Grid item md={7} xs={12}>
-          <div className={classes.titleButtonWrap}>
-            <Typography
-              component="h1"
-              variant="h2"
-              color="textPrimary"
-              className={classes.title}
-            >
-              Handouts
-            </Typography>
-            <Button
-              variant="outlined"
-              component="label"
-            >
-              Add
-              <input
-                type="file"
-                id="file"
-                accept=".pdf, .txt, .doc, .docx, image/*"
-                hidden
-                onChange={(e) => handleHandoutsFile(e)}
-              />
-            </Button>
-          </div>
-          <p>These are files we give to patients about specific topics.</p>
-          <TableContainer component={Paper} elevation={0} className={classes.handoutTable}>
-            <Table className={classes.table} size="small" aria-label="a dense table">
-              <TableHead className={classes.tableHead}>
-                <TableRow>
-                  <TableCell align="left" padding="none">Filename</TableCell>
-                  <TableCell align="left">Actions</TableCell>
-                  <TableCell align="left">Created</TableCell>
-                  <TableCell align="left">CreatedBy</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {handouts.map((handout) => (
-                  <TableRow key={handout.filename}>
-                    <TableCell
-                      padding="none"
-                      component="th"
-                      scope="row"
-                    >
-                      {handout.filename}
-                    </TableCell>
-                    <TableCell align="left">
-                      <Button
-                        className={classes.actionButton}
-                        onClick={() => handleDelete(handout.id)}
-                      >
-                        Delete
-                      </Button>
-                    </TableCell>
-                    <TableCell align="left">{moment(handout.created).format("ll")}</TableCell>
-                    <TableCell align="left">{handout.name}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Grid>
-      </Grid>
+      <Typography
+        component="h1"
+        variant="h2"
+        color="textPrimary"
+        className={classes.title}
+      >
+        Handouts
+      </Typography>
+      <Typography
+        variant="h5"
+        color="textPrimary"
+        className={classes.subTitle}
+      >
+        This page is used to view handouts from your provider.
+      </Typography>
+      {
+        handouts.length
+          ? handouts.map((item, index) => (
+            <div className={classes.handoutContainer}>
+              {getHandoutColumn(item?.filename, "Filename", index, item?.fileName)}
+              {getHandoutColumn(item?.created, "Created", index, item?.fileName)}
+            </div>
+          ))
+          : <Typography>No handouts found...</Typography>
+      }
+
+      {filePath && (
+        <HandoutDocumentViewer
+          filePath={filePath}
+          isOpen={isOpen}
+          hendleOnClose={() => setIsOpen(false)}
+        />
+      )}
+
     </div>
   );
 };
