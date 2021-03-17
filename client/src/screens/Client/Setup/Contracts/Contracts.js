@@ -1,12 +1,16 @@
 import React, { useEffect, useState, useCallback } from "react";
 
 import {
-  Button,
   Container,
   CssBaseline,
   makeStyles,
 } from "@material-ui/core";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
 import Typography from "@material-ui/core/Typography";
+import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 
 import userService from "../../../../services/users.service";
 import ContractDetailModal from "./components/ContractDetailModal";
@@ -17,19 +21,8 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(5),
     paddingBottom: theme.spacing(5),
   },
-  contractListContainer: {
-    marginTop: theme.spacing(2),
-  },
-  contractLink: {
-    display: "block",
-  },
-  contractText: {
-    display: "inline-block",
-    padding: "4px",
-    cursor: "pointer",
-    "&:hover": {
-      background: "#eee",
-    },
+  Contracts: {
+    marginTop: theme.spacing(3),
   },
 }));
 
@@ -61,24 +54,20 @@ const Contracts = () => {
         <Typography component="h1" variant="h2" color="textPrimary" m>
           Contracts
         </Typography>
-
-        <div className={classes.contractListContainer}>
+        <List component="nav" aria-label="main mailbox folders" className={classes.Contracts}>
           {
             contracs.length
               ? contracs.map((item) => (
-                <Button
-                  key={item.id}
-                  className={classes.contractLink}
-                  onClick={(_) => handleOnClick(_, item.contract_file_name)}
-                >
-                  <Typography spacing={10} className={classes.contractText}>
-                    {item.contract_file_name}
-                  </Typography>
-                </Button>
+                <ListItem button key={item.id} onClick={(_) => handleOnClick(_, item.contract_file_name)}>
+                  <ListItemIcon>
+                    <PictureAsPdfIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={item.contract_file_name} />
+                </ListItem>
               ))
               : <Typography>No contracts found...</Typography>
           }
-        </div>
+        </List>
       </Container>
       <ContractDetailModal
         filePath={selectedFilepath}
