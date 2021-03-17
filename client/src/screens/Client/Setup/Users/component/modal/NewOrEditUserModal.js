@@ -210,7 +210,7 @@ const NewOrEditUserModal = ({
           },
         );
       } else {
-        UserService.updateUser(authUser.id, user.id, payload).then(
+        UserService.updateUser(user.id, payload).then(
           (response) => {
             setTimeout(() => {
               enqueueSnackbar(`${response.data.message}`, {
