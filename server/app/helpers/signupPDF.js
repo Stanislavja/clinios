@@ -1,4 +1,5 @@
 const fs = require("fs");
+const moment = require("moment");
 const path = require("path");
 const PDFDocument = require("pdfkit");
 
@@ -13,7 +14,7 @@ const signupPDF = async (content, user, client) => {
   try {
     const pdfPath = path.join(
       process.env.CONTRACT_UPLOAD_DIR,
-      `c${user.client_id}_u${user.id}_contract.pdf`
+      `c${user.client_id}_u${user.id}_${moment().format('YYYY-MM-DD-HHMMSS')}_contract.pdf`
     );
     const pdfDoc = new PDFDocument({ size: "A4", margin: 50 });
     pdfDoc.text(content);
