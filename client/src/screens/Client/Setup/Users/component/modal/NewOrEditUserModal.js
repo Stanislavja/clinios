@@ -97,15 +97,15 @@ const NewOrEditUserModal = ({
 
   const nameError = allUsers.some((u) => (isNewUser
     ? String(u.firstname).trim().toLowerCase()
-          === String(user.firstname).trim().toLowerCase()
-        && String(u.lastname).trim().toLowerCase()
-          === String(user.lastname).trim().toLowerCase()
+    === String(user.firstname).trim().toLowerCase()
+    && String(u.lastname).trim().toLowerCase()
+    === String(user.lastname).trim().toLowerCase()
     : false));
   const firstnameError = String(user.firstname).length <= 0 || String(user.firstname).length > 25;
   const lastnameError = String(user.lastname).length <= 0 || String(user.lastname).length > 255;
   const emailError = allUsers.some((u) => (isNewUser
     ? String(u.email).trim().toLowerCase()
-        === String(user.email).trim().toLowerCase()
+    === String(user.email).trim().toLowerCase()
     : false));
   const statusError = user.id === authUser.id && String(user.status) === "D";
 
@@ -182,6 +182,7 @@ const NewOrEditUserModal = ({
     title: user.title,
     email: user.email,
     phone: user.phone,
+    timezone: user.timezone,
     note: user.note,
     status: user.status,
     appointments: user.appointments,
@@ -190,6 +191,7 @@ const NewOrEditUserModal = ({
     admin: user.admin,
     email_forward_user_id: user.email_forward_user_id,
   };
+
   const handleCreateNewOrEditUser = () => {
     if (isValid()) {
       if (isNewUser) {
@@ -373,6 +375,49 @@ const NewOrEditUserModal = ({
                       shrink: true,
                     }}
                   />
+                </FormControl>
+                <FormControl component="div" className={classes.formControl}>
+                  <TextField
+                    fullWidth
+                    id="outlined-select-currency"
+                    select
+                    label="Timezone"
+                    name="timezone"
+                    value={user.timezone}
+                    onChange={handleOnChange}
+                    variant="outlined"
+                    size="small"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    SelectProps={{
+                      native: true,
+                    }}
+                  >
+                    <option aria-label="None" value="" />
+                    <option aria-label="None" value="-10">
+                      HST &#45; Hawaii Standard Time
+                    </option>
+                    <option aria-label="None" value="-9">
+                      AKST &#45; Alaska Standard Time
+                    </option>
+                    <option aria-label="None" value="-8">
+                      {/* eslint-disable-next-line no-tabs */}
+                      PST	&#45; Pacific Standard Time
+                    </option>
+                    <option aria-label="None" value="-7">
+                      {/* eslint-disable-next-line no-tabs */}
+                      MST	&#45; Mountain Standard Time
+                    </option>
+                    <option aria-label="None" value="-6">
+                      {/* eslint-disable-next-line no-tabs */}
+                      CST	&#45; Central Standard Time
+                    </option>
+                    <option aria-label="None" value="-5">
+                      {/* eslint-disable-next-line no-tabs */}
+                      EST	&#45; Eastern Standard Time
+                    </option>
+                  </TextField>
                 </FormControl>
                 <FormControl component="div" className={classes.formControl}>
                   <TextField
