@@ -275,7 +275,7 @@ const LabRanges = () => {
                   <StyledTableRowLg>
                     <TableCell colSpan={10}>
                       <Typography align="center" variant="body1">
-                        {isLoading ? "Fetching Client Ranges..." : "No Records Found..."}
+                        {isLoading ? "Fetching Lab Ranges..." : "No Records Found..."}
                       </Typography>
                     </TableCell>
                   </StyledTableRowLg>
