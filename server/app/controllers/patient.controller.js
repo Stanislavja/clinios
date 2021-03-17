@@ -1113,6 +1113,11 @@ const createPatientAllergy = async (req, res) => {
   const { drug_id } = req.body.data;
   const db = makeDb(configuration, res);
   try {
+    const selectQueryRes = await db.query(`select 1 from patient_allergy where drug_id=${drug_id}`);
+    if(selectQueryRes.length > 0){
+      errorMessage.message = "This patient allergy already exists.";
+      return res.status(status.notfound).send(errorMessage);
+    }
     const insertResponse = await db.query(
       `insert into patient_allergy (patient_id, drug_id, client_id, created, created_user_id) values (${patient_id}, ${drug_id}, ${req.client_id}, now(), ${req.user_id})`
     );
