@@ -22,6 +22,12 @@ class Users {
       headers: authHeader(),
     });
   }
+
+  getContractlists() {
+    return axios.get(`${API_URL}/auth/user/contracts`, {
+      headers: authHeader(),
+    });
+  }
 }
 
 export default new Users();

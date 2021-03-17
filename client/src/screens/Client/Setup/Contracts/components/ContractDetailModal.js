@@ -38,10 +38,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// TODO: ADD (filePath) necessary props for SampleDocViewer to work dynamicly
 const ContractDetailModal = ({
   isOpen,
   hendleOnClose,
+  filePath,
 }) => {
   const classes = useStyles();
   return (
@@ -58,7 +58,7 @@ const ContractDetailModal = ({
           Contract Detail
         </DialogTitle>
         <DialogContent className={classes.content}>
-          <SampleDocViewer />
+          <SampleDocViewer filePath={filePath} />
           <div className={classes.root} />
         </DialogContent>
       </Dialog>
@@ -66,8 +66,13 @@ const ContractDetailModal = ({
   );
 };
 
+ContractDetailModal.defaultProps = {
+  filePath: null,
+};
+
 ContractDetailModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   hendleOnClose: PropTypes.func.isRequired,
+  filePath: PropTypes.string,
 };
 export default ContractDetailModal;
