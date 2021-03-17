@@ -84,6 +84,29 @@ const getClient = async (req, res) => {
   }
 };
 
+const getUserContracts = async (req, res) => {
+  const db = makeDb(configuration, res);
+  try {
+    const dbResponse = await db.query(
+      `select id, contract_file_path from user where client_id=${req.client_id}`
+    );
+
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (error) {
+    console.log("error:", error);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const getCorporateUser = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
@@ -167,6 +190,7 @@ const updateFunctionalRange = async (req, res) => {
 const users = {
   getUser,
   getClient,
+  getUserContracts,
   getPatient,
   getCorporateUser,
   getFunctionalRange,
