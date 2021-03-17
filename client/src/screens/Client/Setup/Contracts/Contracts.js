@@ -1,60 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 import {
-  Button,
   Container,
   CssBaseline,
   makeStyles,
 } from "@material-ui/core";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
 import Typography from "@material-ui/core/Typography";
+import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 
+import userService from "../../../../services/users.service";
 import ContractDetailModal from "./components/ContractDetailModal";
-
-// TODO: Remove the localContracts dummy data if dynamic data is in use.
-const localContracts = [
-  {
-    signed: "Jan 1 2020 1:00:00PM",
-    name: "John Doe",
-    ipAddress: "192.168.100.100",
-    company: "ultrawideness",
-    userId: "967021",
-  },
-  {
-    signed: "Jan 1 2020 1:00:00PM",
-    name: "John Doe",
-    ipAddress: "192.168.100.100",
-    company: "ultrawideness",
-    userId: "967021",
-  },
-  {
-    signed: "Jan 1 2020 1:00:00PM",
-    name: "John Doe",
-    ipAddress: "192.168.100.100",
-    company: "ultrawideness",
-    userId: "967021",
-  },
-  {
-    signed: "Jan 1 2020 1:00:00PM",
-    name: "John Doe",
-    ipAddress: "192.168.100.100",
-    company: "ultrawideness",
-    userId: "967021",
-  },
-  {
-    signed: "Jan 1 2020 1:00:00PM",
-    name: "John Doe",
-    ipAddress: "192.168.100.100",
-    company: "ultrawideness",
-    userId: "967021",
-  },
-  {
-    signed: "Jan 1 2020 1:00:00PM",
-    name: "John Doe",
-    ipAddress: "192.168.100.100",
-    company: "ultrawideness",
-    userId: "967021",
-  },
-];
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,42 +21,32 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(5),
     paddingBottom: theme.spacing(5),
   },
-  contractListContainer: {
-    marginTop: theme.spacing(2),
-  },
-  contractLink: {
-    display: "block",
-  },
-  contractText: {
-    display: "inline-block",
-    padding: "4px",
-    cursor: "pointer",
-    "&:hover": {
-      background: "#eee",
-    },
+  Contracts: {
+    marginTop: theme.spacing(3),
   },
 }));
 
 const Contracts = () => {
   const classes = useStyles();
 
-  // TODO: Please uncomment the code to get user data
-  // const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+  const [contracs, setContracts] = useState([]);
+  const [selectedFilepath, setSelectedFilepath] = useState(null);
 
-  // TODO: Please uncomment the code to use dynamic data for contracts
-  // const [contracs, setContracts] = useState([]);
+  const fetchContracts = useCallback(() => {
+    userService.getContractlists().then((response) => {
+      setContracts(response.data.data);
+    });
+  }, []);
 
-  // const fetchContracts = useCallback(() => {
-  //   ContractsService.getContracts().then((response) => {
-  //     setContracts(response.data.data);
-  //   });
-  // }, []);
+  useEffect(() => {
+    fetchContracts();
+  }, [fetchContracts]);
 
-  // useEffect(() => {
-  //   fetchContracts();
-  // }, [fetchContracts]);
-
+  const handleOnClick = (_, fileName) => {
+    setSelectedFilepath(`${process.env.REACT_APP_API_URL}static/client/${fileName}`);
+    setIsOpen(true);
+  };
   return (
     <>
       <CssBaseline />
@@ -105,24 +54,23 @@ const Contracts = () => {
         <Typography component="h1" variant="h2" color="textPrimary" m>
           Contracts
         </Typography>
-
-        <div className={classes.contractListContainer}>
-          { // TODO: Replace that with API later.
-            localContracts.length
-              ? localContracts.map((item) => (
-                <Button key={item.signed} className={classes.contractLink}>
-                  <Typography spacing={10} className={classes.contractText} onClick={() => setIsOpen(true)}>
-                    {/* TODO: Replace it with dynamic text */}
-                    {`c{client_id}_u{user_id}_YYYY-MM-DD-HHMMSS_contract.pdf`}
-                  </Typography>
-                </Button>
+        <List component="nav" aria-label="main mailbox folders" className={classes.Contracts}>
+          {
+            contracs.length
+              ? contracs.map((item) => (
+                <ListItem button key={item.id} onClick={(_) => handleOnClick(_, item.contract_file_name)}>
+                  <ListItemIcon>
+                    <PictureAsPdfIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={item.contract_file_name} />
+                </ListItem>
               ))
               : <Typography>No contracts found...</Typography>
           }
-        </div>
+        </List>
       </Container>
       <ContractDetailModal
-        // TODO: ADD (filePath) necessary props
+        filePath={selectedFilepath}
         isOpen={isOpen}
         hendleOnClose={() => setIsOpen(false)}
       />
