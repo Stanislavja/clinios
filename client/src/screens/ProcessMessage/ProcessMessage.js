@@ -25,11 +25,16 @@ const ProcessMessage = () => {
   const { userId } = useParams();
 
   const [messages, setMessages] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchMessages = useCallback(() => {
     PatientService.getMessages(userId).then((res) => {
       setMessages(res.data);
-    });
+      setIsLoading(false);
+    })
+      .catch(() => {
+        setIsLoading(false);
+      });
   }, [userId]);
 
   useEffect(() => {
@@ -47,14 +52,20 @@ const ProcessMessage = () => {
         Message From Patient
       </Typography>
       {
-        messages.map(((item, index) => (
-          <Grid key={item.id}>
-            <MessageSection
-              message={item}
-              showDivider={messages.length !== index + 1}
-            />
-          </Grid>
-        )))
+        messages.length
+          ? messages.map(((item, index) => (
+            <Grid key={item.id}>
+              <MessageSection
+                message={item}
+                showDivider={messages.length !== index + 1}
+              />
+            </Grid>
+          )))
+          : (
+            <Typography variant="h5">
+              {isLoading ? "Fetching Messages..." : "No Messages Found!"}
+            </Typography>
+          )
       }
     </div>
   );
