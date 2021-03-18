@@ -44,8 +44,7 @@ const SampleDocViewer = ({ filePath }) => {
   };
 
   const onError = (e) => {
-    enqueueSnackbar(e, { variant: "error" });
-    console.error("onError", e);
+    enqueueSnackbar(e?.message, { variant: "error" });
   };
 
   const handlePaginationChange = (event, value) => {
