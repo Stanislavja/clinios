@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ContractDetailModal = ({
+const HandoutDocumentViewerModal = ({
   isOpen,
   hendleOnClose,
   filePath,
@@ -55,7 +55,7 @@ const ContractDetailModal = ({
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title" className={classes.title}>
-          Contract Detail
+          Handout Detail
         </DialogTitle>
         <DialogContent className={classes.content}>
           <SampleDocViewer filePath={filePath} />
@@ -66,13 +66,9 @@ const ContractDetailModal = ({
   );
 };
 
-ContractDetailModal.defaultProps = {
-  filePath: null,
-};
-
-ContractDetailModal.propTypes = {
+HandoutDocumentViewerModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   hendleOnClose: PropTypes.func.isRequired,
-  filePath: PropTypes.string,
+  filePath: PropTypes.string.isRequired,
 };
-export default ContractDetailModal;
+export default HandoutDocumentViewerModal;

@@ -17,8 +17,14 @@ class Users {
     return axios.post(`${API_URL}/user`, data, { headers: authHeader() });
   }
 
-  updateUser(userId, id, data) {
-    return axios.put(`${API_URL}/user/${userId}/${id}`, data, {
+  updateUser(id, data) {
+    return axios.put(`${API_URL}/user/${id}`, data, {
+      headers: authHeader(),
+    });
+  }
+
+  getContractlists() {
+    return axios.get(`${API_URL}/auth/user/contracts`, {
       headers: authHeader(),
     });
   }

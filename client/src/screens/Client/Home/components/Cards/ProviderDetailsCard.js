@@ -80,6 +80,12 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
     && providerDetails.patientLabs
     && providerDetails.patientLabs["min(l.created)"];
 
+
+  const dateValidation = (date, jsx) => {
+    if (!moment(date).isValid()) return null;
+    return jsx;
+  };
+
   return (
     <Card className={classes.providerDetails} variant="outlined">
       <Grid
@@ -118,10 +124,10 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
                       {patientLabsCount}
                     </div>
                     <div>
-                      {(patientLabsDate !== undefined && patientLabsDate)
+                      {dateValidation(patientLabsDate, (patientLabsDate !== undefined && patientLabsDate)
                         ? `${moment(patientLabsDate).format("ll")}
                           (${moment(patientLabsDate).startOf("day").fromNow()})`
-                        : ""}
+                        : "")}
                     </div>
                   </Link>
                 )
@@ -132,10 +138,10 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
                       {patientLabsCount}
                     </div>
                     <div>
-                      {(patientLabsDate !== undefined && patientLabsDate)
+                      {dateValidation(patientLabsDate, (patientLabsDate !== undefined && patientLabsDate)
                         ? `${moment(patientLabsDate).format("ll")}
                           (${moment(patientLabsDate).startOf("day").fromNow()})`
-                        : ""}
+                        : "")}
                     </div>
                   </>
                 )
@@ -151,15 +157,16 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
                   && providerDetails.messageFromPatients["count(m.id)"]}
               </div>
               <div>
-                {!!providerDetails
+                {dateValidation(providerDetails.messageFromPatients?.["min(m.created)"],
+                  !!providerDetails
                   && providerDetails.messageFromPatients
                   && `${moment(providerDetails.messageFromPatients["min(m.created)"]).format("ll")}
                     (${moment(providerDetails.messageFromPatients["min(m.created)"])
-      .startOf("day").fromNow()})`}
+      .startOf("day").fromNow()})`)}
               </div>
             </Link>
           </li>
-          { /* Comment out by Ruhul as per #CLIN-18 */ }
+          { /* Comment out by Ruhul as per #CLIN-18 */}
           <li style={{ display: "none" }}>
             <div>Messages To Patients Unread</div>
             <div className={classes.count}>
@@ -168,23 +175,24 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
                 && providerDetails.messageToPatientsNotRead["count(m.id)"]}
             </div>
             <div>
-              {!!providerDetails
-                && providerDetails.messageToPatientsNotRead
-                && providerDetails.messageToPatientsNotRead[
-                  "min(m.unread_notify_dt)"
-                ]
-                ? `${moment(
-                  providerDetails.messageToPatientsNotRead[
+              {dateValidation(providerDetails.messageToPatientsNotRead?.["min(m.unread_notify_dt)"],
+                !!providerDetails
+                  && providerDetails.messageToPatientsNotRead
+                  && providerDetails.messageToPatientsNotRead[
                     "min(m.unread_notify_dt)"
-                  ],
-                ).format("ll")} (${moment(
-                  providerDetails.messageToPatientsNotRead[
-                    "min(m.unread_notify_dt)"
-                  ],
-                )
-                  .startOf("day")
-                  .fromNow()})`
-                : ""}
+                  ]
+                  ? `${moment(
+                    providerDetails.messageToPatientsNotRead[
+                      "min(m.unread_notify_dt)"
+                    ],
+                  ).format("ll")} (${moment(
+                    providerDetails.messageToPatientsNotRead[
+                      "min(m.unread_notify_dt)"
+                    ],
+                  )
+                    .startOf("day")
+                    .fromNow()})`
+                  : "")}
             </div>
           </li>
           <li>
@@ -195,23 +203,24 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
                 && providerDetails.patientAppointmentRequest["count(uc.client_id)"]}
             </div>
             <div>
-              {!!providerDetails
-                && providerDetails.patientAppointmentRequest
-                && providerDetails.patientAppointmentRequest[
-                  "min(uc.created)"
-                ]
-                ? `${moment(
-                  providerDetails.patientAppointmentRequest[
+              {dateValidation(providerDetails.patientAppointmentRequest?.["min(uc.created)"],
+                !!providerDetails
+                  && providerDetails.patientAppointmentRequest
+                  && providerDetails.patientAppointmentRequest[
                     "min(uc.created)"
-                  ],
-                ).format("ll")} (${moment(
-                  providerDetails.patientAppointmentRequest[
-                    "min(uc.created)"
-                  ],
-                )
-                  .startOf("day")
-                  .fromNow()})`
-                : ""}
+                  ]
+                  ? `${moment(
+                    providerDetails.patientAppointmentRequest[
+                      "min(uc.created)"
+                    ],
+                  ).format("ll")} (${moment(
+                    providerDetails.patientAppointmentRequest[
+                      "min(uc.created)"
+                    ],
+                  )
+                    .startOf("day")
+                    .fromNow()})`
+                  : "")}
             </div>
           </li>
         </ul>

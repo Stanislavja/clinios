@@ -137,6 +137,12 @@ exports.signup = async (req, res) => {
           userRows[0],
           clientRows[0]
         );
+        if (pdf) {
+          await db.query(
+            `insert into user_contract (client_id, user_id, contract_id, filename, created) 
+              values (${clientResponse.insertId}, ${userResponse.insertId}, ${contractContent.id}, '${pdf.fileName}', now())`
+          );
+        }
         responseData.contractLink = pdf;
         // end Create contract PDF
       }
