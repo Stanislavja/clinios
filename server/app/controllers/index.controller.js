@@ -88,7 +88,9 @@ const getUserContracts = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const dbResponse = await db.query(
-      `select id, contract_file_name from user where client_id=${req.client_id}`
+      `select id, client_id, user_id, filename, created
+      from user_contract
+      where client_id=${req.client_id}`
     );
 
     if (!dbResponse) {

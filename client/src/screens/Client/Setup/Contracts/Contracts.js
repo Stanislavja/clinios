@@ -58,11 +58,11 @@ const Contracts = () => {
           {
             contracs.length
               ? contracs.map((item) => (
-                <ListItem button key={item.id} onClick={(_) => handleOnClick(_, item.contract_file_name)}>
+                <ListItem button key={item.id} onClick={(_) => handleOnClick(_, item.filename)}>
                   <ListItemIcon>
                     <PictureAsPdfIcon />
                   </ListItemIcon>
-                  <ListItemText primary={item.contract_file_name} />
+                  <ListItemText primary={item.filename} />
                 </ListItem>
               ))
               : <Typography>No contracts found...</Typography>
