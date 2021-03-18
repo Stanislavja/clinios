@@ -135,6 +135,7 @@ const LabRanges = () => {
   const applyResetHandler = () => {
     LabRangeService.resetLabRanges().then((res) => {
       enqueueSnackbar(`${res.message}`, { variant: "success" });
+      closeResetDialog();
     });
   };
 
