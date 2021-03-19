@@ -75,7 +75,7 @@ const StatusSelectionFields = [
   },
   {
     label: "Closed",
-    value: "R",
+    value: "C",
   },
 ];
 
@@ -130,6 +130,7 @@ const MessageSection = (props) => {
     };
     MessageToUserService.updateMessage(id, reqBody).then((res) => {
       enqueueSnackbar(`${res.message}`, { variant: "success" });
+      fetchMessages();
     });
   };
 
