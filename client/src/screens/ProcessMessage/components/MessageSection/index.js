@@ -79,7 +79,7 @@ const StatusSelectionFields = [
   },
 ];
 
-const ProcessMessage = (props) => {
+const MessageSection = (props) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const { message, showDivider, fetchMessages } = props;
@@ -397,7 +397,7 @@ const ProcessMessage = (props) => {
   );
 };
 
-ProcessMessage.propTypes = {
+MessageSection.propTypes = {
   showDivider: PropTypes.bool.isRequired,
   fetchMessages: PropTypes.func.isRequired,
   message: PropTypes.shape({
@@ -413,4 +413,4 @@ ProcessMessage.propTypes = {
   }).isRequired,
 };
 
-export default ProcessMessage;
+export default MessageSection;
