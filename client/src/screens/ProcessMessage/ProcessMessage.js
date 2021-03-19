@@ -5,44 +5,38 @@ import {
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import { useParams } from "react-router-dom";
 
-import PatientService from "../../services/patient.service";
+import MessageToUserService from "../../services/message-to-user.service";
 import MessageSection from "./components/MessageSection";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    padding: "25px 0px",
-  },
   gutterBottom: {
-    marginBottom: theme.spacing(1),
+    marginBottom: theme.spacing(3),
   },
 }));
 
 const ProcessMessage = () => {
   const classes = useStyles();
-  const { userId } = useParams();
 
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchMessages = useCallback(() => {
-    PatientService.getMessages(userId).then((res) => {
+    MessageToUserService.getAllMessages().then((res) => {
       setMessages(res.data);
       setIsLoading(false);
     })
       .catch(() => {
         setIsLoading(false);
       });
-  }, [userId]);
+  }, []);
 
   useEffect(() => {
     fetchMessages();
   }, [fetchMessages]);
 
   return (
-    <div className={classes.root}>
+    <>
       <Typography
         component="h1"
         variant="h2"
@@ -67,7 +61,7 @@ const ProcessMessage = () => {
             </Typography>
           )
       }
-    </div>
+    </>
   );
 };
 
