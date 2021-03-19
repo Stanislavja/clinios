@@ -34,8 +34,8 @@ class Messages {
     }).then((res) => res.data);
   }
 
-  updateMessage(payload) {
-    return axios.put(`${API_BASE}/user/messages/${payload.data.id}`, payload, {
+  updateMessage(id, payload) {
+    return axios.put(`${API_BASE}/user/messages/${id}`, payload, {
       headers: authHeader(),
     }).then((res) => res.data);
   }
