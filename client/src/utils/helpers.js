@@ -194,7 +194,7 @@ export const messageStatusType = (type) => {
   switch (type) {
     case "O":
       return "Open";
-    case "C":
+    case "R":
       return "Closed";
     default:
       return "";

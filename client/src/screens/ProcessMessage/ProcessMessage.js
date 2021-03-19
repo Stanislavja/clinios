@@ -52,6 +52,7 @@ const ProcessMessage = () => {
               <MessageSection
                 message={item}
                 showDivider={messages.length !== index + 1}
+                fetchMessages={fetchMessages}
               />
             </Grid>
           )))
