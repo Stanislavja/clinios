@@ -7,7 +7,7 @@ const { errorMessage, successMessage, status } = require("../helpers/status");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const dest = process.env.UPLOAD_DIR+'/patient';
+    const dest = `${process.env.UPLOAD_DIR}/patient`;
     // eslint-disable-next-line prefer-arrow-callback
     fs.access(dest, function (error) {
       if (error) {
