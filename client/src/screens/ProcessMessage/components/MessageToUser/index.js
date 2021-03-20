@@ -8,6 +8,7 @@ import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 
 import Dialog from "../../../../components/Dialog";
+import useAuth from "../../../../hooks/useAuth";
 import MessageToUserService from "../../../../services/message-to-user.service";
 
 const useStyles = makeStyles((theme) => ({
@@ -25,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
 const NewMessage = (props) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
+  const { user } = useAuth();
   const { isOpen, onClose, reloadData } = props;
 
   const [formFields, setFormFields] = useState({
@@ -46,12 +48,14 @@ const NewMessage = (props) => {
       data: {
         message: formFields.message,
         subject: formFields.subject,
+        user_id_from: user.id,
       },
     };
     MessageToUserService.createMessage(reqBody)
       .then((response) => {
-        enqueueSnackbar(`${response.data.message}`, { variant: "success" });
+        enqueueSnackbar(`${response.message}`, { variant: "success" });
         reloadData();
+        onClose();
       });
   };
 
