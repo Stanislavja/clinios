@@ -65,6 +65,9 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     left: 0,
     top: theme.spacing(-3),
+    [theme.breakpoints.down("md")]: {
+      display: "none",
+    },
   },
 }));
 
@@ -359,7 +362,7 @@ const MessageSection = (props) => {
                 <TableBody>
                   {messageHistory.length
                     ? messageHistory.map((row) => (
-                      <StyledTableRowSm key={row.created}>
+                      <StyledTableRowSm key={`${row.assigned_to}_${row.updated}_${row.updated_by}`}>
                         <StyledTableCellSm>{row.assigned_to}</StyledTableCellSm>
                         <StyledTableCellSm>{messageStatusType(row.status)}</StyledTableCellSm>
                         <StyledTableCellSm>{dateFormat(row.updated)}</StyledTableCellSm>
@@ -406,7 +409,7 @@ MessageSection.propTypes = {
     created: PropTypes.string,
     status: PropTypes.string,
     note_assign: PropTypes.string,
-    user_id_to: PropTypes.string,
+    user_id_to: PropTypes.number,
     user_to_name: PropTypes.string,
     patient_from_name: PropTypes.string,
     subject: PropTypes.string,
