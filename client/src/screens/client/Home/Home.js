@@ -12,16 +12,15 @@ import Appointments from "../../../services/appointments.service";
 import DashboardHome from "../../../services/DashboardHome.service";
 import Messages from "../../../services/message-to-patient.service";
 import { statusToColorCode, isEmpty } from "../../../utils/helpers";
-import {
-  AppointmentRequests,
-  Calendar,
-  MessageHistory,
-  MessagesUnread,
-  MessageToPatient,
-  NewOrEditEvent,
-  ProviderCards,
-  ProviderDetailsCard,
-} from "./components";
+// components
+import Calendar from "./components/Calendar/EventCalendar";
+import AppointmentRequests from "./components/Cards/AppointmentRequests";
+import MessagesUnread from "./components/Cards/MessagesUnread";
+import ProviderCards from "./components/Cards/ProviderCards";
+import ProviderDetailsCard from "./components/Cards/ProviderDetailsCard";
+import MessageHistory from "./components/Modal/MessageHistory";
+import MessageToPatient from "./components/Modal/MessageToPatient";
+import NewOrEditEvent from "./components/Modal/NewOrEditEvent";
 
 const useStyles = makeStyles((theme) => ({
   pageTitle: {
