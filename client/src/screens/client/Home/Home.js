@@ -317,7 +317,11 @@ export default function Home() {
             providers={providers}
             handleProviderClick={handleProviderClick}
           />
-          <ProviderDetailsCard selectedProvider={selectedProvider} providerDetails={providerDetails} />
+          <ProviderDetailsCard
+            selectedProvider={selectedProvider}
+            providerDetails={providerDetails}
+            fetchProviderDetails={() => fetchProviderDetails(selectedProvider.id)}
+          />
           {!!selectedProvider && (
             <>
               <MessagesUnread
