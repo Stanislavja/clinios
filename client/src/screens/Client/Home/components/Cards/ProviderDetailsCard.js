@@ -97,6 +97,7 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails, fetchProviderD
     <>
       {!!showMessagesModal && (
         <Dialog
+          fullHeight
           open={showMessagesModal}
           title="Messages"
           message={(
