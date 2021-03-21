@@ -9,9 +9,9 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-import Dialog from "../../../../../components/Dialog";
-import Colors from "../../../../../theme/colors";
-import ProcessMessage from "../../../../ProcessMessage";
+import Dialog from "../../../../../../components/Dialog";
+import Colors from "../../../../../../theme/colors";
+import ProcessMessage from "../../../../../ProcessMessage";
 
 const useStyles = makeStyles((theme) => ({
   title: {
