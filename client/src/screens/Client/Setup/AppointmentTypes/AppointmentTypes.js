@@ -12,6 +12,7 @@ import AppointmentService from "../../../../services/appointmentType.service";
 import { Appointments } from "./components";
 import DeleteAppointmentModal from "./components/modal/DeleteAppointmentType";
 import NewOrEditAppointment from "./components/modal/NewOrEditAppointmentType";
+import useKeyboardShortcuts from "./hooks/useKeyboardShortcuts";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,6 +47,7 @@ export default function AppointmentTypes() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [appointments, setAppointments] = useState([]);
   const [isNewAppointment, setIsNewAppointment] = useState(true);
+
 
   const fetchAppointmentTypes = () => {
     AppointmentService.getAll().then((res) => {
@@ -89,6 +91,11 @@ export default function AppointmentTypes() {
     setIsNewAppointment(true);
     setSelectedAppointment("");
   };
+
+  useKeyboardShortcuts(["N"], () => {
+    handleOnNewClick();
+  }, { overrideSystem: false });
+
 
   return (
     <>
