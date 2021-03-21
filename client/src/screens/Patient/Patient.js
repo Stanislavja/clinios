@@ -528,7 +528,13 @@ const Patient = () => {
       case "Forms":
         return <FormCardContent />;
       case "Billing":
-        return <BillingCardContent />;
+        return (
+          <BillingCardContent reloadData={() => {
+            fetchBillings();
+            fetchPatientBalance();
+          }}
+          />
+        );
       case "Allergies":
         return (
           <AllergiesCardContent
