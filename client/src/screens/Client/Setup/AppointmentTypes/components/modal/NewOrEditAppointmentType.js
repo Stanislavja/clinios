@@ -42,6 +42,17 @@ const useStyles = makeStyles((theme) => ({
       minWidth: 120,
     },
   },
+  switchControl: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    color: theme.palette.text.secondary,
+    marginBottom: theme.spacing(1.5),
+    marginTop: theme.spacing(1.5),
+    "& .MuiSelect-select": {
+      minWidth: 120,
+    },
+  },
   formLabel: {
     fontSize: "14px",
     fontWeight: "600",
@@ -122,8 +133,8 @@ const NewOrEditAppointment = ({
   const handleFormSubmission = () => {
     // Duplicate Type
     const duplicateType = savedAppointments
-      .map((x) => appointment.appointment_type.includes(x.appointment_type))
-      .includes(true);
+      ?.map((x) => appointment.appointment_type?.includes(x.appointment_type))
+      ?.includes(true);
     // Validation Start Here
     if (duplicateType) {
       setTypeError(true);
@@ -132,8 +143,9 @@ const NewOrEditAppointment = ({
         data: removeEmpty({
           appointment_type: appointment.appointment_type,
           length: appointment.length,
-          allow_patients_schedule: appointment.allow_patients_schedule ? 1 : 0,
+          fee: appointment.fee,
           sort_order: appointment.sort_order,
+          allow_patients_schedule: appointment.allow_patients_schedule ? 1 : 0,
           note: appointment.note,
           active: appointment.active ? 1 : 0,
           created_user_id: user.id,
@@ -230,19 +242,21 @@ const NewOrEditAppointment = ({
               </p>
             </FormControl>
             <FormControl component="div" className={classes.formControl}>
-              <Switch
+              <TextField
+                className={classes.formFieldSmall}
+                variant="outlined"
+                label="Fee"
+                margin="normal"
+                name="fee"
+                id="fee"
+                type="number"
+                autoComplete="fee"
+                onChange={(event) => handleOnChange(event)}
+                value={appointment.fee}
                 size="small"
-                checked={appointment.allow_patients_schedule}
-                onChange={(event) => setAppointment({
-                  ...appointment,
-                  [event.target.name]: !appointment.allow_patients_schedule,
-                })}
-                name="allow_patients_schedule"
-                color="primary"
-                inputProps={{ "aria-label": "primary checkbox" }}
               />
               <p className={classes.formHelperText}>
-                Allow patient to select this in the patient portal
+                The fee for the appointment
               </p>
             </FormControl>
             <FormControl component="div" className={classes.formControl}>
@@ -263,8 +277,23 @@ const NewOrEditAppointment = ({
                 The order in which this is shown
               </p>
             </FormControl>
-
-            <FormControl component="div" className={classes.formControl}>
+            <FormControl component="div" className={classes.switchControl}>
+              <Switch
+                size="small"
+                checked={appointment.allow_patients_schedule}
+                onChange={(event) => setAppointment({
+                  ...appointment,
+                  [event.target.name]: !appointment.allow_patients_schedule,
+                })}
+                name="allow_patients_schedule"
+                color="primary"
+                inputProps={{ "aria-label": "primary checkbox" }}
+              />
+              <p className={classes.formHelperText}>
+                Allow patient to select this in the patient portal
+              </p>
+            </FormControl>
+            <FormControl component="div" className={classes.switchControl}>
               <Switch
                 size="small"
                 checked={appointment.active}
