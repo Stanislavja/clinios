@@ -15,13 +15,13 @@ import { statusToColorCode, isEmpty } from "../../../utils/helpers";
 import {
   AppointmentRequests,
   Calendar,
+  MessageHistory,
   MessagesUnread,
   MessageToPatient,
   NewOrEditEvent,
   ProviderCards,
   ProviderDetailsCard,
 } from "./components";
-import MessageHistory from "./components/modal/MessageHistory";
 
 const useStyles = makeStyles((theme) => ({
   pageTitle: {

@@ -146,8 +146,8 @@ const MessageSection = (props) => {
           reloadData={fetchMessages}
         />
       )}
-      <Grid item lg={8} xs={12}>
-        <Grid container spacing={1} className={classes.gutterBottom}>
+      <Grid item lg={6} xs={12}>
+        <Grid container spacing={1}>
           <Grid item xs>
             <Typography
               component="span"
@@ -224,7 +224,7 @@ const MessageSection = (props) => {
         </Grid>
       </Grid>
 
-      <Grid container spacing={1} className={classes.gutterBottom}>
+      <Grid container spacing={1}>
         <Grid item xs>
           <Typography
             component="span"
@@ -337,7 +337,7 @@ const MessageSection = (props) => {
           <TextField
             variant="outlined"
             name="notes"
-            label="Assignment Notes"
+            label="Assignment Note"
             type="text"
             fullWidth
             multiline

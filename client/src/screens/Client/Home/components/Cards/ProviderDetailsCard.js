@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
+const ProviderDetailsCard = ({ selectedProvider, providerDetails, fetchProviderDetails }) => {
   const classes = useStyles();
   const [showMessagesModal, setShowMessagesModal] = useState(false);
   const patientLabsCount = !!providerDetails
@@ -97,13 +97,13 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
     <>
       {!!showMessagesModal && (
         <Dialog
-          fullScreen
           open={showMessagesModal}
           title="Messages"
           message={(
-            <ProcessMessage />
+            <ProcessMessage fetchProviderDetails={fetchProviderDetails} />
           )}
           cancelForm={() => toggleMessagesModal()}
+          size="xl"
           hideActions
         />
       )}
@@ -251,6 +251,7 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails }) => {
 };
 
 ProviderDetailsCard.propTypes = {
+  fetchProviderDetails: PropTypes.func.isRequired,
   selectedProvider: PropTypes.shape({
     id: PropTypes.number,
     name: PropTypes.string,
