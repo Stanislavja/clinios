@@ -125,7 +125,7 @@ const NewOrEditAppointment = ({
         onClose();
       },
       (error) => {
-        setErrors(error.response.data.error);
+        setErrors(error.response.data.message);
       },
     );
   };
