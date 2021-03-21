@@ -27,10 +27,12 @@ const NewMessage = (props) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuth();
-  const { isOpen, onClose, reloadData } = props;
+  const {
+    isOpen, onClose, reloadData, message,
+  } = props;
 
   const [formFields, setFormFields] = useState({
-    subject: "",
+    subject: message.subject,
     message: "",
   });
 
@@ -67,7 +69,6 @@ const NewMessage = (props) => {
         <form onSubmit={onMessageSend}>
           <Grid className={classes.formInput} item md={4}>
             <TextField
-              autoFocus
               required
               variant="standard"
               name="subject"
@@ -87,6 +88,7 @@ const NewMessage = (props) => {
           <Grid className={classes.formInput} item md={12}>
             <TextField
               required
+              autoFocus
               variant="outlined"
               name="message"
               id="message"
@@ -121,6 +123,9 @@ NewMessage.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   reloadData: PropTypes.func.isRequired,
+  message: PropTypes.shape({
+    subject: PropTypes.string,
+  }).isRequired,
 };
 
 export default NewMessage;

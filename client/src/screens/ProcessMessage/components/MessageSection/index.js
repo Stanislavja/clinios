@@ -144,6 +144,7 @@ const MessageSection = (props) => {
           isOpen={showMessageDialog}
           onClose={toggleMessageDialog}
           reloadData={fetchMessages}
+          message={message}
         />
       )}
       <Grid item lg={6} xs={12}>
