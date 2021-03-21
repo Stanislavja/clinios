@@ -90,7 +90,6 @@ const NewOrEditAppointment = ({
   const { savedAppointments } = props;
   const [appointment, setAppointment] = useState([]);
   const [errors, setErrors] = useState([]);
-  const [nameError, setNameError] = useState(false);
   const [typeError, setTypeError] = useState(false);
 
   useEffect(() => {
@@ -121,31 +120,17 @@ const NewOrEditAppointment = ({
   };
 
   const handleFormSubmission = () => {
-    // Duplicate Name
-    const duplicateName = savedAppointments
-      .map((x) => appointment.appointment_name_portal.includes(x.appointment_name_portal))
-      .includes(true);
     // Duplicate Type
     const duplicateType = savedAppointments
       .map((x) => appointment.appointment_type.includes(x.appointment_type))
       .includes(true);
     // Validation Start Here
-    if (duplicateName || duplicateType) {
-      if (duplicateName && duplicateType) {
-        setNameError(true);
-        setTypeError(true);
-      } else if (duplicateName) {
-        setNameError(true);
-        setTypeError(false);
-      } else {
-        setTypeError(true);
-        setNameError(false);
-      }
+    if (duplicateType) {
+      setTypeError(true);
     } else {
       const formedData = {
         data: removeEmpty({
           appointment_type: appointment.appointment_type,
-          appointment_name_portal: appointment.appointment_name_portal,
           length: appointment.length,
           allow_patients_schedule: appointment.allow_patients_schedule ? 1 : 0,
           sort_order: appointment.sort_order,
@@ -199,7 +184,7 @@ const NewOrEditAppointment = ({
           </DialogContentText>
           {errors
             && errors.map((error, index) => (
-               // eslint-disable-next-line react/no-array-index-key
+              // eslint-disable-next-line react/no-array-index-key
               <Alert severity="error" key={index}>
                 {error.msg}
               </Alert>
@@ -224,26 +209,6 @@ const NewOrEditAppointment = ({
               />
               <p className={classes.formHelperText}>
                 The name of the appointment type
-              </p>
-            </FormControl>
-            <FormControl component="div" className={classes.formControl}>
-              <TextField
-                className={classes.formFieldLarge}
-                variant="outlined"
-                label="Portal Name"
-                margin="normal"
-                fullWidth
-                name="appointment_name_portal"
-                id="appointment_name_portal"
-                autoComplete="appointment_name_portal"
-                onChange={(event) => handleOnChange(event)}
-                value={appointment.appointment_name_portal}
-                size="small"
-                error={nameError}
-                helperText={nameError ? "You entered a duplicate name" : ""}
-              />
-              <p className={classes.formHelperText}>
-                The name shown in the patient portal
               </p>
             </FormControl>
             <FormControl component="div" className={classes.formControl}>
@@ -371,7 +336,6 @@ NewOrEditAppointment.propTypes = {
     PropTypes.shape({
       id: PropTypes.number,
       appointment_type: PropTypes.string,
-      appointment_name_portal: PropTypes.string,
       length: PropTypes.number,
       sort_order: PropTypes.number,
       allow_patients_schedule: PropTypes.number,
@@ -380,7 +344,6 @@ NewOrEditAppointment.propTypes = {
   ]).isRequired,
   savedAppointments: PropTypes.arrayOf(
     PropTypes.shape({
-      appointment_name_portal: PropTypes.string,
       appointment_type: PropTypes.string,
     }),
   ).isRequired,
