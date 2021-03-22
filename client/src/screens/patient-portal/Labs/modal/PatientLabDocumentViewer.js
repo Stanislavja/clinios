@@ -67,7 +67,6 @@ const Lab = ({
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setTotalPages(numPages);
-    setPageNumber(1);
   };
 
   const handleChange = (event, value) => {
