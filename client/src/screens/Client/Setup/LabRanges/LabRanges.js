@@ -18,7 +18,7 @@ import {
   TableCell,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/DeleteOutline";
-import EditIcon from "@material-ui/icons/Edit";
+import EditIcon from "@material-ui/icons/EditOutlined";
 import { isEmpty } from "lodash";
 import moment from "moment";
 import { useSnackbar } from "notistack";
@@ -115,8 +115,16 @@ const LabRanges = () => {
     fetchLabRanges();
   }, [fetchLabRanges]);
 
-  const handleChangeFuncRange = () => {
+  const handleChangeFuncRange = (e, value) => {
     setUseFuncRange((prevState) => !prevState);
+    const reqBody = {
+      data: {
+        use: value,
+      },
+    };
+    LabRangeService.updateLabRangeUse(reqBody).then((res) => {
+      enqueueSnackbar(res.message, { variant: "success" });
+    });
   };
 
   const deleteItemHandler = (item) => {

@@ -40,6 +40,12 @@ class LabRangeService {
       headers: authHeader(),
     }).then((res) => res.data);
   }
+
+  updateLabRangeUse(data) {
+    return axios.post(`${API_BASE}/client-range/use`, data, {
+      headers: authHeader(),
+    }).then((res) => res.data);
+  }
 }
 
 export default new LabRangeService();
