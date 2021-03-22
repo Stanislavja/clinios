@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, Typography, IconButton } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/DeleteOutline";
 import EditIcon from "@material-ui/icons/Edit";
@@ -29,13 +29,13 @@ const useStyles = makeStyles((theme) => ({
     width: 65,
     textAlign: "right",
     padding: theme.spacing(0, 0.5, 0, 0),
+    "& button": {
+      padding: 5,
+    },
     "& svg": {
       fontSize: "1rem",
       cursor: "pointer",
     },
-  },
-  mr2: {
-    marginRight: 5,
   },
 }));
 
@@ -143,13 +143,17 @@ const BillingContent = (props) => {
             </Grid>
           )}
           <Grid item className={classes.blockAction}>
-            <EditIcon
+            <IconButton
               onClick={() => editItemHandler(item)}
-              className={classes.mr2}
-            />
-            <DeleteIcon
+            >
+              <EditIcon />
+            </IconButton>
+            <IconButton
+              disabled={(item.payment_type === "C" || item.payment_type === "A")}
               onClick={() => openDeleteDialog(item)}
-            />
+            >
+              <DeleteIcon />
+            </IconButton>
           </Grid>
         </Grid>
       ))}
