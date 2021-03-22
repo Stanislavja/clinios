@@ -14,7 +14,6 @@ import PatientService from "../../../../services/patient.service";
 
 const useStyles = makeStyles((theme) => ({
   inputRow: {
-    marginBottom: theme.spacing(0.5),
     flexWrap: "nowrap",
   },
   block: {
@@ -26,11 +25,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(0, 0.5, 0, 0),
   },
   blockAction: {
-    width: "100%",
     textAlign: "right",
-    padding: theme.spacing(0, 0.5, 0, 0),
     "& button": {
-      padding: 5,
+      padding: 2,
     },
     "& svg": {
       fontSize: "1rem",

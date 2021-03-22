@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(0, 0.5, 0, 0),
   },
   fullWidth: {
-    width: "100%",
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",
@@ -36,9 +35,8 @@ const useStyles = makeStyles((theme) => ({
   },
   blockAction: {
     textAlign: "right",
-    padding: theme.spacing(0, 0.5, 0, 0),
     "& button": {
-      padding: 5,
+      padding: 2,
     },
     "& svg": {
       fontSize: "1rem",

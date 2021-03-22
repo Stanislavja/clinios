@@ -11,7 +11,7 @@ import Alert from "../../../../components/Alert";
 import usePatientContext from "../../../../hooks/usePatientContext";
 import PatientService from "../../../../services/patient.service";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   text12: {
     fontSize: 12,
   },
@@ -19,11 +19,10 @@ const useStyles = makeStyles((theme) => ({
     whiteSpace: "nowrap",
   },
   blockAction: {
-    // width: "100%",
+    marginLeft: 5,
     textAlign: "right",
-    padding: theme.spacing(0, 0.5, 0, 0),
     "& button": {
-      padding: 5,
+      padding: 2,
     },
     "& svg": {
       fontSize: "1rem",
@@ -82,7 +81,7 @@ const AllergiesContent = (props) => {
               {moment(item.created).format("MMM D YYYY")}
             </Typography>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item>
             <Typography className={`${classes.text12} ${classes.noWrap}`}>
               {item.name}
             </Typography>

@@ -28,9 +28,8 @@ const useStyles = makeStyles((theme) => ({
   blockAction: {
     width: 65,
     textAlign: "right",
-    padding: theme.spacing(0, 0.5, 0, 0),
     "& button": {
-      padding: 5,
+      padding: 2,
     },
     "& svg": {
       fontSize: "1rem",
