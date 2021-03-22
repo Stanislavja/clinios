@@ -12,7 +12,7 @@ import { useParams } from "react-router-dom";
 import { StyledTableCellLg, StyledTableRowLg } from "../../../../components/common/StyledTable";
 import Dialog from "../../../../components/Dialog";
 import LabService from "../../../../services/lab.service";
-import { labStatusType, labSourceType } from "../../../../utils/helpers";
+import { labStatusType, labSourceType, dateFormat } from "../../../../utils/helpers";
 
 const UserHistory = (props) => {
   const { open, onClose } = props;
@@ -34,7 +34,7 @@ const UserHistory = (props) => {
       <TableHead>
         <TableRow>
           <StyledTableCellLg>Created</StyledTableCellLg>
-          <StyledTableCellLg>Created By</StyledTableCellLg>
+          <StyledTableCellLg>Filename</StyledTableCellLg>
           <StyledTableCellLg>Status</StyledTableCellLg>
           <StyledTableCellLg>Type</StyledTableCellLg>
           <StyledTableCellLg>Assigned To</StyledTableCellLg>
@@ -46,9 +46,9 @@ const UserHistory = (props) => {
         {userHistory.map((row) => (
           <StyledTableRowLg key={row.type}>
             <StyledTableCellLg component="th" scope="row">
-              {row.created}
+              {dateFormat(row.created)}
             </StyledTableCellLg>
-            <StyledTableCellLg>{row.lastFour}</StyledTableCellLg>
+            <StyledTableCellLg>{row.filename}</StyledTableCellLg>
             <StyledTableCellLg>{labStatusType(row.status)}</StyledTableCellLg>
             <StyledTableCellLg>{labSourceType(row.type)}</StyledTableCellLg>
             <StyledTableCellLg>{row.assigned_to}</StyledTableCellLg>
