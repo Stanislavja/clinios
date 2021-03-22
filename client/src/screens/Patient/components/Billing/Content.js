@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Grid, Typography, IconButton } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/DeleteOutline";
-import EditIcon from "@material-ui/icons/Edit";
+import EditIcon from "@material-ui/icons/EditOutlined";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
