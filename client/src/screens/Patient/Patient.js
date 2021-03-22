@@ -550,7 +550,11 @@ const Patient = () => {
         return <MedicalNotesCardContent />;
 
       case "Handouts":
-        return <HandoutsCardContent />;
+        return (
+          <HandoutsCardContent
+            reloadData={() => fetchPatientHandouts()}
+          />
+        );
       case "Messages":
         return (
           <MessagesCardContent
@@ -560,7 +564,14 @@ const Patient = () => {
       case "Medications":
         return <MedicationsCardContent />;
       case "Diagnoses":
-        return <DiagnosesCardContent />;
+        return (
+          <DiagnosesCardContent
+            reloadData={() => {
+              fetchDiagnoses();
+              fetchDiagnoses(true);
+            }}
+          />
+        );
       case "Requisitions":
         return <RequisitionsCardContent />;
       case "Insights":
