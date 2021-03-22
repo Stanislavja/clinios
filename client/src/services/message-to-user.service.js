@@ -29,7 +29,7 @@ class Messages {
   }
 
   createMessage(payload) {
-    return axios.post(`${API_BASE}/user/messages`, payload, {
+    return axios.post(`${API_BASE}/user/message`, payload, {
       headers: authHeader(),
     }).then((res) => res.data);
   }

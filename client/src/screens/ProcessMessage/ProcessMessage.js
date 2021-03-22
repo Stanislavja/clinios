@@ -2,21 +2,27 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import {
   Grid,
+  Button,
   Typography,
   makeStyles,
 } from "@material-ui/core";
+import PropTypes from "prop-types";
 
 import MessageToUserService from "../../services/message-to-user.service";
 import MessageSection from "./components/MessageSection";
 
 const useStyles = makeStyles((theme) => ({
   gutterBottom: {
-    marginBottom: theme.spacing(3),
+    marginBottom: theme.spacing(2),
+  },
+  mr3: {
+    marginRight: theme.spacing(3),
   },
 }));
 
-const ProcessMessage = () => {
+const ProcessMessage = (props) => {
   const classes = useStyles();
+  const { fetchProviderDetails } = props;
 
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -37,14 +43,19 @@ const ProcessMessage = () => {
 
   return (
     <>
-      <Typography
-        component="h1"
-        variant="h2"
-        color="textPrimary"
-        className={classes.gutterBottom}
-      >
-        Message From Patient
-      </Typography>
+      <Grid container className={classes.gutterBottom}>
+        <Typography
+          component="h1"
+          variant="h2"
+          color="textPrimary"
+          className={classes.mr3}
+        >
+          Message From Patient
+        </Typography>
+        <Button onClick={() => { }}>
+          User History
+        </Button>
+      </Grid>
       {
         messages.length
           ? messages.map(((item, index) => (
@@ -52,7 +63,10 @@ const ProcessMessage = () => {
               <MessageSection
                 message={item}
                 showDivider={messages.length !== index + 1}
-                fetchMessages={fetchMessages}
+                fetchMessages={() => {
+                  fetchMessages();
+                  fetchProviderDetails();
+                }}
               />
             </Grid>
           )))
@@ -64,6 +78,10 @@ const ProcessMessage = () => {
       }
     </>
   );
+};
+
+ProcessMessage.propTypes = {
+  fetchProviderDetails: PropTypes.func.isRequired,
 };
 
 export default ProcessMessage;

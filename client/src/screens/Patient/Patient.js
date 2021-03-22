@@ -113,6 +113,7 @@ import {
   HandoutsCardContent,
   HandoutsDetails,
 } from "./components/Handouts";
+import InsightsCardContent from "./components/Insights/content";
 import EncountersForm from "./Encounters";
 import EncountersCardContent from "./Encounters/content";
 import EncountersDetails from "./Encounters/details";
@@ -527,7 +528,13 @@ const Patient = () => {
       case "Forms":
         return <FormCardContent />;
       case "Billing":
-        return <BillingCardContent />;
+        return (
+          <BillingCardContent reloadData={() => {
+            fetchBillings();
+            fetchPatientBalance();
+          }}
+          />
+        );
       case "Allergies":
         return (
           <AllergiesCardContent
@@ -556,6 +563,8 @@ const Patient = () => {
         return <DiagnosesCardContent />;
       case "Requisitions":
         return <RequisitionsCardContent />;
+      case "Insights":
+        return <InsightsCardContent />;
       default:
         return <div />;
     }
