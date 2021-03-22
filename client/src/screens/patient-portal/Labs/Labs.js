@@ -15,6 +15,7 @@ import { useSnackbar } from "notistack";
 import useAuth from "../../../hooks/useAuth";
 import useDidMountEffect from "../../../hooks/useDidMountEffect";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
+import PatientLabDocumentViewer from "./modal/PatientLabDocumentViewer";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,6 +60,7 @@ const StyledTableCell = withStyles(() => ({
 const StyledTableRow = withStyles(() => ({
   root: {
     fontSize: 14,
+    cursor: "pointer",
     "& th": {
       fontSize: 14,
       whiteSpace: "nowrap",
@@ -77,10 +79,12 @@ const StyledTableRow = withStyles(() => ({
 const Labs = () => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  const { lastVisitedPatient } = useAuth();
+  const { lastVisitedPatient, user } = useAuth();
   const [labDocuments, setLabDocuments] = useState([]);
   const [tabValue, setTabValue] = useState(0);
   const [tableData, setTableData] = useState([]);
+  const [isLabModalOpen, setIsLabModalOpen] = useState(false);
+  const [documentName, setDocumentName] = useState("");
 
   const fetchLabDocuments = useCallback(() => {
     PatientPortalService.getLabDocuments(lastVisitedPatient).then((res) => {
@@ -144,6 +148,11 @@ const Labs = () => {
           enqueueSnackbar(`${resMessage}`, { variant: "error" });
         });
     }
+  };
+
+  const handleDocumentClick = (doc) => {
+    setDocumentName(doc.filename);
+    setIsLabModalOpen(true);
   };
 
   return (
@@ -233,11 +242,16 @@ const Labs = () => {
             <TableBody>
               {tableData.length ? (
                 tableData.map((item) => (
-                  <StyledTableRow key={`${item.created}_${item.filename}`}>
+                  <StyledTableRow
+                    key={`${item.created}_${item.filename}`}
+                    onClick={() => handleDocumentClick(item)}
+                  >
                     <StyledTableCell component="th" scope="item">
                       {moment(item.created).format("MMM D YYYY")}
                     </StyledTableCell>
-                    <StyledTableCell>{item.filename}</StyledTableCell>
+                    <StyledTableCell>
+                      {item.filename}
+                    </StyledTableCell>
                   </StyledTableRow>
                 ))
               ) : (
@@ -253,6 +267,15 @@ const Labs = () => {
           </Table>
         </TableContainer>
       </Grid>
+      {isLabModalOpen
+        && (
+          <PatientLabDocumentViewer
+            open={isLabModalOpen}
+            documentName={documentName}
+            patientId={user?.client_id}
+            handleClose={() => setIsLabModalOpen(false)}
+          />
+        )}
     </div>
   );
 };
