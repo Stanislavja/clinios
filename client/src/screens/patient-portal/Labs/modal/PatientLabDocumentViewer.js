@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function checkFileExtension = (fileName) => fileName.substring(fileName.lastIndexOf(".") + 1);
+const checkFileExtension = (fileName) => fileName.substring(fileName.lastIndexOf(".") + 1);
 
 const Lab = ({
   open, documentName, patientId, handleClose,
