@@ -72,6 +72,7 @@ import {
   toggleNewTransactionDialog,
   togglePaymentDialog,
   togglePatientAppointmentHistoryDialog,
+  resetSelectedMessage,
 } from "../../providers/Patient/actions";
 import initialState from "../../providers/Patient/initialState";
 import PatientService from "../../services/patient.service";
@@ -169,7 +170,7 @@ const Patient = () => {
     allergies, messages, requisitions, tests, diagnoses, medications, billing,
   } = state;
 
-  const { messageType, messageDialogPage } = messages;
+  const { selectedMessage, messageType, messageDialogPage } = messages;
   const { selectedBilling } = billing;
 
   // patient ID authenticity
@@ -1048,7 +1049,14 @@ const Patient = () => {
           open={messageDialogPage}
           title="Edit Messages"
           message={(
-            <ProcessMessagePage fetchProviderDetails={() => { }} />
+            <ProcessMessagePage
+              fetchProviderDetails={() => { }}
+              selectedMessage={selectedMessage}
+              onClose={() => {
+                dispatch(resetSelectedMessage());
+                dispatch(toggleMessageDialogPage());
+              }}
+            />
           )}
           cancelForm={() => dispatch(toggleMessageDialogPage())}
           size="xl"

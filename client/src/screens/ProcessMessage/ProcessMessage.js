@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ProcessMessage = (props) => {
   const classes = useStyles();
-  const { fetchProviderDetails } = props;
+  const { fetchProviderDetails, selectedMessage, onClose } = props;
 
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -39,9 +39,24 @@ const ProcessMessage = (props) => {
       });
   }, []);
 
+  const fetchMessageById = useCallback(() => {
+    const messageId = selectedMessage.id;
+    MessageToUserService.getMessageByID(messageId).then((res) => {
+      setMessages(res.data);
+      setIsLoading(false);
+    })
+      .catch(() => {
+        setIsLoading(false);
+      });
+  }, [selectedMessage]);
+
   useEffect(() => {
-    fetchMessages();
-  }, [fetchMessages]);
+    if (selectedMessage) {
+      fetchMessageById();
+    } else {
+      fetchMessages();
+    }
+  }, [selectedMessage, fetchMessages, fetchMessageById]);
 
   const toggleHistoryDialog = () => {
     setShowHistoryDialog((prevState) => !prevState);
@@ -78,8 +93,12 @@ const ProcessMessage = (props) => {
                 message={item}
                 showDivider={messages.length !== index + 1}
                 fetchMessages={() => {
-                  fetchMessages();
-                  fetchProviderDetails();
+                  if (selectedMessage) {
+                    onClose();
+                  } else {
+                    fetchMessages();
+                    fetchProviderDetails();
+                  }
                 }}
               />
             </Grid>
@@ -94,8 +113,17 @@ const ProcessMessage = (props) => {
   );
 };
 
+ProcessMessage.defaultProps = {
+  selectedMessage: null,
+  onClose: () => { },
+};
+
 ProcessMessage.propTypes = {
   fetchProviderDetails: PropTypes.func.isRequired,
+  onClose: PropTypes.func,
+  selectedMessage: PropTypes.shape({
+    id: PropTypes.number,
+  }),
 };
 
 export default ProcessMessage;
