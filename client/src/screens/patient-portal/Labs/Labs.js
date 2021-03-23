@@ -3,6 +3,7 @@ import React, { useCallback, useState, useEffect } from "react";
 import {
   makeStyles, withStyles, Typography, Grid, Button,
 } from "@material-ui/core";
+import Slide from "@material-ui/core/Slide";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -12,10 +13,14 @@ import TableRow from "@material-ui/core/TableRow";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 
+import Dialog from "../../../components/Dialog";
 import useAuth from "../../../hooks/useAuth";
 import useDidMountEffect from "../../../hooks/useDidMountEffect";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 import PatientLabDocumentViewer from "./modal/PatientLabDocumentViewer";
+
+
+const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -269,12 +274,22 @@ const Labs = () => {
       </Grid>
       {isLabModalOpen
         && (
-          <PatientLabDocumentViewer
+          <Dialog
             open={isLabModalOpen}
-            documentName={documentName}
-            patientId={user?.client_id}
-            handleClose={() => setIsLabModalOpen(false)}
+            title="Lab Document"
+            message={(
+              <PatientLabDocumentViewer
+                documentName={documentName}
+                patientId={user?.client_id}
+              // handleClose={() => setIsLabModalOpen(false)}
+              />
+            )}
+            hideActions
+            size="sm"
+            fullHeight
+            transitionComponent={Transition}
           />
+
         )}
     </div>
   );
