@@ -47,6 +47,15 @@ class Messages {
       })
       .then((res) => res.data);
   }
+
+  // User History
+  getUserHistory() {
+    return axios
+      .get(`${API_BASE}/user/history`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
 }
 
 export default new Messages();

@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 
 import MessageToUserService from "../../services/message-to-user.service";
 import MessageSection from "./components/MessageSection";
+import UserHistory from "./components/UserHistory";
 
 const useStyles = makeStyles((theme) => ({
   gutterBottom: {
@@ -26,6 +27,7 @@ const ProcessMessage = (props) => {
 
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showHistoryDialog, setShowHistoryDialog] = useState(false);
 
   const fetchMessages = useCallback(() => {
     MessageToUserService.getAllMessages().then((res) => {
@@ -41,8 +43,20 @@ const ProcessMessage = (props) => {
     fetchMessages();
   }, [fetchMessages]);
 
+  const toggleHistoryDialog = () => {
+    setShowHistoryDialog((prevState) => !prevState);
+  };
+
   return (
     <>
+      {
+        !!showHistoryDialog && (
+          <UserHistory
+            open={showHistoryDialog}
+            onClose={toggleHistoryDialog}
+          />
+        )
+      }
       <Grid container className={classes.gutterBottom}>
         <Typography
           component="h1"
@@ -52,7 +66,7 @@ const ProcessMessage = (props) => {
         >
           Message From Patient
         </Typography>
-        <Button onClick={() => { }}>
+        <Button onClick={() => toggleHistoryDialog()}>
           User History
         </Button>
       </Grid>
