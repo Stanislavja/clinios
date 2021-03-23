@@ -59,6 +59,7 @@ import {
   toggleAllergyExpandDialog,
   toggleMessageDialog,
   toggleMessageExpandDialog,
+  toggleMessageDialogPage,
   toggleRequisitionDialog,
   toggleRequisitionExpandDialog,
   toggleTestsExpandDialog,
@@ -80,6 +81,7 @@ import {
   FourthColumnPatientCards,
 } from "../../static/patient";
 import { isDev } from "../../utils/helpers";
+import ProcessMessagePage from "../ProcessMessage";
 import {
   AdminNotesForm,
   AdminNotesHistory,
@@ -167,7 +169,7 @@ const Patient = () => {
     allergies, messages, requisitions, tests, diagnoses, medications, billing,
   } = state;
 
-  const { messageType } = messages;
+  const { messageType, messageDialogPage } = messages;
   const { selectedBilling } = billing;
 
   // patient ID authenticity
@@ -1037,6 +1039,20 @@ const Patient = () => {
           cancelForm={() => dispatch(toggleMessageDialog())}
           hideActions
           size="md"
+        />
+      )}
+
+      {!!messageDialogPage && (
+        <Dialog
+          fullHeight
+          open={messageDialogPage}
+          title="Edit Messages"
+          message={(
+            <ProcessMessagePage fetchProviderDetails={() => { }} />
+          )}
+          cancelForm={() => dispatch(toggleMessageDialogPage())}
+          size="xl"
+          hideActions
         />
       )}
 
