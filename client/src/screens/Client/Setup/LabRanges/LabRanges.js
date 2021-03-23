@@ -119,7 +119,7 @@ const LabRanges = () => {
     setUseFuncRange((prevState) => !prevState);
     const reqBody = {
       data: {
-        use: value,
+        functional_range: value ? 1 : 0,
       },
     };
     LabRangeService.updateLabRangeUse(reqBody).then((res) => {
