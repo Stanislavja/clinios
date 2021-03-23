@@ -132,8 +132,6 @@ const MessagesContent = (props) => {
         <MenuItem
           disabled={isEditDisabled}
           onClick={() => {
-            // dispatch(setMessageType("Edit"));
-            // dispatch(toggleMessageDialog());
             dispatch(toggleMessageDialogPage());
             closeMenu();
           }}
