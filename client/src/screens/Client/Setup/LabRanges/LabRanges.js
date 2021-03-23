@@ -52,10 +52,10 @@ const useStyles = makeStyles((theme) => ({
     pointerEvents: "auto",
   },
   text: {
-    lineHeight: "32px",
+    lineHeight: "22px",
   },
   iconButton: {
-    padding: theme.spacing(1),
+    padding: theme.spacing(0.25),
     "& svg": {
       fontSize: "1rem",
     },

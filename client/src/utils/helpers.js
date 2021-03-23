@@ -293,4 +293,4 @@ export function noOp() {
 
 }
 
-export const dateFormat = (date) => moment(date).format("DD MMMM YYYY");
+export const dateFormat = (date) => moment(date).format("MMM D YYYY");
