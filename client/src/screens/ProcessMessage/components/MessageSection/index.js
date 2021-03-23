@@ -385,7 +385,7 @@ const MessageSection = (props) => {
           </Grid>
         </Grid>
       </Grid>
-      <Box mt={2}>
+      <Box mt={1.5}>
         <Button
           variant="outlined"
           onClick={() => messageUpdateHandler()}

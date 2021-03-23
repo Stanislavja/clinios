@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 
 import MessageToUserService from "../../services/message-to-user.service";
 import MessageSection from "./components/MessageSection";
+import UserHistory from "./components/UserHistory";
 
 const useStyles = makeStyles((theme) => ({
   gutterBottom: {
@@ -22,10 +23,11 @@ const useStyles = makeStyles((theme) => ({
 
 const ProcessMessage = (props) => {
   const classes = useStyles();
-  const { fetchProviderDetails } = props;
+  const { fetchProviderDetails, selectedMessage, onClose } = props;
 
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showHistoryDialog, setShowHistoryDialog] = useState(false);
 
   const fetchMessages = useCallback(() => {
     MessageToUserService.getAllMessages().then((res) => {
@@ -37,12 +39,39 @@ const ProcessMessage = (props) => {
       });
   }, []);
 
+  const fetchMessageById = useCallback(() => {
+    const messageId = selectedMessage.id;
+    MessageToUserService.getMessageByID(messageId).then((res) => {
+      setMessages(res.data);
+      setIsLoading(false);
+    })
+      .catch(() => {
+        setIsLoading(false);
+      });
+  }, [selectedMessage]);
+
   useEffect(() => {
-    fetchMessages();
-  }, [fetchMessages]);
+    if (selectedMessage) {
+      fetchMessageById();
+    } else {
+      fetchMessages();
+    }
+  }, [selectedMessage, fetchMessages, fetchMessageById]);
+
+  const toggleHistoryDialog = () => {
+    setShowHistoryDialog((prevState) => !prevState);
+  };
 
   return (
     <>
+      {
+        !!showHistoryDialog && (
+          <UserHistory
+            open={showHistoryDialog}
+            onClose={toggleHistoryDialog}
+          />
+        )
+      }
       <Grid container className={classes.gutterBottom}>
         <Typography
           component="h1"
@@ -52,7 +81,7 @@ const ProcessMessage = (props) => {
         >
           Message From Patient
         </Typography>
-        <Button onClick={() => { }}>
+        <Button onClick={() => toggleHistoryDialog()}>
           User History
         </Button>
       </Grid>
@@ -64,8 +93,12 @@ const ProcessMessage = (props) => {
                 message={item}
                 showDivider={messages.length !== index + 1}
                 fetchMessages={() => {
-                  fetchMessages();
-                  fetchProviderDetails();
+                  if (selectedMessage) {
+                    onClose();
+                  } else {
+                    fetchMessages();
+                    fetchProviderDetails();
+                  }
                 }}
               />
             </Grid>
@@ -80,8 +113,17 @@ const ProcessMessage = (props) => {
   );
 };
 
+ProcessMessage.defaultProps = {
+  selectedMessage: null,
+  onClose: () => { },
+};
+
 ProcessMessage.propTypes = {
   fetchProviderDetails: PropTypes.func.isRequired,
+  onClose: PropTypes.func,
+  selectedMessage: PropTypes.shape({
+    id: PropTypes.number,
+  }),
 };
 
 export default ProcessMessage;
