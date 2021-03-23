@@ -59,7 +59,7 @@ const Header = ({ ...props }) => {
   const location = useLocation();
   const { isAuthenticated, user, logout } = useAuth();
   const { onSidebarOpen } = props;
-  const routeValidationRegex = new RegExp("/login/|/signup/|/forgot/|/agreement");
+  const routeValidationRegex = new RegExp("/login/|/signup/|/forgot/");
 
   const handleLogout = async () => {
     try {
