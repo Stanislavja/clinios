@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { makeStyles } from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
@@ -120,22 +120,22 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedProvider]);
 
-  useEffect(() => {
-    async function fetchProviders() {
-      const { data } = await DashboardHome.getProviders();
-      setProviders(data);
-      if (data.length > 0) {
-        const loggedinUserAsProvider = data.filter((d) => d.id === user.id);
-        if (loggedinUserAsProvider.length > 0) {
-          setSelectedProvider(loggedinUserAsProvider[0]);
-        } else {
-          setSelectedProvider(data[0]);
-        }
+  const fetchProviders = useCallback(async () => {
+    const { data } = await DashboardHome.getProviders();
+    setProviders(data);
+    if (data.length > 0) {
+      const loggedinUserAsProvider = data.filter((d) => d.id === user.id);
+      if (loggedinUserAsProvider.length > 0) {
+        setSelectedProvider(loggedinUserAsProvider[0]);
+      } else {
+        setSelectedProvider(data[0]);
       }
     }
+  }, [user.id]);
+
+  useEffect(() => {
     fetchProviders();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fetchProviders]);
 
   const handleEventCreation = (payload) => {
     setIsLoading(true);
@@ -319,7 +319,9 @@ export default function Home() {
           <ProviderDetailsCard
             selectedProvider={selectedProvider}
             providerDetails={providerDetails}
-            fetchProviderDetails={() => fetchProviderDetails(selectedProvider.id)}
+            fetchProviderDetails={() => {
+              fetchProviders();
+            }}
           />
           {!!selectedProvider && (
             <>
