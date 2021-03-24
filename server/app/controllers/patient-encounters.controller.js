@@ -89,6 +89,30 @@ const getEncountersPrescriptionsFrequencies = async (req, res) => {
   }
 };
 
+const getEncountersPrescriptionsStrength = async (req, res) => {
+  const db = makeDb(configuration, res);
+  const { drug_id } = req.params;
+  try {
+    const dbResponse = await db.query(
+      `select id, strength, unit, form
+      from drug_strength
+      where drug_id=${drug_id}`
+    );
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 // TODO:: inComplete code, need to pass drug_id, drug_strength_id
 const encountersPrescriptionsEdit = async (req, res) => {
   const { encounter_id } = req.params;
@@ -422,8 +446,7 @@ const createNewPrescription = async (req, res) => {
        values (${patient_id}, '${drug_id}', '${drug_frequency_id}', '${drug_strength_id}', '${moment(
         start_dt
       ).format("YYYY-MM-DD HH:mm:ss")}', '${expires}', '${amount}',
-       '${refills}', '${generic}', '${patient_instructions}', '${pharmacy_instructions}', ${encounter_id}, ${
-        req.client_id
+       '${refills}', '${generic}', '${patient_instructions}', '${pharmacy_instructions}', ${encounter_id}, ${req.client_id
       }, ${req.user_id}, now(), ${req.user_id})`
     );
 
@@ -1036,6 +1059,7 @@ const patientEncounter = {
   getEncounters,
   getEncountersPrescriptions,
   getEncountersPrescriptionsFrequencies,
+  getEncountersPrescriptionsStrength,
   encountersPrescriptionsEdit,
   encountersRecentProfiles,
   createEncounter,
