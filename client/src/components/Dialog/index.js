@@ -176,7 +176,7 @@ DialogForm.defaultProps = {
   size: "lg",
   fullScreen: false,
   fullHeight: false,
-  transitionComponent: null,
+  transitionComponent: undefined,
 };
 
 DialogForm.propTypes = {
