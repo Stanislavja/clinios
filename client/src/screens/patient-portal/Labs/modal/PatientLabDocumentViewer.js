@@ -100,9 +100,7 @@ const PatientLabDocumentViewer = ({
 };
 
 PatientLabDocumentViewer.propTypes = {
-  // open: PropTypes.bool.isRequired,
   patientId: PropTypes.string.isRequired,
   documentName: PropTypes.string.isRequired,
-  // handleClose: PropTypes.func.isRequired,
 };
 export default PatientLabDocumentViewer;
