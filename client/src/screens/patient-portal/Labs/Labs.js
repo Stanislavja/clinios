@@ -276,12 +276,12 @@ const Labs = () => {
         && (
           <Dialog
             open={isLabModalOpen}
+            cancelForm={() => setIsLabModalOpen(false)}
             title="Lab Document"
             message={(
               <PatientLabDocumentViewer
                 documentName={documentName}
                 patientId={user?.client_id}
-              // handleClose={() => setIsLabModalOpen(false)}
               />
             )}
             hideActions
