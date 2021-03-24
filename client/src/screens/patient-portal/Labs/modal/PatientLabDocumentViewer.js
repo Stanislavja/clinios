@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Button } from "@material-ui/core";
-import AppBar from "@material-ui/core/AppBar";
-import Dialog from "@material-ui/core/Dialog";
-import IconButton from "@material-ui/core/IconButton";
-import Slide from "@material-ui/core/Slide";
 import { makeStyles } from "@material-ui/core/styles";
-import Toolbar from "@material-ui/core/Toolbar";
-import CloseIcon from "@material-ui/icons/Close";
 import Pagination from "@material-ui/lab/Pagination";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
@@ -17,8 +10,6 @@ import { pdfjs, Document, Page } from "react-pdf";
 pdfjs
   .GlobalWorkerOptions
   .workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
-
-const Transition = React.forwardRef((props, ref) => <Slide direction="up" ref={ref} {...props} />);
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -30,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-between",
   },
   PDFViewer: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
     marginLeft: theme.spacing(2),
   },
@@ -48,8 +39,8 @@ const useStyles = makeStyles((theme) => ({
 
 const checkFileExtension = (fileName) => fileName.substring(fileName.lastIndexOf(".") + 1);
 
-const Lab = ({
-  open, documentName, patientId, handleClose,
+const PatientLabDocumentViewer = ({
+  documentName, patientId,
 }) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
@@ -80,22 +71,7 @@ const Lab = ({
 
 
   return (
-    <Dialog
-      fullScreen
-      open={open}
-      onClose={handleClose}
-      TransitionComponent={Transition}
-    >
-      <AppBar className={classes.appBar}>
-        <Toolbar className={classes.title} variant="dense">
-          <Button variant="contained" color="primary" className={classes.download}>
-            <a href={file} download>Download</a>
-          </Button>
-          <IconButton edge="end" color="inherit" onClick={handleClose} aria-label="close">
-            <CloseIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
+    <>
       {type && (type === "pdf")
         ? (
           <div className={classes.PDFViewer}>
@@ -119,14 +95,12 @@ const Lab = ({
             onError={onError}
           />
         )}
-    </Dialog>
+    </>
   );
 };
 
-Lab.propTypes = {
-  open: PropTypes.bool.isRequired,
+PatientLabDocumentViewer.propTypes = {
   patientId: PropTypes.string.isRequired,
   documentName: PropTypes.string.isRequired,
-  handleClose: PropTypes.func.isRequired,
 };
-export default Lab;
+export default PatientLabDocumentViewer;
