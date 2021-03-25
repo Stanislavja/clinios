@@ -351,6 +351,14 @@ class Patient {
       .then((res) => res.data);
   }
 
+  getMedicationFavorites(patientId) {
+    return axios
+      .get(`${API_BASE}/patient/${patientId}/medication/favorites`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
   getRequisitions(patientId, encounterId) {
     return axios
       .get(`${API_BASE}/patient/${patientId}/requisitions/?encounter_id=${encounterId}`, {
