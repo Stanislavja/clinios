@@ -446,8 +446,8 @@ const createNewPrescription = async (req, res) => {
        values (${patient_id}, '${drug_id}', '${drug_frequency_id}', '${drug_strength_id}', '${moment(
         start_dt
       ).format("YYYY-MM-DD HH:mm:ss")}', '${expires}', '${amount}',
-       '${refills}', '${generic}', '${patient_instructions}', '${pharmacy_instructions}', ${encounter_id}, ${req.client_id
-      }, ${req.user_id}, now(), ${req.user_id})`
+       '${refills}', '${generic}', '${patient_instructions}', '${pharmacy_instructions}', ${encounter_id}, ${
+         req.client_id}, ${req.user_id}, now(), ${req.user_id})`
     );
 
     if (!insertResponse.affectedRows) {
