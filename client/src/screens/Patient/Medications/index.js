@@ -334,7 +334,7 @@ const Medications = (props) => {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
-    if (selectedPrescription) {
+    if (selectedPrescription || selectedMedication) {
       const reqBody = {
         data: prepareRequestBodyParams(),
       };
@@ -456,7 +456,7 @@ const Medications = (props) => {
                           value={formFields[item.name]}
                           fullWidth={item.multiline}
                           onChange={(e) => handleInputChange(e)}
-                          required
+                          required={item.required}
                           select={item.baseType === "select"}
                           className={classes.input}
                           multiline={item.multiline}
