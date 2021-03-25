@@ -1,6 +1,15 @@
 
 export const NewDrugFormFields = [
   {
+    name: "strength",
+    id: "strength",
+    label: "Strength",
+    baseType: "select",
+    type: "text",
+    options: [],
+    multiline: false,
+  },
+  {
     name: "frequency",
     id: "frequency",
     label: "Frequency",
