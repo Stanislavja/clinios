@@ -1963,8 +1963,10 @@ const getMedicationFavorites = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select cd.drug_id, d.name, cd.favorite
+      `select cd.drug_id, d.name, cd.favorite, pd.start_dt, pd.expires, pd.amount, pd.refills
+      , pd.generic, pd.patient_instructions, pd.pharmacy_instructions
       from client_drug cd
+      left join patient_drug pd on cd.drug_id=pd.drug_id
       left join drug d on cd.drug_id=d.id
       where cd.client_id=${req.client_id}
       and cd.favorite = true
