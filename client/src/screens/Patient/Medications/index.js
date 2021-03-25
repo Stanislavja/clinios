@@ -30,12 +30,12 @@ import PropTypes from "prop-types";
 import { StyledTableCellSm, StyledTableRowSm } from "../../../components/common/StyledTable";
 import useDidMountEffect from "../../../hooks/useDidMountEffect";
 import usePatientContext from "../../../hooks/usePatientContext";
-import { toggleMedicationDialog } from "../../../providers/Patient/actions";
+import { toggleMedicationDialog, resetSelectedMedication } from "../../../providers/Patient/actions";
 import PatientService from "../../../services/patient.service";
 import {
   NewDrugFormFields, GenericOptions, InputOptions, RefillsOptions,
 } from "../../../static/medicationForm";
-import { drugFrequencyCodeToLabel } from "../../../utils/helpers";
+import { drugFrequencyCodeToLabel, drugFrequencyLabelToCode } from "../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
   ml2: {
@@ -81,6 +81,7 @@ const Medications = (props) => {
   const { enqueueSnackbar } = useSnackbar();
   const { state, dispatch } = usePatientContext();
   const { patientId } = state;
+  const { selectedMedication } = state.medications;
   const { selectedEncounter } = state.encounters;
   const encounterId = selectedEncounter?.id || 1;
 
@@ -103,6 +104,30 @@ const Medications = (props) => {
     pharmacyInstructions: "",
     generic: "1",
   });
+
+  useEffect(() => {
+    if (selectedMedication) {
+      // medication is selected
+      formFields.type = selectedMedication.name;
+      formFields.strength = selectedMedication.strength;
+      formFields.frequency = drugFrequencyLabelToCode(selectedMedication.descr);
+      formFields.startDate = moment(selectedMedication.start_dt).format("YYYY-MM-DD");
+      formFields.expires = selectedMedication.expires;
+      formFields.amount = selectedMedication.amount;
+      formFields.refills = selectedMedication.refills;
+      setFormFields({ ...formFields });
+    } else {
+      // default values selection
+      formFields.frequency = "1D";
+      formFields.startDate = currentDate;
+      formFields.expires = 30;
+      formFields.amount = 30;
+      formFields.refills = 2;
+      setFormFields({ ...formFields });
+    }
+    return () => !!selectedMedication && dispatch(resetSelectedMedication());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedMedication]);
 
   const fetchRecentPrescriptions = useCallback(() => {
     PatientService.getEncountersPrescriptions(patientId, encounterId)
