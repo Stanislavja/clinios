@@ -73,6 +73,9 @@ const useStyles = makeStyles((theme) => ({
       minWidth: "auto",
     },
   },
+  listItem: {
+    padding: "2px 0",
+  },
 }));
 
 const Medications = (props) => {
@@ -537,6 +540,9 @@ const Medications = (props) => {
                     onClick={() => rowClickHandler(item)}
                     key={item.name}
                     disableGutters
+                    classes={{
+                      root: classes.listItem,
+                    }}
                   >
                     <ListItemText primary={item.name} />
                   </ListItem>
@@ -571,6 +577,7 @@ const Medications = (props) => {
                       onClick={() => rowClickHandler(row)}
                     >
                       <StyledTableCellSm>{row.name}</StyledTableCellSm>
+                      <StyledTableCellSm>{row.strength}</StyledTableCellSm>
                       <StyledTableCellSm>
                         {row.drug_frequency_id && drugFrequencyCodeToLabel(row.drug_frequency_id)}
                       </StyledTableCellSm>
@@ -578,7 +585,6 @@ const Medications = (props) => {
                       <StyledTableCellSm>{row.amount}</StyledTableCellSm>
                       <StyledTableCellSm>{row.refills}</StyledTableCellSm>
                       <StyledTableCellSm>{row.generic ? "Yes" : "No"}</StyledTableCellSm>
-                      <StyledTableCellSm>{row.name}</StyledTableCellSm>
                     </StyledTableRowSm>
                   ))
                   : (
