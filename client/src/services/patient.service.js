@@ -343,6 +343,14 @@ class Patient {
       .then((res) => res.data);
   }
 
+  getMedicationById(patientId, medicationId) {
+    return axios
+      .get(`${API_BASE}/patient/${patientId}/medications/${medicationId}`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
   getRequisitions(patientId, encounterId) {
     return axios
       .get(`${API_BASE}/patient/${patientId}/requisitions/?encounter_id=${encounterId}`, {
