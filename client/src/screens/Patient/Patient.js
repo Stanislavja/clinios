@@ -1048,7 +1048,7 @@ const Patient = () => {
         <Dialog
           fullHeight
           open={messageDialogPage}
-          title="Edit Messages"
+          title="Edit Message"
           message={(
             <ProcessMessagePage
               fetchProviderDetails={() => { }}

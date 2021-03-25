@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(0, 0.5, 0, 0),
   },
   fullWidth: {
-    width: 190,
+    width: "52%",
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",
