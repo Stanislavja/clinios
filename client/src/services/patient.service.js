@@ -238,6 +238,14 @@ class Patient {
       .then((res) => res.data);
   }
 
+  getEncountersPrescriptionsDrugsStrengths(patientId, encounterId, drugId) {
+    // eslint-disable-next-line max-len
+    return axios.get(`${API_BASE}/patient/${patientId}/encounters/${encounterId}/plan/new-prescriptions/${drugId}/strengths`, {
+      headers: authHeader(),
+    })
+      .then((res) => res.data);
+  }
+
   getFavoriteTests(patient_id, encounter_id) {
     return axios
       .get(`${API_BASE}/patient/${patient_id}/encounters/${encounter_id}/new-lab/favorites/?tab=All`, {
