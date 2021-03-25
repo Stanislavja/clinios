@@ -1901,7 +1901,7 @@ const getMedications = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select pd.start_dt, d.name, ds.strength, ds.unit, df.descr, pd.expires
+      `select pd.id, pd.start_dt, d.name, ds.strength, ds.unit, df.descr, pd.expires
         from patient_drug pd
         left join drug d on d.id=pd.drug_id
         left join drug_strength ds on ds.id=pd.drug_strength_id
@@ -1909,6 +1909,38 @@ const getMedications = async (req, res) => {
         where pd.patient_id=${patient_id}
         order by d.name
         limit 50`
+    );
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+const getMedicationById = async (req, res) => {
+  const db = makeDb(configuration, res);
+  const { medication_id } = req.params;
+
+  try {
+    const dbResponse = await db.query(
+      `select d.id, d.name, ds.strength, ds.unit, ds.form
+      , df.descr frequency, pd.start_dt, pd.expires, pd.amount, pd.refills
+      , pd.generic, pd.patient_instructions, pd.pharmacy_instructions
+      from patient_drug pd
+      left join drug d on d.id=pd.drug_id
+      left join drug_strength ds on ds.drug_id=pd.drug_id
+          and ds.id=pd.drug_strength_id
+      left join drug_frequency df on df.id=pd.drug_frequency_id
+      where pd.id=${medication_id}`
     );
     if (!dbResponse) {
       errorMessage.message = "None found";
@@ -2346,6 +2378,7 @@ const appointmentTypes = {
   updateDiagnose,
   createDiagnoses,
   getMedications,
+  getMedicationById,
   deleteMedications,
   createRequisitions,
   getRequisitions,
