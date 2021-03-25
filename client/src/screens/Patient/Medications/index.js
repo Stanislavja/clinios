@@ -105,17 +105,33 @@ const Medications = (props) => {
     generic: "1",
   });
 
+  const populateFormFields = (medication) => {
+    formFields.type = medication.name;
+    formFields.drug_id = medication.id;
+    formFields.strength = medication.strength;
+    formFields.frequency = drugFrequencyLabelToCode(medication.frequency);
+    formFields.startDate = new Date(medication.start_dt);
+    formFields.expires = medication.expires;
+    formFields.amount = medication.amount;
+    formFields.refills = medication.refills;
+    formFields.patientInstructions = medication.patient_instructions;
+    formFields.pharmacyInstructions = medication.pharmacy_instructions;
+    formFields.generic = String(medication.generic);
+    setFormFields({ ...formFields });
+  };
+
+  const fetchMedicationById = (medicationId) => {
+    PatientService.getMedicationById(patientId, medicationId)
+      .then((response) => {
+        const medication = response.data?.length ? response.data[0] : {};
+        populateFormFields(medication);
+      });
+  };
+
   useEffect(() => {
     if (selectedMedication) {
       // medication is selected
-      formFields.type = selectedMedication.name;
-      formFields.strength = selectedMedication.strength;
-      formFields.frequency = drugFrequencyLabelToCode(selectedMedication.descr);
-      formFields.startDate = moment(selectedMedication.start_dt).format("YYYY-MM-DD");
-      formFields.expires = selectedMedication.expires;
-      formFields.amount = selectedMedication.amount;
-      formFields.refills = selectedMedication.refills;
-      setFormFields({ ...formFields });
+      fetchMedicationById(selectedMedication.id);
     } else {
       // default values selection
       formFields.frequency = "1D";
@@ -331,16 +347,7 @@ const Medications = (props) => {
 
   const rowClickHandler = (row) => {
     setSelectedPrescription(row); // selected preescription saved for editing
-    formFields.type = `${row.name} `;
-    formFields.drug_id = row.id;
-    formFields.frequency = row.drug_frequency_id;
-    formFields.expires = row.expires;
-    formFields.amount = row.amount;
-    formFields.refills = row.refills;
-    formFields.startDate = new Date(row.start_dt);
-    formFields.patientInstructions = row.patient_instructions;
-    formFields.pharmacyInstructions = row.pharmacy_instructions;
-    setFormFields({ ...formFields });
+    populateFormFields(row);
   };
 
   const fetchDrugs = (e) => {
