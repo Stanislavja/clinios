@@ -44,10 +44,6 @@ const useStyles = makeStyles((theme) => ({
   labelContainer: {
     pointerEvents: "none",
   },
-  label: {
-    fontSize: 16,
-    marginRight: theme.spacing(1),
-  },
   pointerEnable: {
     pointerEvents: "auto",
   },
@@ -59,6 +55,15 @@ const useStyles = makeStyles((theme) => ({
     "& svg": {
       fontSize: "1rem",
     },
+  },
+  switchLabel: {
+    marginRight: theme.spacing(1),
+    fontSize: 14,
+    fontWeight: 500,
+    lineHeight: 1.75,
+    borderRadius: 4,
+    letterSpacing: "0.02857em",
+    textTransform: "capitalize",
   },
 }));
 
@@ -229,7 +234,7 @@ const LabRanges = () => {
                 label="Use Functional Range"
                 labelPlacement="start"
                 classes={{
-                  label: classes.label,
+                  label: classes.switchLabel,
                   root: classes.labelContainer, // to disable clicking of label
                 }}
               />
