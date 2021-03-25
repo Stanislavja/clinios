@@ -90,6 +90,7 @@ const Medications = (props) => {
   const [drugFrequencies, setDrugFrequencies] = useState([]);
   const [drugStrengths, setDrugStrengths] = useState([]);
   const [recentSelections, setRecentSelections] = useState([]);
+  const [favoriteMedications, setFavoriteMedications] = useState([]);
   const [selectedPrescription, setSelectedPrescription] = useState(null);
   const [formFields, setFormFields] = useState({
     type: "",
@@ -152,6 +153,13 @@ const Medications = (props) => {
       });
   }, [patientId, encounterId]);
 
+  const fetchFavoriteMedications = useCallback(() => {
+    PatientService.getMedicationFavorites(patientId)
+      .then((response) => {
+        setFavoriteMedications(response.data);
+      });
+  }, [patientId]);
+
   const fetchDrugFrequencies = useCallback(() => {
     PatientService.getEncountersPrescriptionsDrugsFrequencies(patientId, encounterId)
       .then((response) => {
@@ -169,7 +177,8 @@ const Medications = (props) => {
   useEffect(() => {
     fetchRecentPrescriptions();
     fetchDrugFrequencies();
-  }, [fetchRecentPrescriptions, fetchDrugFrequencies]);
+    fetchFavoriteMedications();
+  }, [fetchRecentPrescriptions, fetchDrugFrequencies, fetchFavoriteMedications]);
 
   useDidMountEffect(() => {
     if (!formFields.drug_id.length) {
@@ -516,9 +525,25 @@ const Medications = (props) => {
           </Grid>
         </Grid>
         <Grid item lg={2} md={2} xs={12}>
-          <Typography variant="h5" gutterBottom>
-            Favorites
-          </Typography>
+          <Box px={1}>
+            <Typography variant="h5" gutterBottom>
+              Favorites
+            </Typography>
+            <List>
+              {favoriteMedications.length
+                ? favoriteMedications.map((item) => (
+                  <ListItem
+                    button
+                    onClick={() => rowClickHandler(item)}
+                    key={item.name}
+                    disableGutters
+                  >
+                    <ListItemText primary={item.name} />
+                  </ListItem>
+                ))
+                : <Typography>No favorites found!</Typography>}
+            </List>
+          </Box>
         </Grid>
         <Grid item lg={6} md={6} xs={12}>
           <Typography variant="h5" gutterBottom>
