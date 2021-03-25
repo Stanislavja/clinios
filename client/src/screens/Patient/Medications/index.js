@@ -108,7 +108,7 @@ const Medications = (props) => {
 
   const populateFormFields = (medication) => {
     formFields.type = medication.name;
-    formFields.drug_id = medication.id;
+    formFields.drug_id = medication.id || medication.drug_id;
     formFields.strength = medication.strength;
     formFields.frequency = drugFrequencyLabelToCode(medication.frequency);
     formFields.startDate = new Date(medication.start_dt);
@@ -525,7 +525,7 @@ const Medications = (props) => {
           </Grid>
         </Grid>
         <Grid item lg={2} md={2} xs={12}>
-          <Box px={1}>
+          <Box pr={2}>
             <Typography variant="h5" gutterBottom>
               Favorites
             </Typography>
