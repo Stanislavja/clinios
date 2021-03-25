@@ -63,7 +63,7 @@ const AppointmentHistory = () => {
         </TableHead>
         <TableBody>
           {!!appointmentHistory
-            && appointmentHistory.length
+            && Boolean(appointmentHistory.length)
             ? appointmentHistory.map((item) => (
               <StyledTableRowLg key={`${item.start_dt}_${item.end_dt}_${item.status}`}>
                 <TableCell>
