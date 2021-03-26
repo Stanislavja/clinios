@@ -101,7 +101,10 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails, fetchProviderD
           open={showMessagesModal}
           title="Message From Patient"
           message={(
-            <ProcessMessage fetchProviderDetails={fetchProviderDetails} />
+            <ProcessMessage
+              fetchProviderDetails={fetchProviderDetails}
+              selectedProviderId={selectedProvider.id}
+            />
           )}
           cancelForm={() => toggleMessagesModal()}
           size="xl"

@@ -4,9 +4,9 @@ import { API_BASE } from "../utils/API_BASE";
 import authHeader from "./auth-header";
 
 class Messages {
-  getAllMessages() {
+  getAllMessages(id) {
     return axios
-      .get(`${API_BASE}/user/messages`, { headers: authHeader() })
+      .get(`${API_BASE}/user/${id}/messages`, { headers: authHeader() })
       .then((res) => res.data);
   }
 

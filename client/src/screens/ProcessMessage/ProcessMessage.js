@@ -47,7 +47,9 @@ const useStyles = makeStyles((theme) => ({
 const ProcessMessage = (props) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  const { fetchProviderDetails, selectedMessage, onClose } = props;
+  const {
+    fetchProviderDetails, selectedProviderId, selectedMessage, onClose,
+  } = props;
 
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -55,7 +57,7 @@ const ProcessMessage = (props) => {
   const [sectionFormFields, setSectionFormFields] = useState([]);
 
   const fetchMessages = useCallback(() => {
-    MessageToUserService.getAllMessages().then((res) => {
+    MessageToUserService.getAllMessages(selectedProviderId).then((res) => {
       setMessages(res.data);
       setIsLoading(false);
       const messagesResponse = res.data;
@@ -71,7 +73,7 @@ const ProcessMessage = (props) => {
       .catch(() => {
         setIsLoading(false);
       });
-  }, []);
+  }, [selectedProviderId]);
 
   const fetchMessageById = useCallback(() => {
     const messageId = selectedMessage.id;
@@ -191,10 +193,12 @@ const ProcessMessage = (props) => {
 ProcessMessage.defaultProps = {
   selectedMessage: null,
   onClose: () => { },
+  selectedProviderId: 1,
 };
 
 ProcessMessage.propTypes = {
   fetchProviderDetails: PropTypes.func.isRequired,
+  selectedProviderId: PropTypes.number,
   onClose: PropTypes.func,
   selectedMessage: PropTypes.shape({
     id: PropTypes.number,
