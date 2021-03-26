@@ -47,8 +47,12 @@ const useStyles = makeStyles((theme) => ({
   pointerEnable: {
     pointerEvents: "auto",
   },
+  title: {
+    fontSize: "1.7em",
+  },
   text: {
     lineHeight: "22px",
+    fontSize: 12,
   },
   iconButton: {
     padding: theme.spacing(0.25),
@@ -203,7 +207,7 @@ const LabRanges = () => {
           className={classes.mb2}
         >
           <Grid item lg={6}>
-            <Grid container justify="space-between">
+            <Grid container justify="space-between" alignItems="center">
               <Typography
                 component="h1"
                 variant="h2"
