@@ -55,7 +55,7 @@ const getUserMessage = async (req, res) => {
               and m.status='O'
               )
       )
-      and where m.user_id_to=${req.user_id}
+      and m.user_id_to=${req.user_id}
       and m.status='O'
       order by m.created
       limit 10
