@@ -1990,15 +1990,13 @@ const getMedicationFavorites = async (req, res) => {
 };
 
 const deleteMedications = async (req, res) => {
-  const { encounter_id, drug_id, drug_strength_id } = req.body.data;
+  const { drug_id } = req.params;
   const db = makeDb(configuration, res);
   try {
     const deleteResponse = await db.query(`
        delete 
         from patient_drug 
-        where encounter_id=${encounter_id}
-        and drug_id= ${drug_id}
-        and drug_strength_id=${drug_strength_id}
+        where id= ${drug_id}
     `);
 
     if (!deleteResponse.affectedRows) {
