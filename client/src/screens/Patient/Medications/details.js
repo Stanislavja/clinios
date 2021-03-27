@@ -89,12 +89,8 @@ const MedicationsDetails = (props) => {
   };
 
   const deleteItemHandler = (item) => {
-    const reqBody = {
-      encounter_id: item.encounterId || 1,
-      drug_id: item.drugId || 1,
-      drug_strength_id: item.drugStrengthId || 1,
-    };
-    PatientService.deleteMedications(patientId, reqBody)
+    const drug_id = item.id;
+    PatientService.deleteMedications(patientId, drug_id)
       .then((response) => {
         enqueueSnackbar(`${response.data.message}`, { variant: "success" });
         closeDeleteDialog();
