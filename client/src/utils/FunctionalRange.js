@@ -263,27 +263,27 @@ export function calculateFunctionalRange(test, gender, age) {
     range.high = 6.0;
     return range;
   }
-  if (test === "Neut%") { /* Neutrophils % */
+  if (test === "NeutPerc") { /* Neutrophils % */
     range.low = 50.0;
     range.high = 60.0;
     return range;
   }
-  if (test === "Lymph%") { /* Lymphocytes % */
+  if (test === "LymphPerc") { /* Lymphocytes % */
     range.low = 30.0;
     range.high = 35.0;
     return range;
   }
-  if (test === "Mono%") { /* Monocytes % */
+  if (test === "MonoPerc") { /* Monocytes % */
     range.low = 0.0;
     range.high = 7.0;
     return range;
   }
-  if (test === "Eos%") { /* Eosinophil % */
+  if (test === "EosPerc") { /* Eosinophil % */
     range.low = 0.0;
     range.high = 3.0;
     return range;
   }
-  if (test === "Baso%") { /* Basophil % */
+  if (test === "BasoPerc") { /* Basophil % */
     range.low = 0.0;
     range.high = 1.0;
     return range;
@@ -329,7 +329,7 @@ export function calculateFunctionalRange(test, gender, age) {
       return range;
     }
   }
-  if (test === "TS%") { /* Iron Saturation */
+  if (test === "TSPerc") { /* Iron Saturation */
     range.low = 24.0;
     range.high = 35.0;
     return range;
