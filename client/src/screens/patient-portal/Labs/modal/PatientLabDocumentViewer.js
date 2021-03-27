@@ -55,7 +55,7 @@ const PatientLabDocumentViewer = ({
   const pdfWrapper = useRef(null);
 
   useEffect(() => {
-    const filePath = `${process.env.REACT_APP_API_URL}static/client/patient/pid${patientId}_${documentName}`;
+    const filePath = `${process.env.REACT_APP_API_URL}static/patient/pid${patientId}_${documentName}`;
     setFile(filePath);
     const fileType = checkFileExtension(filePath);
     setType(fileType);
