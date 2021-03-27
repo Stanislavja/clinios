@@ -103,7 +103,7 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails, fetchProviderD
           message={(
             <ProcessMessage
               fetchProviderDetails={fetchProviderDetails}
-              selectedProviderId={selectedProvider.id}
+              selectedProvider={selectedProvider}
             />
           )}
           cancelForm={() => toggleMessagesModal()}
