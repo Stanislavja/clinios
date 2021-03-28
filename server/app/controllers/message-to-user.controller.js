@@ -37,7 +37,8 @@ const getUserMessage = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const dbResponse = await db.query(
-      `select m.id, m.created
+      `/*Message To User*/
+      select m.id, m.created
       , concat(p.firstname, ' ', p.lastname) patient_from_name
       , concat(u.firstname, ' ', u.lastname) user_to_name
       , m.status, m.subject, m.message, m.note_assign
