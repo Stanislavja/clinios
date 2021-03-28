@@ -188,6 +188,7 @@ export default function Home() {
         setIsLoading(false);
         fetchEventsByProvider(selectedProvider);
         fetchPatientApptRequests(selectedProvider.id);
+        fetchProviderDetails(selectedProvider.id);
         enqueueSnackbar(`${response.data.message}`, {
           variant: "success",
         });
