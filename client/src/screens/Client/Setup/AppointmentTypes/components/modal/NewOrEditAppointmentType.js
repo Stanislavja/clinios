@@ -10,7 +10,6 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControl from "@material-ui/core/FormControl";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Switch from "@material-ui/core/Switch";
-import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import TextField from "@material-ui/core/TextField";
 import Alert from "@material-ui/lab/Alert";
 import clsx from "clsx";
@@ -112,6 +111,7 @@ const NewOrEditAppointment = ({
   const [appointment, setAppointment] = useState([]);
   const [errors, setErrors] = useState([]);
   const [typeError, setTypeError] = useState(false);
+  const rowsMaxForTextArea = 50;
 
   useEffect(() => {
     const appt = {
@@ -244,11 +244,8 @@ const NewOrEditAppointment = ({
               label="Description"
               multiline
               name="descr"
-              InputProps={{
-                classes: classes.normalOutline,
-                inputComponent: TextareaAutosize,
-                rows: 8,
-              }}
+              rows={8}
+              rowsMax={rowsMaxForTextArea}
               value={appointment.descr}
               onChange={(event) => handleOnChange(event)}
             />
@@ -349,11 +346,8 @@ const NewOrEditAppointment = ({
               label="Note"
               multiline
               name="note"
-              InputProps={{
-                classes: classes.normalOutline,
-                inputComponent: TextareaAutosize,
-                rows: 4,
-              }}
+              rows={4}
+              rowsMax={rowsMaxForTextArea}
               value={appointment.note}
               onChange={(event) => handleOnChange(event)}
             />
