@@ -110,7 +110,7 @@ const Appointments = () => {
           end_dt: `${moment(userSelection.date).format("YYYY-MM-DD")} ${userSelection.time.split("am")[0]}`,
         },
       };
-      PatientPortalService.bookAppointment(reqBody).then((res) => {
+      PatientPortalService.bookAppointment(reqBody).then(() => {
         setTimeout(() => {
           setShowCalendar(false);
           setAppointmentTypes([]);
@@ -122,7 +122,7 @@ const Appointments = () => {
             time: null,
           });
         }, 2000);
-        enqueueSnackbar(res.message, {
+        enqueueSnackbar("Appointment requested successfully", {
           variant: "success",
         });
       });
