@@ -46,9 +46,6 @@ const search = async (req, res) => {
         left join lab_company lc on lc.id=c.lab_company_id
         left join user u on u.id=cc.updated_user_id
         left join cpt_item ci on ci.cpt_id=c.id
-		    /*and ci.cpt2_id=(select max(ci2.cpt2_id) 
-                from cpt_item ci2 
-                where ci2.cpt_id=c.id) this was used originally to get only one item, but now more items are needed*/
 		    left join cpt c2 on c2.id=ci.cpt2_id
         left join client cl on cl.id=c.client_id
         where 1 \n`;
