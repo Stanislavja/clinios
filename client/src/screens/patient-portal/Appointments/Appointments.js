@@ -5,6 +5,7 @@ import {
 } from "@material-ui/core";
 import moment from "moment";
 import { useSnackbar } from "notistack";
+import { useHistory } from "react-router-dom";
 
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 import { timings } from "../../../static/patient-portal/appointments";
@@ -55,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
 const Appointments = () => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
+  const history = useHistory();
   const [practitioners, setPractitioners] = useState([]);
   const [appointmentTypes, setAppointmentTypes] = useState([]);
   const [showCalendar, setShowCalendar] = useState(false);
@@ -110,7 +112,7 @@ const Appointments = () => {
           end_dt: `${moment(userSelection.date).format("YYYY-MM-DD")} ${userSelection.time.split("am")[0]}`,
         },
       };
-      PatientPortalService.bookAppointment(reqBody).then(() => {
+      PatientPortalService.bookAppointment(reqBody).then((res) => {
         setTimeout(() => {
           setShowCalendar(false);
           setAppointmentTypes([]);
@@ -121,8 +123,17 @@ const Appointments = () => {
             date: null,
             time: null,
           });
-        }, 2000);
-        enqueueSnackbar("Appointment requested successfully", {
+          history.push({
+            pathname: "/patient/appointments/confirmation",
+            state: {
+              practitionar: selectedPractitioner?.[0]?.name,
+              appointmentType: userSelection?.appointmentType,
+              date: userSelection?.date,
+              time: userSelection?.time,
+            },
+          });
+        }, 1000);
+        enqueueSnackbar(res.message, {
           variant: "success",
         });
       });
