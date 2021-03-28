@@ -116,7 +116,7 @@ const NewOrEditAppointment = ({
   useEffect(() => {
     const appt = {
       ...props.appointment,
-      length: 30,
+      length: props.appointment.length || 30,
       sort_order: 1,
       allow_patients_schedule: true,
       active: true,
