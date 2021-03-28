@@ -184,7 +184,7 @@ const NewOrEditAppointment = ({
   const handleOnChange = (event) => {
     setAppointment({
       ...appointment,
-      [event.target.name]: event.target.value.trim(),
+      [event.target.name]: event.target.value,
     });
   };
 
