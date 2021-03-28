@@ -140,44 +140,56 @@ const NewOrEditAppointment = ({
     );
   };
 
-  const handleFormSubmission = () => {
-    // Duplicate Type
-    const duplicateType = savedAppointments
-      ?.map((x) => appointment.appointment_type?.includes(x.appointment_type))
+
+  const checkIfDuplicateType = (state = "new") => {
+    if (state === "new") {
+      return savedAppointments
+        ?.map((x) => appointment.appointment_type === x.appointment_type)
+        ?.includes(true);
+    }
+    return savedAppointments
+      ?.filter((x) => x.id !== appointment.id)
+      ?.map((x) => appointment.appointment_type === x.appointment_type)
       ?.includes(true);
-    // Validation Start Here
-    if (duplicateType) {
+  };
+
+  const handleFormSubmission = () => {
+    // intializing the form data with selected appointment_type info
+    const formedData = {
+      data: removeEmpty({
+        appointment_type: appointment.appointment_type,
+        descr: appointment.descr,
+        length: appointment.length,
+        fee: appointment.fee,
+        sort_order: appointment.sort_order,
+        allow_patients_schedule: appointment.allow_patients_schedule ? 1 : 0,
+        note: appointment.note,
+        active: appointment.active ? 1 : 0,
+        created_user_id: user.id,
+        client_id: user.client_id,
+      }),
+    };
+
+    if (isNewAppointment) {
+      if (checkIfDuplicateType("new")) {
+        setTypeError(true);
+      } else {
+        createNewAppointment(formedData);
+      }
+    } else if (checkIfDuplicateType("update")) {
       setTypeError(true);
     } else {
-      const formedData = {
-        data: removeEmpty({
-          appointment_type: appointment.appointment_type,
-          descr: appointment.descr,
-          length: appointment.length,
-          fee: appointment.fee,
-          sort_order: appointment.sort_order,
-          allow_patients_schedule: appointment.allow_patients_schedule ? 1 : 0,
-          note: appointment.note,
-          active: appointment.active ? 1 : 0,
-          created_user_id: user.id,
-          client_id: user.client_id,
-        }),
-      };
-      if (isNewAppointment) {
-        createNewAppointment(formedData);
-      } else {
-        delete formedData.data.created_user_id;
+      delete formedData.data.created_user_id;
 
-        AppointmentService.update(
-          formedData,
-          props.appointment.id,
-        ).then((response) => {
-          enqueueSnackbar(`${response.data.message}`, {
-            variant: "success",
-          });
-          onClose();
+      AppointmentService.update(
+        formedData,
+        props.appointment.id,
+      ).then((response) => {
+        enqueueSnackbar(`${response.data.message}`, {
+          variant: "success",
         });
-      }
+        onClose();
+      });
     }
   };
 
@@ -188,10 +200,21 @@ const NewOrEditAppointment = ({
     });
   };
 
+  const clearExistingStatesOfModal = () => {
+    setTypeError();
+    setErrors([]);
+    setAppointment([]);
+  };
+
+  const handleOnModalClose = () => {
+    clearExistingStatesOfModal();
+    onClose();
+  };
+
   return (
     <Dialog
       open={isOpen}
-      onClose={onClose}
+      onClose={handleOnModalClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
