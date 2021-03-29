@@ -281,7 +281,10 @@ const LabRanges = () => {
                     <TableCell>{item.seq}</TableCell>
                     <TableCell>{labRangeTableTranslation(item.compare_item)}</TableCell>
                     <TableCell>{item.compare_operator}</TableCell>
-                    <TableCell>{labRangeTableTranslation(item.compare_to)}</TableCell>
+                    <TableCell>
+                      {item.compare_item === "G"
+                        ? labRangeTableTranslation(item.compare_to) : item.compare_to}
+                    </TableCell>
                     <TableCell>{item.range_low}</TableCell>
                     <TableCell>{item.range_high}</TableCell>
                     <TableCell>
