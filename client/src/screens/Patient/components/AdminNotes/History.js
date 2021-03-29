@@ -62,7 +62,7 @@ const AdminNotesHistory = () => {
         </TableHead>
         <TableBody>
           {!!data
-            && data.length
+            && Boolean(data.length)
             && data.map((row) => (
               <StyledTableRow key={`${row.created}_${row.name}`}>
                 <TableCell component="th" scope="row">

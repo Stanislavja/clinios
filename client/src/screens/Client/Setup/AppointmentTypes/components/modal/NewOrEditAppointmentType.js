@@ -352,6 +352,14 @@ const NewOrEditAppointment = ({
         </DialogContent>
         <DialogActions className={classes.modalAction}>
           <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            onClick={() => handleFormSubmission()}
+          >
+            {isNewAppointment ? "Save" : "Update"}
+          </Button>
+          <Button
             size="small"
             variant="outlined"
             onClick={() => onClose()}
@@ -361,14 +369,6 @@ const NewOrEditAppointment = ({
             }}
           >
             Cancel
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            size="small"
-            onClick={() => handleFormSubmission()}
-          >
-            {isNewAppointment ? "Save" : "Update"}
           </Button>
         </DialogActions>
       </Dialog>
