@@ -46,7 +46,7 @@ const updatePharmacy = async (req, res) => {
 
   const db = makeDb(configuration, res);
   try {
-    const $sql = `update patient set pharmacy_id={id} updated= now(), updated_user_id='${req.user_id}' where id=${id}`;
+    const $sql = `update patient set pharmacy_id=${id}, updated= now(), updated_user_id='${req.user_id}' where id=${id}`;
     const updateResponse = await db.query($sql);
 
     if (!updateResponse.affectedRows) {
