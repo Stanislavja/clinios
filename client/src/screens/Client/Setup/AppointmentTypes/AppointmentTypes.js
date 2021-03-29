@@ -94,7 +94,7 @@ export default function AppointmentTypes() {
 
   useKeyboardShortcuts(["N"], () => {
     handleOnNewClick();
-  }, { overrideSystem: false });
+  }, { overrideSystem: true });
 
 
   return (
