@@ -6,22 +6,21 @@ import {
   TableBody,
   TableRow,
 } from "@material-ui/core";
-import { useLocation } from "react-router-dom";
+import PropTypes from "prop-types";
 
 import { StyledTableCellSm, StyledTableRowSm } from "../../../../components/common/StyledTable";
 import LabService from "../../../../services/lab.service";
 import { labStatusType, labSourceType } from "../../../../utils/helpers";
 
-const LabHistory = () => {
-  const { state } = useLocation();
-  const { documentId } = state;
+const LabHistory = (props) => {
+  const { labId } = props;
   const [labHistory, setLabHistory] = useState([]);
 
   const fetchLabHistory = useCallback(() => {
-    LabService.getLabHistory(documentId).then((res) => {
+    LabService.getLabHistory(labId).then((res) => {
       setLabHistory(res.data);
     });
-  }, [documentId]);
+  }, [labId]);
 
   useEffect(() => {
     fetchLabHistory();
@@ -58,5 +57,10 @@ const LabHistory = () => {
     </Table>
   );
 };
+
+LabHistory.propTypes = {
+  labId: PropTypes.number.isRequired,
+};
+
 
 export default LabHistory;
