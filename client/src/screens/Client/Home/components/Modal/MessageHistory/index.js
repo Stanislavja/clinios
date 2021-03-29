@@ -154,7 +154,7 @@ const MessageHistory = ({
                 </TableHead>
                 <TableBody>
                   {!!history
-                    && history.length
+                    && Boolean(history.length)
                     && history.map((row) => (
                       <StyledTableRow key={row.id}>
                         <TableCell component="th" scope="row">
