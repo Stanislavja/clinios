@@ -305,3 +305,5 @@ export function noOp() {
 }
 
 export const dateFormat = (date) => moment(date).format("MMM D YYYY");
+
+export const dateTimeFormat = (date) => moment(date).format("MMM D YYYY hh:mm A");
