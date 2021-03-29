@@ -860,13 +860,18 @@ const getBilling = async (req, res) => {
 
 const updateBilling = async (req, res) => {
   const { patient_id, id } = req.params;
-  const { amount, note, payment_type } = req.body.data;
+
+  const formData = req.body.data;
+  formData.updated = new Date();
+  formData.updated_user_id = req.user_id;
+
   const db = makeDb(configuration, res);
   try {
-    const $sql = `update tran set amount='${amount}', note='${note}', payment_type='${payment_type}',
-    updated= now(), updated_user_id='${req.user_id}' where patient_id=${patient_id} and id='${id}'`;
+    const updateResponse = await db.query(
+      `update tran set ? where patient_id=${patient_id} and id='${id}'`,
+      [formData]
+    );
 
-    const updateResponse = await db.query($sql);
     if (!updateResponse.affectedRows) {
       errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
