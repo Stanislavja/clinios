@@ -19,7 +19,9 @@ import PropTypes from "prop-types";
 import Alert from "../../../components/Alert";
 import useAuth from "../../../hooks/useAuth";
 import usePatientContext from "../../../hooks/usePatientContext";
-import { toggleMessageDialog, setSelectedMessage, setMessageType } from "../../../providers/Patient/actions";
+import {
+  toggleMessageDialog, setSelectedMessage, setMessageType, toggleMessageDialogPage,
+} from "../../../providers/Patient/actions";
 import PatientService from "../../../services/patient.service";
 
 const useStyles = makeStyles((theme) => ({
@@ -176,9 +178,8 @@ const MessagesDetails = (props) => {
                       disabled={isEditDisabled(row)}
                       className={classes.button}
                       onClick={() => {
-                        dispatch(setMessageType("Edit"));
                         dispatch(setSelectedMessage(row));
-                        dispatch(toggleMessageDialog());
+                        dispatch(toggleMessageDialogPage());
                       }}
                     >
                       <EditIcon fontSize="small" />

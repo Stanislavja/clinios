@@ -39,17 +39,13 @@ const search = async (req, res) => {
   try {
     $sql = `select c.id, c.name cpt, lc.name lab_company, cc.favorite, cc.billable, cc.fee, cl.name client_name
         , cc.updated, concat(u.firstname, ' ', u.lastname) updated_name
-        , group_concat(c2.name order by c2.name separator "; ") cpt_group
+        , group_concat(ci.quest_id order by ci.quest_id separator ", ") cpt_group
         from cpt c
         left join client_cpt cc on cc.client_id=${req.client_id}
         and cc.cpt_id=c.id
         left join lab_company lc on lc.id=c.lab_company_id
         left join user u on u.id=cc.updated_user_id
         left join cpt_item ci on ci.cpt_id=c.id
-		    /*and ci.cpt2_id=(select max(ci2.cpt2_id) 
-                from cpt_item ci2 
-                where ci2.cpt_id=c.id) this was used originally to get only one item, but now more items are needed*/
-		    left join cpt c2 on c2.id=ci.cpt2_id
         left join client cl on cl.id=c.client_id
         where 1 \n`;
     if (cptId) {
@@ -71,7 +67,7 @@ const search = async (req, res) => {
       $sql += `and c.client_id=${req.client_id} \n`;
     }
     if (group) {
-      $sql += `and c2.name is not null \n`;
+      $sql += `and ci.quest_id is not null \n`;
     }
 
     $sql += `group by c.id, lc.name, c.name, cc.favorite, cc.billable, cc.fee, cl.name
