@@ -89,12 +89,8 @@ const MedicationsDetails = (props) => {
   };
 
   const deleteItemHandler = (item) => {
-    const reqBody = {
-      encounter_id: item.encounterId || 1,
-      drug_id: item.drugId || 1,
-      drug_strength_id: item.drugStrengthId || 1,
-    };
-    PatientService.deleteMedications(patientId, reqBody)
+    const drug_id = item.id;
+    PatientService.deleteMedications(patientId, drug_id)
       .then((response) => {
         enqueueSnackbar(`${response.data.message}`, { variant: "success" });
         closeDeleteDialog();
@@ -127,6 +123,10 @@ const MedicationsDetails = (props) => {
               <StyledTableCell>Expires</StyledTableCell>
               <StyledTableCell>Strength</StyledTableCell>
               <StyledTableCell>Unit</StyledTableCell>
+              <StyledTableCell>Amount</StyledTableCell>
+              <StyledTableCell>Refills</StyledTableCell>
+              <StyledTableCell>Patient Instructions</StyledTableCell>
+              <StyledTableCell>Pharmacy Instructions</StyledTableCell>
               <StyledTableCell align="center">Actions</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -134,7 +134,7 @@ const MedicationsDetails = (props) => {
             {!!data
               && data.length
               ? data.map((row) => (
-                <StyledTableRow key={row.start_dt}>
+                <StyledTableRow key={row.id}>
                   <TableCell component="th" scope="row">
                     {moment(row.start_dt).format("MMM D YYYY")}
                   </TableCell>
@@ -142,6 +142,10 @@ const MedicationsDetails = (props) => {
                   <TableCell>{row.expires}</TableCell>
                   <TableCell>{row.strength}</TableCell>
                   <TableCell>{row.unit}</TableCell>
+                  <TableCell>{row.amount}</TableCell>
+                  <TableCell>{row.refills}</TableCell>
+                  <TableCell>{row.patient_instructions}</TableCell>
+                  <TableCell>{row.pharmacy_instructions}</TableCell>
 
                   <TableCell className={classes.actions}>
                     <IconButton
@@ -161,7 +165,7 @@ const MedicationsDetails = (props) => {
               ))
               : (
                 <StyledTableRow>
-                  <TableCell colSpan={6}>
+                  <TableCell colSpan={10}>
                     <Typography align="center" variant="body1">
                       No Records Found...
                     </Typography>

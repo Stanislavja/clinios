@@ -259,7 +259,7 @@ router.get(
   Patient.getMedicationFavorites
 );
 router.delete(
-  "/patient/:patient_id/medications/",
+  "/patient/:patient_id/medications/:drug_id",
   [authJwt.verifyToken],
   Patient.deleteMedications
 );

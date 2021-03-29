@@ -602,12 +602,9 @@ class Patient {
     );
   }
 
-  deleteMedications(patientId, reqBody) {
-    return axios.delete(`${API_BASE}/patient/${patientId}/medications/`, {
+  deleteMedications(patientId, medicationId) {
+    return axios.delete(`${API_BASE}/patient/${patientId}/medications/${medicationId}`, {
       headers: authHeader(),
-      data: {
-        data: reqBody,
-      },
     });
   }
 
