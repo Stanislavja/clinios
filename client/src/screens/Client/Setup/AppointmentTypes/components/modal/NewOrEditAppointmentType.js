@@ -29,11 +29,11 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   root: {
-    width: theme.spacing(63),
+    width: "500px",
   },
   shiftRootContent: {
-    width: theme.spacing(63),
-    minWidth: theme.spacing(0),
+    width: "500px",
+    minWidth: 0,
   },
   content: {
     paddingTop: theme.spacing(2),
@@ -66,7 +66,6 @@ const useStyles = makeStyles((theme) => ({
     width: "220px",
   },
   formHelperText: {
-    // width: "230px",
     fontSize: "12px",
     paddingLeft: "16px",
   },
@@ -82,10 +81,10 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(3),
     paddingRight: theme.spacing(3),
   },
-  formFieldLarge: {
+  largeFormField: {
     flex: 1,
   },
-  formFieldSmall: {
+  smallFormField: {
     maxWidth: "100px",
     flex: 1,
   },
@@ -242,7 +241,7 @@ const NewOrEditAppointment = ({
           <FormControl component="div" className={classes.formControl}>
             <TextField
               autoFocus
-              className={classes.formFieldLarge}
+              className={classes.largeFormField}
               variant="outlined"
               label="Appointment Type"
               margin="normal"
@@ -275,7 +274,7 @@ const NewOrEditAppointment = ({
           </FormControl>
           <FormControl component="div" className={classes.formControl}>
             <TextField
-              className={classes.formFieldSmall}
+              className={classes.smallFormField}
               variant="outlined"
               label="Minutes"
               margin="normal"
@@ -293,7 +292,7 @@ const NewOrEditAppointment = ({
           </FormControl>
           <FormControl component="div" className={classes.formControl}>
             <TextField
-              className={classes.formFieldSmall}
+              className={classes.smallFormField}
               variant="outlined"
               label="Fee"
               margin="normal"
@@ -311,7 +310,7 @@ const NewOrEditAppointment = ({
           </FormControl>
           <FormControl component="div" className={classes.formControl}>
             <TextField
-              className={classes.formFieldSmall}
+              className={classes.smallFormField}
               variant="outlined"
               label="Sort Order"
               margin="normal"
