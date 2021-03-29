@@ -4,10 +4,19 @@ import { API_BASE } from "../utils/API_BASE";
 import authHeader from "./auth-header";
 
 class LabService {
-  // Lab by Id
-  getLabById(labId) {
+  // Lab data from dahsboard page
+  getLabData(userId) {
     return axios
-      .get(`${API_BASE}/lab/${labId}`, {
+      .get(`${API_BASE}/lab/${userId}`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  // Lab by Id
+  getLabById(userId, labId) {
+    return axios
+      .get(`${API_BASE}/lab/${userId}/${labId}`, {
         headers: authHeader(),
       })
       .then((res) => res.data);
@@ -37,6 +46,14 @@ class LabService {
       .get(`${API_BASE}/lab/values/${labId}`, {
         headers: authHeader(),
       })
+      .then((res) => res.data);
+  }
+
+  // update lab data
+  updateLab(labId, payload) {
+    return axios.put(`${API_BASE}/lab/${labId}`, payload, {
+      headers: authHeader(),
+    })
       .then((res) => res.data);
   }
 
