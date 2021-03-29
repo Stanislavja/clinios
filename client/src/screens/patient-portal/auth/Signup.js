@@ -85,7 +85,7 @@ const PatientSignUp = () => {
       },
       (error) => {
         if (error.response) {
-          setErrors(error.response.data);
+          setErrors(error.response.data.message);
         }
       },
     );
@@ -136,7 +136,7 @@ const PatientSignUp = () => {
           </div>
           <SignupForm
             onFormSubmit={handleFormSubmit}
-            errors={errors.error}
+            errors={errors}
           />
         </>
       )}

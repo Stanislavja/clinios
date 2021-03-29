@@ -593,7 +593,7 @@ const SignupForm = (props) => {
           </Grid>
           <Grid container justify="flex-end" className={classes.signupActions}>
             <Button
-              disabled={!formFields.email || fieldErrors.length > 0}
+              disabled={!formFields.email || fieldErrors.length > 0 || !formFields.password}
               variant="contained"
               color="primary"
               onClick={() => handleFormSubmission()}

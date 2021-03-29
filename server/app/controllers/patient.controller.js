@@ -860,13 +860,18 @@ const getBilling = async (req, res) => {
 
 const updateBilling = async (req, res) => {
   const { patient_id, id } = req.params;
-  const { amount, note, payment_type } = req.body.data;
+
+  const formData = req.body.data;
+  formData.updated = new Date();
+  formData.updated_user_id = req.user_id;
+
   const db = makeDb(configuration, res);
   try {
-    const $sql = `update tran set amount='${amount}', note='${note}', payment_type='${payment_type}',
-    updated= now(), updated_user_id='${req.user_id}' where patient_id=${patient_id} and id='${id}'`;
+    const updateResponse = await db.query(
+      `update tran set ? where patient_id=${patient_id} and id='${id}'`,
+      [formData]
+    );
 
-    const updateResponse = await db.query($sql);
     if (!updateResponse.affectedRows) {
       errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
@@ -1901,7 +1906,8 @@ const getMedications = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select pd.id, pd.start_dt, d.name, ds.strength, ds.unit, df.descr, pd.expires
+      `select pd.id, pd.start_dt, pd.amount, pd.refills, d.name, ds.strength, ds.unit, df.descr, pd.expires
+        , pd.patient_instructions, pd.pharmacy_instructions
         from patient_drug pd
         left join drug d on d.id=pd.drug_id
         left join drug_strength ds on ds.id=pd.drug_strength_id
@@ -1990,15 +1996,13 @@ const getMedicationFavorites = async (req, res) => {
 };
 
 const deleteMedications = async (req, res) => {
-  const { encounter_id, drug_id, drug_strength_id } = req.body.data;
+  const { drug_id } = req.params;
   const db = makeDb(configuration, res);
   try {
     const deleteResponse = await db.query(`
        delete 
         from patient_drug 
-        where encounter_id=${encounter_id}
-        and drug_id= ${drug_id}
-        and drug_strength_id=${drug_strength_id}
+        where id= ${drug_id}
     `);
 
     if (!deleteResponse.affectedRows) {
