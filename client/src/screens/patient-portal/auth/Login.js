@@ -12,6 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import clsx from "clsx";
 import { useSnackbar } from "notistack";
+import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 
 import Error from "../../../components/common/Error";
@@ -73,13 +74,16 @@ const useStyles = makeStyles((theme) => ({
 
 const PatientLogin = () => {
   const classes = useStyles();
+  const {
+    register, handleSubmit, errors,
+  } = useForm();
   const { enqueueSnackbar } = useSnackbar();
   const { patientLogin } = useAuth();
   const { clientCode } = useParams();
   const [email, setEmail] = useState("");
   const [clientId, setClientId] = useState(null);
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState([]);
+  const [apiErrors, setApiErrors] = useState([]);
 
   useEffect(() => {
     AuthService.getClientCode(clientCode).then(
@@ -94,21 +98,19 @@ const PatientLogin = () => {
         const { data, status } = error.response;
 
         if (status === 400) {
-          setErrors([
+          setApiErrors([
             {
               msg: data.message,
             },
           ]);
         } else {
-          setErrors([]);
+          setApiErrors([]);
         }
       },
     );
   }, [clientCode]);
 
-  const onFormSubmit = async (e) => {
-    e.preventDefault();
-
+  const onFormSubmit = async () => {
     if (email !== "") {
       localStorage.username = email;
       localStorage.password = password;
@@ -124,7 +126,7 @@ const PatientLogin = () => {
       enqueueSnackbar("Unable to login", {
         variant: "error",
       });
-      setErrors([
+      setApiErrors([
         {
           msg: error.message,
         },
@@ -161,7 +163,7 @@ const PatientLogin = () => {
           Patient Sign in
         </Typography>
 
-        <Error errors={errors} />
+        <Error errors={apiErrors} />
 
         <form
           className={clsx({
@@ -169,21 +171,32 @@ const PatientLogin = () => {
             [classes.withErrors]: errors.length > 0, // only when isLoading === true
           })}
           noValidate
-          onSubmit={(event) => onFormSubmit(event)}
+          onSubmit={handleSubmit(onFormSubmit)}
         >
           <TextField
             disabled={errors.length > 0}
             value={email}
+            type="email"
             variant="outlined"
             margin="normal"
-            required
-            fullWidth
+            inputRef={register({
+              required: "You must provide the email address!",
+              pattern: {
+                // eslint-disable-next-line max-len, no-useless-escape
+                value: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                message: "You must provide a valid email address!",
+              },
+            })}
+            error={!!errors.email}
             id="email"
             label="Email Address"
             name="email"
             autoComplete="email"
+            fullWidth
             autoFocus
+            required
             onChange={(event) => setEmail(event.target.value)}
+            helperText={errors?.email?.message}
           />
           <TextField
             disabled={errors.length > 0}

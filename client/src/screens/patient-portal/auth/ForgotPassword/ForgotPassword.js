@@ -21,6 +21,7 @@ import Dimmer from "../../../../components/common/Dimmer";
 import Error from "../../../../components/common/Error";
 import EmailService from "../../../../services/email.service";
 import AuthService from "../../../../services/patient_portal/auth.service";
+import { Image } from "../components";
 import Success from "./Success";
 
 const useStyles = makeStyles((theme) => ({
@@ -40,6 +41,19 @@ const useStyles = makeStyles((theme) => ({
   },
   pageTitle: {
     marginBottom: theme.spacing(3),
+  },
+  Logo: {
+    textAlign: "center",
+    marginTop: theme.spacing(2),
+    "& img": {
+      width: "100%",
+    },
+    "& p": {
+      fontSize: "16px",
+      "& span": {
+        fontWeight: 600,
+      },
+    },
   },
   dateOfBirth: {
     width: "100%",
@@ -79,6 +93,7 @@ const ForgotPassword = () => {
   const [dob, handleDateChange] = useState(new Date());
   const success = useSelector((state) => state.common.success, shallowEqual);
 
+
   useEffect(() => {
     AuthService.getClientCode(clientCode).then(
       (res) => {
@@ -102,6 +117,7 @@ const ForgotPassword = () => {
       },
     );
   }, [clientCode]);
+
 
   const sendPasswordResetEmail = (e) => {
     e.preventDefault();
@@ -161,6 +177,13 @@ const ForgotPassword = () => {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
+        <div className={classes.Logo}>
+          <Image
+            lassName="clientLogo"
+            src={`${process.env.REACT_APP_API_URL}static/client/c${client?.client_id}_logo.png`}
+            alt="Client Logo"
+          />
+        </div>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon className={classes.lockIcon} />
         </Avatar>
