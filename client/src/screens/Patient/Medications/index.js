@@ -94,7 +94,6 @@ const Medications = (props) => {
   const [drugStrengths, setDrugStrengths] = useState([]);
   const [recentSelections, setRecentSelections] = useState([]);
   const [favoriteMedications, setFavoriteMedications] = useState([]);
-  const [selectedPrescription, setSelectedPrescription] = useState(null);
   const [formFields, setFormFields] = useState({
     type: "",
     drug_id: "",
@@ -334,7 +333,8 @@ const Medications = (props) => {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
-    if (selectedPrescription || selectedMedication) {
+    if (selectedMedication) { // editing scenario
+      // TODO::Edit API is unavailable
       const reqBody = {
         data: prepareRequestBodyParams(),
       };
@@ -358,7 +358,6 @@ const Medications = (props) => {
   };
 
   const rowClickHandler = (row) => {
-    setSelectedPrescription(row); // selected preescription saved for editing
     populateFormFields(row);
   };
 
