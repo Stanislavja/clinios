@@ -7,6 +7,7 @@ import moment from "moment";
 import { useSnackbar } from "notistack";
 import { useHistory } from "react-router-dom";
 
+import useAuth from "../../../hooks/useAuth";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 import { timings } from "../../../static/patient-portal/appointments";
 import Calendar from "./Calendar";
@@ -57,6 +58,7 @@ const Appointments = () => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const history = useHistory();
+  const { user } = useAuth();
   const [practitioners, setPractitioners] = useState([]);
   const [appointmentTypes, setAppointmentTypes] = useState([]);
   const [showCalendar, setShowCalendar] = useState(false);
@@ -110,6 +112,7 @@ const Appointments = () => {
           ApptStatus: "R",
           start_dt: `${moment(userSelection.date).format("YYYY-MM-DD")} ${userSelection.time.split("am")[0]}`,
           end_dt: `${moment(userSelection.date).format("YYYY-MM-DD")} ${userSelection.time.split("am")[0]}`,
+          patient: user,
         },
       };
       PatientPortalService.bookAppointment(reqBody).then((res) => {
