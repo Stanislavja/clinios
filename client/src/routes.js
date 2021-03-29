@@ -393,6 +393,19 @@ const routes = [
         guard: AuthGuard,
         path: "/patient/appointments",
         component: lazy(() => import("./screens/patient-portal/Appointments")),
+        routes: [
+          {
+            exact: true,
+            guard: AuthGuard,
+            path: "/patient/appointments",
+            component: lazy(() => import("./screens/patient-portal/Appointments")),
+          },
+          {
+            guard: AuthGuard,
+            path: "/patient/appointments/confirmation",
+            component: lazy(() => import("./screens/patient-portal/AppointmentConfirmation")),
+          },
+        ],
       },
       {
         guard: AuthGuard,
