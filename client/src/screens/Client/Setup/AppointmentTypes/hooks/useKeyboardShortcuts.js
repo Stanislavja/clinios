@@ -2,17 +2,30 @@ import { useEffect, useCallback, useReducer } from "react";
 
 const blacklistedTargets = ["INPUT", "TEXTAREA"];
 
+function disabledEventPropagation(e) {
+  if (e) {
+    if (e.stopPropagation) {
+      e.stopPropagation();
+    } else if (window.event) {
+      window.event.cancelBubble = true;
+    }
+  }
+}
+
 const keysReducer = (state, action) => {
   switch (action.type) {
-    case "set-key-down":
+    case "set-key-down": {
       const keydownState = { ...state, [action.key]: true };
       return keydownState;
-    case "set-key-up":
+    }
+    case "set-key-up": {
       const keyUpState = { ...state, [action.key]: false };
       return keyUpState;
-    case "reset-keys":
+    }
+    case "reset-keys": {
       const resetState = { ...action.data };
       return resetState;
+    }
     default:
       return state;
   }
@@ -21,26 +34,28 @@ const keysReducer = (state, action) => {
 const useKeyboardShortcut = (shortcutKeys, callback, options) => {
   if (!Array.isArray(shortcutKeys)) {
     throw new Error(
-      "The first parameter to `useKeyboardShortcut` must be an ordered array of `KeyboardEvent.key` strings.",
+      `The first parameter to "useKeyboardShortcut" must be an ordered array of "KeyboardEvent.key" strings.`,
     );
   }
 
   if (!shortcutKeys.length) {
     throw new Error(
-      "The first parameter to `useKeyboardShortcut` must contain atleast one `KeyboardEvent.key` string.",
+      `The first parameter to "useKeyboardShortcut" must contain atleast one "KeyboardEvent.key" string.`,
     );
   }
 
   if (!callback || typeof callback !== "function") {
     throw new Error(
-      "The second parameter to `useKeyboardShortcut` must be a function that will be envoked when the keys are pressed.",
+      `The second parameter to "useKeyboardShortcut" must be
+       a function that will be envoked when the keys are pressed.`,
     );
   }
 
   const { overrideSystem } = options || {};
   const initalKeyMapping = shortcutKeys.reduce((currentKeys, key) => {
-    currentKeys[key.toLowerCase()] = false;
-    return currentKeys;
+    const localVariableForCurrentKey = currentKeys;
+    localVariableForCurrentKey[key.toLowerCase()] = false;
+    return localVariableForCurrentKey;
   }, {});
 
   const [keys, setKeys] = useReducer(keysReducer, initalKeyMapping);
@@ -60,7 +75,6 @@ const useKeyboardShortcut = (shortcutKeys, callback, options) => {
       }
 
       setKeys({ type: "set-key-down", key: loweredKey });
-      return false;
     },
     [keys, overrideSystem],
   );
@@ -79,7 +93,6 @@ const useKeyboardShortcut = (shortcutKeys, callback, options) => {
       }
 
       setKeys({ type: "set-key-up", key: raisedKey });
-      return false;
     },
     [keys, overrideSystem],
   );
@@ -91,29 +104,18 @@ const useKeyboardShortcut = (shortcutKeys, callback, options) => {
     } else {
       setKeys({ type: null });
     }
-  }, [callback, keys]);
+  }, [callback, keys, initalKeyMapping]);
 
   useEffect(() => {
     shortcutKeys.forEach((k) => window.addEventListener("keydown", keydownListener(k)));
     return () => shortcutKeys.forEach((k) => window.removeEventListener("keydown", keydownListener(k)));
-  }, []);
+  }, [keydownListener, shortcutKeys]);
 
   useEffect(() => {
     shortcutKeys.forEach((k) => window.addEventListener("keyup", keyupListener(k)));
     return () => shortcutKeys.forEach((k) => window.removeEventListener("keyup", keyupListener(k)));
-  }, []);
+  }, [keyupListener, shortcutKeys]);
 };
-
-
-function disabledEventPropagation(e) {
-  if (e) {
-    if (e.stopPropagation) {
-      e.stopPropagation();
-    } else if (window.event) {
-      window.event.cancelBubble = true;
-    }
-  }
-}
 
 
 export default useKeyboardShortcut;
