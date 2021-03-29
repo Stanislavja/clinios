@@ -10832,6 +10832,11 @@ react-grid-layout@^1.1.1:
     react-draggable "^4.0.0"
     react-resizable "^1.10.0"
 
+react-hook-form@^6.15.5:
+  version "6.15.5"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-6.15.5.tgz#c2578f9ce6a6df7b33015587d40cd880dc13e2db"
+  integrity sha512-so2jEPYKdVk1olMo+HQ9D9n1hVzaPPFO4wsjgSeZ964R7q7CHsYRbVF0PGBi83FcycA5482WHflasdwLIUVENg==
+
 react-html-parser@^2.0.2:
   version "2.0.2"
   resolved "https://registry.npmjs.org/react-html-parser/-/react-html-parser-2.0.2.tgz"
