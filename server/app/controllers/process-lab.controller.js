@@ -31,7 +31,6 @@ const getLabById = async (req, res) => {
 
 const getAll = async (req, res) => {
   const db = makeDb(configuration, res);
-  const { userId } = req.params;
 
   try {
     const dbResponse = await db.query(
@@ -39,7 +38,7 @@ const getAll = async (req, res) => {
         from lab l
         left join lab_company lc on lc.id=l.lab_company_id
         left join patient p on p.id=l.patient_id
-        where l.user_id = ${userId}
+        where l.user_id = ${req.user_id}
         and l.status = 'R'
         order by l.created
         limit 1`
