@@ -3,14 +3,14 @@ import { useEffect, useCallback, useReducer } from "react";
 const blacklistedTargets = ["INPUT", "TEXTAREA"];
 
 function disabledEventPropagation(e) {
-      if (e && e.stopPropagation) {
-        e.stopPropagation();
-      }
-      if (window.event) {
-        window.event.cancelBubble = true;
-      }
+  if (e && e.stopPropagation) {
+    e.stopPropagation();
+  }
+  if (window.event) {
+    window.event.cancelBubble = true;
   }
 }
+
 
 const keysReducer = (state, action) => {
   switch (action.type) {
