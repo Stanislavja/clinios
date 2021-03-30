@@ -109,7 +109,7 @@ const Lab = () => {
   const [patientText, setPatientText] = useState("");
   const [patientId, setPatientId] = useState(null);
   const [patientSearchResults, setPatientSearchResults] = useState(null);
-  const [docType, setDocType] = useState("L");
+  const [docType, setDocType] = useState("");
   const [assigneeUsers, setAssigneeUsers] = useState([]);
   const [docNote, setDocNote] = useState("");
   const [docAssignTo, setDocAssignTo] = useState("");
@@ -127,7 +127,7 @@ const Lab = () => {
   const updateFields = (lab) => {
     setPatientId(lab.client_id);
     setPatientText(lab.patient_name);
-    setDocType(lab.type);
+    setDocType(lab.type || "U");
     setDocNote(lab.note);
     setAssignmentNote(lab.note_assign);
     setDocAssignTo(lab.assigned_to);
