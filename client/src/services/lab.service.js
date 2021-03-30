@@ -49,9 +49,17 @@ class LabService {
       .then((res) => res.data);
   }
 
-  // update lab data
+  // update lab status
   updateLab(labId, payload) {
     return axios.put(`${API_BASE}/lab/${labId}`, payload, {
+      headers: authHeader(),
+    })
+      .then((res) => res.data);
+  }
+
+  // update lab data
+  updateLabData(labId, payload) {
+    return axios.put(`${API_BASE}/lab/update/${labId}`, payload, {
       headers: authHeader(),
     })
       .then((res) => res.data);
