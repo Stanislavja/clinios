@@ -10,7 +10,7 @@ import PropTypes from "prop-types";
 
 import { StyledTableCellSm, StyledTableRowSm } from "../../../../components/common/StyledTable";
 import LabService from "../../../../services/lab.service";
-import { labStatusType, labSourceType } from "../../../../utils/helpers";
+import { labStatusType, labSourceType, dateFormat } from "../../../../utils/helpers";
 
 const LabHistory = (props) => {
   const { labId } = props;
@@ -43,7 +43,7 @@ const LabHistory = (props) => {
         {labHistory.map((row) => (
           <StyledTableRowSm key={row.type}>
             <StyledTableCellSm component="th" scope="row">
-              {row.created}
+              {dateFormat(row.created)}
             </StyledTableCellSm>
             <StyledTableCellSm>{row.lastFour}</StyledTableCellSm>
             <StyledTableCellSm>{labStatusType(row.status)}</StyledTableCellSm>
