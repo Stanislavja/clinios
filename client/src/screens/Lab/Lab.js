@@ -107,6 +107,7 @@ const Lab = () => {
   // states
   const [labData, setLabData] = useState(null);
   const [patientText, setPatientText] = useState("");
+  const [patientId, setPatientId] = useState(null);
   const [patientSearchResults, setPatientSearchResults] = useState(null);
   const [docType, setDocType] = useState("L");
   const [assigneeUsers, setAssigneeUsers] = useState([]);
@@ -123,10 +124,20 @@ const Lab = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [type, setType] = useState("");
 
+  const updateFields = (lab) => {
+    setPatientId(lab.client_id);
+    setPatientText(lab.patient_name);
+    setDocType(lab.type);
+    setDocNote(lab.note);
+    setAssignmentNote(lab.note_assign);
+    setDocAssignTo(lab.assigned_to);
+  };
+
   const fetchLabDataByID = useCallback(() => {
     LabService.getLabById(userId, documentId).then((res) => {
       const lab = res.data && res.data.length ? res.data[0] : {};
       setLabData(lab);
+      updateFields(lab);
     });
   }, [userId, documentId]);
 
@@ -135,6 +146,7 @@ const Lab = () => {
       const lab = res.data && res.data.length ? res.data[0] : null;
       if (lab) {
         setLabData(lab);
+        updateFields(lab);
       } else {
         setShowGoBack(true);
       }
@@ -151,14 +163,18 @@ const Lab = () => {
       });
   }, []);
 
-  useEffect(() => {
+  const getLabInformation = useCallback(() => {
     if (fromHome) {
       fetchLabData();
     } else {
       fetchLabDataByID();
     }
+  }, [fromHome, fetchLabData, fetchLabDataByID]);
+
+  useEffect(() => {
+    getLabInformation();
     fetchAssigneeUsers();
-  }, [fromHome, fetchLabData, fetchLabDataByID, fetchAssigneeUsers]);
+  }, [getLabInformation, fetchAssigneeUsers]);
 
   useEffect(() => {
     if (labData) {
@@ -201,10 +217,25 @@ const Lab = () => {
 
   const handlePatientChange = (patient) => {
     setPatientText(`${patient.firstname} ${patient.lastname}`);
+    setPatientId(patient.id);
   };
 
   const onFormSubmit = (e) => {
     e.preventDefault();
+    const labId = labData.id;
+    const reqBody = {
+      data: {
+        type: docType,
+        note: docNote,
+        note_assign: assignmentNote,
+        user_id: docAssignTo,
+        patient_id: patientId,
+      },
+    };
+    LabService.updateLabData(labId, reqBody).then((res) => {
+      enqueueSnackbar(res.message, { variant: "success" });
+      getLabInformation();
+    });
   };
 
   const updateStatus = (status) => {
@@ -563,7 +594,7 @@ const Lab = () => {
                         >
                           {assigneeUsers.length
                             ? assigneeUsers.map((option) => (
-                              <MenuItem key={option.name} value={option.name}>
+                              <MenuItem key={option.name} value={option.id}>
                                 {option.name}
                               </MenuItem>
                             ))
@@ -578,17 +609,15 @@ const Lab = () => {
 
                     <TextField
                       variant="outlined"
-                      placeholder="Can you review this?"
                       name="notes"
-                      id="notes"
+                      label="Assignment Note"
                       type="text"
                       fullWidth
-                      value={assignmentNote}
-                      onChange={(e) => setAssignmentNote(e.target.value)}
                       multiline
                       rows={5}
+                      value={assignmentNote}
+                      onChange={(e) => setAssignmentNote(e.target.value)}
                     />
-
                     <Button
                       variant="outlined"
                       className={classes.buttonsRow}
