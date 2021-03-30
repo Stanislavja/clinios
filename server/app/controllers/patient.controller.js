@@ -1932,6 +1932,66 @@ const getMedications = async (req, res) => {
   }
 };
 
+const createMedications = async (req, res) => {
+  const { patient_id } = req.params;
+  const formData = req.body.data;
+  formData.patient_id = patient_id;
+  formData.created = new Date();
+  formData.created_user_id = req.user_id;
+
+  const db = makeDb(configuration, res);
+
+  try {
+    const insertResponse = await db.query(
+      "insert into patient_drug set ? ",
+      formData
+    );
+
+    if (!insertResponse.affectedRows) {
+      errorMessage.message = "Insert not successful";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = insertResponse;
+    successMessage.message = "Insert successful";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Insert not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+const updateMedications = async (req, res) => {
+  const { patient_id, id } = req.params;
+  const formData = req.body.data;
+  formData.updated = new Date();
+  formData.updated_user_id = req.user_id;
+
+  const db = makeDb(configuration, res);
+  try {
+    const updateResponse = await db.query(
+      `update patient_drug set ? where patient_id=${patient_id} and id=${id}`,
+      formData
+    );
+    if (!updateResponse.affectedRows) {
+      errorMessage.message = "Update not successful";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = updateResponse;
+    successMessage.message = "Update successful";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Update not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const getMedicationById = async (req, res) => {
   const db = makeDb(configuration, res);
   const { medication_id } = req.params;
@@ -2413,6 +2473,8 @@ const appointmentTypes = {
   updateDiagnose,
   createDiagnoses,
   getMedications,
+  createMedications,
+  updateMedications,
   getMedicationById,
   getMedicationFavorites,
   deleteMedications,

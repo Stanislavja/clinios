@@ -248,6 +248,16 @@ router.get(
   [authJwt.verifyToken],
   Patient.getMedications
 );
+router.post(
+  "/patient/:patient_id/medications",
+  [authJwt.verifyToken],
+  Patient.createMedications
+);
+router.put(
+  "/patient/:patient_id/medications/:id",
+  [authJwt.verifyToken],
+  Patient.updateMedications
+);
 router.get(
   "/patient/:patient_id/medications/:medication_id",
   [authJwt.verifyToken],
