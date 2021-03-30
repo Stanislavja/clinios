@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 
 import {
+  TableContainer,
   Table,
   TableHead,
   TableBody,
@@ -27,34 +28,34 @@ const LabValues = (props) => {
   }, [fetchLabValues]);
 
   return (
-    <Table size="small" aria-label="simple table">
-      <TableHead>
-        <TableRow>
-          <StyledTableCellSm>Created</StyledTableCellSm>
-          <StyledTableCellSm>Created By</StyledTableCellSm>
-          <StyledTableCellSm>Status</StyledTableCellSm>
-          <StyledTableCellSm>Type</StyledTableCellSm>
-          <StyledTableCellSm>Assigned To</StyledTableCellSm>
-          <StyledTableCellSm>Patient</StyledTableCellSm>
-          <StyledTableCellSm>Note</StyledTableCellSm>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {labValues.map((row) => (
-          <StyledTableRowSm key={row.type}>
-            <StyledTableCellSm component="th" scope="row">
-              {row.created}
-            </StyledTableCellSm>
-            <StyledTableCellSm>{row.lastFour}</StyledTableCellSm>
-            <StyledTableCellSm>{labStatusType(row.status)}</StyledTableCellSm>
-            <StyledTableCellSm>{labSourceType(row.type)}</StyledTableCellSm>
-            <StyledTableCellSm>{row.assigned_to}</StyledTableCellSm>
-            <StyledTableCellSm>{row.patient_name}</StyledTableCellSm>
-            <StyledTableCellSm>{row.note}</StyledTableCellSm>
-          </StyledTableRowSm>
-        ))}
-      </TableBody>
-    </Table>
+    <TableContainer>
+      <Table size="small" aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <StyledTableCellSm>Test</StyledTableCellSm>
+            <StyledTableCellSm>Result</StyledTableCellSm>
+            <StyledTableCellSm>Conventional Range</StyledTableCellSm>
+            <StyledTableCellSm>Conventional Flag</StyledTableCellSm>
+            <StyledTableCellSm>Functional Range</StyledTableCellSm>
+            <StyledTableCellSm>Functional Flag</StyledTableCellSm>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {labValues.map((row) => (
+            <StyledTableRowSm key={row.type}>
+              <StyledTableCellSm component="th" scope="row">
+                {row.created}
+              </StyledTableCellSm>
+              <StyledTableCellSm>{row.lastFour}</StyledTableCellSm>
+              <StyledTableCellSm>{labStatusType(row.status)}</StyledTableCellSm>
+              <StyledTableCellSm>{labSourceType(row.type)}</StyledTableCellSm>
+              <StyledTableCellSm>{row.assigned_to}</StyledTableCellSm>
+              <StyledTableCellSm>{row.patient_name}</StyledTableCellSm>
+            </StyledTableRowSm>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 
