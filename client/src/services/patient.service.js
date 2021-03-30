@@ -475,6 +475,12 @@ class Patient {
     );
   }
 
+  updateMedication(patientId, medicationId, data) {
+    return axios.put(`${API_BASE}/patient/${patientId}/medications/${medicationId}`, data, {
+      headers: authHeader(),
+    });
+  }
+
   // create methods
   createPatientHandout(patientId, data) {
     return axios.post(
@@ -493,7 +499,7 @@ class Patient {
   }
 
   createMedication(patientId, data) {
-    return axios.post(`${API_BASE}/patient/${patientId}/medication`, data, {
+    return axios.post(`${API_BASE}/patient/${patientId}/medications`, data, {
       headers: authHeader(),
     });
   }

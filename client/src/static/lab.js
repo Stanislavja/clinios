@@ -11,6 +11,10 @@ export const DocumentOptions = [
     label: "Misc",
     value: "M",
   },
+  {
+    label: "Uncategorized",
+    value: "U",
+  },
 ];
 
 export const LabortoriesSelectionFields = [

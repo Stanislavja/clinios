@@ -333,22 +333,19 @@ const Medications = (props) => {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
+    const reqBody = {
+      data: prepareRequestBodyParams(),
+    };
     if (selectedMedication) { // editing scenario
-      // TODO::Edit API is unavailable
-      const reqBody = {
-        data: prepareRequestBodyParams(),
-      };
-      PatientService.editEncountersPrescriptions(patientId, encounterId, reqBody)
+      const medicationId = selectedMedication.id;
+      PatientService.updateMedication(patientId, medicationId, reqBody)
         .then((response) => {
           enqueueSnackbar(`${response.data.message}`, { variant: "success" });
           reloadData();
           dispatch(toggleMedicationDialog());
         });
     } else {
-      const reqBody = {
-        data: prepareRequestBodyParams(),
-      };
-      PatientService.createEncountersPrescriptions(patientId, encounterId, reqBody)
+      PatientService.createMedication(patientId, reqBody)
         .then((response) => {
           enqueueSnackbar(`${response.data.message}`, { variant: "success" });
           reloadData();
