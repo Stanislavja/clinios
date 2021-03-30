@@ -9,7 +9,11 @@ router.get("/lab/:userId/:labId", [authJwt.verifyToken], ProcessLab.getLabById);
 router.get("/lab/:userId", [authJwt.verifyToken], ProcessLab.getAll);
 router.post("/lab", [authJwt.verifyToken], ProcessLab.createLab);
 router.put("/lab/:labId", [authJwt.verifyToken], ProcessLab.updateLab);
-router.put("/lab/update/:labId", [authJwt.verifyToken], ProcessLab.updateLabData);
+router.put(
+  "/lab/update/:labId",
+  [authJwt.verifyToken],
+  ProcessLab.updateLabData
+);
 router.get(
   "/lab/histroy/:labId",
   [authJwt.verifyToken],
