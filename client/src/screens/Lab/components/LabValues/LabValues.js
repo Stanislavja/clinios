@@ -12,7 +12,7 @@ import PropTypes from "prop-types";
 
 import { StyledTableCellSm, StyledTableRowSm } from "../../../../components/common/StyledTable";
 import LabService from "../../../../services/lab.service";
-import { labStatusType, labSourceType } from "../../../../utils/helpers";
+import { labStatusTypeToLabel, labSourceTypeToLabel } from "../../../../utils/helpers";
 import GraphDialog from "./component/GraphDialog";
 
 const useStyles = makeStyles(() => ({
@@ -79,8 +79,8 @@ const LabValues = (props) => {
                   {row.created}
                 </StyledTableCellSm>
                 <StyledTableCellSm>{row.lastFour}</StyledTableCellSm>
-                <StyledTableCellSm>{labStatusType(row.status)}</StyledTableCellSm>
-                <StyledTableCellSm>{labSourceType(row.type)}</StyledTableCellSm>
+                <StyledTableCellSm>{labStatusTypeToLabel(row.status)}</StyledTableCellSm>
+                <StyledTableCellSm>{labSourceTypeToLabel(row.type)}</StyledTableCellSm>
                 <StyledTableCellSm>{row.assigned_to}</StyledTableCellSm>
                 <StyledTableCellSm>{row.patient_name}</StyledTableCellSm>
               </StyledTableRowSm>
