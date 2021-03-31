@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 
 import {
   makeStyles, Typography, Grid,
 } from "@material-ui/core";
 import Checkbox from "@material-ui/core/Checkbox";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -11,13 +14,20 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 
+import useAuth from "../../../hooks/useAuth";
+import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 import PurchaseLabsService from "../../../services/patient_portal/purchase-lab.service";
+import { paymentMethodType } from "../../../utils/helpers";
 
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     padding: "40px 0px",
+  },
+  customSelect: {
+    width: "220px",
+    marginTop: theme.spacing(3),
   },
   title: {
     paddingBottom: theme.spacing(1),
@@ -41,15 +51,25 @@ const useStyles = makeStyles((theme) => ({
 
 const PurchaseLabs = () => {
   const classes = useStyles();
+  const { lastVisitedPatient } = useAuth();
   const [selected, setSelected] = useState([]);
+  const [paymentMethods, setPaymentMethods] = useState([]);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [total, setTotal] = useState(0);
   const [labs, setLabs] = useState([]);
+
+  const fetchPaymentMethods = useCallback(() => {
+    PatientPortalService.getPaymentMethods(lastVisitedPatient).then((res) => {
+      setPaymentMethods(res.data);
+    });
+  }, [lastVisitedPatient]);
 
   useEffect(() => {
     PurchaseLabsService.getAll().then((res) => {
       setLabs(res.data);
     });
-  }, []);
+    fetchPaymentMethods();
+  }, [fetchPaymentMethods]);
 
   const calculateTotal = (selectedLabIds) => {
     const selectedLabs = labs.filter((lab) => selectedLabIds.includes(lab.id));
@@ -133,6 +153,30 @@ const PurchaseLabs = () => {
             </TableBody>
           </Table>
         </TableContainer>
+        <FormControl
+          variant="outlined"
+          className={classes.customSelect}
+          size="small"
+        >
+          <InputLabel htmlFor="age-native-simple">Select Payment Method</InputLabel>
+          <Select
+            native
+            value={selectedPaymentMethod}
+            onChange={(event) => setSelectedPaymentMethod(event.target.value)}
+            inputProps={{
+              name: "type",
+              id: "age-native-simple",
+            }}
+            label="User"
+          >
+            <option aria-label="None" value="" />
+            {paymentMethods.map((pm) => (
+              <option key={pm.id} value={pm.type}>
+                {paymentMethodType(pm.type)}
+              </option>
+            ))}
+          </Select>
+        </FormControl>
       </Grid>
     </div>
   );
