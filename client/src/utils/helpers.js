@@ -227,7 +227,7 @@ export const labRangeTableTranslation = (type) => {
   }
 };
 
-export const labStatusType = (type) => {
+export const labStatusTypeToLabel = (type) => {
   switch (type) {
     case "R":
       return "Requested";
@@ -240,7 +240,7 @@ export const labStatusType = (type) => {
   }
 };
 
-export const labSourceType = (type) => {
+export const labSourceTypeToLabel = (type) => {
   switch (type) {
     case "P":
       return "Patient";

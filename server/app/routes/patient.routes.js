@@ -268,6 +268,11 @@ router.get(
   [authJwt.verifyToken],
   Patient.getMedicationFavorites
 );
+router.get(
+  "/patient/:patient_id/medication/recents",
+  [authJwt.verifyToken],
+  Patient.getMedicationRecents
+);
 router.delete(
   "/patient/:patient_id/medications/:drug_id",
   [authJwt.verifyToken],

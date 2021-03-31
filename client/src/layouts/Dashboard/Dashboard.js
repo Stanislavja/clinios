@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useMediaQuery } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
@@ -44,6 +44,11 @@ const Dashboard = (props) => {
   const handleSidebarClose = () => {
     setOpenSidebar(false);
   };
+
+  // Scroll Restoration::https://reactrouter.com/web/guides/scroll-restoration
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [children]);
 
   return (
     <div

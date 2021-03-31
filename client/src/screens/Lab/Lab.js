@@ -26,7 +26,7 @@ import LabService from "../../services/lab.service";
 import { DocumentOptions } from "../../static/lab";
 import * as API from "../../utils/API";
 import {
-  checkFileExtension, labStatusType, labSourceType, dateTimeFormat,
+  checkFileExtension, labStatusTypeToLabel, labSourceTypeToLabel, dateTimeFormat,
 } from "../../utils/helpers";
 import Interpretation from "./components/Interpretation";
 import LabHistory from "./components/LabHistory";
@@ -422,7 +422,7 @@ const Lab = () => {
                         component="span"
                         className={classes.text14}
                       >
-                        {labStatusType(labData?.status)}
+                        {labStatusTypeToLabel(labData?.status)}
                       </Typography>
                     </Grid>
 
@@ -458,7 +458,7 @@ const Lab = () => {
                         component="span"
                         className={classes.text14}
                       >
-                        {labSourceType(labData?.source)}
+                        {labSourceTypeToLabel(labData?.source)}
                       </Typography>
                     </Grid>
 
