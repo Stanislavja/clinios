@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, Typography, IconButton } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import DeleteIcon from "@material-ui/icons/DeleteOutline";
+import EditIcon from "@material-ui/icons/EditOutlined";
 import moment from "moment";
+import { useSnackbar } from "notistack";
+import PropTypes from "prop-types";
 
+import Alert from "../../../components/Alert";
 import usePatientContext from "../../../hooks/usePatientContext";
+import { setSelectedMedication, toggleMedicationDialog } from "../../../providers/Patient/actions";
+import PatientService from "../../../services/patient.service";
 
 const useStyles = makeStyles((theme) => ({
   text12: {
@@ -18,21 +25,70 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(0, 0.5, 0, 0),
   },
   fullWidth: {
-    width: "52%",
+    width: "41%",
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",
     padding: theme.spacing(0, 0.5, 0, 0),
   },
+  blockAction: {
+    "& button": {
+      padding: 2,
+    },
+    "& svg": {
+      fontSize: "1rem",
+      cursor: "pointer",
+    },
+  },
 }));
 
-const MedicationsContent = () => {
+const MedicationsContent = (props) => {
   const classes = useStyles();
-  const { state } = usePatientContext();
+  const { reloadData } = props;
+  const { enqueueSnackbar } = useSnackbar();
+  const { state, dispatch } = usePatientContext();
+  const { patientId } = state;
   const { data } = state.medications;
+
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const openDeleteDialog = (item) => {
+    setSelectedItem(item);
+    setShowDeleteDialog((prevstate) => !prevstate);
+  };
+
+  const closeDeleteDialog = () => {
+    setSelectedItem(null);
+    setShowDeleteDialog((prevstate) => !prevstate);
+  };
+
+  const editItemHandler = (item) => {
+    dispatch(setSelectedMedication(item));
+    dispatch(toggleMedicationDialog());
+  };
+
+  const deleteItemHandler = (item) => {
+    const medicationId = item.id;
+    PatientService.deleteMedications(patientId, medicationId)
+      .then((response) => {
+        enqueueSnackbar(`${response.data.message}`, { variant: "success" });
+        closeDeleteDialog();
+        reloadData();
+      });
+  };
 
   return (
     <>
+      <Alert
+        open={showDeleteDialog}
+        title="Confirm Delete"
+        message="Are you sure you want to delete this medication?"
+        applyButtonText="Delete"
+        cancelButtonText="Cancel"
+        applyForm={() => deleteItemHandler(selectedItem)}
+        cancelForm={closeDeleteDialog}
+      />
       {data.map((item) => (
         <Grid key={`${item.start_dt}_${item.name}`} container>
           <Grid item className={classes.block}>
@@ -62,10 +118,27 @@ const MedicationsContent = () => {
               {item.name}
             </Typography>
           </Grid>
+          <Grid item className={classes.blockAction}>
+            <IconButton
+              onClick={() => editItemHandler(item)}
+            >
+              <EditIcon />
+            </IconButton>
+            <IconButton
+              disabled={(item.payment_type === "C" || item.payment_type === "A")}
+              onClick={() => openDeleteDialog(item)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Grid>
         </Grid>
       ))}
     </>
   );
+};
+
+MedicationsContent.propTypes = {
+  reloadData: PropTypes.func.isRequired,
 };
 
 export default MedicationsContent;
