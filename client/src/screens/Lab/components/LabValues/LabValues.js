@@ -76,12 +76,12 @@ const LabValues = (props) => {
                 onClick={() => rowClickHandler(row)}
               >
                 <StyledTableCellSm component="th" scope="row">
-                  {row.created}
+                  {row.patient_name}
                 </StyledTableCellSm>
-                <StyledTableCellSm>{row.lastFour}</StyledTableCellSm>
+                <StyledTableCellSm>{row.patient_name}</StyledTableCellSm>
                 <StyledTableCellSm>{labStatusTypeToLabel(row.status)}</StyledTableCellSm>
                 <StyledTableCellSm>{labSourceTypeToLabel(row.type)}</StyledTableCellSm>
-                <StyledTableCellSm>{row.assigned_to}</StyledTableCellSm>
+                <StyledTableCellSm>{row.patient_name}</StyledTableCellSm>
                 <StyledTableCellSm>{row.patient_name}</StyledTableCellSm>
               </StyledTableRowSm>
             ))}
