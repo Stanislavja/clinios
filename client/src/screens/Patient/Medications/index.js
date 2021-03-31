@@ -77,6 +77,11 @@ const useStyles = makeStyles((theme) => ({
   listItem: {
     padding: "2px 0",
   },
+  textClip: {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  },
 }));
 
 const Medications = (props) => {
@@ -541,7 +546,12 @@ const Medications = (props) => {
                       root: classes.listItem,
                     }}
                   >
-                    <ListItemText primary={item.name} />
+                    <ListItemText
+                      classes={{
+                        primary: classes.textClip,
+                      }}
+                      primary={item.name}
+                    />
                   </ListItem>
                 ))
                 : <Typography>No favorites found!</Typography>}
