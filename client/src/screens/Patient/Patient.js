@@ -566,7 +566,11 @@ const Patient = () => {
           />
         );
       case "Medications":
-        return <MedicationsCardContent />;
+        return (
+          <MedicationsCardContent
+            reloadData={() => fetchMedications()}
+          />
+        );
       case "Diagnoses":
         return (
           <DiagnosesCardContent
