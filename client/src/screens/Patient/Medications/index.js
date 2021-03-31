@@ -61,6 +61,7 @@ const useStyles = makeStyles((theme) => ({
   },
   textMessage: {
     lineHeight: "21px",
+    fontSize: 12,
   },
   dateInput: {
     width: 175,
@@ -524,7 +525,7 @@ const Medications = (props) => {
           </Grid>
         </Grid>
         <Grid item lg={2} md={2} xs={12}>
-          <Box pr={2}>
+          <Box pl={4} pr={2}>
             <Typography variant="h5" gutterBottom>
               Favorites
             </Typography>
