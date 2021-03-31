@@ -2066,7 +2066,7 @@ const getMedicationRecents = async (req, res) => {
       left join drug_strength ds on ds.drug_id=pd.drug_id
       and ds.id=pd.drug_strength_id
       left join drug_frequency df on df.id=pd.drug_frequency_id
-      where pd.user_id=${req.user_id}
+      where pd.created_user_id=${req.user_id}
       order by pd.created desc
       limit 20`
     );
