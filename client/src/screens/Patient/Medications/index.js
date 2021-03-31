@@ -432,7 +432,7 @@ const Medications = (props) => {
                           inputVariant="outlined"
                           id="date-picker-dialog"
                           label={item.label}
-                          format="dd/MM/yyyy"
+                          format="MMM dd yyyy"
                           value={formFields.startDate}
                           onChange={handleDateChange}
                           required
