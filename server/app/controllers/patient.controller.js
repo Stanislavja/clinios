@@ -2060,7 +2060,7 @@ const getMedicationRecents = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select d.name, ds.strength, ds.unit, ds.form, df.descr frequency, pd.expires, pd.amount, pd.refills, pd.generic
+      `select d.id, d.name, ds.strength, ds.unit, ds.form, df.descr frequency, pd.expires, pd.amount, pd.refills, pd.generic
       from patient_drug pd
       left join drug d on d.id=pd.drug_id
       left join drug_strength ds on ds.drug_id=pd.drug_id
