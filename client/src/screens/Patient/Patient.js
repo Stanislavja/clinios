@@ -988,7 +988,6 @@ const Patient = () => {
 
       {!!encounters.newDialog && (
         <Dialog
-          fullScreen
           open={encounters.newDialog}
           title="New Encounter"
           message={(
