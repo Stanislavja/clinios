@@ -115,9 +115,9 @@ const Medications = (props) => {
     formFields.strength = medication.strength;
     formFields.frequency = drugFrequencyLabelToCode(medication.frequency);
     formFields.startDate = new Date(medication.start_dt);
-    formFields.expires = medication.expires;
-    formFields.amount = medication.amount;
-    formFields.refills = medication.refills;
+    formFields.expires = medication?.expires || "";
+    formFields.amount = medication?.amount || "";
+    formFields.refills = medication?.refills || "";
     formFields.patientInstructions = medication.patient_instructions;
     formFields.pharmacyInstructions = medication.pharmacy_instructions;
     formFields.generic = String(medication.generic);
