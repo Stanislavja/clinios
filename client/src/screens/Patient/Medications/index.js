@@ -148,8 +148,8 @@ const Medications = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedMedication]);
 
-  const fetchRecentPrescriptions = useCallback(() => {
-    PatientService.getEncountersPrescriptions(patientId, encounterId)
+  const fetchRecentMedications = useCallback(() => {
+    PatientService.getMedicationRecents(patientId, encounterId)
       .then((response) => {
         setRecentSelections(response.data);
       });
@@ -177,10 +177,10 @@ const Medications = (props) => {
   }, [patientId, encounterId]);
 
   useEffect(() => {
-    fetchRecentPrescriptions();
+    fetchRecentMedications();
     fetchDrugFrequencies();
     fetchFavoriteMedications();
-  }, [fetchRecentPrescriptions, fetchDrugFrequencies, fetchFavoriteMedications]);
+  }, [fetchRecentMedications, fetchDrugFrequencies, fetchFavoriteMedications]);
 
   useDidMountEffect(() => {
     if (!formFields.drug_id.length) {
