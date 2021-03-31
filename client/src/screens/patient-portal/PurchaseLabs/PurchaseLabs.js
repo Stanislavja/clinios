@@ -1,26 +1,17 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import {
-  makeStyles, Typography, Grid, withStyles,
+  makeStyles, Typography, Grid,
 } from "@material-ui/core";
-import { useSnackbar } from "notistack";
+import Checkbox from "@material-ui/core/Checkbox";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import Dialog from "../../../components/Dialog";
-import useAuth from "../../../hooks/useAuth";
-import useDidMountEffect from "../../../hooks/useDidMountEffect";
-import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
+
+import PurchaseLabsService from "../../../services/patient_portal/purchase-lab.service";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -31,78 +22,63 @@ const useStyles = makeStyles((theme) => ({
   title: {
     paddingBottom: theme.spacing(1),
   },
-  listItem: {
-    display: 'flex',
+  table: {
+    "& th": {
+      fontWeight: 600,
+    },
   },
-  tab: {
-    paddingBottom: 5,
-    margin: "5px 16px 5px 0",
-    fontSize: 14,
-    cursor: "pointer",
+  selectCheckbox: {
+    padding: 0,
   },
-  tabSelected: {
-    paddingBottom: 5,
-    margin: "5px 16px 5px 0",
-    fontSize: 14,
-    cursor: "pointer",
-    borderBottom: `2px solid ${theme.palette.primary.main}`,
-  },
-  w100: {
-    minWidth: 100,
+  Total: {
+    marginTop: theme.spacing(2),
+    "& span": {
+      fontWeight: 600,
+      marginRight: theme.spacing(1 / 2),
+    },
   },
 }));
 
-const StyledTableCell = withStyles(() => ({
-  head: {
-    whiteSpace: "nowrap",
-    fontSize: "12px",
-    fontWeight: 700,
-    padding: "6px 24px 6px 2px",
-    borderBottom: "unset",
-  },
-  body: {
-    fontSize: 12,
-    borderBottom: "unset",
-  },
-}))(TableCell);
-
-const StyledTableRow = withStyles(() => ({
-  root: {
-    fontSize: 14,
-    "& th": {
-      fontSize: 12,
-      whiteSpace: "nowrap",
-      padding: "2px 16px 2px 2px",
-      lineHeight: "14px",
-    },
-    "& td": {
-      fontSize: 12,
-      whiteSpace: "nowrap",
-      padding: "2px 16px 2px 2px",
-      lineHeight: "14px",
-    },
-  },
-}))(TableRow);
-
 const PurchaseLabs = () => {
   const classes = useStyles();
-  const { enqueueSnackbar } = useSnackbar();
-  const { lastVisitedPatient, user } = useAuth();
-  const [checked, setChecked] = React.useState([0]);
-  const [total, setTotal] = React.useState(0);
+  const [selected, setSelected] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [labs, setLabs] = useState([]);
 
-  const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+  useEffect(() => {
+    PurchaseLabsService.getAll().then((res) => {
+      setLabs(res.data);
+    });
+  }, []);
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
+  const calculateTotal = (selectedLabIds) => {
+    const selectedLabs = labs.filter((lab) => selectedLabIds.includes(lab.id));
+    const sumOfSelectedLabs = selectedLabs.reduce((acc, lab) => (acc + lab.price), 0);
+    setTotal(sumOfSelectedLabs);
   };
+
+  const handleClick = (event, id) => {
+    event.stopPropagation();
+    const selectedIndex = selected.indexOf(id);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, id);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1),
+      );
+    }
+    setSelected(newSelected);
+    calculateTotal(newSelected);
+  };
+
+  const isSelected = (id) => selected.indexOf(id) !== -1;
 
   return (
     <div className={classes.root}>
@@ -119,37 +95,45 @@ const PurchaseLabs = () => {
           <Table size="small" className={classes.table} aria-label="a dense table">
             <TableHead>
               <TableRow>
-                <StyledTableCell>Select</StyledTableCell>
-                <StyledTableCell>Lab Name</StyledTableCell>
-                <StyledTableCell>Lab Company</StyledTableCell>
-                <StyledTableCell>Price</StyledTableCell>
+                <TableCell>Select</TableCell>
+                <TableCell>Lab Name</TableCell>
+                <TableCell>Lab Company</TableCell>
+                <TableCell>Price</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {[0, 1, 2, 3].map((value) => {
-                const labelId = `checkbox-list-label-${value}`;
-               return  <StyledTableRow>
-                  <StyledTableCell component="th" scope="item">
-                    <Checkbox
-                        edge="start"
-                        checked={checked.indexOf(value) !== -1}
-                        tabIndex={-1}
-                        disableRipple
-                        inputProps={{ 'aria-labelledby': labelId }}
+              {labs.map((lab) => {
+                const isChecked = isSelected(lab.id);
+                return (
+                  <TableRow
+                    hover
+                    onClick={(event) => handleClick(event, lab.id)}
+                    role="checkbox"
+                  >
+                    <TableCell component="th" scope="row">
+                      <Checkbox
+                        onClick={(event) => handleClick(event, lab.id)}
+                        className={classes.selectCheckbox}
+                        checked={isChecked}
                       />
-                    </StyledTableCell>
-                    <StyledTableCell>Initial Group For All Patients</StyledTableCell>
-                    <StyledTableCell>Great Plains Laboratory</StyledTableCell>
-                    <StyledTableCell>$ 255</StyledTableCell>
-                </StyledTableRow>
+                    </TableCell>
+                    <TableCell>{lab.cpt_name}</TableCell>
+                    <TableCell>{lab.lab_company_name}</TableCell>
+                    <TableCell>
+                      $
+                      {lab.price}
+                    </TableCell>
+                  </TableRow>
+                );
               })}
               <div className={classes.Total}>
-                Total: {total}
+                <span>Total:</span>
+                {total}
               </div>
             </TableBody>
           </Table>
-      </TableContainer>
-    </Grid>
+        </TableContainer>
+      </Grid>
     </div>
   );
 };
