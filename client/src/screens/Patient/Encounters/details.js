@@ -17,9 +17,8 @@ import PropTypes from "prop-types";
 
 import Alert from "../../../components/Alert";
 import usePatientContext from "../../../hooks/usePatientContext";
-import { toggleEncountersDialog } from "../../../providers/Patient/actions";
+import { toggleEncountersDialog, setEncounter } from "../../../providers/Patient/actions";
 import PatientService from "../../../services/patient.service";
-import { setEncounter } from "../../../store/patient/actions";
 
 const useStyles = makeStyles((theme) => ({
   button: {
