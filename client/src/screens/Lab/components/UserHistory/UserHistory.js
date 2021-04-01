@@ -12,7 +12,7 @@ import { useParams } from "react-router-dom";
 import { StyledTableCellLg, StyledTableRowLg } from "../../../../components/common/StyledTable";
 import Dialog from "../../../../components/Dialog";
 import LabService from "../../../../services/lab.service";
-import { labStatusType, labSourceType, dateFormat } from "../../../../utils/helpers";
+import { labStatusTypeToLabel, labSourceTypeToLabel, dateFormat } from "../../../../utils/helpers";
 
 const UserHistory = (props) => {
   const { open, onClose } = props;
@@ -49,8 +49,8 @@ const UserHistory = (props) => {
               {dateFormat(row.created)}
             </StyledTableCellLg>
             <StyledTableCellLg>{row.filename}</StyledTableCellLg>
-            <StyledTableCellLg>{labStatusType(row.status)}</StyledTableCellLg>
-            <StyledTableCellLg>{labSourceType(row.type)}</StyledTableCellLg>
+            <StyledTableCellLg>{labStatusTypeToLabel(row.status)}</StyledTableCellLg>
+            <StyledTableCellLg>{labSourceTypeToLabel(row.type)}</StyledTableCellLg>
             <StyledTableCellLg>{row.assigned_to}</StyledTableCellLg>
             <StyledTableCellLg>{row.patient_name}</StyledTableCellLg>
             <StyledTableCellLg>{row.note}</StyledTableCellLg>

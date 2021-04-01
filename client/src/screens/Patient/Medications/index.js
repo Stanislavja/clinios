@@ -61,6 +61,7 @@ const useStyles = makeStyles((theme) => ({
   },
   textMessage: {
     lineHeight: "21px",
+    fontSize: 12,
   },
   dateInput: {
     width: 175,
@@ -75,6 +76,11 @@ const useStyles = makeStyles((theme) => ({
   },
   listItem: {
     padding: "2px 0",
+  },
+  textClip: {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
   },
 }));
 
@@ -114,9 +120,9 @@ const Medications = (props) => {
     formFields.strength = medication.strength;
     formFields.frequency = drugFrequencyLabelToCode(medication.frequency);
     formFields.startDate = new Date(medication.start_dt);
-    formFields.expires = medication.expires;
-    formFields.amount = medication.amount;
-    formFields.refills = medication.refills;
+    formFields.expires = medication?.expires || "";
+    formFields.amount = medication?.amount || "";
+    formFields.refills = medication?.refills || "";
     formFields.patientInstructions = medication.patient_instructions;
     formFields.pharmacyInstructions = medication.pharmacy_instructions;
     formFields.generic = String(medication.generic);
@@ -148,8 +154,8 @@ const Medications = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedMedication]);
 
-  const fetchRecentPrescriptions = useCallback(() => {
-    PatientService.getEncountersPrescriptions(patientId, encounterId)
+  const fetchRecentMedications = useCallback(() => {
+    PatientService.getMedicationRecents(patientId, encounterId)
       .then((response) => {
         setRecentSelections(response.data);
       });
@@ -177,10 +183,10 @@ const Medications = (props) => {
   }, [patientId, encounterId]);
 
   useEffect(() => {
-    fetchRecentPrescriptions();
+    fetchRecentMedications();
     fetchDrugFrequencies();
     fetchFavoriteMedications();
-  }, [fetchRecentPrescriptions, fetchDrugFrequencies, fetchFavoriteMedications]);
+  }, [fetchRecentMedications, fetchDrugFrequencies, fetchFavoriteMedications]);
 
   useDidMountEffect(() => {
     if (!formFields.drug_id.length) {
@@ -426,7 +432,7 @@ const Medications = (props) => {
                           inputVariant="outlined"
                           id="date-picker-dialog"
                           label={item.label}
-                          format="dd/MM/yyyy"
+                          format="MMM dd yyyy"
                           value={formFields.startDate}
                           onChange={handleDateChange}
                           required
@@ -524,7 +530,7 @@ const Medications = (props) => {
           </Grid>
         </Grid>
         <Grid item lg={2} md={2} xs={12}>
-          <Box pr={2}>
+          <Box pl={4} pr={2}>
             <Typography variant="h5" gutterBottom>
               Favorites
             </Typography>
@@ -540,7 +546,12 @@ const Medications = (props) => {
                       root: classes.listItem,
                     }}
                   >
-                    <ListItemText primary={item.name} />
+                    <ListItemText
+                      classes={{
+                        primary: classes.textClip,
+                      }}
+                      primary={item.name}
+                    />
                   </ListItem>
                 ))
                 : <Typography>No favorites found!</Typography>}

@@ -68,7 +68,7 @@ export const NewDrugFormFields = [
     type: "text",
     options: [],
     multiline: true,
-    required: true,
+    required: false,
   },
   {
     name: "pharmacyInstructions",
@@ -78,7 +78,7 @@ export const NewDrugFormFields = [
     type: "text",
     options: [],
     multiline: true,
-    required: true,
+    required: false,
   },
 ];
 
