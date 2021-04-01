@@ -7,11 +7,6 @@ import {
   TextField,
   Button,
   MenuItem,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
@@ -24,7 +19,6 @@ import PatientPortalService from "../../../../services/patient_portal/patient-po
 import {
   BasicInfoForm,
   InsuranceForm,
-  PaymentData,
   PortalForm,
 } from "../../../../static/patientBasicInfoForm";
 
@@ -323,7 +317,7 @@ const ProfileForm = () => {
       <Grid container>
         <Grid item xs={12}>
           <Paper className={classes.root} variant="outlined">
-            <Grid item xs={6} className={classes.halfSectionCard}>
+            <Grid item xs={10} className={classes.halfSectionCard}>
               <Typography variant="h5" color="textPrimary">
                 Home Address
               </Typography>
@@ -404,7 +398,7 @@ const ProfileForm = () => {
               </Typography>
               <Grid container spacing={1} className={classes.inputRow}>
                 {InsuranceForm.map((item) => (
-                  <Grid key={item.name} item md={2}>
+                  <Grid key={item.name} item md={3}>
                     <TextField
                       label={item.label}
                       name={item.name}
@@ -422,7 +416,7 @@ const ProfileForm = () => {
         </Grid>
       </Grid>
 
-      <Grid container>
+      {/*       <Grid container>
         <Grid item xs={12}>
           <Paper className={classes.root} variant="outlined">
             <Grid className={classes.sectionCard}>
@@ -463,7 +457,7 @@ const ProfileForm = () => {
           </Paper>
         </Grid>
       </Grid>
-
+ */}
       <Grid container>
         <Grid item xs={12}>
           <Paper className={classes.root} variant="outlined">
