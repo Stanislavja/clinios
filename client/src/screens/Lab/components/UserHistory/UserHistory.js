@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 
 import {
+  Typography,
   Table,
   TableHead,
   TableBody,
@@ -43,19 +44,29 @@ const UserHistory = (props) => {
         </TableRow>
       </TableHead>
       <TableBody>
-        {userHistory.map((row) => (
-          <StyledTableRowLg key={row.type}>
-            <StyledTableCellLg component="th" scope="row">
-              {dateFormat(row.created)}
-            </StyledTableCellLg>
-            <StyledTableCellLg>{row.filename}</StyledTableCellLg>
-            <StyledTableCellLg>{labStatusTypeToLabel(row.status)}</StyledTableCellLg>
-            <StyledTableCellLg>{labSourceTypeToLabel(row.type)}</StyledTableCellLg>
-            <StyledTableCellLg>{row.assigned_to}</StyledTableCellLg>
-            <StyledTableCellLg>{row.patient_name}</StyledTableCellLg>
-            <StyledTableCellLg>{row.note}</StyledTableCellLg>
-          </StyledTableRowLg>
-        ))}
+        {userHistory.length
+          ? userHistory.map((row) => (
+            <StyledTableRowLg key={row.type}>
+              <StyledTableCellLg component="th" scope="row">
+                {dateFormat(row.created)}
+              </StyledTableCellLg>
+              <StyledTableCellLg>{row.filename}</StyledTableCellLg>
+              <StyledTableCellLg>{labStatusTypeToLabel(row.status)}</StyledTableCellLg>
+              <StyledTableCellLg>{labSourceTypeToLabel(row.type)}</StyledTableCellLg>
+              <StyledTableCellLg>{row.assigned_to}</StyledTableCellLg>
+              <StyledTableCellLg>{row.patient_name}</StyledTableCellLg>
+              <StyledTableCellLg>{row.note}</StyledTableCellLg>
+            </StyledTableRowLg>
+          ))
+          : (
+            <StyledTableRowLg>
+              <StyledTableCellLg colSpan={7}>
+                <Typography align="center" variant="body1">
+                  No Records found...
+                </Typography>
+              </StyledTableCellLg>
+            </StyledTableRowLg>
+          )}
       </TableBody>
     </Table>
   );
