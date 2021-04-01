@@ -1,29 +1,27 @@
 import React, { useState, useEffect, useCallback } from "react";
 
 import {
+  Typography,
   TableContainer,
   Table,
   TableHead,
   TableBody,
   TableRow,
 } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 
 import { StyledTableCellSm, StyledTableRowSm } from "../../../../components/common/StyledTable";
 import LabService from "../../../../services/lab.service";
-import { labStatusTypeToLabel, labSourceTypeToLabel } from "../../../../utils/helpers";
+import { calculateFunctionalRange, calculatePercentageFlag } from "../../../../utils/FunctionalRange";
 import GraphDialog from "./component/GraphDialog";
-
-const useStyles = makeStyles(() => ({
-  cursorPointer: {
-    cursor: "pointer",
-  },
-}));
+// import { calculateAge } from "../../../../utils/helpers";
 
 const LabValues = (props) => {
-  const classes = useStyles();
   const { labId } = props;
+  // TODO::Dynamic values for function range evalution
+  const patientAge = 50;
+  const gender = "M";
+
   const [labValues, setLabValues] = useState([]);
   const [selectedGraph, setSelectedGraph] = useState(null);
   const [showGraphDialog, setShowGraphDialog] = useState(false);
@@ -47,6 +45,8 @@ const LabValues = (props) => {
     toggleGraphDialog();
   };
 
+  const hasValue = (value) => !((typeof value === "undefined") || (value === null));
+
   return (
     <>
       {!!showGraphDialog && (
@@ -66,25 +66,62 @@ const LabValues = (props) => {
               <StyledTableCellSm>Conventional Flag</StyledTableCellSm>
               <StyledTableCellSm>Functional Range</StyledTableCellSm>
               <StyledTableCellSm>Functional Flag</StyledTableCellSm>
+              <StyledTableCellSm>Units</StyledTableCellSm>
             </TableRow>
           </TableHead>
           <TableBody>
-            {labValues.map((row) => (
-              <StyledTableRowSm
-                key={row.type}
-                className={classes.cursorPointer}
-                onClick={() => rowClickHandler(row)}
-              >
-                <StyledTableCellSm component="th" scope="row">
-                  {row.patient_name}
-                </StyledTableCellSm>
-                <StyledTableCellSm>{row.patient_name}</StyledTableCellSm>
-                <StyledTableCellSm>{labStatusTypeToLabel(row.status)}</StyledTableCellSm>
-                <StyledTableCellSm>{labSourceTypeToLabel(row.type)}</StyledTableCellSm>
-                <StyledTableCellSm>{row.patient_name}</StyledTableCellSm>
-                <StyledTableCellSm>{row.patient_name}</StyledTableCellSm>
-              </StyledTableRowSm>
-            ))}
+            {!!labValues && labValues.length
+              ? labValues.map((row) => {
+                const functionalRange = calculateFunctionalRange(row.id, gender, patientAge);
+                return (
+                  <StyledTableRowSm key={row.id} onClick={() => rowClickHandler(row)}>
+                    <StyledTableCellSm>{row.name}</StyledTableCellSm>
+                    <StyledTableCellSm>{row.value}</StyledTableCellSm>
+                    <StyledTableCellSm>
+                      {hasValue(row.range_low) && hasValue(row.range_high) && (
+                        `${row.range_low} - ${row.range_high}`
+                      )}
+                    </StyledTableCellSm>
+                    <StyledTableCellSm>
+                      {
+                        hasValue(row.range_low)
+                        && hasValue(row.range_high)
+                        && hasValue(row.value) && (
+                          `${calculatePercentageFlag(row.range_low, row.range_high, row.value)}`
+                        )
+                      }
+                    </StyledTableCellSm>
+                    <StyledTableCellSm>
+                      {hasValue(functionalRange.low) && hasValue(functionalRange.high)
+                        ? `${functionalRange.low} - ${functionalRange.high}`
+                        : ""}
+                    </StyledTableCellSm>
+                    <StyledTableCellSm>
+                      {
+                        hasValue(functionalRange.low)
+                        && hasValue(functionalRange.high) && (
+                          `${calculatePercentageFlag(
+                            functionalRange.low,
+                            functionalRange.high,
+                            row.value,
+                          )
+                          }`
+                        )
+                      }
+                    </StyledTableCellSm>
+                    <StyledTableCellSm>{row.unit}</StyledTableCellSm>
+                  </StyledTableRowSm>
+                );
+              })
+              : (
+                <StyledTableRowSm>
+                  <StyledTableCellSm colSpan={7}>
+                    <Typography align="center" variant="body1">
+                      No Records Found...
+                    </Typography>
+                  </StyledTableCellSm>
+                </StyledTableRowSm>
+              )}
           </TableBody>
         </Table>
       </TableContainer>
