@@ -60,7 +60,13 @@ const PurchaseLabs = () => {
 
   const fetchPaymentMethods = useCallback(() => {
     PatientPortalService.getPaymentMethods(lastVisitedPatient).then((res) => {
-      setPaymentMethods(res.data);
+      setPaymentMethods(
+        [...res.data, {
+          id: 0,
+          type: "new",
+          account_number: "000",
+        }],
+      );
     });
   }, [lastVisitedPatient]);
 

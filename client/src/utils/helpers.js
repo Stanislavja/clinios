@@ -208,7 +208,7 @@ export const paymentMethodType = (type) => {
     case "M":
       return "Master";
     default:
-      return "";
+      return "New Payment Method"; // required for purchase labs page
   }
 };
 
