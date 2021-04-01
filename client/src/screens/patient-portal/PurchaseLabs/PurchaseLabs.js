@@ -3,6 +3,7 @@ import React, { useCallback, useState, useEffect } from "react";
 import {
   makeStyles, Typography, Grid,
 } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
   customSelect: {
     width: "220px",
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(5),
   },
   title: {
     paddingBottom: theme.spacing(1),
@@ -47,6 +48,11 @@ const useStyles = makeStyles((theme) => ({
       fontWeight: 600,
       marginRight: theme.spacing(1 / 2),
     },
+  },
+  purchaseButton: {
+    display: "block",
+    width: "220px",
+    marginTop: theme.spacing(8),
   },
 }));
 
@@ -193,6 +199,15 @@ const PurchaseLabs = () => {
             ))}
           </Select>
         </FormControl>
+        <Button
+          variant="outlined"
+          color="primary"
+          size="medium"
+          onClick={() => alert("purchase")} // TODO:: incomplete
+          className={classes.purchaseButton}
+        >
+          Purchase
+        </Button>
       </Grid>
       <PaymentMethodsForm
         isOpen={isNewPaymentMethodOpen}
