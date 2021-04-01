@@ -112,7 +112,7 @@ const createLab = async (req, res) => {
   }
 };
 
-const updateLab = async (req, res) => {
+const updateLabStatus = async (req, res) => {
   const { labId } = req.params;
   const { labStatus } = req.body.data;
 
@@ -139,7 +139,7 @@ const updateLab = async (req, res) => {
   }
 };
 
-const updateLabData = async (req, res) => {
+const updateLab = async (req, res) => {
   const { labId } = req.params;
   let { user_id, patient_id, type, note, note_assign } = req.body.data;
   const db = makeDb(configuration, res);
@@ -333,7 +333,7 @@ const processLab = {
   getLabById,
   createLab,
   updateLab,
-  updateLabData,
+  updateLabStatus,
   getLabHistory,
   getLabUserHistory,
   getLabValues,

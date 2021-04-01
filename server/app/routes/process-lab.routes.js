@@ -23,6 +23,7 @@ router.get(
   ProcessLab.getLabUserHistory
 );
 router.post("/labs", [authJwt.verifyToken], ProcessLab.createLab);
-router.put("/labs/:labId", [authJwt.verifyToken], ProcessLab.updateLab);
+router.put("/labs/:labId", [authJwt.verifyToken], ProcessLab.updateLabStatus);
+router.put("/labs/:labId/update", [authJwt.verifyToken], ProcessLab.updateLab);
 
 module.exports = router;
