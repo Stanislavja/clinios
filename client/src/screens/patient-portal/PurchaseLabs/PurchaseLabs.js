@@ -18,6 +18,7 @@ import useAuth from "../../../hooks/useAuth";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 import PurchaseLabsService from "../../../services/patient_portal/purchase-lab.service";
 import { paymentMethodType } from "../../../utils/helpers";
+import PaymentMethodsForm from "./components/PaymentMethodsForm";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -57,6 +58,7 @@ const PurchaseLabs = () => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [total, setTotal] = useState(0);
   const [labs, setLabs] = useState([]);
+  const [isNewPaymentMethodOpen, setIsNewPaymentMethodOpen] = useState(false);
 
   const fetchPaymentMethods = useCallback(() => {
     PatientPortalService.getPaymentMethods(lastVisitedPatient).then((res) => {
@@ -76,6 +78,14 @@ const PurchaseLabs = () => {
     });
     fetchPaymentMethods();
   }, [fetchPaymentMethods]);
+
+  const handlePaymentMethodChange = (newPaymentMethod) => {
+    if (newPaymentMethod === "new") {
+      setIsNewPaymentMethodOpen(true);
+    } else {
+      setSelectedPaymentMethod(newPaymentMethod);
+    }
+  };
 
   const calculateTotal = (selectedLabIds) => {
     const selectedLabs = labs.filter((lab) => selectedLabIds.includes(lab.id));
@@ -168,7 +178,7 @@ const PurchaseLabs = () => {
           <Select
             native
             value={selectedPaymentMethod}
-            onChange={(event) => setSelectedPaymentMethod(event.target.value)}
+            onChange={(event) => handlePaymentMethodChange(event.target.value)}
             inputProps={{
               name: "type",
               id: "age-native-simple",
@@ -184,6 +194,11 @@ const PurchaseLabs = () => {
           </Select>
         </FormControl>
       </Grid>
+      <PaymentMethodsForm
+        isOpen={isNewPaymentMethodOpen}
+        onClose={() => setIsNewPaymentMethodOpen(false)}
+        reloadData={() => fetchPaymentMethods()}
+      />
     </div>
   );
 };
