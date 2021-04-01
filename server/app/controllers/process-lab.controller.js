@@ -243,7 +243,7 @@ const getLabUserHistory = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select lh.created
+      `select lh.created, lh.id
       , concat(u.firstname, ' ', u.lastname) created_name
       , concat(u2.firstname, ' ', u2.lastname) assigned_name
       , lh.patient_id, lh.type, lh.note, lh.note_assign, lh.status

@@ -128,8 +128,8 @@ const Lab = () => {
     setPatientId(lab.client_id);
     setPatientText(lab.patient_name);
     setDocType(lab.type || "U");
-    setDocNote(lab.note);
-    setAssignmentNote(lab.note_assign);
+    setDocNote(lab?.note || "");
+    setAssignmentNote(lab?.note_assign || "");
     setDocAssignTo(lab.assigned_to);
   };
 
@@ -440,7 +440,7 @@ const Lab = () => {
                         component="span"
                         className={classes.text14}
                       >
-                        {labData?.lab_dt}
+                        {dateTimeFormat(labData?.lab_dt)}
                       </Typography>
                     </Grid>
 
