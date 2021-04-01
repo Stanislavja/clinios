@@ -25,6 +25,23 @@ export const BasicInfoForm = {
       options: [],
     },
     {
+      name: "gender",
+      id: "gender",
+      label: "Gender",
+      baseType: "select",
+      type: null,
+      options: [
+        {
+          label: "Male",
+          value: "M",
+        },
+        {
+          label: "Female",
+          value: "F",
+        },
+      ],
+    },
+/*     {
       name: "status",
       id: "status",
       label: "Status",
@@ -48,7 +65,7 @@ export const BasicInfoForm = {
       baseType: "input",
       type: "text",
       options: [],
-    },
+    }, */
   ],
   secondRow: [
     {
@@ -76,16 +93,6 @@ export const BasicInfoForm = {
       options: [],
     },
     {
-      name: "email",
-      id: "email",
-      label: "Email",
-      baseType: "input",
-      type: "email",
-      options: [],
-    },
-  ],
-  thirdRow: [
-    {
       name: "phone_other",
       id: "otherPhone",
       label: "Other Phone",
@@ -93,6 +100,16 @@ export const BasicInfoForm = {
       type: "number",
       options: [],
     },
+/*     {
+      name: "email",
+      id: "email",
+      label: "Email",
+      baseType: "input",
+      type: "email",
+      options: [],
+    }, */
+  ],
+  thirdRow: [
     {
       name: "phone_note",
       id: "phoneNotes",
@@ -100,23 +117,6 @@ export const BasicInfoForm = {
       baseType: "input",
       type: "text",
       options: [],
-    },
-    {
-      name: "gender",
-      id: "gender",
-      label: "Gender",
-      baseType: "select",
-      type: null,
-      options: [
-        {
-          label: "Male",
-          value: "M",
-        },
-        {
-          label: "Female",
-          value: "F",
-        },
-      ],
     },
     {
       name: "ssn",

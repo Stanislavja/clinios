@@ -27,7 +27,6 @@ import {
   PaymentData,
   PortalForm,
 } from "../../../../static/patientBasicInfoForm";
-import { calculateAge } from "../../../../utils/helpers";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -188,7 +187,7 @@ const ProfileForm = () => {
               </Typography>
               <Grid container spacing={1} className={classes.inputRow}>
                 {FirstRow.map((item) => (
-                  <Grid key={item.name} item md={2}>
+                  <Grid key={item.name} item md={3}>
                     {item.baseType === "input" ? (
                       <TextField
                         label={item.label}
@@ -222,7 +221,7 @@ const ProfileForm = () => {
               </Grid>
               <Grid container spacing={1} className={classes.inputRow} alignItems="flex-end">
                 {SecondRow.map((item) => (
-                  <Grid key={item.name} item md={2}>
+                  <Grid key={item.name} item md={3}>
                     {item.baseType === "input" ? (
                       <TextField
                         label={item.label}
@@ -257,15 +256,15 @@ const ProfileForm = () => {
                     )}
                   </Grid>
                 ))}
-                <Grid item md={2}>
+                {/*              <Grid item md={2}>
                   <Typography gutterBottom>
                     {`Age: ${calculateAge(formFields.dob)}`}
                   </Typography>
-                </Grid>
+                </Grid> */}
               </Grid>
               <Grid container spacing={1} className={classes.inputRow}>
                 {ThirdRow.map((item) => (
-                  <Grid key={item.name} item md={2}>
+                  <Grid key={item.name} item md={3}>
                     {item.baseType === "input" ? (
                       <TextField
                         label={item.label}
@@ -297,7 +296,7 @@ const ProfileForm = () => {
                   </Grid>
                 ))}
               </Grid>
-              <Grid container spacing={1} alignItems="flex-end">
+              {/*               <Grid container spacing={1} alignItems="flex-end">
                 <Grid item md={2}>
                   <Typography>Last Login: Jan 1, 2020</Typography>
                 </Grid>
@@ -315,7 +314,7 @@ const ProfileForm = () => {
                 <Grid item md={2}>
                   <Button variant="outlined">Send Reset Email</Button>
                 </Grid>
-              </Grid>
+              </Grid> */}
             </Grid>
           </Paper>
         </Grid>
