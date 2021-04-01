@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 
 import {
+  Typography,
   TableContainer,
   Table,
   TableHead,
@@ -42,19 +43,28 @@ const LabHistory = (props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {labHistory.map((row) => (
-            <StyledTableRowSm key={row.type}>
+          {labHistory.length ? labHistory.map((row) => (
+            <StyledTableRowSm key={`${row.created}_${row.created_by}_${row.assigned_to}`}>
               <StyledTableCellSm component="th" scope="row">
                 {dateFormat(row.created)}
               </StyledTableCellSm>
-              <StyledTableCellSm>{row.lastFour}</StyledTableCellSm>
+              <StyledTableCellSm>{row.created_by}</StyledTableCellSm>
               <StyledTableCellSm>{labStatusTypeToLabel(row.status)}</StyledTableCellSm>
               <StyledTableCellSm>{labSourceTypeToLabel(row.type)}</StyledTableCellSm>
               <StyledTableCellSm>{row.assigned_to}</StyledTableCellSm>
               <StyledTableCellSm>{row.patient_name}</StyledTableCellSm>
               <StyledTableCellSm>{row.note}</StyledTableCellSm>
             </StyledTableRowSm>
-          ))}
+          ))
+          : (
+            <StyledTableRowSm>
+              <StyledTableCellSm colSpan={7}>
+                <Typography align="center" variant="body1">
+                  No Records found...
+                </Typography>
+              </StyledTableCellSm>
+            </StyledTableRowSm>
+          )}
         </TableBody>
       </Table>
     </TableContainer>
