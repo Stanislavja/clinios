@@ -240,7 +240,6 @@ const getLabHistory = async (req, res) => {
 
 const getLabUserHistory = async (req, res) => {
   const db = makeDb(configuration, res);
-  const { userId } = req.params;
 
   try {
     const dbResponse = await db.query(

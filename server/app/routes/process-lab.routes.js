@@ -25,6 +25,4 @@ router.get(
 router.post("/labs", [authJwt.verifyToken], ProcessLab.createLab);
 router.put("/labs/:labId", [authJwt.verifyToken], ProcessLab.updateLab);
 
-
-
 module.exports = router;
