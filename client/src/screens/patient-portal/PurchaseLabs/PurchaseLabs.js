@@ -3,6 +3,7 @@ import React, { useCallback, useState, useEffect } from "react";
 import {
   makeStyles, Typography, Grid,
 } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -18,6 +19,7 @@ import useAuth from "../../../hooks/useAuth";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 import PurchaseLabsService from "../../../services/patient_portal/purchase-lab.service";
 import { paymentMethodType } from "../../../utils/helpers";
+import PaymentMethodsForm from "./components/PaymentMethodsForm";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -27,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
   customSelect: {
     width: "220px",
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(5),
   },
   title: {
     paddingBottom: theme.spacing(1),
@@ -47,6 +49,11 @@ const useStyles = makeStyles((theme) => ({
       marginRight: theme.spacing(1 / 2),
     },
   },
+  purchaseButton: {
+    display: "block",
+    width: "220px",
+    marginTop: theme.spacing(8),
+  },
 }));
 
 const PurchaseLabs = () => {
@@ -57,10 +64,17 @@ const PurchaseLabs = () => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [total, setTotal] = useState(0);
   const [labs, setLabs] = useState([]);
+  const [isNewPaymentMethodOpen, setIsNewPaymentMethodOpen] = useState(false);
 
   const fetchPaymentMethods = useCallback(() => {
     PatientPortalService.getPaymentMethods(lastVisitedPatient).then((res) => {
-      setPaymentMethods(res.data);
+      setPaymentMethods(
+        [...res.data, {
+          id: 0,
+          type: "new",
+          account_number: "000",
+        }],
+      );
     });
   }, [lastVisitedPatient]);
 
@@ -70,6 +84,14 @@ const PurchaseLabs = () => {
     });
     fetchPaymentMethods();
   }, [fetchPaymentMethods]);
+
+  const handlePaymentMethodChange = (newPaymentMethod) => {
+    if (newPaymentMethod === "new") {
+      setIsNewPaymentMethodOpen(true);
+    } else {
+      setSelectedPaymentMethod(newPaymentMethod);
+    }
+  };
 
   const calculateTotal = (selectedLabIds) => {
     const selectedLabs = labs.filter((lab) => selectedLabIds.includes(lab.id));
@@ -162,7 +184,7 @@ const PurchaseLabs = () => {
           <Select
             native
             value={selectedPaymentMethod}
-            onChange={(event) => setSelectedPaymentMethod(event.target.value)}
+            onChange={(event) => handlePaymentMethodChange(event.target.value)}
             inputProps={{
               name: "type",
               id: "age-native-simple",
@@ -177,7 +199,21 @@ const PurchaseLabs = () => {
             ))}
           </Select>
         </FormControl>
+        <Button
+          variant="outlined"
+          color="primary"
+          size="medium"
+          onClick={() => alert("purchase")} // TODO:: incomplete
+          className={classes.purchaseButton}
+        >
+          Purchase
+        </Button>
       </Grid>
+      <PaymentMethodsForm
+        isOpen={isNewPaymentMethodOpen}
+        onClose={() => setIsNewPaymentMethodOpen(false)}
+        reloadData={() => fetchPaymentMethods()}
+      />
     </div>
   );
 };
