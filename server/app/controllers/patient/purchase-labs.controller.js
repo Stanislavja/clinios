@@ -33,7 +33,7 @@ const getPurchaseLabs = async (req, res) => {
   }
 };
 
-//TODO: incomplete and waiting for further instruction on CLIN-80
+// TODO: incomplete and waiting for further instruction on CLIN-80
 const createPurchaseLabs = async (req, res) => {
   const formData = req.body.data;
   formData.client_id = req.client_id;
@@ -43,9 +43,9 @@ const createPurchaseLabs = async (req, res) => {
   formData.updated_user_id = req.user_id;
   const db = makeDb(configuration, res);
   try {
-    const insertResponse = await db.query(
-      `insert into tran_corp set ?`, [formData]
-    );
+    const insertResponse = await db.query(`insert into tran_corp set ?`, [
+      formData,
+    ]);
 
     if (!insertResponse.affectedRows) {
       errorMessage.message = "Insert not successful";
