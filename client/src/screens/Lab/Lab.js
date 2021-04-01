@@ -134,15 +134,15 @@ const Lab = () => {
   };
 
   const fetchLabDataByID = useCallback(() => {
-    LabService.getLabById(userId, documentId).then((res) => {
+    LabService.getLabById(documentId).then((res) => {
       const lab = res.data && res.data.length ? res.data[0] : {};
       setLabData(lab);
       updateFields(lab);
     });
-  }, [userId, documentId]);
+  }, [documentId]);
 
   const fetchLabData = useCallback(() => {
-    LabService.getLabData(userId).then((res) => {
+    LabService.getLabData().then((res) => {
       const lab = res.data && res.data.length ? res.data[0] : null;
       if (lab) {
         setLabData(lab);
@@ -151,7 +151,7 @@ const Lab = () => {
         setShowGoBack(true);
       }
     });
-  }, [userId]);
+  }, []);
 
   const fetchAssigneeUsers = useCallback(() => {
     LabService.getAssigneeUsers()
@@ -232,7 +232,7 @@ const Lab = () => {
         patient_id: patientId,
       },
     };
-    LabService.updateLabData(labId, reqBody).then((res) => {
+    LabService.updateLab(labId, reqBody).then((res) => {
       enqueueSnackbar(res.message, { variant: "success" });
       getLabInformation();
     });
@@ -245,7 +245,7 @@ const Lab = () => {
         labStatus: status,
       },
     };
-    LabService.updateLab(labId, reqBody).then((res) => {
+    LabService.updateLabStatus(labId, reqBody).then((res) => {
       enqueueSnackbar(res.message, { variant: "success" });
       window.location.reload();
     });
