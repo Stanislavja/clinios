@@ -35,27 +35,29 @@ const UserHistory = (props) => {
       <TableHead>
         <TableRow>
           <StyledTableCellLg>Created</StyledTableCellLg>
+          <StyledTableCellLg>Created By</StyledTableCellLg>
           <StyledTableCellLg>Filename</StyledTableCellLg>
           <StyledTableCellLg>Status</StyledTableCellLg>
           <StyledTableCellLg>Type</StyledTableCellLg>
           <StyledTableCellLg>Assigned To</StyledTableCellLg>
-          <StyledTableCellLg>Patient</StyledTableCellLg>
-          <StyledTableCellLg>Note</StyledTableCellLg>
+          <StyledTableCellLg>Document Note</StyledTableCellLg>
+          <StyledTableCellLg>Assignment Note</StyledTableCellLg>
         </TableRow>
       </TableHead>
       <TableBody>
         {userHistory.length
           ? userHistory.map((row) => (
-            <StyledTableRowLg key={row.type}>
+            <StyledTableRowLg key={`${row.id}_${row.note_assign}_${row.assigned_name}`}>
               <StyledTableCellLg component="th" scope="row">
                 {dateFormat(row.created)}
               </StyledTableCellLg>
+              <StyledTableCellLg>{row.created_name}</StyledTableCellLg>
               <StyledTableCellLg>{row.filename}</StyledTableCellLg>
               <StyledTableCellLg>{labStatusTypeToLabel(row.status)}</StyledTableCellLg>
               <StyledTableCellLg>{labSourceTypeToLabel(row.type)}</StyledTableCellLg>
-              <StyledTableCellLg>{row.assigned_to}</StyledTableCellLg>
-              <StyledTableCellLg>{row.patient_name}</StyledTableCellLg>
+              <StyledTableCellLg>{row.assigned_name}</StyledTableCellLg>
               <StyledTableCellLg>{row.note}</StyledTableCellLg>
+              <StyledTableCellLg>{row.note_assign}</StyledTableCellLg>
             </StyledTableRowLg>
           ))
           : (
@@ -78,7 +80,7 @@ const UserHistory = (props) => {
       message={<UserHistoryTable />}
       cancelForm={onClose}
       hideActions
-      size="md"
+      size="lg"
     />
   );
 };
