@@ -17,9 +17,9 @@ const getBillings = async (req, res) => {
     $sql = `select t.encounter_id, t.dt, tt.name tran_type, t.payment_type, pm.account_number, t.amount
     from tran t
     left join tran_type tt on tt.id=t.type_id
-    left join encounter e on e.id=t.encounter_id
-    left join encounter_type et on et.id=e.type_id
     left join payment_method pm on pm.id=t.payment_method_id
+    /*left join encounter e on e.id=t.encounter_id
+    left join encounter_type et on et.id=e.type_id*/
     where t.patient_id=${patient_id}
     order by t.dt desc
     limit 100
