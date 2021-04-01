@@ -111,7 +111,7 @@ const MessageHistory = ({
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title" className={classes.title}>
-        Appointment history
+        Appointment History
         {onClose ? (
           <IconButton
             aria-label="Close"
@@ -145,8 +145,8 @@ const MessageHistory = ({
                   <TableRow>
                     <StyledTableCell>Patient</StyledTableCell>
                     <StyledTableCell>Provider</StyledTableCell>
-                    <StyledTableCell>Start Date</StyledTableCell>
-                    <StyledTableCell>End Date</StyledTableCell>
+                    <StyledTableCell>Appointment Start</StyledTableCell>
+                    <StyledTableCell>Appointment End</StyledTableCell>
                     <StyledTableCell>Status</StyledTableCell>
                     <StyledTableCell>Updated</StyledTableCell>
                     <StyledTableCell>Updated by</StyledTableCell>
