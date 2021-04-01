@@ -2055,6 +2055,37 @@ const getMedicationFavorites = async (req, res) => {
   }
 };
 
+const getMedicationRecents = async (req, res) => {
+  const db = makeDb(configuration, res);
+
+  try {
+    const dbResponse = await db.query(
+      `select d.id, d.name, ds.strength, ds.unit, ds.form, df.descr frequency, pd.expires, pd.amount, pd.refills, pd.generic
+      from patient_drug pd
+      left join drug d on d.id=pd.drug_id
+      left join drug_strength ds on ds.drug_id=pd.drug_id
+      and ds.id=pd.drug_strength_id
+      left join drug_frequency df on df.id=pd.drug_frequency_id
+      where pd.created_user_id=${req.user_id}
+      order by pd.created desc
+      limit 20`
+    );
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const deleteMedications = async (req, res) => {
   const { drug_id } = req.params;
   const db = makeDb(configuration, res);
@@ -2477,6 +2508,7 @@ const appointmentTypes = {
   updateMedications,
   getMedicationById,
   getMedicationFavorites,
+  getMedicationRecents,
   deleteMedications,
   createRequisitions,
   getRequisitions,

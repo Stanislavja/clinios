@@ -361,6 +361,11 @@ const routes = [
       },
       {
         guard: AuthGuard,
+        path: "/patient/purchase-labs",
+        component: lazy(() => import("./screens/patient-portal/PurchaseLabs")),
+      },
+      {
+        guard: AuthGuard,
         path: "/patient/labs-requisition",
         component: lazy(() => import("./screens/patient-portal/Requisition")),
       },
