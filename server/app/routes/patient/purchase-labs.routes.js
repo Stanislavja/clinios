@@ -9,5 +9,10 @@ router.get(
   [authJwt.verifyToken],
   PurchaseLabsController.getPurchaseLabs
 );
+router.post(
+  "/patient-portal/purchase-labs",
+  [authJwt.verifyToken],
+  PurchaseLabsController.createPurchaseLabs
+);
 
 module.exports = router;
