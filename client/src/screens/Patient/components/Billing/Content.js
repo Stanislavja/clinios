@@ -121,7 +121,9 @@ const BillingContent = (props) => {
               {item.tran_type}
             </Typography>
           </Grid>
-          <Grid item className={classes.block}>
+          {/* Removed this column because Mr David asked to.
+           Not sure if we need to revert it back, So i am keeping it commented */}
+          {/* <Grid item className={classes.block}>
             <Typography
               component="span"
               className={classes.text12}
@@ -129,7 +131,7 @@ const BillingContent = (props) => {
             >
               {item.encounter_title}
             </Typography>
-          </Grid>
+          </Grid> */}
           {!!item.cpt_procedure && (
             <Grid item className={classes.block}>
               <Typography

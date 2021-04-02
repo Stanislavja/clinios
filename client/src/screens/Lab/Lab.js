@@ -17,16 +17,21 @@ import Pagination from "@material-ui/lab/Pagination";
 import { useSnackbar } from "notistack";
 import FileViewer from "react-file-viewer";
 import { pdfjs, Document, Page } from "react-pdf";
-import { useParams, useLocation } from "react-router-dom";
+import {
+  useParams, useLocation, useHistory, Link,
+} from "react-router-dom";
 
 import useDebounce from "../../hooks/useDebounce";
 import LabService from "../../services/lab.service";
 import { DocumentOptions } from "../../static/lab";
 import * as API from "../../utils/API";
-import { checkFileExtension } from "../../utils/helpers";
+import {
+  checkFileExtension, labStatusTypeToLabel, labSourceTypeToLabel, dateTimeFormat,
+} from "../../utils/helpers";
 import Interpretation from "./components/Interpretation";
 import LabHistory from "./components/LabHistory";
 import LabValues from "./components/LabValues";
+import MessageToPatient from "./components/MessageToPatient";
 import UserHistory from "./components/UserHistory";
 
 pdfjs
@@ -87,24 +92,31 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: 150,
     overflow: "scroll",
   },
+  centerContainer: {
+    height: "100%",
+  },
 }));
 
 const Lab = () => {
   const { state } = useLocation();
-  const { fromHome, documentName, documentId } = state;
+  const { fromHome, documentId } = state;
+  const history = useHistory();
   const { userId } = useParams();
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   // states
-  // const [labData, setLabData] = useState(null);
+  const [labData, setLabData] = useState(null);
   const [patientText, setPatientText] = useState("");
+  const [patientId, setPatientId] = useState(null);
   const [patientSearchResults, setPatientSearchResults] = useState(null);
-  const [docType, setDocType] = useState("L");
+  const [docType, setDocType] = useState("");
   const [assigneeUsers, setAssigneeUsers] = useState([]);
   const [docNote, setDocNote] = useState("");
   const [docAssignTo, setDocAssignTo] = useState("");
   const [assignmentNote, setAssignmentNote] = useState("");
   const [showUserHistory, setShowUserHistory] = useState(false);
+  const [showMessageDialog, setShowMessageDialog] = useState(false);
+  const [showGoBack, setShowGoBack] = useState(false);
 
   // pdf doc
   const [file, setFile] = useState("");
@@ -112,11 +124,34 @@ const Lab = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [type, setType] = useState("");
 
+  const updateFields = (lab) => {
+    setPatientId(lab.client_id);
+    setPatientText(lab.patient_name);
+    setDocType(lab.type || "U");
+    setDocNote(lab.note);
+    setAssignmentNote(lab.note_assign);
+    setDocAssignTo(lab.assigned_to);
+  };
+
   const fetchLabDataByID = useCallback(() => {
-    LabService.getLabById(documentId).then((/* res */) => {
-      // setLabData(res.data);
+    LabService.getLabById(userId, documentId).then((res) => {
+      const lab = res.data && res.data.length ? res.data[0] : {};
+      setLabData(lab);
+      updateFields(lab);
     });
-  }, [documentId]);
+  }, [userId, documentId]);
+
+  const fetchLabData = useCallback(() => {
+    LabService.getLabData(userId).then((res) => {
+      const lab = res.data && res.data.length ? res.data[0] : null;
+      if (lab) {
+        setLabData(lab);
+        updateFields(lab);
+      } else {
+        setShowGoBack(true);
+      }
+    });
+  }, [userId]);
 
   const fetchAssigneeUsers = useCallback(() => {
     LabService.getAssigneeUsers()
@@ -128,17 +163,27 @@ const Lab = () => {
       });
   }, []);
 
-  useEffect(() => {
-    fetchLabDataByID();
-    fetchAssigneeUsers();
-  }, [fetchLabDataByID, fetchAssigneeUsers]);
+  const getLabInformation = useCallback(() => {
+    if (fromHome) {
+      fetchLabData();
+    } else {
+      fetchLabDataByID();
+    }
+  }, [fromHome, fetchLabData, fetchLabDataByID]);
 
   useEffect(() => {
-    const filePath = `${process.env.REACT_APP_API_URL}static/patient/pid${userId}_${documentName}`;
-    setFile(filePath);
-    const fileType = checkFileExtension(filePath);
-    setType(fileType);
-  }, [documentName, userId]);
+    getLabInformation();
+    fetchAssigneeUsers();
+  }, [getLabInformation, fetchAssigneeUsers]);
+
+  useEffect(() => {
+    if (labData) {
+      const filePath = `${process.env.REACT_APP_API_URL}static/patient/pid${userId}_${labData.filename}`;
+      setFile(filePath);
+      const fileType = checkFileExtension(filePath);
+      setType(fileType);
+    }
+  }, [labData, userId]);
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setTotalPages(numPages);
@@ -172,370 +217,450 @@ const Lab = () => {
 
   const handlePatientChange = (patient) => {
     setPatientText(`${patient.firstname} ${patient.lastname}`);
+    setPatientId(patient.id);
+  };
+
+  const onFormSubmit = (e) => {
+    e.preventDefault();
+    const labId = labData.id;
+    const reqBody = {
+      data: {
+        type: docType,
+        note: docNote,
+        note_assign: assignmentNote,
+        user_id: docAssignTo,
+        patient_id: patientId,
+      },
+    };
+    LabService.updateLabData(labId, reqBody).then((res) => {
+      enqueueSnackbar(res.message, { variant: "success" });
+      getLabInformation();
+    });
+  };
+
+  const updateStatus = (status) => {
+    const labId = labData.id;
+    const reqBody = {
+      data: {
+        labStatus: status,
+      },
+    };
+    LabService.updateLab(labId, reqBody).then((res) => {
+      enqueueSnackbar(res.message, { variant: "success" });
+      window.location.reload();
+    });
+  };
+
+  const toggleMessageDialog = () => {
+    setShowMessageDialog((prevState) => !prevState);
   };
 
   return (
-    <>
-      {!!showUserHistory && (
-        <UserHistory
-          open={showUserHistory}
-          onClose={toggleUserHistoryDialog}
-        />
-      )}
-      <Box mt={2}>
+    showGoBack
+      ? (
         <Grid
-          item
-          lg={6}
-          xs={12}
-          className={classes.topControls}
+          container
+          justify="center"
+          alignItems="center"
+          direction="column"
+          className={classes.centerContainer}
         >
-          <Grid
-            container
-            justify="space-between"
-            alignItems="center"
+          <Typography variant="h3" gutterBottom>No Lab Requests Available</Typography>
+          <Button
+            variant="outlined"
+            onClick={() => history.goBack()}
           >
-            <Typography variant="h4">Lab</Typography>
-            <Button variant="text" onClick={() => toggleUserHistoryDialog()}>
-              User History
-            </Button>
-            <Button variant="text" className={classes.downloadButton}>
-              <a
+            Go Back
+          </Button>
+        </Grid>
+      )
+      : (
+        <>
+          {!!showUserHistory && (
+            <UserHistory
+              open={showUserHistory}
+              onClose={toggleUserHistoryDialog}
+            />
+          )}
+          {!!showMessageDialog && (
+            <MessageToPatient
+              isOpen={showMessageDialog}
+              onClose={toggleMessageDialog}
+            />
+          )}
+          <Box mt={2}>
+            <Grid
+              item
+              lg={6}
+              xs={12}
+              className={classes.topControls}
+            >
+              <Grid
+                container
+                justify="space-between"
+                alignItems="center"
+              >
+                <Typography variant="h4">Lab</Typography>
+                <Button variant="text" onClick={() => toggleUserHistoryDialog()}>
+                  User History
+                </Button>
+                <Button
+                  variant="text"
+                  className={classes.downloadButton}
+                >
+                  <Link
+                    download
+                    to={file}
+                    target="_blank"
+                  >
+                    Download
+                  </Link>
+                  {/* <a
                 download
                 href={file}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 Download
-              </a>
-            </Button>
-          </Grid>
-        </Grid>
-        <Grid
-          container
-          spacing={1}
-        >
-          <Grid
-            item
-            lg={6}
-            xs={12}
-          >
-            <Grid
-              className={classes.borderSection}
-            >
-              {type && (type === "pdf")
-                ? (
-                  <>
-                    <Document
-                      file={(file)}
-                      onLoadSuccess={onDocumentLoadSuccess}
-                    >
-                      <Page pageNumber={pageNumber} />
-                    </Document>
-                    <Grid className={classes.paginationWrap}>
-                      <Pagination count={totalPages} shape="rounded" onChange={handleChange} />
-                    </Grid>
-                  </>
-                )
-                : (
-                  <FileViewer
-                    fileType={type}
-                    filePath={file}
-                    onError={onError}
-                  />
-                )}
+              </a> */}
+                  {/* Download */}
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
-          <Grid
-            item
-            lg={6}
-            xs={12}
-          >
             <Grid
-              className={classes.borderSection}
+              container
+              spacing={1}
             >
-              <Grid container className={classes.mb1}>
-                <Grid
-                  item
-                  md={4}
-                  className={classes.mb1}
-                >
-                  <Typography
-                    component="span"
-                    className={`${classes.label}`}
-                  >
-                    Filename:
-                  </Typography>
-                  <Typography
-                    component="span"
-                    className={classes.text14}
-                  >
-                    123123
-                  </Typography>
-                </Grid>
-
-                <Grid
-                  item
-                  md={4}
-                >
-                  <Typography
-                    component="span"
-                    className={`${classes.label}`}
-                  >
-                    Created:
-                  </Typography>
-                  <Typography
-                    component="span"
-                    className={classes.text14}
-                  >
-                    123123
-                  </Typography>
-                </Grid>
-
-                <Grid
-                  item
-                  md={4}
-                >
-                  <Typography
-                    component="span"
-                    className={`${classes.label}`}
-                  >
-                    Status:
-                  </Typography>
-                  <Typography
-                    component="span"
-                    className={classes.text14}
-                  >
-                    123123
-                  </Typography>
-                </Grid>
-
-                <Grid
-                  item
-                  md={4}
-                >
-                  <Typography
-                    component="span"
-                    className={`${classes.label}`}
-                  >
-                    Lab Date:
-                  </Typography>
-                  <Typography
-                    component="span"
-                    className={classes.text14}
-                  >
-                    123123
-                  </Typography>
-                </Grid>
-
-                <Grid
-                  item
-                  md={4}
-                >
-                  <Typography
-                    component="span"
-                    className={`${classes.label}`}
-                  >
-                    Source:
-                  </Typography>
-                  <Typography
-                    component="span"
-                    className={classes.text14}
-                  >
-                    123123
-                  </Typography>
-                </Grid>
-
-                <Grid
-                  item
-                  md={4}
-                >
-                  <Typography
-                    component="span"
-                    className={`${classes.label}`}
-                  >
-                    Lab Company:
-                  </Typography>
-                  <Typography
-                    component="span"
-                    className={classes.text14}
-                  >
-                    123123
-                  </Typography>
-                </Grid>
-
-              </Grid>
-              <Grid container spacing={1}>
-                <Grid
-                  item
-                  sm={6}
-                  xs={12}
-                  className={classes.relativePosition}
-                >
-                  <TextField
-                    required
-                    variant="outlined"
-                    label="Patient"
-                    margin="dense"
-                    fullWidth
-                    value={patientText}
-                    onChange={(e) => setPatientText(e.target.value)}
-                  />
-                  {
-                    (!!patientSearchResults && patientSearchResults.length) ? (
-                      <Paper className={classes.resultsContainer}>
-                        <List>
-                          {patientSearchResults.map((patient) => (
-                            <ListItem
-                              button
-                              onClick={() => handlePatientChange(patient)}
-                              key={patient.id}
-                            >
-                              <ListItemText primary={`${patient.firstname} ${patient.lastname}`} />
-                            </ListItem>
-                          ))}
-                        </List>
-                      </Paper>
-                    )
-                      : null
-                  }
-                </Grid>
-
-                <Grid
-                  item
-                  sm={6}
-                  xs={12}
-                >
-                  <TextField
-                    select
-                    required
-                    variant="outlined"
-                    label="Document Type"
-                    margin="dense"
-                    fullWidth
-                    value={docType}
-                    onChange={(e) => setDocType(e.target.value)}
-                  >
-                    {DocumentOptions.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-              </Grid>
-              <TextField
-                required
-                variant="outlined"
-                label="Document Note"
-                margin="dense"
-                fullWidth
-                value={docNote}
-                onChange={(e) => setDocNote(e.target.value)}
-              />
-
-              {!!fromHome && (
-                <Grid
-                  container
-                  className={classes.buttonsRow}
-                >
-                  <Button
-                    variant="outlined"
-                  >
-                    Send Message to Patient
-                  </Button>
-                  <Button
-                    variant="outlined"
-                  >
-                    Approve and Next
-                  </Button>
-                  <Button
-                    variant="outlined"
-                  >
-                    Reject and Next
-                  </Button>
-                </Grid>
-              )}
-
-              <Box mt={fromHome ? 1 : 0} mb={1}>
-                <Grid
-                  item
-                  lg={4}
-                >
-                  <TextField
-                    select
-                    required
-                    variant="outlined"
-                    label="Assign To"
-                    margin="dense"
-                    fullWidth
-                    value={docAssignTo}
-                    onChange={(e) => setDocAssignTo(e.target.value)}
-                  >
-                    {assigneeUsers.length
-                      ? assigneeUsers.map((option) => (
-                        <MenuItem key={option.name} value={option.name}>
-                          {option.name}
-                        </MenuItem>
-                      ))
-                      : (
-                        <MenuItem value="">
-                          No Items Available
-                        </MenuItem>
-                      )}
-                  </TextField>
-                </Grid>
-              </Box>
-
-              <TextField
-                variant="outlined"
-                placeholder="Mark, Can you review this?"
-                name="notes"
-                id="notes"
-                type="text"
-                fullWidth
-                value={assignmentNote}
-                onChange={(e) => setAssignmentNote(e.target.value)}
-                multiline
-                rows={5}
-              />
-
-              <Button
-                variant="outlined"
-                className={classes.buttonsRow}
+              <Grid
+                item
+                lg={6}
+                xs={12}
               >
-                Save
-              </Button>
+                <Grid
+                  className={classes.borderSection}
+                >
+                  {type && (type === "pdf")
+                    ? (
+                      <>
+                        <Document
+                          file={(file)}
+                          onLoadSuccess={onDocumentLoadSuccess}
+                        >
+                          <Page pageNumber={pageNumber} />
+                        </Document>
+                        <Grid className={classes.paginationWrap}>
+                          <Pagination count={totalPages} shape="rounded" onChange={handleChange} />
+                        </Grid>
+                      </>
+                    )
+                    : (
+                      <FileViewer
+                        fileType={type}
+                        filePath={file}
+                        onError={onError}
+                      />
+                    )}
+                </Grid>
+              </Grid>
+              <Grid
+                item
+                lg={6}
+                xs={12}
+              >
+                <Grid
+                  className={classes.borderSection}
+                >
+                  <Grid container className={classes.mb1}>
+                    <Grid
+                      item
+                      md={4}
+                      className={classes.mb1}
+                    >
+                      <Typography
+                        component="span"
+                        className={`${classes.label}`}
+                      >
+                        Filename:
+                      </Typography>
+                      <Typography
+                        component="span"
+                        className={classes.text14}
+                      >
+                        {labData?.filename}
+                      </Typography>
+                    </Grid>
 
-            </Grid>
-            <Grid
-              className={classes.borderSection}
-            >
-              <Typography gutterBottom variant="h5">Lab History</Typography>
-              <LabHistory />
-            </Grid>
-          </Grid>
-        </Grid>
+                    <Grid
+                      item
+                      md={4}
+                    >
+                      <Typography
+                        component="span"
+                        className={`${classes.label}`}
+                      >
+                        Created:
+                      </Typography>
+                      <Typography
+                        component="span"
+                        className={classes.text14}
+                      >
+                        {dateTimeFormat(labData?.created)}
+                      </Typography>
+                    </Grid>
 
-        <Grid container spacing={1}>
-          <Grid item lg={6} xs={12}>
-            <Grid
-              className={classes.borderSection}
-            >
-              <Typography gutterBottom variant="h5">Values</Typography>
-              <LabValues />
+                    <Grid
+                      item
+                      md={4}
+                    >
+                      <Typography
+                        component="span"
+                        className={`${classes.label}`}
+                      >
+                        Status:
+                      </Typography>
+                      <Typography
+                        component="span"
+                        className={classes.text14}
+                      >
+                        {labStatusTypeToLabel(labData?.status)}
+                      </Typography>
+                    </Grid>
+
+                    <Grid
+                      item
+                      md={4}
+                    >
+                      <Typography
+                        component="span"
+                        className={`${classes.label}`}
+                      >
+                        Lab Date:
+                      </Typography>
+                      <Typography
+                        component="span"
+                        className={classes.text14}
+                      >
+                        {labData?.lab_dt}
+                      </Typography>
+                    </Grid>
+
+                    <Grid
+                      item
+                      md={4}
+                    >
+                      <Typography
+                        component="span"
+                        className={`${classes.label}`}
+                      >
+                        Source:
+                      </Typography>
+                      <Typography
+                        component="span"
+                        className={classes.text14}
+                      >
+                        {labSourceTypeToLabel(labData?.source)}
+                      </Typography>
+                    </Grid>
+
+                    <Grid
+                      item
+                      md={4}
+                    >
+                      <Typography
+                        component="span"
+                        className={`${classes.label}`}
+                      >
+                        Lab Company:
+                      </Typography>
+                      <Typography
+                        component="span"
+                        className={classes.text14}
+                      >
+                        {labData?.lab_company}
+                      </Typography>
+                    </Grid>
+
+                  </Grid>
+                  <form onSubmit={onFormSubmit}>
+                    <Grid container spacing={1}>
+                      <Grid
+                        item
+                        sm={6}
+                        xs={12}
+                        className={classes.relativePosition}
+                      >
+                        <TextField
+                          required
+                          variant="outlined"
+                          label="Patient"
+                          margin="dense"
+                          fullWidth
+                          value={patientText}
+                          onChange={(e) => setPatientText(e.target.value)}
+                        />
+                        {
+                          (!!patientSearchResults && patientSearchResults.length) ? (
+                            <Paper className={classes.resultsContainer}>
+                              <List>
+                                {patientSearchResults.map((patient) => (
+                                  <ListItem
+                                    button
+                                    onClick={() => handlePatientChange(patient)}
+                                    key={patient.id}
+                                  >
+                                    <ListItemText primary={`${patient.firstname} ${patient.lastname}`} />
+                                  </ListItem>
+                                ))}
+                              </List>
+                            </Paper>
+                          )
+                            : null
+                        }
+                      </Grid>
+
+                      <Grid
+                        item
+                        sm={6}
+                        xs={12}
+                      >
+                        <TextField
+                          select
+                          required
+                          variant="outlined"
+                          label="Document Type"
+                          margin="dense"
+                          fullWidth
+                          value={docType}
+                          onChange={(e) => setDocType(e.target.value)}
+                        >
+                          {DocumentOptions.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                              {option.label}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </Grid>
+                    </Grid>
+                    <TextField
+                      required
+                      variant="outlined"
+                      label="Document Note"
+                      margin="dense"
+                      fullWidth
+                      value={docNote}
+                      onChange={(e) => setDocNote(e.target.value)}
+                    />
+
+                    {!!fromHome && (
+                      <Grid
+                        container
+                        className={classes.buttonsRow}
+                      >
+                        <Button
+                          variant="outlined"
+                          onClick={() => toggleMessageDialog()}
+                        >
+                          Send Message to Patient
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          onClick={() => updateStatus("A")}
+                        >
+                          Approve and Next
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          onClick={() => updateStatus("D")}
+                        >
+                          Reject and Next
+                        </Button>
+                      </Grid>
+                    )}
+
+                    <Box mt={fromHome ? 1 : 0} mb={1}>
+                      <Grid
+                        item
+                        lg={4}
+                      >
+                        <TextField
+                          select
+                          required
+                          variant="outlined"
+                          label="Assign To"
+                          margin="dense"
+                          fullWidth
+                          value={docAssignTo}
+                          onChange={(e) => setDocAssignTo(e.target.value)}
+                        >
+                          {assigneeUsers.length
+                            ? assigneeUsers.map((option) => (
+                              <MenuItem key={option.name} value={option.id}>
+                                {option.name}
+                              </MenuItem>
+                            ))
+                            : (
+                              <MenuItem value="">
+                                No Items Available
+                              </MenuItem>
+                            )}
+                        </TextField>
+                      </Grid>
+                    </Box>
+
+                    <TextField
+                      variant="outlined"
+                      name="notes"
+                      label="Assignment Note"
+                      type="text"
+                      fullWidth
+                      multiline
+                      rows={5}
+                      value={assignmentNote}
+                      onChange={(e) => setAssignmentNote(e.target.value)}
+                    />
+                    <Button
+                      variant="outlined"
+                      className={classes.buttonsRow}
+                      type="submit"
+                    >
+                      Save
+                    </Button>
+                  </form>
+                </Grid>
+                <Grid
+                  className={classes.borderSection}
+                >
+                  <Typography gutterBottom variant="h5">Lab History</Typography>
+                  {!!labData && (
+                    <LabHistory labId={labData.id} />
+                  )}
+                </Grid>
+              </Grid>
             </Grid>
-          </Grid>
-          <Grid item lg={6} xs={12}>
-            <Grid
-              className={classes.borderSection}
-            >
-              <Typography gutterBottom variant="h5">Value Interpretation</Typography>
-              <Interpretation />
+
+            <Grid container spacing={1}>
+              <Grid item lg={6} xs={12}>
+                <Grid
+                  className={classes.borderSection}
+                >
+                  <Typography gutterBottom variant="h5">Values</Typography>
+                  {!!labData && (
+                    <LabValues labId={labData.id} />
+                  )}
+                </Grid>
+              </Grid>
+              <Grid item lg={6} xs={12}>
+                <Grid
+                  className={classes.borderSection}
+                >
+                  <Typography gutterBottom variant="h5">Value Interpretation</Typography>
+                  <Interpretation />
+                </Grid>
+              </Grid>
             </Grid>
-          </Grid>
-        </Grid>
-      </Box>
-    </>
+          </Box>
+        </>
+      )
   );
 };
 

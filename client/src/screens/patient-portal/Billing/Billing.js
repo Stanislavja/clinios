@@ -162,11 +162,8 @@ const Billing = () => {
                 <TableRow>
                   <StyledTableCell>Date</StyledTableCell>
                   <StyledTableCell>Transaction Type</StyledTableCell>
-                  <StyledTableCell>Payment Type</StyledTableCell>
                   <StyledTableCell>Account Number</StyledTableCell>
-                  <StyledTableCell>Encounter Type</StyledTableCell>
                   <StyledTableCell>Amount</StyledTableCell>
-                  <StyledTableCell>Invoice/Receipt</StyledTableCell>
                   <StyledTableCell align="center">View</StyledTableCell>
                 </TableRow>
               </TableHead>
@@ -178,21 +175,10 @@ const Billing = () => {
                         {moment(item.dt).format("MMM D YYYY")}
                       </StyledTableCell>
                       <StyledTableCell>{item.tran_type}</StyledTableCell>
-                      <StyledTableCell>{item.payment_type || "-"}</StyledTableCell>
                       <StyledTableCell>{item.account_num || "-"}</StyledTableCell>
-                      <StyledTableCell>{item.encounter_type || "-"}</StyledTableCell>
                       <StyledTableCell>
                         $
                         {item.amount}
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <Typography variant="text" className={classes.textButton}>
-                          Invoice
-                        </Typography>
-                        {" / "}
-                        <Typography variant="text" className={classes.textButton}>
-                          Receipt
-                        </Typography>
                       </StyledTableCell>
                       <StyledTableCell
                         className={classes.centered}
@@ -215,7 +201,7 @@ const Billing = () => {
                 )}
                 {(hasValue(balance) && billings.length) ? (
                   <StyledTableRow>
-                    <StyledTableCell colSpan={4} />
+                    <StyledTableCell colSpan={2} />
                     <StyledTableCell
                       align="right"
                       classes={{ body: classes.shiftContent }}

@@ -359,6 +359,14 @@ class Patient {
       .then((res) => res.data);
   }
 
+  getMedicationRecents(patientId) {
+    return axios
+      .get(`${API_BASE}/patient/${patientId}/medication/recents`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
   getRequisitions(patientId, encounterId) {
     return axios
       .get(`${API_BASE}/patient/${patientId}/requisitions/?encounter_id=${encounterId}`, {
@@ -475,6 +483,12 @@ class Patient {
     );
   }
 
+  updateMedication(patientId, medicationId, data) {
+    return axios.put(`${API_BASE}/patient/${patientId}/medications/${medicationId}`, data, {
+      headers: authHeader(),
+    });
+  }
+
   // create methods
   createPatientHandout(patientId, data) {
     return axios.post(
@@ -493,7 +507,7 @@ class Patient {
   }
 
   createMedication(patientId, data) {
-    return axios.post(`${API_BASE}/patient/${patientId}/medication`, data, {
+    return axios.post(`${API_BASE}/patient/${patientId}/medications`, data, {
       headers: authHeader(),
     });
   }

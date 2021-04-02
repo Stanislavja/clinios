@@ -17,8 +17,8 @@ import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 
 import Tooltip from "../../../../components/common/CustomTooltip";
+import useAuth from "../../../../hooks/useAuth";
 import usePatientContext from "../../../../hooks/usePatientContext";
-// import useAuth from "../../../../hooks/useAuth";
 import PatientService from "../../../../services/patient.service";
 import { calculatePercentageFlag, calculateFunctionalRange } from "../../../../utils/FunctionalRange";
 import { calculateAge } from "../../../../utils/helpers";
@@ -112,7 +112,7 @@ const DocumentsContent = (props) => {
   const { gender, dob } = state.patientInfo.data;
   const patientAge = Number(calculateAge(dob).split(" ")[0]);
   const history = useHistory();
-  // const { user } = useAuth();
+  const { user } = useAuth();
 
   const fetchDocuments = useCallback((selectedTab) => {
     if (selectedTab === 0) { // (All)
@@ -166,9 +166,8 @@ const DocumentsContent = (props) => {
   const handleDocumentClick = (doc) => {
     setDocumentName(doc.filename);
     // setIsLabModalOpen(true);
-    history.push(`/lab/${patientId}`, { // user.id as per documentation
+    history.push(`/lab/${user.id}`, { // user.id as per documentation
       fromHome: false,
-      documentName: doc.filename,
       documentId: doc.id,
     });
   };

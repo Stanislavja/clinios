@@ -1,5 +1,5 @@
-export const EncountersFormFields = [
-  {
+export const EncountersFormFields = {
+  titleField: {
     name: "title",
     id: "title",
     label: "Title",
@@ -7,7 +7,7 @@ export const EncountersFormFields = [
     type: "text",
     options: [],
   },
-  {
+  typeField: {
     name: "encounter_type",
     id: "encounter_type",
     label: "Type",
@@ -36,7 +36,7 @@ export const EncountersFormFields = [
       },
     ],
   },
-];
+};
 
 export const EncountersCards = [
   {

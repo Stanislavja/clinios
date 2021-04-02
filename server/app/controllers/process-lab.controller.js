@@ -31,7 +31,6 @@ const getLabById = async (req, res) => {
 
 const getAll = async (req, res) => {
   const db = makeDb(configuration, res);
-  const { userId } = req.params;
 
   try {
     const dbResponse = await db.query(
@@ -39,7 +38,7 @@ const getAll = async (req, res) => {
         from lab l
         left join lab_company lc on lc.id=l.lab_company_id
         left join patient p on p.id=l.patient_id
-        where l.user_id = ${userId}
+        where l.user_id = ${req.user_id}
         and l.status = 'R'
         order by l.created
         limit 1`
@@ -140,6 +139,66 @@ const updateLab = async (req, res) => {
   }
 };
 
+const updateLabData = async (req, res) => {
+  const { labId } = req.params;
+  let { user_id, patient_id, type, note, note_assign } = req.body.data;
+  const db = makeDb(configuration, res);
+
+  try {
+    if (typeof user_id === "undefined") {
+      user_id = null;
+    }
+    if (typeof patient_id === "undefined") {
+      patient_id = null;
+    }
+    if (typeof type === "undefined") {
+      type = null;
+    }
+    if (typeof note_assign === "undefined") {
+      note_assign = null;
+    }
+    if (typeof note === "undefined") {
+      note = null;
+    }
+    await db.query(
+      `insert into lab_history (id, user_id, patient_id, type, note, note_assign, created, created_user_id) values 
+        (${labId}, ${user_id}, ${patient_id}, '${type}', '${note}', '${note_assign}', now(), ${req.user_id})`
+    );
+
+    let $sql;
+    $sql = `update lab set id='${labId}'`;
+
+    if (typeof type !== "undefined") {
+      $sql += `, type='${type}'`;
+    }
+    if (typeof note !== "undefined") {
+      $sql += `, note='${note}'`;
+    }
+    if (typeof note_assign !== "undefined") {
+      $sql += `, note_assign='${note_assign}'`;
+    }
+
+    $sql += ` where id=${labId}`;
+
+    const updateResponse = await db.query($sql);
+
+    if (!updateResponse.affectedRows) {
+      errorMessage.message = "Update not successful";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = updateResponse;
+    successMessage.message = "Update successful";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Update not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const getLabHistory = async (req, res) => {
   const db = makeDb(configuration, res);
   const { labId } = req.params;
@@ -181,7 +240,6 @@ const getLabHistory = async (req, res) => {
 
 const getLabUserHistory = async (req, res) => {
   const db = makeDb(configuration, res);
-  const { userId } = req.params;
 
   try {
     const dbResponse = await db.query(
@@ -192,7 +250,7 @@ const getLabUserHistory = async (req, res) => {
       from lab_history lh
       left join user u on u.id=lh.created_user_id
       left join user u2 on u2.id=lh.user_id
-      where lh.created_user_id=${userId}
+      where lh.created_user_id=${req.user_id}
       order by lh.created desc
       limit 50`
     );
@@ -247,7 +305,7 @@ const getAssignUser = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select concat(firstname, ' ', lastname) name
+      `select concat(firstname, ' ', lastname) name, id
       from user 
       where client_id=${req.client_id}
       and status<>'D' 
@@ -275,6 +333,7 @@ const processLab = {
   getLabById,
   createLab,
   updateLab,
+  updateLabData,
   getLabHistory,
   getLabUserHistory,
   getLabValues,

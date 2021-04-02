@@ -208,7 +208,7 @@ export const paymentMethodType = (type) => {
     case "M":
       return "Master";
     default:
-      return "";
+      return "New Payment Method"; // required for purchase labs page
   }
 };
 
@@ -227,7 +227,7 @@ export const labRangeTableTranslation = (type) => {
   }
 };
 
-export const labStatusType = (type) => {
+export const labStatusTypeToLabel = (type) => {
   switch (type) {
     case "R":
       return "Requested";
@@ -240,7 +240,7 @@ export const labStatusType = (type) => {
   }
 };
 
-export const labSourceType = (type) => {
+export const labSourceTypeToLabel = (type) => {
   switch (type) {
     case "P":
       return "Patient";
@@ -305,3 +305,5 @@ export function noOp() {
 }
 
 export const dateFormat = (date) => moment(date).format("MMM D YYYY");
+
+export const dateTimeFormat = (date) => moment(date).format("MMM D YYYY hh:mm A");
