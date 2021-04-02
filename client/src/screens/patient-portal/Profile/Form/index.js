@@ -18,10 +18,10 @@ import RegionSelect from "../../../../components/common/RegionSelect";
 import useAuth from "../../../../hooks/useAuth";
 import PatientPortalService from "../../../../services/patient_portal/patient-portal.service";
 import {
-  BasicInfoForm,
+  ProfileFormFields,
   InsuranceForm,
   PortalForm,
-} from "../../../../static/patientBasicInfoForm";
+} from "../../../../static/patient-portal/ProfileForm";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -63,9 +63,9 @@ const ProfileForm = () => {
   const { user } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
 
-  const FirstRow = BasicInfoForm.firstRow;
-  const SecondRow = BasicInfoForm.secondRow;
-  const ThirdRow = BasicInfoForm.thirdRow;
+  const FirstRow = ProfileFormFields.firstRow;
+  const SecondRow = ProfileFormFields.secondRow;
+  const ThirdRow = ProfileFormFields.thirdRow;
 
   const [country, setCountry] = useState("");
   const [region, setRegion] = useState("");

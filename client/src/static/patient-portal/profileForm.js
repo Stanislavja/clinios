@@ -1,4 +1,4 @@
-export const BasicInfoForm = {
+export const ProfileFormFields = {
   firstRow: [
     {
       name: "firstname",
@@ -25,29 +25,21 @@ export const BasicInfoForm = {
       options: [],
     },
     {
-      name: "status",
-      id: "status",
-      label: "Status",
+      name: "gender",
+      id: "gender",
+      label: "Gender",
       baseType: "select",
       type: null,
       options: [
         {
-          label: "Active",
-          value: "active",
+          label: "Male",
+          value: "M",
         },
         {
-          label: "Inactive",
-          value: "inActive",
+          label: "Female",
+          value: "F",
         },
       ],
-    },
-    {
-      name: "provider",
-      id: "provider",
-      label: "Provider",
-      baseType: "input",
-      type: "text",
-      options: [],
     },
   ],
   secondRow: [
@@ -76,16 +68,6 @@ export const BasicInfoForm = {
       options: [],
     },
     {
-      name: "email",
-      id: "email",
-      label: "Email",
-      baseType: "input",
-      type: "email",
-      options: [],
-    },
-  ],
-  thirdRow: [
-    {
       name: "phone_other",
       id: "otherPhone",
       label: "Other Phone",
@@ -93,6 +75,8 @@ export const BasicInfoForm = {
       type: "number",
       options: [],
     },
+  ],
+  thirdRow: [
     {
       name: "phone_note",
       id: "phoneNotes",
@@ -100,23 +84,6 @@ export const BasicInfoForm = {
       baseType: "input",
       type: "text",
       options: [],
-    },
-    {
-      name: "gender",
-      id: "gender",
-      label: "Gender",
-      baseType: "select",
-      type: null,
-      options: [
-        {
-          label: "Male",
-          value: "M",
-        },
-        {
-          label: "Female",
-          value: "F",
-        },
-      ],
     },
     {
       name: "ssn",
@@ -215,37 +182,5 @@ export const PortalForm = [
     baseType: "input",
     type: "password",
     options: [],
-  },
-];
-
-export const Pharmacies = [
-  {
-    id: "pharmacy1",
-    name: "pharmacy1",
-    label: "Search",
-    address: "100 Main St, Ottario Canada",
-    phone: "030-123-456",
-  },
-  {
-    id: "pharmacy2",
-    name: "pharmacy2",
-    label: "Search",
-    address: "100 Main St, New York USA",
-    phone: "030-123-456",
-  },
-];
-
-export const PaymentData = [
-  {
-    type: "Visa",
-    cardNumber: "4234 5678 1234 5678",
-    expiryDate: "08/25",
-    cvv: 123,
-  },
-  {
-    type: "Master Card",
-    cardNumber: "5678 1234 5678 1234",
-    expiryDate: "07/23",
-    cvv: 567,
   },
 ];

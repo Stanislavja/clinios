@@ -41,7 +41,6 @@ const getPatient = async (req, res) => {
 
 const updatePatient = async (req, res) => {
   const formData = req.body.data;
-  console.log("req.body.data:", req.body.data);
   formData.created = new Date();
   formData.created_user_id = req.user_id;
 
