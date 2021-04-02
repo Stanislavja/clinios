@@ -21,7 +21,7 @@ import {
   ProfileFormFields,
   InsuranceForm,
   PortalForm,
-} from "../../../../static/patient-portal/ProfileForm";
+} from "../../../../static/patient-portal/ProfileFormFields";
 
 
 const useStyles = makeStyles((theme) => ({
