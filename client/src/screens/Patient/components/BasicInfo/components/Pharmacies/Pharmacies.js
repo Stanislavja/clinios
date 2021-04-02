@@ -71,13 +71,12 @@ const Pharmacies = (props) => {
         const pharmacy1 = pharmacyFirst.length ? pharmacyFirst[0] : null;
         const pharmacy2 = pharmacySecond.length ? pharmacySecond[0] : null;
         setPatientPharmacy({
-          ...patientPharmacy,
           pharmacy1,
           pharmacy2,
         });
       }
     });
-  }, [patientPharmacy, pharmacy1Id, pharmacy2Id]);
+  }, [pharmacy1Id, pharmacy2Id]);
 
   useEffect(() => {
     fetchAllPharmacies();
