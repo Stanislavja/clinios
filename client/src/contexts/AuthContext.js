@@ -93,12 +93,34 @@ const AuthContext = createContext({
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(isDev() ? logger(reducer) : reducer, initialAuthState);
-  const [cookies, removeCookie] = useCookies(["last_viewed_patient_id"]);
+  const [cookies] = useCookies(["last_viewed_patient_id"]);
+
+  const updateLastVisitedPatient = async (patientId) => {
+    try {
+      const lastVisitedPatentResponse = await axios.get(`${API_BASE}/user/last-visited-patient/${patientId}`,
+        {
+          headers: authHeader(),
+        });
+      const lastVisitedPatient = lastVisitedPatentResponse.data.data;
+
+      dispatch({
+        type: "UPDATE_LAST_VISITED_PATIENT",
+        payload: {
+          lastVisitedPatient,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
 
   const login = async (email, password) => {
     const response = await axios.post(`${API_BASE}/auth/login`, { email, password });
     const { accessToken, user } = response.data.data;
     setSession(accessToken);
+    const patientId = cookies[`${user.id}-last_viewed_patient_id`];
+    updateLastVisitedPatient(patientId);
     dispatch({
       type: "LOGIN",
       payload: {
@@ -123,6 +145,9 @@ export const AuthProvider = ({ children }) => {
     const response = await axios.post(`${API_BASE}/auth/corporate/login`, { email, password });
     const { accessToken, user } = response.data.data;
     setSession(accessToken);
+    //* Not sure if the corporate need to see the last viewed patient but thought of adding it.
+    const patientId = cookies[`${user.id}-last_viewed_patient_id`];
+    updateLastVisitedPatient(patientId);
     dispatch({
       type: "LOGIN",
       payload: {
@@ -131,29 +156,11 @@ export const AuthProvider = ({ children }) => {
     });
   };
 
-  const updateLastVisitedPatient = async (patientId) => {
-    try {
-      const lastVisitedPatentResponse = await axios.get(`${API_BASE}/user/last-visited-patient/${patientId}`,
-        {
-          headers: authHeader(),
-        });
-      const lastVisitedPatient = lastVisitedPatentResponse.data.data;
-
-      dispatch({
-        type: "UPDATE_LAST_VISITED_PATIENT",
-        payload: {
-          lastVisitedPatient,
-        },
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const logout = () => {
     setSession(null);
     dispatch({ type: "LOGOUT" });
-    removeCookie("last_viewed_patient_id");
+
+    // removeCookie("last_viewed_patient_id");
   };
 
   useEffect(() => {
@@ -175,7 +182,7 @@ export const AuthProvider = ({ children }) => {
             headers: authHeader(),
           });
           const { user } = response.data.data;
-          const patientId = cookies.last_viewed_patient_id;
+          const patientId = cookies[`${user.id}-last_viewed_patient_id`];
           let lastVisitedPatient = null;
           if (patientId && patientId !== "undefined" && (decoded.role === "CLIENT")) {
             const lastPatentRes = await axios.get(`${API_BASE}/user/last-visited-patient/${patientId}`,
