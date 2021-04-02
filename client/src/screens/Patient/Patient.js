@@ -150,6 +150,8 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const THIRTY_DAYS_IN_MILI_SECONDS = 1000 * 60 * 60 * 24 * 30;
+
 export const PatientContext = createContext(null);
 
 const Patient = () => {
@@ -347,7 +349,9 @@ const Patient = () => {
     fetchCardsLayout();
     fetchPatientData();
     dispatch(setPatientId(patientId)); // saving patientId in reducer
-    setCookie("last_viewed_patient_id", patientId, { path: "/" }); // Same patientId into cookie
+
+    setCookie(`${userId}-last_viewed_patient_id`,
+      patientId, { path: "/", maxAge: THIRTY_DAYS_IN_MILI_SECONDS }); // Same patientId into cookie
     updateLastVisitedPatient(patientId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [patientId]);
