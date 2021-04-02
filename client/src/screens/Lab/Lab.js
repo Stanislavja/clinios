@@ -72,9 +72,14 @@ const useStyles = makeStyles((theme) => ({
   paginationWrap: {
     display: "flex",
     justifyContent: "center",
+    position: "relative",
+    marginTop: theme.spacing(2),
+  },
+  paginationBottom: {
+    display: "flex",
+    justifyContent: "center",
     position: "absolute",
     bottom: theme.spacing(1),
-    marginTop: theme.spacing(4),
     width: `calc(100% - ${theme.spacing(3)}px)`, // 1.5 x 2 sides = 3
   },
   downloadButton: {
@@ -125,6 +130,7 @@ const Lab = () => {
   const [totalPages, setTotalPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [type, setType] = useState("");
+  const [docLoadSuccess, setDocLoadSuccess] = useState(false);
 
   const updateFields = (lab) => {
     setPatientId(lab.client_id);
@@ -190,6 +196,7 @@ const Lab = () => {
   const onDocumentLoadSuccess = ({ numPages }) => {
     setTotalPages(numPages);
     setPageNumber(1);
+    setDocLoadSuccess(true);
   };
 
   const onError = (e) => {
@@ -355,7 +362,7 @@ const Lab = () => {
                         >
                           <Page pageNumber={pageNumber} />
                         </Document>
-                        <Grid className={classes.paginationWrap}>
+                        <Grid className={docLoadSuccess ? classes.paginationWrap : classes.paginationBottom}>
                           <Pagination count={totalPages} shape="rounded" onChange={handleChange} />
                         </Grid>
                       </>
@@ -549,7 +556,6 @@ const Lab = () => {
                       </Grid>
                     </Grid>
                     <TextField
-                      required
                       variant="outlined"
                       label="Document Note"
                       margin="dense"
