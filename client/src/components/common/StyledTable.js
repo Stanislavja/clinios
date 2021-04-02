@@ -33,6 +33,10 @@ export const StyledTableCellSm = withStyles(() => ({
 
 export const StyledTableRowSm = withStyles((theme) => ({
   root: {
+    "& p": {
+      fontSize: 12,
+      lineHeight: "21px",
+    },
     fontSize: 14,
     "&:nth-of-type(odd)": {
       backgroundColor: theme.palette.action.hover,

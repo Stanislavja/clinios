@@ -34,8 +34,9 @@ import { toggleMedicationDialog, resetSelectedMedication } from "../../../provid
 import PatientService from "../../../services/patient.service";
 import {
   NewDrugFormFields, GenericOptions, InputOptions, RefillsOptions,
+  DEFAULT_AMOUNT, DEFAULT_EXPIRY, DEFAULT_FREQUENCY, DEFAULT_REFILLS,
 } from "../../../static/medicationForm";
-import { drugFrequencyCodeToLabel, drugFrequencyLabelToCode } from "../../../utils/helpers";
+import { drugFrequencyLabelToCode } from "../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
   ml2: {
@@ -95,6 +96,7 @@ const Medications = (props) => {
   const encounterId = selectedEncounter?.id || 1;
 
   const currentDate = new Date();
+  const [hasDrugIdError, setHasDrugIdError] = useState(false);
   const [drugSearchResults, setDrugSearchResults] = useState([]);
   const [drugFrequencies, setDrugFrequencies] = useState([]);
   const [drugStrengths, setDrugStrengths] = useState([]);
@@ -117,14 +119,14 @@ const Medications = (props) => {
   const populateFormFields = (medication) => {
     formFields.type = medication.name;
     formFields.drug_id = medication.id || medication.drug_id;
-    formFields.strength = medication.strength;
-    formFields.frequency = drugFrequencyLabelToCode(medication.frequency);
-    formFields.startDate = new Date(medication.start_dt);
-    formFields.expires = medication?.expires || "";
-    formFields.amount = medication?.amount || "";
-    formFields.refills = medication?.refills || "";
-    formFields.patientInstructions = medication.patient_instructions;
-    formFields.pharmacyInstructions = medication.pharmacy_instructions;
+    formFields.strength = medication.drug_strength_id;
+    formFields.frequency = drugFrequencyLabelToCode(medication?.frequency || DEFAULT_FREQUENCY);
+    formFields.startDate = moment(medication.start_dt).format("MMM DD YYYY");
+    formFields.expires = medication?.expires || DEFAULT_EXPIRY;
+    formFields.amount = medication?.amount || DEFAULT_AMOUNT;
+    formFields.refills = medication?.refills || DEFAULT_REFILLS;
+    formFields.patientInstructions = medication?.patient_instructions || "";
+    formFields.pharmacyInstructions = medication?.pharmacy_instructions || "";
     formFields.generic = String(medication.generic);
     setFormFields({ ...formFields });
   };
@@ -143,11 +145,11 @@ const Medications = (props) => {
       fetchMedicationById(selectedMedication.id);
     } else {
       // default values selection
-      formFields.frequency = "1D";
+      formFields.frequency = DEFAULT_FREQUENCY;
       formFields.startDate = currentDate;
-      formFields.expires = 30;
-      formFields.amount = 30;
-      formFields.refills = 2;
+      formFields.expires = DEFAULT_EXPIRY;
+      formFields.amount = DEFAULT_AMOUNT;
+      formFields.refills = DEFAULT_REFILLS;
       setFormFields({ ...formFields });
     }
     return () => !!selectedMedication && dispatch(resetSelectedMedication());
@@ -189,10 +191,24 @@ const Medications = (props) => {
   }, [fetchRecentMedications, fetchDrugFrequencies, fetchFavoriteMedications]);
 
   useDidMountEffect(() => {
-    if (!formFields.drug_id.length) {
+    if (+formFields.drug_id) {
       fetchDrugStrengths(formFields.drug_id);
     }
+    if (hasDrugIdError) {
+      setHasDrugIdError(false);
+    }
   }, [formFields.drug_id]);
+
+  useDidMountEffect(() => {
+    if (!formFields.type.length) {
+      const name = "drug_id";
+      setFormFields({
+        ...formFields,
+        [name]: "",
+      });
+      setDrugSearchResults([]);
+    }
+  }, [formFields.type]);
 
   const handleInputChange = (e) => {
     const { value, name } = e.target;
@@ -339,24 +355,29 @@ const Medications = (props) => {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
-    const reqBody = {
-      data: prepareRequestBodyParams(),
-    };
-    if (selectedMedication) { // editing scenario
-      const medicationId = selectedMedication.id;
-      PatientService.updateMedication(patientId, medicationId, reqBody)
-        .then((response) => {
-          enqueueSnackbar(`${response.data.message}`, { variant: "success" });
-          reloadData();
-          dispatch(toggleMedicationDialog());
-        });
+    if (formFields.type.length && formFields.drug_id !== "") {
+      const reqBody = {
+        data: prepareRequestBodyParams(),
+      };
+      if (selectedMedication) { // editing scenario
+        const medicationId = selectedMedication.id;
+        PatientService.updateMedication(patientId, medicationId, reqBody)
+          .then((response) => {
+            enqueueSnackbar(`${response.data.message}`, { variant: "success" });
+            reloadData();
+            dispatch(toggleMedicationDialog());
+          });
+      } else {
+        PatientService.createMedication(patientId, reqBody)
+          .then((response) => {
+            enqueueSnackbar(`${response.data.message}`, { variant: "success" });
+            reloadData();
+            dispatch(toggleMedicationDialog());
+          });
+      }
     } else {
-      PatientService.createMedication(patientId, reqBody)
-        .then((response) => {
-          enqueueSnackbar(`${response.data.message}`, { variant: "success" });
-          reloadData();
-          dispatch(toggleMedicationDialog());
-        });
+      enqueueSnackbar(`Drug selection is required`, { variant: "error" });
+      setHasDrugIdError(true);
     }
   };
 
@@ -379,11 +400,11 @@ const Medications = (props) => {
   return (
     <>
       <Grid container>
-        <Grid item lg={4} md={4} xs={12}>
+        <Grid item lg={5} md={5} xs={12}>
           <Grid
             item
-            lg={10}
-            md={10}
+            lg={9}
+            md={9}
             xs={12}
             className={classes.relativePosition}
           >
@@ -403,6 +424,7 @@ const Medications = (props) => {
                       inputProps={{
                         autoComplete: "off",
                       }}
+                      error={hasDrugIdError}
                     />
                   </Grid>
                   <Grid item xs={3}>
@@ -558,7 +580,7 @@ const Medications = (props) => {
             </List>
           </Box>
         </Grid>
-        <Grid item lg={6} md={6} xs={12}>
+        <Grid item lg={5} md={5} xs={12}>
           <Typography variant="h5" gutterBottom>
             Recent selections, click to populate
           </Typography>
@@ -586,7 +608,7 @@ const Medications = (props) => {
                       <StyledTableCellSm>{row.name}</StyledTableCellSm>
                       <StyledTableCellSm>{row.strength}</StyledTableCellSm>
                       <StyledTableCellSm>
-                        {row.drug_frequency_id && drugFrequencyCodeToLabel(row.drug_frequency_id)}
+                        {row.frequency}
                       </StyledTableCellSm>
                       <StyledTableCellSm>{row.expires}</StyledTableCellSm>
                       <StyledTableCellSm>{row.amount}</StyledTableCellSm>

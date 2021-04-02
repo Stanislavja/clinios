@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, {
+  useState, useEffect, useCallback, useMemo,
+} from "react";
 
 import {
   Box,
@@ -26,7 +28,7 @@ import LabService from "../../services/lab.service";
 import { DocumentOptions } from "../../static/lab";
 import * as API from "../../utils/API";
 import {
-  checkFileExtension, labStatusTypeToLabel, labSourceTypeToLabel, dateTimeFormat,
+  checkFileExtension, labStatusTypeToLabel, labSourceTypeToLabel, dateTimeFormat, calculateAge,
 } from "../../utils/helpers";
 import Interpretation from "./components/Interpretation";
 import LabHistory from "./components/LabHistory";
@@ -70,9 +72,14 @@ const useStyles = makeStyles((theme) => ({
   paginationWrap: {
     display: "flex",
     justifyContent: "center",
+    position: "relative",
+    marginTop: theme.spacing(2),
+  },
+  paginationBottom: {
+    display: "flex",
+    justifyContent: "center",
     position: "absolute",
     bottom: theme.spacing(1),
-    marginTop: theme.spacing(4),
     width: `calc(100% - ${theme.spacing(3)}px)`, // 1.5 x 2 sides = 3
   },
   downloadButton: {
@@ -123,26 +130,27 @@ const Lab = () => {
   const [totalPages, setTotalPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [type, setType] = useState("");
+  const [docLoadSuccess, setDocLoadSuccess] = useState(false);
 
   const updateFields = (lab) => {
     setPatientId(lab.client_id);
     setPatientText(lab.patient_name);
     setDocType(lab.type || "U");
-    setDocNote(lab.note);
-    setAssignmentNote(lab.note_assign);
+    setDocNote(lab?.note || "");
+    setAssignmentNote(lab?.note_assign || "");
     setDocAssignTo(lab.assigned_to);
   };
 
   const fetchLabDataByID = useCallback(() => {
-    LabService.getLabById(userId, documentId).then((res) => {
+    LabService.getLabById(documentId).then((res) => {
       const lab = res.data && res.data.length ? res.data[0] : {};
       setLabData(lab);
       updateFields(lab);
     });
-  }, [userId, documentId]);
+  }, [documentId]);
 
   const fetchLabData = useCallback(() => {
-    LabService.getLabData(userId).then((res) => {
+    LabService.getLabData().then((res) => {
       const lab = res.data && res.data.length ? res.data[0] : null;
       if (lab) {
         setLabData(lab);
@@ -151,7 +159,7 @@ const Lab = () => {
         setShowGoBack(true);
       }
     });
-  }, [userId]);
+  }, []);
 
   const fetchAssigneeUsers = useCallback(() => {
     LabService.getAssigneeUsers()
@@ -188,6 +196,7 @@ const Lab = () => {
   const onDocumentLoadSuccess = ({ numPages }) => {
     setTotalPages(numPages);
     setPageNumber(1);
+    setDocLoadSuccess(true);
   };
 
   const onError = (e) => {
@@ -232,7 +241,7 @@ const Lab = () => {
         patient_id: patientId,
       },
     };
-    LabService.updateLabData(labId, reqBody).then((res) => {
+    LabService.updateLab(labId, reqBody).then((res) => {
       enqueueSnackbar(res.message, { variant: "success" });
       getLabInformation();
     });
@@ -245,7 +254,7 @@ const Lab = () => {
         labStatus: status,
       },
     };
-    LabService.updateLab(labId, reqBody).then((res) => {
+    LabService.updateLabStatus(labId, reqBody).then((res) => {
       enqueueSnackbar(res.message, { variant: "success" });
       window.location.reload();
     });
@@ -254,6 +263,11 @@ const Lab = () => {
   const toggleMessageDialog = () => {
     setShowMessageDialog((prevState) => !prevState);
   };
+
+  const patientData = useMemo(() => ({
+    age: calculateAge(labData?.dob),
+    gender: labData?.gender,
+  }), [labData]);
 
   return (
     showGoBack
@@ -348,7 +362,7 @@ const Lab = () => {
                         >
                           <Page pageNumber={pageNumber} />
                         </Document>
-                        <Grid className={classes.paginationWrap}>
+                        <Grid className={docLoadSuccess ? classes.paginationWrap : classes.paginationBottom}>
                           <Pagination count={totalPages} shape="rounded" onChange={handleChange} />
                         </Grid>
                       </>
@@ -440,7 +454,7 @@ const Lab = () => {
                         component="span"
                         className={classes.text14}
                       >
-                        {labData?.lab_dt}
+                        {dateTimeFormat(labData?.lab_dt)}
                       </Typography>
                     </Grid>
 
@@ -542,7 +556,6 @@ const Lab = () => {
                       </Grid>
                     </Grid>
                     <TextField
-                      required
                       variant="outlined"
                       label="Document Note"
                       margin="dense"
@@ -645,7 +658,7 @@ const Lab = () => {
                 >
                   <Typography gutterBottom variant="h5">Values</Typography>
                   {!!labData && (
-                    <LabValues labId={labData.id} />
+                    <LabValues labId={labData.id} patientData={patientData} />
                   )}
                 </Grid>
               </Grid>

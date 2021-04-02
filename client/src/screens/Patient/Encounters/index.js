@@ -161,6 +161,7 @@ const Encounters = (props) => {
                 onChange={handleDateChange}
                 fullWidth
                 required
+                InputProps={{ readOnly: true }}
               />
             </Grid>
             <Grid item lg={3}>

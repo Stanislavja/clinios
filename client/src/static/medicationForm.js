@@ -8,7 +8,7 @@ export const NewDrugFormFields = [
     type: "text",
     options: [],
     multiline: false,
-    required: false,
+    required: true,
   },
   {
     name: "frequency",
@@ -130,3 +130,8 @@ export const RefillsOptions = [
     value: "4",
   },
 ];
+
+export const DEFAULT_FREQUENCY = "1D";
+export const DEFAULT_EXPIRY = 30;
+export const DEFAULT_AMOUNT = 30;
+export const DEFAULT_REFILLS = 2;

@@ -7,7 +7,7 @@ const getLabById = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select l.id, l.filename, l.created, l.status, lab_dt, l.source, lc.name lab_company, concat(p.firstname, ' ', p.lastname) patient_name, l.type, l.note, l.user_id assigned_to, l.note_assign, l.client_id
+      `select l.id, l.filename, l.created, l.status, lab_dt, l.source, lc.name lab_company, concat(p.firstname, ' ', p.lastname) patient_name, p.id patient_id, p.gender, p.dob, l.type, l.note, l.user_id assigned_to, l.note_assign, l.client_id
       from lab l
       left join lab_company lc on lc.id=l.lab_company_id
       left join patient p on p.id=l.patient_id
@@ -34,7 +34,7 @@ const getAll = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select l.id, l.filename, l.created, l.status, lab_dt, l.source, lc.name lab_company, concat(p.firstname, ' ', p.lastname) patient_name, l.type, l.note, l.user_id assigned_to, l.note_assign, l.client_id
+      `select l.id, l.filename, l.created, l.status, lab_dt, l.source, lc.name lab_company, concat(p.firstname, ' ', p.lastname) patient_name, p.id patient_id, p.gender, p.dob, l.type, l.note, l.user_id assigned_to, l.note_assign, l.client_id
         from lab l
         left join lab_company lc on lc.id=l.lab_company_id
         left join patient p on p.id=l.patient_id
@@ -112,7 +112,7 @@ const createLab = async (req, res) => {
   }
 };
 
-const updateLab = async (req, res) => {
+const updateLabStatus = async (req, res) => {
   const { labId } = req.params;
   const { labStatus } = req.body.data;
 
@@ -139,7 +139,7 @@ const updateLab = async (req, res) => {
   }
 };
 
-const updateLabData = async (req, res) => {
+const updateLab = async (req, res) => {
   const { labId } = req.params;
   let { user_id, patient_id, type, note, note_assign } = req.body.data;
   const db = makeDb(configuration, res);
@@ -243,7 +243,7 @@ const getLabUserHistory = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select lh.created
+      `select lh.created, lh.id
       , concat(u.firstname, ' ', u.lastname) created_name
       , concat(u2.firstname, ' ', u2.lastname) assigned_name
       , lh.patient_id, lh.type, lh.note, lh.note_assign, lh.status
@@ -333,7 +333,7 @@ const processLab = {
   getLabById,
   createLab,
   updateLab,
-  updateLabData,
+  updateLabStatus,
   getLabHistory,
   getLabUserHistory,
   getLabValues,

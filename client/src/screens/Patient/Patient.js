@@ -1278,7 +1278,7 @@ const Patient = () => {
               <Card
                 title="Encounters"
                 data={
-                  <EncountersCardContent />
+                  <EncountersCardContent reloadData={() => fetchEncounters()} />
                 }
                 showActions
                 primaryButtonText="New"

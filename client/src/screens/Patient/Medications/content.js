@@ -125,7 +125,6 @@ const MedicationsContent = (props) => {
               <EditIcon />
             </IconButton>
             <IconButton
-              disabled={(item.payment_type === "C" || item.payment_type === "A")}
               onClick={() => openDeleteDialog(item)}
             >
               <DeleteIcon />
