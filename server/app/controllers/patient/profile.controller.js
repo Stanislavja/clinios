@@ -44,8 +44,10 @@ const updatePatient = async (req, res) => {
   formData.created = new Date();
   formData.created_user_id = req.user_id;
 
-  if (formData.password) {
+  if (formData.password && formData.password !== "") {
     formData.password = bcrypt.hashSync(formData.password, 8);
+  } else {
+    delete formData.password;
   }
 
   const db = makeDb(configuration, res);
