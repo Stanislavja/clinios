@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
 
 import {
-  makeStyles, TextField, Grid, Typography, Box,
+  makeStyles, TextField, Grid, Typography, Box, Divider,
+  List,
+  ListItem,
 } from "@material-ui/core";
 import _ from "lodash";
+import { useSnackbar } from "notistack";
 
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 import {
@@ -30,10 +33,14 @@ const useStyles = makeStyles((theme) => ({
   halfSectionCard: {
     padding: theme.spacing(1.5, 0, 1, 0),
   },
+  divider: {
+    margin: theme.spacing(1, 0),
+  },
 }));
 
 const Pharmacies = () => {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const [patientPharmacy, setPatientPharmacy] = useState(null);
   const [searchedResults, setSearchedResults] = useState({
     pharmacy1: [],
@@ -67,6 +74,19 @@ const Pharmacies = () => {
     }
   }, 1000);
 
+  const saveSelectedPharmacy = (pharmacy) => {
+    const pharmacyId = pharmacy.id;
+    const reqBody = {
+      data: {
+        ...pharmacy,
+      },
+    };
+    PatientPortalService.updatePharmacy(pharmacyId, reqBody).then((response) => {
+      enqueueSnackbar(`${response.message}`, { variant: "success" });
+      fetchPatienPharmacy();
+    });
+  };
+
   return (
     <div className={classes.root}>
       <Typography
@@ -94,24 +114,35 @@ const Pharmacies = () => {
                   className={classes.inputTextRow}
                   onChange={(e) => debouncedSearchPharmacies(e)}
                 />
+                <List component="ul">
+                  {
+                    searchedResults[pharmacy.name].map((item) => (
+                      <ListItem
+                        key={item.id}
+                        disableGutters
+                        button
+                        onClick={() => saveSelectedPharmacy(item)}
+                      >
+                        <Box key={item.id}>
+                          <Typography gutterBottom>{item.name}</Typography>
+                          <Typography gutterBottom>{item.address}</Typography>
+                          <Typography gutterBottom>
+                            {`${item.city} ${item.state} ${item.postal}`}
+                          </Typography>
+                          <Typography gutterBottom>
+                            Phone
+                            {item.phone}
+                          </Typography>
+                        </Box>
+                      </ListItem>
+                    ))
+                  }
+                </List>
                 {
-                  searchedResults[pharmacy.name].map((item) => (
-                    <Box key={item.id} mb={2}>
-                      <Typography gutterBottom>{item.name}</Typography>
-                      <Typography gutterBottom>{item.address}</Typography>
-                      <Typography gutterBottom>
-                        {item.city}
-                        {" "}
-                        {item.state}
-                        {" "}
-                        {item.postal}
-                      </Typography>
-                      <Typography gutterBottom>
-                        Phone
-                        {item.phone}
-                      </Typography>
-                    </Box>
-                  ))
+                  searchedResults[pharmacy.name].length || searchedResults[pharmacy.name].length ? (
+                    <Divider className={classes.divider} />
+                  )
+                    : null
                 }
               </Grid>
             ))}
@@ -123,11 +154,7 @@ const Pharmacies = () => {
               <Typography gutterBottom>{patientPharmacy.name}</Typography>
               <Typography gutterBottom>{patientPharmacy.address}</Typography>
               <Typography gutterBottom>
-                {patientPharmacy.city}
-                {" "}
-                {patientPharmacy.state}
-                {" "}
-                {patientPharmacy.postal}
+                {`${patientPharmacy.city} ${patientPharmacy.state} ${patientPharmacy.postal}`}
               </Typography>
               <Typography gutterBottom>
                 Phone
