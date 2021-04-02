@@ -268,7 +268,7 @@ const ProfileForm = () => {
                     )}
                   </Grid>
                 ))}
-                {/*              <Grid item md={2}>
+                {/*              <Grid item md={2}> //TODO:: might be used later
                   <Typography gutterBottom>
                     {`Age: ${calculateAge(formFields.dob)}`}
                   </Typography>
@@ -308,7 +308,7 @@ const ProfileForm = () => {
                   </Grid>
                 ))}
               </Grid>
-              {/*               <Grid container spacing={1} alignItems="flex-end">
+              {/* <Grid container spacing={1} alignItems="flex-end">  //TODO:: might be used later
                 <Grid item md={2}>
                   <Typography>Last Login: Jan 1, 2020</Typography>
                 </Grid>
@@ -434,7 +434,7 @@ const ProfileForm = () => {
         </Grid>
       </Grid>
 
-      {/*       <Grid container>
+      {/* <Grid container>  //TODO:: might be used later
         <Grid item xs={12}>
           <Paper className={classes.root} variant="outlined">
             <Grid className={classes.sectionCard}>
