@@ -11,6 +11,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import moment from "moment";
 import { useSnackbar } from "notistack";
+import { CountryRegionData } from "react-country-region-selector";
 
 import CountrySelect from "../../../../components/common/CountrySelect";
 import RegionSelect from "../../../../components/common/RegionSelect";
@@ -72,33 +73,30 @@ const ProfileForm = () => {
     firstname: "",
     middlename: "",
     lastname: "",
-    status: "",
-    provider: "",
+    gender: "",
     phone_home: "",
     phone_cell: "",
     phone_work: "",
-    email: "",
-    dob: "",
     phone_other: "",
     phone_note: "",
-    gender: "",
     ssn: "",
-    password: "",
-    postal: "",
     address: "",
     address2: "",
     city: "",
-    insurance_desc: "",
+    postal: "",
+    insurance_name: "",
     insurance_group: "",
     insurance_member: "",
-    insurance_name: "",
     insurance_phone: "",
+    insurance_desc: "",
+    email: "",
+    password: "",
+
   });
 
   function formatformFeilds(data = {}) {
     return {
       ...data,
-      status: data.status && data.status === "A" ? "active" : "inActive",
       ...(data.gender && { gender: data.gender ? data.gender : "M" }),
       ...(data.dob && { dob: data.dob ? data.dob : moment().format("YYYY-MM-DD") }),
     };
@@ -106,8 +104,24 @@ const ProfileForm = () => {
 
   useEffect(() => {
     setFormFields({ ...formFields, ...formatformFeilds(user) });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
+
+  useEffect(() => {
+    const selectedCountry = CountryRegionData.filter(
+      (countryArray) => countryArray[1] === formFields.country,
+    );
+    if (selectedCountry.length) { // country and state is present in the db
+      setCountry(selectedCountry[0]);
+      const regions = selectedCountry[0][2].split("|").map((regionPair) => {
+        const [regionName = null, regionInShort] = regionPair.split("~");
+        return [regionName, regionInShort];
+      });
+      const selectedRegion = regions.filter((x) => x[1] === formFields.state);
+      setRegion(selectedRegion[0][1]);
+    }
+  }, [formFields]);
 
   const fetchProfile = useCallback(() => {
     PatientPortalService.getProfile().then((res) => {
@@ -150,10 +164,14 @@ const ProfileForm = () => {
 
 
     // * status is in need to be formated back to it's original state.
-    formFields.status = formFields?.status === "active" ? "A" : null;
+    // formFields.status = formFields?.status === "active" ? "A" : null;
 
     const payload = {
-      data: formFields,
+      data: {
+        ...formFields,
+        country: country[1],
+        state: region,
+      },
     };
 
     PatientPortalService.updateProfile(payload, user.id).then(
@@ -467,7 +485,7 @@ const ProfileForm = () => {
               </Typography>
               <Grid container spacing={1} className={classes.inputRow}>
                 {PortalForm.map((item) => (
-                  <Grid key={item.name} item md={2}>
+                  <Grid key={item.name} item md={3}>
                     <TextField
                       label={item.label}
                       name={item.name}
