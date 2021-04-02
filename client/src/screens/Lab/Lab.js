@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, {
+  useState, useEffect, useCallback, useMemo,
+} from "react";
 
 import {
   Box,
@@ -26,7 +28,7 @@ import LabService from "../../services/lab.service";
 import { DocumentOptions } from "../../static/lab";
 import * as API from "../../utils/API";
 import {
-  checkFileExtension, labStatusTypeToLabel, labSourceTypeToLabel, dateTimeFormat,
+  checkFileExtension, labStatusTypeToLabel, labSourceTypeToLabel, dateTimeFormat, calculateAge,
 } from "../../utils/helpers";
 import Interpretation from "./components/Interpretation";
 import LabHistory from "./components/LabHistory";
@@ -254,6 +256,11 @@ const Lab = () => {
   const toggleMessageDialog = () => {
     setShowMessageDialog((prevState) => !prevState);
   };
+
+  const patientData = useMemo(() => ({
+    age: calculateAge(labData?.dob),
+    gender: labData?.gender,
+  }), [labData]);
 
   return (
     showGoBack
@@ -645,7 +652,7 @@ const Lab = () => {
                 >
                   <Typography gutterBottom variant="h5">Values</Typography>
                   {!!labData && (
-                    <LabValues labId={labData.id} />
+                    <LabValues labId={labData.id} patientData={patientData} />
                   )}
                 </Grid>
               </Grid>

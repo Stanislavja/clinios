@@ -8,19 +8,25 @@ import {
   TableBody,
   TableRow,
 } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 
 import { StyledTableCellSm, StyledTableRowSm } from "../../../../components/common/StyledTable";
 import LabService from "../../../../services/lab.service";
 import { calculateFunctionalRange, calculatePercentageFlag } from "../../../../utils/FunctionalRange";
 import GraphDialog from "./component/GraphDialog";
-// import { calculateAge } from "../../../../utils/helpers";
+
+const useStyles = makeStyles(() => ({
+  cursorPointer: {
+    cursor: "pointer",
+  },
+}));
 
 const LabValues = (props) => {
-  const { labId } = props;
-  // TODO::Dynamic values for function range evalution
-  const patientAge = 50;
-  const gender = "M";
+  const classes = useStyles();
+  const { labId, patientData } = props;
+  const patientAge = patientData.age;
+  const { gender } = patientData;
 
   const [labValues, setLabValues] = useState([]);
   const [selectedGraph, setSelectedGraph] = useState(null);
@@ -41,7 +47,7 @@ const LabValues = (props) => {
   };
 
   const rowClickHandler = (row) => {
-    setSelectedGraph(row.filename);
+    setSelectedGraph(row);
     toggleGraphDialog();
   };
 
@@ -51,7 +57,7 @@ const LabValues = (props) => {
     <>
       {!!showGraphDialog && (
         <GraphDialog
-          fileName={selectedGraph}
+          fileName={selectedGraph?.name}
           isOpen={showGraphDialog}
           onClose={toggleGraphDialog}
         />
@@ -74,7 +80,11 @@ const LabValues = (props) => {
               ? labValues.map((row) => {
                 const functionalRange = calculateFunctionalRange(row.id, gender, patientAge);
                 return (
-                  <StyledTableRowSm key={row.id} onClick={() => rowClickHandler(row)}>
+                  <StyledTableRowSm
+                    key={row.id}
+                    className={classes.cursorPointer}
+                    onClick={() => rowClickHandler(row)}
+                  >
                     <StyledTableCellSm>{row.name}</StyledTableCellSm>
                     <StyledTableCellSm>{row.value}</StyledTableCellSm>
                     <StyledTableCellSm>
@@ -131,6 +141,10 @@ const LabValues = (props) => {
 
 LabValues.propTypes = {
   labId: PropTypes.number.isRequired,
+  patientData: PropTypes.shape({
+    gender: PropTypes.string,
+    age: PropTypes.string,
+  }).isRequired,
 };
 
 export default LabValues;

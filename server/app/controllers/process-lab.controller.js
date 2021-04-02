@@ -7,7 +7,7 @@ const getLabById = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select l.id, l.filename, l.created, l.status, lab_dt, l.source, lc.name lab_company, concat(p.firstname, ' ', p.lastname) patient_name, l.type, l.note, l.user_id assigned_to, l.note_assign, l.client_id
+      `select l.id, l.filename, l.created, l.status, lab_dt, l.source, lc.name lab_company, concat(p.firstname, ' ', p.lastname) patient_name, p.id patient_id, p.gender, p.dob, l.type, l.note, l.user_id assigned_to, l.note_assign, l.client_id
       from lab l
       left join lab_company lc on lc.id=l.lab_company_id
       left join patient p on p.id=l.patient_id
@@ -34,7 +34,7 @@ const getAll = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select l.id, l.filename, l.created, l.status, lab_dt, l.source, lc.name lab_company, concat(p.firstname, ' ', p.lastname) patient_name, l.type, l.note, l.user_id assigned_to, l.note_assign, l.client_id
+      `select l.id, l.filename, l.created, l.status, lab_dt, l.source, lc.name lab_company, concat(p.firstname, ' ', p.lastname) patient_name, p.id patient_id, p.gender, p.dob, l.type, l.note, l.user_id assigned_to, l.note_assign, l.client_id
         from lab l
         left join lab_company lc on lc.id=l.lab_company_id
         left join patient p on p.id=l.patient_id
