@@ -351,7 +351,7 @@ const Patient = () => {
     dispatch(setPatientId(patientId)); // saving patientId in reducer
 
     setCookie(`${userId}-last_viewed_patient_id`,
-      patientId, { path: "/", maxAge: THIRTY_DAYS_IN_NUMBERS }); // Same patientId into cookie
+      patientId, { path: "/", maxAge: THIRTY_DAYS_IN_MILI_SECONDS }); // Same patientId into cookie
     updateLastVisitedPatient(patientId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [patientId]);
