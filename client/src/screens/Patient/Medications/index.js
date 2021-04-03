@@ -602,33 +602,23 @@ const Medications = (props) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {recentSelections.length
-                    ? recentSelections.map((row) => (
-                      <StyledTableRowSm
-                        key={row.created}
-                        className={classes.cursorPointer}
-                        onClick={() => rowClickHandler(row)}
-                      >
-                        <StyledTableCellSm>{row.name}</StyledTableCellSm>
-                        <StyledTableCellSm>{row.strength}</StyledTableCellSm>
-                        <StyledTableCellSm>
-                          {row.frequency}
-                        </StyledTableCellSm>
-                        <StyledTableCellSm>{row.expires}</StyledTableCellSm>
-                        <StyledTableCellSm>{row.amount}</StyledTableCellSm>
-                        <StyledTableCellSm>{row.refills}</StyledTableCellSm>
-                        <StyledTableCellSm>{row.generic ? "Yes" : "No"}</StyledTableCellSm>
-                      </StyledTableRowSm>
-                    ))
-                    : (
-                      <StyledTableRowSm>
-                        <StyledTableCellSm colSpan={7}>
-                          <Typography className={classes.textMessage} align="center" variant="body1">
-                            No Records Found...
-                          </Typography>
-                        </StyledTableCellSm>
-                      </StyledTableRowSm>
-                    )}
+                  {recentSelections.map((row) => (
+                    <StyledTableRowSm
+                      key={row.created}
+                      className={classes.cursorPointer}
+                      onClick={() => rowClickHandler(row)}
+                    >
+                      <StyledTableCellSm>{row.name}</StyledTableCellSm>
+                      <StyledTableCellSm>{row.strength}</StyledTableCellSm>
+                      <StyledTableCellSm>
+                        {row.frequency}
+                      </StyledTableCellSm>
+                      <StyledTableCellSm>{row.expires}</StyledTableCellSm>
+                      <StyledTableCellSm>{row.amount}</StyledTableCellSm>
+                      <StyledTableCellSm>{row.refills}</StyledTableCellSm>
+                      <StyledTableCellSm>{row.generic ? "Yes" : "No"}</StyledTableCellSm>
+                    </StyledTableRowSm>
+                  ))}
                 </TableBody>
               </Table>
             </TableContainer>
