@@ -34,10 +34,10 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 12,
   },
   mr: {
-    marginRight: 2,
+    marginRight: theme.spacing(1),
   },
   status: {
-    marginLeft: 8,
+    marginLeft: theme.spacing(1),
     color: "orange",
   },
 }));
@@ -56,12 +56,9 @@ const StyledTableCell = withStyles((theme) => ({
   },
 }))(TableCell);
 
-const StyledTableRow = withStyles((theme) => ({
+const StyledTableRow = withStyles(() => ({
   root: {
     fontSize: 14,
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover,
-    },
     "& th": {
       fontSize: 12,
       whiteSpace: "nowrap",
@@ -76,7 +73,7 @@ const StyledTableRow = withStyles((theme) => ({
         position: "relative",
         zIndex: 1,
         top: 3,
-        left: 3,
+        left: -3,
       },
     },
   },
