@@ -10,10 +10,10 @@ import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
-import { orderBy } from "lodash";
 import moment from "moment";
 
 import usePatientContext from "../../../../hooks/usePatientContext";
+import { InsightsTests } from "../../../../static/insightsTests";
 import { calculateFunctionalRange, calculatePercentageFlag } from "../../../../utils/FunctionalRange";
 import { calculateAge } from "../../../../utils/helpers";
 
@@ -32,6 +32,13 @@ const useStyles = makeStyles((theme) => ({
   noRecordsMessage: {
     lineHeight: "21px",
     fontSize: 12,
+  },
+  mr: {
+    marginRight: 2,
+  },
+  status: {
+    marginLeft: 8,
+    color: "orange",
   },
 }));
 
@@ -86,72 +93,27 @@ const InsightsContent = () => {
 
   const hasValue = (value) => !((typeof value === "undefined") || (value === null));
 
-  const hasTestValue = (value, testsArray) => {
-    const matchArray = testsArray.filter((x) => x.name === value);
-    let res = null;
-    if (matchArray.length) {
-      const [firstEl] = matchArray;
-      res = firstEl;
-    }
-    return res;
-  };
-
-  const addCalculatedTests = useCallback(() => {
+  const filterRequiredTests = useCallback(() => {
     if (!!data && data.length) {
-      let tempTestsArray = [...data];
-      const sodiumTest = hasTestValue("Sodium", data);
-      const potassiumTest = hasTestValue("Potassium", data);
-      const glucoseTest = hasTestValue("Glucose", data);
-      const ureaTest = hasTestValue("Blood Urea Nitrogen", data);
-      if (!!sodiumTest && !!potassiumTest && !!glucoseTest && !!ureaTest) {
-        const newTest = {
-          count: 1,
-          cpt_id: "Osmolarity",
-          lab_dt: new Date(),
-          name: "Osmolarity (Derived)",
-          unit: "",
-          value: ((1.9 * (sodiumTest.value + potassiumTest.value))
-            + glucoseTest.value + (ureaTest.value * 0.5) + 5).toFixed(1),
-        };
-        tempTestsArray.push(newTest);
-      }
-      const hematocritTest = hasTestValue("Hematocrit", data);
-      const proteinTotalTest = hasTestValue("Protein Total", data);
-      if (!!hematocritTest && !!proteinTotalTest) {
-        const newTest = {
-          count: 1,
-          cpt_id: "ViscosityHighShear",
-          lab_dt: new Date(),
-          name: "Viscosity High Shear (Derived)",
-          unit: "",
-          value: ((0.12 * hematocritTest.value) + (0.17 * ((proteinTotalTest.value * 10) - 2.07))).toFixed(1),
-        };
-        tempTestsArray.push(newTest);
-      }
-      const chlorideTest = hasTestValue("Chloride", data);
-      const carbonDioxideTest = hasTestValue("Carbon Dioxide", data);
-      if (!!sodiumTest && !!chlorideTest && !!carbonDioxideTest) {
-        const newTest = {
-          count: 1,
-          cpt_id: "AnionGapNaClHCO3",
-          lab_dt: new Date(),
-          name: "Anion Gap (Na-Cl-HCO3) (Derived)",
-          unit: "",
-          value: (sodiumTest.value - (chlorideTest.value + carbonDioxideTest.value)).toFixed(1),
-        };
-        tempTestsArray.push(newTest);
-      }
-      tempTestsArray = orderBy(tempTestsArray, (item) => item.name.toLowerCase());
-      setTests([...tempTestsArray]);
-    } else {
-      setTests([]);
+      const tempArray = [];
+      InsightsTests.forEach((test) => {
+        data.forEach((allTest) => {
+          if (test.id === allTest.cpt_id) {
+            tempArray.push({
+              ...allTest,
+              ...test,
+            });
+          }
+        });
+      });
+      setTests([...tempArray]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, gender, patientAge]);
+  }, [data]);
 
   useEffect(() => {
-    addCalculatedTests();
-  }, [addCalculatedTests]);
+    filterRequiredTests();
+  }, [filterRequiredTests]);
 
   const getFlag = (value, functionalRange) => {
     const flag = {};
@@ -179,6 +141,26 @@ const InsightsContent = () => {
       range.value = `${value.range_low} - ${value.range_high}`;
     }
     return range;
+  };
+
+  const renderIcon = (value) => {
+    switch (value) {
+      case 0:
+        return <ArrowDownwardIcon />;
+      case 1:
+        return <ArrowUpwardIcon />;
+      default:
+        return () => { };
+    }
+  };
+
+  const calculateStatus = (flag, icon) => {
+    if ((flag === "low" && icon === 0) || (flag === "high" && icon === 1)) {
+      return (
+        <span className={classes.status}>Yes</span>
+      );
+    }
+    return true;
   };
 
   return (
@@ -214,17 +196,27 @@ const InsightsContent = () => {
                     <TableCell>{range.value}</TableCell>
                     <TableCell>
                       {flag.value}
-                      {flag.icon === "low" && (
-                        <ArrowDownwardIcon />
-                      )}
-                      {flag.icon === "high" && (
-                        <ArrowUpwardIcon />
-                      )}
                     </TableCell>
-                    <TableCell>{row.unit}</TableCell>
-                    <TableCell>{row.unit}</TableCell>
-                    <TableCell>{row.unit}</TableCell>
-                    <TableCell>{row.count}</TableCell>
+                    <TableCell>
+                      {row.ironNormal ? <span className={classes.mr}>N</span> : ""}
+                      {renderIcon(row.iron)}
+                      {calculateStatus(flag.icon, row.iron)}
+                    </TableCell>
+                    <TableCell>
+                      {row.bloodNormal ? <span className={classes.mr}>N</span> : ""}
+                      {renderIcon(row.blood)}
+                      {calculateStatus(flag.icon, row.blood)}
+                    </TableCell>
+                    <TableCell>
+                      {row.inflammationNormal ? <span className={classes.mr}>N</span> : ""}
+                      {renderIcon(row.inflammation)}
+                      {calculateStatus(flag.icon, row.inflammation)}
+                    </TableCell>
+                    <TableCell>
+                      {row.hemolyticNormal ? <span className={classes.mr}>N</span> : ""}
+                      {renderIcon(row.hemolytic)}
+                      {calculateStatus(flag.icon, row.hemolytic)}
+                    </TableCell>
                   </StyledTableRow>
                 );
               })
