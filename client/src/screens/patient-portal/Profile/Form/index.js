@@ -161,6 +161,7 @@ const ProfileForm = () => {
     delete formFields.login_url;
     delete formFields.dob;
     delete formFields.provider;
+    delete formFields.password;
 
 
     // * status is in need to be formated back to it's original state.
@@ -487,6 +488,7 @@ const ProfileForm = () => {
                 {PortalForm.map((item) => (
                   <Grid key={item.name} item md={3}>
                     <TextField
+                      disabled={item.type === "password"} // TODO:: Disabled to avoid updating from profile
                       label={item.label}
                       name={item.name}
                       id={item.id}
