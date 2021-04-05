@@ -263,16 +263,6 @@ router.get(
   [authJwt.verifyToken],
   Patient.getMedications
 );
-router.post(
-  "/patient/:patient_id/medications",
-  [authJwt.verifyToken],
-  Patient.createMedications
-);
-router.put(
-  "/patient/:patient_id/medications/:id",
-  [authJwt.verifyToken],
-  Patient.updateMedications
-);
 router.get(
   "/patient/:patient_id/medications/:medication_id",
   [authJwt.verifyToken],
@@ -283,13 +273,8 @@ router.get(
   [authJwt.verifyToken],
   Patient.getMedicationFavorites
 );
-router.get(
-  "/patient/:patient_id/medication/recents",
-  [authJwt.verifyToken],
-  Patient.getMedicationRecents
-);
 router.delete(
-  "/patient/:patient_id/medications/:drug_id",
+  "/patient/:patient_id/medications/",
   [authJwt.verifyToken],
   Patient.deleteMedications
 );

@@ -9,11 +9,6 @@ router.get(
   [authJwt.verifyToken],
   pharmacyController.getPharmacy
 );
-router.put(
-  "/client-portal/pharmacy/:id",
-  [authJwt.verifyToken],
-  pharmacyController.updatePharmacy
-);
 router.post(
   "/client-portal/pharmacy/search",
   [authJwt.verifyToken],

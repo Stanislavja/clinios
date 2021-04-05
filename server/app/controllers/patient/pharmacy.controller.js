@@ -16,8 +16,7 @@ const getPharmacy = async (req, res) => {
   let $sql;
 
   try {
-    $sql = `select p.id, p.firstname, p.middlename, p.lastname, p.gender, p.dob, p.ssn, p.preferred_name,
-     p.referred_by, p.phone_home, p.phone_cell, p.phone_work, p.email, p.client_id
+    $sql = `select p.id, p.firstname, p.middlename, p.lastname, p.gender, p.dob, p.ssn, p.preferred_name, p.referred_by, p.phone_home, p.phone_cell, p.phone_work, p.email, p.client_id
     , ph.id, ph.name, ph.address, ph.address2, ph.city, ph.state, ph.postal, ph.country, ph.phone, ph.fax
     , ph2.id pharmacy2_id, ph2.name pharmacy2_name, ph2.address pharmacy2_address, ph2.address2 pharmacy2_address2, ph2.city pharmacy2_city,
      ph2.state pharmacy2_state, ph2.postal pharmacy2_postal, ph2.country pharmacy2_country, ph2.phone pharmacy2_phone, ph2.fax pharmacy2_fax
@@ -36,36 +35,6 @@ const getPharmacy = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     errorMessage.message = "Select not successful";
-    return res.status(status.error).send(errorMessage);
-  } finally {
-    await db.close();
-  }
-};
-
-const updatePharmacy = async (req, res) => {
-  const { id } = req.params;
-  const formData = req.body.data;
-  formData.updated = new Date();
-  formData.updated_user_id = req.user_id;
-
-  const db = makeDb(configuration, res);
-  try {
-    const updateResponse = await db.query(
-      `update patient set ? where id=${id}`,
-      [formData]
-    );
-
-    if (!updateResponse.affectedRows) {
-      errorMessage.message = "Update not successful";
-      return res.status(status.notfound).send(errorMessage);
-    }
-
-    successMessage.data = updateResponse;
-    successMessage.message = "Update successful";
-    return res.status(status.created).send(successMessage);
-  } catch (err) {
-    console.log("err", err);
-    errorMessage.message = "Update not successful";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -104,7 +73,6 @@ const searchPharmacy = async (req, res) => {
 
 const Pharmacy = {
   getPharmacy,
-  updatePharmacy,
   searchPharmacy,
 };
 

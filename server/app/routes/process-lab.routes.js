@@ -4,26 +4,25 @@ const ProcessLab = require("../controllers/process-lab.controller.js");
 
 const router = express.Router();
 
-router.get("/labs", [authJwt.verifyToken], ProcessLab.getAll);
-router.get("/labs/:labId", [authJwt.verifyToken], ProcessLab.getLabById);
 router.get("/lab/assign-user", [authJwt.verifyToken], ProcessLab.getAssignUser);
+router.get("/lab/:userId/:labId", [authJwt.verifyToken], ProcessLab.getLabById);
+router.get("/lab/:userId", [authJwt.verifyToken], ProcessLab.getAll);
+router.post("/lab", [authJwt.verifyToken], ProcessLab.createLab);
+router.put("/lab/:labId", [authJwt.verifyToken], ProcessLab.updateLab);
 router.get(
-  "/labs/:labId/values",
-  [authJwt.verifyToken],
-  ProcessLab.getLabValues
-);
-router.get(
-  "/labs/:labId/history",
+  "/lab/histroy/:labId",
   [authJwt.verifyToken],
   ProcessLab.getLabHistory
 );
 router.get(
-  "/labs/:labId/user-history/",
+  "/lab/user-history/:userId",
   [authJwt.verifyToken],
   ProcessLab.getLabUserHistory
 );
-router.post("/labs", [authJwt.verifyToken], ProcessLab.createLab);
-router.put("/labs/:labId", [authJwt.verifyToken], ProcessLab.updateLabStatus);
-router.put("/labs/:labId/update", [authJwt.verifyToken], ProcessLab.updateLab);
+router.get(
+  "/lab/values/:labId",
+  [authJwt.verifyToken],
+  ProcessLab.getLabValues
+);
 
 module.exports = router;

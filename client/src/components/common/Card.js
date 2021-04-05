@@ -12,11 +12,13 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/AddCircleOutline";
-import CancelIcon from "@material-ui/icons/CancelOutlined";
-import CardIcon from "@material-ui/icons/CreditCardOutlined";
-import DesktopIcon from "@material-ui/icons/DesktopMacOutlined";
-import MoreVertIcon from "@material-ui/icons/MoreVertOutlined";
-import SaveIcon from "@material-ui/icons/SaveOutlined";
+import CancelIcon from "@material-ui/icons/Cancel";
+import SaveIcon from "@material-ui/icons/CheckCircle";
+import CardIcon from "@material-ui/icons/CreditCard";
+import DesktopIcon from "@material-ui/icons/DesktopMac";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import SaveLayoutIcon from "@material-ui/icons/SaveOutlined";
+import InsertChartIcon from "@material-ui/icons/InsertChart";
 import { mdiCalendarBlankOutline } from "@mdi/js";
 import Icon from "@mdi/react";
 import clsx from "clsx";
@@ -175,14 +177,21 @@ const PatientCard = (props) => {
           alignItems="center"
           className={`drag-handle 
           ${classes.titleContainer}
-           ${showActions ? classes.leftPadding : classes.fullPadding
-    }`}
+           ${showActions ? classes.leftPadding : classes.fullPadding}`}
         >
           <Typography className={classes.title}>
-            {title}
-            {" "}
-          &nbsp; &nbsp;
+            {title} &nbsp; &nbsp;
           </Typography>
+          {title === "All Tests" && (
+            <>
+              <InsertChartIcon
+                className={classes.icon}
+                onClick={() => {
+                  contentToggleHandler();
+                }}
+              />
+            </>
+          )}
           {title === "Patient" && (
             <>
               <MoreVertIcon className={classes.icon} onClick={handleClick} />
@@ -192,14 +201,16 @@ const PatientCard = (props) => {
               />
               <Icon
                 className={classes.icon}
-                onClick={() => dispatch(togglePatientAppointmentHistoryDialog())}
+                onClick={() =>
+                  dispatch(togglePatientAppointmentHistoryDialog())
+                }
                 path={mdiCalendarBlankOutline}
                 size={1}
               />
             </>
           )}
-          {!!icon
-            && React.createElement(menuIcons[icon], {
+          {!!icon &&
+            React.createElement(menuIcons[icon], {
               onClick: iconHandler,
               className: classes.icon,
             })}
@@ -292,16 +303,16 @@ PatientCard.defaultProps = {
   secondaryButtonText: "Edit",
   icon: null,
   cardInfo: null,
-  primaryButtonHandler: () => { },
-  secondaryButtonHandler: () => { },
-  iconHandler: () => { },
-  searchHandler: () => { },
-  editorSaveHandler: () => { },
-  editorCancelHandler: () => { },
-  updateLayoutHandler: () => { },
-  resetLayoutHandler: () => { },
+  primaryButtonHandler: () => {},
+  secondaryButtonHandler: () => {},
+  iconHandler: () => {},
+  searchHandler: () => {},
+  editorSaveHandler: () => {},
+  editorCancelHandler: () => {},
+  updateLayoutHandler: () => {},
+  resetLayoutHandler: () => {},
   isLayoutUpdated: false,
-  contentToggleHandler: () => { },
+  contentToggleHandler: () => {},
   hasMinHeight: false,
 };
 

@@ -10,7 +10,7 @@ router.get(
   userMessagesController.getUserMessageById
 );
 router.get(
-  "/user/:provider_id/messages",
+  "/user/messages",
   [authJwt.verifyToken],
   userMessagesController.getUserMessage
 );
