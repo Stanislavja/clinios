@@ -14,15 +14,16 @@ import { chunk, orderBy } from "lodash";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import { useHistory } from "react-router-dom";
 
 import Tooltip from "../../../../components/common/CustomTooltip";
+import Dialog from "../../../../components/Dialog";
 import useAuth from "../../../../hooks/useAuth";
 import usePatientContext from "../../../../hooks/usePatientContext";
 import PatientService from "../../../../services/patient.service";
 import { calculatePercentageFlag, calculateFunctionalRange } from "../../../../utils/FunctionalRange";
 import { calculateAge } from "../../../../utils/helpers";
-import Lab from "./Dialog/Lab";
+// import Lab from "./Dialog/Lab";
+import ProcessLab from "../../../Lab";
 
 const useStyles = makeStyles((theme) => ({
   tab: {
@@ -103,7 +104,7 @@ const DocumentsContent = (props) => {
   const { enqueueSnackbar } = useSnackbar();
   const { state } = usePatientContext();
   const classes = useStyles();
-  const [documentName, setDocumentName] = useState("");
+  const [selectedDocument, setSelectedDocument] = useState("");
   const [tabValue, setTabValue] = useState(0);
   const [tableData, setTableData] = useState([]);
   const [isLabModalOpen, setIsLabModalOpen] = useState(false);
@@ -111,7 +112,6 @@ const DocumentsContent = (props) => {
   const { patientId } = state;
   const { gender, dob } = state.patientInfo.data;
   const patientAge = Number(calculateAge(dob).split(" ")[0]);
-  const history = useHistory();
   const { user } = useAuth();
 
   const fetchDocuments = useCallback((selectedTab) => {
@@ -164,12 +164,12 @@ const DocumentsContent = (props) => {
   };
 
   const handleDocumentClick = (doc) => {
-    setDocumentName(doc.filename);
-    // setIsLabModalOpen(true);
-    history.push(`/lab/${user.id}`, { // user.id as per documentation
-      fromHome: false,
-      documentId: doc.id,
-    });
+    setSelectedDocument(doc);
+    setIsLabModalOpen(true);
+    // history.push(`/lab/${user.id}`, { // user.id as per documentation
+    //   fromHome: false,
+    //   documentId: doc.id,
+    // });
   };
 
   const handleChange = (newValue) => {
@@ -266,6 +266,24 @@ const DocumentsContent = (props) => {
 
   return (
     <>
+      {isLabModalOpen
+        && (
+          <Dialog
+            fullHeight
+            open={isLabModalOpen}
+            title={selectedDocument.filename}
+            message={(
+              <ProcessLab
+                fromHome={false}
+                userId={user.id}
+                documentId={selectedDocument.id}
+              />
+            )}
+            cancelForm={() => setIsLabModalOpen(false)}
+            size="xl"
+            hideActions
+          />
+        )}
       <Grid container>
         <Typography
           className={tabValue === 0 ? classes.tabSelected : classes.tab}
@@ -408,15 +426,6 @@ const DocumentsContent = (props) => {
           </TableBody>
         </Table>
       </TableContainer>
-      {isLabModalOpen
-        && (
-          <Lab
-            open={isLabModalOpen}
-            documentName={documentName}
-            patientId={patientId}
-            handleClose={() => setIsLabModalOpen(false)}
-          />
-        )}
     </>
   );
 };
