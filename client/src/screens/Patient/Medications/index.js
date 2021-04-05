@@ -36,7 +36,7 @@ import {
   NewDrugFormFields, GenericOptions, InputOptions, RefillsOptions,
   DEFAULT_AMOUNT, DEFAULT_EXPIRY, DEFAULT_FREQUENCY, DEFAULT_REFILLS,
 } from "../../../static/medicationForm";
-import { drugFrequencyLabelToCode } from "../../../utils/helpers";
+import { drugFrequencyLabelToCode, medicationFormToLabel } from "../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
   ml2: {
@@ -257,7 +257,7 @@ const Medications = (props) => {
         const strengthOptions = drugStrengths.length
           ? drugStrengths.map((option) => (
             <MenuItem key={option.id} value={option.id}>
-              {`${option.strength} ${option.unit}`}
+              {`${option.strength} ${option.unit} ${medicationFormToLabel(option.form)}`}
             </MenuItem>
           ))
           : (
