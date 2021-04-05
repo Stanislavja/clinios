@@ -13,7 +13,7 @@ import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import moment from "moment";
 
 import usePatientContext from "../../../../hooks/usePatientContext";
-import { InsightsTests } from "../../../../static/insightsTests";
+import { InsightsTests, MissingTests } from "../../../../static/insightsTests";
 import { calculateFunctionalRange, calculatePercentageFlag } from "../../../../utils/FunctionalRange";
 import { calculateAge } from "../../../../utils/helpers";
 
@@ -103,7 +103,7 @@ const InsightsContent = () => {
           }
         });
       });
-      setTests([...tempArray]);
+      setTests([...tempArray, ...MissingTests]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
