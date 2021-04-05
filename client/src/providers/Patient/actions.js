@@ -64,8 +64,9 @@ import {
   TOGGLE_REQUISITIONS_EXPAND_DIALOG,
   TOGGLE_DOCUMENTS_EXPAND_DIALOG,
   TOGGLE_TESTS_EXPAND_DIALOG,
+  TOGGLE_TESTS_CHART_EXPAND_DIALOG,
+  SET_TEST_NAME,
 } from "./types";
-
 
 export const setEncounter = (encounter) => ({
   type: SET_SELECTED_ENCOUNTER,
@@ -75,7 +76,6 @@ export const setEncounter = (encounter) => ({
 export const resetEncounter = () => ({
   type: RESET_SELECTED_ENCOUNTER,
 });
-
 
 export const setEditorText = (value) => ({
   type: SET_EDITOR_TEXT,
@@ -160,7 +160,6 @@ export const setMessageType = (message) => ({
   type: SET_MESSAGE_TYPE,
   payload: message,
 });
-
 
 export const setRequisitions = (data) => ({
   type: SET_REQUISITIONS,
@@ -340,4 +339,13 @@ export const toggleDocumentsExpandDialog = () => ({
 
 export const toggleTestsExpandDialog = () => ({
   type: TOGGLE_TESTS_EXPAND_DIALOG,
+});
+
+export const toggleTestsChartExpandDialog = () => ({
+  type: TOGGLE_TESTS_CHART_EXPAND_DIALOG,
+});
+
+export const setTestName = (testName) => ({
+  type: SET_TEST_NAME,
+  payload: testName,
 });

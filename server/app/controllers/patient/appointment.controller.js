@@ -76,22 +76,18 @@ const getAppointmentTypes = async (req, res) => {
 };
 
 const createAppointment = async (req, res) => {
-  const { start_dt, end_dt, provider, ApptStatus, patient } = req.body.data;
+  const { start_dt, end_dt, provider, ApptStatus } = req.body.data;
 
   const db = makeDb(configuration, res);
   try {
     const insertResponse = await db.query(
-      `insert into user_calendar (client_id, user_id, patient_id, start_dt, end_dt, status, created, created_user_id) values (${
+      `insert into user_calendar (client_id, user_id, start_dt, end_dt, status, created, created_user_id) values (${
         req.client_id
-      }, ${provider.user_id}, ${patient.id}, '${moment(
-        start_dt,
+      }, ${provider.user_id},'${moment(start_dt).format(
         "YYYY-MM-DD HH:mm:ss"
-      ).format("YYYY-MM-DD HH:mm:ss")}', '${moment(
-        end_dt,
+      )}', '${moment(end_dt).format(
         "YYYY-MM-DD HH:mm:ss"
-      ).format("YYYY-MM-DD HH:mm:ss")}', '${ApptStatus}', now(), ${
-        req.user_id
-      })`
+      )}', '${ApptStatus}', now(), ${req.user_id})`
     );
     if (!insertResponse.affectedRows) {
       errorMessage.message = "Insert not successful";
