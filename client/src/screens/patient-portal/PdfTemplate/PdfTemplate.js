@@ -5,17 +5,22 @@ import React from "react";
 import {
   Typography, Grid, createStyles, withStyles, Box,
 } from "@material-ui/core";
+import clsx from "clsx";
 import PropTypes from "prop-types";
 
-import { formatDate } from "../../../utils/helpers";
+import colors from "../../../theme/colors";
+import { formatPdfDate, formatPhoneNumber } from "../../../utils/helpers";
 
 const styles = (theme) => createStyles({
   root: {
-    padding: 20,
-    minHeight: "70vh",
+      // minHeight: "70vh",
+    paddingTop: 10,
+  },
+  questDiagnosticHeading: {
+    color: colors.headingBlue,
   },
   coverRoot: {
-    minHeight: "85%",
+    minHeight: "92%",
   },
   pscHoldOrderText: {
     color: theme.palette.warning.main,
@@ -46,12 +51,25 @@ const styles = (theme) => createStyles({
   mt2: {
     marginTop: 2,
   },
+  mt10: {
+    marginTop: 10,
+  },
+  footer: {
+    marginTop: 20,
+  },
 });
 
 class PdfTemplate extends React.Component {
   render() {
     const { classes, testProfileInfo, profileTests } = this.props;
-    if (!testProfileInfo || !profileTests) return <Box>Please wait ...</Box>;
+    if (!testProfileInfo || !profileTests) {
+      return (
+        <Box>
+          {/* pdf */}
+        </Box>
+      );
+    }
+
     return (
       <Box className={classes.root}>
         <Box className={classes.coverRoot}>
@@ -60,10 +78,10 @@ class PdfTemplate extends React.Component {
               <img src="https://content.ultalabtests.com/static/images/Logo.png" alt="logo" />
             </Grid>
             <Grid item>
-              <Typography variant="h4" color="primary">
+              <Typography variant="h5" className={classes.questDiagnosticHeading}>
                 Quest Diagnostics Incorporated
               </Typography>
-              <Typography variant="h2" className={classes.pscHoldOrderText}>
+              <Typography variant="h1" className={classes.pscHoldOrderText}>
                 PSC HOLD ORDER
               </Typography>
             </Grid>
@@ -77,7 +95,7 @@ class PdfTemplate extends React.Component {
           <Grid container justify="space-between" className={classes.clientAndPatientInfo}>
             <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
               <Typography className={classes.infoSpace}>
-                Client #
+                Client&nbsp;#:&nbsp;
                 {testProfileInfo.ulta_order}
               </Typography>
               <Typography className={classes.infoSpace}>Ultra Lab Tests, LLC</Typography>
@@ -88,7 +106,7 @@ class PdfTemplate extends React.Component {
               <Typography className={classes.infoSpace}>Patient Information </Typography>
               <Typography className={classes.infoSpace}>
                 {testProfileInfo.firstname}
-                ,
+                ,&nbsp;
                 {testProfileInfo.lastname}
               </Typography>
               <Typography className={classes.infoSpace}>
@@ -97,14 +115,14 @@ class PdfTemplate extends React.Component {
               </Typography>
               <Typography className={classes.infoSpace}>
                 {testProfileInfo.city}
-                ,
+                ,&nbsp;
                 {testProfileInfo.state}
                 {" "}
                 {testProfileInfo.postal}
               </Typography>
               <Typography className={classes.infoSpace}>
-                Phone:
-                {testProfileInfo.phone_home}
+                Phone:&nbsp;
+                {formatPhoneNumber(testProfileInfo.phone_home).replaceAll(" ", "-")}
               </Typography>
             </Grid>
           </Grid>
@@ -114,8 +132,8 @@ class PdfTemplate extends React.Component {
           </Box>
 
           <Box className={classes.mt5}>
-            <Typography variant="h4">
-              IMPORTANT – Please forward specimens to Quest Diagnostics National Laboratory
+            <Typography variant="h5" style={{ fontWeight: 700 }}>
+              IMPORTANT – Please forward specimens to Quest Diagnostics National Laboratory.
             </Typography>
           </Box>
           {/* table heading */}
@@ -124,7 +142,7 @@ class PdfTemplate extends React.Component {
             <Grid
               item
               container
-              justify="center"
+              justify="flex-start"
               direction="column"
               xs={6}
               sm={6}
@@ -133,8 +151,10 @@ class PdfTemplate extends React.Component {
               xl={6}
               className={classes.tableHeading}
             >
-              <Typography variant="h4">Order Physician</Typography>
-              <Typography className={classes.ml5}>NPI: 1346417086 Bauer, Michael</Typography>
+              <Typography variant="h5">Ordering Physician</Typography>
+              <Typography className={clsx(classes.ml5, classes.mt10)}>
+                NPI: &nbsp;&nbsp;1346417086&nbsp;&nbsp;&nbsp; Bauer,&nbsp;Michael
+              </Typography>
             </Grid>
             <Grid
               item
@@ -148,34 +168,35 @@ class PdfTemplate extends React.Component {
               xl={6}
               className={classes.tableHeading}
             >
-              <Typography variant="h4">Data Information</Typography>
-              <Grid container className={classes.ml5}>
+              <Typography variant="h5">Data Information</Typography>
+              <Grid container className={clsx(classes.ml5)} style={{ paddingTop: 5 }}>
                 <Grid item>
                   <Typography variant="h5">
-                    Pat ID #
+                    Pat ID #:&nbsp;
                     {testProfileInfo.patient_id}
                   </Typography>
                   <Typography variant="h5">
-                    DOB:
-                    {formatDate(testProfileInfo.dob)}
+                    DOB: &nbsp;
+                    {formatPdfDate(testProfileInfo.dob)}
                   </Typography>
                 </Grid>
-                <Grid item>
+                <Grid item style={{ marginLeft: 4 }}>
                   <Typography variant="h5">
-                    Pat Name:
+                    &nbsp;Pat Name:
                     {" "}
                     {testProfileInfo.firstname}
-                    ,
+                    ,&nbsp;
                     {testProfileInfo.lastname}
                   </Typography>
                   <Grid container justify="space-between">
                     <Typography variant="h5" style={{ margin: "0 5px" }}>
-                      Sex:
+                      Sex:&nbsp;
                       {" "}
                       {testProfileInfo.gender}
+                      &nbsp;&nbsp;
                     </Typography>
                     <Typography variant="h5">
-                      Order #
+                      Order #:&nbsp;
                       {testProfileInfo.ulta_order}
                     </Typography>
                   </Grid>
@@ -190,11 +211,11 @@ class PdfTemplate extends React.Component {
               <Grid container>
                 <Typography variant="h5">Responsible Party</Typography>
                 <Typography variant="h5" style={{ marginLeft: 10 }}>
-                  Bill Type : Client
+                  Bill Type: Client
                 </Typography>
               </Grid>
               <Typography className={classes.infoSpace} variant="h4">
-                Client #
+                Client #:&nbsp;
                 {" "}
                 {testProfileInfo.ulta_order}
               </Typography>
@@ -231,23 +252,29 @@ class PdfTemplate extends React.Component {
           <Box className={classes.mt20}>
             <Typography variant="h4">Profiles/Tests</Typography>
           </Box>
-          <Box style={{ marginTop: 15, paddingLeft: 10 }}>
+          <Box style={{ marginTop: 15 }}>
+
             {profileTests.map((test) => (
-              <Typography component="p" key={test.quest_id} style={{ marginTop: 3 }}>
-                {test.quest_id}
-                {" "}
-                -
-                {test.quest_name}
-              </Typography>
+              <Grid
+                container
+                component="p"
+                key={test.quest_id}
+                style={{ marginTop: 3, width: "100vw", fontSize: 12 }}
+              >
+                <span style={{ minWidth: 40, textAlign: "end" }}>{test.quest_id}</span>
+                <span style={{ margin: "0 5px" }}>-</span>
+                <span>{test.quest_name}</span>
+              </Grid>
             ))}
           </Box>
         </Box>
+
         {/* footer */}
         <Box className={classes.footer}>
-          <Typography variant="h4" color="error">
+          <Typography variant="h6" color="error" style={{ fontSize: 12 }}>
             Bring this sheet to the Patient Service Center. See Attached Patient Instructions.
           </Typography>
-          <Typography component="p">
+          <Typography component="p" style={{ fontSize: 9 }}>
             By submitting this Requisition form to the patient service center and or having your specimen
             collected, you agree to the Ulta Lab Tests Patient Agreement, which is located in your patient
             portal. If you do not agree to the Patient Agreement, do not use this Requisition form or the Ulta

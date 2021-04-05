@@ -135,7 +135,7 @@ const labRequitions = {
   getLabRequitions,
   getTestList,
   getTestProfileInfo,
-  getProfileTests
+  getProfileTests,
 };
 
 module.exports = labRequitions;

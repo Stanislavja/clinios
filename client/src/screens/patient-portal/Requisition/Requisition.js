@@ -46,6 +46,33 @@ const Encounters = () => {
   const [profileTests, setProfileTests] = useState();
 
   const handlePrint = useReactToPrint({
+    pageStyle: `
+    @media print
+    {
+     
+      footer#footer-sections a {
+        background-image: unset;
+      }
+
+      @page {
+        margin-top: 0;
+        
+        @bottom-center {
+          content: "Page " counter(page) " of " counter(pages);
+        }
+      }
+
+      @page{
+        @bottom-center {
+          content: "Page " counter(page) " of " counter(pages);
+        }
+      }
+      
+      
+       body  {
+        
+       }
+    } `,
     content: () => componentRef.current,
   });
 
@@ -64,7 +91,6 @@ const Encounters = () => {
     const profileTestsRes = await PatientPortalService.getProfileTests(id);
     setTestProfileInfo(testProfileInfoRes.data[0]);
     setProfileTests(profileTestsRes.data);
-
     handlePrint();
   };
 
@@ -98,38 +124,14 @@ const Encounters = () => {
       ))}
 
       {/* <button onClick={handlePrint}>Print this out!!!</button> */}
-      <div style={{ display: "none" }}>
-        <PdfTemplate testProfileInfo={testProfileInfo} profileTests={profileTests} ref={componentRef} />
-      </div>
-      {/* <Grid item lg={3} md={4} sm={6} xs={12}>
-        <form onSubmit={onFormSubmit}>
-          <TextField
-            select
-            required
-            variant="outlined"
-            label="Select Lab Requisition"
-            margin="dense"
-            fullWidth
-            value={selectedRequisition}
-            onChange={(e) => setSelectedRequisition(e.target.value)}
-          >
-            {requisitions.length ? (
-              requisitions.map((option) => (
-                <MenuItem key={option.id} value={option.id}>
-                  {option.lab}
-                </MenuItem>
-              ))
-            ) : (
-              <MenuItem value="">No Requisitions available</MenuItem>
-            )}
-          </TextField>
-        </form>
-      </Grid> */}
-      {/* <Grow
-        in={Boolean(selectedRequisition)}
-        style={{ transformOrigin: "0 0 0" }}
-        {...(selectedRequisition ? { timeout: 500 } : {})}
-      ></Grow> */}
+      {testProfileInfo && profileTests && (
+        <div style={{
+          marginTop: 50, border: "1px solid black", overflow: "hidden", padding: 10,
+        }}
+        >
+          <PdfTemplate testProfileInfo={testProfileInfo} profileTests={profileTests} ref={componentRef} />
+        </div>
+      )}
     </div>
   );
 };
