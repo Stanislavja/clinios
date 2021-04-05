@@ -122,7 +122,7 @@ export default function Messages() {
     setSelectedMessage(msg);
     setSubject(msg.subject);
     setMessage(msg.message);
-    setSelectedUser(msg.user_id_to);
+    setSelectedUser(msg.user_id_from);
     setOpen(true);
   };
 
