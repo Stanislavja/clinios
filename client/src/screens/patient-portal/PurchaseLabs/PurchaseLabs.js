@@ -14,6 +14,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import { useSnackbar } from "notistack";
 
 import useAuth from "../../../hooks/useAuth";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
@@ -58,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
 
 const PurchaseLabs = () => {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const { lastVisitedPatient } = useAuth();
   const [selected, setSelected] = useState([]);
   const [paymentMethods, setPaymentMethods] = useState([]);
@@ -118,6 +120,21 @@ const PurchaseLabs = () => {
     }
     setSelected(newSelected);
     calculateTotal(newSelected);
+  };
+
+  const handleOnSubmit = () => {
+    const payload = {
+      data: {
+        payment_method_id: selectedPaymentMethod,
+        amount: total,
+        cpt_ids: selected,
+      },
+    };
+    PurchaseLabsService.create(payload).then(() => {
+      enqueueSnackbar(`Lab purchased successfully!`, {
+        variant: "success",
+      });
+    });
   };
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
@@ -193,7 +210,7 @@ const PurchaseLabs = () => {
           >
             <option aria-label="None" value="" />
             {paymentMethods.map((pm) => (
-              <option key={pm.id} value={pm.type}>
+              <option key={pm.id} value={pm.id}>
                 {paymentMethodType(pm.type)}
               </option>
             ))}
@@ -203,7 +220,7 @@ const PurchaseLabs = () => {
           variant="outlined"
           color="primary"
           size="medium"
-          onClick={() => alert("purchase")} // TODO:: incomplete
+          onClick={() => handleOnSubmit()}
           className={classes.purchaseButton}
         >
           Purchase
