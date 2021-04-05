@@ -28,11 +28,11 @@ const NewMessage = (props) => {
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuth();
   const {
-    isOpen, onClose,
+    isOpen, onClose, fileName,
   } = props;
 
   const [formFields, setFormFields] = useState({
-    subject: "",
+    subject: fileName,
     message: "",
   });
 
@@ -69,7 +69,6 @@ const NewMessage = (props) => {
           <Grid className={classes.formInput} item md={4}>
             <TextField
               required
-              autoFocus
               variant="standard"
               name="subject"
               id="subject"
@@ -88,6 +87,7 @@ const NewMessage = (props) => {
           <Grid className={classes.formInput} item md={12}>
             <TextField
               required
+              autoFocus
               variant="outlined"
               name="message"
               id="message"
@@ -121,6 +121,7 @@ const NewMessage = (props) => {
 NewMessage.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  fileName: PropTypes.string.isRequired,
 };
 
 export default NewMessage;
