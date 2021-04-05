@@ -18,6 +18,7 @@ import CardIcon from "@material-ui/icons/CreditCard";
 import DesktopIcon from "@material-ui/icons/DesktopMac";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SaveLayoutIcon from "@material-ui/icons/SaveOutlined";
+import InsertChartIcon from "@material-ui/icons/InsertChart";
 import { mdiCalendarBlankOutline } from "@mdi/js";
 import Icon from "@mdi/react";
 import clsx from "clsx";
@@ -178,11 +179,12 @@ const PatientCard = (props) => {
             showActions ? classes.leftPadding : classes.fullPadding
           }`}
         >
-          <Typography className={classes.title}>
-            {title}
-            {" "}
-&nbsp; &nbsp;
-          </Typography>
+          <Typography className={classes.title}>{title} &nbsp; &nbsp;</Typography>
+          {title === "All Tests" && (
+            <>
+              <InsertChartIcon className={classes.icon} onClick={() => {contentToggleHandler();}} />
+            </>
+          )}
           {title === "Patient" && (
             <>
               <MoreVertIcon className={classes.icon} onClick={handleClick} />

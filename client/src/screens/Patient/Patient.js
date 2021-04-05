@@ -63,6 +63,7 @@ import {
   toggleRequisitionDialog,
   toggleRequisitionExpandDialog,
   toggleTestsExpandDialog,
+  toggleTestsChartExpandDialog,
   toggleDiagnosesDialog,
   toggleDiagnosesExpandDialog,
   setDiagnosesStatus,
@@ -73,6 +74,7 @@ import {
   togglePaymentDialog,
   togglePatientAppointmentHistoryDialog,
   resetSelectedMessage,
+  setTestName,
 } from "../../providers/Patient/actions";
 import initialState from "../../providers/Patient/initialState";
 import PatientService from "../../services/patient.service";
@@ -140,6 +142,7 @@ import TestsCardContent from "./Tests/content";
 import "react-grid-layout/css/styles.css";
 // import "react-resizable/css/styles.css";
 import "../../reactGridLayout.css";
+import TestGraph from "../TestGraph/TestGraph";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -219,6 +222,10 @@ const Patient = () => {
     return height;
   };
 
+  const changeTestGraphTitle = (title) =>{
+    if(title)
+    dispatch(setTestName(title))
+  }
   const generateLayout = () => {
     const y = 4;
     const firstlayout = FirstColumnPatientCards.map((item) => ({
@@ -1223,6 +1230,18 @@ const Patient = () => {
           fullHeight
         />
       )}
+      {!!tests.expandChartDialog && (
+        <Dialog
+          open={tests.expandChartDialog}
+          title={tests.testName}
+          message={<TestGraph changeTitle={changeTestGraphTitle}/>}
+          applyForm={() => dispatch(toggleTestsChartExpandDialog())}
+          cancelForm={() => dispatch(toggleTestsChartExpandDialog())}
+          hideActions
+          size="lg"
+          fullHeight
+        />
+      )}
 
       <Grid className={classes.main}>
         {!hasPatientIderror && (
@@ -1363,7 +1382,7 @@ const Patient = () => {
                 updateMinHeight={updateMinHeight}
               />
             </Grid>
-            <Grid key="All Tests">
+            <Grid key="All Tests"> 
               <Card
                 title="All Tests"
                 data={<TestsCardContent />}
@@ -1371,6 +1390,7 @@ const Patient = () => {
                 primaryButtonText="Expand"
                 secondaryButtonText={null}
                 showSearch={false}
+                contentToggleHandler={() => dispatch(toggleTestsChartExpandDialog())}
                 primaryButtonHandler={() => dispatch(toggleTestsExpandDialog())}
                 updateMinHeight={updateMinHeight}
               />

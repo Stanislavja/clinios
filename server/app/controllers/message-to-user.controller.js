@@ -35,11 +35,9 @@ const getUserMessageById = async (req, res) => {
 
 const getUserMessage = async (req, res) => {
   const db = makeDb(configuration, res);
-  const { provider_id } = req.params;
   try {
     const dbResponse = await db.query(
-      `/*Message To User*/
-      select m.id, m.created
+      `select m.id, m.created
       , concat(p.firstname, ' ', p.lastname) patient_from_name
       , concat(u.firstname, ' ', u.lastname) user_to_name
       , m.status, m.subject, m.message, m.note_assign
@@ -53,11 +51,11 @@ const getUserMessage = async (req, res) => {
           where m.id=(
               select min(m.id) id
               from message m
-              where m.user_id_to=${provider_id}
+              where m.user_id_to=${req.user_id}
               and m.status='O'
               )
       )
-      and m.user_id_to=${provider_id}
+      and m.user_id_to=${req.user_id}
       and m.status='O'
       order by m.created
       limit 10

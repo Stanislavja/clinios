@@ -79,7 +79,6 @@ app.use(baseAPIPath, require("./app/routes/patient/appointment.routes"));
 app.use(baseAPIPath, require("./app/routes/patient/invoice.routes"));
 app.use(baseAPIPath, require("./app/routes/patient/prescription.routes"));
 app.use(baseAPIPath, require("./app/routes/patient/lab_requisitions.routes"));
-app.use(baseAPIPath, require("./app/routes/patient/purchase-labs.routes"));
 
 app.use(baseAPIPath, require("./app/routes/myself.routes"));
 app.use(baseAPIPath, require("./app/routes/index.routes"));
