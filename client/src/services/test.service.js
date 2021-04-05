@@ -9,19 +9,28 @@ class Tests {
   }
 
   getTestCptName(cptId) {
-    return axios.get(`${API_BASE}/tests/page-title/${cptId}`, { headers: authHeader() });
+    return axios.get(`${API_BASE}/tests/page-title/${cptId}`, {
+      headers: authHeader(),
+    });
   }
 
   getLabCpt(patientId) {
-    return axios.get(`${API_BASE}/tests/lab-cpt/${patientId}`, { headers: authHeader() });
+    return axios.get(`${API_BASE}/tests/lab-cpt/${patientId}`, {
+      headers: authHeader(),
+    });
   }
 
   getTestGraph(patientId, labId) {
-    return axios.get(`${API_BASE}/tests/graph/${patientId}/${labId}`, { headers: authHeader() });
+    return axios.get(`${API_BASE}/tests/graph/${patientId}/${labId}`, {
+      headers: authHeader(),
+    });
   }
 
   getConventionalRange(patientId, cptId) {
-    return axios.get(`${API_BASE}/tests/conventionalrange/${patientId}/${cptId}`, { headers: authHeader() });
+    return axios.get(
+      `${API_BASE}/tests/conventionalrange/${patientId}/${cptId}`,
+      { headers: authHeader() }
+    );
   }
 }
 

@@ -146,43 +146,57 @@ class Patient {
   // encounters billing APIs
   getEncountersBilling(patientId, encounterId) {
     return axios
-      .get(`${API_BASE}/patient/${patientId}/encounters/${encounterId}/billing`, {
-        headers: authHeader(),
-      })
+      .get(
+        `${API_BASE}/patient/${patientId}/encounters/${encounterId}/billing`,
+        {
+          headers: authHeader(),
+        }
+      )
       .then((res) => res.data);
   }
 
   geEncountersBillingDiagnoses(patientId, encounterId) {
     return axios
-      .get(`${API_BASE}/patient/${patientId}/encounters/${encounterId}/billing/diagnoses`, {
-        headers: authHeader(),
-      })
+      .get(
+        `${API_BASE}/patient/${patientId}/encounters/${encounterId}/billing/diagnoses`,
+        {
+          headers: authHeader(),
+        }
+      )
       .then((res) => res.data);
   }
 
   geEncountersBillingProcedures(patientId, encounterId) {
     return axios
-      .get(`${API_BASE}/patient/${patientId}/encounters/${encounterId}/billing/procedsures`, {
-        headers: authHeader(),
-      })
+      .get(
+        `${API_BASE}/patient/${patientId}/encounters/${encounterId}/billing/procedsures`,
+        {
+          headers: authHeader(),
+        }
+      )
       .then((res) => res.data);
   }
 
   geEncountersBillingPayments(patientId, encounterId) {
     return axios
-      .get(`${API_BASE}/patient/${patientId}/encounters/${encounterId}/billing/payment`, {
-        headers: authHeader(),
-      })
+      .get(
+        `${API_BASE}/patient/${patientId}/encounters/${encounterId}/billing/payment`,
+        {
+          headers: authHeader(),
+        }
+      )
       .then((res) => res.data);
   }
 
   createEncountersBillingPayments(patientId, encounterId, reqBody) {
     return axios
-      .post(`${API_BASE}/patient/${patientId}/encounters/${encounterId}/billing/payment`,
+      .post(
+        `${API_BASE}/patient/${patientId}/encounters/${encounterId}/billing/payment`,
         reqBody,
         {
           headers: authHeader(),
-        })
+        }
+      )
       .then((res) => res.data);
   }
 
@@ -192,7 +206,7 @@ class Patient {
       data,
       {
         headers: authHeader(),
-      },
+      }
     );
   }
 
@@ -202,23 +216,29 @@ class Patient {
       data,
       {
         headers: authHeader(),
-      },
+      }
     );
   }
 
   getEncountersPrescriptions(patient_id, encounter_id) {
     return axios
-      .get(`${API_BASE}/patient/${patient_id}/encounters/${encounter_id}/plan/new-prescription/recent`, {
-        headers: authHeader(),
-      })
+      .get(
+        `${API_BASE}/patient/${patient_id}/encounters/${encounter_id}/plan/new-prescription/recent`,
+        {
+          headers: authHeader(),
+        }
+      )
       .then((res) => res.data);
   }
 
   getEncountersRecentDiagnosesICDs(patientId, encounterId) {
     return axios
-      .get(`${API_BASE}/patient/${patientId}/encounters/${encounterId}/diagnoses/recent-icds`, {
-        headers: authHeader(),
-      })
+      .get(
+        `${API_BASE}/patient/${patientId}/encounters/${encounterId}/diagnoses/recent-icds`,
+        {
+          headers: authHeader(),
+        }
+      )
       .then((res) => res.data);
   }
 
@@ -232,33 +252,46 @@ class Patient {
 
   getEncountersPrescriptionsDrugsFrequencies(patientId, encounterId) {
     return axios
-      .get(`${API_BASE}/patient/${patientId}/encounters/${encounterId}/plan/new-prescriptions/frequencies`, {
-        headers: authHeader(),
-      })
+      .get(
+        `${API_BASE}/patient/${patientId}/encounters/${encounterId}/plan/new-prescriptions/frequencies`,
+        {
+          headers: authHeader(),
+        }
+      )
       .then((res) => res.data);
   }
 
   getEncountersPrescriptionsDrugsStrengths(patientId, encounterId, drugId) {
     // eslint-disable-next-line max-len
-    return axios.get(`${API_BASE}/patient/${patientId}/encounters/${encounterId}/plan/new-prescriptions/${drugId}/strengths`, {
-      headers: authHeader(),
-    })
+    return axios
+      .get(
+        `${API_BASE}/patient/${patientId}/encounters/${encounterId}/plan/new-prescriptions/${drugId}/strengths`,
+        {
+          headers: authHeader(),
+        }
+      )
       .then((res) => res.data);
   }
 
   getFavoriteTests(patient_id, encounter_id) {
     return axios
-      .get(`${API_BASE}/patient/${patient_id}/encounters/${encounter_id}/new-lab/favorites/?tab=All`, {
-        headers: authHeader(),
-      })
+      .get(
+        `${API_BASE}/patient/${patient_id}/encounters/${encounter_id}/new-lab/favorites/?tab=All`,
+        {
+          headers: authHeader(),
+        }
+      )
       .then((res) => res.data);
   }
 
   getOrderedTests(patient_id, encounter_id) {
     return axios
-      .get(`${API_BASE}/patient/${patient_id}/encounters/${encounter_id}/new-lab/test-ordered`, {
-        headers: authHeader(),
-      })
+      .get(
+        `${API_BASE}/patient/${patient_id}/encounters/${encounter_id}/new-lab/test-ordered`,
+        {
+          headers: authHeader(),
+        }
+      )
       .then((res) => res.data);
   }
 
@@ -272,9 +305,12 @@ class Patient {
 
   getLabortories(patient_id, encounter_id) {
     return axios
-      .get(`${API_BASE}/patient/${patient_id}/encounters/${encounter_id}/new-lab/laboratories`, {
-        headers: authHeader(),
-      })
+      .get(
+        `${API_BASE}/patient/${patient_id}/encounters/${encounter_id}/new-lab/laboratories`,
+        {
+          headers: authHeader(),
+        }
+      )
       .then((res) => res.data);
   }
 
@@ -337,9 +373,13 @@ class Patient {
 
   searchTests(patientId, data) {
     return axios
-      .post(`${API_BASE}/patient/${patientId}/requisitions/search-tests`, data, {
-        headers: authHeader(),
-      })
+      .post(
+        `${API_BASE}/patient/${patientId}/requisitions/search-tests`,
+        data,
+        {
+          headers: authHeader(),
+        }
+      )
       .then((res) => res.data);
   }
 
@@ -469,7 +509,7 @@ class Patient {
       data,
       {
         headers: authHeader(),
-      },
+      }
     );
   }
 
@@ -479,7 +519,7 @@ class Patient {
       data,
       {
         headers: authHeader(),
-      },
+      }
     );
   }
 
@@ -492,9 +532,13 @@ class Patient {
   }
 
   updateMessage(patientId, messageId, data) {
-    return axios.put(`${API_BASE}/patient/${patientId}/messages/${messageId}`, data, {
-      headers: authHeader(),
-    });
+    return axios.put(
+      `${API_BASE}/patient/${patientId}/messages/${messageId}`,
+      data,
+      {
+        headers: authHeader(),
+      }
+    );
   }
 
   updateDiagnoses(patient_id, icd_id, data) {
@@ -503,14 +547,18 @@ class Patient {
       data,
       {
         headers: authHeader(),
-      },
+      }
     );
   }
 
   updateMedication(patientId, medicationId, data) {
-    return axios.put(`${API_BASE}/patient/${patientId}/medications/${medicationId}`, data, {
-      headers: authHeader(),
-    });
+    return axios.put(
+      `${API_BASE}/patient/${patientId}/medications/${medicationId}`,
+      data,
+      {
+        headers: authHeader(),
+      }
+    );
   }
 
   // create methods
@@ -520,7 +568,7 @@ class Patient {
       data,
       {
         headers: authHeader(),
-      },
+      }
     );
   }
 
@@ -590,7 +638,7 @@ class Patient {
       `${API_BASE}/patient/${patientId}/allergies/${drugId}`,
       {
         headers: authHeader(),
-      },
+      }
     );
   }
 
@@ -599,7 +647,7 @@ class Patient {
       `${API_BASE}/patient/${patientId}/encounters/${encounterId}`,
       {
         headers: authHeader(),
-      },
+      }
     );
   }
 
@@ -608,7 +656,7 @@ class Patient {
       `${API_BASE}/patient/patient-handout/${patientId}/${handoutId}`,
       {
         headers: authHeader(),
-      },
+      }
     );
   }
 
@@ -617,7 +665,7 @@ class Patient {
       `${API_BASE}/patient/${patientId}/handouts/${handoutId}`,
       {
         headers: authHeader(),
-      },
+      }
     );
   }
 
@@ -627,27 +675,27 @@ class Patient {
       body,
       {
         headers: authHeader(),
-      },
+      }
     );
   }
 
   deleteDiagnoses(patientId, icdId) {
-    return axios.delete(
-      `${API_BASE}/patient/${patientId}/diagnoses/${icdId}`,
-      {
-        headers: authHeader(),
-      },
-    );
-  }
-
-  deleteMedications(patientId, medicationId) {
-    return axios.delete(`${API_BASE}/patient/${patientId}/medications/${medicationId}`, {
+    return axios.delete(`${API_BASE}/patient/${patientId}/diagnoses/${icdId}`, {
       headers: authHeader(),
     });
   }
 
-  deleteRequisitions(patientId, requisitionId) {
-    return axios.delete(`${API_BASE}/patient/${patientId}/requisitions/${requisitionId}`, {
+  deleteMedications(patientId, medicationId) {
+    return axios.delete(
+      `${API_BASE}/patient/${patientId}/medications/${medicationId}`,
+      {
+        headers: authHeader(),
+      }
+    );
+  }
+
+  deleteRequisitions(patientId, reqBody) {
+    return axios.delete(`${API_BASE}/patient/${patientId}/requisitions`, {
       headers: authHeader(),
     });
   }
@@ -661,9 +709,10 @@ class Patient {
   }
 
   createPaymentMethod(patientId, data) {
-    return axios.post(`${API_BASE}/patient/${patientId}/payment-methods`, data, {
-      headers: authHeader(),
-    })
+    return axios
+      .post(`${API_BASE}/patient/${patientId}/payment-methods`, data, {
+        headers: authHeader(),
+      })
       .then((res) => res.data);
   }
 
@@ -672,20 +721,21 @@ class Patient {
       `${API_BASE}/patient/${patientId}/payment-methods/${paymentMethodId}`,
       {
         headers: authHeader(),
-      },
+      }
     );
   }
 
   updatePaymentMethod(patientId, paymentMethodId, data) {
-    return axios.put(
-      `${API_BASE}/patient/${patientId}/payment-methods/${paymentMethodId}`,
-      data,
-      {
-        headers: authHeader(),
-      },
-    ).then((res) => res.data);
+    return axios
+      .put(
+        `${API_BASE}/patient/${patientId}/payment-methods/${paymentMethodId}`,
+        data,
+        {
+          headers: authHeader(),
+        }
+      )
+      .then((res) => res.data);
   }
-
   getFunctionalRange(patientId) {
     return axios
       .get(`${API_BASE}/patient/${patientId}`, {

@@ -32,7 +32,7 @@ const CustomTooltip = ({ payload }) => {
       <div className={classes.root}>
         <p className="label">
           {`Date : ${moment(payload[0]?.payload?.lab_dt).format(
-            "MMMM Do YYYY, h:mm A",
+            "MMMM Do YYYY, h:mm A"
           )}`}
         </p>
         <p className="label">{`File : ${payload[0]?.payload?.filename}`}</p>
@@ -65,8 +65,8 @@ const Graph = ({ data, range, conventionalRange }) => {
       const hash = Object.create(null);
       const result = data.map((d) => {
         if (
-          !moment(d.lab_dt).format("YYYY")
-          || hash[moment(d.lab_dt).format("YYYY")]
+          !moment(d.lab_dt).format("YYYY") ||
+          hash[moment(d.lab_dt).format("YYYY")]
         ) {
           return null;
         }
@@ -195,7 +195,7 @@ Graph.propTypes = {
       lab_dt: PropTypes.string,
       filename: PropTypes.string,
       value: PropTypes.number,
-    }),
+    })
   ).isRequired,
   range: PropTypes.oneOfType([
     PropTypes.shape({
