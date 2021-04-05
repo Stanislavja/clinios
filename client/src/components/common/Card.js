@@ -206,14 +206,16 @@ const PatientCard = (props) => {
               />
               <Icon
                 className={classes.icon}
-                onClick={() => dispatch(togglePatientAppointmentHistoryDialog())}
+                onClick={() =>
+                  dispatch(togglePatientAppointmentHistoryDialog())
+                }
                 path={mdiCalendarBlankOutline}
                 size={1}
               />
             </>
           )}
-          {!!icon
-            && React.createElement(menuIcons[icon], {
+          {!!icon &&
+            React.createElement(menuIcons[icon], {
               onClick: iconHandler,
               className: classes.icon,
             })}

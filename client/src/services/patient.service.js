@@ -743,6 +743,14 @@ class Patient {
       })
       .then((res) => res.data);
   }
+  
+  getFunctionalRange(patientId) {
+    return axios
+      .get(`${API_BASE}/patient/${patientId}`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
 }
 
 export default new Patient();
