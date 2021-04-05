@@ -103,12 +103,6 @@ const ProfileForm = () => {
   }
 
   useEffect(() => {
-    setFormFields({ ...formFields, ...formatformFeilds(user) });
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-
-  useEffect(() => {
     const selectedCountry = CountryRegionData.filter(
       (countryArray) => countryArray[1] === formFields.country,
     );
@@ -128,11 +122,10 @@ const ProfileForm = () => {
       const profile = res.data?.[0];
       setFormFields((formFieldValues) => ({
         ...formFieldValues,
-        ...formatformFeilds(user),
         ...formatformFeilds(profile),
       }));
     });
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     fetchProfile();
@@ -161,8 +154,6 @@ const ProfileForm = () => {
     delete formFields.login_url;
     delete formFields.dob;
     delete formFields.provider;
-    delete formFields.password;
-
 
     // * status is in need to be formated back to it's original state.
     // formFields.status = formFields?.status === "active" ? "A" : null;
@@ -371,7 +362,7 @@ const ProfileForm = () => {
                 <Grid item lg={3}>
                   <TextField
                     label="Zip/Postal"
-                    name="zipPostal"
+                    name="postal"
                     value={formFields.postal}
                     fullWidth
                     onChange={(e) => handleInputChange(e)}
@@ -488,7 +479,6 @@ const ProfileForm = () => {
                 {PortalForm.map((item) => (
                   <Grid key={item.name} item md={3}>
                     <TextField
-                      disabled={item.type === "password"} // TODO:: Disabled to avoid updating from profile
                       label={item.label}
                       name={item.name}
                       id={item.id}
