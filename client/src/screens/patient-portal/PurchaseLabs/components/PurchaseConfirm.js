@@ -54,7 +54,14 @@ const PurchaseConfirm = ({
       </DialogTitle>
       <DialogContent className={classes.content}>
         <Typography variant="body1" gutterBottom>
-          {`This is a confirmation that you have purchased labs for <b>${amount}</b>`}
+          This is a confirmation that you have purchased labs for
+          {" "}
+          <b>
+            $
+            {amount}
+            {" "}
+
+          </b>
         </Typography>
         <Typography variant="body1" gutterBottom>
           Next step is to

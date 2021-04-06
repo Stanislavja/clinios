@@ -74,7 +74,7 @@ const PurchaseLabs = () => {
     PatientPortalService.getPaymentMethods(lastVisitedPatient).then((res) => {
       setPaymentMethods(
         [...res.data, {
-          id: 0,
+          id: 999,
           type: "new",
           account_number: "000",
         }],
@@ -90,7 +90,7 @@ const PurchaseLabs = () => {
   }, [fetchPaymentMethods]);
 
   const handlePaymentMethodChange = (newPaymentMethod) => {
-    if (newPaymentMethod === "new") {
+    if (Number(newPaymentMethod) === 999) {
       setIsNewPaymentMethodOpen(true);
     } else {
       setSelectedPaymentMethod(newPaymentMethod);
