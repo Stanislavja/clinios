@@ -46,6 +46,32 @@ const getAllMessages = async (req, res) => {
   }
 };
 
+const getUsers = async (req, res) => {
+  const db = makeDb(configuration, res);
+
+  try {
+    const $sql = `select u.id, u.firstname, u.lastname
+      from user u
+      where u.client_id=${req.client_id}
+      order by u.firstname
+      limit 100`;
+
+    const dbResponse = await db.query($sql);
+
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const createMessage = async (req, res) => {
   const { user_id_to, subject, message } = req.body.data;
   const db = makeDb(configuration, res);
@@ -163,6 +189,7 @@ const getSingleMessage = async (req, res) => {
 
 const Messages = {
   getAllMessages,
+  getUsers,
   createMessage,
   updateMessage,
   deleteMessage,
