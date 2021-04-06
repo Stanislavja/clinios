@@ -58,16 +58,20 @@ const StyledTableCell = withStyles((theme) => ({
 
 const StyledTableRow = withStyles(() => ({
   root: {
-    fontSize: 14,
+    fontSize: 12,
+    border: "unset",
     "& th": {
       fontSize: 12,
       whiteSpace: "nowrap",
-      padding: "2px 16px 2px 2px",
+      padding: "2px 8px 0px 2px",
+      border: "unset",
     },
     "& td": {
       fontSize: 12,
+      lineHeight: "13px",
       whiteSpace: "nowrap",
-      padding: "2px 16px 2px 2px",
+      padding: "2px 18px 0px 2px",
+      border: "unset",
       "& svg": {
         fontSize: "1rem",
         position: "relative",
