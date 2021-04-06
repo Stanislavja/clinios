@@ -12,12 +12,11 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/AddCircleOutline";
-import CancelIcon from "@material-ui/icons/Cancel";
-import SaveIcon from "@material-ui/icons/CheckCircle";
-import CardIcon from "@material-ui/icons/CreditCard";
-import DesktopIcon from "@material-ui/icons/DesktopMac";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import SaveLayoutIcon from "@material-ui/icons/SaveOutlined";
+import CancelIcon from "@material-ui/icons/CancelOutlined";
+import CardIcon from "@material-ui/icons/CreditCardOutlined";
+import DesktopIcon from "@material-ui/icons/DesktopMacOutlined";
+import MoreVertIcon from "@material-ui/icons/MoreVertOutlined";
+import SaveIcon from "@material-ui/icons/SaveOutlined";
 import { mdiCalendarBlankOutline } from "@mdi/js";
 import Icon from "@mdi/react";
 import clsx from "clsx";
@@ -174,19 +173,20 @@ const PatientCard = (props) => {
           container
           justify="space-between"
           alignItems="center"
-          className={`drag-handle ${classes.titleContainer} ${
-            showActions ? classes.leftPadding : classes.fullPadding
-          }`}
+          className={`drag-handle 
+          ${classes.titleContainer}
+           ${showActions ? classes.leftPadding : classes.fullPadding
+    }`}
         >
           <Typography className={classes.title}>
             {title}
             {" "}
-&nbsp; &nbsp;
+          &nbsp; &nbsp;
           </Typography>
           {title === "Patient" && (
             <>
               <MoreVertIcon className={classes.icon} onClick={handleClick} />
-              <SaveLayoutIcon
+              <SaveIcon
                 className={classes.icon}
                 onClick={() => updateLayoutHandler()}
               />

@@ -10,7 +10,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
-import ViewIcon from "@material-ui/icons/Visibility";
+import ViewIcon from "@material-ui/icons/VisibilityOutlined";
 import clsx from "clsx";
 import moment from "moment";
 

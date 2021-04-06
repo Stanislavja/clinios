@@ -1,18 +1,18 @@
-import AccountBoxIcon from "@material-ui/icons/AccountBox";
+import AccountBoxIcon from "@material-ui/icons/AccountBoxOutlined";
 import AccountBoxSharpIcon from "@material-ui/icons/AccountBoxSharp";
-import CodeIcon from "@material-ui/icons/Code";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import FindInPageIcon from "@material-ui/icons/FindInPage";
-import GroupIcon from "@material-ui/icons/Group";
-import GroupAddIcon from "@material-ui/icons/GroupAdd";
+import CodeIcon from "@material-ui/icons/CodeOutlined";
+import ExitToAppIcon from "@material-ui/icons/ExitToAppOutlined";
+import FindInPageIcon from "@material-ui/icons/FindInPageOutlined";
+import GroupAddIcon from "@material-ui/icons/GroupAddOutlined";
+import GroupIcon from "@material-ui/icons/GroupOutlined";
 import InsertInvitationSharpIcon from "@material-ui/icons/InsertInvitationSharp";
 // import PersonAddSharpIcon from "@material-ui/icons/PersonAddSharp";
-import PieChartIcon from "@material-ui/icons/PieChart";
-import ScheduleIcon from "@material-ui/icons/Schedule";
-import SettingsEthernetIcon from "@material-ui/icons/SettingsEthernet";
-import SettingsInputComponentIcon from "@material-ui/icons/SettingsInputComponent";
-import TimelineIcon from "@material-ui/icons/Timeline";
-import TuneIcon from "@material-ui/icons/Tune";
+import PieChartIcon from "@material-ui/icons/PieChartOutlined";
+import ScheduleIcon from "@material-ui/icons/ScheduleOutlined";
+import SettingsEthernetIcon from "@material-ui/icons/SettingsEthernetOutlined";
+import SettingsInputComponentIcon from "@material-ui/icons/SettingsInputComponentOutlined";
+import TimelineIcon from "@material-ui/icons/TimelineOutlined";
+import TuneIcon from "@material-ui/icons/TuneOutlined";
 
 
 export const client_pages = [

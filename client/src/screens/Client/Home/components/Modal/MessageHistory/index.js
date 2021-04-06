@@ -13,7 +13,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import CloseIcon from "@material-ui/icons/Close";
+import CloseIcon from "@material-ui/icons/CloseOutlined";
 import clsx from "clsx";
 import moment from "moment";
 import PropTypes from "prop-types";
