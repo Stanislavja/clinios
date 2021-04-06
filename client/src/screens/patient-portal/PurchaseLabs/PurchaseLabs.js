@@ -241,6 +241,7 @@ const PurchaseLabs = () => {
         open={isConfirmDialog}
         onClose={() => setIsConfirmDialog(false)}
         onConfirmation={() => handleOnSubmit(false)}
+        amount={total}
       />
     </div>
   );
