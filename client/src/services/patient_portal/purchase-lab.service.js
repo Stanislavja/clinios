@@ -10,6 +10,12 @@ class PurchaseLabsService {
       .get(`${API_BASE}/patient-portal/purchase-labs`, { headers: authHeader() })
       .then((res) => res.data);
   }
+
+  create(data) {
+    return axios
+      .post(`${API_BASE}/patient-portal/purchase-labs`, data, { headers: authHeader() })
+      .then((res) => res.data);
+  }
 }
 
 export default new PurchaseLabsService();
