@@ -277,6 +277,17 @@ export const drugFrequencyLabelToCode = (frequency) => {
   }
 };
 
+export const medicationFormToLabel = (form) => {
+  switch (form) {
+    case "T":
+      return "Tablets";
+    case "C":
+      return "Capsules";
+    default:
+      return "";
+  }
+};
+
 export const isDev = () => process.env.NODE_ENV === "development";
 
 export function isArrayWithLength(arr) {
@@ -303,6 +314,8 @@ export function isEmpty(obj) {
 export function noOp() {
 
 }
+
+export const pickerDateFormat = (date) => moment(date).format("MMM DD YYYY");
 
 export const dateFormat = (date) => moment(date).format("MMM D YYYY");
 

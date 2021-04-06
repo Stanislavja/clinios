@@ -120,3 +120,30 @@ export const InsightsTests = [
     hemolyticNormal: 0,
   },
 ];
+
+export const MissingTests = [
+  {
+    test: "Reticulocyte Count",
+    name: "Reticulocyte Count",
+    iron: 0,
+    blood: 1,
+    inflammation: 0,
+    hemolytic: 1,
+    ironNormal: 1,
+    bloodNormal: 0,
+    inflammationNormal: 1,
+    hemolyticNormal: 0,
+  },
+  {
+    test: "Transferrin Receptor",
+    name: "Transferrin Receptor",
+    iron: 1,
+    blood: null,
+    inflammation: 0,
+    hemolytic: null,
+    ironNormal: 0,
+    bloodNormal: 0,
+    inflammationNormal: 1,
+    hemolyticNormal: 0,
+  },
+];

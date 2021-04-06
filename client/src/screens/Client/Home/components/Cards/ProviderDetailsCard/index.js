@@ -121,11 +121,12 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails, fetchProviderD
         <Dialog
           fullHeight
           open={showLabsModal}
-          title="Labs"
+          title="Documents"
           message={(
             <ProcessLab
               fromHome
               userId={selectedProvider.id}
+              fetchProviderDetails={fetchProviderDetails}
             />
           )}
           cancelForm={() => toggleLabsModal()}
