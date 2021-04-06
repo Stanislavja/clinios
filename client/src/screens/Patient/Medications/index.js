@@ -36,7 +36,7 @@ import {
   NewDrugFormFields, GenericOptions, InputOptions, RefillsOptions,
   DEFAULT_AMOUNT, DEFAULT_EXPIRY, DEFAULT_FREQUENCY, DEFAULT_REFILLS,
 } from "../../../static/medicationForm";
-import { drugFrequencyLabelToCode, medicationFormToLabel } from "../../../utils/helpers";
+import { drugFrequencyLabelToCode, medicationFormToLabel, pickerDateFormat } from "../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
   ml2: {
@@ -126,7 +126,7 @@ const Medications = (props) => {
     formFields.drug_id = medication.id || medication.drug_id;
     formFields.strength = medication.drug_strength_id;
     formFields.frequency = drugFrequencyLabelToCode(medication?.frequency || DEFAULT_FREQUENCY);
-    formFields.startDate = moment(medication.start_dt).format("MMM DD YYYY");
+    formFields.startDate = medication?.start_dt ? pickerDateFormat(medication.start_dt) : currentDate;
     formFields.expires = medication?.expires || DEFAULT_EXPIRY;
     formFields.amount = medication?.amount || DEFAULT_AMOUNT;
     formFields.refills = medication?.refills || DEFAULT_REFILLS;
