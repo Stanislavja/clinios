@@ -21,6 +21,7 @@ import PatientPortalService from "../../../services/patient_portal/patient-porta
 import PurchaseLabsService from "../../../services/patient_portal/purchase-lab.service";
 import { paymentMethodType } from "../../../utils/helpers";
 import PaymentMethodsForm from "./components/PaymentMethodsForm";
+import PurchaseConfirm from "./components/PurchaseConfirm";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -67,6 +68,7 @@ const PurchaseLabs = () => {
   const [total, setTotal] = useState(0);
   const [labs, setLabs] = useState([]);
   const [isNewPaymentMethodOpen, setIsNewPaymentMethodOpen] = useState(false);
+  const [isConfirmDialog, setIsConfirmDialog] = useState(false);
 
   const fetchPaymentMethods = useCallback(() => {
     PatientPortalService.getPaymentMethods(lastVisitedPatient).then((res) => {
@@ -134,6 +136,9 @@ const PurchaseLabs = () => {
       enqueueSnackbar(`Lab purchased successfully!`, {
         variant: "success",
       });
+      setIsConfirmDialog(false);
+      setSelected([]);
+      setSelectedPaymentMethod(null);
     });
   };
 
@@ -217,10 +222,11 @@ const PurchaseLabs = () => {
           </Select>
         </FormControl>
         <Button
+          disabled={(!total || !selectedPaymentMethod)}
           variant="outlined"
           color="primary"
           size="medium"
-          onClick={() => handleOnSubmit()}
+          onClick={() => setIsConfirmDialog(true)}
           className={classes.purchaseButton}
         >
           Purchase
@@ -230,6 +236,11 @@ const PurchaseLabs = () => {
         isOpen={isNewPaymentMethodOpen}
         onClose={() => setIsNewPaymentMethodOpen(false)}
         reloadData={() => fetchPaymentMethods()}
+      />
+      <PurchaseConfirm
+        open={isConfirmDialog}
+        onClose={() => setIsConfirmDialog(false)}
+        onConfirmation={() => handleOnSubmit(false)}
       />
     </div>
   );
