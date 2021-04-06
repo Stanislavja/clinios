@@ -110,6 +110,7 @@ const updatePatient = async (req, res) => {
     address2,
     city,
     postal,
+    country,
     state,
     emergency_firstname,
     emergency_middlename,
@@ -185,6 +186,9 @@ const updatePatient = async (req, res) => {
     }
     if (postal && typeof postal !== "undefined") {
       $sql += `, postal='${postal}'`;
+    }
+    if (country && typeof country !== "undefined") {
+      $sql += `, country='${country}'`;
     }
     if (state && typeof state !== "undefined") {
       $sql += `, state='${state}'`;
