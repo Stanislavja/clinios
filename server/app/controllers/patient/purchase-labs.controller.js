@@ -40,11 +40,11 @@ const createPurchaseLabs = async (req, res) => {
     client_id: req.client_id,
     patient_id: req.user_id,
     type_id: 1,
-    dt:  new Date(),
-    created:  new Date(),
+    dt: new Date(),
+    created: new Date(),
     amount: formData.amount,
-    payment_method_id: formData.payment_method_id
-  }
+    payment_method_id: formData.payment_method_id,
+  };
 
   const db = makeDb(configuration, res);
   try {
@@ -57,19 +57,16 @@ const createPurchaseLabs = async (req, res) => {
       return res.status(status.notfound).send(errorMessage);
     }
     if (insertResponse.insertId) {
-        const trancDetailsData = {
-          tranc_id: insertResponse.insertId,
-          cpt_id: formData.cpt_ids
-        }
-        if(formData.cpt_ids.length > 0) {
-          formData.cpt_ids.map(async (cpt_id)=> {
-            trancDetailsData.cpt_id = cpt_id;
-             await db.query(`insert into tranc_detail set ?`, [
-              trancDetailsData,
-            ]);
-        
-          })
-        }
+      const trancDetailsData = {
+        tranc_id: insertResponse.insertId,
+        cpt_id: formData.cpt_ids,
+      };
+      if (formData.cpt_ids.length > 0) {
+        formData.cpt_ids.map(async (cpt_id) => {
+          trancDetailsData.cpt_id = cpt_id;
+          await db.query(`insert into tranc_detail set ?`, [trancDetailsData]);
+        });
+      }
     }
     successMessage.data = insertResponse;
     successMessage.message = "Insert successful";
