@@ -126,6 +126,7 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails, fetchProviderD
             <ProcessLab
               fromHome
               userId={selectedProvider.id}
+              fetchProviderDetails={fetchProviderDetails}
             />
           )}
           cancelForm={() => toggleLabsModal()}

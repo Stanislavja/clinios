@@ -113,7 +113,10 @@ const useStyles = makeStyles((theme) => ({
     overflow: "scroll",
   },
   centerContainer: {
-    height: "100%",
+    position: "absolute",
+    left: "50%",
+    top: "50%",
+    transform: "translate(-50%, -50%)",
   },
   historyButton: {
     position: "absolute",
@@ -127,7 +130,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Lab = (props) => {
-  const { fromHome, userId, documentId } = props;
+  const {
+    fromHome, userId, documentId, fetchProviderDetails,
+  } = props;
   const history = useHistory();
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
@@ -276,7 +281,9 @@ const Lab = (props) => {
     };
     LabService.updateLabStatus(labId, reqBody).then((res) => {
       enqueueSnackbar(res.message, { variant: "success" });
-      window.location.reload();
+      // reload modal data
+      getLabInformation();
+      fetchProviderDetails();
     });
   };
 
@@ -710,12 +717,14 @@ const Lab = (props) => {
 
 Lab.defaultProps = {
   documentId: 0,
+  fetchProviderDetails: () => { },
 };
 
 Lab.propTypes = {
   fromHome: PropTypes.bool.isRequired,
   userId: PropTypes.number.isRequired,
   documentId: PropTypes.number,
+  fetchProviderDetails: PropTypes.func,
 };
 
 export default Lab;
