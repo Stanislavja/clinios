@@ -13,6 +13,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Hidden,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Pagination from "@material-ui/lab/Pagination";
@@ -81,7 +82,20 @@ const useStyles = makeStyles((theme) => ({
     bottom: theme.spacing(1),
     width: `calc(100% - ${theme.spacing(3)}px)`, // 1.5 x 2 sides = 3
   },
+  buttonLink: {
+    "& a": {
+      color: theme.palette.text.primary,
+      textDecoration: "none",
+    },
+  },
   downloadButton: {
+    position: "absolute",
+    right: "15%",
+    top: "10px",
+    [theme.breakpoints.down("md")]: {
+      right: "8%",
+      top: "7px",
+    },
     "& a": {
       color: theme.palette.text.primary,
       textDecoration: "none",
@@ -100,6 +114,15 @@ const useStyles = makeStyles((theme) => ({
   },
   centerContainer: {
     height: "100%",
+  },
+  historyButton: {
+    position: "absolute",
+    right: "27%",
+    top: "10px",
+    [theme.breakpoints.down("md")]: {
+      right: "17%",
+      top: "7px",
+    },
   },
 }));
 
@@ -301,44 +324,55 @@ const Lab = (props) => {
               fileName={labData?.filename}
             />
           )}
-          <Grid
-            item
-            lg={6}
-            xs={12}
-            className={classes.topControls}
-          >
-            <Grid
-              container
-              justify="space-between"
-              alignItems="center"
+          <Hidden only={["sm", "xs"]}>
+            <Button
+              variant="text"
+              onClick={() => toggleUserHistoryDialog()}
+              className={classes.historyButton}
             >
-              <Typography variant="h4">Lab</Typography>
-              <Button variant="text" onClick={() => toggleUserHistoryDialog()}>
-                User History
-              </Button>
-              <Button
-                variant="text"
-                className={classes.downloadButton}
-              >
-                <Link
-                  download
-                  to={file}
-                  target="_blank"
-                >
-                  Download
-                </Link>
-                {/* <a
+              User History
+            </Button>
+            <Button
+              variant="text"
+              className={classes.downloadButton}
+            >
+              <Link
                 download
-                href={file}
+                to={file}
                 target="_blank"
-                rel="noopener noreferrer"
               >
                 Download
-              </a> */}
-                {/* Download */}
-              </Button>
-            </Grid>
-          </Grid>
+              </Link>
+            </Button>
+          </Hidden>
+          <Hidden smUp>
+            <Box mb={1}>
+              <Grid
+                container
+                justify="space-between"
+                alignItems="center"
+              >
+                <Button
+                  variant="text"
+                  onClick={() => toggleUserHistoryDialog()}
+                >
+                  User History
+                </Button>
+                <Button
+                  variant="text"
+                  className={classes.buttonLink}
+                >
+                  <Link
+                    download
+                    to={file}
+                    target="_blank"
+                  >
+                    Download
+                  </Link>
+                </Button>
+              </Grid>
+            </Box>
+          </Hidden>
           <Grid
             container
             spacing={1}
