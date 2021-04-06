@@ -20,11 +20,17 @@ const useStyles = makeStyles((theme) => createStyles({
     },
   },
   content: {
-    padding: "1rem 1.5rem",
+    padding: "2rem 1.5rem",
+    "& p": {
+      lineHeight: "20px",
+      fontSize: "16px",
+    },
   },
   actionsContainer: {
     padding: "1rem 1.5rem",
     justifyContent: "space-between",
+    borderColor: theme.palette.borderColor,
+    borderTop: "1px solid",
   },
   w100: {
     minWidth: 100,
@@ -35,6 +41,7 @@ const PurchaseConfirm = ({
   open,
   onClose,
   onConfirmation,
+  amount,
 }) => {
   const classes = useStyles();
   return (
@@ -46,9 +53,19 @@ const PurchaseConfirm = ({
         <Typography variant="h5">Purchase confirmation</Typography>
       </DialogTitle>
       <DialogContent className={classes.content}>
-        <Typography variant="h6">This is a confirmation that you have purchased labs for 10</Typography>
-        <Typography variant="h6">
+        <Typography variant="body1" gutterBottom>
+          This is a confirmation that you have purchased labs for
+          {" "}
+          <b>
+            $
+            {amount}
+            {" "}
+
+          </b>
+        </Typography>
+        <Typography variant="body1" gutterBottom>
           Next step is to
+          {" "}
           <Link to="/patient/labs-requisition">click here</Link>
           {" "}
           to print your test requisition.
@@ -83,6 +100,7 @@ PurchaseConfirm.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onConfirmation: PropTypes.func.isRequired,
+  amount: PropTypes.number.isRequired,
 };
 
 export default PurchaseConfirm;
