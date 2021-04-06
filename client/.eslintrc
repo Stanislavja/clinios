@@ -28,7 +28,6 @@
     }
   },
   "rules": {
-    "linebreak-style": 0,
     "import/no-unresolved": "off",
     "import/extensions": 0,
     "class-methods-use-this": [
