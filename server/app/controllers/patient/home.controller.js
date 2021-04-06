@@ -78,15 +78,12 @@ const getUpcomingAppointments = async (req, res) => {
   let $sql;
 
   try {
-    $sql = `select uc.patient_id, uc.start_dt, uc2.end_dt, uc2.status, concat(u.firstname, ' ', u.lastname) provider from (
-      select uc.patient_id, min(start_dt) start_dt
-      from user_calendar uc
-      where uc.patient_id=${patient_id}
-      and uc.start_dt>now()
-      group by uc.patient_id
-      ) uc
-      join user_calendar uc2 on uc2.patient_id=uc.patient_id and uc2.start_dt=uc.start_dt
-      join user u on u.id=uc2.user_id`;
+    $sql = `select uc.patient_id, uc.start_dt, uc.end_dt, uc.status, concat(u.firstname, ' ', u.lastname) provider
+    from user_calendar uc
+    join user u on u.id=uc.user_id
+    where uc.patient_id=${patient_id}
+    and uc.start_dt>now()
+    `;
 
     const dbResponse = await db.query($sql);
 
