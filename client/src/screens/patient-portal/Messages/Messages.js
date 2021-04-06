@@ -17,7 +17,6 @@ import moment from "moment";
 import { useSnackbar } from "notistack";
 
 import MessagesService from "../../../services/patient_portal/messages.service";
-import UsersService from "../../../services/users.service";
 
 
 const isLessThan60Minutes = (createdTime) => (moment()
@@ -98,7 +97,7 @@ export default function Messages() {
   };
 
   const fetchUsers = () => {
-    UsersService.getAllUsers().then((res) => {
+    MessagesService.getMessageUsers().then((res) => {
       setUsers(res.data.data);
     });
   };
