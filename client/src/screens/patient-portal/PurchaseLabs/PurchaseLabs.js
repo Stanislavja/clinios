@@ -21,6 +21,7 @@ import PatientPortalService from "../../../services/patient_portal/patient-porta
 import PurchaseLabsService from "../../../services/patient_portal/purchase-lab.service";
 import { paymentMethodType } from "../../../utils/helpers";
 import PaymentMethodsForm from "./components/PaymentMethodsForm";
+import PurchaseConfirm from "./components/PurchaseConfirm";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -67,12 +68,13 @@ const PurchaseLabs = () => {
   const [total, setTotal] = useState(0);
   const [labs, setLabs] = useState([]);
   const [isNewPaymentMethodOpen, setIsNewPaymentMethodOpen] = useState(false);
+  const [isConfirmDialog, setIsConfirmDialog] = useState(false);
 
   const fetchPaymentMethods = useCallback(() => {
     PatientPortalService.getPaymentMethods(lastVisitedPatient).then((res) => {
       setPaymentMethods(
         [...res.data, {
-          id: 0,
+          id: 999,
           type: "new",
           account_number: "000",
         }],
@@ -88,7 +90,7 @@ const PurchaseLabs = () => {
   }, [fetchPaymentMethods]);
 
   const handlePaymentMethodChange = (newPaymentMethod) => {
-    if (newPaymentMethod === "new") {
+    if (Number(newPaymentMethod) === 999) {
       setIsNewPaymentMethodOpen(true);
     } else {
       setSelectedPaymentMethod(newPaymentMethod);
@@ -134,6 +136,9 @@ const PurchaseLabs = () => {
       enqueueSnackbar(`Lab purchased successfully!`, {
         variant: "success",
       });
+      setIsConfirmDialog(false);
+      setSelected([]);
+      setSelectedPaymentMethod(null);
     });
   };
 
@@ -217,10 +222,11 @@ const PurchaseLabs = () => {
           </Select>
         </FormControl>
         <Button
+          disabled={(!total || !selectedPaymentMethod)}
           variant="outlined"
           color="primary"
           size="medium"
-          onClick={() => handleOnSubmit()}
+          onClick={() => setIsConfirmDialog(true)}
           className={classes.purchaseButton}
         >
           Purchase
@@ -230,6 +236,12 @@ const PurchaseLabs = () => {
         isOpen={isNewPaymentMethodOpen}
         onClose={() => setIsNewPaymentMethodOpen(false)}
         reloadData={() => fetchPaymentMethods()}
+      />
+      <PurchaseConfirm
+        open={isConfirmDialog}
+        onClose={() => setIsConfirmDialog(false)}
+        onConfirmation={() => handleOnSubmit(false)}
+        amount={total}
       />
     </div>
   );
