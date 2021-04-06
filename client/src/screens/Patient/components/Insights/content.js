@@ -7,7 +7,6 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Typography from "@material-ui/core/Typography";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import moment from "moment";
@@ -42,14 +41,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const StyledTableCell = withStyles((theme) => ({
+const StyledTableCell = withStyles(() => ({
   head: {
-    backgroundColor: theme.palette.grey,
-    color: theme.palette.grey,
     fontSize: "12px",
     whiteSpace: "nowrap",
     fontWeight: 700,
-    padding: "0px 6px 6px 2px",
+    padding: "0px 6px 2px 2px",
   },
   body: {
     fontSize: 12,
@@ -166,73 +163,67 @@ const InsightsContent = () => {
 
   return (
     <>
-      <TableContainer>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>Test</StyledTableCell>
-              <StyledTableCell>Date</StyledTableCell>
-              <StyledTableCell>Value</StyledTableCell>
-              <StyledTableCell>Range</StyledTableCell>
-              <StyledTableCell>Flag</StyledTableCell>
-              <StyledTableCell>Iron Deficiency</StyledTableCell>
-              <StyledTableCell>Blood Loss</StyledTableCell>
-              <StyledTableCell>Inflammation</StyledTableCell>
-              <StyledTableCell>Hemolytic</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {!!tests && tests.length
-              ? tests.map((row) => {
-                const functionalRange = calculateFunctionalRange(row.cpt_id, gender, patientAge);
-                const flag = getFlag(row, functionalRange);
-                const range = getRange(row, functionalRange);
-                return (
-                  <StyledTableRow key={row.name}>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell>
-                      {row.lab_dt ? moment(row.lab_dt).format("MMM D YYYY") : ""}
-                    </TableCell>
-                    <TableCell>{row.value}</TableCell>
-                    <TableCell>{range.value}</TableCell>
-                    <TableCell>
-                      {flag.value}
-                    </TableCell>
-                    <TableCell>
-                      {row.ironNormal ? <span className={classes.mr}>N</span> : ""}
-                      {renderIcon(row.iron)}
-                      {calculateStatus(flag.icon, row.iron)}
-                    </TableCell>
-                    <TableCell>
-                      {row.bloodNormal ? <span className={classes.mr}>N</span> : ""}
-                      {renderIcon(row.blood)}
-                      {calculateStatus(flag.icon, row.blood)}
-                    </TableCell>
-                    <TableCell>
-                      {row.inflammationNormal ? <span className={classes.mr}>N</span> : ""}
-                      {renderIcon(row.inflammation)}
-                      {calculateStatus(flag.icon, row.inflammation)}
-                    </TableCell>
-                    <TableCell>
-                      {row.hemolyticNormal ? <span className={classes.mr}>N</span> : ""}
-                      {renderIcon(row.hemolytic)}
-                      {calculateStatus(flag.icon, row.hemolytic)}
-                    </TableCell>
-                  </StyledTableRow>
-                );
-              })
-              : (
-                <StyledTableRow>
-                  <TableCell colSpan={10}>
-                    <Typography className={classes.noRecordsMessage} align="center" variant="body1">
-                      No Records Found...
-                    </Typography>
-                  </TableCell>
-                </StyledTableRow>
-              )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      {!!tests && tests.length
+        ? (
+          <TableContainer>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>Test</StyledTableCell>
+                  <StyledTableCell>Date</StyledTableCell>
+                  <StyledTableCell>Value</StyledTableCell>
+                  <StyledTableCell>Range</StyledTableCell>
+                  <StyledTableCell>Flag</StyledTableCell>
+                  <StyledTableCell>Iron Deficiency</StyledTableCell>
+                  <StyledTableCell>Blood Loss</StyledTableCell>
+                  <StyledTableCell>Inflammation</StyledTableCell>
+                  <StyledTableCell>Hemolytic</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {tests.map((row) => {
+                  const functionalRange = calculateFunctionalRange(row.cpt_id, gender, patientAge);
+                  const flag = getFlag(row, functionalRange);
+                  const range = getRange(row, functionalRange);
+                  return (
+                    <StyledTableRow key={row.name}>
+                      <TableCell>{row.name}</TableCell>
+                      <TableCell>
+                        {row.lab_dt ? moment(row.lab_dt).format("MMM D YYYY") : ""}
+                      </TableCell>
+                      <TableCell>{row.value}</TableCell>
+                      <TableCell>{range.value}</TableCell>
+                      <TableCell>
+                        {flag.value}
+                      </TableCell>
+                      <TableCell>
+                        {row.ironNormal ? <span className={classes.mr}>N</span> : ""}
+                        {renderIcon(row.iron)}
+                        {calculateStatus(flag.icon, row.iron)}
+                      </TableCell>
+                      <TableCell>
+                        {row.bloodNormal ? <span className={classes.mr}>N</span> : ""}
+                        {renderIcon(row.blood)}
+                        {calculateStatus(flag.icon, row.blood)}
+                      </TableCell>
+                      <TableCell>
+                        {row.inflammationNormal ? <span className={classes.mr}>N</span> : ""}
+                        {renderIcon(row.inflammation)}
+                        {calculateStatus(flag.icon, row.inflammation)}
+                      </TableCell>
+                      <TableCell>
+                        {row.hemolyticNormal ? <span className={classes.mr}>N</span> : ""}
+                        {renderIcon(row.hemolytic)}
+                        {calculateStatus(flag.icon, row.hemolytic)}
+                      </TableCell>
+                    </StyledTableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )
+        : null}
     </>
   );
 };
