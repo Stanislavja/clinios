@@ -13,10 +13,9 @@ import InformationTable from "./components/InformationTable";
 import PatientInformation from "./components/PatientInformation";
 import ProfileTestsComponent from "./components/ProfileTests";
 
-const styles = () => createStyles({
+const styles = (theme) => createStyles({
   root: {
-      // minHeight: "70vh",
-    paddingTop: 10,
+    paddingTop: 10, // theme.spacing(1.2, 0, 0, 0),
   },
 
   coverRoot: {
@@ -24,45 +23,19 @@ const styles = () => createStyles({
   },
 
   mt5: {
-    marginTop: 5,
+    marginTop: 5, // theme.spacing(0.5, 0, 0, 0),
   },
   mt20: {
-    marginTop: 20,
-  },
-  clientAndPatientInfo: {
-    marginTop: 20,
-  },
-  infoSpace: {
-    lineHeight: 1.3,
-  },
-  tableHeading: {
-    border: "1px solid black",
-    padding: "20px 5px 20px 5px",
-  },
-  tableBody: {
-    border: "1px solid black",
-    padding: "20px 5px 20px 5px",
-  },
-  ml5: {
-    marginLeft: 5,
-  },
-  mt2: {
-    marginTop: 2,
-  },
-  mt10: {
-    marginTop: 10,
+    marginTop: 20, // theme.spacing(2.5, 0, 0, 0),
   },
   footer: {
-    marginTop: 20,
+    marginTop: 20, // theme.spacing(2.5, 0, 0, 0),
   },
-  fontWeight800: {
-    fontWeight: 800,
-  },
-  fontWeight1000: {
+  importantTypo: {
     fontWeight: 1000,
   },
-  fontSize14: {
-    fontSize: 14,
+  profileTestsComponent: {
+    marginTop: theme.spacing(1.9, 0, 0, 0),
   },
 });
 
@@ -80,12 +53,12 @@ class PdfTemplate extends React.Component {
           </Box>
           {/* client and patient information */}
           <PatientInformation testProfileInfo={testProfileInfo} />
-          <Box>
+          <Box className={classes.mt5}>
             <Typography variant="h5">SPECIMENS MUST BE TESTED IN A QLS LABORATORY</Typography>
           </Box>
 
           <Box className={classes.mt5}>
-            <Typography variant="h5" style={{ fontWeight: 1000 }}>
+            <Typography variant="h5" className={classes.importantTypo}>
               IMPORTANT – Please forward specimens to Quest Diagnostics National Laboratory.
             </Typography>
           </Box>
@@ -95,12 +68,11 @@ class PdfTemplate extends React.Component {
           <Box className={classes.mt20}>
             <Typography variant="h4">Profiles/Tests</Typography>
           </Box>
-          <Box style={{ marginTop: 15 }}>
+          <Box className={classes.profileTestsComponent}>
             <ProfileTestsComponent profileTests={profileTests} />
           </Box>
         </Box>
 
-        {/* footer */}
         <Footer />
       </Box>
     );

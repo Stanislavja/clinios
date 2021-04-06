@@ -7,25 +7,7 @@ import PropTypes from "prop-types";
 
 import { formatPdfDate } from "../../../../utils/helpers";
 
-const useStyles = makeStyles(() => ({
-  root: {
-    // minHeight: "70vh",
-    paddingTop: 10,
-  },
-
-  coverRoot: {
-    minHeight: "92%",
-  },
-
-  mt5: {
-    marginTop: 5,
-  },
-  mt20: {
-    marginTop: 20,
-  },
-  clientAndPatientInfo: {
-    marginTop: 20,
-  },
+const useStyles = makeStyles((theme) => ({
   infoSpace: {
     lineHeight: 1.3,
   },
@@ -37,18 +19,6 @@ const useStyles = makeStyles(() => ({
     border: "1px solid black",
     padding: "20px 5px 20px 5px",
   },
-  ml5: {
-    marginLeft: 5,
-  },
-  mt2: {
-    marginTop: 2,
-  },
-  mt10: {
-    marginTop: 10,
-  },
-  footer: {
-    marginTop: 20,
-  },
   fontWeight800: {
     fontWeight: 800,
   },
@@ -57,6 +27,54 @@ const useStyles = makeStyles(() => ({
   },
   fontSize14: {
     fontSize: 14,
+  },
+  dataInformationGrid: {
+    paddingTop: 5,
+  },
+  profileGenderTypo: {
+    // theme.spacing(0.5, 0),
+  },
+  patNameGrid: {
+    marginLeft: 4,
+  },
+  billTypeTypo: {
+    marginLeft: 10,
+  },
+  clientTypo: {
+    margin: theme.spacing(0.5, 0),
+  },
+  clientTypoHeading: {
+    fontSize: 18,
+  },
+  genderTextSize: {
+    fontSize: 12,
+  },
+  mt5: {
+    marginTop: 5,
+  },
+  ml5: {
+    marginLeft: 5,
+  },
+  mt10: {
+    marginTop: 10,
+  },
+  ml15: {
+    marginLeft: 15,
+  },
+  ml10: {
+    marginLeft: 10,
+  },
+  ml1: {
+    marginLeft: 1,
+  },
+  ml2: {
+    marginLeft: 2,
+  },
+  ml3: {
+    marginLeft: 3,
+  },
+  ml4: {
+    marginLeft: 4,
   },
 }));
 
@@ -80,9 +98,11 @@ const InformationTable = (props) => {
         >
           <Typography variant="h5">Ordering Physician</Typography>
           <Typography className={clsx(classes.ml5, classes.mt10)}>
-            <b className={clsx(classes.fontWeight800, classes.fontSize14)}>NPI</b>
+            <span className={clsx(classes.fontWeight800, classes.fontSize14)}>NPI</span>
             :
-            &nbsp;&nbsp;1346417086&nbsp;&nbsp;&nbsp; Bauer,&nbsp;Michael
+            <span className={classes.ml15}>1346417086</span>
+            <span className={classes.ml10}> Bauer,</span>
+            <span> Michael</span>
           </Typography>
         </Grid>
         <Grid
@@ -98,43 +118,42 @@ const InformationTable = (props) => {
           className={classes.tableHeading}
         >
           <Typography variant="h5">Data Information</Typography>
-          <Grid container className={clsx(classes.ml5)} style={{ paddingTop: 5 }}>
+          <Grid container className={clsx(classes.ml5, classes.dataInformationGrid)}>
             <Grid item>
               <Typography component="h1" variant="h5">
-                <b className={clsx(classes.fontWeight800, classes.fontSize14)}>
-                  Pat ID #:&nbsp;
-                  {testProfileInfo.patient_id}
-                </b>
+                <p className={clsx(classes.fontWeight800, classes.fontSize14)}>
+                  Pat ID #:
+                  <span className={classes.ml3}>{testProfileInfo.patient_id}</span>
+                </p>
               </Typography>
               <Typography variant="h5">
-                <b className={clsx(classes.fontWeight800, classes.fontSize14)}>
-                  DOB: &nbsp;
-                  {formatPdfDate(testProfileInfo.dob)}
-                </b>
+                <p className={clsx(classes.fontWeight800, classes.fontSize14)}>
+                  DOB:
+                  <span className={classes.ml3}>{formatPdfDate(testProfileInfo.dob)}</span>
+                </p>
               </Typography>
             </Grid>
-            <Grid item style={{ marginLeft: 4 }}>
+            <Grid item className={classes.patNameGrid}>
               <Typography variant="h5">
-                <b className={clsx(classes.fontWeight800, classes.fontSize14)}>
-                  &nbsp;Pat Name:
+                <p className={clsx(classes.fontWeight800, classes.fontSize14)}>
+                  <span className={classes.ml2}>Pat Name: </span>
                   {" "}
-                  {testProfileInfo.firstname}
-                  ,&nbsp;
-                  {testProfileInfo.lastname}
-                </b>
+                  <span className={classes.ml2}>{testProfileInfo.firstname}</span>
+                  ,
+                  <span className={classes.ml4}>{testProfileInfo.lastname}</span>
+                </p>
               </Typography>
-              <Grid container justify="space-between">
-                <Typography variant="h5" style={{ margin: "0 5px" }}>
-                  <b className={clsx(classes.fontWeight800, classes.fontSize14)}>Sex:&nbsp;</b>
-                  {" "}
-                  {testProfileInfo.gender}
-                  &nbsp;&nbsp;
+              <Grid container alignItems="flex-start" justify="space-between">
+                <Typography variant="h5" className={classes.profileGenderTypo}>
+                  <span className={clsx(classes.fontWeight800, classes.fontSize14)}>Sex:</span>
+                  <span className={clsx(classes.ml4, classes.genderTextSize)}>{testProfileInfo.gender}</span>
+                  <span className={classes.ml5} />
                 </Typography>
                 <Typography variant="h5">
-                  <b className={clsx(classes.fontWeight800, classes.fontSize14)}>
-                    Order #:&nbsp;
-                    {testProfileInfo.ulta_order}
-                  </b>
+                  <p className={clsx(classes.fontWeight800, classes.fontSize14)}>
+                    Order #:
+                    <span className={classes.ml4}>{testProfileInfo.ulta_order}</span>
+                  </p>
                 </Typography>
               </Grid>
             </Grid>
@@ -147,17 +166,15 @@ const InformationTable = (props) => {
         <Grid item xs={6} sm={6} md={6} lg={6} xl={6} className={classes.tableBody}>
           <Grid container>
             <Typography variant="h5">Responsible Party</Typography>
-            <Typography variant="h5" style={{ marginLeft: 10 }}>
-              <b className={clsx(classes.fontWeight800, classes.fontSize14)}>Bill Type:</b>
+            <Typography variant="h5" className={classes.billTypeTypo}>
+              <span className={clsx(classes.fontWeight800, classes.fontSize14)}>Bill Type : </span>
               Client
             </Typography>
           </Grid>
-          <Typography className={classes.infoSpace} variant="h4" style={{ margin: "5px 0" }}>
-            <b className={clsx(classes.fontWeight1000)} style={{ fontSize: 18 }}>
-              Client #:
-            </b>
-            &nbsp;
-            {testProfileInfo.ulta_order}
+          <Typography className={clsx(classes.infoSpace, classes.clientTypo)} variant="h4">
+            <span className={clsx(classes.fontWeight1000, classes.clientTypoHeading)}>Client #:</span>
+            <span className={classes.ml4}>{testProfileInfo.ulta_order}</span>
+
           </Typography>
           <Typography className={classes.infoSpace}>Ultra Lab Tests, LLC</Typography>
           <Typography className={classes.infoSpace}>9237 E Via de Ventura, Suite 220 </Typography>
