@@ -103,19 +103,19 @@ const Encounters = () => {
         This page is used to view lab requisitions you can take to a Quest Diagnostics Lab
       </Typography>
       <Grid container className={classes.testListContainer}>
-        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+        <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
           <Typography variant="h6">Date</Typography>
         </Grid>
-        <Grid item xs={9} sm={9} md={9} lg={9} xl={9}>
+        <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
           <Typography variant="h6">Tests</Typography>
         </Grid>
       </Grid>
       {testList.map((list) => (
-        <Grid key={list.id} container className={classes.mt5} onClick={() => fetchReportInformation(list.id)}>
-          <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+        <Grid key={list.id} container className={classes.mt5}>
+          <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
             <Typography component="p">{dateFormat(list.dt)}</Typography>
           </Grid>
-          <Grid item xs={9} sm={9} md={9} lg={9} xl={9}>
+          <Grid item xs={8} sm={8} md={8} lg={8} xl={8} onClick={() => fetchReportInformation(list.id)}>
             <Typography component="p" className={classes.test}>
               {list.tests}
             </Typography>
@@ -123,12 +123,8 @@ const Encounters = () => {
         </Grid>
       ))}
 
-      {/* <button onClick={handlePrint}>Print this out!!!</button> */}
       {testProfileInfo && profileTests && (
-        <div style={{
-          marginTop: 50, border: "1px solid black", overflow: "hidden", padding: 10,
-        }}
-        >
+        <div style={{ display: "none" }}>
           <PdfTemplate testProfileInfo={testProfileInfo} profileTests={profileTests} ref={componentRef} />
         </div>
       )}
