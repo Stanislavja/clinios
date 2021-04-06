@@ -34,7 +34,6 @@
     "prettier/prettier": "error",
     "camelcase": 0,
     "import/no-unresolved": 1,
-    "endOfLine": "auto",
     "consistent-return": [
       "warn",
       {
