@@ -11,7 +11,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Tooltip from "@material-ui/core/Tooltip";
 import DeleteIcon from "@material-ui/icons/DeleteOutline";
-import EditIcon from "@material-ui/icons/Edit";
+import EditIcon from "@material-ui/icons/EditOutlined";
 import moment from "moment";
 import PropTypes from "prop-types";
 

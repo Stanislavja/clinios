@@ -8,7 +8,6 @@ import {
   TableRow,
 } from "@material-ui/core";
 import PropTypes from "prop-types";
-import { useParams } from "react-router-dom";
 
 import { StyledTableCellLg, StyledTableRowLg } from "../../../../components/common/StyledTable";
 import Dialog from "../../../../components/Dialog";
@@ -16,8 +15,7 @@ import LabService from "../../../../services/lab.service";
 import { labStatusTypeToLabel, labSourceTypeToLabel, dateFormat } from "../../../../utils/helpers";
 
 const UserHistory = (props) => {
-  const { open, onClose } = props;
-  const { userId } = useParams();
+  const { open, onClose, userId } = props;
   const [userHistory, setUserHistory] = useState([]);
 
   const fetchUserHistory = useCallback(() => {
@@ -88,6 +86,7 @@ const UserHistory = (props) => {
 UserHistory.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  userId: PropTypes.number.isRequired,
 };
 
 export default UserHistory;

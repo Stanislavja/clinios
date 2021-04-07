@@ -1,7 +1,7 @@
 import React from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
-import WarningIcon from "@material-ui/icons/Warning";
+import WarningIcon from "@material-ui/icons/WarningOutlined";
 
 const useStyles = makeStyles(() => ({
   root: {

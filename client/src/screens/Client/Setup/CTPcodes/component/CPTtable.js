@@ -12,7 +12,7 @@ import {
   TableRow,
   withStyles,
 } from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
+import EditIcon from "@material-ui/icons/EditOutlined";
 import Alert from "@material-ui/lab/Alert";
 import moment from "moment";
 import { useSnackbar } from "notistack";
@@ -160,7 +160,7 @@ const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
     <div>
       {errors
         && errors.map((error, index) => (
-           // eslint-disable-next-line react/no-array-index-key
+          // eslint-disable-next-line react/no-array-index-key
           <Alert severity="error" key={index}>
             {error.msg}
           </Alert>

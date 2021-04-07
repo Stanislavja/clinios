@@ -7,13 +7,12 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Typography from "@material-ui/core/Typography";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
-import { orderBy } from "lodash";
 import moment from "moment";
 
 import usePatientContext from "../../../../hooks/usePatientContext";
+import { InsightsTests, MissingTests } from "../../../../static/insightsTests";
 import { calculateFunctionalRange, calculatePercentageFlag } from "../../../../utils/FunctionalRange";
 import { calculateAge } from "../../../../utils/helpers";
 
@@ -33,43 +32,49 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: "21px",
     fontSize: 12,
   },
+  mr: {
+    marginRight: theme.spacing(1),
+  },
+  status: {
+    marginLeft: theme.spacing(1),
+    color: "orange",
+  },
 }));
 
-const StyledTableCell = withStyles((theme) => ({
+const StyledTableCell = withStyles(() => ({
   head: {
-    backgroundColor: theme.palette.grey,
-    color: theme.palette.grey,
     fontSize: "12px",
     whiteSpace: "nowrap",
     fontWeight: 700,
-    padding: "0px 6px 6px 2px",
+    padding: "0px 6px 2px 2px",
   },
   body: {
     fontSize: 12,
   },
 }))(TableCell);
 
-const StyledTableRow = withStyles((theme) => ({
+const StyledTableRow = withStyles(() => ({
   root: {
-    fontSize: 14,
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover,
-    },
+    fontSize: 12,
+    border: "unset",
     "& th": {
       fontSize: 12,
       whiteSpace: "nowrap",
-      padding: "2px 16px 2px 2px",
+      padding: "2px 8px 0px 2px",
+      border: "unset",
     },
     "& td": {
       fontSize: 12,
+      lineHeight: "13px",
       whiteSpace: "nowrap",
-      padding: "2px 16px 2px 2px",
+      padding: "2px 18px 0px 2px",
+      border: "unset",
       "& svg": {
         fontSize: "1rem",
         position: "relative",
         zIndex: 1,
         top: 3,
-        left: 3,
+        left: -3,
       },
     },
   },
@@ -86,72 +91,27 @@ const InsightsContent = () => {
 
   const hasValue = (value) => !((typeof value === "undefined") || (value === null));
 
-  const hasTestValue = (value, testsArray) => {
-    const matchArray = testsArray.filter((x) => x.name === value);
-    let res = null;
-    if (matchArray.length) {
-      const [firstEl] = matchArray;
-      res = firstEl;
-    }
-    return res;
-  };
-
-  const addCalculatedTests = useCallback(() => {
+  const filterRequiredTests = useCallback(() => {
     if (!!data && data.length) {
-      let tempTestsArray = [...data];
-      const sodiumTest = hasTestValue("Sodium", data);
-      const potassiumTest = hasTestValue("Potassium", data);
-      const glucoseTest = hasTestValue("Glucose", data);
-      const ureaTest = hasTestValue("Blood Urea Nitrogen", data);
-      if (!!sodiumTest && !!potassiumTest && !!glucoseTest && !!ureaTest) {
-        const newTest = {
-          count: 1,
-          cpt_id: "Osmolarity",
-          lab_dt: new Date(),
-          name: "Osmolarity (Derived)",
-          unit: "",
-          value: ((1.9 * (sodiumTest.value + potassiumTest.value))
-            + glucoseTest.value + (ureaTest.value * 0.5) + 5).toFixed(1),
-        };
-        tempTestsArray.push(newTest);
-      }
-      const hematocritTest = hasTestValue("Hematocrit", data);
-      const proteinTotalTest = hasTestValue("Protein Total", data);
-      if (!!hematocritTest && !!proteinTotalTest) {
-        const newTest = {
-          count: 1,
-          cpt_id: "ViscosityHighShear",
-          lab_dt: new Date(),
-          name: "Viscosity High Shear (Derived)",
-          unit: "",
-          value: ((0.12 * hematocritTest.value) + (0.17 * ((proteinTotalTest.value * 10) - 2.07))).toFixed(1),
-        };
-        tempTestsArray.push(newTest);
-      }
-      const chlorideTest = hasTestValue("Chloride", data);
-      const carbonDioxideTest = hasTestValue("Carbon Dioxide", data);
-      if (!!sodiumTest && !!chlorideTest && !!carbonDioxideTest) {
-        const newTest = {
-          count: 1,
-          cpt_id: "AnionGapNaClHCO3",
-          lab_dt: new Date(),
-          name: "Anion Gap (Na-Cl-HCO3) (Derived)",
-          unit: "",
-          value: (sodiumTest.value - (chlorideTest.value + carbonDioxideTest.value)).toFixed(1),
-        };
-        tempTestsArray.push(newTest);
-      }
-      tempTestsArray = orderBy(tempTestsArray, (item) => item.name.toLowerCase());
-      setTests([...tempTestsArray]);
-    } else {
-      setTests([]);
+      const tempArray = [];
+      InsightsTests.forEach((test) => {
+        data.forEach((allTest) => {
+          if (test.id === allTest.cpt_id) {
+            tempArray.push({
+              ...allTest,
+              ...test,
+            });
+          }
+        });
+      });
+      setTests([...tempArray, ...MissingTests]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, gender, patientAge]);
+  }, [data]);
 
   useEffect(() => {
-    addCalculatedTests();
-  }, [addCalculatedTests]);
+    filterRequiredTests();
+  }, [filterRequiredTests]);
 
   const getFlag = (value, functionalRange) => {
     const flag = {};
@@ -181,65 +141,89 @@ const InsightsContent = () => {
     return range;
   };
 
+  const renderIcon = (value) => {
+    switch (value) {
+      case 0:
+        return <ArrowDownwardIcon />;
+      case 1:
+        return <ArrowUpwardIcon />;
+      default:
+        return () => { };
+    }
+  };
+
+  const calculateStatus = (flag, icon) => {
+    if ((flag === "low" && icon === 0) || (flag === "high" && icon === 1)) {
+      return (
+        <span className={classes.status}>Yes</span>
+      );
+    }
+    return true;
+  };
+
   return (
     <>
-      <TableContainer>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>Test</StyledTableCell>
-              <StyledTableCell>Date</StyledTableCell>
-              <StyledTableCell>Value</StyledTableCell>
-              <StyledTableCell>Range</StyledTableCell>
-              <StyledTableCell>Flag</StyledTableCell>
-              <StyledTableCell>Iron Deficiency</StyledTableCell>
-              <StyledTableCell>Blood Loss</StyledTableCell>
-              <StyledTableCell>Inflammation</StyledTableCell>
-              <StyledTableCell>Hemolytic</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {!!tests && tests.length
-              ? tests.map((row) => {
-                const functionalRange = calculateFunctionalRange(row.cpt_id, gender, patientAge);
-                const flag = getFlag(row, functionalRange);
-                const range = getRange(row, functionalRange);
-                return (
-                  <StyledTableRow key={row.name}>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell>
-                      {row.lab_dt ? moment(row.lab_dt).format("MMM D YYYY") : ""}
-                    </TableCell>
-                    <TableCell>{row.value}</TableCell>
-                    <TableCell>{range.value}</TableCell>
-                    <TableCell>
-                      {flag.value}
-                      {flag.icon === "low" && (
-                        <ArrowDownwardIcon />
-                      )}
-                      {flag.icon === "high" && (
-                        <ArrowUpwardIcon />
-                      )}
-                    </TableCell>
-                    <TableCell>{row.unit}</TableCell>
-                    <TableCell>{row.unit}</TableCell>
-                    <TableCell>{row.unit}</TableCell>
-                    <TableCell>{row.count}</TableCell>
-                  </StyledTableRow>
-                );
-              })
-              : (
-                <StyledTableRow>
-                  <TableCell colSpan={10}>
-                    <Typography className={classes.noRecordsMessage} align="center" variant="body1">
-                      No Records Found...
-                    </Typography>
-                  </TableCell>
-                </StyledTableRow>
-              )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      {!!tests && tests.length
+        ? (
+          <TableContainer>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>Test</StyledTableCell>
+                  <StyledTableCell>Date</StyledTableCell>
+                  <StyledTableCell>Value</StyledTableCell>
+                  <StyledTableCell>Range</StyledTableCell>
+                  <StyledTableCell>Flag</StyledTableCell>
+                  <StyledTableCell>Iron Deficiency</StyledTableCell>
+                  <StyledTableCell>Blood Loss</StyledTableCell>
+                  <StyledTableCell>Inflammation</StyledTableCell>
+                  <StyledTableCell>Hemolytic</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {tests.map((row) => {
+                  const functionalRange = calculateFunctionalRange(row.cpt_id, gender, patientAge);
+                  const flag = getFlag(row, functionalRange);
+                  const range = getRange(row, functionalRange);
+                  return (
+                    <StyledTableRow key={row.name}>
+                      <TableCell>{row.name}</TableCell>
+                      <TableCell>
+                        {row.lab_dt ? moment(row.lab_dt).format("MMM D YYYY") : ""}
+                      </TableCell>
+                      <TableCell>{row.value}</TableCell>
+                      <TableCell>{range.value}</TableCell>
+                      <TableCell>
+                        {flag.value}
+                      </TableCell>
+                      <TableCell>
+                        {row.ironNormal ? <span className={classes.mr}>N</span> : ""}
+                        {renderIcon(row.iron)}
+                        {calculateStatus(flag.icon, row.iron)}
+                      </TableCell>
+                      <TableCell>
+                        {row.bloodNormal ? <span className={classes.mr}>N</span> : ""}
+                        {renderIcon(row.blood)}
+                        {calculateStatus(flag.icon, row.blood)}
+                      </TableCell>
+                      <TableCell>
+                        {row.inflammationNormal ? <span className={classes.mr}>N</span> : ""}
+                        {renderIcon(row.inflammation)}
+                        {calculateStatus(flag.icon, row.inflammation)}
+                      </TableCell>
+                      <TableCell>
+                        {row.hemolyticNormal ? <span className={classes.mr}>N</span> : ""}
+                        {renderIcon(row.hemolytic)}
+                        {calculateStatus(flag.icon, row.hemolytic)}
+                      </TableCell>
+                    </StyledTableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )
+        : null}
     </>
   );
 };

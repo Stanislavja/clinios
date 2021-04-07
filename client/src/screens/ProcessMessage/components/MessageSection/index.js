@@ -24,6 +24,7 @@ import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 
 import { StyledTableCellSm, StyledTableRowSm } from "../../../../components/common/StyledTable";
+import useAuth from "../../../../hooks/useAuth";
 import MessageToUserService from "../../../../services/message-to-user.service";
 import { messageStatusType, dateFormat } from "../../../../utils/helpers";
 import MessageToUser from "../MessageToUser";
@@ -85,6 +86,7 @@ const StatusSelectionFields = [
 
 const MessageSection = (props) => {
   const classes = useStyles();
+  const { user } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const {
     message, showDivider, fetchMessages, onChangeHandler, index, isEdit,
@@ -98,7 +100,7 @@ const MessageSection = (props) => {
   const [showMessageDialog, setShowMessageDialog] = useState(false);
   const [messageHistory, setMessageHistory] = useState(false);
   const [messageAssignees, setMessageAssignees] = useState(false);
-  const [assignTo, setAssignTo] = useState(user_id_to);
+  const [assignTo, setAssignTo] = useState(user_id_to || user.id);
   const [assignmentNotes, setAssignmentNotes] = useState(note_assign);
 
   const fetchMessageHistory = useCallback(() => {

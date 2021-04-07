@@ -5,7 +5,7 @@ import Divider from "@material-ui/core/Divider";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
 import { fade, makeStyles } from "@material-ui/core/styles";
-import InputIcon from "@material-ui/icons/Input";
+import InputIcon from "@material-ui/icons/InputOutlined";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 import { Link as RouterLink, useHistory } from "react-router-dom";

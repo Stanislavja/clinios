@@ -153,6 +153,13 @@ class PatientPortalService {
       .then((res) => res.data);
   }
 
+  updatePharmacy(pharmacyId, payload) {
+    return axios.put(`${API_BASE}/client-portal/pharmacy/${pharmacyId}`, payload, {
+      headers: authHeader(),
+    })
+      .then((res) => res.data);
+  }
+
   // Requisitions
   getRequisitions(patient) {
     let url = `${API_BASE}/client-portal/lab_requisitions`;

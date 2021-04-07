@@ -7,8 +7,8 @@ import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
-import InputIcon from "@material-ui/icons/Input";
-import MenuIcon from "@material-ui/icons/Menu";
+import InputIcon from "@material-ui/icons/InputOutlined";
+import MenuIcon from "@material-ui/icons/MenuOutlined";
 import PropTypes from "prop-types";
 import { Link as RouterLink, useHistory, useLocation } from "react-router-dom";
 

@@ -36,7 +36,7 @@ import {
   NewDrugFormFields, GenericOptions, InputOptions, RefillsOptions,
   DEFAULT_AMOUNT, DEFAULT_EXPIRY, DEFAULT_FREQUENCY, DEFAULT_REFILLS,
 } from "../../../static/medicationForm";
-import { drugFrequencyLabelToCode } from "../../../utils/helpers";
+import { drugFrequencyLabelToCode, medicationFormToLabel, pickerDateFormat } from "../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
   ml2: {
@@ -83,6 +83,11 @@ const useStyles = makeStyles((theme) => ({
     overflow: "hidden",
     textOverflow: "ellipsis",
   },
+  recentsContainer: {
+    [theme.breakpoints.up("md")]: {
+      paddingLeft: theme.spacing(8),
+    },
+  },
 }));
 
 const Medications = (props) => {
@@ -121,7 +126,7 @@ const Medications = (props) => {
     formFields.drug_id = medication.id || medication.drug_id;
     formFields.strength = medication.drug_strength_id;
     formFields.frequency = drugFrequencyLabelToCode(medication?.frequency || DEFAULT_FREQUENCY);
-    formFields.startDate = moment(medication.start_dt).format("MMM DD YYYY");
+    formFields.startDate = medication?.start_dt ? pickerDateFormat(medication.start_dt) : currentDate;
     formFields.expires = medication?.expires || DEFAULT_EXPIRY;
     formFields.amount = medication?.amount || DEFAULT_AMOUNT;
     formFields.refills = medication?.refills || DEFAULT_REFILLS;
@@ -252,7 +257,7 @@ const Medications = (props) => {
         const strengthOptions = drugStrengths.length
           ? drugStrengths.map((option) => (
             <MenuItem key={option.id} value={option.id}>
-              {`${option.strength} ${option.unit}`}
+              {`${option.strength} ${option.unit} ${medicationFormToLabel(option.form)}`}
             </MenuItem>
           ))
           : (
@@ -551,55 +556,53 @@ const Medications = (props) => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item lg={2} md={2} xs={12}>
-          <Box pl={4} pr={2}>
-            <Typography variant="h5" gutterBottom>
-              Favorites
-            </Typography>
-            <List>
-              {favoriteMedications.length
-                ? favoriteMedications.map((item) => (
-                  <ListItem
-                    button
-                    onClick={() => rowClickHandler(item)}
-                    key={item.name}
-                    disableGutters
-                    classes={{
-                      root: classes.listItem,
-                    }}
-                  >
-                    <ListItemText
-                      classes={{
-                        primary: classes.textClip,
-                      }}
-                      primary={item.name}
-                    />
-                  </ListItem>
-                ))
-                : <Typography>No favorites found!</Typography>}
-            </List>
-          </Box>
-        </Grid>
-        <Grid item lg={5} md={5} xs={12}>
+        <Grid item lg={1} md={1} xs={12}>
           <Typography variant="h5" gutterBottom>
-            Recent selections, click to populate
+            Favorites
           </Typography>
-          <TableContainer>
-            <Table size="small" aria-label="prescriptions-table">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCellSm>Drug and Type</StyledTableCellSm>
-                  <StyledTableCellSm>Strength</StyledTableCellSm>
-                  <StyledTableCellSm>Frequency</StyledTableCellSm>
-                  <StyledTableCellSm>Expires</StyledTableCellSm>
-                  <StyledTableCellSm>Amount</StyledTableCellSm>
-                  <StyledTableCellSm>Refills</StyledTableCellSm>
-                  <StyledTableCellSm>Generic</StyledTableCellSm>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {recentSelections.length
-                  ? recentSelections.map((row) => (
+          <List>
+            {favoriteMedications.length
+              ? favoriteMedications.map((item) => (
+                <ListItem
+                  button
+                  onClick={() => rowClickHandler(item)}
+                  key={item.name}
+                  disableGutters
+                  classes={{
+                    root: classes.listItem,
+                  }}
+                >
+                  <ListItemText
+                    classes={{
+                      primary: classes.textClip,
+                    }}
+                    primary={item.name}
+                  />
+                </ListItem>
+              ))
+              : <Typography>No favorites found!</Typography>}
+          </List>
+        </Grid>
+        <Grid item lg={6} md={6} xs={12}>
+          <Grid className={classes.recentsContainer}>
+            <Typography variant="h5" gutterBottom>
+              Recent selections, click to populate
+            </Typography>
+            <TableContainer>
+              <Table size="small" aria-label="prescriptions-table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCellSm>Drug and Type</StyledTableCellSm>
+                    <StyledTableCellSm>Strength</StyledTableCellSm>
+                    <StyledTableCellSm>Frequency</StyledTableCellSm>
+                    <StyledTableCellSm>Expires</StyledTableCellSm>
+                    <StyledTableCellSm>Amount</StyledTableCellSm>
+                    <StyledTableCellSm>Refills</StyledTableCellSm>
+                    <StyledTableCellSm>Generic</StyledTableCellSm>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {recentSelections.map((row) => (
                     <StyledTableRowSm
                       key={row.created}
                       className={classes.cursorPointer}
@@ -615,19 +618,11 @@ const Medications = (props) => {
                       <StyledTableCellSm>{row.refills}</StyledTableCellSm>
                       <StyledTableCellSm>{row.generic ? "Yes" : "No"}</StyledTableCellSm>
                     </StyledTableRowSm>
-                  ))
-                  : (
-                    <StyledTableRowSm>
-                      <StyledTableCellSm colSpan={7}>
-                        <Typography className={classes.textMessage} align="center" variant="body1">
-                          No Records Found...
-                        </Typography>
-                      </StyledTableCellSm>
-                    </StyledTableRowSm>
-                  )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
         </Grid>
       </Grid>
     </>
