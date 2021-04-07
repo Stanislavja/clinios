@@ -179,7 +179,11 @@ const MessagesDetails = (props) => {
                       className={classes.button}
                       onClick={() => {
                         dispatch(setSelectedMessage(row));
-                        dispatch(toggleMessageDialogPage());
+                        if (row.throughDoctor) { // TODO::update flag
+                          dispatch(toggleMessageDialogPage());
+                        } else {
+                          dispatch(toggleMessageDialog());
+                        }
                       }}
                     >
                       <EditIcon fontSize="small" />

@@ -132,7 +132,11 @@ const MessagesContent = (props) => {
         <MenuItem
           disabled={isEditDisabled}
           onClick={() => {
-            dispatch(toggleMessageDialogPage());
+            if (selectedMessage.throughDoctor) { // TODO::update flag
+              dispatch(toggleMessageDialogPage());
+            } else {
+              dispatch(toggleMessageDialog());
+            }
             closeMenu();
           }}
         >
