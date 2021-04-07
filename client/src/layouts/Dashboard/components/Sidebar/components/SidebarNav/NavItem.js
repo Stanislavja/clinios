@@ -6,8 +6,8 @@ import {
   ListItem,
   makeStyles,
 } from "@material-ui/core";
-import ExpandLessIcon from "@material-ui/icons/ExpandLess";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpandLessIcon from "@material-ui/icons/ExpandLessOutlined";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMoreOutlined";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 import { NavLink as RouterLink } from "react-router-dom";

@@ -9,7 +9,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import DeleteIcon from "@material-ui/icons/DeleteOutline";
-import RestoreIcon from "@material-ui/icons/RestorePage";
+import RestoreIcon from "@material-ui/icons/RestorePageOutlined";
 import { chunk, orderBy } from "lodash";
 import moment from "moment";
 import { useSnackbar } from "notistack";

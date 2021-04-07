@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
-import CheckIcon from "@material-ui/icons/Check";
+import CheckIcon from "@material-ui/icons/CheckOutlined";
 import RotateLeftTwoToneIcon from "@material-ui/icons/RotateLeftTwoTone";
 import Alert from "@material-ui/lab/Alert";
 import _ from "lodash";

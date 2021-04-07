@@ -6,7 +6,7 @@ import MuiAccordionSummary from "@material-ui/core/AccordionSummary";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMoreOutlined";
 
 import AdminNotes from "../components/AdminNotes/Content";
 import Allergies from "../components/Allergies/Content";

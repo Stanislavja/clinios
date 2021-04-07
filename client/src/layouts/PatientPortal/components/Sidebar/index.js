@@ -2,9 +2,9 @@ import React from "react";
 
 import { Drawer } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import PaymentIcon from "@material-ui/icons/Payment";
-import ReceiptIcon from "@material-ui/icons/Receipt";
-import SettingsIcon from "@material-ui/icons/Settings";
+import PaymentIcon from "@material-ui/icons/PaymentOutlined";
+import ReceiptIcon from "@material-ui/icons/ReceiptOutlined";
+import SettingsIcon from "@material-ui/icons/SettingsOutlined";
 import {
   mdiChartBox,
   mdiAccount,
@@ -200,7 +200,7 @@ const Sidebar = (props) => {
 
 Sidebar.defaultProps = {
   className: null,
-  onClose: () => {},
+  onClose: () => { },
 };
 
 Sidebar.propTypes = {
