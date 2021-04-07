@@ -110,7 +110,7 @@ const Home = () => {
         <Alert icon={false} variant="filled" severity="info">
           {header && ReactHtmlParser(header.header)}
         </Alert>
-        {upcomingAppointments?.length && upcomingAppointments?.map((appointment) => (
+        {Boolean(upcomingAppointments?.length) && upcomingAppointments?.map((appointment) => (
           <Box component="div" className={classes.BoxStyle}>
             <p>
               Appointment
