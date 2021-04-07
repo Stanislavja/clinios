@@ -7,7 +7,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Slide from "@material-ui/core/Slide";
 import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
-import CloseIcon from "@material-ui/icons/Close";
+import CloseIcon from "@material-ui/icons/CloseOutlined";
 import Pagination from "@material-ui/lab/Pagination";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";

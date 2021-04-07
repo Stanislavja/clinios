@@ -7,8 +7,8 @@ import {
   Grid,
   Typography,
 } from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-import SubtractIcon from "@material-ui/icons/Remove";
+import AddIcon from "@material-ui/icons/AddOutlined";
+import SubtractIcon from "@material-ui/icons/RemoveOutlined";
 
 const Counter = () => {
   const [counterValue, setCounterValue] = useState(1);

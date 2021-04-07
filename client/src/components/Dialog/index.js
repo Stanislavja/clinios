@@ -6,9 +6,9 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
-import CloseIcon from "@material-ui/icons/Close";
+import ArrowBackIcon from "@material-ui/icons/ArrowBackOutlined";
+import ArrowForwardIcon from "@material-ui/icons/ArrowForwardOutlined";
+import CloseIcon from "@material-ui/icons/CloseOutlined";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 
