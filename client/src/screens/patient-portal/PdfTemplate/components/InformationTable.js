@@ -31,9 +31,6 @@ const useStyles = makeStyles((theme) => ({
   dataInformationGrid: {
     paddingTop: 5,
   },
-  profileGenderTypo: {
-    // theme.spacing(0.5, 0),
-  },
   patNameGrid: {
     marginLeft: 4,
   },
@@ -90,10 +87,6 @@ const InformationTable = (props) => {
           justify="flex-start"
           direction="column"
           xs={6}
-          sm={6}
-          md={6}
-          lg={6}
-          xl={6}
           className={classes.tableHeading}
         >
           <Typography variant="h5">Ordering Physician</Typography>
@@ -111,10 +104,6 @@ const InformationTable = (props) => {
           justify="center"
           direction="column"
           xs={6}
-          sm={6}
-          md={6}
-          lg={6}
-          xl={6}
           className={classes.tableHeading}
         >
           <Typography variant="h5">Data Information</Typography>
@@ -163,7 +152,7 @@ const InformationTable = (props) => {
       {/* table body */}
 
       <Grid container>
-        <Grid item xs={6} sm={6} md={6} lg={6} xl={6} className={classes.tableBody}>
+        <Grid item xs={6} className={classes.tableBody}>
           <Grid container>
             <Typography variant="h5">Responsible Party</Typography>
             <Typography variant="h5" className={classes.billTypeTypo}>
@@ -191,10 +180,6 @@ const InformationTable = (props) => {
           alignItems="center"
           justify="center"
           xs={6}
-          sm={6}
-          md={6}
-          lg={6}
-          xl={6}
           className={classes.tableBody}
         >
           <Typography variant="h4">ClIENT BILL ONLY</Typography>

@@ -53,7 +53,7 @@ const PatientInformation = (props) => {
   const { testProfileInfo } = props;
   return (
     <Grid container justify="space-between" className={classes.clientAndPatientInfo}>
-      <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
+      <Grid item xs={8}>
         <Typography className={classes.infoSpace}>
           Client
           <span className={classes.ml4}>#:</span>
@@ -64,7 +64,7 @@ const PatientInformation = (props) => {
         <Typography className={classes.infoSpace}>9237 E Via de Ventura, Suite 220 </Typography>
         <Typography className={classes.infoSpace}>Scottsdale, AZ 85258 UltraLabTests.com </Typography>
       </Grid>
-      <Grid item xs={4} sm={4} md={4} lg={4} xl={4} className={classes.patientInformationGridItem}>
+      <Grid item xs={4} className={classes.patientInformationGridItem}>
         <Typography className={classes.infoSpace}>Patient Information </Typography>
         <Typography className={classes.infoSpace}>
           {testProfileInfo.firstname}
