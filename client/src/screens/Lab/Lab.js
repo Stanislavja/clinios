@@ -21,7 +21,7 @@ import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 import FileViewer from "react-file-viewer";
 import { pdfjs, Document, Page } from "react-pdf";
-import { useHistory, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import useDebounce from "../../hooks/useDebounce";
 import LabService from "../../services/lab.service";
@@ -131,9 +131,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Lab = (props) => {
   const {
-    fromHome, userId, documentId, fetchProviderDetails,
+    fromHome, userId, documentId, fetchProviderDetails, onClose,
   } = props;
-  const history = useHistory();
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   // states
@@ -309,7 +308,7 @@ const Lab = (props) => {
           <Typography variant="h3" gutterBottom>No Lab Requests Available</Typography>
           <Button
             variant="outlined"
-            onClick={() => history.goBack()}
+            onClick={() => onClose()}
           >
             Go Back
           </Button>
@@ -718,6 +717,7 @@ const Lab = (props) => {
 Lab.defaultProps = {
   documentId: 0,
   fetchProviderDetails: () => { },
+  onClose: () => { },
 };
 
 Lab.propTypes = {
@@ -725,6 +725,7 @@ Lab.propTypes = {
   userId: PropTypes.number.isRequired,
   documentId: PropTypes.number,
   fetchProviderDetails: PropTypes.func,
+  onClose: PropTypes.func,
 };
 
 export default Lab;
