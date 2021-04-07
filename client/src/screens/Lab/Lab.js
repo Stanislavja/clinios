@@ -268,6 +268,7 @@ const Lab = (props) => {
     LabService.updateLab(labId, reqBody).then((res) => {
       enqueueSnackbar(res.message, { variant: "success" });
       getLabInformation();
+      fetchProviderDetails();
     });
   };
 
