@@ -43,7 +43,9 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(2),
   },
   label: {
-    margin: "0 2px 2px 0",
+    margin: "0 2px 0 0",
+    fontWeight: 500,
+    fontSize: 13,
   },
   relativePosition: {
     position: "relative",
