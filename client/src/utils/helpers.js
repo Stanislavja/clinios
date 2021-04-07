@@ -92,6 +92,18 @@ export const formatDate = (date) => {
   return [year, month, day].join("-");
 };
 
+export const formatPdfDate = (date) => {
+  const d = new Date(date);
+  let month = `${d.getMonth() + 1}`;
+  let day = `${d.getDate()}`;
+  const year = d.getFullYear();
+
+  if (month.length < 2) month = `0${month}`;
+  if (day.length < 2) day = `0${day}`;
+
+  return [day, month, year].join("/");
+};
+
 export const dateDiffInDays = (d1, d2) => {
   const t2 = d2.getTime();
   const t1 = d1.getTime();
@@ -291,7 +303,7 @@ export const medicationFormToLabel = (form) => {
 export const isDev = () => process.env.NODE_ENV === "development";
 
 export function isArrayWithLength(arr) {
-  return (Array.isArray(arr) && arr.length);
+  return Array.isArray(arr) && arr.length;
 }
 
 export function getAllowedRoutes(routes, roles) {
@@ -311,9 +323,7 @@ export function isEmpty(obj) {
   return Object.keys(obj).length === 0;
 }
 
-export function noOp() {
-
-}
+export function noOp() {}
 
 export const pickerDateFormat = (date) => moment(date).format("MMM DD YYYY");
 

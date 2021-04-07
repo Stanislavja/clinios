@@ -31,6 +31,7 @@
     "sourceType": "module"
   },
   "rules": {
+    "endOfLine": "off",
     "prettier/prettier": "error",
     "camelcase": 0,
     "import/no-unresolved": 1,

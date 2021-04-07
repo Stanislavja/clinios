@@ -10,4 +10,22 @@ router.get(
   labRequisitionController.getLabRequitions
 );
 
+router.get(
+  "/client-portal/lab_requisitions/test-list",
+  [authJwt.verifyToken],
+  labRequisitionController.getTestList
+);
+
+router.get(
+  "/client-portal/lab_requisitions/test-profile-info",
+  [authJwt.verifyToken],
+  labRequisitionController.getTestProfileInfo
+);
+
+router.get(
+  "/client-portal/lab_requisitions/profile-tests",
+  [authJwt.verifyToken],
+  labRequisitionController.getProfileTests
+);
+
 module.exports = router;
