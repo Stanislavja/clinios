@@ -6,9 +6,7 @@ import authHeader from "../auth-header";
 class PatientPortalService {
   // patient profile
   getProfile() {
-    return axios
-      .get(`${API_BASE}/client-portal/patient`, { headers: authHeader() })
-      .then((res) => res.data);
+    return axios.get(`${API_BASE}/client-portal/patient`, { headers: authHeader() }).then((res) => res.data);
   }
 
   updateProfile(payload, patientId) {
@@ -174,6 +172,40 @@ class PatientPortalService {
         headers: authHeader(),
       })
       .then((res) => res.data);
+  }
+
+  // test list
+
+  getTestList(patient) {
+    let url = `${API_BASE}/client-portal/lab_requisitions/test-list`;
+    if (patient) {
+      // eslint-disable-next-line max-len
+      url = `${API_BASE}/client-portal/lab_requisitions/?patient_id=${patient.id}&client_id=${patient.client_id}`;
+    }
+    return axios
+      .get(url, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  async getTestProfileInfo(testId) {
+    const url = `${API_BASE}/client-portal/lab_requisitions/test-profile-info?testId=${testId}`;
+
+    const res = await axios.get(url, {
+      headers: authHeader(),
+    });
+    return res.data;
+  }
+
+  async getProfileTests(testId) {
+    const url = `${API_BASE}/client-portal/lab_requisitions/profile-tests?testId=${testId}`;
+
+    const res = await axios.get(url, {
+      headers: authHeader(),
+    });
+
+    return res.data;
   }
 
   // Handouts

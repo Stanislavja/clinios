@@ -43,11 +43,16 @@ const getPharmacy = async (req, res) => {
 
 const updatePharmacy = async (req, res) => {
   const { id } = req.params;
+  const formData = req.body.data;
+  formData.updated = new Date();
+  formData.updated_user_id = req.user_id;
 
   const db = makeDb(configuration, res);
   try {
-    const $sql = `update patient set pharmacy_id=${id}, updated= now(), updated_user_id='${req.user_id}' where id=${id}`;
-    const updateResponse = await db.query($sql);
+    const updateResponse = await db.query(
+      `update patient set ? where id=${id}`,
+      [formData]
+    );
 
     if (!updateResponse.affectedRows) {
       errorMessage.message = "Update not successful";
