@@ -5,18 +5,18 @@ import authHeader from "./auth-header";
 
 class LabService {
   // Lab data from dahsboard page
-  getLabData(userId) {
+  getLabData() {
     return axios
-      .get(`${API_BASE}/lab/${userId}`, {
+      .get(`${API_BASE}/labs`, {
         headers: authHeader(),
       })
       .then((res) => res.data);
   }
 
   // Lab by Id
-  getLabById(userId, labId) {
+  getLabById(labId) {
     return axios
-      .get(`${API_BASE}/lab/${userId}/${labId}`, {
+      .get(`${API_BASE}/labs/${labId}`, {
         headers: authHeader(),
       })
       .then((res) => res.data);
@@ -25,7 +25,7 @@ class LabService {
   // User History
   getUserHistory(userId) {
     return axios
-      .get(`${API_BASE}/lab/user-history/${userId}`, {
+      .get(`${API_BASE}/labs/${userId}/user-history`, {
         headers: authHeader(),
       })
       .then((res) => res.data);
@@ -34,7 +34,7 @@ class LabService {
   // Lab History
   getLabHistory(labId) {
     return axios
-      .get(`${API_BASE}/lab/history/${labId}`, {
+      .get(`${API_BASE}/labs/${labId}/history`, {
         headers: authHeader(),
       })
       .then((res) => res.data);
@@ -43,23 +43,23 @@ class LabService {
   // Lab Values
   getLabValues(labId) {
     return axios
-      .get(`${API_BASE}/lab/values/${labId}`, {
+      .get(`${API_BASE}/labs/${labId}/values`, {
         headers: authHeader(),
       })
       .then((res) => res.data);
   }
 
   // update lab status
-  updateLab(labId, payload) {
-    return axios.put(`${API_BASE}/lab/${labId}`, payload, {
+  updateLabStatus(labId, payload) {
+    return axios.put(`${API_BASE}/labs/${labId}`, payload, {
       headers: authHeader(),
     })
       .then((res) => res.data);
   }
 
   // update lab data
-  updateLabData(labId, payload) {
-    return axios.put(`${API_BASE}/lab/update/${labId}`, payload, {
+  updateLab(labId, payload) {
+    return axios.put(`${API_BASE}/labs/${labId}/update`, payload, {
       headers: authHeader(),
     })
       .then((res) => res.data);

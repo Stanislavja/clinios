@@ -1061,8 +1061,11 @@ const Patient = () => {
               fetchProviderDetails={() => { }}
               selectedMessage={selectedMessage}
               onClose={() => {
-                dispatch(resetSelectedMessage());
+                // resetSelectedMessage is used with a timeout otherwise selectedMessage prop
+                // gets null on the process message page and wrong API gets called
+                setTimeout(() => dispatch(resetSelectedMessage()), 1000);
                 dispatch(toggleMessageDialogPage());
+                fetchMessages();
               }}
             />
           )}
@@ -1278,7 +1281,7 @@ const Patient = () => {
               <Card
                 title="Encounters"
                 data={
-                  <EncountersCardContent />
+                  <EncountersCardContent reloadData={() => fetchEncounters()} />
                 }
                 showActions
                 primaryButtonText="New"

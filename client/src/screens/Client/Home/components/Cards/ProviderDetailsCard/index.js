@@ -7,10 +7,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
 
 import Dialog from "../../../../../../components/Dialog";
 import Colors from "../../../../../../theme/colors";
+import ProcessLab from "../../../../../Lab";
 import ProcessMessage from "../../../../../ProcessMessage";
 
 const useStyles = makeStyles((theme) => ({
@@ -75,6 +75,8 @@ const useStyles = makeStyles((theme) => ({
 const ProviderDetailsCard = ({ selectedProvider, providerDetails, fetchProviderDetails }) => {
   const classes = useStyles();
   const [showMessagesModal, setShowMessagesModal] = useState(false);
+  const [showLabsModal, setShowLabsModal] = useState(false);
+
   const patientLabsCount = !!providerDetails
     && providerDetails.patientLabs
     && providerDetails.patientLabs["count(l.id)"];
@@ -93,6 +95,10 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails, fetchProviderD
     setShowMessagesModal((prevState) => !prevState);
   };
 
+  const toggleLabsModal = () => {
+    setShowLabsModal((prevState) => !prevState);
+  };
+
   return (
     <>
       {!!showMessagesModal && (
@@ -107,6 +113,23 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails, fetchProviderD
             />
           )}
           cancelForm={() => toggleMessagesModal()}
+          size="xl"
+          hideActions
+        />
+      )}
+      {!!showLabsModal && (
+        <Dialog
+          fullHeight
+          open={showLabsModal}
+          title="Documents"
+          message={(
+            <ProcessLab
+              fromHome
+              userId={selectedProvider.id}
+              fetchProviderDetails={fetchProviderDetails}
+            />
+          )}
+          cancelForm={() => toggleLabsModal()}
           size="xl"
           hideActions
         />
@@ -130,46 +153,19 @@ const ProviderDetailsCard = ({ selectedProvider, providerDetails, fetchProviderD
               <div className={classes.count}>Count</div>
               <div>Since</div>
             </li>
-            <li>
-              {/* we will redirect only if the patient labs count is > 0 */}
-              {
-                patientLabsCount
-                  ? (
-                    <Link
-                      to={{
-                        pathname: `/lab/${selectedProvider.id}`,
-                        state: {
-                          fromHome: true,
-                        },
-                      }}
-                    >
-                      <div>Patient Labs</div>
-                      <div className={classes.count}>
-                        {patientLabsCount}
-                      </div>
-                      <div>
-                        {dateValidation(patientLabsDate, (patientLabsDate !== undefined && patientLabsDate)
-                          ? `${moment(patientLabsDate).format("ll")}
+            <li onClick={() => (patientLabsCount ? toggleLabsModal() : {})} aria-hidden="true">
+              <>
+                <div>Patient Labs</div>
+                <div className={classes.count}>
+                  {patientLabsCount}
+                </div>
+                <div>
+                  {dateValidation(patientLabsDate, (patientLabsDate !== undefined && patientLabsDate)
+                    ? `${moment(patientLabsDate).format("ll")}
                           (${moment(patientLabsDate).startOf("day").fromNow()})`
-                          : "")}
-                      </div>
-                    </Link>
-                  )
-                  : (
-                    <>
-                      <div>Patient Labs</div>
-                      <div className={classes.count}>
-                        {patientLabsCount}
-                      </div>
-                      <div>
-                        {dateValidation(patientLabsDate, (patientLabsDate !== undefined && patientLabsDate)
-                          ? `${moment(patientLabsDate).format("ll")}
-                          (${moment(patientLabsDate).startOf("day").fromNow()})`
-                          : "")}
-                      </div>
-                    </>
-                  )
-              }
+                    : "")}
+                </div>
+              </>
             </li>
 
             <li onClick={() => toggleMessagesModal()} aria-hidden="true">

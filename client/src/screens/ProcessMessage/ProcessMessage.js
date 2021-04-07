@@ -57,7 +57,7 @@ const ProcessMessage = (props) => {
   const [sectionFormFields, setSectionFormFields] = useState([]);
 
   const fetchMessages = useCallback(() => {
-    const selectedProviderId = selectedProvider.id;
+    const selectedProviderId = selectedProvider?.id;
     MessageToUserService.getAllMessages(selectedProviderId).then((res) => {
       setMessages(res.data);
       setIsLoading(false);
@@ -74,7 +74,7 @@ const ProcessMessage = (props) => {
       .catch(() => {
         setIsLoading(false);
       });
-  }, [selectedProvider.id]);
+  }, [selectedProvider?.id]);
 
   const fetchMessageById = useCallback(() => {
     const messageId = selectedMessage.id;

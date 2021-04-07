@@ -2,9 +2,9 @@ import React from "react";
 
 import { Drawer } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import PaymentIcon from "@material-ui/icons/Payment";
-import ReceiptIcon from "@material-ui/icons/Receipt";
-import SettingsIcon from "@material-ui/icons/Settings";
+import PaymentIcon from "@material-ui/icons/PaymentOutlined";
+import ReceiptIcon from "@material-ui/icons/ReceiptOutlined";
+import SettingsIcon from "@material-ui/icons/SettingsOutlined";
 import {
   mdiChartBox,
   mdiAccount,
@@ -89,6 +89,14 @@ const Sidebar = (props) => {
     },
     {
       id: 6,
+      title: "Purchase Labs",
+      href: "/patient/purchase-labs",
+      icon: (
+        <Icon path={mdiTestTube} size={1} horizontal vertical rotate={180} />
+      ),
+    },
+    {
+      id: 7,
       title: "Lab Requisitions",
       href: "/patient/labs-requisition",
       icon: (
@@ -96,7 +104,7 @@ const Sidebar = (props) => {
       ),
     },
     {
-      id: 12,
+      id: 8,
       title: "Appointments",
       href: "/patient/appointments",
       icon: (
@@ -104,13 +112,13 @@ const Sidebar = (props) => {
       ),
     },
     {
-      id: 7,
+      id: 9,
       title: "Billing",
       href: "/patient/billing",
       icon: <ReceiptIcon />,
     },
     {
-      id: 8,
+      id: 10,
       title: "Payment Methods",
       href: "/patient/payment-methods",
       icon: <PaymentIcon />,
@@ -122,7 +130,7 @@ const Sidebar = (props) => {
     // icon: <Icon path={mdiAllergy} size={1} horizontal vertical rotate={180} />,
     // },
     {
-      id: 10,
+      id: 11,
       title: "Prescriptions",
       href: "/patient/prescriptions",
       icon: (
@@ -136,7 +144,7 @@ const Sidebar = (props) => {
       ),
     },
     {
-      id: 11,
+      id: 12,
       title: "Pharmacies",
       href: "/patient/pharmacies",
       icon: (
@@ -192,7 +200,7 @@ const Sidebar = (props) => {
 
 Sidebar.defaultProps = {
   className: null,
-  onClose: () => {},
+  onClose: () => { },
 };
 
 Sidebar.propTypes = {

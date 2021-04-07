@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import DeleteIcon from "@material-ui/icons/DeleteOutline";
-import EditIcon from "@material-ui/icons/Edit";
+import EditIcon from "@material-ui/icons/EditOutlined";
 import moment from "moment";
 import PropTypes from "prop-types";
 

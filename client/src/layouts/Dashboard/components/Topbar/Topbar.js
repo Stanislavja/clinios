@@ -8,8 +8,8 @@ import InputBase from "@material-ui/core/InputBase";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
+import MenuIcon from "@material-ui/icons/MenuOutlined";
+import SearchIcon from "@material-ui/icons/SearchOutlined";
 import clsx from "clsx";
 import moment from "moment";
 import PropTypes from "prop-types";
@@ -289,7 +289,7 @@ const Topbar = (props) => {
 
 Topbar.defaultProps = {
   className: null,
-  onSidebarOpen: () => {},
+  onSidebarOpen: () => { },
 };
 
 Topbar.propTypes = {

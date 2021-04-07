@@ -14,12 +14,14 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import { useSnackbar } from "notistack";
 
 import useAuth from "../../../hooks/useAuth";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 import PurchaseLabsService from "../../../services/patient_portal/purchase-lab.service";
 import { paymentMethodType } from "../../../utils/helpers";
 import PaymentMethodsForm from "./components/PaymentMethodsForm";
+import PurchaseConfirm from "./components/PurchaseConfirm";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -58,6 +60,7 @@ const useStyles = makeStyles((theme) => ({
 
 const PurchaseLabs = () => {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const { lastVisitedPatient } = useAuth();
   const [selected, setSelected] = useState([]);
   const [paymentMethods, setPaymentMethods] = useState([]);
@@ -65,12 +68,13 @@ const PurchaseLabs = () => {
   const [total, setTotal] = useState(0);
   const [labs, setLabs] = useState([]);
   const [isNewPaymentMethodOpen, setIsNewPaymentMethodOpen] = useState(false);
+  const [isConfirmDialog, setIsConfirmDialog] = useState(false);
 
   const fetchPaymentMethods = useCallback(() => {
     PatientPortalService.getPaymentMethods(lastVisitedPatient).then((res) => {
       setPaymentMethods(
         [...res.data, {
-          id: 0,
+          id: 999,
           type: "new",
           account_number: "000",
         }],
@@ -86,7 +90,7 @@ const PurchaseLabs = () => {
   }, [fetchPaymentMethods]);
 
   const handlePaymentMethodChange = (newPaymentMethod) => {
-    if (newPaymentMethod === "new") {
+    if (Number(newPaymentMethod) === 999) {
       setIsNewPaymentMethodOpen(true);
     } else {
       setSelectedPaymentMethod(newPaymentMethod);
@@ -118,6 +122,24 @@ const PurchaseLabs = () => {
     }
     setSelected(newSelected);
     calculateTotal(newSelected);
+  };
+
+  const handleOnSubmit = () => {
+    const payload = {
+      data: {
+        payment_method_id: selectedPaymentMethod,
+        amount: total,
+        cpt_ids: selected,
+      },
+    };
+    PurchaseLabsService.create(payload).then(() => {
+      enqueueSnackbar(`Lab purchased successfully!`, {
+        variant: "success",
+      });
+      setIsConfirmDialog(false);
+      setSelected([]);
+      setSelectedPaymentMethod(null);
+    });
   };
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
@@ -193,17 +215,18 @@ const PurchaseLabs = () => {
           >
             <option aria-label="None" value="" />
             {paymentMethods.map((pm) => (
-              <option key={pm.id} value={pm.type}>
+              <option key={pm.id} value={pm.id}>
                 {paymentMethodType(pm.type)}
               </option>
             ))}
           </Select>
         </FormControl>
         <Button
+          disabled={(!total || !selectedPaymentMethod)}
           variant="outlined"
           color="primary"
           size="medium"
-          onClick={() => alert("purchase")} // TODO:: incomplete
+          onClick={() => setIsConfirmDialog(true)}
           className={classes.purchaseButton}
         >
           Purchase
@@ -213,6 +236,12 @@ const PurchaseLabs = () => {
         isOpen={isNewPaymentMethodOpen}
         onClose={() => setIsNewPaymentMethodOpen(false)}
         reloadData={() => fetchPaymentMethods()}
+      />
+      <PurchaseConfirm
+        open={isConfirmDialog}
+        onClose={() => setIsConfirmDialog(false)}
+        onConfirmation={() => handleOnSubmit(false)}
+        amount={total}
       />
     </div>
   );

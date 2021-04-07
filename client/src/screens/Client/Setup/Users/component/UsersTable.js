@@ -12,7 +12,7 @@ import {
   TableRow,
   withStyles,
 } from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
+import EditIcon from "@material-ui/icons/EditOutlined";
 import moment from "moment";
 import PropTypes from "prop-types";
 

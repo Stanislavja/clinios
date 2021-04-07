@@ -2,8 +2,8 @@ import React from "react";
 
 import { Divider, Drawer } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import LockIcon from "@material-ui/icons/Lock";
-import LockOpenIcon from "@material-ui/icons/LockOpen";
+import LockOpenIcon from "@material-ui/icons/LockOpenOutlined";
+import LockIcon from "@material-ui/icons/LockOutlined";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 
@@ -80,7 +80,7 @@ const Sidebar = (props) => {
 
 Sidebar.defaultProps = {
   className: "",
-  onClose: () => {},
+  onClose: () => { },
 };
 
 Sidebar.propTypes = {

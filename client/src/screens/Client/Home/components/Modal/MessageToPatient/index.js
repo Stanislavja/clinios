@@ -13,7 +13,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
-import CloseIcon from "@material-ui/icons/Close";
+import CloseIcon from "@material-ui/icons/CloseOutlined";
 import Alert from "@material-ui/lab/Alert";
 import { KeyboardDatePicker } from "@material-ui/pickers";
 import clsx from "clsx";
