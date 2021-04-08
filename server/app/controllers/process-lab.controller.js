@@ -171,6 +171,9 @@ const updateLab = async (req, res) => {
     if (typeof type !== "undefined") {
       $sql += `, type='${type}'`;
     }
+    if (typeof user_id !== "undefined") {
+      $sql += `, user_id='${user_id}'`;
+    }
     if (typeof note !== "undefined") {
       $sql += `, note='${note}'`;
     }

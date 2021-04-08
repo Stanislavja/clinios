@@ -143,8 +143,9 @@ const BasicInfo = (props) => {
   useEffect(() => {
     formData.status = formData.status ? formData.status : "active";
     setBasicInfo({ ...formData });
-
-    const selectedCountry = CountryRegionData.filter((countryArray) => countryArray[0] === formData.country);
+    // [Pakistan, PK, ["Azad Kashmir", "Punjab"]]
+    // [United States, US, ["Alabama", "Illinois"]]
+    const selectedCountry = CountryRegionData.filter((countryArray) => countryArray[1] === formData.country);
     if (selectedCountry.length) { // country and state is present in the db
       setCountry(selectedCountry[0]);
 

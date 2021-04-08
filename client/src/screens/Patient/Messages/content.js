@@ -103,6 +103,16 @@ const MessagesContent = (props) => {
     return true;
   }, [selectedMessage]);
 
+  // if patient_id_from is not null and user_id_to is not null then message is to user
+  // if user_id_from is not null and patient_id_to is not null then message is to patient
+
+  const messageIsToUser = useMemo(() => {
+    if (selectedMessage && !!selectedMessage.patient_id_from && !!selectedMessage.user_id_to) {
+      return true;
+    }
+    return false;
+  }, [selectedMessage]);
+
   return (
     <>
       <Alert
@@ -132,7 +142,11 @@ const MessagesContent = (props) => {
         <MenuItem
           disabled={isEditDisabled}
           onClick={() => {
-            dispatch(toggleMessageDialogPage());
+            if (messageIsToUser) {
+              dispatch(toggleMessageDialogPage());
+            } else {
+              dispatch(toggleMessageDialog());
+            }
             closeMenu();
           }}
         >
