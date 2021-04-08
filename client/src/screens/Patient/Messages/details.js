@@ -179,7 +179,7 @@ const MessagesDetails = (props) => {
                       className={classes.button}
                       onClick={() => {
                         dispatch(setSelectedMessage(row));
-                        if (row.throughDoctor) { // TODO::update flag
+                        if (!!row.patient_id_from && !!row.user_id_to) {
                           dispatch(toggleMessageDialogPage());
                         } else {
                           dispatch(toggleMessageDialog());
