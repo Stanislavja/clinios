@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
   inputFix: {
     marginBottom: theme.spacing(1),
+    width: 400,
   },
   submitBtn: {
     marginTop: theme.spacing(2),
@@ -192,7 +193,7 @@ const Appointments = () => {
               >
                 {appointmentTypes.map((option) => (
                   <MenuItem key={option.length} value={option.length}>
-                    {option.appointment_type}
+                    {`${option.appointment_type} - ${option.length} minutes - $${option.fee}`}
                   </MenuItem>
                 ))}
               </TextField>
