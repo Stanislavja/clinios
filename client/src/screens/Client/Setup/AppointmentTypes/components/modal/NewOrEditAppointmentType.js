@@ -91,6 +91,10 @@ const useStyles = makeStyles((theme) => ({
   textArea: {
     marginTop: "12px",
   },
+  cancelButton: {
+    borderColor: colors.orange[600],
+    color: colors.orange[600],
+  },
 }));
 
 const NewOrEditAppointment = ({
@@ -389,10 +393,7 @@ const NewOrEditAppointment = ({
           size="small"
           variant="outlined"
           onClick={() => onClose()}
-          style={{
-            borderColor: colors.orange[600],
-            color: colors.orange[600],
-          }}
+          className={classes.cancelButton}
         >
           Cancel
         </Button>
