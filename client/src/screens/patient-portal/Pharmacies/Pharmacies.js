@@ -5,24 +5,21 @@ import {
   List,
   ListItem,
 } from "@material-ui/core";
-import _ from "lodash";
+import { omitBy, debounce } from "lodash";
 import { useSnackbar } from "notistack";
 
+import useAuth from "../../../hooks/useAuth";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 import {
   Pharmacies as pharmacies,
 } from "../../../static/patientBasicInfoForm";
+import PharmacyCard from "./components/PharmacyCard";
 
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     padding: "40px 0px",
-  },
-  cardRoot: {
-    border: "1px solid",
-    margin: theme.spacing(0, 0, 1, 0),
-    borderRadius: 0,
   },
   title: {
     paddingBottom: theme.spacing(1),
@@ -40,8 +37,12 @@ const useStyles = makeStyles((theme) => ({
 
 const Pharmacies = () => {
   const classes = useStyles();
+  const { user } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
-  const [patientPharmacy, setPatientPharmacy] = useState(null);
+  const [patientPharmacy, setPatientPharmacy] = useState({
+    pharmacy1: null,
+    pharmacy2: null,
+  });
   const [searchedResults, setSearchedResults] = useState({
     pharmacy1: [],
     pharmacy2: [],
@@ -49,7 +50,13 @@ const Pharmacies = () => {
 
   const fetchPatienPharmacy = useCallback(() => {
     PatientPortalService.getPharmacies().then((res) => {
-      setPatientPharmacy(res.data.length ? res.data[0] : null);
+      const apiData = res.data.length ? res.data[0] : null;
+      if (apiData) {
+        setPatientPharmacy({
+          pharmacy1: omitBy(apiData, (value, key) => key.startsWith("pharmacy2")),
+          pharmacy2: omitBy(apiData, (value, key) => !key.startsWith("pharmacy2")),
+        });
+      }
     });
   }, []);
 
@@ -57,7 +64,7 @@ const Pharmacies = () => {
     fetchPatienPharmacy();
   }, [fetchPatienPharmacy]);
 
-  const debouncedSearchPharmacies = _.debounce((event) => {
+  const debouncedSearchPharmacies = debounce((event) => {
     const { name, value } = event.target;
     if (value.length > 5) {
       const reqBody = {
@@ -74,14 +81,17 @@ const Pharmacies = () => {
     }
   }, 1000);
 
-  const saveSelectedPharmacy = (pharmacy) => {
-    const pharmacyId = pharmacy.id;
+  const saveSelectedPharmacy = (pharmacy, pharmacyName) => {
+    const patientId = user?.client_id;
+    const pharmacy1Id = pharmacyName === "pharmacy1" ? pharmacy.id : patientPharmacy.pharmacy1.id;
+    const pharmacy2Id = pharmacyName === "pharmacy2" ? pharmacy.id : patientPharmacy.pharmacy2.pharmacy2_id;
     const reqBody = {
       data: {
-        ...pharmacy,
+        pharmacy_id: pharmacy1Id,
+        pharmacy2_id: pharmacy2Id,
       },
     };
-    PatientPortalService.updatePharmacy(pharmacyId, reqBody).then((response) => {
+    PatientPortalService.updatePharmacy(patientId, reqBody).then((response) => {
       enqueueSnackbar(`${response.message}`, { variant: "success" });
       fetchPatienPharmacy();
     });
@@ -99,7 +109,7 @@ const Pharmacies = () => {
       </Typography>
       <Grid item xs={6}>
         <Grid className={classes.halfSectionCard}>
-          <Grid container>
+          <Grid container spacing={3}>
             {pharmacies.map((pharmacy, index) => (
               <Grid key={pharmacy.name} item md={4}>
                 <Typography variant="h4" color="textPrimary">
@@ -121,7 +131,12 @@ const Pharmacies = () => {
                         key={item.id}
                         disableGutters
                         button
-                        onClick={() => saveSelectedPharmacy(item)}
+                        selected={
+                          !!patientPharmacy[pharmacy.name]
+                          && (patientPharmacy[pharmacy.name].id === item.id
+                            || patientPharmacy[pharmacy.name].pharmacy2_id === item.id)
+                        }
+                        onClick={() => saveSelectedPharmacy(item, pharmacy.name)}
                       >
                         <Box key={item.id}>
                           <Typography gutterBottom>{item.name}</Typography>
@@ -144,25 +159,34 @@ const Pharmacies = () => {
                   )
                     : null
                 }
+                {
+                  !!patientPharmacy.pharmacy1 && index === 0 && (
+                    <PharmacyCard
+                      name={patientPharmacy.pharmacy1?.name}
+                      address={patientPharmacy.pharmacy1?.address}
+                      city={patientPharmacy.pharmacy1?.city}
+                      state={patientPharmacy.pharmacy1?.state}
+                      postal={patientPharmacy.pharmacy1?.postal}
+                      phone={patientPharmacy.pharmacy1?.phone}
+                    />
+                  )
+                }
+                {
+                  !!patientPharmacy.pharmacy2 && index === 1 && (
+                    <PharmacyCard
+                      name={patientPharmacy.pharmacy2?.pharmacy2_name}
+                      address={patientPharmacy.pharmacy2?.pharmacy2_address}
+                      city={patientPharmacy.pharmacy2?.pharmacy2_city}
+                      state={patientPharmacy.pharmacy2?.pharmacy2_state}
+                      postal={patientPharmacy.pharmacy2?.pharmacy2_postal}
+                      phone={patientPharmacy.pharmacy2?.pharmacy2_phone}
+                    />
+                  )
+                }
               </Grid>
             ))}
           </Grid>
         </Grid>
-        {
-          !!patientPharmacy && (
-            <>
-              <Typography gutterBottom>{patientPharmacy.name}</Typography>
-              <Typography gutterBottom>{patientPharmacy.address}</Typography>
-              <Typography gutterBottom>
-                {`${patientPharmacy.city} ${patientPharmacy.state} ${patientPharmacy.postal}`}
-              </Typography>
-              <Typography gutterBottom>
-                Phone
-                {patientPharmacy.phone}
-              </Typography>
-            </>
-          )
-        }
       </Grid>
     </div>
   );
