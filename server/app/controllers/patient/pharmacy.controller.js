@@ -19,7 +19,8 @@ const getPharmacy = async (req, res) => {
     $sql = `select p.id, p.firstname, p.middlename, p.lastname, p.gender, p.dob, p.ssn, p.preferred_name,
      p.referred_by, p.phone_home, p.phone_cell, p.phone_work, p.email, p.client_id
     , ph.id, ph.name, ph.address, ph.address2, ph.city, ph.state, ph.postal, ph.country, ph.phone, ph.fax
-    , ph2.id, ph2.name, ph2.address, ph2.address2, ph2.city, ph2.state, ph2.postal, ph2.country, ph2.phone, ph2.fax
+    , ph2.id pharmacy2_id, ph2.name pharmacy2_name, ph2.address pharmacy2_address, ph2.address2 pharmacy2_address2, ph2.city pharmacy2_city,
+     ph2.state pharmacy2_state, ph2.postal pharmacy2_postal, ph2.country pharmacy2_country, ph2.phone pharmacy2_phone, ph2.fax pharmacy2_fax
     from patient p
     left join pharmacy ph on ph.id=p.pharmacy_id
     left join pharmacy ph2 on ph2.id=p.pharmacy2_id
