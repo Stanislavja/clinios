@@ -66,10 +66,18 @@ const Sidebar = (props) => {
       icon: <Icon path={mdiMessageOutline} size={1} horizontal vertical rotate={180} />,
     },
     {
-      id: 3,
-      title: "Encounters",
-      href: "/patient/encounters",
-      icon: <SettingsIcon />,
+      id: 8,
+      title: "Appointments",
+      href: "/patient/appointments",
+      icon: (
+        <Icon path={mdiCalendar} size={1} horizontal vertical rotate={180} />
+      ),
+    },
+    {
+      id: 9,
+      title: "Provider Billing",
+      href: "/patient/billing",
+      icon: <ReceiptIcon />,
     },
     {
       id: 4,
@@ -80,12 +88,10 @@ const Sidebar = (props) => {
       ),
     },
     {
-      id: 5,
-      title: "Labs/Documents",
-      href: "/patient/labs",
-      icon: (
-        <Icon path={mdiTestTube} size={1} horizontal vertical rotate={180} />
-      ),
+      id: 3,
+      title: "Encounters",
+      href: "/patient/encounters",
+      icon: <SettingsIcon />,
     },
     {
       id: 6,
@@ -104,18 +110,12 @@ const Sidebar = (props) => {
       ),
     },
     {
-      id: 8,
-      title: "Appointments",
-      href: "/patient/appointments",
+      id: 5,
+      title: "Documents / Lab Results",
+      href: "/patient/labs",
       icon: (
-        <Icon path={mdiCalendar} size={1} horizontal vertical rotate={180} />
+        <Icon path={mdiTestTube} size={1} horizontal vertical rotate={180} />
       ),
-    },
-    {
-      id: 9,
-      title: "Billing",
-      href: "/patient/billing",
-      icon: <ReceiptIcon />,
     },
     {
       id: 10,

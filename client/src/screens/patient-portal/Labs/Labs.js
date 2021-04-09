@@ -178,7 +178,7 @@ const Labs = () => {
             color="textPrimary"
             className={classes.title}
           >
-            Labs/Documents
+            Documents / Lab Results
           </Typography>
           <Button
             component="label"
