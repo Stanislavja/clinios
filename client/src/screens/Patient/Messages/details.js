@@ -118,12 +118,13 @@ const MessagesDetails = (props) => {
     return true;
   }, [user.id]);
 
-  const isEditDisabled = useCallback((item) => {
-    if (item && item.user_id_from === user.id) {
-      return false;
-    }
-    return true;
-  }, [user.id]);
+  // commented out edit disable as per CLIN-54 comments
+  // const isEditDisabled = useCallback((item) => {
+  //   if (item && item.user_id_from === user.id) {
+  //     return false;
+  //   }
+  //   return true;
+  // }, [user.id]);
 
   const isReplyDisabled = useCallback((item) => {
     if (item && item.user_id_from === null) {
@@ -175,7 +176,7 @@ const MessagesDetails = (props) => {
                       <DeleteIcon fontSize="small" />
                     </IconButton>
                     <IconButton
-                      disabled={isEditDisabled(row)}
+                      // disabled={isEditDisabled(row)}
                       className={classes.button}
                       onClick={() => {
                         dispatch(setSelectedMessage(row));
