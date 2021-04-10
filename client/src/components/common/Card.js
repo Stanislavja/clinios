@@ -16,9 +16,9 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import SaveIcon from "@material-ui/icons/CheckCircle";
 import CardIcon from "@material-ui/icons/CreditCard";
 import DesktopIcon from "@material-ui/icons/DesktopMac";
+import InsertChartIcon from "@material-ui/icons/InsertChart";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SaveLayoutIcon from "@material-ui/icons/SaveOutlined";
-import InsertChartIcon from "@material-ui/icons/InsertChart";
 import { mdiCalendarBlankOutline } from "@mdi/js";
 import Icon from "@mdi/react";
 import clsx from "clsx";
@@ -94,6 +94,10 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     cursor: "pointer",
+  },
+  graphIcon: {
+    cursor: "pointer",
+    marginRight: "auto",
   },
   textField: {
     height: 8,
@@ -180,12 +184,13 @@ const PatientCard = (props) => {
            ${showActions ? classes.leftPadding : classes.fullPadding}`}
         >
           <Typography className={classes.title}>
-            {title} &nbsp; &nbsp;
+            {title}
+            &nbsp; &nbsp;
           </Typography>
           {title === "All Tests" && (
             <>
               <InsertChartIcon
-                className={classes.icon}
+                className={classes.graphIcon}
                 onClick={() => {
                   contentToggleHandler();
                 }}

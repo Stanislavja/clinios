@@ -91,6 +91,7 @@ import {
   getFourthColumnHeight,
 } from "../../utils/patientLayoutHelpers";
 import ProcessMessagePage from "../ProcessMessage";
+import TestGraph from "../TestGraph/TestGraph";
 import {
   AdminNotesForm,
   AdminNotesHistory,
@@ -144,11 +145,9 @@ import RequisitionsForm from "./Requisitions";
 import RequisitionsCardContent from "./Requisitions/content";
 import RequisitionsDetails from "./Requisitions/details";
 import TestsCardContent from "./Tests/content";
-
 import "react-grid-layout/css/styles.css";
 // import "react-resizable/css/styles.css";
 import "../../reactGridLayout.css";
-import TestGraph from "../TestGraph/TestGraph";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -176,7 +175,7 @@ const Patient = () => {
 
   const [state, dispatch] = useReducer(
     isDev() ? logger(PatientReducer) : PatientReducer,
-    initialState
+    initialState,
   );
 
   const {
@@ -245,7 +244,9 @@ const Patient = () => {
   };
 
   const changeTestGraphTitle = (title) => {
-    if (title) dispatch(setTestName(title));
+    if (title) {
+      dispatch(setTestName(title));
+    }
   };
   const generateLayout = () => {
     const y = 4;
@@ -305,12 +306,12 @@ const Patient = () => {
     dispatch(
       saveLayout([
         ...firstlayout,
-        ...secondlayout,
+        encounterslayout,
         ...thirdlayout,
         ...fourthlayout,
         documentslayout,
         testslayout,
-      ])
+      ]),
     );
   };
 
@@ -427,7 +428,7 @@ const Patient = () => {
   const fetchPatientBalance = useCallback(() => {
     PatientService.getPatientBalance(patientId).then((res) => {
       dispatch(
-        setBalance(res.data && res.data.length ? res.data[0].amount : "")
+        setBalance(res.data && res.data.length ? res.data[0].amount : ""),
       );
     });
   }, [patientId]);
@@ -467,7 +468,7 @@ const Patient = () => {
         }
       });
     },
-    [patientId]
+    [patientId],
   );
 
   const fetchMedications = useCallback(() => {
@@ -649,12 +650,11 @@ const Patient = () => {
         fetchDocuments();
       })
       .catch((error) => {
-        const resMessage =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
+        const resMessage = (error.response
+            && error.response.data
+            && error.response.data.message)
+          || error.message
+          || error.toString();
         enqueueSnackbar(`${resMessage}`, { variant: "error" });
       });
   };
@@ -688,12 +688,11 @@ const Patient = () => {
           dispatch(toggleAdminFormDialog());
         })
         .catch((error) => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message[0].msg) ||
-            error.message ||
-            error.toString();
+          const resMessage = (error.response
+              && error.response.data
+              && error.response.data.message[0].msg)
+            || error.message
+            || error.toString();
           enqueueSnackbar(`${resMessage}`, { variant: "error" });
         });
     } else {
@@ -720,12 +719,11 @@ const Patient = () => {
           dispatch(toggleMedicalNotesFormDialog());
         })
         .catch((error) => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
+          const resMessage = (error.response
+              && error.response.data
+              && error.response.data.message)
+            || error.message
+            || error.toString();
           enqueueSnackbar(`${resMessage}`, { variant: "error" });
         });
     } else {
@@ -758,9 +756,7 @@ const Patient = () => {
   const updateMinHeight = (key, newHeight) => {
     const calculatedHeight = newHeight / 40 + 0.5;
     // 40 is the row height, 0.5 is the margin
-    const newLayout = layout.map((item) =>
-      item.i === key ? { ...item, h: calculatedHeight } : item
-    );
+    const newLayout = layout.map((item) => (item.i === key ? { ...item, h: calculatedHeight } : item));
     setLayout([...newLayout]);
   };
 
@@ -918,7 +914,7 @@ const Patient = () => {
         <Dialog
           open={billing.expandDialog}
           title="Billing"
-          message={
+          message={(
             <BillingDetails
               reloadData={() => {
                 fetchBillings();
@@ -1269,12 +1265,8 @@ const Patient = () => {
                   icon={item.icon}
                   primaryButtonText={item.primaryButtonText}
                   secondaryButtonText={item.secondaryButtonText}
-                  primaryButtonHandler={() =>
-                    mapPrimaryButtonHandlers(item.title)
-                  }
-                  secondaryButtonHandler={() =>
-                    mapSecondaryButtonHandlers(item.title)
-                  }
+                  primaryButtonHandler={() => mapPrimaryButtonHandlers(item.title)}
+                  secondaryButtonHandler={() => mapSecondaryButtonHandlers(item.title)}
                   iconHandler={mapIconHandlers(item.title)}
                   searchHandler={(value) => searchPatientHandler(value)}
                   updateLayoutHandler={() => updateCardsLayout()}
@@ -1290,7 +1282,6 @@ const Patient = () => {
                   key={item.title}
                   title={item.title}
                   data={mapCardContentDataHandlers(item.title)}
-                  showActions={item.showActions}
                   showEditorActions={
                     item.title === "Medical Notes" && !!medicalNotes.editForm
                   }
@@ -1321,12 +1312,8 @@ const Patient = () => {
                   icon={item.icon}
                   primaryButtonText={item.primaryButtonText}
                   secondaryButtonText={item.secondaryButtonText}
-                  primaryButtonHandler={() =>
-                    mapPrimaryButtonHandlers(item.title)
-                  }
-                  secondaryButtonHandler={() =>
-                    mapSecondaryButtonHandlers(item.title)
-                  }
+                  primaryButtonHandler={() => mapPrimaryButtonHandlers(item.title)}
+                  secondaryButtonHandler={() => mapSecondaryButtonHandlers(item.title)}
                   updateMinHeight={updateMinHeight}
                 />
               </Grid>
@@ -1343,12 +1330,8 @@ const Patient = () => {
                   primaryButtonText={item.primaryButtonText}
                   secondaryButtonText={item.secondaryButtonText}
                   iconHandler={mapIconHandlers(item.title)}
-                  primaryButtonHandler={() =>
-                    mapPrimaryButtonHandlers(item.title)
-                  }
-                  secondaryButtonHandler={() =>
-                    mapSecondaryButtonHandlers(item.title)
-                  }
+                  primaryButtonHandler={() => mapPrimaryButtonHandlers(item.title)}
+                  secondaryButtonHandler={() => mapSecondaryButtonHandlers(item.title)}
                   updateMinHeight={updateMinHeight}
                   cardInfo={
                     item.title === "Billing" && patientBalance !== null
@@ -1395,10 +1378,10 @@ const Patient = () => {
                 primaryButtonText="Expand"
                 secondaryButtonText={null}
                 showSearch={false}
-                contentToggleHandler={() =>
-                  dispatch(toggleTestsChartExpandDialog())
-                }
-                primaryButtonHandler={() => dispatch(toggleTestsExpandDialog())}
+                contentToggleHandler={() => dispatch(toggleTestsChartExpandDialog())}
+                primaryButtonHandler={() => {
+                  dispatch(toggleTestsExpandDialog());
+                }}
                 updateMinHeight={updateMinHeight}
               />
             </Grid>
