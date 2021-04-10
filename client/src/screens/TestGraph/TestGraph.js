@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import { Grid, makeStyles, Button, Typography } from "@material-ui/core";
+import {
+  Grid, makeStyles, Button, Typography,
+} from "@material-ui/core";
 import { mdiArrowLeftBold, mdiArrowRightBold } from "@mdi/js";
 import Icon from "@mdi/react";
 import moment from "moment";
@@ -18,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     margin: "10px",
+    height: "80%",
   },
   filterbutton: {
     marginRight: "10px",
@@ -69,7 +72,7 @@ const TestGraph = ({ changeTitle }) => {
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
   const { user } = useAuth();
-  const [graphSize, setGraphSize] = useState({ width: 650, heigh: 200 });
+  const [graphSize, setGraphSize] = useState({ width: 650, heigh: 300 });
   const [cptName, setCptName] = useState("");
   const [functionalRange, setFunctionalRange] = useState({});
   const [conventionalRange, setConventionalRange] = useState({});
@@ -81,6 +84,7 @@ const TestGraph = ({ changeTitle }) => {
   const [range, setRange] = useState({});
   const ref = useRef(null);
 
+  /* eslint-disable */
   useEffect(() => {
     if (cptName[0]?.name) {
       changeTitle(cptName[0].name);
