@@ -106,11 +106,11 @@ const Home = () => {
   const renderAppointmentRowText = ({
     provider, start_dt, end_dt, status,
   }) => {
-    const formatterStatus = formatAppointmentType(status);
-    const formatterStartDate = moment(start_dt).format("MMM Do YYYY, h:mm a");
-    const formatterEndDate = moment(end_dt).format("h:mm  a");
+    const formattedStatus = formatAppointmentType(status);
+    const formattedStartDate = moment(start_dt).format("MMM Do YYYY, h:mm a");
+    const formattedEndDate = moment(end_dt).format("h:mm  a");
 
-    return `Appointment ${formatterStatus} with ${provider} on ${formatterStartDate} - ${formatterEndDate}`;
+    return `Appointment ${formattedStatus} with ${provider} on ${formattedStartDate} - ${formattedEndDate}`;
   };
 
   return (
