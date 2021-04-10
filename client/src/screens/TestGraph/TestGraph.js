@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     margin: "10px",
-    height: "80%",
+    height: "100%",
   },
   filterbutton: {
     marginRight: "10px",
@@ -72,7 +72,6 @@ const TestGraph = ({ changeTitle }) => {
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
   const { user } = useAuth();
-  const [graphSize, setGraphSize] = useState({ width: 650, heigh: 300 });
   const [cptName, setCptName] = useState("");
   const [functionalRange, setFunctionalRange] = useState({});
   const [conventionalRange, setConventionalRange] = useState({});
@@ -192,15 +191,6 @@ const TestGraph = ({ changeTitle }) => {
     }
   }, [labCpt, cptIdCount]);
 
-  React.useEffect(() => {
-    if (ref?.current) {
-      setGraphSize({
-        width: ref.current.clientWidth,
-        height: ref.current.clientHeight,
-      });
-    }
-  }, [ref, setGraphSize]);
-
   const previousCpt = () => {
     if (cptIdCount > 0) {
       setCptIdCount(cptIdCount - 1);
@@ -288,7 +278,6 @@ const TestGraph = ({ changeTitle }) => {
         <Graph
           data={graphFilterData}
           range={range}
-          graphSize={graphSize}
           conventionalRange={conventionalRange}
         />
       )}
