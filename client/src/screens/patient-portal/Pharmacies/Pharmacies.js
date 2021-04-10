@@ -123,6 +123,9 @@ const Pharmacies = () => {
                   label={pharmacy.label}
                   className={classes.inputTextRow}
                   onChange={(e) => debouncedSearchPharmacies(e)}
+                  inputProps={{
+                    autoComplete: "off",
+                  }}
                 />
                 <List component="ul">
                   {
