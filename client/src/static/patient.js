@@ -42,7 +42,17 @@ export const FirstColumnPatientCards = [
   },
 ];
 
-export const ThirdColumnPatientCards = [
+export const SecondColumnPatientCards = [
+  {
+    title: "Encounters",
+    showActions: true,
+    showSearch: false,
+    data: [],
+    primaryButtonText: "New",
+    secondaryButtonText: "Expand",
+    icon: null,
+    cardInfo: null,
+  },
   {
     title: "Medical Notes",
     showActions: true,
@@ -62,8 +72,19 @@ export const ThirdColumnPatientCards = [
     icon: null,
     cardInfo: null,
   },
+];
+
+export const ThirdColumnPatientCards = [
   {
-    title: "Messages",
+    title: "Diagnoses",
+    showActions: true,
+    showSearch: false,
+    data: [],
+    primaryButtonText: "New",
+    secondaryButtonText: "Expand",
+  },
+  {
+    title: "Medications",
     showActions: true,
     showSearch: false,
     data: [],
@@ -80,19 +101,20 @@ export const ThirdColumnPatientCards = [
     secondaryButtonText: "Expand",
     icon: null,
   },
+  {
+    title: "Nutrition",
+    showActions: false,
+    showSearch: false,
+    data: [],
+    primaryButtonText: "History",
+    secondaryButtonText: "Edit",
+    icon: null,
+  },
 ];
 
 export const FourthColumnPatientCards = [
   {
-    title: "Diagnoses",
-    showActions: true,
-    showSearch: false,
-    data: [],
-    primaryButtonText: "New",
-    secondaryButtonText: "Expand",
-  },
-  {
-    title: "Medications",
+    title: "Messages",
     showActions: true,
     showSearch: false,
     data: [],
@@ -112,15 +134,6 @@ export const FourthColumnPatientCards = [
   },
   {
     title: "Insights",
-    showActions: false,
-    showSearch: false,
-    data: [],
-    primaryButtonText: "History",
-    secondaryButtonText: "Edit",
-    icon: null,
-  },
-  {
-    title: "Nutrition",
     showActions: false,
     showSearch: false,
     data: [],
