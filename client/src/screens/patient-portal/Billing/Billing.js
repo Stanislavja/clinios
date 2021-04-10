@@ -136,7 +136,7 @@ const Billing = () => {
               color="textPrimary"
               className={classes.title}
             >
-              Billing
+              Provider Billing
             </Typography>
             <Button
               variant="outlined"
