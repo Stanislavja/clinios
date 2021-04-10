@@ -96,6 +96,7 @@ const RequisitionsDetails = (props) => {
       .then((response) => {
         enqueueSnackbar(`${response.data.message}`, { variant: "success" });
         reloadData();
+        closeDeleteDialog();
       });
   };
 
