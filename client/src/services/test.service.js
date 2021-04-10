@@ -39,6 +39,10 @@ class Tests {
       { headers: authHeader() }
     );
   }
+
+  getConventionalRange(patientId, cptId) {
+    return axios.get(`${API_BASE}/tests/conventionalrange/${patientId}/${cptId}`, { headers: authHeader() });
+  }
 }
 
 export default new Tests();
