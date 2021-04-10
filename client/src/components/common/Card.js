@@ -19,7 +19,6 @@ import DesktopIcon from "@material-ui/icons/DesktopMac";
 import InsertChartIcon from "@material-ui/icons/InsertChart";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SaveLayoutIcon from "@material-ui/icons/SaveOutlined";
-import InsertChartIcon from "@material-ui/icons/InsertChart";
 import { mdiCalendarBlankOutline } from "@mdi/js";
 import Icon from "@mdi/react";
 import clsx from "clsx";

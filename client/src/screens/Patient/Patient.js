@@ -148,7 +148,6 @@ import TestsCardContent from "./Tests/content";
 import "react-grid-layout/css/styles.css";
 // import "react-resizable/css/styles.css";
 import "../../reactGridLayout.css";
-import TestGraph from "../TestGraph/TestGraph";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -1367,7 +1366,7 @@ const Patient = () => {
                 updateMinHeight={updateMinHeight}
               />
             </Grid>
-            <Grid key="All Tests"> 
+            <Grid key="All Tests">
               <Card
                 title="All Tests"
                 data={<TestsCardContent />}
