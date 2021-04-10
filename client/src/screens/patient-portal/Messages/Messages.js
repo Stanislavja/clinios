@@ -109,6 +109,10 @@ export default function Messages() {
 
   const handleClose = () => {
     setOpen(false);
+    // reset fields on modal close
+    setMessage("");
+    setSubject("");
+    setSelectedUser("");
   };
 
   const onNewMessageButton = () => {
@@ -203,7 +207,7 @@ export default function Messages() {
       </Typography>
 
       <div className={classes.content}>
-        { messages.map((msg) => (
+        {messages.map((msg) => (
           <div key={msg.id}>
             <Grid container spacing={4} alignItems="flex-start">
               <Grid item xs={6}>

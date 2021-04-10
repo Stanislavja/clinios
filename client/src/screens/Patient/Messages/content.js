@@ -89,12 +89,13 @@ const MessagesContent = (props) => {
     return true;
   }, [selectedMessage, user.id]);
 
-  const isEditDisabled = useMemo(() => {
-    if (selectedMessage && selectedMessage.user_id_from === user.id) {
-      return false;
-    }
-    return true;
-  }, [selectedMessage, user.id]);
+  // commented out edit disable as per CLIN-54 comments
+  // const isEditDisabled = useMemo(() => {
+  //   if (selectedMessage && selectedMessage.user_id_from === user.id) {
+  //     return false;
+  //   }
+  //   return true;
+  // }, [selectedMessage, user.id]);
 
   const isReplyDisabled = useMemo(() => {
     if (selectedMessage && selectedMessage.user_id_from === null) {
@@ -140,7 +141,7 @@ const MessagesContent = (props) => {
           Delete
         </MenuItem>
         <MenuItem
-          disabled={isEditDisabled}
+          // disabled={isEditDisabled}
           onClick={() => {
             if (messageIsToUser) {
               dispatch(toggleMessageDialogPage());

@@ -148,7 +148,7 @@ const InsightsContent = () => {
       case 1:
         return <ArrowUpwardIcon />;
       default:
-        return () => { };
+        return null;
     }
   };
 
@@ -158,7 +158,7 @@ const InsightsContent = () => {
         <span className={classes.status}>Yes</span>
       );
     }
-    return true;
+    return null;
   };
 
   return (

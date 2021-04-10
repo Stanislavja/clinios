@@ -66,7 +66,7 @@ const Pharmacies = () => {
 
   const debouncedSearchPharmacies = debounce((event) => {
     const { name, value } = event.target;
-    if (value.length > 5) {
+    if (value.length > 3) {
       const reqBody = {
         data: {
           text: value,
@@ -123,6 +123,9 @@ const Pharmacies = () => {
                   label={pharmacy.label}
                   className={classes.inputTextRow}
                   onChange={(e) => debouncedSearchPharmacies(e)}
+                  inputProps={{
+                    autoComplete: "off",
+                  }}
                 />
                 <List component="ul">
                   {

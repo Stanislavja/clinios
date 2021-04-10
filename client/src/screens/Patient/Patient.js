@@ -78,10 +78,16 @@ import initialState from "../../providers/Patient/initialState";
 import PatientService from "../../services/patient.service";
 import {
   FirstColumnPatientCards,
+  SecondColumnPatientCards,
   ThirdColumnPatientCards,
   FourthColumnPatientCards,
 } from "../../static/patient";
 import { isDev } from "../../utils/helpers";
+import {
+  getSecondColumnHeight,
+  getThirdColumnHeight,
+  getFourthColumnHeight,
+} from "../../utils/patientLayoutHelpers";
 import ProcessMessagePage from "../ProcessMessage";
 import {
   AdminNotesForm,
@@ -207,18 +213,6 @@ const Patient = () => {
     });
   };
 
-  const getThirdColumnHeight = (title) => {
-    let height = 0;
-    if (title === "Allergies" || title === "Requisitions") {
-      height = 3;
-    } else if (title === "Messages") {
-      height = 6;
-    } else {
-      height = 4;
-    }
-    return height;
-  };
-
   const generateLayout = () => {
     const y = 4;
     const firstlayout = FirstColumnPatientCards.map((item) => ({
@@ -228,13 +222,13 @@ const Patient = () => {
       h: item.title === "Patient" ? 6 : 3.33,
       i: item.title.toString(),
     }));
-    const encounterslayout = {
+    const secondlayout = SecondColumnPatientCards.map((item) => ({
       x: 3,
       y: 0,
       w: 3,
-      h: 16,
-      i: "Encounters",
-    };
+      h: getSecondColumnHeight(item.title),
+      i: item.title.toString(),
+    }));
     const thirdlayout = ThirdColumnPatientCards.map((item) => {
       const { title } = item;
       return {
@@ -249,7 +243,7 @@ const Patient = () => {
       x: 9,
       y: 0,
       w: 3,
-      h: 3.2,
+      h: getFourthColumnHeight(item.title),
       i: item.title.toString(),
     }));
     const documentslayout = {
@@ -268,7 +262,7 @@ const Patient = () => {
     };
     setLayout([
       ...firstlayout,
-      encounterslayout,
+      ...secondlayout,
       ...thirdlayout,
       ...fourthlayout,
       documentslayout,
@@ -276,7 +270,7 @@ const Patient = () => {
     ]);
     dispatch(saveLayout([
       ...firstlayout,
-      encounterslayout,
+      ...secondlayout,
       ...thirdlayout,
       ...fourthlayout,
       documentslayout,
@@ -475,6 +469,8 @@ const Patient = () => {
         return dispatch(toggleHandoutsDialog());
       case "Billing":
         return dispatch(toggleNewTransactionDialog());
+      case "Encounters":
+        return dispatch(toggleEncountersDialog());
       case "Allergies":
         return dispatch(toggleAllergyDialog());
       case "Medical Notes":
@@ -504,6 +500,8 @@ const Patient = () => {
         return dispatch(toggleHandoutsExpandDialog());
       case "Billing":
         return dispatch(toggleBillngExpandDialog());
+      case "Encounters":
+        return dispatch(toggleEncountersExpandDialog());
       case "Allergies":
         return dispatch(toggleAllergyExpandDialog());
       case "Medical Notes":
@@ -541,6 +539,12 @@ const Patient = () => {
             fetchBillings();
             fetchPatientBalance();
           }}
+          />
+        );
+      case "Encounters":
+        return (
+          <EncountersCardContent
+            reloadData={() => fetchEncounters()}
           />
         );
       case "Allergies":
@@ -1277,30 +1281,34 @@ const Patient = () => {
                 />
               </Grid>
             ))}
-            <Grid key="Encounters">
-              <Card
-                title="Encounters"
-                data={
-                  <EncountersCardContent reloadData={() => fetchEncounters()} />
-                }
-                showActions
-                primaryButtonText="New"
-                secondaryButtonText="Expand"
-                primaryButtonHandler={() => dispatch(toggleEncountersDialog())}
-                secondaryButtonHandler={() => dispatch(toggleEncountersExpandDialog())}
-                showSearch={false}
-                updateMinHeight={updateMinHeight}
-              />
-            </Grid>
+            {SecondColumnPatientCards.map((item) => (
+              <Grid key={item.title}>
+                <Card
+                  key={item.title}
+                  title={item.title}
+                  data={mapCardContentDataHandlers(item.title)}
+                  showActions={item.showActions}
+                  showEditorActions={item.title === "Medical Notes" && !!medicalNotes.editForm}
+                  editorSaveHandler={() => mapEditorSaveHandler(item.title)}
+                  editorCancelHandler={() => mapEditorCancelHandler(item.title)}
+                  showSearch={item.showSearch}
+                  icon={item.icon}
+                  primaryButtonText={item.primaryButtonText}
+                  secondaryButtonText={item.secondaryButtonText}
+                  primaryButtonHandler={() => mapPrimaryButtonHandlers(item.title)}
+                  secondaryButtonHandler={() => mapSecondaryButtonHandlers(
+                    item.title,
+                  )}
+                  updateMinHeight={updateMinHeight}
+                />
+              </Grid>
+            ))}
             {ThirdColumnPatientCards.map((item) => (
               <Grid key={item.title}>
                 <Card
                   key={item.title}
                   title={item.title}
                   data={mapCardContentDataHandlers(item.title)}
-                  showEditorActions={item.title === "Medical Notes" && !!medicalNotes.editForm}
-                  editorSaveHandler={() => mapEditorSaveHandler(item.title)}
-                  editorCancelHandler={() => mapEditorCancelHandler(item.title)}
                   showActions={item.showActions}
                   showSearch={item.showSearch}
                   icon={item.icon}
