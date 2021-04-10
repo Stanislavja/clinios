@@ -212,12 +212,11 @@ const Patient = () => {
 
   const fetchCardsLayout = () => {
     PatientService.getCardsLayout(userId).then((res) => {
-      const layoutResponse =
-        res.data.length &&
-        res.data[0].layout &&
-        res.data[0].layout !== "undefined"
-          ? JSON.parse(res.data[0].layout)
-          : null;
+      const layoutResponse = res.data.length
+        && res.data[0].layout
+        && res.data[0].layout !== "undefined"
+        ? JSON.parse(res.data[0].layout)
+        : null;
       if (layoutResponse) {
         setLayout(layoutResponse);
         setIsLayoutUpdated(true);
@@ -361,9 +360,9 @@ const Patient = () => {
       // check if patient exists in the database
       // check if patient's client_id is equal to the signed user's client_id
       if (
-        !!res.data &&
-        res.data.client_id &&
-        res.data.client_id === user.client_id
+        !!res.data
+        && res.data.client_id
+        && res.data.client_id === user.client_id
       ) {
         dispatch(setPatientData(res.data));
         setHasPatientIderror(false);
@@ -831,12 +830,12 @@ const Patient = () => {
         <Dialog
           open={patientInfo.editDialog}
           title="Patient Edit"
-          message={
+          message={(
             <BasicInfo
               reloadData={fetchPatientData}
               reloadPaymentMethods={fetchPaymentMethods}
             />
-          }
+          )}
           applyForm={() => dispatch(togglePatientInfoDialog())}
           cancelForm={() => dispatch(togglePatientInfoDialog())}
           hideActions
@@ -895,14 +894,14 @@ const Patient = () => {
         <Dialog
           open={billing.newTransactionDialog}
           title={`${selectedBilling ? "Edit" : "New"} Transaction`}
-          message={
+          message={(
             <NewTransactionForm
               reloadData={() => {
                 fetchBillings();
                 fetchPatientBalance();
               }}
             />
-          }
+          )}
           applyForm={() => dispatch(toggleNewTransactionDialog())}
           cancelForm={() => dispatch(toggleNewTransactionDialog())}
           hideActions
@@ -921,7 +920,7 @@ const Patient = () => {
                 fetchPatientBalance();
               }}
             />
-          }
+          )}
           applyForm={() => dispatch(toggleBillngExpandDialog())}
           cancelForm={() => dispatch(toggleBillngExpandDialog())}
           hideActions
@@ -933,7 +932,7 @@ const Patient = () => {
         <Dialog
           open={billing.newDialog}
           title="New Billing"
-          message={
+          message={(
             <PaymentForm
               reloadData={() => {
                 fetchBillings();
@@ -941,7 +940,7 @@ const Patient = () => {
               }}
               reloadPaymentMethods={fetchPaymentMethods}
             />
-          }
+          )}
           applyForm={() => dispatch(togglePaymentDialog())}
           cancelForm={() => dispatch(togglePaymentDialog())}
           hideActions
@@ -1015,12 +1014,12 @@ const Patient = () => {
         <Dialog
           open={encounters.expandDialog}
           title="Encounters"
-          message={
+          message={(
             <EncountersDetails
               toggleEncountersDialog={() => dispatch(toggleEncountersDialog())}
               reloadData={fetchEncounters}
             />
-          }
+          )}
           applyForm={() => dispatch(toggleEncountersExpandDialog())}
           cancelForm={() => dispatch(toggleEncountersExpandDialog())}
           hideActions
@@ -1057,7 +1056,7 @@ const Patient = () => {
           fullHeight
           open={messageDialogPage}
           title="Edit Message"
-          message={
+          message={(
             <ProcessMessagePage
               fetchProviderDetails={() => {}}
               selectedMessage={selectedMessage}
@@ -1069,7 +1068,7 @@ const Patient = () => {
                 fetchMessages();
               }}
             />
-          }
+          )}
           cancelForm={() => dispatch(toggleMessageDialogPage())}
           size="xl"
           hideActions
@@ -1092,14 +1091,14 @@ const Patient = () => {
         <Dialog
           open={diagnoses.newDialog}
           title="Diagnoses"
-          message={
+          message={(
             <DiagnosesForm
               reloadData={() => {
                 fetchDiagnoses();
                 fetchDiagnoses(true);
               }}
             />
-          }
+          )}
           applyForm={() => dispatch(toggleDiagnosesDialog())}
           cancelForm={() => dispatch(toggleDiagnosesDialog())}
           hideActions
@@ -1112,14 +1111,14 @@ const Patient = () => {
         <Dialog
           open={diagnoses.expandDialog}
           title="Diagnoses"
-          message={
+          message={(
             <DiagnosesDetails
               reloadData={() => {
                 fetchDiagnoses();
                 fetchDiagnoses(true);
               }}
             />
-          }
+          )}
           applyForm={() => dispatch(toggleDiagnosesExpandDialog())}
           cancelForm={() => dispatch(toggleDiagnosesExpandDialog())}
           hideActions
@@ -1180,12 +1179,12 @@ const Patient = () => {
         <Dialog
           open={documents.expandDialog}
           title="Documents"
-          message={
+          message={(
             <DocumentsCardContent
               reloadData={() => fetchDocuments()}
               actionsEnable
             />
-          }
+          )}
           applyForm={() => dispatch(toggleDocumentsExpandDialog())}
           cancelForm={() => dispatch(toggleDocumentsExpandDialog())}
           hideActions
@@ -1296,12 +1295,8 @@ const Patient = () => {
                   icon={item.icon}
                   primaryButtonText={item.primaryButtonText}
                   secondaryButtonText={item.secondaryButtonText}
-                  primaryButtonHandler={() =>
-                    mapPrimaryButtonHandlers(item.title)
-                  }
-                  secondaryButtonHandler={() =>
-                    mapSecondaryButtonHandlers(item.title)
-                  }
+                  primaryButtonHandler={() => mapPrimaryButtonHandlers(item.title)}
+                  secondaryButtonHandler={() => mapSecondaryButtonHandlers(item.title)}
                   updateMinHeight={updateMinHeight}
                 />
               </Grid>
@@ -1366,20 +1361,18 @@ const Patient = () => {
             <Grid key="Documents">
               <Card
                 title="Documents"
-                data={
+                data={(
                   <DocumentsCardContent
                     reloadData={() => fetchDocuments()}
                     actionsEnable
                   />
-                }
+                )}
                 showActions
                 primaryButtonText="New"
                 secondaryButtonText="Expand"
                 showSearch={false}
                 primaryButtonHandler={onFilePickerClick}
-                secondaryButtonHandler={() =>
-                  dispatch(toggleDocumentsExpandDialog())
-                }
+                secondaryButtonHandler={() => dispatch(toggleDocumentsExpandDialog())}
                 updateMinHeight={updateMinHeight}
               />
             </Grid>
