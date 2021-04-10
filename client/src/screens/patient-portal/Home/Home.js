@@ -103,6 +103,16 @@ const Home = () => {
     return "canceled";
   };
 
+  const renderAppointmentRowText = ({
+    provider, start_dt, end_dt, status,
+  }) => {
+    const formatterStatus = formatAppointmentType(status);
+    const formatterStartDate = moment(start_dt).format("MMM Do YYYY, h:mm a");
+    const formatterEndDate = moment(end_dt).format("h:mm  a");
+
+    return `Appointment ${formatterStatus} with ${provider} on ${formatterStartDate} - ${formatterEndDate}`;
+  };
+
   return (
     <Container component="main">
       <CssBaseline />
@@ -113,23 +123,7 @@ const Home = () => {
         {Boolean(upcomingAppointments?.length) && upcomingAppointments?.map((appointment) => (
           <Box component="div" className={classes.BoxStyle}>
             <p>
-              Appointment
-              {" "}
-              {formatAppointmentType(appointment.status)}
-              {" "}
-              with
-              {" "}
-              {appointment.provider}
-              {" "}
-              on
-              {" "}
-              {moment(appointment.start_dt).format(
-                "MMM Do YYYY, h:mm a",
-              )}
-              {" "}
-              -
-              {" "}
-              {moment(appointment.end_dt).format("h:mm  a")}
+              {renderAppointmentRowText(appointment)}
             </p>
           </Box>
         ))}
