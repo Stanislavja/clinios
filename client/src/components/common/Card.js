@@ -18,7 +18,6 @@ import CardIcon from "@material-ui/icons/CreditCard";
 import DesktopIcon from "@material-ui/icons/DesktopMac";
 import InsertChartIcon from "@material-ui/icons/InsertChart";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import SaveLayoutIcon from "@material-ui/icons/SaveOutlined";
 import { mdiCalendarBlankOutline } from "@mdi/js";
 import Icon from "@mdi/react";
 import clsx from "clsx";
@@ -206,16 +205,14 @@ const PatientCard = (props) => {
               />
               <Icon
                 className={classes.icon}
-                onClick={() =>
-                  dispatch(togglePatientAppointmentHistoryDialog())
-                }
+                onClick={() => dispatch(togglePatientAppointmentHistoryDialog())}
                 path={mdiCalendarBlankOutline}
                 size={1}
               />
             </>
           )}
-          {!!icon &&
-            React.createElement(menuIcons[icon], {
+          {!!icon
+            && React.createElement(menuIcons[icon], {
               onClick: iconHandler,
               className: classes.icon,
             })}
