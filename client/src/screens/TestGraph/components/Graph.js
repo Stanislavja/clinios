@@ -178,6 +178,7 @@ const Graph = ({
           stroke="#477fc9"
         />
         <Line
+          animationDuration={0}
           strokeWidth={2}
           type="monotone"
           dataKey="value"
