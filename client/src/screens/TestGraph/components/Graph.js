@@ -53,9 +53,7 @@ const countDecimals = (value) => {
   return value.toString().split(".")[1].length || 0;
 };
 
-const Graph = ({
-  data, range, graphSize, conventionalRange,
-}) => {
+const Graph = ({ data, range, conventionalRange }) => {
   const [graphData, setGraphData] = useState([]);
   const [scaling, setScaling] = useState([]);
   const [high, setHigh] = useState();
@@ -137,10 +135,10 @@ const Graph = ({
   }, [high, low, middle]);
 
   return (
-    <ResponsiveContainer width="100%" height={graphSize.height}>
+    <ResponsiveContainer width="100%" height={600}>
       <LineChart
-        width={graphSize.width}
-        height={graphSize.height}
+        width={1100}
+        height={600}
         data={graphData}
         margin={{
           top: 5,
@@ -213,10 +211,6 @@ Graph.propTypes = {
     }),
     PropTypes.bool,
   ]).isRequired,
-  graphSize: PropTypes.shape({
-    height: PropTypes.number,
-    width: PropTypes.number,
-  }).isRequired,
 };
 
 export default Graph;
