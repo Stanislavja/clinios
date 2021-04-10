@@ -274,7 +274,7 @@ const TestGraph = ({ changeTitle }) => {
         </Button>
       </div>
 
-      {graphSize.width && graph && (
+      {graph && (
         <Graph
           data={graphFilterData}
           range={range}
