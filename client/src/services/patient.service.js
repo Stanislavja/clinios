@@ -664,7 +664,7 @@ class Patient {
       },
     ).then((res) => res.data);
   }
-  
+
   getFunctionalRange(patientId) {
     return axios
       .get(`${API_BASE}/patient/${patientId}`, {

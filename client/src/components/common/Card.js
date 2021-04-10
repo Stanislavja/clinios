@@ -16,9 +16,9 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import SaveIcon from "@material-ui/icons/CheckCircle";
 import CardIcon from "@material-ui/icons/CreditCard";
 import DesktopIcon from "@material-ui/icons/DesktopMac";
+import InsertChartIcon from "@material-ui/icons/InsertChart";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SaveLayoutIcon from "@material-ui/icons/SaveOutlined";
-import InsertChartIcon from "@material-ui/icons/InsertChart";
 import { mdiCalendarBlankOutline } from "@mdi/js";
 import Icon from "@mdi/react";
 import clsx from "clsx";
@@ -94,6 +94,10 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     cursor: "pointer",
+  },
+  graphIcon: {
+    cursor: "pointer",
+    marginRight: "auto",
   },
   textField: {
     height: 8,
@@ -179,10 +183,18 @@ const PatientCard = (props) => {
             showActions ? classes.leftPadding : classes.fullPadding
           }`}
         >
-          <Typography className={classes.title}>{title} &nbsp; &nbsp;</Typography>
+          <Typography className={classes.title}>
+            {title}
+            &nbsp; &nbsp;
+          </Typography>
           {title === "All Tests" && (
             <>
-              <InsertChartIcon className={classes.icon} onClick={() => {contentToggleHandler();}} />
+              <InsertChartIcon
+                className={classes.graphIcon}
+                onClick={() => {
+                  contentToggleHandler();
+                }}
+              />
             </>
           )}
           {title === "Patient" && (
@@ -294,16 +306,16 @@ PatientCard.defaultProps = {
   secondaryButtonText: "Edit",
   icon: null,
   cardInfo: null,
-  primaryButtonHandler: () => { },
-  secondaryButtonHandler: () => { },
-  iconHandler: () => { },
-  searchHandler: () => { },
-  editorSaveHandler: () => { },
-  editorCancelHandler: () => { },
-  updateLayoutHandler: () => { },
-  resetLayoutHandler: () => { },
+  primaryButtonHandler: () => {},
+  secondaryButtonHandler: () => {},
+  iconHandler: () => {},
+  searchHandler: () => {},
+  editorSaveHandler: () => {},
+  editorCancelHandler: () => {},
+  updateLayoutHandler: () => {},
+  resetLayoutHandler: () => {},
   isLayoutUpdated: false,
-  contentToggleHandler: () => { },
+  contentToggleHandler: () => {},
   hasMinHeight: false,
 };
 

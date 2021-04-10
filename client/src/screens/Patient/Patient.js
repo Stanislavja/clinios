@@ -85,6 +85,7 @@ import {
 } from "../../static/patient";
 import { isDev } from "../../utils/helpers";
 import ProcessMessagePage from "../ProcessMessage";
+import TestGraph from "../TestGraph/TestGraph";
 import {
   AdminNotesForm,
   AdminNotesHistory,
@@ -138,11 +139,9 @@ import RequisitionsForm from "./Requisitions";
 import RequisitionsCardContent from "./Requisitions/content";
 import RequisitionsDetails from "./Requisitions/details";
 import TestsCardContent from "./Tests/content";
-
 import "react-grid-layout/css/styles.css";
 // import "react-resizable/css/styles.css";
 import "../../reactGridLayout.css";
-import TestGraph from "../TestGraph/TestGraph";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -168,11 +167,26 @@ const Patient = () => {
   const [cookies, setCookie] = useCookies(["last_viewed_patient_id"]);
   const userId = user.id;
 
-  const [state, dispatch] = useReducer(isDev() ? logger(PatientReducer) : PatientReducer, initialState);
+  const [state, dispatch] = useReducer(
+    isDev() ? logger(PatientReducer) : PatientReducer,
+    initialState,
+  );
 
   const {
-    patientInfo, adminNotes, forms, handouts, documents, encounters, medicalNotes,
-    allergies, messages, requisitions, tests, diagnoses, medications, billing,
+    patientInfo,
+    adminNotes,
+    forms,
+    handouts,
+    documents,
+    encounters,
+    medicalNotes,
+    allergies,
+    messages,
+    requisitions,
+    tests,
+    diagnoses,
+    medications,
+    billing,
   } = state;
 
   const { selectedMessage, messageType, messageDialogPage } = messages;
@@ -222,10 +236,11 @@ const Patient = () => {
     return height;
   };
 
-  const changeTestGraphTitle = (title) =>{
-    if(title)
-    dispatch(setTestName(title))
-  }
+  const changeTestGraphTitle = (title) => {
+    if (title) {
+      dispatch(setTestName(title));
+    }
+  };
   const generateLayout = () => {
     const y = 4;
     const firstlayout = FirstColumnPatientCards.map((item) => ({
@@ -281,14 +296,16 @@ const Patient = () => {
       documentslayout,
       testslayout,
     ]);
-    dispatch(saveLayout([
-      ...firstlayout,
-      encounterslayout,
-      ...thirdlayout,
-      ...fourthlayout,
-      documentslayout,
-      testslayout,
-    ]));
+    dispatch(
+      saveLayout([
+        ...firstlayout,
+        encounterslayout,
+        ...thirdlayout,
+        ...fourthlayout,
+        documentslayout,
+        testslayout,
+      ]),
+    );
   };
 
   const updateCardsLayout = () => {
@@ -357,12 +374,13 @@ const Patient = () => {
     fetchPatientData();
     dispatch(setPatientId(patientId)); // saving patientId in reducer
 
-    setCookie(`${userId}-last_viewed_patient_id`,
-      patientId, { path: "/", maxAge: THIRTY_DAYS_IN_MILI_SECONDS }); // Same patientId into cookie
+    setCookie(`${userId}-last_viewed_patient_id`, patientId, {
+      path: "/",
+      maxAge: THIRTY_DAYS_IN_MILI_SECONDS,
+    }); // Same patientId into cookie
     updateLastVisitedPatient(patientId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [patientId]);
-
 
   const fetchPatientHistory = useCallback(() => {
     PatientService.getPatientHistory(patientId).then((res) => {
@@ -402,7 +420,9 @@ const Patient = () => {
 
   const fetchPatientBalance = useCallback(() => {
     PatientService.getPatientBalance(patientId).then((res) => {
-      dispatch(setBalance(res.data && res.data.length ? res.data[0].amount : ""));
+      dispatch(
+        setBalance(res.data && res.data.length ? res.data[0].amount : ""),
+      );
     });
   }, [patientId]);
 
@@ -431,15 +451,18 @@ const Patient = () => {
     });
   }, [patientId]);
 
-  const fetchDiagnoses = useCallback((status) => {
-    PatientService.getDiagnoses(patientId, status).then((res) => {
-      if (status) {
-        dispatch(setActiveDiagnoses(res.data));
-      } else {
-        dispatch(setDiagnoses(res.data));
-      }
-    });
-  }, [patientId]);
+  const fetchDiagnoses = useCallback(
+    (status) => {
+      PatientService.getDiagnoses(patientId, status).then((res) => {
+        if (status) {
+          dispatch(setActiveDiagnoses(res.data));
+        } else {
+          dispatch(setDiagnoses(res.data));
+        }
+      });
+    },
+    [patientId],
+  );
 
   const fetchMedications = useCallback(() => {
     PatientService.getMedications(patientId).then((res) => {
@@ -466,8 +489,7 @@ const Patient = () => {
         text: searchText,
       },
     };
-    PatientService.searchPatient(patientId, reqBody).then(() => {
-    });
+    PatientService.searchPatient(patientId, reqBody).then(() => {});
   };
 
   const mapPrimaryButtonHandlers = (value) => {
@@ -495,7 +517,7 @@ const Patient = () => {
       case "Requisitions":
         return dispatch(toggleRequisitionDialog());
       default:
-        return () => { };
+        return () => {};
     }
   };
 
@@ -524,7 +546,7 @@ const Patient = () => {
       case "Requisitions":
         return dispatch(toggleRequisitionExpandDialog());
       default:
-        return () => { };
+        return () => {};
     }
   };
 
@@ -534,9 +556,7 @@ const Patient = () => {
         return <PatientCardContent />;
       case "Admin Notes":
         if (adminNotes.editForm) {
-          return (
-            <AdminNotesForm />
-          );
+          return <AdminNotesForm />;
         }
         return <AdminNotesCardContent />;
 
@@ -544,44 +564,29 @@ const Patient = () => {
         return <FormCardContent />;
       case "Billing":
         return (
-          <BillingCardContent reloadData={() => {
-            fetchBillings();
-            fetchPatientBalance();
-          }}
+          <BillingCardContent
+            reloadData={() => {
+              fetchBillings();
+              fetchPatientBalance();
+            }}
           />
         );
       case "Allergies":
-        return (
-          <AllergiesCardContent
-            reloadData={() => fetchAllergies()}
-          />
-        );
+        return <AllergiesCardContent reloadData={() => fetchAllergies()} />;
       case "Medical Notes":
         if (medicalNotes.editForm) {
-          return (
-            <MedicalNotesForm />
-          );
+          return <MedicalNotesForm />;
         }
         return <MedicalNotesCardContent />;
 
       case "Handouts":
         return (
-          <HandoutsCardContent
-            reloadData={() => fetchPatientHandouts()}
-          />
+          <HandoutsCardContent reloadData={() => fetchPatientHandouts()} />
         );
       case "Messages":
-        return (
-          <MessagesCardContent
-            reloadData={() => fetchMessages()}
-          />
-        );
+        return <MessagesCardContent reloadData={() => fetchMessages()} />;
       case "Medications":
-        return (
-          <MedicationsCardContent
-            reloadData={() => fetchMedications()}
-          />
-        );
+        return <MedicationsCardContent reloadData={() => fetchMedications()} />;
       case "Diagnoses":
         return (
           <DiagnosesCardContent
@@ -616,7 +621,7 @@ const Patient = () => {
       case "Billing":
         return () => dispatch(togglePaymentDialog());
       default:
-        return () => { };
+        return () => {};
     }
   };
 
@@ -633,8 +638,8 @@ const Patient = () => {
       })
       .catch((error) => {
         const resMessage = (error.response
-          && error.response.data
-          && error.response.data.message)
+            && error.response.data
+            && error.response.data.message)
           || error.message
           || error.toString();
         enqueueSnackbar(`${resMessage}`, { variant: "error" });
@@ -671,8 +676,8 @@ const Patient = () => {
         })
         .catch((error) => {
           const resMessage = (error.response
-            && error.response.data
-            && error.response.data.message[0].msg)
+              && error.response.data
+              && error.response.data.message[0].msg)
             || error.message
             || error.toString();
           enqueueSnackbar(`${resMessage}`, { variant: "error" });
@@ -702,8 +707,8 @@ const Patient = () => {
         })
         .catch((error) => {
           const resMessage = (error.response
-            && error.response.data
-            && error.response.data.message)
+              && error.response.data
+              && error.response.data.message)
             || error.message
             || error.toString();
           enqueueSnackbar(`${resMessage}`, { variant: "error" });
@@ -720,7 +725,7 @@ const Patient = () => {
       case "Medical Notes":
         return dispatch(toggleMedicalNotesFormDialog());
       default:
-        return () => { };
+        return () => {};
     }
   };
 
@@ -731,15 +736,14 @@ const Patient = () => {
       case "Medical Notes":
         return updateMedicalNotes();
       default:
-        return () => { };
+        return () => {};
     }
   };
 
   const updateMinHeight = (key, newHeight) => {
     const calculatedHeight = newHeight / 40 + 0.5;
     // 40 is the row height, 0.5 is the margin
-    const newLayout = layout.map((item) => (item.i === key
-      ? { ...item, h: calculatedHeight } : item));
+    const newLayout = layout.map((item) => (item.i === key ? { ...item, h: calculatedHeight } : item));
     setLayout([...newLayout]);
   };
 
@@ -898,10 +902,11 @@ const Patient = () => {
           open={billing.expandDialog}
           title="Billing"
           message={(
-            <BillingDetails reloadData={() => {
-              fetchBillings();
-              fetchPatientBalance();
-            }}
+            <BillingDetails
+              reloadData={() => {
+                fetchBillings();
+                fetchPatientBalance();
+              }}
             />
           )}
           applyForm={() => dispatch(toggleBillngExpandDialog())}
@@ -935,11 +940,7 @@ const Patient = () => {
         <Dialog
           open={allergies.newDialog}
           title="New Allergy"
-          message={(
-            <Allergies
-              reloadData={() => fetchAllergies()}
-            />
-          )}
+          message={<Allergies reloadData={() => fetchAllergies()} />}
           applyForm={() => dispatch(toggleAllergyDialog())}
           cancelForm={() => dispatch(toggleAllergyDialog())}
           hideActions
@@ -952,11 +953,7 @@ const Patient = () => {
         <Dialog
           open={allergies.expandDialog}
           title="Allergies"
-          message={(
-            <AllergiesDetails
-              reloadData={() => fetchAllergies()}
-            />
-          )}
+          message={<AllergiesDetails reloadData={() => fetchAllergies()} />}
           applyForm={() => dispatch(toggleAllergyExpandDialog())}
           cancelForm={() => dispatch(toggleAllergyExpandDialog())}
           hideActions
@@ -968,11 +965,7 @@ const Patient = () => {
         <Dialog
           open={handouts.newDialog}
           title="New Handout"
-          message={(
-            <HandoutsForm
-              reloadData={fetchPatientHandouts}
-            />
-          )}
+          message={<HandoutsForm reloadData={fetchPatientHandouts} />}
           applyForm={() => dispatch(toggleHandoutsDialog())}
           cancelForm={() => dispatch(toggleHandoutsDialog())}
           hideActions
@@ -985,11 +978,7 @@ const Patient = () => {
         <Dialog
           open={handouts.expandDialog}
           title="Handouts"
-          message={(
-            <HandoutsDetails
-              reloadData={fetchPatientHandouts}
-            />
-          )}
+          message={<HandoutsDetails reloadData={fetchPatientHandouts} />}
           applyForm={() => dispatch(toggleHandoutsExpandDialog())}
           cancelForm={() => dispatch(toggleHandoutsExpandDialog())}
           hideActions
@@ -1001,11 +990,7 @@ const Patient = () => {
         <Dialog
           open={encounters.newDialog}
           title="New Encounter"
-          message={(
-            <EncountersForm
-              reloadData={fetchEncounters}
-            />
-          )}
+          message={<EncountersForm reloadData={fetchEncounters} />}
           applyForm={() => dispatch(toggleEncountersDialog())}
           cancelForm={() => dispatch(toggleEncountersDialog())}
           hideActions
@@ -1046,11 +1031,7 @@ const Patient = () => {
         <Dialog
           open={messages.newDialog}
           title={`${messageType} Message`}
-          message={(
-            <NewMessageForm
-              reloadData={fetchMessages}
-            />
-          )}
+          message={<NewMessageForm reloadData={fetchMessages} />}
           applyForm={() => dispatch(toggleMessageDialog())}
           cancelForm={() => dispatch(toggleMessageDialog())}
           hideActions
@@ -1065,7 +1046,7 @@ const Patient = () => {
           title="Edit Message"
           message={(
             <ProcessMessagePage
-              fetchProviderDetails={() => { }}
+              fetchProviderDetails={() => {}}
               selectedMessage={selectedMessage}
               onClose={() => {
                 dispatch(resetSelectedMessage());
@@ -1083,11 +1064,7 @@ const Patient = () => {
         <Dialog
           open={messages.expandDialog}
           title="Messages"
-          message={(
-            <MessagesDetails
-              reloadData={fetchMessages}
-            />
-          )}
+          message={<MessagesDetails reloadData={fetchMessages} />}
           applyForm={() => dispatch(toggleMessageExpandDialog())}
           cancelForm={() => dispatch(toggleMessageExpandDialog())}
           hideActions
@@ -1138,11 +1115,7 @@ const Patient = () => {
         <Dialog
           open={medications.newDialog}
           title={`${selectedMedication ? "Edit" : "New"} Patient Medication`}
-          message={(
-            <MedicationsForm
-              reloadData={fetchMedications}
-            />
-          )}
+          message={<MedicationsForm reloadData={fetchMedications} />}
           applyForm={() => dispatch(toggleMedicationDialog())}
           cancelForm={() => dispatch(toggleMedicationDialog())}
           hideActions
@@ -1154,11 +1127,7 @@ const Patient = () => {
         <Dialog
           open={medications.expandDialog}
           title="Medications"
-          message={(
-            <MedicationsDetails
-              reloadData={() => fetchMedications()}
-            />
-          )}
+          message={<MedicationsDetails reloadData={() => fetchMedications()} />}
           applyForm={() => dispatch(toggleMedicationExpandDialog())}
           cancelForm={() => dispatch(toggleMedicationExpandDialog())}
           hideActions
@@ -1170,11 +1139,7 @@ const Patient = () => {
         <Dialog
           open={requisitions.newDialog}
           title="New Requisition"
-          message={(
-            <RequisitionsForm
-              reloadData={fetchRequisitions}
-            />
-          )}
+          message={<RequisitionsForm reloadData={fetchRequisitions} />}
           applyForm={() => dispatch(toggleRequisitionDialog())}
           cancelForm={() => dispatch(toggleRequisitionDialog())}
           hideActions
@@ -1186,11 +1151,7 @@ const Patient = () => {
         <Dialog
           open={requisitions.expandDialog}
           title="Requisitions"
-          message={(
-            <RequisitionsDetails
-              reloadData={fetchRequisitions}
-            />
-          )}
+          message={<RequisitionsDetails reloadData={fetchRequisitions} />}
           applyForm={() => dispatch(toggleRequisitionExpandDialog())}
           cancelForm={() => dispatch(toggleRequisitionExpandDialog())}
           hideActions
@@ -1220,9 +1181,7 @@ const Patient = () => {
         <Dialog
           open={tests.expandDialog}
           title="All Tests"
-          message={
-            <TestsCardContent />
-          }
+          message={<TestsCardContent />}
           applyForm={() => dispatch(toggleTestsExpandDialog())}
           cancelForm={() => dispatch(toggleTestsExpandDialog())}
           hideActions
@@ -1234,7 +1193,7 @@ const Patient = () => {
         <Dialog
           open={tests.expandChartDialog}
           title={tests.testName}
-          message={<TestGraph changeTitle={changeTestGraphTitle}/>}
+          message={<TestGraph changeTitle={changeTestGraphTitle} />}
           applyForm={() => dispatch(toggleTestsChartExpandDialog())}
           cancelForm={() => dispatch(toggleTestsChartExpandDialog())}
           hideActions
@@ -1249,10 +1208,18 @@ const Patient = () => {
             className="layout"
             rowHeight={40}
             cols={{
-              lg: 12, md: 10, sm: 6, xs: 4, xxs: 2,
+              lg: 12,
+              md: 10,
+              sm: 6,
+              xs: 4,
+              xxs: 2,
             }}
             breakpoints={{
-              lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0,
+              lg: 1200,
+              md: 996,
+              sm: 768,
+              xs: 480,
+              xxs: 0,
             }}
             layouts={{ lg: layout }}
             onDragStop={(val) => updateLayoutState(val)}
@@ -1273,7 +1240,9 @@ const Patient = () => {
                   title={item.title}
                   data={mapCardContentDataHandlers(item.title)}
                   showActions={item.showActions}
-                  showEditorActions={item.title === "Admin Notes" && !!adminNotes.editForm}
+                  showEditorActions={
+                    item.title === "Admin Notes" && !!adminNotes.editForm
+                  }
                   editorSaveHandler={() => mapEditorSaveHandler(item.title)}
                   editorCancelHandler={() => mapEditorCancelHandler(item.title)}
                   showSearch={item.showSearch}
@@ -1281,9 +1250,7 @@ const Patient = () => {
                   primaryButtonText={item.primaryButtonText}
                   secondaryButtonText={item.secondaryButtonText}
                   primaryButtonHandler={() => mapPrimaryButtonHandlers(item.title)}
-                  secondaryButtonHandler={() => mapSecondaryButtonHandlers(
-                    item.title,
-                  )}
+                  secondaryButtonHandler={() => mapSecondaryButtonHandlers(item.title)}
                   iconHandler={mapIconHandlers(item.title)}
                   searchHandler={(value) => searchPatientHandler(value)}
                   updateLayoutHandler={() => updateCardsLayout()}
@@ -1314,7 +1281,9 @@ const Patient = () => {
                   key={item.title}
                   title={item.title}
                   data={mapCardContentDataHandlers(item.title)}
-                  showEditorActions={item.title === "Medical Notes" && !!medicalNotes.editForm}
+                  showEditorActions={
+                    item.title === "Medical Notes" && !!medicalNotes.editForm
+                  }
                   editorSaveHandler={() => mapEditorSaveHandler(item.title)}
                   editorCancelHandler={() => mapEditorCancelHandler(item.title)}
                   showActions={item.showActions}
@@ -1323,9 +1292,7 @@ const Patient = () => {
                   primaryButtonText={item.primaryButtonText}
                   secondaryButtonText={item.secondaryButtonText}
                   primaryButtonHandler={() => mapPrimaryButtonHandlers(item.title)}
-                  secondaryButtonHandler={() => mapSecondaryButtonHandlers(
-                    item.title,
-                  )}
+                  secondaryButtonHandler={() => mapSecondaryButtonHandlers(item.title)}
                   updateMinHeight={updateMinHeight}
                 />
               </Grid>
@@ -1343,9 +1310,7 @@ const Patient = () => {
                   secondaryButtonText={item.secondaryButtonText}
                   iconHandler={mapIconHandlers(item.title)}
                   primaryButtonHandler={() => mapPrimaryButtonHandlers(item.title)}
-                  secondaryButtonHandler={() => mapSecondaryButtonHandlers(
-                    item.title,
-                  )}
+                  secondaryButtonHandler={() => mapSecondaryButtonHandlers(item.title)}
                   updateMinHeight={updateMinHeight}
                   cardInfo={
                     item.title === "Billing" && patientBalance !== null
@@ -1382,7 +1347,7 @@ const Patient = () => {
                 updateMinHeight={updateMinHeight}
               />
             </Grid>
-            <Grid key="All Tests"> 
+            <Grid key="All Tests">
               <Card
                 title="All Tests"
                 data={<TestsCardContent />}
@@ -1391,7 +1356,9 @@ const Patient = () => {
                 secondaryButtonText={null}
                 showSearch={false}
                 contentToggleHandler={() => dispatch(toggleTestsChartExpandDialog())}
-                primaryButtonHandler={() => dispatch(toggleTestsExpandDialog())}
+                primaryButtonHandler={() => {
+                  dispatch(toggleTestsExpandDialog());
+                }}
                 updateMinHeight={updateMinHeight}
               />
             </Grid>

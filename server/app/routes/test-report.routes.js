@@ -30,5 +30,9 @@ router.get(
   [authJwt.verifyToken],
   testReports.getTestGraph
 );
-
+router.get(
+  "/tests/conventionalrange/:patientId/:cptId",
+  [authJwt.verifyToken],
+  testReports.getConventionalRange
+);
 module.exports = router;

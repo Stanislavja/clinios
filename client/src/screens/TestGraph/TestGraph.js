@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useRef} from "react";
+import React, { useState, useEffect, useRef } from "react";
+
 import { Grid, makeStyles, Button, Typography } from "@material-ui/core";
 import { mdiArrowLeftBold, mdiArrowRightBold } from "@mdi/js";
 import Icon from "@mdi/react";
 import moment from "moment";
 import { useSnackbar } from "notistack";
+import PropTypes from "prop-types";
 
 import useAuth from "../../hooks/useAuth";
 import Patient from "../../services/patient.service";
@@ -13,12 +15,9 @@ import { Graph } from "./components";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: "75%",
-    width: "75%",
-    padding: "40px 0px",
-  },
-  gridMargin: {
-    marginTop: "15px",
+    display: "flex",
+    flexDirection: "column",
+    margin: "10px",
   },
   filterbutton: {
     marginRight: "10px",
@@ -29,11 +28,11 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     position: "relative",
     flexDirection: "column",
-    marginTop: "30px",
+    marginTop: "20px",
   },
   testGraph: {
     alignSelf: "center",
-    width: 1190,
+    width: 1000,
   },
   graphArrowIconContainer: {
     width: "70px",
@@ -43,30 +42,37 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "20px",
   },
   graphArrowIcon: {
-    marginBottom: theme.spacing(1 / 2),
+    marginBottom: theme.spacing(1 / 3),
     marginLeft: theme.spacing(1),
     color: "#2979ffdb",
   },
   filterButtonContainer: {
     display: "flex",
+    maxHeight: "55px",
+    marginTop: "15px",
+    paddingBottom: "15px",
+    justifyContent: "flex-end",
+  },
+  rangeContainer: {
+    marginRight: "50px",
+    marginLeft: "50px",
   },
   inRange: {
     color: "#008000",
-    marginRight: "10px",
   },
   outOfRange: {
     color: "#FFA500",
-    marginRight: "10px",
   },
 }));
 
-const TestGraph = ({changeTitle}) => {
+const TestGraph = ({ changeTitle }) => {
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
   const { user } = useAuth();
-  const [graphSize, setGraphSize] = useState({ width: 650, heigh: 300 });
+  const [graphSize, setGraphSize] = useState({ width: 650, heigh: 200 });
   const [cptName, setCptName] = useState("");
   const [functionalRange, setFunctionalRange] = useState({});
+  const [conventionalRange, setConventionalRange] = useState({});
   const [labCpt, setLabCpt] = useState([]);
   const [graph, setGraph] = useState(null);
   const [graphFilterData, setGraphFilterData] = useState(null);
@@ -75,11 +81,31 @@ const TestGraph = ({changeTitle}) => {
   const [range, setRange] = useState({});
   const ref = useRef(null);
 
-  useEffect(()=>{
-    if(cptName[0]?.name)
-    changeTitle(cptName[0].name)
+  useEffect(() => {
+    if (cptName[0]?.name) {
+      changeTitle(cptName[0].name);
+    }
+  }, [cptName]);
 
-  },[cptName])
+  useEffect(() => {
+    if (testId) {
+      Tests.getConventionalRange(user.id, testId).then(
+        (res) => {
+          const data = res?.data?.data;
+          const cRange = {
+            high: data[data.length - 1]?.range_high,
+            low: data[data.length - 1]?.range_low,
+          };
+          setConventionalRange(cRange);
+        },
+        () => {
+          enqueueSnackbar("Unable to fetch Activity history.", {
+            variant: "error",
+          });
+        }
+      );
+    }
+  }, [testId, enqueueSnackbar, user.id]);
 
   useEffect(() => {
     if (testId) {
@@ -124,7 +150,13 @@ const TestGraph = ({changeTitle}) => {
     if (testId) {
       Tests.getTestGraph(user.id, testId).then(
         (res) => {
-          const data = res?.data;
+          const data = res?.data.data.map((d) => ({
+            id: d.cpt_id,
+            lab_dt: d.lab_dt,
+            filename: d.filename,
+            value: d.value,
+          }));
+
           setGraph(data);
           setGraphFilterData(data);
         },
@@ -140,7 +172,11 @@ const TestGraph = ({changeTitle}) => {
   useEffect(() => {
     if (functionalRange?.functional_range && graph) {
       if (functionalRange?.functional_range[0]?.functional_range !== 0) {
-        const data = calculateFunctionalRange(testId, functionalRange?.gender, functionalRange?.age);
+        const data = calculateFunctionalRange(
+          testId,
+          functionalRange?.gender,
+          functionalRange?.age
+        );
         setRange(data);
       }
     }
@@ -187,28 +223,31 @@ const TestGraph = ({changeTitle}) => {
     if (filer === "year_2") {
       startDate = moment().subtract(24, "M");
     }
+    if (filer === "year_3") {
+      startDate = moment().subtract(36, "M");
+    }
+    if (filer === "year_4") {
+      startDate = moment().subtract(48, "M");
+    }
 
     const filterData = [];
 
     if (filer === "all") {
       setGraphFilterData(graph);
     } else {
-      for (let i = 0; i < graph?.data.length; i += 1) {
-        const compareDate = moment(graph?.data[i]?.lab_dt);
+      for (let i = 0; i < graph.length; i += 1) {
+        const compareDate = moment(graph[i].lab_dt);
         const com = compareDate.isBetween(startDate, endDate);
         if (com) {
-          filterData.push(graph?.data[i]);
+          filterData.push(graph[i]);
         }
       }
-      setGraphFilterData({ data: filterData });
+      setGraphFilterData(filterData);
     }
   };
 
   return (
     <div className={classes.root} ref={ref}>
-      <Typography component="h1" variant="h2" color="textPrimary">
-        {cptName[0]?.name && cptName[0].name}
-      </Typography>
       <div className={classes.graphArrowIconContainer}>
         <Button
           disabled={cptIdCount <= 0}
@@ -216,7 +255,13 @@ const TestGraph = ({changeTitle}) => {
           color="default"
           className={classes.graphArrowIcon}
         >
-          <Icon path={mdiArrowLeftBold} size={1.3} horizontal vertical rotate={180} />
+          <Icon
+            path={mdiArrowLeftBold}
+            size={1.3}
+            horizontal
+            vertical
+            rotate={180}
+          />
         </Button>
         <Button
           disabled={cptIdCount >= labCpt?.data?.length}
@@ -225,67 +270,101 @@ const TestGraph = ({changeTitle}) => {
           className={classes.graphArrowIcon}
           target="_blank"
         >
-          <Icon path={mdiArrowRightBold} size={1.3} horizontal vertical rotate={180} />
+          <Icon
+            path={mdiArrowRightBold}
+            size={1.3}
+            horizontal
+            vertical
+            rotate={180}
+          />
         </Button>
       </div>
 
-      {graphSize.width && graph?.data && (
-        <Graph data={graphFilterData?.data} range={range} graphSize={graphSize} />
+      {graphSize.width && graph && (
+        <Graph
+          data={graphFilterData}
+          range={range}
+          graphSize={graphSize}
+          conventionalRange={conventionalRange}
+        />
       )}
-
-      <Grid container xs={12} md={12} className={classes.gridMargin}>
-        <Grid item xs={12} sm={6} className={classes.gridMargin} />
-        <Grid item xs={12} sm={4} className={classes.filterButtonContainer}>
-          <Button
-            size="medium"
-            type="submit"
-            variant="contained"
-            color="default"
-            className={classes.filterbutton}
-            onClick={() => filterDate("month_3")}
-          >
-            3 Months
-          </Button>
-          <Button
-            size="medium"
-            type="submit"
-            variant="contained"
-            color="default"
-            className={classes.filterbutton}
-            onClick={() => filterDate("month_6")}
-          >
-            6 Months
-          </Button>
-          <Button
-            size="medium"
-            type="submit"
-            variant="contained"
-            color="default"
-            className={classes.filterbutton}
-            onClick={() => filterDate("year_1")}
-          >
-            1 Years
-          </Button>
-          <Button
-            size="medium"
-            type="submit"
-            variant="contained"
-            color="default"
-            className={classes.filterbutton}
-            onClick={() => filterDate("year_2")}
-          >
-            2 Years
-          </Button>
-          <Button
-            size="medium"
-            type="submit"
-            variant="contained"
-            color="default"
-            className={classes.filterbutton}
-            onClick={() => filterDate("all")}
-          >
-            All
-          </Button>
+      <Grid item className={classes.filterButtonContainer}>
+        <Button
+          size="medium"
+          type="submit"
+          variant="contained"
+          color="default"
+          className={classes.filterbutton}
+          onClick={() => filterDate("month_3")}
+        >
+          3 Months
+        </Button>
+        <Button
+          size="medium"
+          type="submit"
+          variant="contained"
+          color="default"
+          className={classes.filterbutton}
+          onClick={() => filterDate("month_6")}
+        >
+          6 Months
+        </Button>
+        <Button
+          size="medium"
+          type="submit"
+          variant="contained"
+          color="default"
+          className={classes.filterbutton}
+          onClick={() => filterDate("year_1")}
+        >
+          1 Years
+        </Button>
+        <Button
+          size="medium"
+          type="submit"
+          variant="contained"
+          color="default"
+          className={classes.filterbutton}
+          onClick={() => filterDate("year_2")}
+        >
+          2 Years
+        </Button>
+        <Button
+          size="medium"
+          type="submit"
+          variant="contained"
+          color="default"
+          className={classes.filterbutton}
+          onClick={() => filterDate("year_3")}
+        >
+          3 Years
+        </Button>
+        <Button
+          size="medium"
+          type="submit"
+          variant="contained"
+          color="default"
+          className={classes.filterbutton}
+          onClick={() => filterDate("year_4")}
+        >
+          4 Years
+        </Button>
+        <Button
+          size="medium"
+          type="submit"
+          variant="contained"
+          color="default"
+          className={classes.filterbutton}
+          onClick={() => filterDate("all")}
+        >
+          All
+        </Button>
+        <Grid
+          direction="column"
+          justify="center"
+          alignItems="flex-end"
+          className={classes.rangeContainer}
+        >
           <Typography className={classes.inRange} variant="h5">
             --- Within range
           </Typography>
@@ -297,5 +376,7 @@ const TestGraph = ({changeTitle}) => {
     </div>
   );
 };
-
+TestGraph.propTypes = {
+  changeTitle: PropTypes.func.isRequired,
+};
 export default TestGraph;

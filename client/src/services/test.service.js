@@ -19,6 +19,10 @@ class Tests {
   getTestGraph(patientId, labId) {
     return axios.get(`${API_BASE}/tests/graph/${patientId}/${labId}`, { headers: authHeader() });
   }
+
+  getConventionalRange(patientId, cptId) {
+    return axios.get(`${API_BASE}/tests/conventionalrange/${patientId}/${cptId}`, { headers: authHeader() });
+  }
 }
 
 export default new Tests();
