@@ -13,8 +13,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-import ReferenceLabel from "./ReferenceLabel";
-
 const useStyles = makeStyles((theme) => ({
   root: {
     border: "2px solid #333",
@@ -48,91 +46,21 @@ CustomTooltip.propTypes = {
   payload: PropTypes.instanceOf(Array).isRequired,
 };
 
-const countDecimals = (value) => {
-  if (Math.floor(value) === value) return 0;
-  return value.toString().split(".")[1].length || 0;
-};
-
 const Graph = ({ data, range, conventionalRange }) => {
   const [graphData, setGraphData] = useState([]);
-  const [scaling, setScaling] = useState([]);
-  const [high, setHigh] = useState();
-  const [low, setLow] = useState();
-  const [middle, setMiddle] = useState();
 
   useEffect(() => {
     if (data) {
-      const hash = Object.create(null);
-      const result = data.map((d) => {
-        if (
-          !moment(d.lab_dt).format("YYYY")
-          || hash[moment(d.lab_dt).format("YYYY")]
-        ) {
-          return null;
-        }
-        hash[moment(d.lab_dt).format("YYYY")] = true;
-        return moment(d.lab_dt).format("YYYY");
-      });
-      const tempData = data.map((d, index) => ({
+      const tempData = data.map((d) => ({
         id: d.id,
         lab_dt: d.lab_dt,
         filename: d.filename,
         value: d.value,
-        year: result[index],
+        year: moment(d.lab_dt).format("MMM-YYYY"),
       }));
       setGraphData(tempData);
     }
   }, [data]);
-
-  useEffect(() => {
-    if (typeof range === "boolean") {
-      setHigh(conventionalRange.high);
-      setLow(conventionalRange.low);
-      setMiddle((conventionalRange.high + conventionalRange.low) / 2);
-    }
-    if (range?.high && conventionalRange?.high) {
-      let highT = 0;
-      let lowT = 0;
-      if (conventionalRange?.high > range.high) {
-        highT = conventionalRange?.high;
-      } else {
-        highT = range?.high;
-      }
-      if (conventionalRange?.low < range.low) {
-        lowT = conventionalRange?.low;
-      } else {
-        lowT = range?.low;
-      }
-      setHigh(highT);
-      setLow(lowT);
-      setMiddle((highT + lowT) / 2);
-    }
-  }, [range, conventionalRange]);
-
-  useEffect(() => {
-    const tempScaling = [
-      high + middle * 0.2,
-      high + middle * 0.15,
-      high + middle * 0.1,
-      high + middle * 0.05,
-      high,
-      middle,
-      low,
-      low - middle * 0.05,
-      low - middle * 0.1,
-      low - middle * 0.15,
-      low - middle * 0.2,
-    ];
-    const checkScaling = tempScaling.map((val) => {
-      if (val) {
-        if (countDecimals(val) > 2) {
-          return parseFloat(val.toFixed(2));
-        }
-      }
-      return val;
-    });
-    setScaling(checkScaling);
-  }, [high, low, middle]);
 
   return (
     <ResponsiveContainer width="100%" height={600}>
@@ -147,32 +75,49 @@ const Graph = ({ data, range, conventionalRange }) => {
           bottom: 5,
         }}
       >
-        <XAxis dataKey="year" tickLine={false} />
+        <XAxis
+          dataKey="year"
+          interval={0}
+          style={{
+            fontSize: "0.9rem",
+          }}
+        />
         <YAxis
           type="number"
-          domain={[low - middle * 0.2, high + middle * 0.2]}
+          domain={[parseInt(conventionalRange.low, 10), Math.round(conventionalRange.high)]}
           interval={0}
-          ticks={scaling}
+          tickCount={6}
+          style={{
+            fontSize: "0.9rem",
+          }}
         />
         <Tooltip content={<CustomTooltip />} />
         <ReferenceLine
           y={conventionalRange?.high}
-          label={<ReferenceLabel value="Conventional range" fill="#477fc9" />}
+          label={{
+            position: "insideTopLeft", value: "Conventional range", fontSize: "0.9rem", fill: "#477fc9",
+          }}
           stroke="#477fc9"
         />
         <ReferenceLine
           y={range?.high}
-          label={<ReferenceLabel value="Functional range" fill="#477fc9" />}
+          label={{
+            position: "insideBottomLeft", value: "Functional range", fontSize: "0.9rem", fill: "#477fc9",
+          }}
           stroke="#477fc9"
         />
         <ReferenceLine
           y={range?.low}
-          label={<ReferenceLabel value="Functional range" fill="#477fc9" />}
+          label={{
+            position: "insideTopLeft", value: "Functional range", fontSize: "0.9rem", fill: "#477fc9",
+          }}
           stroke="#477fc9"
         />
         <ReferenceLine
           y={conventionalRange?.low}
-          label={<ReferenceLabel value="Conventional range" fill="#477fc9" />}
+          label={{
+            position: "insideBottomLeft", value: "Conventional range", fontSize: "0.9rem", fill: "#477fc9",
+          }}
           stroke="#477fc9"
         />
         <Line
@@ -189,14 +134,14 @@ const Graph = ({ data, range, conventionalRange }) => {
 };
 
 Graph.propTypes = {
-  data: PropTypes.arrayOf(
+  data: PropTypes.oneOfType([PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
       lab_dt: PropTypes.string,
       filename: PropTypes.string,
       value: PropTypes.number,
     }),
-  ).isRequired,
+  ), PropTypes.any]).isRequired,
   range: PropTypes.oneOfType([
     PropTypes.shape({
       high: PropTypes.number,
