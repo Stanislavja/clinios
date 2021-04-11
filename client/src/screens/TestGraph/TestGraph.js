@@ -93,9 +93,20 @@ const TestGraph = ({ changeTitle }) => {
       Tests.getConventionalRange(user.id, testId).then(
         (res) => {
           const data = res?.data?.data;
+          let high;
+          let low;
+          data.map((d)=>{
+            if(d.range_high>high || !high){
+              high = d.range_high;
+
+              if(d.range_low<low || !low){
+                low = d.range_low
+              }
+            }
+          })
           const cRange = {
-            high: data[data.length - 1]?.range_high,
-            low: data[data.length - 1]?.range_low,
+            high: high,
+            low: low,
           };
           setConventionalRange(cRange);
         },
@@ -184,7 +195,7 @@ const TestGraph = ({ changeTitle }) => {
   }, [functionalRange, graph, testId]);
 
   useEffect(() => {
-    if (labCpt?.data?.length > 0) {
+    if (labCpt?.data?.length > 0 && labCpt.data[cptIdCount]) {
       setTestId(labCpt.data[cptIdCount].id);
     }
   }, [labCpt, cptIdCount]);

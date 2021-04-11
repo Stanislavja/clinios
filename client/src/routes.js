@@ -129,12 +129,6 @@ const routes = [
     component: lazy(() => import("./screens/Auth/SignUp")),
   },
   {
-    path: "/test-results",
-    guard: ClientPortalGuard,
-    layout: DashboardLayout,
-    component: lazy(() => import("./screens/TestGraph")),
-  },
-  {
     path: "/manage",
     guard: ClientPortalGuard,
     layout: DashboardLayout,
