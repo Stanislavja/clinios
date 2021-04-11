@@ -252,7 +252,7 @@ export const Graph = ({ data, range, conventionalRange }) => {
 };
 
 Graph.propTypes = {
-  data: PropTypes.arrayOf(
+  data: PropTypes.oneOfType([PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
       lab_dt: PropTypes.string,
