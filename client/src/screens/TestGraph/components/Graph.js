@@ -74,10 +74,10 @@ const Graph = ({ data, range, conventionalRange }) => {
   }, [data]);
 
   return (
-    <ResponsiveContainer width="100%" height={600}>
+    <ResponsiveContainer width="100%" height={550}>
       <LineChart
-        width={1100}
-        height={600}
+        width={1300}
+        height={550}
         data={graphData}
         margin={{
           top: 5,
@@ -106,28 +106,28 @@ const Graph = ({ data, range, conventionalRange }) => {
         <ReferenceLine
           y={conventionalRange?.high}
           label={{
-            position: "insideTopLeft", value: "Conventional range", fontSize: "0.9rem", fill: "#477fc9",
+            position: "insideTopLeft", value: "Conventional range", fontSize: "0.6rem", fill: "#477fc9",
           }}
           stroke="#477fc9"
         />
         <ReferenceLine
           y={range?.high}
           label={{
-            position: "insideBottomLeft", value: "Functional range", fontSize: "0.9rem", fill: "#477fc9",
+            position: "insideBottomLeft", value: "Functional range", fontSize: "0.6rem", fill: "#477fc9",
           }}
           stroke="#477fc9"
         />
         <ReferenceLine
           y={range?.low}
           label={{
-            position: "insideTopLeft", value: "Functional range", fontSize: "0.9rem", fill: "#477fc9",
+            position: "insideTopLeft", value: "Functional range", fontSize: "0.6rem", fill: "#477fc9",
           }}
           stroke="#477fc9"
         />
         <ReferenceLine
           y={conventionalRange?.low}
           label={{
-            position: "insideBottomLeft", value: "Conventional range", fontSize: "0.9rem", fill: "#477fc9",
+            position: "insideBottomLeft", value: "Conventional range", fontSize: "0.6rem", fill: "#477fc9",
           }}
           stroke="#477fc9"
         />
