@@ -16,9 +16,8 @@ import CancelIcon from "@material-ui/icons/Cancel";
 import SaveIcon from "@material-ui/icons/CheckCircle";
 import CardIcon from "@material-ui/icons/CreditCard";
 import DesktopIcon from "@material-ui/icons/DesktopMac";
-import InsertChartIcon from "@material-ui/icons/InsertChart";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import { mdiCalendarBlankOutline } from "@mdi/js";
+import { mdiCalendarBlankOutline, mdiChartLine } from "@mdi/js";
 import Icon from "@mdi/react";
 import clsx from "clsx";
 import PropTypes from "prop-types";
@@ -188,11 +187,13 @@ const PatientCard = (props) => {
           </Typography>
           {title === "All Tests" && (
             <>
-              <InsertChartIcon
+              <Icon
                 className={classes.graphIcon}
                 onClick={() => {
                   contentToggleHandler();
                 }}
+                path={mdiChartLine}
+                size={1}
               />
             </>
           )}
