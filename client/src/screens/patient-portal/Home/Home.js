@@ -64,8 +64,7 @@ const Home = () => {
   const [header, setHeader] = useState({});
   const { lastVisitedPatient } = useAuth();
   const [clientForms, setClientForms] = useState({});
-  const [upcomingAppointment, setUpcomingAppointment] = useState({});
-
+  const [upcomingAppointments, setUpcomingAppointments] = useState({});
 
   useEffect(() => {
     HomeService.getClientHeader(lastVisitedPatient).then(
@@ -86,13 +85,33 @@ const Home = () => {
     );
     HomeService.getUpcomingAppointments(lastVisitedPatient).then(
       (response) => {
-        setUpcomingAppointment(response.data[0]);
+        setUpcomingAppointments(response.data);
       },
       (error) => {
         console.error("error", error);
       },
     );
   }, [lastVisitedPatient]);
+
+  const formatAppointmentType = (status) => {
+    if (status === "A") {
+      return "scheduled";
+    }
+    if (status === "R") {
+      return "requested";
+    }
+    return "canceled";
+  };
+
+  const renderAppointmentRowText = ({
+    provider, start_dt, end_dt, status,
+  }) => {
+    const formattedStatus = formatAppointmentType(status);
+    const formattedStartDate = moment(start_dt).format("MMM Do YYYY, h:mm a");
+    const formattedEndDate = moment(end_dt).format("h:mm  a");
+
+    return `Appointment ${formattedStatus} with ${provider} on ${formattedStartDate} - ${formattedEndDate}`;
+  };
 
   return (
     <Container component="main">
@@ -101,25 +120,13 @@ const Home = () => {
         <Alert icon={false} variant="filled" severity="info">
           {header && ReactHtmlParser(header.header)}
         </Alert>
-        {upcomingAppointment && (
+        {Boolean(upcomingAppointments?.length) && upcomingAppointments?.map((appointment) => (
           <Box component="div" className={classes.BoxStyle}>
             <p>
-              Appointment Scheduled with
-              {" "}
-              {upcomingAppointment.provider}
-              {" "}
-              on
-              {" "}
-              {moment(upcomingAppointment.start_dt).format(
-                "MMM Do YYYY, h:mm a",
-              )}
-              {" "}
-              -
-              {" "}
-              {moment(upcomingAppointment.end_dt).format("h:mm  a")}
+              {renderAppointmentRowText(appointment)}
             </p>
           </Box>
-        )}
+        ))}
 
         {clientForms && (
           <Box component="div" className={classes.formBox}>
