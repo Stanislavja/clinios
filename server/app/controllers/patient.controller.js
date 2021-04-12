@@ -2176,11 +2176,11 @@ const createRequisitions = async (req, res) => {
 };
 
 const deleteRequisitions = async (req, res) => {
-  const { cpt_id, encounter_id } = req.body.data;
+  const { id } = req.params;
   const db = makeDb(configuration, res);
   try {
     const deleteResponse = await db.query(
-      `delete from patient_cpt where encounter_id=${encounter_id} and cpt_id='${cpt_id}'`
+      `delete from patient_cpt where cpt_id='${id}'`
     );
 
     if (!deleteResponse.affectedRows) {

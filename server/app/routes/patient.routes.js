@@ -289,7 +289,7 @@ router.post(
   Patient.createRequisitions
 );
 router.delete(
-  "/patient/:patient_id/requisitions/",
+  "/patient/:patient_id/requisitions/:id",
   [authJwt.verifyToken],
   Patient.deleteRequisitions
 );

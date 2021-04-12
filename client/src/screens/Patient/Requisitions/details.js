@@ -87,12 +87,8 @@ const RequisitionsDetails = (props) => {
   };
 
   const deleteItemHandler = (item) => {
-    const reqBody = {
-      cpt_id: item.id || 1,
-      encounter_id: item.cpt_id || 1,
-    };
-
-    PatientService.deleteRequisitions(patientId, reqBody)
+    const requisitionId = item.id;
+    PatientService.deleteRequisitions(patientId, requisitionId)
       .then((response) => {
         enqueueSnackbar(`${response.data.message}`, { variant: "success" });
         reloadData();
