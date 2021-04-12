@@ -42,7 +42,10 @@ const CustomTooltip = ({ payload }) => {
 };
 
 CustomTooltip.propTypes = {
-  payload: PropTypes.instanceOf(Array).isRequired,
+  payload: PropTypes.instanceOf(Array),
+};
+CustomTooltip.defaultProps = {
+  payload: [],
 };
 CustomTooltip.defaultProps = {
   payload: [],
