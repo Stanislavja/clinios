@@ -6,6 +6,7 @@ import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
@@ -29,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
   },
   btn: {
     minWidth: 120,
+  },
+  actionButtonStyle: {
+    minWidth: 0,
   },
 }));
 
@@ -58,12 +62,11 @@ const StyledTableRow = withStyles(() => ({
     "& td": {
       fontSize: 12,
       whiteSpace: "nowrap",
-      padding: "2px 16px 2px 2px",
+      padding: "8px 16px 2px 2px",
       lineHeight: "14px",
     },
     "& button": {
       padding: 0,
-      minWidth: 48,
       fontSize: 12,
       lineHeight: "14px",
       fontWeight: "normal",
@@ -147,6 +150,15 @@ const PaymentMethods = () => {
         <Grid item md={6} sm={8} xs={12}>
           <TableContainer className={classes.tableContainer}>
             <Table size="small" className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>Date</StyledTableCell>
+                  <StyledTableCell>Type</StyledTableCell>
+                  <StyledTableCell>Card Number</StyledTableCell>
+                  <StyledTableCell>Edit</StyledTableCell>
+                  <StyledTableCell>Delete</StyledTableCell>
+                </TableRow>
+              </TableHead>
               <TableBody>
                 {paymentMethods.length ? (
                   paymentMethods.map((item) => (
@@ -165,13 +177,17 @@ const PaymentMethods = () => {
                           disableRipple
                           variant="text"
                           onClick={() => onItemEdit(item)}
+                          className={classes.actionButtonStyle}
                         >
                           Edit
                         </Button>
+                      </StyledTableCell>
+                      <StyledTableCell>
                         <Button
                           disableRipple
                           variant="text"
                           onClick={() => onItemDelete(item)}
+                          className={classes.actionButtonStyle}
                         >
                           Delete
                         </Button>

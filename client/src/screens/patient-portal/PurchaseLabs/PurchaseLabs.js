@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
   purchaseButton: {
     display: "block",
     width: "220px",
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(3.5),
   },
 }));
 
