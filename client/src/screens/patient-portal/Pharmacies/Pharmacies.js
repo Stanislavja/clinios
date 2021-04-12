@@ -39,6 +39,10 @@ const Pharmacies = () => {
   const classes = useStyles();
   const { user } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
+  const [searchText, setSearchText] = useState({
+    pharmacy1: "",
+    pharmacy2: "",
+  });
   const [patientPharmacy, setPatientPharmacy] = useState({
     pharmacy1: null,
     pharmacy2: null,
@@ -64,22 +68,20 @@ const Pharmacies = () => {
     fetchPatienPharmacy();
   }, [fetchPatienPharmacy]);
 
-  const debouncedSearchPharmacies = debounce((event) => {
+  const searchPharmacies = (event) => {
     const { name, value } = event.target;
-    if (value.length > 3) {
-      const reqBody = {
-        data: {
-          text: value,
-        },
-      };
-      PatientPortalService.searchPharmacies(reqBody).then((res) => {
-        setSearchedResults({
-          ...searchedResults,
-          [name]: res.data,
-        });
+    const reqBody = {
+      data: {
+        text: value,
+      },
+    };
+    PatientPortalService.searchPharmacies(reqBody).then((res) => {
+      setSearchedResults({
+        ...searchedResults,
+        [name]: res.data,
       });
-    }
-  }, 1000);
+    });
+  };
 
   const saveSelectedPharmacy = (pharmacy, pharmacyName) => {
     const patientId = user?.client_id;
@@ -94,7 +96,31 @@ const Pharmacies = () => {
     PatientPortalService.updatePharmacy(patientId, reqBody).then((response) => {
       enqueueSnackbar(`${response.message}`, { variant: "success" });
       fetchPatienPharmacy();
+      // clear searched results on selection after 1 sec
+      setTimeout(() => {
+        setSearchedResults({
+          ...searchedResults,
+          [pharmacyName]: [],
+        });
+        setSearchText({
+          ...searchText,
+          [pharmacyName]: "",
+        });
+      }, 1000);
     });
+  };
+
+  const [debouncedCallApi] = useState(() => debounce(searchPharmacies, 1000));
+
+  const handleInputChange = (e) => {
+    const { value, name } = e.target;
+    setSearchText({
+      ...searchText,
+      [name]: value,
+    });
+    if (value.length > 3) {
+      debouncedCallApi(e);
+    }
   };
 
   return (
@@ -122,7 +148,9 @@ const Pharmacies = () => {
                   name={pharmacy.name}
                   label={pharmacy.label}
                   className={classes.inputTextRow}
-                  onChange={(e) => debouncedSearchPharmacies(e)}
+                  value={searchText[pharmacy.name]}
+                  onChange={(e) => handleInputChange(e)}
+                  // onChange={(e) => searchPharmacies(e)}
                   inputProps={{
                     autoComplete: "off",
                   }}
