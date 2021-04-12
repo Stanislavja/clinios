@@ -2,7 +2,13 @@ import React, {
   useState, useEffect, useCallback, useRef,
 } from "react";
 
-import { makeStyles, Typography, Grid } from "@material-ui/core";
+import { makeStyles, Typography, withStyles } from "@material-ui/core";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
 import { useReactToPrint } from "react-to-print";
 
 import useAuth from "../../../hooks/useAuth";
@@ -34,7 +40,36 @@ const useStyles = makeStyles((theme) => ({
   test: {
     cursor: "pointer",
   },
+  tableContainer: {
+    marginTop: theme.spacing(2),
+    padding: 0,
+  },
+  tableTestsCell: {
+    cursor: "pointer",
+  },
+  table: {
+    "& th": {
+      fontWeight: 600,
+    },
+  },
 }));
+
+const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.grey,
+    color: theme.palette.grey,
+    fontSize: "14px",
+    fontWeight: 700,
+    paddingLeft: 0,
+    border: "none",
+  },
+  body: {
+    fontSize: 14,
+    paddingLeft: 0,
+    border: "none",
+  },
+}))(TableCell);
+
 
 const Encounters = () => {
   const classes = useStyles();
@@ -102,27 +137,34 @@ const Encounters = () => {
       <Typography component="p" color="textPrimary">
         This page is used to view lab requisitions you can take to a Quest Diagnostics Lab
       </Typography>
-      <Grid container className={classes.testListContainer}>
-        <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-          <Typography variant="h6">Date</Typography>
-        </Grid>
-        <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
-          <Typography variant="h6">Tests</Typography>
-        </Grid>
-      </Grid>
-      {testList.map((list) => (
-        <Grid key={list.id} container className={classes.mt5}>
-          <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-            <Typography component="p">{dateFormat(list.dt)}</Typography>
-          </Grid>
-          <Grid item xs={8} sm={8} md={8} lg={8} xl={8} onClick={() => fetchReportInformation(list.id)}>
-            <Typography component="p" className={classes.test}>
-              {list.tests}
-            </Typography>
-          </Grid>
-        </Grid>
-      ))}
-
+      <TableContainer className={classes.tableContainer}>
+        <Table size="small" className={classes.table} aria-label="a dense table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Date</StyledTableCell>
+              <StyledTableCell>Tests</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {testList.map((list) => (
+              <TableRow style={{
+                border: "none",
+              }}
+              >
+                <StyledTableCell>
+                  {dateFormat(list.dt)}
+                </StyledTableCell>
+                <StyledTableCell
+                  className={classes.tableTestsCell}
+                  onClick={() => fetchReportInformation(list.id)}
+                >
+                  {list.tests}
+                </StyledTableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
       {testProfileInfo && profileTests && (
         <div style={{ display: "none" }}>
           <PdfTemplate testProfileInfo={testProfileInfo} profileTests={profileTests} ref={componentRef} />
