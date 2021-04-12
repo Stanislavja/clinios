@@ -589,7 +589,7 @@ const Patient = () => {
           />
         );
       case "Requisitions":
-        return <RequisitionsCardContent />;
+        return <RequisitionsCardContent reloadData={() => fetchRequisitions()} />;
       case "Insights":
         return <InsightsCardContent />;
       default:
