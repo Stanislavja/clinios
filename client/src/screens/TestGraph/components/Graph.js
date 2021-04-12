@@ -79,7 +79,7 @@ export const Graph = ({ data, range, conventionalRange }) => {
   return (
     <ResponsiveContainer width="100%" height={550}>
       <LineChart
-        width={1300}
+        width={1100}
         height={550}
         data={graphData}
         margin={{
@@ -93,19 +93,23 @@ export const Graph = ({ data, range, conventionalRange }) => {
           dataKey="year"
           interval={0}
           style={{
-            fontSize: "0.9rem",
+            fontSize: "0.8rem",
+            margin: "2px",
           }}
         />
         <YAxis
           type="number"
           domain={[
             parseInt(conventionalRange.low, 10),
-            Math.round(conventionalRange.high),
+            Math.round(conventionalRange.high) < conventionalRange.high
+              ? conventionalRange.high
+              : Math.round(conventionalRange.high),
           ]}
           interval={0}
           tickCount={6}
           style={{
-            fontSize: "0.9rem",
+            fontSize: "0.8rem",
+            margin: "2px",
           }}
         />
         <Tooltip content={<CustomTooltip />} />
@@ -119,26 +123,30 @@ export const Graph = ({ data, range, conventionalRange }) => {
           }}
           stroke="#477fc9"
         />
-        <ReferenceLine
-          y={range?.high}
-          label={{
-            position: "insideBottomLeft",
-            value: "Functional range",
-            fontSize: "0.6rem",
-            fill: "#477fc9",
-          }}
-          stroke="#477fc9"
-        />
-        <ReferenceLine
-          y={range?.low}
-          label={{
-            position: "insideTopLeft",
-            value: "Functional range",
-            fontSize: "0.6rem",
-            fill: "#477fc9",
-          }}
-          stroke="#477fc9"
-        />
+        {range.high && (
+          <ReferenceLine
+            y={range?.high}
+            label={{
+              position: "insideBottomLeft",
+              value: "Functional range",
+              fontSize: "0.6rem",
+              fill: "#477fc9",
+            }}
+            stroke="#477fc9"
+          />
+        )}
+        {range.low && (
+          <ReferenceLine
+            y={range?.low}
+            label={{
+              position: "insideTopLeft",
+              value: "Functional range",
+              fontSize: "0.6rem",
+              fill: "#477fc9",
+            }}
+            stroke="#477fc9"
+          />
+        )}
         <ReferenceLine
           y={conventionalRange?.low}
           label={{
