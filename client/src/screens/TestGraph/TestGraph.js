@@ -90,6 +90,7 @@ const TestGraph = ({ changeTitle }) => {
     }
   }, [cptName]);
 
+  /* eslint-disable */
   useEffect(() => {
     if (testId) {
       Tests.getConventionalRange(user.id, testId).then(
@@ -97,15 +98,15 @@ const TestGraph = ({ changeTitle }) => {
           const data = res?.data?.data;
           let high;
           let low;
-          data.map((d)=>{
-            if(d.range_high>high || !high){
+          data.map((d) => {
+            if (d.range_high > high || !high) {
               high = d.range_high;
 
-              if(d.range_low<low || !low){
-                low = d.range_low
+              if (d.range_low < low || !low) {
+                low = d.range_low;
               }
             }
-          })
+          });
           const cRange = {
             high: high,
             low: low,
@@ -119,7 +120,7 @@ const TestGraph = ({ changeTitle }) => {
         }
       );
     }
-  }, [testId, enqueueSnackbar, user.id]);
+  }, [testId]);
 
   useEffect(() => {
     if (testId) {

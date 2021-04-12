@@ -24,29 +24,31 @@ const useStyles = makeStyles((theme) => ({
 
 const CustomTooltip = ({ payload }) => {
   const classes = useStyles();
-
-  if (payload && payload.length) {
-    return (
-      <div className={classes.root}>
-        <p className="label">
-          {`Date : ${moment(payload[0]?.payload?.lab_dt).format(
-            "MMMM Do YYYY, h:mm A",
-          )}`}
-        </p>
-        <p className="label">{`File : ${payload[0]?.payload?.filename}`}</p>
-        <p className="label">{`Value : ${payload[0]?.payload?.value}`}</p>
-      </div>
-    );
-  }
-
-  return null;
+  return (
+    <div className={classes.root}>
+      {payload && payload.length ? (
+        <>
+          <p className="label">
+            {`Date : ${moment(payload[0]?.payload?.lab_dt).format(
+              "MMMM Do YYYY, h:mm A",
+            )}`}
+          </p>
+          <p className="label">{`File : ${payload[0]?.payload?.filename}`}</p>
+          <p className="label">{`Value : ${payload[0]?.payload?.value}`}</p>
+        </>
+      ) : null}
+    </div>
+  );
 };
 
 CustomTooltip.propTypes = {
-  payload: PropTypes.instanceOf(Array).isRequired,
+  payload: PropTypes.instanceOf(Array),
+};
+CustomTooltip.defaultProps = {
+  payload: [],
 };
 
-const Graph = ({ data, range, conventionalRange }) => {
+export const Graph = ({ data, range, conventionalRange }) => {
   const [graphData, setGraphData] = useState([]);
 
   useEffect(() => {
@@ -84,7 +86,10 @@ const Graph = ({ data, range, conventionalRange }) => {
         />
         <YAxis
           type="number"
-          domain={[parseInt(conventionalRange.low, 10), Math.round(conventionalRange.high)]}
+          domain={[
+            parseInt(conventionalRange.low, 10),
+            Math.round(conventionalRange.high),
+          ]}
           interval={0}
           tickCount={6}
           style={{
@@ -95,28 +100,40 @@ const Graph = ({ data, range, conventionalRange }) => {
         <ReferenceLine
           y={conventionalRange?.high}
           label={{
-            position: "insideTopLeft", value: "Conventional range", fontSize: "0.6rem", fill: "#477fc9",
+            position: "insideTopLeft",
+            value: "Conventional range",
+            fontSize: "0.6rem",
+            fill: "#477fc9",
           }}
           stroke="#477fc9"
         />
         <ReferenceLine
           y={range?.high}
           label={{
-            position: "insideBottomLeft", value: "Functional range", fontSize: "0.6rem", fill: "#477fc9",
+            position: "insideBottomLeft",
+            value: "Functional range",
+            fontSize: "0.6rem",
+            fill: "#477fc9",
           }}
           stroke="#477fc9"
         />
         <ReferenceLine
           y={range?.low}
           label={{
-            position: "insideTopLeft", value: "Functional range", fontSize: "0.6rem", fill: "#477fc9",
+            position: "insideTopLeft",
+            value: "Functional range",
+            fontSize: "0.6rem",
+            fill: "#477fc9",
           }}
           stroke="#477fc9"
         />
         <ReferenceLine
           y={conventionalRange?.low}
           label={{
-            position: "insideBottomLeft", value: "Conventional range", fontSize: "0.6rem", fill: "#477fc9",
+            position: "insideBottomLeft",
+            value: "Conventional range",
+            fontSize: "0.6rem",
+            fill: "#477fc9",
           }}
           stroke="#477fc9"
         />
@@ -134,14 +151,17 @@ const Graph = ({ data, range, conventionalRange }) => {
 };
 
 Graph.propTypes = {
-  data: PropTypes.oneOfType([PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      lab_dt: PropTypes.string,
-      filename: PropTypes.string,
-      value: PropTypes.number,
-    }),
-  ), PropTypes.any]).isRequired,
+  data: PropTypes.oneOfType([
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string,
+        lab_dt: PropTypes.string,
+        filename: PropTypes.string,
+        value: PropTypes.number,
+      }),
+    ),
+    PropTypes.any,
+  ]),
   range: PropTypes.oneOfType([
     PropTypes.shape({
       high: PropTypes.number,
@@ -158,4 +178,6 @@ Graph.propTypes = {
   ]).isRequired,
 };
 
-export default Graph;
+Graph.defaultProps = {
+  data: [],
+};
