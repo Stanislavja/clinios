@@ -5,10 +5,11 @@ import {
   List,
   ListItem,
 } from "@material-ui/core";
-import { omitBy, debounce } from "lodash";
+import { omitBy } from "lodash";
 import { useSnackbar } from "notistack";
 
 import useAuth from "../../../hooks/useAuth";
+import useDebounce from "../../../hooks/useDebounce";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 import {
   Pharmacies as pharmacies,
@@ -39,6 +40,8 @@ const Pharmacies = () => {
   const classes = useStyles();
   const { user } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
+  const [inputText, setInputText] = useState("");
+  const [inputType, setInputType] = useState("");
   const [searchText, setSearchText] = useState({
     pharmacy1: "",
     pharmacy2: "",
@@ -68,21 +71,6 @@ const Pharmacies = () => {
     fetchPatienPharmacy();
   }, [fetchPatienPharmacy]);
 
-  const searchPharmacies = (event) => {
-    const { name, value } = event.target;
-    const reqBody = {
-      data: {
-        text: value,
-      },
-    };
-    PatientPortalService.searchPharmacies(reqBody).then((res) => {
-      setSearchedResults({
-        ...searchedResults,
-        [name]: res.data,
-      });
-    });
-  };
-
   const saveSelectedPharmacy = (pharmacy, pharmacyName) => {
     const patientId = user?.client_id;
     const pharmacy1Id = pharmacyName === "pharmacy1" ? pharmacy.id : patientPharmacy.pharmacy1.id;
@@ -106,11 +94,9 @@ const Pharmacies = () => {
           ...searchText,
           [pharmacyName]: "",
         });
-      }, 1000);
+      }, 500);
     });
   };
-
-  const [debouncedCallApi] = useState(() => debounce(searchPharmacies, 1000));
 
   const handleInputChange = (e) => {
     const { value, name } = e.target;
@@ -118,10 +104,28 @@ const Pharmacies = () => {
       ...searchText,
       [name]: value,
     });
-    if (value.length > 3) {
-      debouncedCallApi(e);
-    }
+    setInputText(value);
+    setInputType(name);
   };
+
+  const debouncedSearchTerm = useDebounce(inputText, 1000);
+
+  useEffect(() => {
+    if (debouncedSearchTerm && debouncedSearchTerm.length > 3) {
+      const reqBody = {
+        data: {
+          text: debouncedSearchTerm,
+        },
+      };
+      PatientPortalService.searchPharmacies(reqBody).then((res) => {
+        setSearchedResults({
+          ...searchedResults,
+          [inputType]: res.data,
+        });
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearchTerm]);
 
   return (
     <div className={classes.root}>
@@ -150,7 +154,6 @@ const Pharmacies = () => {
                   className={classes.inputTextRow}
                   value={searchText[pharmacy.name]}
                   onChange={(e) => handleInputChange(e)}
-                  // onChange={(e) => searchPharmacies(e)}
                   inputProps={{
                     autoComplete: "off",
                   }}
