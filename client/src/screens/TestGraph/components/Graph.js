@@ -72,6 +72,7 @@ export const Graph = ({ data, range, conventionalRange }) => {
 
   /* eslint-disable */
   useEffect(() => {
+    console.log(range, conventionalRange);
     const middle = (conventionalRange?.high + conventionalRange?.low) / 2;
     if (conventionalRange?.high > range?.high) {
       if (
@@ -128,6 +129,13 @@ export const Graph = ({ data, range, conventionalRange }) => {
       setLow(0);
     } else {
       setLow(Math.round(conventionalRange?.low - middle * 0.12));
+    }
+
+    if (range.low === conventionalRange.low) {
+      setLow(range.low);
+    }
+    if (range.high === conventionalRange.high) {
+      setHigh(range.high);
     }
   }, [conventionalRange]);
 
