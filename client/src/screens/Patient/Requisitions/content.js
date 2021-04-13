@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Grid, Typography, IconButton } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/DeleteOutline";
-import EditIcon from "@material-ui/icons/EditOutlined";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
@@ -11,7 +10,6 @@ import PropTypes from "prop-types";
 import Alert from "../../../components/Alert";
 import Tooltip from "../../../components/common/CustomTooltip";
 import usePatientContext from "../../../hooks/usePatientContext";
-import { toggleRequisitionDialog } from "../../../providers/Patient/actions";
 import PatientService from "../../../services/patient.service";
 
 const useStyles = makeStyles((theme) => ({
@@ -31,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(0, 0.5, 0, 0),
   },
   fullWidth: {
-    width: "41%",
+    width: "47%",
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",
@@ -51,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 const RequisitionsContent = (props) => {
   const classes = useStyles();
   const { reloadData } = props;
-  const { state, dispatch } = usePatientContext();
+  const { state } = usePatientContext();
   const { enqueueSnackbar } = useSnackbar();
   const { patientId } = state;
   const { data } = state.requisitions;
@@ -67,11 +65,6 @@ const RequisitionsContent = (props) => {
   const closeDeleteDialog = () => {
     setSelectedItem(null);
     setShowDeleteDialog((prevstate) => !prevstate);
-  };
-
-  const editItemHandler = (/* item */) => {
-    // dispatch(setSelectedMedication(item));
-    dispatch(toggleRequisitionDialog());
   };
 
   const deleteItemHandler = (item) => {
@@ -136,11 +129,6 @@ const RequisitionsContent = (props) => {
                 )
             }
             <Grid item className={classes.blockAction}>
-              <IconButton
-                onClick={() => editItemHandler(item)}
-              >
-                <EditIcon />
-              </IconButton>
               <IconButton
                 onClick={() => openDeleteDialog(item)}
               >
