@@ -54,43 +54,83 @@ const countDecimals = (value) => {
   return value.toString().split(".")[1].length || 0;
 };
 function roundNumber(num, scale) {
-  if (!(`${num}`).includes("e")) {
-    return +(`${Math.round(`${num}e+${scale}`)}e-${scale}`);
+  if (!`${num}`.includes("e")) {
+    return +`${Math.round(`${num}e+${scale}`)}e-${scale}`;
   }
-  const arr = (`${num}`).split("e");
+  const arr = `${num}`.split("e");
   let sig = "";
   if (+arr[1] + scale > 0) {
     sig = "+";
   }
-  return +(
-    `${Math.round(`${+arr[0]}e${sig}${+arr[1] + scale}`)
-    }e-${
-      scale}`
-  );
+  return +`${Math.round(`${+arr[0]}e${sig}${+arr[1] + scale}`)}e-${scale}`;
 }
 
 export const Graph = ({ data, range, conventionalRange }) => {
   const [graphData, setGraphData] = useState([]);
-  const [low, setLow] = useState([]);
-  const [high, setHigh] = useState([]);
+  const [low, setLow] = useState(0);
+  const [high, setHigh] = useState(0);
 
+  /* eslint-disable */
   useEffect(() => {
-    const middle = (conventionalRange.high + conventionalRange.low) / 2;
-    if (
-      Math.round(conventionalRange.high + middle * 0.12)
-      < conventionalRange.high
+    const middle = (conventionalRange?.high + conventionalRange?.low) / 2;
+    if (conventionalRange?.high > range?.high) {
+      if (
+        Math.round(conventionalRange?.high + middle * 0.12) <
+        conventionalRange?.high
+      ) {
+        const newHigh = conventionalRange?.high + middle * 0.12;
+        if (countDecimals(newHigh) > 2) {
+          setHigh(roundNumber(newHigh.toFixed(2), 1));
+        } else {
+          setHigh(newHigh);
+        }
+      } else {
+        setHigh(Math.round(conventionalRange?.high + middle * 0.12));
+      }
+    } else if (range !== true) {
+      if (Math.round(range?.high + middle * 0.12) < range?.high) {
+        const newHigh = range?.high + middle * 0.12;
+        if (countDecimals(newHigh) > 2) {
+          setHigh(roundNumber(newHigh.toFixed(2), 1));
+        } else {
+          setHigh(newHigh);
+        }
+      } else {
+        setHigh(Math.round(range?.high + middle * 0.12));
+      }
+    } else if (
+      Math.round(conventionalRange?.high + middle * 0.12) <
+      conventionalRange?.high
     ) {
-      const newHigh = conventionalRange.high + middle * 0.12;
+      const newHigh = conventionalRange?.high + middle * 0.12;
       if (countDecimals(newHigh) > 2) {
         setHigh(roundNumber(newHigh.toFixed(2), 1));
       } else {
         setHigh(newHigh);
       }
     } else {
-      setHigh(Math.round(conventionalRange.high + middle * 0.12));
+      setHigh(Math.round(conventionalRange?.high + middle * 0.12));
     }
-    setLow(Math.round(conventionalRange.low - middle * 0.12));
-  }, [range, conventionalRange]);
+
+    if (range !== true) {
+      if (conventionalRange?.low < range?.low) {
+        if (conventionalRange?.low < 1) {
+          setLow(0);
+        } else {
+          setLow(Math.round(conventionalRange?.low - middle * 0.12));
+        }
+      } else if (range?.low < 1) {
+        setLow(0);
+      } else {
+        setLow(Math.round(range?.low - middle * 0.12));
+      }
+    } else if (conventionalRange?.low < 1) {
+      setLow(0);
+    } else {
+      setLow(Math.round(conventionalRange?.low - middle * 0.12));
+    }
+  }, [conventionalRange]);
+
   useEffect(() => {
     if (data) {
       const hash = Object.create(null);
@@ -140,7 +180,7 @@ export const Graph = ({ data, range, conventionalRange }) => {
           type="number"
           domain={[low, high]}
           interval={0}
-          tickCount={6}
+          tickCount={8}
           style={{
             fontSize: "0.8rem",
             margin: "2px",
@@ -157,11 +197,11 @@ export const Graph = ({ data, range, conventionalRange }) => {
           }}
           stroke="#477fc9"
         />
-        {range.high && (
+        {range !== true && (
           <ReferenceLine
             y={range?.high}
             label={{
-              position: "insideTopLeft",
+              position: "insideTopRight",
               value: "Functional range",
               fontSize: "0.6rem",
               fill: "#477fc9",
@@ -169,11 +209,11 @@ export const Graph = ({ data, range, conventionalRange }) => {
             stroke="#477fc9"
           />
         )}
-        {range.low && (
+        {range !== true && (
           <ReferenceLine
             y={range?.low}
             label={{
-              position: "insideTopLeft",
+              position: "insideBottomRight",
               value: "Functional range",
               fontSize: "0.6rem",
               fill: "#477fc9",
