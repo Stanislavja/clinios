@@ -113,6 +113,7 @@ const RequisitionsDetails = (props) => {
             <TableRow>
               <StyledTableCell>Created</StyledTableCell>
               <StyledTableCell>ID</StyledTableCell>
+              <StyledTableCell>CPT ID</StyledTableCell>
               <StyledTableCell>Name</StyledTableCell>
               <StyledTableCell>Lab Name</StyledTableCell>
               <StyledTableCell align="center">Actions</StyledTableCell>
@@ -127,6 +128,7 @@ const RequisitionsDetails = (props) => {
                     {moment(row.created).format("MMM D YYYY")}
                   </TableCell>
                   <TableCell>{row.id}</TableCell>
+                  <TableCell>{row.cpt_id}</TableCell>
                   <TableCell>{row.cpt_name || ""}</TableCell>
                   <TableCell>{row.lab_name || ""}</TableCell>
 

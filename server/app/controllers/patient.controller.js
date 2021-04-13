@@ -2224,7 +2224,7 @@ const getRequisitions = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select pc.created, c.name cpt_name, c.id, lc.name lab_name
+      `select pc.created, pc.id, c.name cpt_name, c.id cpt_id, lc.name lab_name
         from patient_cpt pc
         left join cpt c on c.id=pc.cpt_id
         left join lab_company lc on lc.id=c.lab_company_id
@@ -2280,7 +2280,7 @@ const deleteRequisitions = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const deleteResponse = await db.query(
-      `delete from patient_cpt where cpt_id='${id}'`
+      `delete from patient_cpt where id='${id}'`
     );
 
     if (!deleteResponse.affectedRows) {
