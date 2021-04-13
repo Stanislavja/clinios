@@ -93,37 +93,6 @@ const TestGraph = ({ changeTitle }) => {
   /* eslint-disable */
   useEffect(() => {
     if (testId) {
-      Tests.getConventionalRange(user.id, testId).then(
-        (res) => {
-          const data = res?.data?.data;
-          let high;
-          let low;
-          data.map((d) => {
-            if (d.range_high > high || !high) {
-              high = d.range_high;
-
-              if (d.range_low < low || !low) {
-                low = d.range_low;
-              }
-            }
-          });
-          const cRange = {
-            high: high,
-            low: low,
-          };
-          setConventionalRange(cRange);
-        },
-        () => {
-          enqueueSnackbar("Unable to fetch Activity history.", {
-            variant: "error",
-          });
-        }
-      );
-    }
-  }, [testId]);
-
-  useEffect(() => {
-    if (testId) {
       Tests.getTestCptName(testId).then(
         (res) => {
           const data = res?.data?.data;
@@ -136,9 +105,31 @@ const TestGraph = ({ changeTitle }) => {
         }
       );
     }
-  }, [testId, enqueueSnackbar]);
-
-  useEffect(() => {
+    if (testId) {
+      Tests.getConventionalRange(user.id, testId).then(
+        (res) => {
+          const data = res?.data?.data;
+          const cRange = {
+            high: data[data.length - 1].range_high,
+            low: data[data.length - 1].range_low,
+          };
+          const graphData = res?.data.data.map((d) => ({
+            id: d.cpt_id,
+            lab_dt: d.lab_dt,
+            filename: d.filename,
+            value: d.value,
+          }));
+          setGraph(graphData);
+          setGraphFilterData(graphData);
+          setConventionalRange(cRange);
+        },
+        () => {
+          enqueueSnackbar("Unable to fetch Activity history.", {
+            variant: "error",
+          });
+        }
+      );
+    }
     Patient.getFunctionalRange(user.id).then(
       (res) => {
         const data = res?.data;
@@ -150,7 +141,6 @@ const TestGraph = ({ changeTitle }) => {
         });
       }
     );
-
     Tests.getLabCpt(user.id).then(
       (res) => {
         const data = res?.data;
@@ -162,27 +152,7 @@ const TestGraph = ({ changeTitle }) => {
         });
       }
     );
-    if (testId) {
-      Tests.getTestGraph(user.id, testId).then(
-        (res) => {
-          const data = res?.data.data.map((d) => ({
-            id: d.cpt_id,
-            lab_dt: d.lab_dt,
-            filename: d.filename,
-            value: d.value,
-          }));
-
-          setGraph(data);
-          setGraphFilterData(data);
-        },
-        () => {
-          enqueueSnackbar("Unable to fetch Activity history.", {
-            variant: "error",
-          });
-        }
-      );
-    }
-  }, [user, testId, enqueueSnackbar]);
+  }, [testId]);
 
   useEffect(() => {
     if (functionalRange?.functional_range && graph) {
