@@ -1174,7 +1174,7 @@ const Patient = () => {
           cancelForm={() => dispatch(toggleRequisitionDialog())}
           hideActions
           fullHeight
-          size="lg"
+          size="xl"
         />
       )}
 

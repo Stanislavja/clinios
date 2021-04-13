@@ -183,7 +183,7 @@ const Requisitions = (props) => {
               <TableHead>
                 <TableRow>
                   <StyledTableCellSm>Name</StyledTableCellSm>
-                  <StyledTableCellSm>Favorite</StyledTableCellSm>
+                  <StyledTableCellSm width="15%">Favorite</StyledTableCellSm>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -233,7 +233,7 @@ const Requisitions = (props) => {
                 <TableHead>
                   <TableRow>
                     <StyledTableCellSm>Name</StyledTableCellSm>
-                    <StyledTableCellSm>Favorite</StyledTableCellSm>
+                    <StyledTableCellSm width="15%">Favorite</StyledTableCellSm>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -284,7 +284,7 @@ const Requisitions = (props) => {
                 <TableHead>
                   <TableRow>
                     <StyledTableCellSm>Name</StyledTableCellSm>
-                    <StyledTableCellSm>Favorite</StyledTableCellSm>
+                    <StyledTableCellSm width="15%">Favorite</StyledTableCellSm>
                   </TableRow>
                 </TableHead>
                 <TableBody>
