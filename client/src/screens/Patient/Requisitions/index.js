@@ -31,17 +31,11 @@ const useStyles = makeStyles((theme) => ({
       padding: 0,
     },
   },
-  mainSection: {
-    marginTop: theme.spacing(2),
-    [theme.breakpoints.up("md")]: {
-      minHeight: 500,
-    },
-  },
   tableContainer: {
     marginTop: theme.spacing(2),
   },
   header: {
-    minHeight: 37,
+    minHeight: 38,
     display: "flex",
     alignItems: "flex-end",
   },
@@ -184,7 +178,7 @@ const Requisitions = (props) => {
               </Grid>
             </Grid>
           </form>
-          <TableContainer className={classes.mainSection}>
+          <TableContainer className={classes.tableContainer}>
             <Table stickyHeader size="small">
               <TableHead>
                 <TableRow>
