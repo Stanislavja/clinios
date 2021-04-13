@@ -1825,9 +1825,7 @@ const searchTests = async (req, res) => {
 
   const db = makeDb(configuration, res);
   try {
-    let $sql =
-      `
-      select c.id cpt_id, lc.name lab_name, c.name, case when cc.cpt_id then true end favorite
+    let $sql = `select c.id cpt_id, lc.name lab_name, c.name, case when cc.cpt_id then true end favorite
       from cpt c
       left join lab_company lc on lc.id=c.lab_company_id
       left join client_cpt cc on cc.client_id=${req.client_id}
