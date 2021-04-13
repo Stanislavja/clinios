@@ -90,13 +90,13 @@ const Requisitions = (props) => {
   }, []);
 
   const fetchRecentTests = useCallback(() => {
-    PatientService.getDiagnosesRecentTests(patientId).then((response) => {
+    PatientService.getRequisitionsRecentTests(patientId).then((response) => {
       setRecentTests(response.data);
     });
   }, [patientId]);
 
   const fetchFavoriteTests = useCallback(() => {
-    PatientService.getDiagnosesFavoriteTests(patientId).then((response) => {
+    PatientService.getRequisitionsFavoriteTests(patientId).then((response) => {
       setFavoriteTests(response.data);
     });
   }, [patientId]);
