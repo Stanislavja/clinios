@@ -90,6 +90,7 @@ export const Graph = ({ data, range, conventionalRange }) => {
 
   /* eslint-disable */
   useEffect(() => {
+    console.log(range, conventionalRange);
     const middle = (conventionalRange?.high + conventionalRange?.low) / 2;
     if (conventionalRange?.high > range?.high) {
       if (
