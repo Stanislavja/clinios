@@ -27,22 +27,29 @@ import PatientService from "../../../services/patient.service";
 const useStyles = makeStyles((theme) => ({
   section: {
     padding: theme.spacing(0, 2),
+    [theme.breakpoints.down("md")]: {
+      padding: 0,
+    },
   },
   mainSection: {
-    paddingRight: theme.spacing(2),
-    minHeight: 500,
+    marginTop: theme.spacing(2),
+    [theme.breakpoints.up("md")]: {
+      minHeight: 500,
+    },
+  },
+  tableContainer: {
+    marginTop: theme.spacing(2),
+  },
+  header: {
+    minHeight: 37,
+    display: "flex",
+    alignItems: "flex-end",
   },
   pointer: {
     cursor: "pointer",
   },
   actionContainer: {
     marginTop: theme.spacing(2),
-  },
-  mr2: {
-    marginRight: theme.spacing(2),
-  },
-  ml2: {
-    marginLeft: theme.spacing(2),
   },
   menuOption: {
     minHeight: 26,
@@ -130,9 +137,9 @@ const Requisitions = (props) => {
 
   return (
     <>
-      <Grid container spacing={3}>
-        <Grid item xs={4}>
-          <Grid item xs={8}>
+      <Grid container spacing={4}>
+        <Grid item md={4} xs={12}>
+          <Grid item sm={9}>
             <TextField
               select
               required
@@ -152,11 +159,11 @@ const Requisitions = (props) => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid container spacing={3} alignItems="flex-end">
-        <Grid item xs={4}>
+      <Grid container spacing={3}>
+        <Grid item md={4} xs={12}>
           <form onSubmit={(e) => searchTests(e, searchText)}>
-            <Grid container alignItems="center">
-              <Grid item xs={8}>
+            <Grid container spacing={2} alignItems="center">
+              <Grid item sm={9} xs={8}>
                 <TextField
                   autoFocus
                   fullWidth
@@ -166,34 +173,17 @@ const Requisitions = (props) => {
                   onChange={(e) => setSearchText(e.target.value)}
                 />
               </Grid>
-              <Button
-                variant="outlined"
-                type="submit"
-                className={classes.ml2}
-              >
-                Search
-              </Button>
+              <Grid item>
+                <Button
+                  variant="outlined"
+                  type="submit"
+                  fullWidth
+                >
+                  Search
+                </Button>
+              </Grid>
             </Grid>
           </form>
-        </Grid>
-        <Grid item xs={4}>
-          <Grid className={classes.section}>
-            <Typography variant="h5" color="textPrimary">
-              Recently Used
-            </Typography>
-          </Grid>
-        </Grid>
-        <Grid item xs={4}>
-          <Grid className={classes.section}>
-            <Typography variant="h5" color="textPrimary">
-              Favorites
-            </Typography>
-          </Grid>
-        </Grid>
-      </Grid>
-
-      <Grid container spacing={3} className={classes.mb2}>
-        <Grid item lg={4}>
           <TableContainer className={classes.mainSection}>
             <Table stickyHeader size="small">
               <TableHead>
@@ -239,101 +229,113 @@ const Requisitions = (props) => {
             </Table>
           </TableContainer>
         </Grid>
-        <Grid item lg={4}>
-          <TableContainer className={classes.section}>
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCellSm>Name</StyledTableCellSm>
-                  <StyledTableCellSm>ID</StyledTableCellSm>
-                  <StyledTableCellSm>Favorite</StyledTableCellSm>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {recentTests.length
-                  ? recentTests.map((item) => (
-                    <StyledTableRowSm
-                      key={item.cpt_id}
-                      className={classes.pointer}
-                      onClick={() => onFormSubmit(item)}
-                    >
-                      {!!item.name && item.name.length > 30
-                        ? (
-                          <Tooltip title={item.name}>
-                            <StyledTableCellSm
-                              className={classes.overFlowControl}
-                            >
-                              {item.name}
-                            </StyledTableCellSm>
-                          </Tooltip>
-                        )
-                        : <StyledTableCellSm>{item.name}</StyledTableCellSm>}
-                      <StyledTableCellSm>{item.cpt_id}</StyledTableCellSm>
-                      <StyledTableCellSm>{item.favorite ? "Yes" : ""}</StyledTableCellSm>
-                    </StyledTableRowSm>
-                  ))
-                  : (
-                    <StyledTableRowSm>
-                      <StyledTableCellSm colSpan={4}>
-                        <Typography align="center" variant="body1" className={classes.text}>
-                          No Records found...
-                        </Typography>
-                      </StyledTableCellSm>
-                    </StyledTableRowSm>
-                  )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+        <Grid item md={4} xs={12}>
+          <Grid className={classes.section}>
+            <Grid className={classes.header}>
+              <Typography variant="h5" color="textPrimary">
+                Recently Used
+              </Typography>
+            </Grid>
+            <TableContainer className={classes.tableContainer}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCellSm>Name</StyledTableCellSm>
+                    <StyledTableCellSm>ID</StyledTableCellSm>
+                    <StyledTableCellSm>Favorite</StyledTableCellSm>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {recentTests.length
+                    ? recentTests.map((item) => (
+                      <StyledTableRowSm
+                        key={item.cpt_id}
+                        className={classes.pointer}
+                        onClick={() => onFormSubmit(item)}
+                      >
+                        {!!item.name && item.name.length > 30
+                          ? (
+                            <Tooltip title={item.name}>
+                              <StyledTableCellSm
+                                className={classes.overFlowControl}
+                              >
+                                {item.name}
+                              </StyledTableCellSm>
+                            </Tooltip>
+                          )
+                          : <StyledTableCellSm>{item.name}</StyledTableCellSm>}
+                        <StyledTableCellSm>{item.cpt_id}</StyledTableCellSm>
+                        <StyledTableCellSm>{item.favorite ? "Yes" : ""}</StyledTableCellSm>
+                      </StyledTableRowSm>
+                    ))
+                    : (
+                      <StyledTableRowSm>
+                        <StyledTableCellSm colSpan={4}>
+                          <Typography align="center" variant="body1" className={classes.text}>
+                            No Records found...
+                          </Typography>
+                        </StyledTableCellSm>
+                      </StyledTableRowSm>
+                    )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
         </Grid>
-        <Grid item lg={4}>
-          <TableContainer className={classes.section}>
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <StyledTableCellSm>Name</StyledTableCellSm>
-                  <StyledTableCellSm>ID</StyledTableCellSm>
-                  <StyledTableCellSm>Favorite</StyledTableCellSm>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {favoriteTests.length
-                  ? favoriteTests.map((item) => (
-                    <StyledTableRowSm
-                      key={item.cpt_id}
-                      className={classes.pointer}
-                      onClick={() => onFormSubmit(item)}
-                    >
-                      {!!item.name && item.name.length > 30
-                        ? (
-                          <Tooltip title={item.name}>
-                            <StyledTableCellSm
-                              className={classes.overFlowControl}
-                            >
-                              {item.name}
-                            </StyledTableCellSm>
-                          </Tooltip>
-                        )
-                        : <StyledTableCellSm>{item.name}</StyledTableCellSm>}
-                      <StyledTableCellSm>{item.cpt_id}</StyledTableCellSm>
-                      <StyledTableCellSm>{item.favorite ? "Yes" : ""}</StyledTableCellSm>
-                    </StyledTableRowSm>
-                  ))
-                  : (
-                    <StyledTableRowSm>
-                      <StyledTableCellSm colSpan={4}>
-                        <Typography align="center" variant="body1" className={classes.text}>
-                          No Records found...
-                        </Typography>
-                      </StyledTableCellSm>
-                    </StyledTableRowSm>
-                  )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+        <Grid item md={4} xs={12}>
+          <Grid className={classes.section}>
+            <Grid className={classes.header}>
+              <Typography variant="h5" color="textPrimary">
+                Favorites
+              </Typography>
+            </Grid>
+            <TableContainer className={classes.tableContainer}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCellSm>Name</StyledTableCellSm>
+                    <StyledTableCellSm>ID</StyledTableCellSm>
+                    <StyledTableCellSm>Favorite</StyledTableCellSm>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {favoriteTests.length
+                    ? favoriteTests.map((item) => (
+                      <StyledTableRowSm
+                        key={item.cpt_id}
+                        className={classes.pointer}
+                        onClick={() => onFormSubmit(item)}
+                      >
+                        {!!item.name && item.name.length > 30
+                          ? (
+                            <Tooltip title={item.name}>
+                              <StyledTableCellSm
+                                className={classes.overFlowControl}
+                              >
+                                {item.name}
+                              </StyledTableCellSm>
+                            </Tooltip>
+                          )
+                          : <StyledTableCellSm>{item.name}</StyledTableCellSm>}
+                        <StyledTableCellSm>{item.cpt_id}</StyledTableCellSm>
+                        <StyledTableCellSm>{item.favorite ? "Yes" : ""}</StyledTableCellSm>
+                      </StyledTableRowSm>
+                    ))
+                    : (
+                      <StyledTableRowSm>
+                        <StyledTableCellSm colSpan={4}>
+                          <Typography align="center" variant="body1" className={classes.text}>
+                            No Records found...
+                          </Typography>
+                        </StyledTableCellSm>
+                      </StyledTableRowSm>
+                    )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
         </Grid>
       </Grid>
-
-
     </>
   );
 };
