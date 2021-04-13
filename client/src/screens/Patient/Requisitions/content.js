@@ -98,13 +98,6 @@ const RequisitionsContent = (props) => {
             >
               {moment(item.created).format("MMM D YYYY")}
             </Typography>
-            <Typography
-              component="span"
-              className={`${classes.text12} ${classes.block}`}
-              color="textPrimary"
-            >
-              {item.id}
-            </Typography>
             {
               !!item.cpt_name && item.cpt_name.length > 30
                 ? (
