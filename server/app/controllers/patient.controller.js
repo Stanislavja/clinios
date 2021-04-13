@@ -1815,6 +1815,106 @@ const getFavoriteDiagnoses = async (req, res) => {
   }
 };
 
+const searchTests = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    errorMessage.message = errors.array();
+    return res.status(status.bad).send(errorMessage);
+  }
+  const { text, company_id } = req.body.data;
+
+  const db = makeDb(configuration, res);
+  try {
+    let $sql = `select c.id cpt_id, lc.name lab_name, c.name, case when cc.cpt_id then true end favorite
+      from cpt c
+      left join lab_company lc on lc.id=c.lab_company_id
+      left join client_cpt cc on cc.client_id=${req.client_id}
+      and cc.cpt_id=c.id
+      where c.type='L'
+      and c.name like '%${text}%'
+    `;
+    if (typeof company_id !== "undefined") {
+      $sql += `and lc.id=${company_id}`;
+    }
+
+    $sql += ` order by lc.name, c.name limit 20`;
+
+    const dbResponse = await db.query($sql);
+
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Search not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+const getRecentTests = async (req, res) => {
+  const db = makeDb(configuration, res);
+
+  try {
+    const dbResponse = await db.query(
+      `select c.id cpt_id, lc.name lab_name, c.name, case when cc.cpt_id then true end favorite
+      from patient_cpt pc
+      left join cpt c on c.id=pc.cpt_id
+      left join lab_company lc on lc.id=c.lab_company_id
+      left join client_cpt cc on cc.client_id=${req.client_id}
+      and cc.cpt_id=c.id
+      order by lc.name, c.name
+      limit 20`
+    );
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+const getFavoriteTests = async (req, res) => {
+  const db = makeDb(configuration, res);
+
+  try {
+    const dbResponse = await db.query(
+      `select c.id cpt_id, lc.name lab_name, c.name, case when cc.cpt_id then true end favorite
+      from cpt c
+      left join lab_company lc on lc.id=c.lab_company_id
+      join client_cpt cc on cc.client_id=${req.client_id}
+      and cc.cpt_id=c.id
+      where c.type='L'
+      order by lc.name, c.name
+      limit 20`
+    );
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const updateDiagnose = async (req, res) => {
   const { patient_id, icd_id } = req.params;
   const { active, is_primary } = req.body.data;
@@ -2151,12 +2251,12 @@ const getRequisitions = async (req, res) => {
 
 const createRequisitions = async (req, res) => {
   const { patient_id } = req.params;
-  const { cpt_id, encounter_id } = req.body.data;
+  const { cpt_id } = req.body.data;
   const db = makeDb(configuration, res);
   try {
     const insertResponse = await db.query(
-      `insert into patient_cpt (patient_id, cpt_id, client_id, encounter_id, created, created_user_id) 
-      values (${patient_id}, '${cpt_id}', ${req.client_id}, '${encounter_id}', now(), ${req.user_id})`
+      `insert into patient_cpt (patient_id, cpt_id, client_id, created, created_user_id) 
+      values (${patient_id}, '${cpt_id}', ${req.client_id}, now(), ${req.user_id})`
     );
 
     if (!insertResponse.affectedRows) {
@@ -2176,11 +2276,11 @@ const createRequisitions = async (req, res) => {
 };
 
 const deleteRequisitions = async (req, res) => {
-  const { cpt_id, encounter_id } = req.body.data;
+  const { id } = req.params;
   const db = makeDb(configuration, res);
   try {
     const deleteResponse = await db.query(
-      `delete from patient_cpt where encounter_id=${encounter_id} and cpt_id='${cpt_id}'`
+      `delete from patient_cpt where cpt_id='${id}'`
     );
 
     if (!deleteResponse.affectedRows) {
@@ -2505,6 +2605,9 @@ const appointmentTypes = {
   getDiagnoses,
   getRecentDiagnoses,
   getFavoriteDiagnoses,
+  searchTests,
+  getRecentTests,
+  getFavoriteTests,
   deleteDiagnose,
   updateDiagnose,
   createDiagnoses,

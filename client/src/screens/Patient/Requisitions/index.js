@@ -3,57 +3,50 @@ import React, { useState, useEffect, useCallback } from "react";
 import {
   Button,
   Grid,
+  TextField,
+  MenuItem,
   Typography,
-  Checkbox,
-  RadioGroup,
-  Radio,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  List,
-  ListItem,
-  ListItemText,
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import Select from "react-select";
 
+import Tooltip from "../../../components/common/CustomTooltip";
+import { StyledTableRowSm, StyledTableCellSm } from "../../../components/common/StyledTable";
+import useDidMountEffect from "../../../hooks/useDidMountEffect";
 import usePatientContext from "../../../hooks/usePatientContext";
 import { toggleRequisitionDialog } from "../../../providers/Patient/actions";
+import CPTCodesService from "../../../services/cpt.service";
 import PatientService from "../../../services/patient.service";
-import {
-  BillSelectionFields,
-  LabortoriesSelectionFields,
-  FavoritesSelectionFields,
-} from "../../../static/requisitionform";
-import SelectCustomStyles from "../../../styles/SelectCustomStyles";
 
 const useStyles = makeStyles((theme) => ({
-  inputRow: {
-    margin: theme.spacing(3, 0),
-  },
   section: {
-    marginBottom: theme.spacing(2),
+    padding: theme.spacing(0, 2),
+    [theme.breakpoints.down("md")]: {
+      padding: 0,
+    },
   },
-  heading: {
-    marginBottom: theme.spacing(2),
+  tableContainer: {
+    marginTop: theme.spacing(1),
   },
-  border: {
-    border: "1px solid grey",
-    padding: 10,
+  header: {
+    minHeight: 38,
+    display: "flex",
+    alignItems: "flex-end",
   },
-  height100: {
-    height: "100%",
+  pointer: {
+    cursor: "pointer",
   },
   actionContainer: {
     marginTop: theme.spacing(2),
   },
-  mr2: {
-    marginRight: theme.spacing(2),
-  },
-  ml1: {
-    marginLeft: theme.spacing(1),
+  menuOption: {
+    minHeight: 26,
   },
 }));
 
@@ -62,39 +55,63 @@ const Requisitions = (props) => {
   const { enqueueSnackbar } = useSnackbar();
   const { state, dispatch } = usePatientContext();
   const { reloadData } = props;
-  const [billSelection, setBillSelection] = useState("physician");
+  const [searchText, setSearchText] = useState("");
+  const [hasUserSearched, setHasUserSearched] = useState(false);
   const [tests, setTests] = useState([]);
-  const [diagnoses, setDiagnoses] = useState([]);
-  const [selectedTest, setSelectedTest] = useState([]);
+  const [recentTests, setRecentTests] = useState([]);
+  const [favoriteTests, setFavoriteTests] = useState([]);
+  const [selectedCompany, setSelectedCompany] = useState("");
+  const [labCompanyList, setLabCompanyList] = useState([]);
 
   const { patientId } = state;
 
-  const fetchTests = useCallback(() => {
-    PatientService.getTests(patientId).then((res) => {
+  const searchTests = (e, text) => {
+    e.preventDefault();
+    const reqBody = {
+      data: {
+        text,
+        company_id: selectedCompany.length ? selectedCompany : undefined,
+      },
+    };
+    PatientService.searchTests(patientId, reqBody).then((res) => {
       setTests(res.data);
+      setHasUserSearched(true);
+    });
+  };
+
+  const fetchLabCompanyList = useCallback(() => {
+    CPTCodesService.getLabCompnayList().then((res) => {
+      const companyList = res.data;
+      const emptyOption = {
+        name: "",
+        id: "",
+      };
+      setLabCompanyList([emptyOption, ...companyList]);
+    });
+  }, []);
+
+  const fetchRecentTests = useCallback(() => {
+    PatientService.getRequisitionsRecentTests(patientId).then((response) => {
+      setRecentTests(response.data);
     });
   }, [patientId]);
 
-  const fetchDiagnoses = useCallback(() => {
-    PatientService.getDiagnoses(patientId, true).then((res) => {
-      setDiagnoses(res.data);
+  const fetchFavoriteTests = useCallback(() => {
+    PatientService.getRequisitionsFavoriteTests(patientId).then((response) => {
+      setFavoriteTests(response.data);
     });
   }, [patientId]);
 
   useEffect(() => {
-    fetchTests();
-    fetchDiagnoses();
-  }, [fetchTests, fetchDiagnoses]);
+    fetchLabCompanyList();
+    fetchRecentTests();
+    fetchFavoriteTests();
+  }, [fetchLabCompanyList, fetchRecentTests, fetchFavoriteTests]);
 
-  const handleBillSelection = (e) => {
-    setBillSelection(e.target.value);
-  };
-
-  const onFormSubmit = () => {
+  const onFormSubmit = (selectedTest) => {
     const reqBody = {
       data: {
         cpt_id: selectedTest.cpt_id,
-        encounter_id: 1, // TODO hard coded for the time being: discussion required
       },
     };
     PatientService.createRequisition(patientId, reqBody)
@@ -102,173 +119,216 @@ const Requisitions = (props) => {
         enqueueSnackbar(`${response.data.message}`, { variant: "success" });
         reloadData();
         dispatch(toggleRequisitionDialog());
-      })
-      .catch((error) => {
-        const resMessage = (error.response
-          && error.response.data
-          && error.response.data.message)
-          || error.message
-          || error.toString();
-        enqueueSnackbar(`${resMessage}`, { variant: "error" });
       });
   };
 
+  useDidMountEffect(() => {
+    if (!searchText.length) {
+      setTests([]);
+      setHasUserSearched(false);
+    }
+  }, [searchText]);
+
   return (
     <>
-      <Grid className={classes.heading} container justify="space-between">
-        <Typography variant="h3" color="textSecondary">
-          Select Lab Test
-        </Typography>
-      </Grid>
-      <Grid container spacing={1}>
-        <Grid item lg={3}>
-          <FormControl component="fieldset" className={classes.section}>
-            <FormLabel component="legend">Bill To</FormLabel>
-            <RadioGroup
-              row
-              value={billSelection}
-              onChange={handleBillSelection}
-              name="position"
-              defaultValue="top"
+      <Grid container spacing={4}>
+        <Grid item md={4} xs={12}>
+          <Grid item sm={9}>
+            <TextField
+              select
+              required
+              variant="outlined"
+              label="Document Type"
+              margin="dense"
+              fullWidth
+              value={selectedCompany}
+              onChange={(e) => setSelectedCompany(`${e.target.value}`)} // number to string
             >
-              {BillSelectionFields.map((item) => (
-                <FormControlLabel
-                  key={`${item.label}_${item.value}`}
-                  value={item.value}
-                  label={item.label}
-                  control={<Radio color="primary" />}
-                />
+              {labCompanyList.map((option) => (
+                <MenuItem key={option.id} value={option.id} className={classes.menuOption}>
+                  {option.name}
+                </MenuItem>
               ))}
-            </RadioGroup>
-          </FormControl>
-          <Grid className={classes.section}>
-            <Typography gutterBottom variant="h4" color="textSecondary">
-              Recommended
-            </Typography>
-            {diagnoses.map((item) => (
-              <Grid
-                container
-                alignItems="center"
-                direction="row"
-                key={item.icd_id}
-              >
-                <Typography variant="body1">
-                  {item.name}
-                </Typography>
-                <Button className={classes.ml1}>[Remove]</Button>
-              </Grid>
-            ))}
+            </TextField>
           </Grid>
-          <Grid item lg={9} className={classes.border}>
-            <Typography
-              gutterBottom
-              variant="h5"
-              color="textPrimary"
-            >
-              Labortories
-            </Typography>
-            {LabortoriesSelectionFields.map((item) => (
-              <Grid key={`${item.label}_${item.value}`}>
-                <FormControlLabel
-                  value={item.value}
-                  label={item.label}
-                  control={<Checkbox color="primary" />}
+        </Grid>
+      </Grid>
+      <Grid container spacing={3}>
+        <Grid item md={4} xs={12}>
+          <form onSubmit={(e) => searchTests(e, searchText)}>
+            <Grid container spacing={2} alignItems="center">
+              <Grid item sm={9} xs={8}>
+                <TextField
+                  autoFocus
+                  fullWidth
+                  size="small"
+                  variant="outlined"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
                 />
               </Grid>
-            ))}
-          </Grid>
-        </Grid>
-        <Grid item lg={3}>
-          <Grid item lg={8} className={classes.heading}>
-            <Select
-              value={selectedTest}
-              options={tests.length ? tests : []}
-              getOptionLabel={(option) => option.name}
-              getOptionValue={(option) => option.id}
-              onChange={(value) => setSelectedTest(value)}
-              styles={SelectCustomStyles}
-              isClearable
-              isLoading={!tests.length}
-            />
-          </Grid>
-
-          <List component="ul">
-            {tests.map((medication) => (
-              <ListItem
-                onClick={() => setSelectedTest(medication)}
-                key={medication.cpt_id}
-                disableGutters
-                button
-              >
-                <ListItemText primary={medication.name} />
-              </ListItem>
-            ))}
-          </List>
-
-        </Grid>
-        <Grid item lg={6}>
-          <Grid className={`${classes.border} ${classes.height100}`}>
-            <Typography gutterBottom variant="h5" color="textPrimary">
-              Favorites
-            </Typography>
-            <Grid container spacing={1}>
-              <Grid item lg={4}>
-                {FavoritesSelectionFields.map((item) => (
-                  <Grid key={`${item.label}_${item.value}`}>
-                    <FormControlLabel
-                      value={item.value}
-                      label={item.label}
-                      control={<Checkbox color="primary" />}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-              <Grid item lg={4}>
-                {FavoritesSelectionFields.map((item) => (
-                  <Grid key={`${item.label}_${item.value}`}>
-                    <FormControlLabel
-                      value={item.value}
-                      label={item.label}
-                      control={<Checkbox color="primary" />}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-              <Grid item lg={4}>
-                {FavoritesSelectionFields.map((item) => (
-                  <Grid key={`${item.label}_${item.value}`}>
-                    <FormControlLabel
-                      value={item.vlaue}
-                      label={item.label}
-                      control={<Checkbox color="primary" />}
-                    />
-                  </Grid>
-                ))}
+              <Grid item>
+                <Button
+                  variant="outlined"
+                  type="submit"
+                  fullWidth
+                >
+                  Search
+                </Button>
               </Grid>
             </Grid>
+          </form>
+          <TableContainer className={classes.tableContainer}>
+            <Table stickyHeader size="small">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCellSm>Name</StyledTableCellSm>
+                  <StyledTableCellSm>ID</StyledTableCellSm>
+                  <StyledTableCellSm>Favorite</StyledTableCellSm>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {tests.length
+                  ? tests.map((item) => (
+                    <StyledTableRowSm
+                      key={item.cpt_id}
+                      className={classes.pointer}
+                      onClick={() => onFormSubmit(item)}
+                    >
+                      {!!item.name && item.name.length > 30
+                        ? (
+                          <Tooltip title={item.name}>
+                            <StyledTableCellSm
+                              className={classes.overFlowControl}
+                            >
+                              {item.name}
+                            </StyledTableCellSm>
+                          </Tooltip>
+                        )
+                        : <StyledTableCellSm>{item.name}</StyledTableCellSm>}
+                      <StyledTableCellSm>{item.cpt_id}</StyledTableCellSm>
+                      <StyledTableCellSm>{item.favorite ? "Yes" : ""}</StyledTableCellSm>
+                    </StyledTableRowSm>
+                  ))
+                  : hasUserSearched ? (
+                    <StyledTableRowSm>
+                      <StyledTableCellSm colSpan={4}>
+                        <Typography align="center" variant="body1" className={classes.text}>
+                          No Records found...
+                        </Typography>
+                      </StyledTableCellSm>
+                    </StyledTableRowSm>
+                  ) : null}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+        <Grid item md={4} xs={12}>
+          <Grid className={classes.section}>
+            <Grid className={classes.header}>
+              <Typography variant="h5" color="textPrimary">
+                Recently Used
+              </Typography>
+            </Grid>
+            <TableContainer className={classes.tableContainer}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCellSm>Name</StyledTableCellSm>
+                    <StyledTableCellSm>ID</StyledTableCellSm>
+                    <StyledTableCellSm>Favorite</StyledTableCellSm>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {recentTests.length
+                    ? recentTests.map((item) => (
+                      <StyledTableRowSm
+                        key={item.cpt_id}
+                        className={classes.pointer}
+                        onClick={() => onFormSubmit(item)}
+                      >
+                        {!!item.name && item.name.length > 30
+                          ? (
+                            <Tooltip title={item.name}>
+                              <StyledTableCellSm
+                                className={classes.overFlowControl}
+                              >
+                                {item.name}
+                              </StyledTableCellSm>
+                            </Tooltip>
+                          )
+                          : <StyledTableCellSm>{item.name}</StyledTableCellSm>}
+                        <StyledTableCellSm>{item.cpt_id}</StyledTableCellSm>
+                        <StyledTableCellSm>{item.favorite ? "Yes" : ""}</StyledTableCellSm>
+                      </StyledTableRowSm>
+                    ))
+                    : (
+                      <StyledTableRowSm>
+                        <StyledTableCellSm colSpan={4}>
+                          <Typography align="center" variant="body1" className={classes.text}>
+                            No Records found...
+                          </Typography>
+                        </StyledTableCellSm>
+                      </StyledTableRowSm>
+                    )}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Grid>
         </Grid>
-      </Grid>
-      <Grid
-        className={classes.actionContainer}
-        container
-        justify="space-between"
-      >
-        <Grid>
-          <Button
-            variant="outlined"
-            className={classes.mr2}
-            onClick={() => onFormSubmit()}
-          >
-            Complete
-          </Button>
-          <Button variant="outlined" onClick={() => onFormSubmit()}>
-            Complete and Fax
-          </Button>
+        <Grid item md={4} xs={12}>
+          <Grid className={classes.section}>
+            <Grid className={classes.header}>
+              <Typography variant="h5" color="textPrimary">
+                Favorites
+              </Typography>
+            </Grid>
+            <TableContainer className={classes.tableContainer}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCellSm>Name</StyledTableCellSm>
+                    <StyledTableCellSm>ID</StyledTableCellSm>
+                    <StyledTableCellSm>Favorite</StyledTableCellSm>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {favoriteTests.length
+                    ? favoriteTests.map((item) => (
+                      <StyledTableRowSm
+                        key={item.cpt_id}
+                        className={classes.pointer}
+                        onClick={() => onFormSubmit(item)}
+                      >
+                        {!!item.name && item.name.length > 30
+                          ? (
+                            <Tooltip title={item.name}>
+                              <StyledTableCellSm
+                                className={classes.overFlowControl}
+                              >
+                                {item.name}
+                              </StyledTableCellSm>
+                            </Tooltip>
+                          )
+                          : <StyledTableCellSm>{item.name}</StyledTableCellSm>}
+                        <StyledTableCellSm>{item.cpt_id}</StyledTableCellSm>
+                        <StyledTableCellSm>{item.favorite ? "Yes" : ""}</StyledTableCellSm>
+                      </StyledTableRowSm>
+                    ))
+                    : (
+                      <StyledTableRowSm>
+                        <StyledTableCellSm colSpan={4}>
+                          <Typography align="center" variant="body1" className={classes.text}>
+                            No Records found...
+                          </Typography>
+                        </StyledTableCellSm>
+                      </StyledTableRowSm>
+                    )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
         </Grid>
-        <Button variant="outlined" onClick={() => dispatch(toggleRequisitionDialog())}>
-          Cancel
-        </Button>
       </Grid>
     </>
   );

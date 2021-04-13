@@ -435,8 +435,7 @@ const Patient = () => {
   }, [patientId]);
 
   const fetchRequisitions = useCallback(() => {
-    const encounterId = 1; // TODO static for the time being: discussion required
-    PatientService.getRequisitions(patientId, encounterId).then((res) => {
+    PatientService.getRequisitions(patientId).then((res) => {
       dispatch(setRequisitions(res.data));
     });
   }, [patientId]);
@@ -589,7 +588,7 @@ const Patient = () => {
           />
         );
       case "Requisitions":
-        return <RequisitionsCardContent />;
+        return <RequisitionsCardContent reloadData={() => fetchRequisitions()} />;
       case "Insights":
         return <InsightsCardContent />;
       default:
@@ -656,9 +655,7 @@ const Patient = () => {
           old_admin_note: patientData && patientData.admin_note,
         },
       };
-      // TODO:: static for the time being - discussion required
-      const noteId = 1;
-      PatientService.updateAdminNotes(patientId, reqBody, noteId)
+      PatientService.updateAdminNotes(patientId, reqBody)
         .then((response) => {
           enqueueSnackbar(`${response.data.message}`, { variant: "success" });
           dispatch(resetEditorText());
@@ -681,15 +678,13 @@ const Patient = () => {
 
   const updateMedicalNotes = () => {
     if (editorText !== patientData.medical_note) {
-      // TODO:: static for the time being - discussion required
-      const noteId = 1;
       const reqBody = {
         data: {
           old_medical_note: patientData && patientData.medical_note,
           medical_note: editorText,
         },
       };
-      PatientService.updateMedicalNotes(patientId, reqBody, noteId)
+      PatientService.updateMedicalNotes(patientId, reqBody)
         .then((response) => {
           enqueueSnackbar(`${response.data.message}`, { variant: "success" });
           dispatch(resetEditorText());
@@ -1178,7 +1173,8 @@ const Patient = () => {
           applyForm={() => dispatch(toggleRequisitionDialog())}
           cancelForm={() => dispatch(toggleRequisitionDialog())}
           hideActions
-          size="xl"
+          fullHeight
+          size="lg"
         />
       )}
 

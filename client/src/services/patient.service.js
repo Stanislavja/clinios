@@ -335,6 +335,30 @@ class Patient {
       .then((res) => res.data);
   }
 
+  searchTests(patientId, data) {
+    return axios
+      .post(`${API_BASE}/patient/${patientId}/requisitions/search-tests`, data, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  getRequisitionsRecentTests(patientId) {
+    return axios
+      .get(`${API_BASE}/patient/${patientId}/requisitions/recent-tests`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+  getRequisitionsFavoriteTests(patientId) {
+    return axios
+      .get(`${API_BASE}/patient/${patientId}/requisitions/favorite-tests`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
   getMedications(patientId) {
     return axios
       .get(`${API_BASE}/patient/${patientId}/medications`, {
@@ -367,9 +391,9 @@ class Patient {
       .then((res) => res.data);
   }
 
-  getRequisitions(patientId, encounterId) {
+  getRequisitions(patientId) {
     return axios
-      .get(`${API_BASE}/patient/${patientId}/requisitions/?encounter_id=${encounterId}`, {
+      .get(`${API_BASE}/patient/${patientId}/requisitions`, {
         headers: authHeader(),
       })
       .then((res) => res.data);
@@ -622,12 +646,9 @@ class Patient {
     });
   }
 
-  deleteRequisitions(patientId, reqBody) {
-    return axios.delete(`${API_BASE}/patient/${patientId}/requisitions`, {
+  deleteRequisitions(patientId, requisitionId) {
+    return axios.delete(`${API_BASE}/patient/${patientId}/requisitions/${requisitionId}`, {
       headers: authHeader(),
-      data: {
-        data: reqBody,
-      },
     });
   }
 
