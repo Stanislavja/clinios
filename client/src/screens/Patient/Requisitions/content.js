@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 12,
   },
   inputRow: {
-    // marginBottom: theme.spacing(0.5),
     flexWrap: "nowrap",
   },
   block: {
@@ -29,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(0, 0.5, 0, 0),
   },
   fullWidth: {
-    width: "47%",
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",
