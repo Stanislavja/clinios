@@ -435,7 +435,7 @@ const Patient = () => {
   }, [patientId]);
 
   const fetchRequisitions = useCallback(() => {
-    const encounterId = 1; // static for the time being: discussion required
+    const encounterId = 1; // TODO static for the time being: discussion required
     PatientService.getRequisitions(patientId, encounterId).then((res) => {
       dispatch(setRequisitions(res.data));
     });
