@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   tableContainer: {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(1),
   },
   header: {
     minHeight: 38,
