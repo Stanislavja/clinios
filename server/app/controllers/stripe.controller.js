@@ -20,20 +20,76 @@ const listOfCustomers = async (req, res) => {
 };
 
 const createCustomer = async (req, res) => {
-  const customer = await stripe.customers.create({
-    description: 'My First Test Customer (created for API docs)',
-  });
-  console.log('customer:', customer)
+  const {email, name, description} = req.body.data;
+  try {
+    const customer = await stripe.customers.create({
+      email: email,
+      name: name,
+      description: description
+    });
+    successMessage.data = customer;
+    successMessage.message = "Payment Succesful!";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Problem on creating customers";
+    return res.status(status.error).send(errorMessage);
+  } 
 }
 
 const createPayment = async (req, res) => {
-  const {amount, description} = req.body.data;
+  const {amount, description, payment_method_id} = req.body.data;
   try {
-    const charge = await stripe.charges.create({
+  // Create the PaymentIntent
+  let intent = await stripe.paymentIntents.create({
+      payment_method: payment_method_id,
+      description: description,
       amount: amount,
       currency: 'usd',
-      source: 'tok_mastercard',
-      description: description,
+      confirmation_method: 'manual',
+      confirm: true
+    });
+    successMessage.data = intent;
+    successMessage.message = "Payment Succesful!";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Problem on fetching customers";
+    return res.status(status.error).send(errorMessage);
+  } 
+}
+
+const createPaymentMethod = async (req, res) => {
+  const {type, card} = req.body.data;
+  try {
+    /*
+      card: {
+        number: '4242424242424242',
+        exp_month: 4,
+        exp_year: 2022,
+        cvc: '314',
+      },
+    */
+    const charge = await stripe.paymentMethods.create({
+      type: type,
+      card: card,
+    });
+    successMessage.data = charge;
+    successMessage.message = "Payment Succesful!";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Problem on fetching customers";
+    return res.status(status.error).send(errorMessage);
+  } 
+}
+
+const getPaymentMethod = async (req, res) => {
+  const {type, card} = req.body.data;
+  try {
+    const charge = await stripe.paymentMethods.create({
+      type: type,
+      card: card,
     });
     successMessage.data = charge;
     successMessage.message = "Payment Succesful!";
@@ -48,7 +104,9 @@ const createPayment = async (req, res) => {
 const users = {
   listOfCustomers,
   createCustomer,
-  createPayment
+  createPayment,
+  createPaymentMethod,
+  getPaymentMethod
 };
 
 module.exports = users;
