@@ -228,6 +228,21 @@ router.get(
   [authJwt.verifyToken],
   Patient.getFavoriteDiagnoses
 );
+router.post(
+  "/patient/:patient_id/requisitions/search-tests",
+  [authJwt.verifyToken],
+  Patient.searchTests
+);
+router.get(
+  "/patient/:patient_id/requisitions/recent-tests",
+  [authJwt.verifyToken],
+  Patient.getRecentTests
+);
+router.get(
+  "/patient/:patient_id/requisitions/favorite-tests",
+  [authJwt.verifyToken],
+  Patient.getFavoriteTests
+);
 router.put(
   "/patient/:patient_id/diagnoses/:icd_id",
   [authJwt.verifyToken],
