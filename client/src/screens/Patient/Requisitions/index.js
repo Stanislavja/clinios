@@ -94,7 +94,7 @@ const Requisitions = (props) => {
     const reqBody = {
       data: {
         cpt_id: selectedTest.cpt_id,
-        encounter_id: 1, // hard coded for the time being: discussion required
+        encounter_id: 1, // TODO hard coded for the time being: discussion required
       },
     };
     PatientService.createRequisition(patientId, reqBody)
