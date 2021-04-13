@@ -49,9 +49,48 @@ CustomTooltip.defaultProps = {
   payload: [],
 };
 
+const countDecimals = (value) => {
+  if (Math.floor(value) === value) return 0;
+  return value.toString().split(".")[1].length || 0;
+};
+function roundNumber(num, scale) {
+  if (!(`${num}`).includes("e")) {
+    return +(`${Math.round(`${num}e+${scale}`)}e-${scale}`);
+  }
+  const arr = (`${num}`).split("e");
+  let sig = "";
+  if (+arr[1] + scale > 0) {
+    sig = "+";
+  }
+  return +(
+    `${Math.round(`${+arr[0]}e${sig}${+arr[1] + scale}`)
+    }e-${
+      scale}`
+  );
+}
+
 export const Graph = ({ data, range, conventionalRange }) => {
   const [graphData, setGraphData] = useState([]);
+  const [low, setLow] = useState([]);
+  const [high, setHigh] = useState([]);
 
+  useEffect(() => {
+    const middle = (conventionalRange.high + conventionalRange.low) / 2;
+    if (
+      Math.round(conventionalRange.high + middle * 0.12)
+      < conventionalRange.high
+    ) {
+      const newHigh = conventionalRange.high + middle * 0.12;
+      if (countDecimals(newHigh) > 2) {
+        setHigh(roundNumber(newHigh.toFixed(2), 1));
+      } else {
+        setHigh(newHigh);
+      }
+    } else {
+      setHigh(Math.round(conventionalRange.high + middle * 0.12));
+    }
+    setLow(Math.round(conventionalRange.low - middle * 0.12));
+  }, [range, conventionalRange]);
   useEffect(() => {
     if (data) {
       const hash = Object.create(null);
@@ -99,12 +138,7 @@ export const Graph = ({ data, range, conventionalRange }) => {
         />
         <YAxis
           type="number"
-          domain={[
-            parseInt(conventionalRange.low, 10),
-            Math.round(conventionalRange.high) < conventionalRange.high
-              ? conventionalRange.high
-              : Math.round(conventionalRange.high),
-          ]}
+          domain={[low, high]}
           interval={0}
           tickCount={6}
           style={{
@@ -127,7 +161,7 @@ export const Graph = ({ data, range, conventionalRange }) => {
           <ReferenceLine
             y={range?.high}
             label={{
-              position: "insideBottomLeft",
+              position: "insideTopLeft",
               value: "Functional range",
               fontSize: "0.6rem",
               fill: "#477fc9",
