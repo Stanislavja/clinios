@@ -72,19 +72,15 @@ const countDecimals = (value) => {
   return value.toString().split(".")[1].length || 0;
 };
 function roundNumber(num, scale) {
-  if (!(`${num}`).includes("e")) {
-    return +(`${Math.round(`${num}e+${scale}`)}e-${scale}`);
+  if (!`${num}`.includes("e")) {
+    return +`${Math.round(`${num}e+${scale}`)}e-${scale}`;
   }
-  const arr = (`${num}`).split("e");
+  const arr = `${num}`.split("e");
   let sig = "";
   if (+arr[1] + scale > 0) {
     sig = "+";
   }
-  return +(
-    `${Math.round(`${+arr[0]}e${sig}${+arr[1] + scale}`)
-    }e-${
-      scale}`
-  );
+  return +`${Math.round(`${+arr[0]}e${sig}${+arr[1] + scale}`)}e-${scale}`;
 }
 
 export const Graph = ({ data, range, conventionalRange }) => {
@@ -93,6 +89,7 @@ export const Graph = ({ data, range, conventionalRange }) => {
   const [high, setHigh] = useState(0);
 
   /* eslint-disable */
+<<<<<<< HEAD
   useEffect(() => {
     const middle = (conventionalRange?.high + conventionalRange?.low) / 2;
     if (conventionalRange?.high > range?.high) {
@@ -161,23 +158,68 @@ export const Graph = ({ data, range, conventionalRange }) => {
   }, [conventionalRange]);
 
   /* eslint-disable */
+=======
+>>>>>>> c79083ef (Generic graph)
   useEffect(() => {
-    const middle = (conventionalRange.high + conventionalRange.low) / 2;
-    if (
-      Math.round(conventionalRange.high + middle * 0.12)
-      < conventionalRange.high
+    const middle = (conventionalRange?.high + conventionalRange?.low) / 2;
+    if (conventionalRange?.high > range?.high) {
+      if (
+        Math.round(conventionalRange?.high + middle * 0.12) <
+        conventionalRange?.high
+      ) {
+        const newHigh = conventionalRange?.high + middle * 0.12;
+        if (countDecimals(newHigh) > 2) {
+          setHigh(roundNumber(newHigh.toFixed(2), 1));
+        } else {
+          setHigh(newHigh);
+        }
+      } else {
+        setHigh(Math.round(conventionalRange?.high + middle * 0.12));
+      }
+    } else if (range !== true) {
+      if (Math.round(range?.high + middle * 0.12) < range?.high) {
+        const newHigh = range?.high + middle * 0.12;
+        if (countDecimals(newHigh) > 2) {
+          setHigh(roundNumber(newHigh.toFixed(2), 1));
+        } else {
+          setHigh(newHigh);
+        }
+      } else {
+        setHigh(Math.round(range?.high + middle * 0.12));
+      }
+    } else if (
+      Math.round(conventionalRange?.high + middle * 0.12) <
+      conventionalRange?.high
     ) {
-      const newHigh = conventionalRange.high + middle * 0.12;
+      const newHigh = conventionalRange?.high + middle * 0.12;
       if (countDecimals(newHigh) > 2) {
         setHigh(roundNumber(newHigh.toFixed(2), 1));
       } else {
         setHigh(newHigh);
       }
     } else {
-      setHigh(Math.round(conventionalRange.high + middle * 0.12));
+      setHigh(Math.round(conventionalRange?.high + middle * 0.12));
     }
-    setLow(Math.round(conventionalRange.low - middle * 0.12));
-  }, [range, conventionalRange]);
+
+    if (range !== true) {
+      if (conventionalRange?.low < range?.low) {
+        if (conventionalRange?.low < 1) {
+          setLow(0);
+        } else {
+          setLow(Math.round(conventionalRange?.low - middle * 0.12));
+        }
+      } else if (range?.low < 1) {
+        setLow(0);
+      } else {
+        setLow(Math.round(range?.low - middle * 0.12));
+      }
+    } else if (conventionalRange?.low < 1) {
+      setLow(0);
+    } else {
+      setLow(Math.round(conventionalRange?.low - middle * 0.12));
+    }
+  }, [conventionalRange]);
+
   useEffect(() => {
     if (data) {
       const hash = Object.create(null);
@@ -248,7 +290,7 @@ export const Graph = ({ data, range, conventionalRange }) => {
           <ReferenceLine
             y={range?.high}
             label={{
-              position: "insideTopLeft",
+              position: "insideTopRight",
               value: "Functional range",
               fontSize: "0.6rem",
               fill: "#477fc9",
@@ -260,7 +302,11 @@ export const Graph = ({ data, range, conventionalRange }) => {
           <ReferenceLine
             y={range?.low}
             label={{
+<<<<<<< HEAD
               position: "insideBottomLeft",
+=======
+              position: "insideBottomRight",
+>>>>>>> c79083ef (Generic graph)
               value: "Functional range",
               fontSize: "0.6rem",
               fill: "#477fc9",
@@ -292,6 +338,7 @@ export const Graph = ({ data, range, conventionalRange }) => {
 };
 
 Graph.propTypes = {
+<<<<<<< HEAD
   data: PropTypes.oneOfType([PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
@@ -300,6 +347,19 @@ Graph.propTypes = {
       value: PropTypes.number,
     })
   ).isRequired,
+=======
+  data: PropTypes.oneOfType([
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string,
+        lab_dt: PropTypes.string,
+        filename: PropTypes.string,
+        value: PropTypes.number,
+      })
+    ),
+    PropTypes.any,
+  ]),
+>>>>>>> c79083ef (Generic graph)
   range: PropTypes.oneOfType([
     PropTypes.shape({
       high: PropTypes.number,
