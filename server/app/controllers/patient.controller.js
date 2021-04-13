@@ -1837,9 +1837,9 @@ const searchTests = async (req, res) => {
       $sql += `and lc.id=${company_id}`;
     }
 
-    $sql += ` order by lc.name, c.name limit 20`
+    $sql += ` order by lc.name, c.name limit 20`;
 
-    const dbResponse = await db.query($sql)
+    const dbResponse = await db.query($sql);
 
     if (!dbResponse) {
       errorMessage.message = "None found";
