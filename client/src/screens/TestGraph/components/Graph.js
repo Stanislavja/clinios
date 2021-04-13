@@ -189,7 +189,7 @@ export const Graph = ({ data, range, conventionalRange }) => {
           <ReferenceLine
             y={range?.high}
             label={{
-              position: "insideTopRight",
+              position: "insideTopLeft",
               value: "Functional range",
               fontSize: "0.6rem",
               fill: "#477fc9",
@@ -201,7 +201,7 @@ export const Graph = ({ data, range, conventionalRange }) => {
           <ReferenceLine
             y={range?.low}
             label={{
-              position: "insideBottomRight",
+              position: "insideBottomLeft",
               value: "Functional range",
               fontSize: "0.6rem",
               fill: "#477fc9",
