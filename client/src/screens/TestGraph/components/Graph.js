@@ -89,7 +89,6 @@ export const Graph = ({ data, range, conventionalRange }) => {
   const [high, setHigh] = useState(0);
 
   /* eslint-disable */
-<<<<<<< HEAD
   useEffect(() => {
     const middle = (conventionalRange?.high + conventionalRange?.low) / 2;
     if (conventionalRange?.high > range?.high) {
@@ -158,8 +157,6 @@ export const Graph = ({ data, range, conventionalRange }) => {
   }, [conventionalRange]);
 
   /* eslint-disable */
-=======
->>>>>>> c79083ef (Generic graph)
   useEffect(() => {
     const middle = (conventionalRange?.high + conventionalRange?.low) / 2;
     if (conventionalRange?.high > range?.high) {
@@ -302,11 +299,7 @@ export const Graph = ({ data, range, conventionalRange }) => {
           <ReferenceLine
             y={range?.low}
             label={{
-<<<<<<< HEAD
               position: "insideBottomLeft",
-=======
-              position: "insideBottomRight",
->>>>>>> c79083ef (Generic graph)
               value: "Functional range",
               fontSize: "0.6rem",
               fill: "#477fc9",
@@ -338,7 +331,6 @@ export const Graph = ({ data, range, conventionalRange }) => {
 };
 
 Graph.propTypes = {
-<<<<<<< HEAD
   data: PropTypes.oneOfType([PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
@@ -347,19 +339,6 @@ Graph.propTypes = {
       value: PropTypes.number,
     })
   ).isRequired,
-=======
-  data: PropTypes.oneOfType([
-    PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string,
-        lab_dt: PropTypes.string,
-        filename: PropTypes.string,
-        value: PropTypes.number,
-      })
-    ),
-    PropTypes.any,
-  ]),
->>>>>>> c79083ef (Generic graph)
   range: PropTypes.oneOfType([
     PropTypes.shape({
       high: PropTypes.number,
