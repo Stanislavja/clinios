@@ -114,6 +114,7 @@ const RequisitionsDetails = (props) => {
               <StyledTableCell>Created</StyledTableCell>
               <StyledTableCell>ID</StyledTableCell>
               <StyledTableCell>Name</StyledTableCell>
+              <StyledTableCell>Lab Name</StyledTableCell>
               <StyledTableCell align="center">Actions</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -127,6 +128,7 @@ const RequisitionsDetails = (props) => {
                   </TableCell>
                   <TableCell>{row.id}</TableCell>
                   <TableCell>{row.cpt_name || ""}</TableCell>
+                  <TableCell>{row.lab_name || ""}</TableCell>
 
                   <TableCell className={classes.actions}>
                     <IconButton
