@@ -62,9 +62,6 @@ const getPatient = async (req, res) => {
       `
     );
 
-    // Call DB query without assigning into a variable
-    await db.query(`insert into user_log values (1, 1, now(), 1, null)`);
-
     const functionalRange = await db.query(
       `select functional_range
         from client
