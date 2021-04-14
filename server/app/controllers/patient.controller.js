@@ -1,3 +1,5 @@
+const Stripe = require('stripe');
+const stripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
 const multer = require("multer");
 const moment = require("moment");
 const fs = require("fs");
@@ -53,7 +55,7 @@ const getPatient = async (req, res) => {
   try {
     const dbResponse = await db.query(
       `select p.firstname, p.middlename, p.lastname, p.gender, p.dob, p.ssn, p.preferred_name, p.referred_by, p.phone_home, p.phone_cell, p.phone_work, p.phone_other, p.phone_note, p.email, concat(u.firstname, ' ', u.lastname) provider, p.client_id
-        , p.admin_note, p.medical_note, p.address, p.address2, p.country, p.city, p.postal, p.state, p.emergency_firstname, p.emergency_middlename, p.emergency_lastname, p.emergency_relationship, p.emergency_email,
+        , p.admin_note, p.medical_note, p.address, p.address2, p.country, p.city, p.postal, p.state, p.emergency_firstname, p.emergency_middlename, p.emergency_lastname, p.emergency_relationship, p.emergency_email, p.stripe_customer_id,
         p.emergency_phone, p.insurance_name, p.insurance_group, p.insurance_member, p.insurance_phone, p.insurance_desc, p.height, p.waist, p.weight, p.medical_note, p.pharmacy_id, p.pharmacy2_id
         from patient p
         left join user u on u.id=p.user_id
@@ -953,7 +955,7 @@ const getBillingPaymentOptions = async (req, res) => {
   const { patient_id } = req.params;
   try {
     const dbResponse = await db.query(
-      `select id, type, account_number, exp, created
+      `select id, type, account_number, exp, stripe_payment_method_token, created
       from payment_method
       where patient_id=${patient_id}
       order by 1`
@@ -977,26 +979,51 @@ const getBillingPaymentOptions = async (req, res) => {
 
 const createBilling = async (req, res) => {
   const { patient_id } = req.params;
-  const { dt, note } = req.body.data;
-  let { amount } = req.body.data;
+  const { payment_method_id, customer_id, note } = req.body.data;
   const { payment_type, type_id } = req.body.data;
+
+  const formData = req.body.data;
+  formData.patient_id = patient_id;
+  formData.created = new Date();
+  formData.created_user_id = req.user_id;
 
   const db = makeDb(configuration, res);
 
-  // if (!payment_type && typeof payment_type !== "undefined") {
-  //  payment_type = `'${payment_type}'`;
-  // }
+  const $sql = `select p.id, c.name, c.stripe_api_key from patient p
+  left join client c on c.id=p.client_id
+  where p.id=${patient_id}`
+
+  const getStripeResponse = await db.query($sql);
 
   // transaction type 2 'Service Credit' and 3 'Payment' are stored in the database as negative numbers, david march 2021
   if (type_id === 2 || type_id === 3) {
-    amount *= -1;
+    if(payment_type === "C") {
+      const stripe = Stripe(getStripeResponse[0].stripe_api_key);
+      const intentData = {
+        payment_method: payment_method_id || 'pm_1Ig0ZzHLdNAkRyURjEzwP4Te',
+        customer: customer_id || 'cus_JIBHpEyrb1IJfZ',
+        description: note + ` from patient with patient_id: ${patient_id}`,
+        amount: Number(formData.amount) * 100, // it accepts cents
+        currency: 'usd',
+        confirmation_method: 'manual',
+        confirm: true
+      }
+      let intent = await stripe.paymentIntents.create(intentData);
+      if (intent.status === 'succeeded'){
+        formData.pp_status = 1;
+        formData.pp_return = JSON.stringify(intent);
+      }else {
+        console.log('error:', intent);
+        formData.pp_status = -1;
+        formData.pp_return = error;
+      }
+    }
+    // Change for localdatabase
+    formData.amount =  formData.amount * -1;
   }
 
   try {
-    const $sql = `insert into tran (patient_id, user_id, client_id, dt, type_id, amount, payment_type, note, created, created_user_id) values 
-    (${patient_id}, ${req.user_id}, ${req.client_id}, '${dt}', ${type_id}, ${amount}, '${payment_type}', '${note}', now(), ${req.user_id})`;
-
-    const insertResponse = await db.query($sql);
+    const insertResponse = await db.query(`insert into tran set ?`, [formData]);
 
     if (!insertResponse.affectedRows) {
       errorMessage.message = "Insert not successful";
@@ -2354,12 +2381,38 @@ const deleteLayout = async (req, res) => {
 
 const createPaymentMethod = async (req, res) => {
   const { patient_id } = req.params;
-  const { type, account_number, exp } = req.body.data;
+ // const { type, account_number, exp } = req.body.data;
+  const formData = req.body.data;
+  formData.client_id = req.client_id;
+  formData.created_user_id = req.user_id; 
+  formData.patient_id = patient_id; 
+  formData.created = new Date();
+
   const db = makeDb(configuration, res);
   try {
+    const paymentMethod = await stripe.paymentMethods.create({
+      type: 'card',
+      card: {
+        number: formData.account_number,
+        exp_month: formData.exp.substring(0, 2),
+        exp_year: formData.exp.substring(2, 4),
+        cvc: formData.cvc,
+      },
+    }); 
+
+    formData.stripe_payment_method_token = paymentMethod.id;
+    formData.account_number = formData.account_number.substring(0, 4)
+
+    const attachedPaymentMethod = await stripe.paymentMethods.attach(
+      paymentMethod.id,
+      {customer: formData.customer_id}
+    );
+
+    console.log('attachedPaymentMethod:', attachedPaymentMethod)
+
+    delete formData.customer_id; // Delete customer_id as it's not on payment_method table
     const insertResponse = await db.query(
-      `insert into payment_method (type, account_number, exp, client_id, patient_id, created, created_user_id) 
-      values ('${type}', '${account_number}', '${exp}', ${req.client_id}, ${patient_id}, now(), ${req.user_id})`
+      "insert into payment_method set ? ", [formData]
     );
 
     if (!insertResponse.affectedRows) {
@@ -2478,7 +2531,7 @@ const getPaymentMethods = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select id, type, account_number, exp, created
+      `select id, type, account_number, exp, stripe_payment_method_token, created
       from payment_method
       where patient_id=${patient_id}
       order by 1`

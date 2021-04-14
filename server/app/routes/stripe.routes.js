@@ -17,19 +17,24 @@ router.post(
   stripeController.createCustomer
 );
 router.post(
-  "/stripe/create-payment",
+  "/stripe/payment",
   [authJwt.verifyToken],
   stripeController.createPayment
 );
 router.get(
-  "/stripe/create-payment-method/:id",
+  "/stripe/payment-method/:id",
   [authJwt.verifyToken],
   stripeController.getPaymentMethod
 );
 router.post(
-  "/stripe/create-payment-method",
+  "/stripe/payment-method",
   [authJwt.verifyToken],
   stripeController.createPaymentMethod
+);
+router.post(
+  "/stripe/payment-method/:id/attach",
+  [authJwt.verifyToken],
+  stripeController.attachPaymentMethod
 );
 
 module.exports = router;
