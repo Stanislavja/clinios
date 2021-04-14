@@ -262,9 +262,9 @@ class Patient {
   }
 
   getEncountersPrescriptionsDrugsStrengths(patientId, encounterId, drugId) {
-    // eslint-disable-next-line max-len
     return axios
       .get(
+        // eslint-disable-next-line max-len
         `${API_BASE}/patient/${patientId}/encounters/${encounterId}/plan/new-prescriptions/${drugId}/strengths`,
         {
           headers: authHeader(),
@@ -694,7 +694,7 @@ class Patient {
     );
   }
 
-  deleteRequisitions(patientId, reqBody) {
+  deleteRequisitions(patientId) {
     return axios.delete(`${API_BASE}/patient/${patientId}/requisitions`, {
       headers: authHeader(),
     });
@@ -734,13 +734,6 @@ class Patient {
           headers: authHeader(),
         }
       )
-      .then((res) => res.data);
-  }
-  getFunctionalRange(patientId) {
-    return axios
-      .get(`${API_BASE}/patient/${patientId}`, {
-        headers: authHeader(),
-      })
       .then((res) => res.data);
   }
 

@@ -30,7 +30,7 @@ const CustomTooltip = ({ payload }) => {
         <>
           <p className="label">
             {`Date : ${moment(payload[0]?.payload?.lab_dt).format(
-              "MMMM Do YYYY, h:mm A"
+              "MMMM Do YYYY, h:mm A",
             )}`}
           </p>
           <p className="label">{`File : ${payload[0]?.payload?.filename}`}</p>
@@ -47,25 +47,6 @@ CustomTooltip.propTypes = {
 CustomTooltip.defaultProps = {
   payload: [],
 };
-CustomTooltip.defaultProps = {
-  payload: [],
-};
-
-const countDecimals = (value) => {
-  if (Math.floor(value) === value) return 0;
-  return value.toString().split(".")[1].length || 0;
-};
-function roundNumber(num, scale) {
-  if (!`${num}`.includes("e")) {
-    return +`${Math.round(`${num}e+${scale}`)}e-${scale}`;
-  }
-  const arr = `${num}`.split("e");
-  let sig = "";
-  if (+arr[1] + scale > 0) {
-    sig = "+";
-  }
-  return +`${Math.round(`${+arr[0]}e${sig}${+arr[1] + scale}`)}e-${scale}`;
-}
 
 const countDecimals = (value) => {
   if (Math.floor(value) === value) return 0;
@@ -90,7 +71,6 @@ export const Graph = ({ data, range, conventionalRange }) => {
 
   /* eslint-disable */
   useEffect(() => {
-    console.log(range, conventionalRange);
     const middle = (conventionalRange?.high + conventionalRange?.low) / 2;
     if (conventionalRange?.high > range?.high) {
       if (
@@ -158,66 +138,6 @@ export const Graph = ({ data, range, conventionalRange }) => {
   }, [conventionalRange]);
 
   /* eslint-disable */
-  useEffect(() => {
-    const middle = (conventionalRange?.high + conventionalRange?.low) / 2;
-    if (conventionalRange?.high > range?.high) {
-      if (
-        Math.round(conventionalRange?.high + middle * 0.12) <
-        conventionalRange?.high
-      ) {
-        const newHigh = conventionalRange?.high + middle * 0.12;
-        if (countDecimals(newHigh) > 2) {
-          setHigh(roundNumber(newHigh.toFixed(2), 1));
-        } else {
-          setHigh(newHigh);
-        }
-      } else {
-        setHigh(Math.round(conventionalRange?.high + middle * 0.12));
-      }
-    } else if (range !== true) {
-      if (Math.round(range?.high + middle * 0.12) < range?.high) {
-        const newHigh = range?.high + middle * 0.12;
-        if (countDecimals(newHigh) > 2) {
-          setHigh(roundNumber(newHigh.toFixed(2), 1));
-        } else {
-          setHigh(newHigh);
-        }
-      } else {
-        setHigh(Math.round(range?.high + middle * 0.12));
-      }
-    } else if (
-      Math.round(conventionalRange?.high + middle * 0.12) <
-      conventionalRange?.high
-    ) {
-      const newHigh = conventionalRange?.high + middle * 0.12;
-      if (countDecimals(newHigh) > 2) {
-        setHigh(roundNumber(newHigh.toFixed(2), 1));
-      } else {
-        setHigh(newHigh);
-      }
-    } else {
-      setHigh(Math.round(conventionalRange?.high + middle * 0.12));
-    }
-
-    if (range !== true) {
-      if (conventionalRange?.low < range?.low) {
-        if (conventionalRange?.low < 1) {
-          setLow(0);
-        } else {
-          setLow(Math.round(conventionalRange?.low - middle * 0.12));
-        }
-      } else if (range?.low < 1) {
-        setLow(0);
-      } else {
-        setLow(Math.round(range?.low - middle * 0.12));
-      }
-    } else if (conventionalRange?.low < 1) {
-      setLow(0);
-    } else {
-      setLow(Math.round(conventionalRange?.low - middle * 0.12));
-    }
-  }, [conventionalRange]);
-
   useEffect(() => {
     if (data) {
       const hash = Object.create(null);
@@ -288,7 +208,7 @@ export const Graph = ({ data, range, conventionalRange }) => {
           <ReferenceLine
             y={range?.high}
             label={{
-              position: "insideTopRight",
+              position: "insideTopLeft",
               value: "Functional range",
               fontSize: "0.6rem",
               fill: "#477fc9",
@@ -332,7 +252,7 @@ export const Graph = ({ data, range, conventionalRange }) => {
 };
 
 Graph.propTypes = {
-  data: PropTypes.oneOfType([PropTypes.arrayOf(
+  data: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
       lab_dt: PropTypes.string,
