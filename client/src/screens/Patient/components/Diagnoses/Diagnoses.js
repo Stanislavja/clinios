@@ -53,6 +53,14 @@ const useStyles = makeStyles((theme) => ({
     textOverflow: "ellipsis",
     overflow: "hidden",
   },
+  tableContainer: {
+    marginTop: theme.spacing(1),
+  },
+  header: {
+    minHeight: 38,
+    display: "flex",
+    alignItems: "flex-end",
+  },
 }));
 
 const Diagnoses = (props) => {
@@ -124,8 +132,8 @@ const Diagnoses = (props) => {
       </Grid>
       */}
 
-      <Grid container spacing={5} alignItems="center">
-        <Grid item xs={4}>
+      <Grid container spacing={5}>
+        <Grid item md={4} xs={12}>
           <form onSubmit={(e) => fetchDiagnosis(e, searchText)}>
             <Grid container alignItems="center">
               <Grid item xs>
@@ -148,22 +156,7 @@ const Diagnoses = (props) => {
               </Button>
             </Grid>
           </form>
-        </Grid>
-        <Grid item xs={4}>
-          <Typography variant="h5" color="textPrimary">
-            Recently Used
-          </Typography>
-        </Grid>
-        <Grid item xs={4}>
-          <Typography variant="h5" color="textPrimary">
-            Favorites
-          </Typography>
-        </Grid>
-      </Grid>
-
-      <Grid container spacing={5} className={classes.mb2}>
-        <Grid item lg={4}>
-          <TableContainer>
+          <TableContainer className={classes.tableContainer}>
             <Table stickyHeader size="small">
               <TableHead>
                 <TableRow>
@@ -208,8 +201,13 @@ const Diagnoses = (props) => {
             </Table>
           </TableContainer>
         </Grid>
-        <Grid item lg={4}>
-          <TableContainer>
+        <Grid item md={4} xs={12}>
+          <Grid className={classes.header}>
+            <Typography variant="h5" color="textPrimary">
+              Recently Used
+            </Typography>
+          </Grid>
+          <TableContainer className={classes.tableContainer}>
             <Table size="small">
               <TableHead>
                 <TableRow>
@@ -254,8 +252,13 @@ const Diagnoses = (props) => {
             </Table>
           </TableContainer>
         </Grid>
-        <Grid item lg={4}>
-          <TableContainer>
+        <Grid item md={4} xs={12}>
+          <Grid className={classes.header}>
+            <Typography variant="h5" color="textPrimary">
+              Favorites
+            </Typography>
+          </Grid>
+          <TableContainer className={classes.tableContainer}>
             <Table size="small">
               <TableHead>
                 <TableRow>

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 
 import {
   Grid,
-  Typography,
   Paper,
   TextField,
   Button,
@@ -186,9 +185,6 @@ const ProfileForm = () => {
         <Grid item xs={12}>
           <Paper className={classes.root} variant="outlined">
             <Grid className={classes.sectionCard}>
-              <Typography variant="h5" color="textPrimary" gutterBottom>
-                Basic Information
-              </Typography>
               <Grid container spacing={1} className={classes.inputRow}>
                 {FirstRow.map((item) => (
                   <Grid key={item.name} item md={3}>
@@ -201,6 +197,9 @@ const ProfileForm = () => {
                         type={item.type}
                         fullWidth
                         onChange={(e) => handleInputChange(e)}
+                        InputProps={{
+                          readOnly: item.readOnly,
+                        }}
                       />
                     ) : (
                       <TextField
@@ -260,11 +259,6 @@ const ProfileForm = () => {
                     )}
                   </Grid>
                 ))}
-                {/*              <Grid item md={2}> //TODO:: might be used later
-                  <Typography gutterBottom>
-                    {`Age: ${calculateAge(formFields.dob)}`}
-                  </Typography>
-                </Grid> */}
               </Grid>
               <Grid container spacing={1} className={classes.inputRow}>
                 {ThirdRow.map((item) => (
@@ -300,25 +294,6 @@ const ProfileForm = () => {
                   </Grid>
                 ))}
               </Grid>
-              {/* <Grid container spacing={1} alignItems="flex-end">  //TODO:: might be used later
-                <Grid item md={2}>
-                  <Typography>Last Login: Jan 1, 2020</Typography>
-                </Grid>
-                <Grid item md={2}>
-                  <TextField
-                    label="Password"
-                    name="password"
-                    id="password"
-                    type="password"
-                    fullWidth
-                    value={formFields.password}
-                    onChange={(e) => handleInputChange(e)}
-                  />
-                </Grid>
-                <Grid item md={2}>
-                  <Button variant="outlined">Send Reset Email</Button>
-                </Grid>
-              </Grid> */}
             </Grid>
           </Paper>
         </Grid>
@@ -328,9 +303,6 @@ const ProfileForm = () => {
         <Grid item xs={12}>
           <Paper className={classes.root} variant="outlined">
             <Grid item xs={10} className={classes.halfSectionCard}>
-              <Typography variant="h5" color="textPrimary">
-                Home Address
-              </Typography>
               <Grid container spacing={1}>
                 <Grid item lg={12}>
                   <TextField
@@ -403,9 +375,6 @@ const ProfileForm = () => {
         <Grid item xs={12}>
           <Paper className={classes.root} variant="outlined">
             <Grid className={classes.sectionCard}>
-              <Typography variant="h5" color="textPrimary">
-                Insurance
-              </Typography>
               <Grid container spacing={1} className={classes.inputRow}>
                 {InsuranceForm.map((item) => (
                   <Grid key={item.name} item md={3}>
@@ -472,9 +441,6 @@ const ProfileForm = () => {
         <Grid item xs={12}>
           <Paper className={classes.root} variant="outlined">
             <Grid className={classes.sectionCard}>
-              <Typography variant="h5" color="textPrimary">
-                Portal
-              </Typography>
               <Grid container spacing={1} className={classes.inputRow}>
                 {PortalForm.map((item) => (
                   <Grid key={item.name} item md={3}>
@@ -495,16 +461,14 @@ const ProfileForm = () => {
         </Grid>
       </Grid>
 
-      <Grid container justify="center">
-        <Button
-          onClick={() => onFormSubmit()}
-          variant="contained"
-          color="primary"
-          className={classes.submitBtn}
-        >
-          Save
-        </Button>
-      </Grid>
+      <Button
+        onClick={() => onFormSubmit()}
+        variant="contained"
+        color="primary"
+        className={classes.submitBtn}
+      >
+        Save
+      </Button>
     </>
   );
 };
