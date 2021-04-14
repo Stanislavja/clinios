@@ -198,7 +198,7 @@ const Medications = (props) => {
   }, [fetchRecentMedications, fetchDrugFrequencies, fetchFavoriteMedications]);
 
   useDidMountEffect(() => {
-    if (+formFields.drug_id) {
+    if (+formFields.drug_id) { /* converts string to number, david */
       fetchDrugStrengths(formFields.drug_id);
     }
     if (hasDrugIdError) {
