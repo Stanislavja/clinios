@@ -24,22 +24,21 @@ const useStyles = makeStyles((theme) => ({
 
 const CustomTooltip = ({ payload }) => {
   const classes = useStyles();
-
-  if (payload && payload.length) {
-    return (
-      <div className={classes.root}>
-        <p className="label">
-          {`Date : ${moment(payload[0]?.payload?.lab_dt).format(
-            "MMMM Do YYYY, h:mm A"
-          )}`}
-        </p>
-        <p className="label">{`File : ${payload[0]?.payload?.filename}`}</p>
-        <p className="label">{`Value : ${payload[0]?.payload?.value}`}</p>
-      </div>
-    );
-  }
-
-  return null;
+  return (
+    <div className={classes.root}>
+      {payload && payload.length ? (
+        <>
+          <p className="label">
+            {`Date : ${moment(payload[0]?.payload?.lab_dt).format(
+              "MMMM Do YYYY, h:mm A",
+            )}`}
+          </p>
+          <p className="label">{`File : ${payload[0]?.payload?.filename}`}</p>
+          <p className="label">{`Value : ${payload[0]?.payload?.value}`}</p>
+        </>
+      ) : null}
+    </div>
+  );
 };
 
 CustomTooltip.propTypes = {
@@ -72,7 +71,6 @@ export const Graph = ({ data, range, conventionalRange }) => {
 
   /* eslint-disable */
   useEffect(() => {
-    console.log(range, conventionalRange);
     const middle = (conventionalRange?.high + conventionalRange?.low) / 2;
     if (conventionalRange?.high > range?.high) {
       if (
@@ -139,6 +137,7 @@ export const Graph = ({ data, range, conventionalRange }) => {
     }
   }, [conventionalRange]);
 
+  /* eslint-disable */
   useEffect(() => {
     if (data) {
       const hash = Object.create(null);
@@ -253,7 +252,7 @@ export const Graph = ({ data, range, conventionalRange }) => {
 };
 
 Graph.propTypes = {
-  data: PropTypes.oneOfType([PropTypes.arrayOf(
+  data: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
       lab_dt: PropTypes.string,
