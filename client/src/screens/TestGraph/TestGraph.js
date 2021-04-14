@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import {
-  Grid, makeStyles, Button, Typography,
-} from "@material-ui/core";
+import { Grid, makeStyles, Button, Typography } from "@material-ui/core";
 import { mdiArrowLeftBold, mdiArrowRightBold } from "@mdi/js";
 import Icon from "@mdi/react";
 import moment from "moment";
