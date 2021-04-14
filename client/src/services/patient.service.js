@@ -150,7 +150,7 @@ class Patient {
         `${API_BASE}/patient/${patientId}/encounters/${encounterId}/billing`,
         {
           headers: authHeader(),
-        }
+        },
       )
       .then((res) => res.data);
   }
@@ -161,7 +161,7 @@ class Patient {
         `${API_BASE}/patient/${patientId}/encounters/${encounterId}/billing/diagnoses`,
         {
           headers: authHeader(),
-        }
+        },
       )
       .then((res) => res.data);
   }
@@ -172,7 +172,7 @@ class Patient {
         `${API_BASE}/patient/${patientId}/encounters/${encounterId}/billing/procedsures`,
         {
           headers: authHeader(),
-        }
+        },
       )
       .then((res) => res.data);
   }
@@ -183,7 +183,7 @@ class Patient {
         `${API_BASE}/patient/${patientId}/encounters/${encounterId}/billing/payment`,
         {
           headers: authHeader(),
-        }
+        },
       )
       .then((res) => res.data);
   }
@@ -195,7 +195,7 @@ class Patient {
         reqBody,
         {
           headers: authHeader(),
-        }
+        },
       )
       .then((res) => res.data);
   }
@@ -206,7 +206,7 @@ class Patient {
       data,
       {
         headers: authHeader(),
-      }
+      },
     );
   }
 
@@ -216,7 +216,7 @@ class Patient {
       data,
       {
         headers: authHeader(),
-      }
+      },
     );
   }
 
@@ -226,7 +226,7 @@ class Patient {
         `${API_BASE}/patient/${patient_id}/encounters/${encounter_id}/plan/new-prescription/recent`,
         {
           headers: authHeader(),
-        }
+        },
       )
       .then((res) => res.data);
   }
@@ -237,7 +237,7 @@ class Patient {
         `${API_BASE}/patient/${patientId}/encounters/${encounterId}/diagnoses/recent-icds`,
         {
           headers: authHeader(),
-        }
+        },
       )
       .then((res) => res.data);
   }
@@ -256,7 +256,7 @@ class Patient {
         `${API_BASE}/patient/${patientId}/encounters/${encounterId}/plan/new-prescriptions/frequencies`,
         {
           headers: authHeader(),
-        }
+        },
       )
       .then((res) => res.data);
   }
@@ -268,7 +268,7 @@ class Patient {
         `${API_BASE}/patient/${patientId}/encounters/${encounterId}/plan/new-prescriptions/${drugId}/strengths`,
         {
           headers: authHeader(),
-        }
+        },
       )
       .then((res) => res.data);
   }
@@ -279,7 +279,7 @@ class Patient {
         `${API_BASE}/patient/${patient_id}/encounters/${encounter_id}/new-lab/favorites/?tab=All`,
         {
           headers: authHeader(),
-        }
+        },
       )
       .then((res) => res.data);
   }
@@ -290,7 +290,7 @@ class Patient {
         `${API_BASE}/patient/${patient_id}/encounters/${encounter_id}/new-lab/test-ordered`,
         {
           headers: authHeader(),
-        }
+        },
       )
       .then((res) => res.data);
   }
@@ -309,7 +309,7 @@ class Patient {
         `${API_BASE}/patient/${patient_id}/encounters/${encounter_id}/new-lab/laboratories`,
         {
           headers: authHeader(),
-        }
+        },
       )
       .then((res) => res.data);
   }
@@ -378,7 +378,7 @@ class Patient {
         data,
         {
           headers: authHeader(),
-        }
+        },
       )
       .then((res) => res.data);
   }
@@ -509,7 +509,7 @@ class Patient {
       data,
       {
         headers: authHeader(),
-      }
+      },
     );
   }
 
@@ -519,7 +519,7 @@ class Patient {
       data,
       {
         headers: authHeader(),
-      }
+      },
     );
   }
 
@@ -537,7 +537,7 @@ class Patient {
       data,
       {
         headers: authHeader(),
-      }
+      },
     );
   }
 
@@ -547,7 +547,7 @@ class Patient {
       data,
       {
         headers: authHeader(),
-      }
+      },
     );
   }
 
@@ -557,7 +557,7 @@ class Patient {
       data,
       {
         headers: authHeader(),
-      }
+      },
     );
   }
 
@@ -568,7 +568,7 @@ class Patient {
       data,
       {
         headers: authHeader(),
-      }
+      },
     );
   }
 
@@ -638,7 +638,7 @@ class Patient {
       `${API_BASE}/patient/${patientId}/allergies/${drugId}`,
       {
         headers: authHeader(),
-      }
+      },
     );
   }
 
@@ -647,7 +647,7 @@ class Patient {
       `${API_BASE}/patient/${patientId}/encounters/${encounterId}`,
       {
         headers: authHeader(),
-      }
+      },
     );
   }
 
@@ -656,7 +656,7 @@ class Patient {
       `${API_BASE}/patient/patient-handout/${patientId}/${handoutId}`,
       {
         headers: authHeader(),
-      }
+      },
     );
   }
 
@@ -665,7 +665,7 @@ class Patient {
       `${API_BASE}/patient/${patientId}/handouts/${handoutId}`,
       {
         headers: authHeader(),
-      }
+      },
     );
   }
 
@@ -675,7 +675,7 @@ class Patient {
       body,
       {
         headers: authHeader(),
-      }
+      },
     );
   }
 
@@ -690,7 +690,7 @@ class Patient {
       `${API_BASE}/patient/${patientId}/medications/${medicationId}`,
       {
         headers: authHeader(),
-      }
+      },
     );
   }
 
@@ -721,7 +721,7 @@ class Patient {
       `${API_BASE}/patient/${patientId}/payment-methods/${paymentMethodId}`,
       {
         headers: authHeader(),
-      }
+      },
     );
   }
 
@@ -732,10 +732,11 @@ class Patient {
         data,
         {
           headers: authHeader(),
-        }
+        },
       )
       .then((res) => res.data);
   }
+
   getFunctionalRange(patientId) {
     return axios
       .get(`${API_BASE}/patient/${patientId}`, {
