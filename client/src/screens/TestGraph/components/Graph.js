@@ -30,7 +30,7 @@ const CustomTooltip = ({ payload }) => {
         <>
           <p className="label">
             {`Date : ${moment(payload[0]?.payload?.lab_dt).format(
-              "MMMM Do YYYY, h:mm A",
+              "MMMM Do YYYY, h:mm A"
             )}`}
           </p>
           <p className="label">{`File : ${payload[0]?.payload?.filename}`}</p>
