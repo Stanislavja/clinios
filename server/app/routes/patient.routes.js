@@ -92,6 +92,11 @@ router.get(
   [authJwt.verifyToken],
   Patient.getBilling
 );
+router.post(
+  "/patient/:patient_id/billing",
+  [authJwt.verifyToken],
+  Patient.createBilling
+);
 router.put(
   "/patient/:patient_id/billing/:id",
   [authJwt.verifyToken],
@@ -111,11 +116,6 @@ router.get(
   "/patient/:patient_id/billing/paymentOptions",
   [authJwt.verifyToken],
   Patient.getBillingPaymentOptions
-);
-router.post(
-  "/patient/:patient_id/billing",
-  [authJwt.verifyToken],
-  Patient.createBilling
 );
 router.get(
   "/patient/:patient_id/allergies",
