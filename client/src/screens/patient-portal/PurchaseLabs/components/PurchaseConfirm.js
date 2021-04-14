@@ -7,9 +7,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
-import {
-  Link,
-} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => createStyles({
   titleContainer: {
@@ -35,6 +33,10 @@ const useStyles = makeStyles((theme) => createStyles({
   w100: {
     minWidth: 100,
   },
+  boldPrice: {
+    fontWeight: "bold",
+    padding: theme.spacing(0, 0.5),
+  },
 }));
 
 const PurchaseConfirm = ({
@@ -54,14 +56,11 @@ const PurchaseConfirm = ({
       </DialogTitle>
       <DialogContent className={classes.content}>
         <Typography variant="body1" gutterBottom>
-          This is a confirmation that you have purchased labs for
-          {" "}
-          <b>
+          This is a confirmation that you have purchased lab(s) for
+          <span className={classes.boldPrice}>
             $
             {amount}
-            {" "}
-
-          </b>
+          </span>
         </Typography>
         <Typography variant="body1" gutterBottom>
           Next step is to
