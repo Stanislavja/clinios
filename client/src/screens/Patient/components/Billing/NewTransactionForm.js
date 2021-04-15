@@ -95,6 +95,7 @@ const NewTransactionForm = (props) => {
 
   const createBilling = () => {
     if (+formFields.amount > 0) { /* shorthand to convert string => number */
+      const selectedPaymentMethod = paymentOptions.filter((p) => p.id === formFields.accountNum);
       const reqBody = {
         data: {
           dt: moment(formFields.date).format("YYYY-MM-DD hh:mm"),
@@ -103,6 +104,7 @@ const NewTransactionForm = (props) => {
           amount: formFields.amount,
           note: formFields.notes,
           payment_method_id: formFields.accountNum,
+          stripe_payment_method_token: selectedPaymentMethod[0].stripe_payment_method_token,
           customer_id: patientInfo.data.stripe_customer_id,
         },
       };
@@ -170,6 +172,7 @@ const NewTransactionForm = (props) => {
       name: "",
       account_number: null,
       type: null,
+      stripe_payment_method_token: null,
     };
     const paymentTypeSelectOptionsMutated = [blankItem, ...paymentOptions];
     switch (value) {
@@ -183,7 +186,7 @@ const NewTransactionForm = (props) => {
       }
       case "paymentOptions": {
         const paymentTypeSelectOptions = paymentTypeSelectOptionsMutated.map((option) => (
-          <MenuItem className={classes.menuOption} key={option.id} value={option.stripe_payment_method_token}>
+          <MenuItem className={classes.menuOption} key={option.id} value={option.id}>
             {option.account_number ? `${option.account_number} - ${option.type}` : ""}
           </MenuItem>
         ));

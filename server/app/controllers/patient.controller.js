@@ -999,7 +999,7 @@ const createBilling = async (req, res) => {
     if(payment_type === "C") {
       const stripe = Stripe(getStripeResponse[0].stripe_api_key);
       const intentData = {
-        payment_method: formData.payment_method_id,
+        payment_method: formData.stripe_payment_method_token,
         customer: formData.customer_id,
         description: formData.note + `; patient_id: ${patient_id}`,
         amount: Number(formData.amount) * 100, // it accepts cents
@@ -1023,6 +1023,7 @@ const createBilling = async (req, res) => {
 
   try {
     delete formData.customer_id; // Delete customer_id 
+    delete formData.stripe_payment_method_token; // Delete stripe_payment_method_token 
     const insertResponse = await db.query(`insert into tran set ?`, [formData]);
 
     if (!insertResponse.affectedRows) {
