@@ -9,6 +9,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import clsx from "clsx";
 import { useReactToPrint } from "react-to-print";
 
 import useAuth from "../../../hooks/useAuth";
@@ -52,6 +53,12 @@ const useStyles = makeStyles((theme) => ({
       fontWeight: 600,
     },
   },
+  firstColumnforStyledTableCell: {
+    width: "9%",
+  },
+  secondColumnforStyledTableCell: {
+    width: "91%",
+  },
 }));
 
 const StyledTableCell = withStyles((theme) => ({
@@ -62,11 +69,15 @@ const StyledTableCell = withStyles((theme) => ({
     fontWeight: 700,
     paddingLeft: 0,
     border: "none",
+    padding: 0,
+    margin: 0,
   },
   body: {
     fontSize: 14,
     paddingLeft: 0,
     border: "none",
+    margin: 0,
+    padding: 0,
   },
 }))(TableCell);
 
@@ -151,11 +162,11 @@ const Encounters = () => {
                 border: "none",
               }}
               >
-                <StyledTableCell>
+                <StyledTableCell className={classes.firstColumnforStyledTableCell}>
                   {dateFormat(list.dt)}
                 </StyledTableCell>
                 <StyledTableCell
-                  className={classes.tableTestsCell}
+                  className={clsx(classes.tableTestsCell, classes.secondColumnforStyledTableCell)}
                   onClick={() => fetchReportInformation(list.id)}
                 >
                   {list.tests}

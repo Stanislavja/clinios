@@ -16,8 +16,8 @@ import moment from "moment";
 
 import useAuth from "../../../hooks/useAuth";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
-import NewTransactionForm from "../PaymentMethods/NewTransactionForm";
-import ViewTransactionDetails from "../PaymentMethods/ViewTransactionDetails";
+import NewTransactionForm from "./components/NewTransactionForm";
+import ViewTransactionDetails from "./components/ViewTransactionDetails";
 
 const useStyles = makeStyles((theme) => ({
   root: {

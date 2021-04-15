@@ -56,7 +56,7 @@ export const BasicInfoForm = {
       id: "homePhone",
       label: "Home Phone",
       baseType: "input",
-      type: "number",
+      type: "text",
       options: [],
     },
     {
@@ -64,7 +64,7 @@ export const BasicInfoForm = {
       id: "cellPhone",
       label: "Cell Phone",
       baseType: "input",
-      type: "number",
+      type: "text",
       options: [],
     },
     {
@@ -72,7 +72,7 @@ export const BasicInfoForm = {
       id: "workPhone",
       label: "Work Phone",
       baseType: "input",
-      type: "number",
+      type: "text",
       options: [],
     },
     {
