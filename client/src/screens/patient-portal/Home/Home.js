@@ -57,6 +57,9 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  rescheduleLink: {
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 const Home = () => {
@@ -124,10 +127,16 @@ const Home = () => {
           <Box component="div" className={classes.BoxStyle}>
             <p>
               {renderAppointmentRowText(appointment)}
+              <Link
+                to={{ pathname: "/patient/appointments", state: { appointment } }}
+                className={classes.rescheduleLink}
+              >
+                Reschedule Appointment
+              </Link>
             </p>
+
           </Box>
         ))}
-
         {clientForms && (
           <Box component="div" className={classes.formBox}>
             <p>
