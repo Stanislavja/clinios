@@ -9,6 +9,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import clsx from "clsx";
 import { useReactToPrint } from "react-to-print";
 
 import useAuth from "../../../hooks/useAuth";
@@ -47,6 +48,15 @@ const useStyles = makeStyles((theme) => ({
   tableTestsCell: {
     cursor: "pointer",
   },
+  firstColumnOfStyledCell: {
+    width: "9%",
+  },
+  secondColumnOfStyledCell: {
+    width: "9%",
+  },
+  thirdColumnOfStyledCell: {
+    width: "82%",
+  },
   table: {
     "& th": {
       fontWeight: 600,
@@ -62,11 +72,14 @@ const StyledTableCell = withStyles((theme) => ({
     fontWeight: 700,
     paddingLeft: 0,
     border: "none",
+    margin: theme.spacing(0),
+    padding: theme.spacing(0),
   },
   body: {
     fontSize: 14,
-    paddingLeft: 0,
     border: "none",
+    margin: theme.spacing(0),
+    padding: theme.spacing(0),
   },
 }))(TableCell);
 
@@ -75,7 +88,7 @@ const LabBilling = () => {
   const classes = useStyles();
   const { lastVisitedPatient } = useAuth();
   const componentRef = useRef();
-  const [testList, setTestList] = useState([]);
+  const [labBillingList, setLabBillingList] = useState([]);
   // to get personal information like firstName, lastName
   const [testProfileInfo, setTestProfileInfo] = useState();
   const [profileTests, setProfileTests] = useState();
@@ -111,15 +124,15 @@ const LabBilling = () => {
     content: () => componentRef.current,
   });
 
-  const fetchTestList = useCallback(() => {
-    PatientPortalService.getTestList(lastVisitedPatient).then((res) => {
-      setTestList(res.data);
+  const fetchLabBilling = useCallback(() => {
+    PatientPortalService.getLabBilling(lastVisitedPatient).then((res) => {
+      setLabBillingList(res.data);
     });
   }, [lastVisitedPatient]);
 
   useEffect(() => {
-    fetchTestList();
-  }, [fetchTestList]);
+    fetchLabBilling();
+  }, [fetchLabBilling]);
 
   const fetchReportInformation = async (id) => {
     const testProfileInfoRes = await PatientPortalService.getTestProfileInfo(id);
@@ -142,23 +155,27 @@ const LabBilling = () => {
           <TableHead>
             <TableRow>
               <StyledTableCell>Date</StyledTableCell>
+              <StyledTableCell>Amount</StyledTableCell>
               <StyledTableCell>Tests</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {testList.map((list) => (
+            {labBillingList.map((item) => (
               <TableRow style={{
                 border: "none",
               }}
               >
-                <StyledTableCell>
-                  {dateFormat(list.dt)}
+                <StyledTableCell className={classes.firstColumnOfStyledCell}>
+                  {dateFormat(item.dt)}
+                </StyledTableCell>
+                <StyledTableCell className={classes.secondColumnOfStyledCell}>
+                  {item.amount}
                 </StyledTableCell>
                 <StyledTableCell
-                  className={classes.tableTestsCell}
-                  onClick={() => fetchReportInformation(list.id)}
+                  className={clsx(classes.tableTestsCell, classes.thirdColumnOfStyledCell)}
+                  onClick={() => fetchReportInformation(item.id)}
                 >
-                  {list.tests}
+                  {item.tests}
                 </StyledTableCell>
               </TableRow>
             ))}
