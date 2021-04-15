@@ -53,6 +53,9 @@ const useStyles = makeStyles((theme) => ({
       fontWeight: 600,
     },
   },
+  tableRow: {
+    border: "none",
+  },
   firstColumnforStyledTableCell: {
     width: "9%",
   },
