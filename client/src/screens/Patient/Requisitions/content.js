@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 12,
   },
   inputRow: {
-    // marginBottom: theme.spacing(0.5),
     flexWrap: "nowrap",
   },
   block: {
@@ -29,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(0, 0.5, 0, 0),
   },
   fullWidth: {
-    width: "47%",
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",
@@ -97,13 +95,6 @@ const RequisitionsContent = (props) => {
               color="textPrimary"
             >
               {moment(item.created).format("MMM D YYYY")}
-            </Typography>
-            <Typography
-              component="span"
-              className={`${classes.text12} ${classes.block}`}
-              color="textPrimary"
-            >
-              {item.id}
             </Typography>
             {
               !!item.cpt_name && item.cpt_name.length > 30

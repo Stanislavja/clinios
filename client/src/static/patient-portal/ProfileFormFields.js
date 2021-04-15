@@ -7,6 +7,7 @@ export const ProfileFormFields = {
       baseType: "input",
       type: "text",
       options: [],
+      readOnly: true,
     },
     {
       name: "middlename",
@@ -15,6 +16,7 @@ export const ProfileFormFields = {
       baseType: "input",
       type: "text",
       options: [],
+      readOnly: true,
     },
     {
       name: "lastname",
@@ -23,6 +25,7 @@ export const ProfileFormFields = {
       baseType: "input",
       type: "text",
       options: [],
+      readOnly: true,
     },
     {
       name: "gender",
@@ -100,7 +103,7 @@ export const InsuranceForm = [
   {
     name: "insurance_name",
     id: "insurance_name",
-    label: "Plan Name",
+    label: "Insurance Plan Name",
     baseType: "input",
     type: "text",
     options: [],

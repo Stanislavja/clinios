@@ -1174,7 +1174,7 @@ const Patient = () => {
           cancelForm={() => dispatch(toggleRequisitionDialog())}
           hideActions
           fullHeight
-          size="lg"
+          size="xl"
         />
       )}
 
@@ -1315,6 +1315,15 @@ const Patient = () => {
                     item.title,
                   )}
                   updateMinHeight={updateMinHeight}
+                  contentToggleHandler={(value) => {
+                    // setFetchDiagnosesStatus(value);
+                    dispatch(setDiagnosesStatus(value));
+                    if (value) {
+                      fetchDiagnoses(value);
+                    } else {
+                      fetchDiagnoses();
+                    }
+                  }}
                 />
               </Grid>
             ))}
@@ -1340,15 +1349,6 @@ const Patient = () => {
                       ? `Balance $${patientBalance}`
                       : ""
                   }
-                  contentToggleHandler={(value) => {
-                    // setFetchDiagnosesStatus(value);
-                    dispatch(setDiagnosesStatus(value));
-                    if (value) {
-                      fetchDiagnoses(value);
-                    } else {
-                      fetchDiagnoses();
-                    }
-                  }}
                 />
               </Grid>
             ))}
