@@ -103,12 +103,19 @@ const PaymentMethods = () => {
     setSelectedPayment(item);
   };
 
+  const closeDialog = () => {
+    setNewPaymentDialog(false);
+    if (selectedPaymentMethod) {
+      setSelectedPayment(null);
+    }
+  };
+
   return (
     <>
       {!!paymentMethodDialog && (
         <PaymentMethodsForm
           isOpen={paymentMethodDialog}
-          onClose={() => setNewPaymentDialog(false)}
+          onClose={closeDialog}
           reloadData={fetchPaymentMethods}
           cardData={selectedPaymentMethod}
         />
