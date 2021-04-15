@@ -54,21 +54,21 @@ const StyledTableRow = withStyles(() => ({
   root: {
     fontSize: 14,
     "& th": {
-      fontSize: 12,
+      fontSize: 14,
       whiteSpace: "nowrap",
       padding: "2px 16px 2px 2px",
-      lineHeight: "14px",
+      lineHeight: "16px",
     },
     "& td": {
-      fontSize: 12,
+      fontSize: 14,
       whiteSpace: "nowrap",
-      padding: "8px 16px 2px 2px",
-      lineHeight: "14px",
+      padding: "2px 16px 2px 2px",
+      lineHeight: "16px",
     },
     "& button": {
       padding: 0,
-      fontSize: 12,
-      lineHeight: "14px",
+      fontSize: 14,
+      lineHeight: "16px",
       fontWeight: "normal",
 
       "&:hover": {
