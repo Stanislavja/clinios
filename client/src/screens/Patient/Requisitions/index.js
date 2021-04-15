@@ -138,7 +138,7 @@ const Requisitions = (props) => {
               select
               required
               variant="outlined"
-              label="Document Type"
+              label="Lab Company"
               margin="dense"
               fullWidth
               value={selectedCompany}
@@ -183,8 +183,7 @@ const Requisitions = (props) => {
               <TableHead>
                 <TableRow>
                   <StyledTableCellSm>Name</StyledTableCellSm>
-                  <StyledTableCellSm>ID</StyledTableCellSm>
-                  <StyledTableCellSm>Favorite</StyledTableCellSm>
+                  <StyledTableCellSm width="15%">Favorite</StyledTableCellSm>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -206,7 +205,6 @@ const Requisitions = (props) => {
                           </Tooltip>
                         )
                         : <StyledTableCellSm>{item.name}</StyledTableCellSm>}
-                      <StyledTableCellSm>{item.cpt_id}</StyledTableCellSm>
                       <StyledTableCellSm>{item.favorite ? "Yes" : ""}</StyledTableCellSm>
                     </StyledTableRowSm>
                   ))
@@ -235,8 +233,7 @@ const Requisitions = (props) => {
                 <TableHead>
                   <TableRow>
                     <StyledTableCellSm>Name</StyledTableCellSm>
-                    <StyledTableCellSm>ID</StyledTableCellSm>
-                    <StyledTableCellSm>Favorite</StyledTableCellSm>
+                    <StyledTableCellSm width="15%">Favorite</StyledTableCellSm>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -258,7 +255,6 @@ const Requisitions = (props) => {
                             </Tooltip>
                           )
                           : <StyledTableCellSm>{item.name}</StyledTableCellSm>}
-                        <StyledTableCellSm>{item.cpt_id}</StyledTableCellSm>
                         <StyledTableCellSm>{item.favorite ? "Yes" : ""}</StyledTableCellSm>
                       </StyledTableRowSm>
                     ))
@@ -288,8 +284,7 @@ const Requisitions = (props) => {
                 <TableHead>
                   <TableRow>
                     <StyledTableCellSm>Name</StyledTableCellSm>
-                    <StyledTableCellSm>ID</StyledTableCellSm>
-                    <StyledTableCellSm>Favorite</StyledTableCellSm>
+                    <StyledTableCellSm width="15%">Favorite</StyledTableCellSm>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -311,7 +306,6 @@ const Requisitions = (props) => {
                             </Tooltip>
                           )
                           : <StyledTableCellSm>{item.name}</StyledTableCellSm>}
-                        <StyledTableCellSm>{item.cpt_id}</StyledTableCellSm>
                         <StyledTableCellSm>{item.favorite ? "Yes" : ""}</StyledTableCellSm>
                       </StyledTableRowSm>
                     ))
