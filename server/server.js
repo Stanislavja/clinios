@@ -94,7 +94,6 @@ app.use(baseAPIPath, require("./app/routes/corporate/index.routes"));
 app.use(baseAPIPath, require("./app/routes/corporate/myself.routes"));
 app.use(baseAPIPath, require("./app/routes/corporate/case.routes"));
 
-
 app.use(baseAPIPath, require("./app/routes/stripe.routes"));
 
 app.listen(config.port).on("listening", () => {

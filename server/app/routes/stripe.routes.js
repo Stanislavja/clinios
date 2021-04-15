@@ -4,7 +4,6 @@ const stripeController = require("../controllers/stripe.controller");
 
 const router = express.Router();
 
-
 router.get(
   "/stripe/customers",
   [authJwt.verifyToken],

@@ -1,4 +1,5 @@
-const Stripe = require('stripe');
+const Stripe = require("stripe");
+
 const stripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
 const fs = require("fs");
 const bcrypt = require("bcryptjs");
@@ -80,11 +81,11 @@ exports.patientSignup = async (req, res) => {
       line1: patient.address,
       line2: patient.address2,
       postal_code: patient.postal,
-      state: patient.state
-    }
+      state: patient.state,
+    },
   });
 
-  patient.stripe_customer_id= customer.id;
+  patient.stripe_customer_id = customer.id;
   try {
     const patientResponse = await db.query(
       "INSERT INTO patient set ?",
