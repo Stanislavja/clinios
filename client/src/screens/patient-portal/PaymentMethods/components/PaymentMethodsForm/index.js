@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 
 const PaymentMethodsForm = (props) => {
   const classes = useStyles();
-  const patientId = 1;
+  const patientId = 1; // TODO:remove static ID
   const { enqueueSnackbar } = useSnackbar();
   const {
     isOpen, onClose, reloadData, cardData,
