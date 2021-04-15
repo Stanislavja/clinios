@@ -39,13 +39,13 @@ const useStyles = makeStyles((theme) => ({
 const StyledTableCell = withStyles(() => ({
   head: {
     whiteSpace: "nowrap",
-    fontSize: "12px",
+    fontSize: "14px",
     fontWeight: 700,
-    padding: "6px 24px 6px 2px",
+    padding: "6px 24px 2px 2px",
     borderBottom: "unset",
   },
   body: {
-    fontSize: 12,
+    fontSize: 14,
     borderBottom: "unset",
   },
 }))(TableCell);
