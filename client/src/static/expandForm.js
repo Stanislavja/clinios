@@ -7,6 +7,7 @@ export const FormFields = {
       baseType: "input",
       type: "text",
       options: [],
+      required: true,
     },
     {
       name: "middlename",
@@ -15,6 +16,7 @@ export const FormFields = {
       baseType: "input",
       type: "text",
       options: [],
+      required: false,
     },
     {
       name: "lastname",
@@ -23,6 +25,7 @@ export const FormFields = {
       baseType: "input",
       type: "text",
       options: [],
+      required: true,
     },
     {
       name: "dob",
@@ -31,6 +34,7 @@ export const FormFields = {
       baseType: "input",
       type: "date",
       options: [],
+      required: true,
     },
     {
       name: "ssn",
@@ -39,6 +43,7 @@ export const FormFields = {
       baseType: "input",
       type: "text",
       options: [],
+      required: false,
     },
     {
       name: "nickName",
@@ -47,6 +52,7 @@ export const FormFields = {
       baseType: "input",
       type: "text",
       options: [],
+      required: false,
     },
     {
       name: "aboutUs",
@@ -55,6 +61,7 @@ export const FormFields = {
       baseType: "input",
       type: "text",
       options: [],
+      required: true,
     },
     {
       name: "gender",
@@ -62,6 +69,7 @@ export const FormFields = {
       label: "Gender",
       baseType: "select",
       type: null,
+      required: true,
       options: [
         {
           label: "",
@@ -86,6 +94,7 @@ export const FormFields = {
       baseType: "input",
       type: "text",
       options: [],
+      required: true,
     },
     {
       name: "address2",
@@ -94,6 +103,7 @@ export const FormFields = {
       baseType: "input",
       type: "text",
       options: [],
+      required: true,
     },
     {
       name: "city",
@@ -102,6 +112,7 @@ export const FormFields = {
       baseType: "input",
       type: "text",
       options: [],
+      required: true,
     },
     {
       name: "postal",
@@ -110,6 +121,7 @@ export const FormFields = {
       baseType: "input",
       type: "text",
       options: [],
+      required: true,
     },
   ],
   contactInfo: [
@@ -118,24 +130,27 @@ export const FormFields = {
       id: "phone_home",
       label: "Home Phone",
       baseType: "input",
-      type: "number",
+      type: "text",
       options: [],
+      required: true,
     },
     {
       name: "phone_cell",
       id: "phone_cell",
       label: "Cell Phone",
       baseType: "input",
-      type: "number",
+      type: "text",
       options: [],
+      required: false,
     },
     {
       name: "phone_work",
       id: "phone_work",
       label: "Work Phone",
       baseType: "input",
-      type: "number",
+      type: "text",
       options: [],
+      required: false,
     },
     {
       name: "email",
@@ -144,6 +159,7 @@ export const FormFields = {
       baseType: "input",
       type: "email",
       options: [],
+      required: true,
     },
     {
       name: "contactPreference",
@@ -151,6 +167,7 @@ export const FormFields = {
       label: "Contact Preference",
       baseType: "select",
       type: null,
+      required: false,
       options: [
         {
           label: "Mobile Phone",
@@ -175,6 +192,7 @@ export const FormFields = {
       baseType: "input",
       type: "text",
       options: [],
+      required: false,
     },
     {
       name: "emergency_middlename",
@@ -183,6 +201,7 @@ export const FormFields = {
       baseType: "input",
       type: "text",
       options: [],
+      required: false,
     },
     {
       name: "emergency_lastname",
@@ -191,6 +210,7 @@ export const FormFields = {
       baseType: "input",
       type: "text",
       options: [],
+      required: false,
     },
     {
       name: "emergency_relationship",
@@ -199,6 +219,7 @@ export const FormFields = {
       baseType: "input",
       type: "text",
       options: [],
+      required: false,
     },
     {
       name: "emergency_email",
@@ -207,6 +228,7 @@ export const FormFields = {
       baseType: "input",
       type: "email",
       options: [],
+      required: false,
     },
     {
       name: "emergency_phone",
@@ -215,6 +237,7 @@ export const FormFields = {
       baseType: "input",
       type: "number",
       options: [],
+      required: false,
     },
   ],
   insuranceInfo: [
@@ -225,6 +248,7 @@ export const FormFields = {
       baseType: "input",
       type: "text",
       options: [],
+      required: false,
     },
     {
       name: "insurance_group",
@@ -233,6 +257,7 @@ export const FormFields = {
       baseType: "input",
       type: "text",
       options: [],
+      required: false,
     },
     {
       name: "insurance_member",
@@ -241,6 +266,7 @@ export const FormFields = {
       baseType: "input",
       type: "text",
       options: [],
+      required: false,
     },
     {
       name: "insuranceType",
@@ -249,6 +275,7 @@ export const FormFields = {
       baseType: "input",
       type: "text",
       options: [],
+      required: false,
     },
   ],
   medicalInfo: [
@@ -259,6 +286,7 @@ export const FormFields = {
       baseType: "input",
       type: "number",
       options: [],
+      required: true,
     },
     {
       name: "weight",
@@ -267,6 +295,7 @@ export const FormFields = {
       baseType: "input",
       type: "number",
       options: [],
+      required: true,
     },
     {
       name: "medical_note",
@@ -275,6 +304,7 @@ export const FormFields = {
       baseType: "input",
       type: "number",
       options: [],
+      required: true,
     },
   ],
   userNamePasswordDetails: [
@@ -285,6 +315,7 @@ export const FormFields = {
       baseType: "input",
       type: "password",
       options: [],
+      required: true,
     },
     {
       name: "confirmPassword",
@@ -293,6 +324,7 @@ export const FormFields = {
       baseType: "input",
       type: "password",
       options: [],
+      required: true,
     },
   ],
 };

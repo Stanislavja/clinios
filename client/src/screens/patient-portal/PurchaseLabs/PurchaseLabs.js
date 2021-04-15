@@ -16,6 +16,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { useSnackbar } from "notistack";
 
+import Alert from "../../../components/Alert";
 import useAuth from "../../../hooks/useAuth";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 import PurchaseLabsService from "../../../services/patient_portal/purchase-lab.service";
@@ -69,6 +70,7 @@ const PurchaseLabs = () => {
   const [labs, setLabs] = useState([]);
   const [isNewPaymentMethodOpen, setIsNewPaymentMethodOpen] = useState(false);
   const [isConfirmDialog, setIsConfirmDialog] = useState(false);
+  const [showPurchaseConfirmation, setShowPurchaseConfirmation] = useState(false);
 
   const fetchPaymentMethods = useCallback(() => {
     PatientPortalService.getPaymentMethods(lastVisitedPatient).then((res) => {
@@ -137,6 +139,7 @@ const PurchaseLabs = () => {
         variant: "success",
       });
       setIsConfirmDialog(false);
+      setShowPurchaseConfirmation(true);
       setSelected([]);
       setSelectedPaymentMethod(null);
     });
@@ -145,105 +148,116 @@ const PurchaseLabs = () => {
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
   return (
-    <div className={classes.root}>
-      <Typography
-        component="h1"
-        variant="h2"
-        color="textPrimary"
-        className={classes.title}
-      >
-        Purchase Lab Tests
-      </Typography>
-      <Grid item md={6} sm={12} xs={12}>
-        <TableContainer className={classes.tableContainer}>
-          <Table size="small" className={classes.table} aria-label="a dense table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Select</TableCell>
-                <TableCell>Lab Name</TableCell>
-                <TableCell>Lab Company</TableCell>
-                <TableCell>Price</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {labs.map((lab) => {
-                const isChecked = isSelected(lab.id);
-                return (
-                  <TableRow
-                    hover
-                    onClick={(event) => handleClick(event, lab.id)}
-                    role="checkbox"
-                  >
-                    <TableCell component="th" scope="row">
-                      <Checkbox
-                        onClick={(event) => handleClick(event, lab.id)}
-                        className={classes.selectCheckbox}
-                        checked={isChecked}
-                      />
-                    </TableCell>
-                    <TableCell>{lab.cpt_name}</TableCell>
-                    <TableCell>{lab.lab_company_name}</TableCell>
-                    <TableCell>
-                      $
-                      {lab.price}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-              <div className={classes.Total}>
-                <span>Total:</span>
-                {total}
-              </div>
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <FormControl
-          variant="outlined"
-          className={classes.customSelect}
-          size="small"
-        >
-          <InputLabel htmlFor="age-native-simple">Select Payment Method</InputLabel>
-          <Select
-            native
-            value={selectedPaymentMethod}
-            onChange={(event) => handlePaymentMethodChange(event.target.value)}
-            inputProps={{
-              name: "type",
-              id: "age-native-simple",
-            }}
-            label="User"
-          >
-            <option aria-label="None" value="" />
-            {paymentMethods.map((pm) => (
-              <option key={pm.id} value={pm.id}>
-                {paymentMethodType(pm.type)}
-              </option>
-            ))}
-          </Select>
-        </FormControl>
-        <Button
-          disabled={(!total || !selectedPaymentMethod)}
-          variant="outlined"
-          color="primary"
-          size="medium"
-          onClick={() => setIsConfirmDialog(true)}
-          className={classes.purchaseButton}
-        >
-          Purchase
-        </Button>
-      </Grid>
-      <PaymentMethodsForm
-        isOpen={isNewPaymentMethodOpen}
-        onClose={() => setIsNewPaymentMethodOpen(false)}
-        reloadData={() => fetchPaymentMethods()}
-      />
-      <PurchaseConfirm
+    <>
+      <Alert
         open={isConfirmDialog}
-        onClose={() => setIsConfirmDialog(false)}
-        onConfirmation={() => handleOnSubmit(false)}
-        amount={total}
+        title="Purchase Confirmation"
+        message={`Confirm purchase of $${total}?`}
+        applyButtonText="Confirm"
+        cancelButtonText="Cancel"
+        applyForm={() => handleOnSubmit()}
+        cancelForm={() => setIsConfirmDialog(false)}
       />
-    </div>
+      <div className={classes.root}>
+        <Typography
+          component="h1"
+          variant="h2"
+          color="textPrimary"
+          className={classes.title}
+        >
+          Purchase Lab Tests
+        </Typography>
+        <Grid item md={6} sm={12} xs={12}>
+          <TableContainer className={classes.tableContainer}>
+            <Table size="small" className={classes.table} aria-label="a dense table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Select</TableCell>
+                  <TableCell>Lab Name</TableCell>
+                  <TableCell>Lab Company</TableCell>
+                  <TableCell>Price</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {labs.map((lab) => {
+                  const isChecked = isSelected(lab.id);
+                  return (
+                    <TableRow
+                      hover
+                      onClick={(event) => handleClick(event, lab.id)}
+                      role="checkbox"
+                    >
+                      <TableCell component="th" scope="row">
+                        <Checkbox
+                          onClick={(event) => handleClick(event, lab.id)}
+                          className={classes.selectCheckbox}
+                          checked={isChecked}
+                        />
+                      </TableCell>
+                      <TableCell>{lab.cpt_name}</TableCell>
+                      <TableCell>{lab.lab_company_name}</TableCell>
+                      <TableCell>
+                        $
+                        {lab.price}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+                <div className={classes.Total}>
+                  <span>Total:</span>
+                  $
+                  {total}
+                </div>
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <FormControl
+            variant="outlined"
+            className={classes.customSelect}
+            size="small"
+          >
+            <InputLabel htmlFor="age-native-simple">Select Payment Method</InputLabel>
+            <Select
+              native
+              value={selectedPaymentMethod}
+              onChange={(event) => handlePaymentMethodChange(event.target.value)}
+              inputProps={{
+                name: "type",
+                id: "age-native-simple",
+              }}
+              label="User"
+            >
+              <option aria-label="None" value="" />
+              {paymentMethods.map((pm) => (
+                <option key={pm.id} value={pm.id}>
+                  {paymentMethodType(pm.type)}
+                </option>
+              ))}
+            </Select>
+          </FormControl>
+          <Button
+            disabled={(!total || !selectedPaymentMethod)}
+            variant="outlined"
+            color="primary"
+            size="medium"
+            onClick={() => setIsConfirmDialog(true)}
+            className={classes.purchaseButton}
+          >
+            Purchase
+          </Button>
+        </Grid>
+        <PaymentMethodsForm
+          isOpen={isNewPaymentMethodOpen}
+          onClose={() => setIsNewPaymentMethodOpen(false)}
+          reloadData={() => fetchPaymentMethods()}
+        />
+        <PurchaseConfirm
+          open={showPurchaseConfirmation}
+          onClose={() => setShowPurchaseConfirmation(false)}
+          amount={total}
+        />
+      </div>
+    </>
   );
 };
 

@@ -6,19 +6,19 @@ import {
   Grid,
   Typography,
   MenuItem,
-  Checkbox,
-  FormControlLabel,
+  // Checkbox,
+  // FormControlLabel,
   Divider,
 } from "@material-ui/core";
-import IconButton from "@material-ui/core/IconButton";
+// import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
-import CheckIcon from "@material-ui/icons/CheckOutlined";
-import RotateLeftTwoToneIcon from "@material-ui/icons/RotateLeftTwoTone";
+// import CheckIcon from "@material-ui/icons/CheckOutlined";
+// import RotateLeftTwoToneIcon from "@material-ui/icons/RotateLeftTwoTone";
 import Alert from "@material-ui/lab/Alert";
 import _ from "lodash";
 import PropTypes from "prop-types";
 import { CountryRegionData } from "react-country-region-selector";
-import SignatureCanvas from "react-signature-canvas";
+// import SignatureCanvas from "react-signature-canvas";
 
 import CountrySelect from "../../../../components/common/CountrySelect";
 import Error from "../../../../components/common/Error";
@@ -51,11 +51,11 @@ const useStyles = makeStyles((theme) => ({
   },
   signupActions: {
     marginTop: theme.spacing(1),
-    maxWidth: "506px",
-    marginLeft: "auto",
-    marginRight: "auto",
-    textAlign: "right",
-    display: "block",
+    // maxWidth: "506px",
+    // marginLeft: "auto",
+    // marginRight: "auto",
+    // textAlign: "right",
+    // display: "block",
   },
 }));
 
@@ -71,9 +71,9 @@ const SignupForm = (props) => {
   const MedicalInfo = FormFields.medicalInfo;
   const UserNamePasswordInfo = FormFields.userNamePasswordDetails;
 
-  const [termsChecked, setTermsChecked] = useState(true);
-  const [signatureRef, setSignatureRef] = useState(null);
-  const [signature, setSignature] = useState(null);
+  // const [termsChecked, setTermsChecked] = useState(true);
+  // const [signatureRef, setSignatureRef] = useState(null);
+  // const [signature, setSignature] = useState(null);
 
   const [formFields, setFormFields] = useState({
     firstname: "",
@@ -113,17 +113,17 @@ const SignupForm = (props) => {
     }
   };
 
-  const handleCheckboxChange = (event) => {
-    setTermsChecked(event.target.checked);
-  };
+  // const handleCheckboxChange = (event) => {
+  //   setTermsChecked(event.target.checked);
+  // };
 
-  const clearSignaturePad = () => {
-    signatureRef.clear();
-  };
+  // const clearSignaturePad = () => {
+  //   signatureRef.clear();
+  // };
 
-  const saveSignaturePad = () => {
-    setSignature(signatureRef.getTrimmedCanvas().toDataURL("image/png"));
-  };
+  // const saveSignaturePad = () => {
+  //   setSignature(signatureRef.getTrimmedCanvas().toDataURL("image/png"));
+  // };
 
   const patientErrors = errors && errors.filter((err) => err.param.includes("patient"));
 
@@ -207,7 +207,8 @@ const SignupForm = (props) => {
     }
   };
 
-  const handleFormSubmission = () => {
+  const handleFormSubmission = (e) => {
+    e.preventDefault();
     const formData = {
       patient: {
         status: "A",
@@ -249,7 +250,7 @@ const SignupForm = (props) => {
         height: formFields.height,
         waist: formFields.waist,
         weight: formFields.weigh,
-        imgBase64: signatureRef.getTrimmedCanvas().toDataURL("image/png"),
+        // imgBase64: signatureRef.getTrimmedCanvas().toDataURL("image/png"),
       },
     };
     onFormSubmit(formData);
@@ -257,7 +258,7 @@ const SignupForm = (props) => {
 
   return (
     <>
-      <form>
+      <form onSubmit={handleFormSubmission}>
         <Grid className={classes.inputRow}>
           {patientErrors
             && patientErrors.map((error, index) => (
@@ -275,6 +276,7 @@ const SignupForm = (props) => {
               <Grid key={index} item md={4}>
                 {item.baseType === "input" ? (
                   <TextField
+                    required={item.required}
                     size="small"
                     variant="outlined"
                     label={item.label}
@@ -286,7 +288,7 @@ const SignupForm = (props) => {
                   />
                 ) : (
                   <TextField
-                    // className={classes.select}
+                    required={item.required}
                     size="small"
                     variant="outlined"
                     select
@@ -323,6 +325,7 @@ const SignupForm = (props) => {
               // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={4}>
                 <TextField
+                  required={item.required}
                   size="small"
                   variant="outlined"
                   label={item.label}
@@ -377,6 +380,7 @@ const SignupForm = (props) => {
                 {item.baseType === "input" ? (
                   <>
                     <TextField
+                      required={item.required}
                       size="small"
                       variant="outlined"
                       label={item.label}
@@ -392,6 +396,7 @@ const SignupForm = (props) => {
                   </>
                 ) : (
                   <TextField
+                    required={item.required}
                     size="small"
                     variant="outlined"
                     // className={classes.select}
@@ -428,6 +433,7 @@ const SignupForm = (props) => {
               // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={4}>
                 <TextField
+                  required={item.required}
                   size="small"
                   variant="outlined"
                   label={item.label}
@@ -454,6 +460,7 @@ const SignupForm = (props) => {
               // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={4}>
                 <TextField
+                  required={item.required}
                   size="small"
                   variant="outlined"
                   label={item.label}
@@ -479,6 +486,7 @@ const SignupForm = (props) => {
               // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={6}>
                 <TextField
+                  required={item.required}
                   size="small"
                   variant="outlined"
                   label={item.label}
@@ -494,6 +502,7 @@ const SignupForm = (props) => {
               // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={12}>
                 <TextField
+                  required={item.required}
                   size="small"
                   variant="outlined"
                   label={item.label}
@@ -519,6 +528,7 @@ const SignupForm = (props) => {
               // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={4}>
                 <TextField
+                  required={item.required}
                   size="small"
                   variant="outlined"
                   label={item.label}
@@ -537,7 +547,7 @@ const SignupForm = (props) => {
           </Grid>
         </Grid>
 
-        <Divider />
+        {/* <Divider />
 
         <FormControlLabel
           value="end"
@@ -591,16 +601,16 @@ const SignupForm = (props) => {
               />
             ) : null}
           </Grid>
-          <Grid container justify="flex-end" className={classes.signupActions}>
-            <Button
-              disabled={!formFields.email || fieldErrors.length > 0 || !formFields.password}
-              variant="contained"
-              color="primary"
-              onClick={() => handleFormSubmission()}
-            >
-              Submit
-            </Button>
-          </Grid>
+        </Grid> */}
+        <Grid container justify="center" className={classes.signupActions}>
+          <Button
+            disabled={!formFields.email || fieldErrors.length > 0 || !formFields.password}
+            variant="contained"
+            color="primary"
+            type="submit"
+          >
+            Submit
+          </Button>
         </Grid>
       </form>
     </>

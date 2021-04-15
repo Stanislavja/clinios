@@ -51,7 +51,7 @@ export const ProfileFormFields = {
       id: "homePhone",
       label: "Home Phone",
       baseType: "input",
-      type: "number",
+      type: "text",
       options: [],
     },
     {
@@ -59,7 +59,7 @@ export const ProfileFormFields = {
       id: "cellPhone",
       label: "Cell Phone",
       baseType: "input",
-      type: "number",
+      type: "text",
       options: [],
     },
     {
@@ -67,7 +67,7 @@ export const ProfileFormFields = {
       id: "workPhone",
       label: "Work Phone",
       baseType: "input",
-      type: "number",
+      type: "text",
       options: [],
     },
     {
@@ -75,7 +75,7 @@ export const ProfileFormFields = {
       id: "otherPhone",
       label: "Other Phone",
       baseType: "input",
-      type: "number",
+      type: "text",
       options: [],
     },
   ],
