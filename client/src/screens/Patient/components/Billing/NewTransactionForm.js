@@ -41,7 +41,7 @@ const NewTransactionForm = (props) => {
   const classes = useStyles();
   const { reloadData } = props;
   const { state, dispatch } = usePatientContext();
-  const { patientId } = state;
+  const { patientId, patientInfo } = state;
   const { enqueueSnackbar } = useSnackbar();
 
   const [hasAmountError, setHasAmountError] = useState(false);
@@ -102,8 +102,11 @@ const NewTransactionForm = (props) => {
           payment_type: formFields.paymentType,
           amount: formFields.amount,
           note: formFields.notes,
+          payment_method_id: formFields.accountNum,
+          customer_id: patientInfo.data.stripe_customer_id,
         },
       };
+
       if (selectedBilling) { // edit scenario
         const billingId = selectedBilling.id;
         PatientService.updateBilling(patientId, billingId, reqBody)
@@ -180,7 +183,7 @@ const NewTransactionForm = (props) => {
       }
       case "paymentOptions": {
         const paymentTypeSelectOptions = paymentTypeSelectOptionsMutated.map((option) => (
-          <MenuItem className={classes.menuOption} key={option.id} value={option.id}>
+          <MenuItem className={classes.menuOption} key={option.id} value={option.stripe_payment_method_token}>
             {option.account_number ? `${option.account_number} - ${option.type}` : ""}
           </MenuItem>
         ));

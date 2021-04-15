@@ -979,7 +979,6 @@ const getBillingPaymentOptions = async (req, res) => {
 
 const createBilling = async (req, res) => {
   const { patient_id } = req.params;
-  const { payment_method_id, customer_id, note } = req.body.data;
   const { payment_type, type_id } = req.body.data;
 
   const formData = req.body.data;
@@ -1000,9 +999,9 @@ const createBilling = async (req, res) => {
     if(payment_type === "C") {
       const stripe = Stripe(getStripeResponse[0].stripe_api_key);
       const intentData = {
-        payment_method: payment_method_id || 'pm_1Ig0ZzHLdNAkRyURjEzwP4Te',
-        customer: customer_id || 'cus_JIBHpEyrb1IJfZ',
-        description: note + ` from patient with patient_id: ${patient_id}`,
+        payment_method: formData.payment_method_id,
+        customer: formData.customer_id,
+        description: formData.note + `; patient_id: ${patient_id}`,
         amount: Number(formData.amount) * 100, // it accepts cents
         currency: 'usd',
         confirmation_method: 'manual',
@@ -1023,6 +1022,7 @@ const createBilling = async (req, res) => {
   }
 
   try {
+    delete formData.customer_id; // Delete customer_id 
     const insertResponse = await db.query(`insert into tran set ?`, [formData]);
 
     if (!insertResponse.affectedRows) {
