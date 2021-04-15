@@ -78,7 +78,7 @@ const getUpcomingAppointments = async (req, res) => {
   let $sql;
 
   try {
-    $sql = `select uc.patient_id, uc.start_dt, uc.end_dt, uc.status, concat(u.firstname, ' ', u.lastname) provider
+    $sql = `select uc.patient_id, uc.user_id, uc.start_dt, uc.end_dt, uc.status, concat(u.firstname, ' ', u.lastname) provider
     from user_calendar uc
     join user u on u.id=uc.user_id
     where uc.patient_id=${patient_id}
