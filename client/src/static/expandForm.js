@@ -118,7 +118,7 @@ export const FormFields = {
       id: "phone_home",
       label: "Home Phone",
       baseType: "input",
-      type: "number",
+      type: "text",
       options: [],
     },
     {
@@ -126,7 +126,7 @@ export const FormFields = {
       id: "phone_cell",
       label: "Cell Phone",
       baseType: "input",
-      type: "number",
+      type: "text",
       options: [],
     },
     {
@@ -134,7 +134,7 @@ export const FormFields = {
       id: "phone_work",
       label: "Work Phone",
       baseType: "input",
-      type: "number",
+      type: "text",
       options: [],
     },
     {
