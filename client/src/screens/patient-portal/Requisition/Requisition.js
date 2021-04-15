@@ -84,7 +84,6 @@ const StyledTableCell = withStyles((theme) => ({
   },
 }))(TableCell);
 
-
 const Encounters = () => {
   const classes = useStyles();
   const { lastVisitedPatient } = useAuth();
@@ -161,10 +160,7 @@ const Encounters = () => {
           </TableHead>
           <TableBody>
             {testList.map((list) => (
-              <TableRow style={{
-                border: "none",
-              }}
-              >
+              <TableRow className={classes.tableRow}>
                 <StyledTableCell className={classes.firstColumnforStyledTableCell}>
                   {dateFormat(list.dt)}
                 </StyledTableCell>
