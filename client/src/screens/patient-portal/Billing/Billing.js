@@ -27,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
   title: {
     paddingBottom: theme.spacing(1),
   },
+  subTitle: {
+    paddingBottom: theme.spacing(4),
+  },
   viewIcon: {
     cursor: "pointer",
     fontSize: "1rem",
@@ -148,9 +151,10 @@ const Billing = () => {
         </Grid>
 
         <Typography
-          variant="h5"
+          component="p"
+          variant="body2"
           color="textPrimary"
-          className={classes.title}
+          className={classes.subTitle}
         >
           This page is used to view billings.
         </Typography>
