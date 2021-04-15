@@ -56,6 +56,9 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  rescheduleLink: {
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 const Home = () => {
