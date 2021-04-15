@@ -56,13 +56,13 @@ const StyledTableRow = withStyles(() => ({
     "& th": {
       fontSize: 14,
       whiteSpace: "nowrap",
-      padding: "2px 16px 2px 2px",
+      padding: "0px 16px 2px 2px",
       lineHeight: "16px",
     },
     "& td": {
       fontSize: 14,
       whiteSpace: "nowrap",
-      padding: "2px 16px 2px 2px",
+      padding: "0px 16px 2px 2px",
       lineHeight: "16px",
     },
     "& button": {
@@ -163,7 +163,7 @@ const PaymentMethods = () => {
                 {paymentMethods.length ? (
                   paymentMethods.map((item) => (
                     <StyledTableRow key={item.id}>
-                      <StyledTableCell component="th" scope="item">
+                      <StyledTableCell>
                         {moment(item.created).format("MMM D YYYY")}
                       </StyledTableCell>
                       <StyledTableCell>{paymentMethodType(item.type)}</StyledTableCell>
