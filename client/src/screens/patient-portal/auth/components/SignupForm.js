@@ -207,7 +207,8 @@ const SignupForm = (props) => {
     }
   };
 
-  const handleFormSubmission = () => {
+  const handleFormSubmission = (e) => {
+    e.preventDefault();
     const formData = {
       patient: {
         status: "A",
@@ -257,7 +258,7 @@ const SignupForm = (props) => {
 
   return (
     <>
-      <form>
+      <form onSubmit={handleFormSubmission}>
         <Grid className={classes.inputRow}>
           {patientErrors
             && patientErrors.map((error, index) => (
@@ -275,6 +276,7 @@ const SignupForm = (props) => {
               <Grid key={index} item md={4}>
                 {item.baseType === "input" ? (
                   <TextField
+                    required={item.required}
                     size="small"
                     variant="outlined"
                     label={item.label}
@@ -286,7 +288,7 @@ const SignupForm = (props) => {
                   />
                 ) : (
                   <TextField
-                    // className={classes.select}
+                    required={item.required}
                     size="small"
                     variant="outlined"
                     select
@@ -323,6 +325,7 @@ const SignupForm = (props) => {
               // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={4}>
                 <TextField
+                  required={item.required}
                   size="small"
                   variant="outlined"
                   label={item.label}
@@ -377,6 +380,7 @@ const SignupForm = (props) => {
                 {item.baseType === "input" ? (
                   <>
                     <TextField
+                      required={item.required}
                       size="small"
                       variant="outlined"
                       label={item.label}
@@ -392,6 +396,7 @@ const SignupForm = (props) => {
                   </>
                 ) : (
                   <TextField
+                    required={item.required}
                     size="small"
                     variant="outlined"
                     // className={classes.select}
@@ -428,6 +433,7 @@ const SignupForm = (props) => {
               // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={4}>
                 <TextField
+                  required={item.required}
                   size="small"
                   variant="outlined"
                   label={item.label}
@@ -454,6 +460,7 @@ const SignupForm = (props) => {
               // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={4}>
                 <TextField
+                  required={item.required}
                   size="small"
                   variant="outlined"
                   label={item.label}
@@ -479,6 +486,7 @@ const SignupForm = (props) => {
               // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={6}>
                 <TextField
+                  required={item.required}
                   size="small"
                   variant="outlined"
                   label={item.label}
@@ -494,6 +502,7 @@ const SignupForm = (props) => {
               // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={12}>
                 <TextField
+                  required={item.required}
                   size="small"
                   variant="outlined"
                   label={item.label}
@@ -519,6 +528,7 @@ const SignupForm = (props) => {
               // eslint-disable-next-line react/no-array-index-key
               <Grid key={index} item md={4}>
                 <TextField
+                  required={item.required}
                   size="small"
                   variant="outlined"
                   label={item.label}
@@ -597,7 +607,7 @@ const SignupForm = (props) => {
             disabled={!formFields.email || fieldErrors.length > 0 || !formFields.password}
             variant="contained"
             color="primary"
-            onClick={() => handleFormSubmission()}
+            type="submit"
           >
             Submit
           </Button>
