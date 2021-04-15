@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 
 import Box from "@material-ui/core/Box";
-import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -15,7 +14,7 @@ import HomeService from "../../../services/patient_portal/home.service";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    paddingTop: theme.spacing(4),
+    paddingTop: theme.spacing(5),
     display: "flex",
     flexDirection: "column",
     alignItems: "left",
@@ -45,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "5px 0 40px 0",
   },
   pageTitle: {
-    marginBottom: 0,
+    marginBottom: theme.spacing(2),
   },
   form: {
     width: "100%", // Fix IE 11 issue.
@@ -114,38 +113,32 @@ const Home = () => {
   };
 
   return (
-    <Container component="main">
+    <div className={classes.paper}>
       <CssBaseline />
-      <div className={classes.paper}>
-        <Alert icon={false} variant="filled" severity="info">
-          {header && ReactHtmlParser(header.header)}
-        </Alert>
-        {Boolean(upcomingAppointments?.length) && upcomingAppointments?.map((appointment) => (
-          <Box component="div" className={classes.BoxStyle}>
-            <p>
-              {renderAppointmentRowText(appointment)}
-            </p>
-          </Box>
-        ))}
+      <Typography component="h1" variant="h2" className={classes.pageTitle}>
+        Portal Home
+      </Typography>
+      <Alert icon={false} variant="filled" severity="info">
+        {header && ReactHtmlParser(header.header)}
+      </Alert>
+      {Boolean(upcomingAppointments?.length) && upcomingAppointments?.map((appointment) => (
+        <Box component="div" className={classes.BoxStyle}>
+          <p>
+            {renderAppointmentRowText(appointment)}
+          </p>
+        </Box>
+      ))}
 
-        {clientForms && (
-          <Box component="div" className={classes.formBox}>
-            <p>
-              Please fill out the following forms:
-              {" "}
-              <Link to="/">{clientForms.title}</Link>
-            </p>
-          </Box>
-        )}
-
-        <Typography component="h1" variant="h2" className={classes.pageTitle}>
-          Portal Home
-        </Typography>
-        <Typography component="p" variant="body2">
-          Welcome to patient portal
-        </Typography>
-      </div>
-    </Container>
+      {clientForms && (
+        <Box component="div" className={classes.formBox}>
+          <p>
+            Please fill out the following forms:
+            {" "}
+            <Link to="/">{clientForms.title}</Link>
+          </p>
+        </Box>
+      )}
+    </div>
   );
 };
 
