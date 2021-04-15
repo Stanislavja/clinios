@@ -5,7 +5,7 @@ import {
 } from "@material-ui/core";
 import moment from "moment";
 import { useSnackbar } from "notistack";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 import useAuth from "../../../hooks/useAuth";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
@@ -69,12 +69,35 @@ const Appointments = () => {
     date: null,
     time: null,
   });
+  const [isRescheduleAppointment, setIsRescheduleAppointment] = useState(false);
+  const location = useLocation();
 
   const fetchPractitioners = useCallback(() => {
     PatientPortalService.getPractitioners().then((res) => {
       setPractitioners(res.data);
     });
   }, []);
+
+
+  useEffect(() => {
+    const appointment = location?.state?.appointment;
+    if (appointment?.patient_id) {
+      const date = moment(appointment.start_dt).format("YYYY-MM-DD");
+      const minutesFromStartDate = moment(appointment.start_dt).minutes();
+      const time = `${moment(appointment.start_dt).hours()}:${minutesFromStartDate < 10
+        ? `0${minutesFromStartDate}`
+        : minutesFromStartDate}am`;
+      setUserSelection((prevUserSelection) => ({
+        ...prevUserSelection,
+        ...appointment,
+        date,
+        time,
+        practitioner: appointment?.user_id,
+      }));
+      setIsRescheduleAppointment(true);
+      setShowCalendar(true);
+    }
+  }, [location?.state]);
 
   useEffect(() => {
     fetchPractitioners();
@@ -114,6 +137,7 @@ const Appointments = () => {
           start_dt: `${moment(userSelection.date).format("YYYY-MM-DD")} ${userSelection.time.split("am")[0]}`,
           end_dt: `${moment(userSelection.date).format("YYYY-MM-DD")} ${userSelection.time.split("am")[0]}`,
           patient: user,
+          reschedule: isRescheduleAppointment,
         },
       };
       PatientPortalService.bookAppointment(reqBody).then(() => {
@@ -280,7 +304,7 @@ const Appointments = () => {
                   className={classes.submitBtn}
                   onClick={() => bookAppointmentHandler()}
                 >
-                  Book Appointment
+                  {isRescheduleAppointment ? "Reschedule Appointment" : "Book Appointment"}
                 </Button>
               </Grid>
             </Grid>
