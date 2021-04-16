@@ -153,9 +153,10 @@ const BasicInfo = (props) => {
         const [regionName = null, regionInShort] = regionPair.split("~");
         return [regionName, regionInShort];
       });
-
       const selectedRegion = regions.filter((x) => x[1] === formData.state);
-      setRegion(selectedRegion[0][1]);
+      if (selectedRegion.length) {
+        setRegion(selectedRegion[0][1]);
+      }
     }
   }, [formData]);
 
