@@ -45,6 +45,14 @@ class PatientPortalService {
       .then((res) => res.data);
   }
 
+  updateAppointment(payload, appointmentId) {
+    return axios
+      .post(`${API_BASE}/client-portal/appointment/update/${appointmentId}`, payload, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
   // encounters
   getEncounters(patient) {
     let url = `${API_BASE}/client-portal/encounters`;
