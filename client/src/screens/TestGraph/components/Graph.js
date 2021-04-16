@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import { makeStyles } from "@material-ui/core";
 import moment from "moment";
 import PropTypes from "prop-types";
 import {
@@ -13,40 +12,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    border: "2px solid #333",
-    padding: theme.spacing(1),
-    background: "#fff",
-    borderRadius: "10px",
-  },
-}));
-
-const CustomTooltip = ({ payload }) => {
-  const classes = useStyles();
-  return (
-    <div className={classes.root}>
-      {payload && payload.length ? (
-        <>
-          <p className="label">
-            {`Date : ${moment(payload[0]?.payload?.lab_dt).format(
-              "MMMM Do YYYY, h:mm A",
-            )}`}
-          </p>
-          <p className="label">{`File : ${payload[0]?.payload?.filename}`}</p>
-          <p className="label">{`Value : ${payload[0]?.payload?.value}`}</p>
-        </>
-      ) : null}
-    </div>
-  );
-};
-
-CustomTooltip.propTypes = {
-  payload: PropTypes.instanceOf(Array),
-};
-CustomTooltip.defaultProps = {
-  payload: [],
-};
+import Colors from "../../../theme/colors";
+import CustomTooltip from "./Tooltip";
 
 const countDecimals = (value) => {
   if (Math.floor(value) === value) return 0;
@@ -244,7 +211,7 @@ export const Graph = ({ data, range, conventionalRange }) => {
           type="monotone"
           dataKey="value"
           fill="#477fc9"
-          stroke="#477fc9"
+          stroke={Colors.graphInRange}
         />
       </LineChart>
     </ResponsiveContainer>
