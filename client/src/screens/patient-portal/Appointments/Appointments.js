@@ -128,6 +128,17 @@ const Appointments = () => {
 
   const bookAppointmentHandler = () => {
     const selectedPractitioner = practitioners.filter((x) => x.user_id === userSelection.practitioner);
+    let selectedAppointemntTypeLength = userSelection?.appointment_type_length || 0;
+    if (!selectedAppointemntTypeLength) {
+      selectedAppointemntTypeLength = appointmentTypes
+        ?.find((item) => item.id === userSelection.appointmentType)?.length;
+    }
+
+
+    const endTime = moment(userSelection.time, "h:ma")
+      .add(selectedAppointemntTypeLength || 0, "minutes")
+      .format("h:m");
+
     if (!!userSelection.time && userSelection.date) {
       const reqBody = {
         data: {
@@ -136,12 +147,15 @@ const Appointments = () => {
           },
           ApptStatus: "R",
           start_dt: `${moment(userSelection.date).format("YYYY-MM-DD")} ${userSelection.time.split("am")[0]}`,
-          end_dt: `${moment(userSelection.date).format("YYYY-MM-DD")} ${userSelection.time.split("am")[0]}`,
+          end_dt: `${moment(userSelection.date).format("YYYY-MM-DD")} ${endTime}`,
           patient: user,
           reschedule: isRescheduleAppointment,
+          appointment_type_id: userSelection.appointmentType,
         },
       };
-      PatientPortalService.bookAppointment(reqBody).then(() => {
+      PatientPortalService[isRescheduleAppointment
+        ? "updateAppointment"
+        : "bookAppointment"](reqBody, userSelection?.id).then(() => {
         setTimeout(() => {
           setShowCalendar(false);
           setAppointmentTypes([]);
