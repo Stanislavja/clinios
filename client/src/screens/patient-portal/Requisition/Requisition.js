@@ -53,6 +53,9 @@ const useStyles = makeStyles((theme) => ({
       fontWeight: 600,
     },
   },
+  tableRow: {
+    border: "none",
+  },
   firstColumnforStyledTableCell: {
     width: "9%",
   },
@@ -80,7 +83,6 @@ const StyledTableCell = withStyles((theme) => ({
     padding: 0,
   },
 }))(TableCell);
-
 
 const Encounters = () => {
   const classes = useStyles();
@@ -158,10 +160,7 @@ const Encounters = () => {
           </TableHead>
           <TableBody>
             {testList.map((list) => (
-              <TableRow style={{
-                border: "none",
-              }}
-              >
+              <TableRow className={classes.tableRow}>
                 <StyledTableCell className={classes.firstColumnforStyledTableCell}>
                   {dateFormat(list.dt)}
                 </StyledTableCell>
