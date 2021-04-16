@@ -48,7 +48,7 @@ const getAppointmentTypes = async (req, res) => {
   let $sql;
 
   try {
-    $sql = `select at.appointment_type, at.descr, at.length, at.fee
+    $sql = `select at.id, at.appointment_type, at.descr, at.length, at.fee
     from appointment_type at 
     where at.client_id=${req.client_id} 
     /*and atu.user_id=${practitioner_id}*/
@@ -83,14 +83,15 @@ const createAppointment = async (req, res) => {
     ApptStatus,
     patient,
     reschedule,
+    appointment_type_id,
   } = req.body.data;
 
   const db = makeDb(configuration, res);
   try {
     const insertResponse = await db.query(
-      `insert into user_calendar (client_id, user_id, patient_id, start_dt, end_dt, status, reschedule, created, created_user_id) values (${
+      `insert into user_calendar (client_id, user_id, patient_id, appointment_type_id, start_dt, end_dt, status, reschedule, created, created_user_id) values (${
         req.client_id
-      }, ${provider.user_id}, ${patient.id}, '${moment(
+      }, ${provider.user_id}, ${patient.id}, ${appointment_type_id}, '${moment(
         start_dt,
         "YYYY-MM-DD HH:mm:ss"
       ).format("YYYY-MM-DD HH:mm:ss")}', '${moment(
