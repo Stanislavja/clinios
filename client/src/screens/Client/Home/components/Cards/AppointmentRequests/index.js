@@ -141,14 +141,13 @@ const AppointmentRequests = ({
 
 
   const renderAppointmentRequestText = ({
-    name, end_dt, start_dt, reschedule,
+    name, end_dt, start_dt, reschedule, appointment_type,
   }, provider) => {
     const appointmentRequestType = reschedule ? "Reschedule Appointment" : "New Appointment";
-    const appointmentType = "Follow-Up 60 Minutes";
     const formattedStartDate = moment(start_dt).format("ll, h:mm");
     const formattedEndDate = moment(end_dt).format("h:mm");
 
-    return `${name}, ${appointmentRequestType}, ${appointmentType},
+    return `${name}, ${appointmentRequestType}, ${appointment_type ? `${appointment_type},` : ""}
      ${provider}, ${formattedStartDate} - ${formattedEndDate}`;
   };
   return (
