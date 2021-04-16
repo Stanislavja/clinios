@@ -369,7 +369,7 @@ const Patient = () => {
     });
   }, [patientId]);
 
-  const fetchPatientHandouts = useCallback(() => {
+  const fetchHandouts = useCallback(() => {
     PatientService.getPatientHandouts(patientId).then((res) => {
       dispatch(setHandouts(res.data));
     });
@@ -563,7 +563,7 @@ const Patient = () => {
       case "Handouts":
         return (
           <HandoutsCardContent
-            reloadData={() => fetchPatientHandouts()}
+            reloadData={() => fetchHandouts()}
           />
         );
       case "Messages":
@@ -743,21 +743,21 @@ const Patient = () => {
 
   useEffect(() => {
     if (!hasPatientIderror) {
+      fetchEncounters();
+      fetchDiagnoses(true);
+      fetchMessages();
+      fetchMedications();
+      fetchForms();
+      fetchMedicalNotes();
+      fetchRequisitions();
+      fetchBillings();
+      fetchHandouts();
+      fetchAllergies();
+      fetchDocuments();
+      fetchTests();
       fetchPatientHistory();
       fetchPatientBalance();
       fetchAdminNotesHistory();
-      fetchAllergies();
-      fetchPatientHandouts();
-      fetchForms();
-      fetchBillings();
-      fetchDocuments();
-      fetchEncounters();
-      fetchMedicalNotes();
-      fetchMessages();
-      fetchDiagnoses(true);
-      fetchMedications();
-      fetchRequisitions();
-      fetchTests();
       fetchPaymentMethods();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }
@@ -767,7 +767,7 @@ const Patient = () => {
     fetchPatientBalance,
     fetchAdminNotesHistory,
     fetchAllergies,
-    fetchPatientHandouts,
+    fetchHandouts,
     fetchForms,
     fetchBillings,
     fetchDocuments,
@@ -962,7 +962,7 @@ const Patient = () => {
           title="New Handout"
           message={(
             <HandoutsForm
-              reloadData={fetchPatientHandouts}
+              reloadData={fetchHandouts}
             />
           )}
           applyForm={() => dispatch(toggleHandoutsDialog())}
@@ -979,7 +979,7 @@ const Patient = () => {
           title="Handouts"
           message={(
             <HandoutsDetails
-              reloadData={fetchPatientHandouts}
+              reloadData={fetchHandouts}
             />
           )}
           applyForm={() => dispatch(toggleHandoutsExpandDialog())}

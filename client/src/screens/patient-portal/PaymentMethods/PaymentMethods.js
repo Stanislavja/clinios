@@ -14,8 +14,7 @@ import moment from "moment";
 import useAuth from "../../../hooks/useAuth";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 import { paymentMethodType } from "../../../utils/helpers";
-import NewTransactionForm from "./NewTransactionForm";
-import ViewTransactionDetails from "./ViewTransactionDetails";
+import PaymentMethodsForm from "./components/PaymentMethodsForm";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -82,8 +81,8 @@ const PaymentMethods = () => {
   const classes = useStyles();
   const { lastVisitedPatient } = useAuth();
   const [paymentMethods, setPaymentMethods] = useState([]);
-  const [newPaymentDialog, setNewPaymentDialog] = useState(false);
-  const [selectedPayment, setSelectedPayment] = useState(null);
+  const [paymentMethodDialog, setNewPaymentDialog] = useState(false);
+  const [selectedPaymentMethod, setSelectedPayment] = useState(null);
 
   const fetchPaymentMethods = useCallback(() => {
     PatientPortalService.getPaymentMethods(lastVisitedPatient).then((res) => {
@@ -97,26 +96,28 @@ const PaymentMethods = () => {
 
   const onItemEdit = (item) => {
     setSelectedPayment(item);
+    setNewPaymentDialog(true);
   };
 
   const onItemDelete = (item) => {
     setSelectedPayment(item);
   };
 
+  const closeDialog = () => {
+    setNewPaymentDialog(false);
+    if (selectedPaymentMethod) {
+      setSelectedPayment(null);
+    }
+  };
+
   return (
     <>
-      {!!newPaymentDialog && (
-        <NewTransactionForm
-          isOpen={newPaymentDialog}
-          onClose={() => setNewPaymentDialog(false)}
-          reloadData={() => { }}
-        />
-      )}
-      {!!selectedPayment && (
-        <ViewTransactionDetails
-          isOpen={Boolean(selectedPayment)}
-          onClose={() => setSelectedPayment(null)}
-          data={selectedPayment}
+      {!!paymentMethodDialog && (
+        <PaymentMethodsForm
+          isOpen={paymentMethodDialog}
+          onClose={closeDialog}
+          reloadData={fetchPaymentMethods}
+          cardData={selectedPaymentMethod}
         />
       )}
       <div className={classes.root}>

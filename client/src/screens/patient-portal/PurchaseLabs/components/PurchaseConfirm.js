@@ -7,9 +7,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
-import {
-  Link,
-} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => createStyles({
   titleContainer: {
@@ -28,19 +26,22 @@ const useStyles = makeStyles((theme) => createStyles({
   },
   actionsContainer: {
     padding: "1rem 1.5rem",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     borderColor: theme.palette.borderColor,
     borderTop: "1px solid",
   },
   w100: {
     minWidth: 100,
   },
+  boldPrice: {
+    fontWeight: "bold",
+    padding: theme.spacing(0, 0.5),
+  },
 }));
 
 const PurchaseConfirm = ({
   open,
   onClose,
-  onConfirmation,
   amount,
 }) => {
   const classes = useStyles();
@@ -50,18 +51,15 @@ const PurchaseConfirm = ({
       onClose={onClose}
     >
       <DialogTitle disableTypography className={classes.titleContainer} id="form-dialog-title">
-        <Typography variant="h5">Purchase confirmation</Typography>
+        <Typography variant="h5">Purchase success</Typography>
       </DialogTitle>
       <DialogContent className={classes.content}>
         <Typography variant="body1" gutterBottom>
-          This is a confirmation that you have purchased labs for
-          {" "}
-          <b>
+          This is a confirmation that you have purchased lab(s) for
+          <span className={classes.boldPrice}>
             $
             {amount}
-            {" "}
-
-          </b>
+          </span>
         </Typography>
         <Typography variant="body1" gutterBottom>
           Next step is to
@@ -77,19 +75,10 @@ const PurchaseConfirm = ({
           onClick={onClose}
           type="submit"
           variant="outlined"
-          disableElevation
-        >
-          Cancel
-        </Button>
-        <Button
-          className={classes.w100}
-          onClick={onConfirmation}
-          type="submit"
-          variant="outlined"
           color="primary"
           disableElevation
         >
-          Confirm
+          Cancel
         </Button>
       </DialogActions>
     </Dialog>
@@ -99,7 +88,6 @@ const PurchaseConfirm = ({
 PurchaseConfirm.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onConfirmation: PropTypes.func.isRequired,
   amount: PropTypes.number.isRequired,
 };
 

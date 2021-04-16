@@ -12,10 +12,10 @@ import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 
-import Dialog from "../../../components/Dialog";
-import useAuth from "../../../hooks/useAuth";
-import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
-import { TransactionFormFields } from "../../../static/transactionForm";
+import Dialog from "../../../../components/Dialog";
+import useAuth from "../../../../hooks/useAuth";
+import PatientPortalService from "../../../../services/patient_portal/patient-portal.service";
+import { TransactionFormFields } from "../../../../static/transactionForm";
 
 const useStyles = makeStyles((theme) => ({
   inputRow: {

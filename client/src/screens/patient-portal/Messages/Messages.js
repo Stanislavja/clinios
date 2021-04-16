@@ -1,29 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import {
-  Button, Divider, Grid, makeStyles, TextField,
-  colors,
+  Button, Divider, Grid, makeStyles,
 } from "@material-ui/core";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 
 import MessagesService from "../../../services/patient_portal/messages.service";
-
+import MessageModal from "./components/MessageModal";
 
 const isLessThan60Minutes = (createdTime) => (moment()
   .subtract(60, "minutes")
   .format()
-      < moment(createdTime)
-        .format()
+  < moment(createdTime)
+    .format()
 );
 
 const useStyles = makeStyles((theme) => ({
@@ -33,13 +24,6 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     paddingBottom: theme.spacing(1),
-  },
-  modalTitle: {
-    backgroundColor: theme.palette.primary.light,
-    "& h2": {
-      color: "#fff",
-      fontSize: "16px",
-    },
   },
   titleSection: {
     display: "flex",
@@ -53,66 +37,34 @@ const useStyles = makeStyles((theme) => ({
   content: {
     marginTop: "30px",
   },
-  modalContent: {
-    paddingLeft: theme.spacing(3),
-    paddingTop: theme.spacing(3),
-    paddingRight: theme.spacing(3),
-    paddingBottom: theme.spacing(6),
-    fontSize: "18px",
-    "& p": {
-      fontSize: "16px",
-    },
-  },
   divider: {
-    margin: "10px 0",
-    marginBottom: theme.spacing(2),
-  },
-  modalAction: {
-    borderTop: `1px solid ${theme.palette.background.default}`,
-    display: "flex",
-    justifyContent: "space-between",
-    paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
-    paddingLeft: theme.spacing(3),
-    paddingRight: theme.spacing(3),
+    margin: "10px 0 16px 0",
   },
 }));
 
 export default function Messages() {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState("");
   const [messages, setMessages] = useState([]);
-  const [selectedMessage, setSelectedMessage] = useState("");
+  const [selectedMessage, setSelectedMessage] = useState(null);
   const [open, setOpen] = useState(false);
 
   const [modalView, setModalView] = useState("new");
-  const [message, setMessage] = useState("");
-  const [subject, setSubject] = useState("");
 
   const fetchMessages = async () => {
     const msg = await MessagesService.getMessages();
     setMessages(msg.data.data);
   };
 
-  const fetchUsers = () => {
-    MessagesService.getMessageUsers().then((res) => {
-      setUsers(res.data.data);
-    });
-  };
-
   useEffect(() => {
     fetchMessages();
-    fetchUsers();
   }, []);
 
   const handleClose = () => {
     setOpen(false);
-    // reset fields on modal close
-    setMessage("");
-    setSubject("");
-    setSelectedUser("");
+    if (selectedMessage) {
+      setSelectedMessage(null);
+    }
   };
 
   const onNewMessageButton = () => {
@@ -123,248 +75,125 @@ export default function Messages() {
   const onHandleReplyClick = (msg) => {
     setModalView("reply");
     setSelectedMessage(msg);
-    setSubject(msg.subject);
-    setMessage(msg.message);
-    setSelectedUser(msg.user_id_from);
     setOpen(true);
   };
 
-  const handleMessageSubmission = () => {
-    const formData = {
-      data: {
-        user_id_to: selectedUser,
-        subject,
-        message,
-      },
-    };
-    MessagesService.createMessage(formData).then((response) => {
-      enqueueSnackbar(`${response.data.message}`, {
-        variant: "success",
-      });
-      fetchMessages();
-      handleClose();
-    });
-  };
-
-  const handleOnEditClick = (msg) => {
+  const handleMessageEdit = (msg) => {
     setModalView("edit");
     setSelectedMessage(msg);
-    setSubject(msg.subject);
-    setMessage(msg.message);
-    setSelectedUser(msg.user_id_to);
     setOpen(true);
   };
 
-  const handleMessageUpdate = () => {
-    const formData = {
-      data: {
-        id: selectedMessage.id,
-        user_id_to: selectedUser,
-        subject,
-        message,
-      },
-    };
-    MessagesService.updateMessage(formData).then((response) => {
-      enqueueSnackbar(`${response.data.message}`, {
-        variant: "success",
-      });
-      fetchMessages();
-      handleClose();
-    });
-  };
-
-  const handleMessageDeletion = (msg) => {
+  const handleMessageDelete = (msg) => {
     MessagesService.deleteMessage(msg.id).then((response) => {
       enqueueSnackbar(`${response.data.message}`, {
         variant: "success",
       });
       fetchMessages();
-      setMessage("");
-      setSubject("");
-      setSelectedUser("");
     });
   };
 
-  return (
-    <div className={classes.root}>
-      <div className={classes.titleSection}>
-        <Typography component="h1" variant="h2" color="textPrimary" className={classes.title}>
-          Messages
-        </Typography>
-        <Button
-          className={classes.newMessage}
-          onClick={() => onNewMessageButton()}
-          size="small"
-          variant="contained"
-          color="primary"
-        >
-          New Message
-        </Button>
-      </div>
-      <Typography component="p" variant="body2" color="textPrimary">
-        This page is used to send administrative messages to your practitioner. To send a new message click
-        New Message.
-      </Typography>
+  const getTitle = useCallback((msg) => {
+    let title = "";
+    const subject = msg?.subject;
+    if (modalView === "new") {
+      title = "Send A Secure Message";
+    } else if (modalView === "edit") {
+      title = `Edit Message || ${subject}`;
+    } else if (modalView === "reply") {
+      title = `Reply Message || ${subject}`;
+    }
+    return title;
+  }, [modalView]);
 
-      <div className={classes.content}>
-        {messages.map((msg) => (
-          <div key={msg.id}>
-            <Grid container spacing={4} alignItems="flex-start">
-              <Grid item xs={6}>
-                <Typography component="p" variant="body2" color="textPrimary">
-                  <span style={{ fontWeight: "bold" }}>Time: </span>
-                  {" "}
-                  {moment(msg.created).format("ll, h:mm")}
-                  {" "}
-                  <span style={{ fontWeight: "bold" }}>Subject: </span>
-                  {" "}
-                  {msg.subject}
-                  {" "}
-                  <span style={{ fontWeight: "bold" }}>From: </span>
-                  {msg.user_to_from || msg.patient_to_from}
-                  {" "}
-                  <span style={{ fontWeight: "bold" }}>To: </span>
-                  {msg.user_to_name ? msg.user_to_name : "You"}
-                  <br />
-                  {msg.message}
-                </Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Grid container spacing={2}>
-                  <Grid item>
-                    {msg.user_id_from
-                      && (
-                        <Button size="small" variant="outlined" onClick={() => onHandleReplyClick(msg)}>
-                          Reply
-                        </Button>
-                      )}
+  return (
+    <>
+      {open && (
+        <MessageModal
+          isOpen={open}
+          onClose={handleClose}
+          title={getTitle(selectedMessage)}
+          reloadData={fetchMessages}
+          selectedMessage={selectedMessage}
+        />
+      )}
+      <div className={classes.root}>
+        <div className={classes.titleSection}>
+          <Typography component="h1" variant="h2" color="textPrimary" className={classes.title}>
+            Messages
+          </Typography>
+          <Button
+            className={classes.newMessage}
+            onClick={() => onNewMessageButton()}
+            variant="outlined"
+            color="primary"
+          >
+            New Message
+          </Button>
+        </div>
+        <Typography component="p" variant="body2" color="textPrimary">
+          This page is used to send administrative messages to your practitioner. To send a new message click
+          New Message.
+        </Typography>
+
+        <div className={classes.content}>
+          {messages.map((msg) => (
+            <div key={msg.id}>
+              <Grid container spacing={4} alignItems="flex-start">
+                <Grid item xs={6}>
+                  <Typography component="p" variant="body2" color="textPrimary">
+                    <span style={{ fontWeight: "bold" }}>Time: </span>
+                    {" "}
+                    {moment(msg.created).format("ll, h:mm")}
+                    {" "}
+                    <span style={{ fontWeight: "bold" }}>Subject: </span>
+                    {" "}
+                    {msg.subject}
+                    {" "}
+                    <span style={{ fontWeight: "bold" }}>From: </span>
+                    {msg.user_to_from || msg.patient_to_from}
+                    {" "}
+                    <span style={{ fontWeight: "bold" }}>To: </span>
+                    {msg.user_to_name ? msg.user_to_name : "You"}
+                    <br />
+                    {msg.message}
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Grid container spacing={2}>
+                    <Grid item>
+                      {msg.user_id_from
+                        && (
+                          <Button size="small" variant="outlined" onClick={() => onHandleReplyClick(msg)}>
+                            Reply
+                          </Button>
+                        )}
+                    </Grid>
+                    {
+                      isLessThan60Minutes(msg.created) && (
+                        <>
+                          <Grid item>
+                            <Button size="small" variant="outlined" onClick={() => handleMessageEdit(msg)}>
+                              Edit
+                            </Button>
+                          </Grid>
+                          <Grid item>
+                            <Button size="small" variant="outlined" onClick={() => handleMessageDelete(msg)}>
+                              Delete
+                            </Button>
+                          </Grid>
+                        </>
+                      )
+                    }
                   </Grid>
-                  {
-                    isLessThan60Minutes(msg.created) && (
-                      <>
-                        <Grid item>
-                          <Button size="small" variant="outlined" onClick={() => handleOnEditClick(msg)}>
-                            Edit
-                          </Button>
-                        </Grid>
-                        <Grid item>
-                          <Button size="small" variant="outlined" onClick={() => handleMessageDeletion(msg)}>
-                            Delete
-                          </Button>
-                        </Grid>
-                      </>
-                    )
-                  }
                 </Grid>
               </Grid>
-            </Grid>
-            <Divider className={classes.divider} />
-          </div>
-        ))}
-        {messages.length === 0 && <p>No records found!</p>}
+              <Divider className={classes.divider} />
+            </div>
+          ))}
+          {messages.length === 0 && <p>No records found!</p>}
+        </div>
       </div>
-      <Dialog
-        maxWidth="sm"
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title" className={classes.modalTitle}>
-          {modalView === "new" && "Send A Secure Message"}
-          {modalView === "edit" && `Edit Message || ${subject}`}
-          {modalView === "reply" && `Reply Message || ${subject}`}
-        </DialogTitle>
-        <DialogContent className={classes.modalContent} style={{ minWidth: "600px" }}>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <FormControl
-              variant="outlined"
-              className={classes.customSelect}
-              size="small"
-            >
-              <InputLabel htmlFor="age-native-simple">To</InputLabel>
-              <Select
-                native
-                value={selectedUser}
-                onChange={(event) => setSelectedUser(event.target.value)}
-                inputProps={{
-                  name: "type",
-                  id: "age-native-simple",
-                }}
-                label="User"
-              >
-                <option aria-label="None" value="" />
-                {users.map((user) => (
-                  <option key={user.id} value={user.id}>
-                    {user.firstname}
-                    {" "}
-                    {user.lastname}
-                  </option>
-                ))}
-              </Select>
-            </FormControl>
-            <TextField
-              fullWidth
-              margin="normal"
-              variant="outlined"
-              label="Subject"
-              size="small"
-              value={subject}
-              onChange={(event) => setSubject(event.target.value)}
-            />
-            <TextField
-              fullWidth
-              variant="outlined"
-              label="Message"
-              className={classes.textArea}
-              InputProps={{
-                classes: classes.normalOutline,
-                inputComponent: TextareaAutosize,
-                rows: 8,
-              }}
-              value={message}
-              onChange={(event) => setMessage(event.target.value)}
-              size="small"
-            />
-          </div>
-        </DialogContent>
-        <DialogActions className={classes.modalAction}>
-          <Button
-            size="small"
-            variant="outlined"
-            onClick={handleClose}
-            style={{
-              borderColor: colors.orange[600],
-              color: colors.orange[600],
-            }}
-          >
-            Cancel
-          </Button>
-          {
-            modalView === "new"
-              ? (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  onClick={() => handleMessageSubmission()}
-                >
-                  Send
-                </Button>
-              )
-              : (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  onClick={() => handleMessageUpdate()}
-                >
-                  Update
-                </Button>
-              )
-          }
-        </DialogActions>
-      </Dialog>
-    </div>
+    </>
   );
 }
