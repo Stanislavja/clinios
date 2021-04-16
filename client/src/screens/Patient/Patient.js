@@ -87,6 +87,7 @@ import {
 import { isDev } from "../../utils/helpers";
 import {
   getSecondColumnHeight,
+  getThirdColumnHeight,
   getFourthColumnHeight,
 } from "../../utils/patientLayoutHelpers";
 import ProcessMessagePage from "../ProcessMessage";
@@ -227,18 +228,6 @@ const Patient = () => {
         dispatch(saveLayout(tempLayout));
       }
     });
-  };
-
-  const getThirdColumnHeight = (title) => {
-    let height = 0;
-    if (title === "Allergies" || title === "Requisitions") {
-      height = 3;
-    } else if (title === "Messages") {
-      height = 6;
-    } else {
-      height = 4;
-    }
-    return height;
   };
 
   const changeTestGraphTitle = (title) => {
