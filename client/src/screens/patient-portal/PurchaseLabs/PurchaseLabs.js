@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from "react";
 
 import {
-  makeStyles, Typography, Grid,
+  makeStyles, Typography, Grid, Box,
 } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -15,6 +15,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { useSnackbar } from "notistack";
+import { Link } from "react-router-dom";
 
 import Alert from "../../../components/Alert";
 import useAuth from "../../../hooks/useAuth";
@@ -22,7 +23,6 @@ import PatientPortalService from "../../../services/patient_portal/patient-porta
 import PurchaseLabsService from "../../../services/patient_portal/purchase-lab.service";
 import { paymentMethodType } from "../../../utils/helpers";
 import PaymentMethodsForm from "./components/PaymentMethodsForm";
-import PurchaseConfirm from "./components/PurchaseConfirm";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -56,6 +56,10 @@ const useStyles = makeStyles((theme) => ({
     display: "block",
     width: "220px",
     marginTop: theme.spacing(3.5),
+  },
+  boldPrice: {
+    fontWeight: "bold",
+    padding: theme.spacing(0, 0.5),
   },
 }));
 
@@ -167,94 +171,114 @@ const PurchaseLabs = () => {
         >
           Purchase Lab Tests
         </Typography>
-        <Grid item md={6} sm={12} xs={12}>
-          <TableContainer className={classes.tableContainer}>
-            <Table size="small" className={classes.table} aria-label="a dense table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Select</TableCell>
-                  <TableCell>Lab Name</TableCell>
-                  <TableCell>Lab Company</TableCell>
-                  <TableCell>Price</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {labs.map((lab) => {
-                  const isChecked = isSelected(lab.id);
-                  return (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, lab.id)}
-                      role="checkbox"
+        {
+          showPurchaseConfirmation
+            ? (
+              <Box mt={2}>
+                <Typography variant="h5" gutterBottom>
+                  This is a confirmation that you have purchased lab(s) for
+                  <span className={classes.boldPrice}>
+                    $
+                    {total}
+                  </span>
+                </Typography>
+                <Typography variant="h5" gutterBottom>
+                  Next step is to
+                  {" "}
+                  <Link to="/patient/labs-requisition">click here</Link>
+                  {" "}
+                  to print your test requisition.
+                </Typography>
+              </Box>
+            )
+            : (
+              <>
+                <Grid item md={6} sm={12} xs={12}>
+                  <TableContainer className={classes.tableContainer}>
+                    <Table size="small" className={classes.table} aria-label="a dense table">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Select</TableCell>
+                          <TableCell>Lab Name</TableCell>
+                          <TableCell>Lab Company</TableCell>
+                          <TableCell>Price</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {labs.map((lab) => {
+                          const isChecked = isSelected(lab.id);
+                          return (
+                            <TableRow
+                              hover
+                              onClick={(event) => handleClick(event, lab.id)}
+                              role="checkbox"
+                            >
+                              <TableCell component="th" scope="row">
+                                <Checkbox
+                                  onClick={(event) => handleClick(event, lab.id)}
+                                  className={classes.selectCheckbox}
+                                  checked={isChecked}
+                                />
+                              </TableCell>
+                              <TableCell>{lab.cpt_name}</TableCell>
+                              <TableCell>{lab.lab_company_name}</TableCell>
+                              <TableCell>
+                                $
+                                {lab.price}
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                        <div className={classes.Total}>
+                          <span>Total:</span>
+                          $
+                          {total}
+                        </div>
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                  <FormControl
+                    variant="outlined"
+                    className={classes.customSelect}
+                    size="small"
+                  >
+                    <InputLabel htmlFor="age-native-simple">Select Payment Method</InputLabel>
+                    <Select
+                      native
+                      value={selectedPaymentMethod}
+                      onChange={(event) => handlePaymentMethodChange(event.target.value)}
+                      inputProps={{
+                        name: "type",
+                        id: "age-native-simple",
+                      }}
+                      label="User"
                     >
-                      <TableCell component="th" scope="row">
-                        <Checkbox
-                          onClick={(event) => handleClick(event, lab.id)}
-                          className={classes.selectCheckbox}
-                          checked={isChecked}
-                        />
-                      </TableCell>
-                      <TableCell>{lab.cpt_name}</TableCell>
-                      <TableCell>{lab.lab_company_name}</TableCell>
-                      <TableCell>
-                        $
-                        {lab.price}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-                <div className={classes.Total}>
-                  <span>Total:</span>
-                  $
-                  {total}
-                </div>
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <FormControl
-            variant="outlined"
-            className={classes.customSelect}
-            size="small"
-          >
-            <InputLabel htmlFor="age-native-simple">Select Payment Method</InputLabel>
-            <Select
-              native
-              value={selectedPaymentMethod}
-              onChange={(event) => handlePaymentMethodChange(event.target.value)}
-              inputProps={{
-                name: "type",
-                id: "age-native-simple",
-              }}
-              label="User"
-            >
-              <option aria-label="None" value="" />
-              {paymentMethods.map((pm) => (
-                <option key={pm.id} value={pm.id}>
-                  {paymentMethodType(pm.type)}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-          <Button
-            disabled={(!total || !selectedPaymentMethod)}
-            variant="outlined"
-            color="primary"
-            size="medium"
-            onClick={() => setIsConfirmDialog(true)}
-            className={classes.purchaseButton}
-          >
-            Purchase
-          </Button>
-        </Grid>
+                      <option aria-label="None" value="" />
+                      {paymentMethods.map((pm) => (
+                        <option key={pm.id} value={pm.id}>
+                          {paymentMethodType(pm.type)}
+                        </option>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  <Button
+                    disabled={(!total || !selectedPaymentMethod)}
+                    variant="outlined"
+                    color="primary"
+                    size="medium"
+                    onClick={() => setIsConfirmDialog(true)}
+                    className={classes.purchaseButton}
+                  >
+                    Purchase
+                  </Button>
+                </Grid>
+              </>
+            )
+        }
         <PaymentMethodsForm
           isOpen={isNewPaymentMethodOpen}
           onClose={() => setIsNewPaymentMethodOpen(false)}
           reloadData={() => fetchPaymentMethods()}
-        />
-        <PurchaseConfirm
-          open={showPurchaseConfirmation}
-          onClose={() => setShowPurchaseConfirmation(false)}
-          amount={total}
         />
       </div>
     </>
