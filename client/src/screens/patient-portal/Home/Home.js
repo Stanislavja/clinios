@@ -128,6 +128,12 @@ const Home = () => {
         <Box component="div" className={classes.BoxStyle}>
           <p>
             {renderAppointmentRowText(appointment)}
+            <Link
+              to={{ pathname: "/patient/appointments", state: { appointment } }}
+              className={classes.rescheduleLink}
+            >
+              Request Reschedule Appointment
+            </Link>
           </p>
         </Box>
       ))}
