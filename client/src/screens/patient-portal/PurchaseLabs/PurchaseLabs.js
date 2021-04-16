@@ -61,6 +61,9 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "bold",
     padding: theme.spacing(0, 0.5),
   },
+  link: {
+    padding: theme.spacing(0, 0.5),
+  },
 }));
 
 const PurchaseLabs = () => {
@@ -163,36 +166,50 @@ const PurchaseLabs = () => {
         cancelForm={() => setIsConfirmDialog(false)}
       />
       <div className={classes.root}>
-        <Typography
-          component="h1"
-          variant="h2"
-          color="textPrimary"
-          className={classes.title}
-        >
-          Purchase Lab Tests
-        </Typography>
         {
           showPurchaseConfirmation
             ? (
-              <Box mt={2}>
-                <Typography variant="h5" gutterBottom>
-                  This is a confirmation that you have purchased lab(s) for
-                  <span className={classes.boldPrice}>
-                    $
-                    {total}
-                  </span>
+              <>
+                <Typography
+                  component="h1"
+                  variant="h2"
+                  color="textPrimary"
+                  className={classes.title}
+                >
+
+                  Purchase Lab Confirmation
                 </Typography>
-                <Typography variant="h5" gutterBottom>
-                  Next step is to
-                  {" "}
-                  <Link to="/patient/labs-requisition">click here</Link>
-                  {" "}
-                  to print your test requisition.
-                </Typography>
-              </Box>
+                <Box mt={2}>
+                  <Typography variant="h5" gutterBottom>
+                    This is a confirmation that you have purchased lab(s) for
+                    <span className={classes.boldPrice}>
+                      $
+                      {total}
+                    </span>
+                  </Typography>
+                  <Typography variant="h5" gutterBottom>
+                    Next step is to
+                    <Link
+                      className={classes.link}
+                      to="/patient/labs-requisition"
+                    >
+                      click here
+                    </Link>
+                    to print your test requisition.
+                  </Typography>
+                </Box>
+              </>
             )
             : (
               <>
+                <Typography
+                  component="h1"
+                  variant="h2"
+                  color="textPrimary"
+                  className={classes.title}
+                >
+                  Purchase Lab Tests
+                </Typography>
                 <Grid item md={6} sm={12} xs={12}>
                   <TableContainer className={classes.tableContainer}>
                     <Table size="small" className={classes.table} aria-label="a dense table">
