@@ -19,7 +19,9 @@ const getLabBilling = async (req, res) => {
     left join tranc_detail td on td.tranc_id = t.id
     left join cpt c on c.id = td.cpt_id
     where t.patient_id = ${patient_id}
-    group by t.id, t.dt, t.amount, t.completed_dt`;
+    group by t.id, t.dt, t.amount, t.completed_dt
+    order by t.dt desc
+    `;
 
     const dbResponse = await db.query($sql);
 
