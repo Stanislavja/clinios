@@ -404,7 +404,7 @@ const Patient = () => {
     });
   }, [patientId]);
 
-  const fetchPatientHandouts = useCallback(() => {
+  const fetchHandouts = useCallback(() => {
     PatientService.getPatientHandouts(patientId).then((res) => {
       dispatch(setHandouts(res.data));
     });
@@ -492,7 +492,7 @@ const Patient = () => {
         text: searchText,
       },
     };
-    PatientService.searchPatient(patientId, reqBody).then(() => {});
+    PatientService.searchPatient(patientId, reqBody).then(() => { });
   };
 
   const mapPrimaryButtonHandlers = (value) => {
@@ -522,7 +522,7 @@ const Patient = () => {
       case "Requisitions":
         return dispatch(toggleRequisitionDialog());
       default:
-        return () => {};
+        return () => { };
     }
   };
 
@@ -553,7 +553,7 @@ const Patient = () => {
       case "Requisitions":
         return dispatch(toggleRequisitionExpandDialog());
       default:
-        return () => {};
+        return () => { };
     }
   };
 
@@ -590,7 +590,9 @@ const Patient = () => {
 
       case "Handouts":
         return (
-          <HandoutsCardContent reloadData={() => fetchPatientHandouts()} />
+          <HandoutsCardContent
+            reloadData={() => fetchHandouts()}
+          />
         );
       case "Messages":
         return <MessagesCardContent reloadData={() => fetchMessages()} />;
@@ -632,7 +634,7 @@ const Patient = () => {
       case "Billing":
         return () => dispatch(togglePaymentDialog());
       default:
-        return () => {};
+        return () => { };
     }
   };
 
@@ -649,8 +651,8 @@ const Patient = () => {
       })
       .catch((error) => {
         const resMessage = (error.response
-            && error.response.data
-            && error.response.data.message)
+          && error.response.data
+          && error.response.data.message)
           || error.message
           || error.toString();
         enqueueSnackbar(`${resMessage}`, { variant: "error" });
@@ -685,8 +687,8 @@ const Patient = () => {
         })
         .catch((error) => {
           const resMessage = (error.response
-              && error.response.data
-              && error.response.data.message[0].msg)
+            && error.response.data
+            && error.response.data.message[0].msg)
             || error.message
             || error.toString();
           enqueueSnackbar(`${resMessage}`, { variant: "error" });
@@ -714,8 +716,8 @@ const Patient = () => {
         })
         .catch((error) => {
           const resMessage = (error.response
-              && error.response.data
-              && error.response.data.message)
+            && error.response.data
+            && error.response.data.message)
             || error.message
             || error.toString();
           enqueueSnackbar(`${resMessage}`, { variant: "error" });
@@ -732,7 +734,7 @@ const Patient = () => {
       case "Medical Notes":
         return dispatch(toggleMedicalNotesFormDialog());
       default:
-        return () => {};
+        return () => { };
     }
   };
 
@@ -743,7 +745,7 @@ const Patient = () => {
       case "Medical Notes":
         return updateMedicalNotes();
       default:
-        return () => {};
+        return () => { };
     }
   };
 
@@ -762,21 +764,21 @@ const Patient = () => {
 
   useEffect(() => {
     if (!hasPatientIderror) {
+      fetchEncounters();
+      fetchDiagnoses(true);
+      fetchMessages();
+      fetchMedications();
+      fetchForms();
+      fetchMedicalNotes();
+      fetchRequisitions();
+      fetchBillings();
+      fetchHandouts();
+      fetchAllergies();
+      fetchDocuments();
+      fetchTests();
       fetchPatientHistory();
       fetchPatientBalance();
       fetchAdminNotesHistory();
-      fetchAllergies();
-      fetchPatientHandouts();
-      fetchForms();
-      fetchBillings();
-      fetchDocuments();
-      fetchEncounters();
-      fetchMedicalNotes();
-      fetchMessages();
-      fetchDiagnoses(true);
-      fetchMedications();
-      fetchRequisitions();
-      fetchTests();
       fetchPaymentMethods();
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }
@@ -786,7 +788,7 @@ const Patient = () => {
     fetchPatientBalance,
     fetchAdminNotesHistory,
     fetchAllergies,
-    fetchPatientHandouts,
+    fetchHandouts,
     fetchForms,
     fetchBillings,
     fetchDocuments,
@@ -972,7 +974,11 @@ const Patient = () => {
         <Dialog
           open={handouts.newDialog}
           title="New Handout"
-          message={<HandoutsForm reloadData={fetchPatientHandouts} />}
+          message={(
+            <HandoutsForm
+              reloadData={fetchHandouts}
+            />
+          )}
           applyForm={() => dispatch(toggleHandoutsDialog())}
           cancelForm={() => dispatch(toggleHandoutsDialog())}
           hideActions
@@ -985,7 +991,11 @@ const Patient = () => {
         <Dialog
           open={handouts.expandDialog}
           title="Handouts"
-          message={<HandoutsDetails reloadData={fetchPatientHandouts} />}
+          message={(
+            <HandoutsDetails
+              reloadData={fetchHandouts}
+            />
+          )}
           applyForm={() => dispatch(toggleHandoutsExpandDialog())}
           cancelForm={() => dispatch(toggleHandoutsExpandDialog())}
           hideActions
@@ -1053,7 +1063,7 @@ const Patient = () => {
           title="Edit Message"
           message={(
             <ProcessMessagePage
-              fetchProviderDetails={() => {}}
+              fetchProviderDetails={() => { }}
               selectedMessage={selectedMessage}
               onClose={() => {
                 // resetSelectedMessage is used with a timeout otherwise selectedMessage prop
