@@ -10,12 +10,14 @@ const getPurchaseLabs = async (req, res) => {
   try {
     const $sql = `select c.id, c.name cpt_name, c.price, pc.created, lc.name lab_company_name
     from patient_cpt pc
+    left join tranc t on t.id = pc.tranc_id
     left join cpt c on c.id=pc.cpt_id
     left join lab_company lc on lc.id=c.lab_company_id
     where pc.patient_id=${req.user_id}
-    and pc.completed_dt is null
+    and pc.tranc_id is null
     order by c.name
-    limit 100`;
+    limit 100
+    `;
 
     const dbResponse = await db.query($sql);
 
