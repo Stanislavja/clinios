@@ -21,5 +21,10 @@ router.post(
   [authJwt.verifyToken],
   encountersController.createAppointment
 );
+router.post(
+  "/client-portal/appointment/update/:id",
+  [authJwt.verifyToken],
+  encountersController.updateAppointment
+);
 
 module.exports = router;
