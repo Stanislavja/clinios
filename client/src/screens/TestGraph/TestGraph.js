@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import {
-  Grid, makeStyles, Button, Typography,
+  Grid, makeStyles, Button, Typography, IconButton,
 } from "@material-ui/core";
 import { mdiArrowLeftBold, mdiArrowRightBold } from "@mdi/js";
 import Icon from "@mdi/react";
@@ -12,6 +12,7 @@ import PropTypes from "prop-types";
 import useAuth from "../../hooks/useAuth";
 import Patient from "../../services/patient.service";
 import Tests from "../../services/test.service";
+import Colors from "../../theme/colors";
 import { calculateFunctionalRange } from "../../utils/FunctionalRange";
 import { Graph } from "./components";
 
@@ -41,13 +42,13 @@ const useStyles = makeStyles((theme) => ({
     width: "70px",
     display: "flex",
     justifyContent: "space-between",
-    marginTop: "10px",
     marginBottom: "20px",
   },
   graphArrowIcon: {
     marginBottom: theme.spacing(1 / 3),
-    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     color: "#2979ffdb",
+    padding: theme.spacing(1),
   },
   filterButtonContainer: {
     display: "flex",
@@ -61,10 +62,13 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "50px",
   },
   inRange: {
-    color: "#008000",
+    color: Colors.graphInRange,
   },
   outOfRange: {
-    color: "#FFA500",
+    color: Colors.graphOutRange,
+  },
+  testTitle: {
+    marginLeft: theme.spacing(1),
   },
 }));
 
@@ -224,11 +228,13 @@ const TestGraph = ({ changeTitle }) => {
 
   return (
     <div className={classes.root} ref={ref}>
+      <Typography variant="h5" gutterBottom className={classes.testTitle}>
+        {cptName[0]?.name}
+      </Typography>
       <div className={classes.graphArrowIconContainer}>
-        <Button
+        <IconButton
           disabled={cptIdCount <= 0}
           onClick={previousCpt}
-          color="default"
           className={classes.graphArrowIcon}
         >
           <Icon
@@ -238,13 +244,11 @@ const TestGraph = ({ changeTitle }) => {
             vertical
             rotate={180}
           />
-        </Button>
-        <Button
+        </IconButton>
+        <IconButton
           disabled={cptIdCount >= labCpt?.data?.length}
           onClick={nextCpt}
-          color="default"
           className={classes.graphArrowIcon}
-          target="_blank"
         >
           <Icon
             path={mdiArrowRightBold}
@@ -253,7 +257,7 @@ const TestGraph = ({ changeTitle }) => {
             vertical
             rotate={180}
           />
-        </Button>
+        </IconButton>
       </div>
 
       {graph && (
