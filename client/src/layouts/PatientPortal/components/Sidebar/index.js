@@ -110,6 +110,12 @@ const Sidebar = (props) => {
       ),
     },
     {
+      id: 16,
+      title: "Lab Billing",
+      href: "/patient/lab-billing",
+      icon: <ReceiptIcon />,
+    },
+    {
       id: 5,
       title: "Documents / Lab Results",
       href: "/patient/labs",
