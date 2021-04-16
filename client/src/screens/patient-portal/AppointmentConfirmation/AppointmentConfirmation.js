@@ -29,7 +29,7 @@ const AppointmentConfirmation = () => {
         color="textPrimary"
         className={classes.title}
       >
-        Appointment Request Confirmation
+        {`Appointment ${location?.state?.reschedule ? "Reschedule" : "Request"} Confirmation`}
       </Typography>
       <Typography
         component="h1"
@@ -39,8 +39,9 @@ const AppointmentConfirmation = () => {
       >
         {`An appointment at ${moment(location?.state?.date).format("ll")} ${location?.state?.time}
          to ${moment(location?.state?.time?.split("am")[0], "HH:mm")
-      .add(location?.state?.appointmentType, "minutes").format("h:mma")}
-         with ${location?.state?.practitionar} has been requested.`}
+      .add(location?.state?.appointmentLength, "minutes").format("h:mma")}
+         with ${location?.state?.practitionar} has been
+          ${location?.state?.reschedule ? "Rescheduled" : "Requested"}.`}
       </Typography>
     </div>
   );
