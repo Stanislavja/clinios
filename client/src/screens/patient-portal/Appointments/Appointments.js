@@ -232,7 +232,7 @@ const Appointments = () => {
                 disabled={!appointmentTypes.length}
               >
                 {appointmentTypes.map((option) => (
-                  <MenuItem key={option.length} value={option.length}>
+                  <MenuItem key={option.id} value={option.id}>
                     {`${option.appointment_type} - ${option.length} minutes - $${option.fee}`}
                   </MenuItem>
                 ))}
