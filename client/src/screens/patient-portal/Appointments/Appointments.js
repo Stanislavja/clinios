@@ -170,9 +170,10 @@ const Appointments = () => {
             pathname: "/patient/appointments/confirmation",
             state: {
               practitionar: selectedPractitioner?.[0]?.name,
-              appointmentType: userSelection?.appointmentType,
+              appointmentLength: selectedAppointemntTypeLength,
               date: userSelection?.date,
               time: userSelection?.time,
+              reschedule: isRescheduleAppointment,
             },
           });
         }, 1000);
