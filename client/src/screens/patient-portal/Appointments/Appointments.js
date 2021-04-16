@@ -90,6 +90,7 @@ const Appointments = () => {
       setUserSelection((prevUserSelection) => ({
         ...prevUserSelection,
         ...appointment,
+        appointmentType: appointment.appointment_type_id,
         date,
         time,
         practitioner: appointment?.user_id,
