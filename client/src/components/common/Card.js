@@ -17,7 +17,7 @@ import SaveIcon from "@material-ui/icons/CheckCircle";
 import CardIcon from "@material-ui/icons/CreditCard";
 import DesktopIcon from "@material-ui/icons/DesktopMac";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import { mdiCalendarBlankOutline, mdiChartLine } from "@mdi/js";
+import { mdiCalendarBlankOutline, mdiChartBoxOutline } from "@mdi/js";
 import Icon from "@mdi/react";
 import clsx from "clsx";
 import PropTypes from "prop-types";
@@ -192,7 +192,7 @@ const PatientCard = (props) => {
                 onClick={() => {
                   contentToggleHandler();
                 }}
-                path={mdiChartLine}
+                path={mdiChartBoxOutline}
                 size={1}
               />
             </>
