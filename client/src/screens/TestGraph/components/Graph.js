@@ -123,7 +123,7 @@ export const Graph = ({ data, range, conventionalRange }) => {
         lab_dt: d.lab_dt,
         filename: d.filename,
         value: d.value,
-        year: moment(d.lab_dt).format("MMM-YYYY"),
+        year: moment(d.lab_dt).format("MMM YYYY"),
       }));
       setGraphData(tempData);
     }
@@ -138,7 +138,7 @@ export const Graph = ({ data, range, conventionalRange }) => {
         margin={{
           top: 5,
           right: 30,
-          left: 20,
+          left: 0,
           bottom: 5,
         }}
       >

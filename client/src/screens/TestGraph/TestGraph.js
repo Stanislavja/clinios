@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import {
-  Grid, makeStyles, Button, Typography, IconButton,
+  Grid, makeStyles, Button, IconButton,
 } from "@material-ui/core";
 import { mdiArrowLeftBold, mdiArrowRightBold } from "@mdi/js";
 import Icon from "@mdi/react";
@@ -12,7 +12,6 @@ import PropTypes from "prop-types";
 import useAuth from "../../hooks/useAuth";
 import usePatientContext from "../../hooks/usePatientContext";
 import Tests from "../../services/test.service";
-import Colors from "../../theme/colors";
 import { calculateFunctionalRange } from "../../utils/FunctionalRange";
 import { calculateAge } from "../../utils/helpers";
 import { Graph } from "./components";
@@ -56,20 +55,6 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: "55px",
     marginTop: "15px",
     paddingBottom: "15px",
-    justifyContent: "flex-end",
-  },
-  rangeContainer: {
-    marginRight: "50px",
-    marginLeft: "50px",
-  },
-  inRange: {
-    color: Colors.graphInRange,
-  },
-  outOfRange: {
-    color: Colors.graphOutRange,
-  },
-  testTitle: {
-    marginLeft: theme.spacing(1),
   },
 }));
 
@@ -221,9 +206,6 @@ const TestGraph = ({ changeTitle }) => {
 
   return (
     <div className={classes.root} ref={ref}>
-      <Typography variant="h5" gutterBottom className={classes.testTitle}>
-        {cptName[0]?.name}
-      </Typography>
       <div className={classes.graphArrowIconContainer}>
         <IconButton
           disabled={cptIdCount <= 0}
@@ -261,55 +243,15 @@ const TestGraph = ({ changeTitle }) => {
         />
       )}
       <Grid item className={classes.filterButtonContainer}>
-        <Button
+      <Button
           size="medium"
           type="submit"
           variant="contained"
           color="default"
           className={classes.filterbutton}
-          onClick={() => filterDate("month_3")}
+          onClick={() => filterDate("all")}
         >
-          3 Months
-        </Button>
-        <Button
-          size="medium"
-          type="submit"
-          variant="contained"
-          color="default"
-          className={classes.filterbutton}
-          onClick={() => filterDate("month_6")}
-        >
-          6 Months
-        </Button>
-        <Button
-          size="medium"
-          type="submit"
-          variant="contained"
-          color="default"
-          className={classes.filterbutton}
-          onClick={() => filterDate("year_1")}
-        >
-          1 Years
-        </Button>
-        <Button
-          size="medium"
-          type="submit"
-          variant="contained"
-          color="default"
-          className={classes.filterbutton}
-          onClick={() => filterDate("year_2")}
-        >
-          2 Years
-        </Button>
-        <Button
-          size="medium"
-          type="submit"
-          variant="contained"
-          color="default"
-          className={classes.filterbutton}
-          onClick={() => filterDate("year_3")}
-        >
-          3 Years
+          All
         </Button>
         <Button
           size="medium"
@@ -327,23 +269,50 @@ const TestGraph = ({ changeTitle }) => {
           variant="contained"
           color="default"
           className={classes.filterbutton}
-          onClick={() => filterDate("all")}
+          onClick={() => filterDate("year_3")}
         >
-          All
+          3 Years
         </Button>
-        <Grid
-          direction="column"
-          justify="center"
-          alignItems="flex-end"
-          className={classes.rangeContainer}
+        <Button
+          size="medium"
+          type="submit"
+          variant="contained"
+          color="default"
+          className={classes.filterbutton}
+          onClick={() => filterDate("year_2")}
         >
-          <Typography className={classes.inRange} variant="h5">
-            --- Within range
-          </Typography>
-          <Typography className={classes.outOfRange} variant="h5">
-            --- Out of range
-          </Typography>
-        </Grid>
+          2 Years
+        </Button>
+        <Button
+          size="medium"
+          type="submit"
+          variant="contained"
+          color="default"
+          className={classes.filterbutton}
+          onClick={() => filterDate("year_1")}
+        >
+          1 Year
+        </Button>
+        <Button
+          size="medium"
+          type="submit"
+          variant="contained"
+          color="default"
+          className={classes.filterbutton}
+          onClick={() => filterDate("month_6")}
+        >
+          6 Months
+        </Button>
+        <Button
+          size="medium"
+          type="submit"
+          variant="contained"
+          color="default"
+          className={classes.filterbutton}
+          onClick={() => filterDate("month_3")}
+        >
+          3 Months
+        </Button>
       </Grid>
     </div>
   );
