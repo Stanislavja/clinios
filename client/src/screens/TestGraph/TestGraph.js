@@ -10,10 +10,11 @@ import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 
 import useAuth from "../../hooks/useAuth";
-import Patient from "../../services/patient.service";
+import usePatientContext from "../../hooks/usePatientContext";
 import Tests from "../../services/test.service";
 import Colors from "../../theme/colors";
 import { calculateFunctionalRange } from "../../utils/FunctionalRange";
+import { calculateAge } from "../../utils/helpers";
 import { Graph } from "./components";
 
 const useStyles = makeStyles((theme) => ({
@@ -76,8 +77,10 @@ const TestGraph = ({ changeTitle }) => {
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
   const { user } = useAuth();
+  const { state } = usePatientContext();
+  const patientData = state.patientInfo.data;
+
   const [cptName, setCptName] = useState("");
-  const [functionalRange, setFunctionalRange] = useState({});
   const [conventionalRange, setConventionalRange] = useState({});
   const [labCpt, setLabCpt] = useState([]);
   const [graph, setGraph] = useState(null);
@@ -134,17 +137,6 @@ const TestGraph = ({ changeTitle }) => {
         }
       );
     }
-    Patient.getFunctionalRange(user.id).then(
-      (res) => {
-        const data = res?.data;
-        setFunctionalRange(data);
-      },
-      () => {
-        enqueueSnackbar("Unable to fetch Activity history.", {
-          variant: "error",
-        });
-      }
-    );
     Tests.getLabCpt(user.id).then(
       (res) => {
         const data = res?.data;
@@ -159,17 +151,18 @@ const TestGraph = ({ changeTitle }) => {
   }, [testId]);
 
   useEffect(() => {
-    if (functionalRange?.functional_range && graph) {
-      if (functionalRange?.functional_range[0]?.functional_range !== 0) {
+    if (patientData?.functional_range && graph) {
+      if (patientData?.functional_range[0]?.functional_range !== 0) {
+        const patientAge = Number(calculateAge(patientData.dob).split(" ")[0]);
         const data = calculateFunctionalRange(
           testId,
-          functionalRange?.gender,
-          functionalRange?.age
+          patientData?.gender,
+          patientAge
         );
         setRange(data);
       }
     }
-  }, [functionalRange, graph, testId]);
+  }, [graph, testId]);
 
   useEffect(() => {
     if (labCpt?.data?.length > 0 && labCpt.data[cptIdCount]) {
