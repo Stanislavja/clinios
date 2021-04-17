@@ -1276,6 +1276,7 @@ const Patient = () => {
                   key={item.title}
                   title={item.title}
                   data={mapCardContentDataHandlers(item.title)}
+                  showActions={item.showActions}
                   showEditorActions={
                     item.title === "Medical Notes" && !!medicalNotes.editForm
                   }
