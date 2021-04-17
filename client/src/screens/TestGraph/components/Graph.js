@@ -130,16 +130,16 @@ export const Graph = ({ data, range, conventionalRange }) => {
   }, [data]);
 
   return (
-    <ResponsiveContainer width="100%" height={550}>
+    <ResponsiveContainer width="100%" height={600}>
       <LineChart
         width={1100}
-        height={550}
+        height={600}
         data={graphData}
         margin={{
           top: 5,
           right: 30,
           left: 0,
-          bottom: 5,
+          bottom: 10,
         }}
       >
         <XAxis
