@@ -32,6 +32,7 @@ function roundNumber(num, scale) {
 }
 
 export const Graph = ({ data, range, conventionalRange }) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [graphData, setGraphData] = useState([]);
   const [low, setLow] = useState(0);
   const [high, setHigh] = useState(0);
@@ -126,94 +127,97 @@ export const Graph = ({ data, range, conventionalRange }) => {
         year: moment(d.lab_dt).format("MMM-YYYY"),
       }));
       setGraphData(tempData);
+      setIsLoading(false);
     }
   }, [data]);
 
   return (
     <ResponsiveContainer width="100%" height={550}>
-      <LineChart
-        width={1100}
-        height={550}
-        data={graphData}
-        margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 5,
-        }}
-      >
-        <XAxis
-          dataKey="year"
-          interval={0}
-          style={{
-            fontSize: "0.8rem",
-            margin: "2px",
+      {isLoading ? <> </> : (
+        <LineChart
+          width={1100}
+          height={550}
+          data={graphData}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
           }}
-        />
-        <YAxis
-          type="number"
-          domain={[low, high]}
-          interval={0}
-          tickCount={8}
-          style={{
-            fontSize: "0.8rem",
-            margin: "2px",
-          }}
-        />
-        <Tooltip content={<CustomTooltip />} />
-        <ReferenceLine
-          y={conventionalRange?.high}
-          label={{
-            position: "insideTopLeft",
-            value: "Conventional range",
-            fontSize: "0.6rem",
-            fill: "#477fc9",
-          }}
-          stroke="#477fc9"
-        />
-        {range !== true && (
+        >
+          <XAxis
+            dataKey="year"
+            interval={0}
+            style={{
+              fontSize: "0.8rem",
+              margin: "2px",
+            }}
+          />
+          <YAxis
+            type="number"
+            domain={[low, high]}
+            interval={0}
+            tickCount={8}
+            style={{
+              fontSize: "0.8rem",
+              margin: "2px",
+            }}
+          />
+          <Tooltip content={<CustomTooltip />} />
           <ReferenceLine
-            y={range?.high}
+            y={conventionalRange?.high}
             label={{
               position: "insideTopLeft",
-              value: "Functional range",
+              value: "Conventional range",
               fontSize: "0.6rem",
               fill: "#477fc9",
             }}
             stroke="#477fc9"
           />
-        )}
-        {range !== true && (
+          {range !== true && (
+            <ReferenceLine
+              y={range?.high}
+              label={{
+                position: "insideTopLeft",
+                value: "Functional range",
+                fontSize: "0.6rem",
+                fill: "#477fc9",
+              }}
+              stroke="#477fc9"
+            />
+          )}
+          {range !== true && (
+            <ReferenceLine
+              y={range?.low}
+              label={{
+                position: "insideBottomLeft",
+                value: "Functional range",
+                fontSize: "0.6rem",
+                fill: "#477fc9",
+              }}
+              stroke="#477fc9"
+            />
+          )}
           <ReferenceLine
-            y={range?.low}
+            y={conventionalRange?.low}
             label={{
               position: "insideBottomLeft",
-              value: "Functional range",
+              value: "Conventional range",
               fontSize: "0.6rem",
               fill: "#477fc9",
             }}
             stroke="#477fc9"
           />
-        )}
-        <ReferenceLine
-          y={conventionalRange?.low}
-          label={{
-            position: "insideBottomLeft",
-            value: "Conventional range",
-            fontSize: "0.6rem",
-            fill: "#477fc9",
-          }}
-          stroke="#477fc9"
-        />
-        <Line
-          animationDuration={0}
-          strokeWidth={2}
-          type="monotone"
-          dataKey="value"
-          fill="#477fc9"
-          stroke={Colors.graphInRange}
-        />
-      </LineChart>
+          <Line
+            animationDuration={0}
+            strokeWidth={2}
+            type="monotone"
+            dataKey="value"
+            fill="#477fc9"
+            stroke={Colors.graphInRange}
+          />
+        </LineChart>
+      )}
     </ResponsiveContainer>
   );
 };
@@ -241,8 +245,4 @@ Graph.propTypes = {
     }),
     PropTypes.bool,
   ]).isRequired,
-};
-
-Graph.defaultProps = {
-  data: [],
 };

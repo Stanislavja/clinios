@@ -253,7 +253,7 @@ const TestGraph = ({ changeTitle }) => {
         </IconButton>
       </div>
 
-      {graph && (
+      {graph && graphFilterData && (
         <Graph
           data={graphFilterData}
           range={range}
@@ -332,9 +332,6 @@ const TestGraph = ({ changeTitle }) => {
           All
         </Button>
         <Grid
-          direction="column"
-          justify="center"
-          alignItems="flex-end"
           className={classes.rangeContainer}
         >
           <Typography className={classes.inRange} variant="h5">
