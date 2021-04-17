@@ -96,7 +96,7 @@ const TestsContent = () => {
       const sodiumTest = hasTestValue("Sodium", data);
       const potassiumTest = hasTestValue("Potassium", data);
       const glucoseTest = hasTestValue("Glucose", data);
-      const ureaTest = hasTestValue("Blood Urea Nitrogen", data);
+      const ureaTest = hasTestValue("Urea Nitrogen (Bun)", data);
       if (!!sodiumTest && !!potassiumTest && !!glucoseTest && !!ureaTest) {
         const newTest = {
           count: 1,
@@ -110,7 +110,7 @@ const TestsContent = () => {
         tempTestsArray.push(newTest);
       }
       const hematocritTest = hasTestValue("Hematocrit", data);
-      const proteinTotalTest = hasTestValue("Protein Total", data);
+      const proteinTotalTest = hasTestValue("Protein, Total", data);
       if (!!hematocritTest && !!proteinTotalTest) {
         const newTest = {
           count: 1,
@@ -119,6 +119,19 @@ const TestsContent = () => {
           name: "Viscosity High Shear (Derived)",
           unit: "",
           value: ((0.12 * hematocritTest.value) + (0.17 * ((proteinTotalTest.value * 10) - 2.07))).toFixed(1),
+        };
+        tempTestsArray.push(newTest);
+      }
+      const ironTest = hasTestValue("Iron, Total", data);
+      const transferrinTest = hasTestValue("Transferrin", data);
+      if (!!ironTest && !!transferrinTest) {
+        const newTest = {
+          count: 1,
+          cpt_id: "TransferrinSaturation",
+          lab_dt: new Date(),
+          name: "Transferrin saturation (Derived)",
+          unit: "",
+          value: ((ironTest.value / transferrinTest.value) * 0.709).toFixed(1),
         };
         tempTestsArray.push(newTest);
       }
