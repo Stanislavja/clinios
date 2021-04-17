@@ -102,7 +102,7 @@ const Home = () => {
     if (status === "R") {
       return "requested";
     }
-    return "canceled";
+    return "";
   };
 
   const renderAppointmentRowText = ({
@@ -124,19 +124,20 @@ const Home = () => {
       <Alert icon={false} variant="filled" severity="info">
         {header && ReactHtmlParser(header.header)}
       </Alert>
-      {Boolean(upcomingAppointments?.length) && upcomingAppointments?.map((appointment) => (
-        <Box component="div" className={classes.BoxStyle}>
-          <p>
-            {renderAppointmentRowText(appointment)}
-            <Link
-              to={{ pathname: "/patient/appointments", state: { appointment } }}
-              className={classes.rescheduleLink}
-            >
-              Request Reschedule Appointment
-            </Link>
-          </p>
-        </Box>
-      ))}
+      {Boolean(upcomingAppointments?.length)
+       && upcomingAppointments?.filter(((appointment) => appointment?.status !== "D"))?.map((appointment) => (
+         <Box component="div" className={classes.BoxStyle}>
+           <p>
+             {renderAppointmentRowText(appointment)}
+             <Link
+               to={{ pathname: "/patient/appointments", state: { appointment } }}
+               className={classes.rescheduleLink}
+             >
+               Request Reschedule Appointment
+             </Link>
+           </p>
+         </Box>
+       ))}
 
       {clientForms && (
         <Box component="div" className={classes.formBox}>
