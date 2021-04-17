@@ -1,115 +1,248 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
+import moment from "moment";
+import PropTypes from "prop-types";
 import {
   LineChart,
   ReferenceLine,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
-  Legend,
+  Line,
+  ResponsiveContainer,
 } from "recharts";
 
-import ReferenceLabel from "./ReferenceLabel";
+import Colors from "../../../theme/colors";
+import CustomTooltip from "./Tooltip";
 
-// TODO:: Dummy data which will be removed soon.
-const data = [
-  {
-    name: "2012",
-    fr: 5.5,
-    uv: 2500,
-    pv: 4000,
-    amt: 2500,
-  },
-  {
-    name: "2013",
-    fr: 5.5,
-    uv: 2500,
-    pv: 4000,
-    amt: 2500,
-  },
-  {
-    name: "2014",
-    fr: 5.5,
-    uv: 2500,
-    pv: 4000,
-    amt: 2500,
-  },
-  {
-    name: "2015",
-    fr: 5.5,
-    uv: 2500,
-    pv: 4000,
-    amt: 2500,
-  },
-  {
-    name: "2016",
-    fr: 5.5,
-    uv: 2500,
-    pv: 4000,
-    amt: 2500,
-  },
-  {
-    name: "2017",
-    fr: 5.5,
-    uv: 2500,
-    pv: 4000,
-    amt: 2500,
-  },
-  {
-    name: "2018",
-    fr: 5.5,
-    uv: 2500,
-    pv: 4000,
-    amt: 2500,
-  },
-];
-
-export default function Graph() {
-  return (
-    <LineChart
-      width={800}
-      height={500}
-      data={data}
-      margin={{
-        top: 5,
-        right: 30,
-        left: 20,
-        bottom: 5,
-      }}
-    >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="name" />
-      <YAxis
-        type="number"
-        domain={[3, 8]}
-        interval="0.5"
-        ticks={[4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7]}
-        tick={{ stroke: "grey", strokeWidth: 0.5 }}
-        tickCount={5}
-      />
-      <Tooltip />
-      <Legend />
-      <ReferenceLine
-        y={5.6}
-        label={<ReferenceLabel value="Conventional range" fill="#477fc9" />}
-        stroke="#477fc9"
-      />
-      <ReferenceLine
-        y={5.5}
-        label={<ReferenceLabel value="Functional range" fill="#477fc9" />}
-        stroke="#477fc9"
-      />
-      <ReferenceLine
-        y={5.0}
-        label={<ReferenceLabel value="Functional range" fill="#477fc9" />}
-        stroke="#477fc9"
-      />
-      <ReferenceLine
-        y={4.8}
-        label={<ReferenceLabel value="Conventional range" fill="#477fc9" />}
-        stroke="#477fc9"
-      />
-    </LineChart>
-  );
+const countDecimals = (value) => {
+  if (Math.floor(value) === value) return 0;
+  return value.toString().split(".")[1].length || 0;
+};
+function roundNumber(num, scale) {
+  if (!`${num}`.includes("e")) {
+    return +`${Math.round(`${num}e+${scale}`)}e-${scale}`;
+  }
+  const arr = `${num}`.split("e");
+  let sig = "";
+  if (+arr[1] + scale > 0) {
+    sig = "+";
+  }
+  return +`${Math.round(`${+arr[0]}e${sig}${+arr[1] + scale}`)}e-${scale}`;
 }
+
+export const Graph = ({ data, range, conventionalRange }) => {
+  const [graphData, setGraphData] = useState([]);
+  const [low, setLow] = useState(0);
+  const [high, setHigh] = useState(0);
+
+  /* eslint-disable */
+  useEffect(() => {
+    const middle = (conventionalRange?.high + conventionalRange?.low) / 2;
+    if (conventionalRange?.high > range?.high) {
+      if (
+        Math.round(conventionalRange?.high + middle * 0.12) <
+        conventionalRange?.high
+      ) {
+        const newHigh = conventionalRange?.high + middle * 0.12;
+        if (countDecimals(newHigh) > 2) {
+          setHigh(roundNumber(newHigh.toFixed(2), 1));
+        } else {
+          setHigh(newHigh);
+        }
+      } else {
+        setHigh(Math.round(conventionalRange?.high + middle * 0.12));
+      }
+    } else if (range !== true) {
+      if (Math.round(range?.high + middle * 0.12) < range?.high) {
+        const newHigh = range?.high + middle * 0.12;
+        if (countDecimals(newHigh) > 2) {
+          setHigh(roundNumber(newHigh.toFixed(2), 1));
+        } else {
+          setHigh(newHigh);
+        }
+      } else {
+        setHigh(Math.round(range?.high + middle * 0.12));
+      }
+    } else if (
+      Math.round(conventionalRange?.high + middle * 0.12) <
+      conventionalRange?.high
+    ) {
+      const newHigh = conventionalRange?.high + middle * 0.12;
+      if (countDecimals(newHigh) > 2) {
+        setHigh(roundNumber(newHigh.toFixed(2), 1));
+      } else {
+        setHigh(newHigh);
+      }
+    } else {
+      setHigh(Math.round(conventionalRange?.high + middle * 0.12));
+    }
+
+    if (range !== true) {
+      if (conventionalRange?.low < range?.low) {
+        if (conventionalRange?.low < 1) {
+          setLow(0);
+        } else {
+          setLow(Math.round(conventionalRange?.low - middle * 0.12));
+        }
+      } else if (range?.low < 1) {
+        setLow(0);
+      } else {
+        setLow(Math.round(range?.low - middle * 0.12));
+      }
+    } else if (conventionalRange?.low < 1) {
+      setLow(0);
+    } else {
+      setLow(Math.round(conventionalRange?.low - middle * 0.12));
+    }
+
+    if (range.low === conventionalRange.low) {
+      setLow(range.low);
+    }
+    if (range.high === conventionalRange.high) {
+      setHigh(range.high);
+    }
+  }, [conventionalRange]);
+
+  /* eslint-disable */
+  useEffect(() => {
+    if (data) {
+      const hash = Object.create(null);
+      const result = data.map((d) => {
+        if (
+          !moment(d.lab_dt).format("YYYY") ||
+          hash[moment(d.lab_dt).format("YYYY")]
+        ) {
+          return null;
+        }
+        hash[moment(d.lab_dt).format("YYYY")] = true;
+        return moment(d.lab_dt).format("YYYY");
+      });
+      const tempData = data.map((d, index) => ({
+        id: d.id,
+        lab_dt: d.lab_dt,
+        filename: d.filename,
+        value: d.value,
+        year: moment(d.lab_dt).format("MMM-YYYY"),
+      }));
+      setGraphData(tempData);
+    }
+  }, [data]);
+
+  return (
+    <ResponsiveContainer width="100%" height={550}>
+      <LineChart
+        width={1100}
+        height={550}
+        data={graphData}
+        margin={{
+          top: 5,
+          right: 30,
+          left: 20,
+          bottom: 5,
+        }}
+      >
+        <XAxis
+          dataKey="year"
+          interval={0}
+          style={{
+            fontSize: "0.8rem",
+            margin: "2px",
+          }}
+        />
+        <YAxis
+          type="number"
+          domain={[low, high]}
+          interval={0}
+          tickCount={8}
+          style={{
+            fontSize: "0.8rem",
+            margin: "2px",
+          }}
+        />
+        <Tooltip content={<CustomTooltip />} />
+        <ReferenceLine
+          y={conventionalRange?.high}
+          label={{
+            position: "insideTopLeft",
+            value: "Conventional range",
+            fontSize: "0.6rem",
+            fill: "#477fc9",
+          }}
+          stroke="#477fc9"
+        />
+        {range !== true && (
+          <ReferenceLine
+            y={range?.high}
+            label={{
+              position: "insideTopLeft",
+              value: "Functional range",
+              fontSize: "0.6rem",
+              fill: "#477fc9",
+            }}
+            stroke="#477fc9"
+          />
+        )}
+        {range !== true && (
+          <ReferenceLine
+            y={range?.low}
+            label={{
+              position: "insideBottomLeft",
+              value: "Functional range",
+              fontSize: "0.6rem",
+              fill: "#477fc9",
+            }}
+            stroke="#477fc9"
+          />
+        )}
+        <ReferenceLine
+          y={conventionalRange?.low}
+          label={{
+            position: "insideBottomLeft",
+            value: "Conventional range",
+            fontSize: "0.6rem",
+            fill: "#477fc9",
+          }}
+          stroke="#477fc9"
+        />
+        <Line
+          animationDuration={0}
+          strokeWidth={2}
+          type="monotone"
+          dataKey="value"
+          fill="#477fc9"
+          stroke={Colors.graphInRange}
+        />
+      </LineChart>
+    </ResponsiveContainer>
+  );
+};
+
+Graph.propTypes = {
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      lab_dt: PropTypes.string,
+      filename: PropTypes.string,
+      value: PropTypes.number,
+    })
+  ).isRequired,
+  range: PropTypes.oneOfType([
+    PropTypes.shape({
+      high: PropTypes.number,
+      low: PropTypes.number,
+    }),
+    PropTypes.bool,
+  ]).isRequired,
+  conventionalRange: PropTypes.oneOfType([
+    PropTypes.shape({
+      high: PropTypes.number,
+      low: PropTypes.number,
+    }),
+    PropTypes.bool,
+  ]).isRequired,
+};
+
+Graph.defaultProps = {
+  data: [],
+};
