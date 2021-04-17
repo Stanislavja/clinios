@@ -48,19 +48,19 @@ const useStyles = makeStyles((theme) => ({
   tableTestsCell: {
     cursor: "pointer",
   },
+  firstColumnOfStyledCell: {
+    width: "9%",
+  },
+  secondColumnOfStyledCell: {
+    width: "9%",
+  },
+  thirdColumnOfStyledCell: {
+    width: "82%",
+  },
   table: {
     "& th": {
       fontWeight: 600,
     },
-  },
-  tableRow: {
-    border: "none",
-  },
-  firstColumnforStyledTableCell: {
-    width: "9%",
-  },
-  secondColumnforStyledTableCell: {
-    width: "91%",
   },
 }));
 
@@ -72,23 +72,23 @@ const StyledTableCell = withStyles((theme) => ({
     fontWeight: 700,
     paddingLeft: 0,
     border: "none",
-    padding: 0,
-    margin: 0,
+    margin: theme.spacing(0),
+    padding: theme.spacing(0),
   },
   body: {
     fontSize: 14,
-    paddingLeft: 0,
     border: "none",
-    margin: 0,
-    padding: 0,
+    margin: theme.spacing(0),
+    padding: theme.spacing(0),
   },
 }))(TableCell);
 
-const Encounters = () => {
+
+const LabBilling = () => {
   const classes = useStyles();
   const { lastVisitedPatient } = useAuth();
   const componentRef = useRef();
-  const [testList, setTestList] = useState([]);
+  const [labBillingList, setLabBillingList] = useState([]);
   // to get personal information like firstName, lastName
   const [testProfileInfo, setTestProfileInfo] = useState();
   const [profileTests, setProfileTests] = useState();
@@ -124,15 +124,15 @@ const Encounters = () => {
     content: () => componentRef.current,
   });
 
-  const fetchTestList = useCallback(() => {
-    PatientPortalService.getTestList(lastVisitedPatient).then((res) => {
-      setTestList(res.data);
+  const fetchLabBilling = useCallback(() => {
+    PatientPortalService.getLabBilling(lastVisitedPatient).then((res) => {
+      setLabBillingList(res.data);
     });
   }, [lastVisitedPatient]);
 
   useEffect(() => {
-    fetchTestList();
-  }, [fetchTestList]);
+    fetchLabBilling();
+  }, [fetchLabBilling]);
 
   const fetchReportInformation = async (id) => {
     const testProfileInfoRes = await PatientPortalService.getTestProfileInfo(id);
@@ -145,30 +145,37 @@ const Encounters = () => {
   return (
     <div className={classes.root}>
       <Typography component="h1" variant="h2" color="textPrimary" className={classes.title}>
-        Lab Requisitions
+        Lab Billing
       </Typography>
       <Typography component="p" color="textPrimary">
-        This page is used to view lab requisitions you can take to a Quest Diagnostics Lab
+        This page shows purchases of laboratory tests
       </Typography>
       <TableContainer className={classes.tableContainer}>
         <Table size="small" className={classes.table} aria-label="a dense table">
           <TableHead>
             <TableRow>
               <StyledTableCell>Date</StyledTableCell>
+              <StyledTableCell>Amount</StyledTableCell>
               <StyledTableCell>Tests</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {testList.map((list) => (
-              <TableRow className={classes.tableRow}>
-                <StyledTableCell className={classes.firstColumnforStyledTableCell}>
-                  {dateFormat(list.dt)}
+            {labBillingList.map((item) => (
+              <TableRow style={{
+                border: "none",
+              }}
+              >
+                <StyledTableCell className={classes.firstColumnOfStyledCell}>
+                  {dateFormat(item.dt)}
+                </StyledTableCell>
+                <StyledTableCell className={classes.secondColumnOfStyledCell}>
+                  {item.amount}
                 </StyledTableCell>
                 <StyledTableCell
-                  className={clsx(classes.tableTestsCell, classes.secondColumnforStyledTableCell)}
-                  onClick={() => fetchReportInformation(list.id)}
+                  className={clsx(classes.tableTestsCell, classes.thirdColumnOfStyledCell)}
+                  onClick={() => fetchReportInformation(item.id)}
                 >
-                  {list.tests}
+                  {item.tests}
                 </StyledTableCell>
               </TableRow>
             ))}
@@ -184,4 +191,4 @@ const Encounters = () => {
   );
 };
 
-export default Encounters;
+export default LabBilling;

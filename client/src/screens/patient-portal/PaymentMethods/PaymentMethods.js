@@ -38,13 +38,13 @@ const useStyles = makeStyles((theme) => ({
 const StyledTableCell = withStyles(() => ({
   head: {
     whiteSpace: "nowrap",
-    fontSize: "12px",
+    fontSize: "14px",
     fontWeight: 700,
-    padding: "6px 24px 6px 2px",
+    padding: "6px 24px 2px 2px",
     borderBottom: "unset",
   },
   body: {
-    fontSize: 12,
+    fontSize: 14,
     borderBottom: "unset",
   },
 }))(TableCell);
@@ -53,21 +53,21 @@ const StyledTableRow = withStyles(() => ({
   root: {
     fontSize: 14,
     "& th": {
-      fontSize: 12,
+      fontSize: 14,
       whiteSpace: "nowrap",
-      padding: "2px 16px 2px 2px",
-      lineHeight: "14px",
+      padding: "0px 16px 2px 2px",
+      lineHeight: "16px",
     },
     "& td": {
-      fontSize: 12,
+      fontSize: 14,
       whiteSpace: "nowrap",
-      padding: "8px 16px 2px 2px",
-      lineHeight: "14px",
+      padding: "0px 16px 2px 2px",
+      lineHeight: "16px",
     },
     "& button": {
       padding: 0,
-      fontSize: 12,
-      lineHeight: "14px",
+      fontSize: 14,
+      lineHeight: "16px",
       fontWeight: "normal",
 
       "&:hover": {
@@ -164,7 +164,7 @@ const PaymentMethods = () => {
                 {paymentMethods.length ? (
                   paymentMethods.map((item) => (
                     <StyledTableRow key={item.id}>
-                      <StyledTableCell component="th" scope="item">
+                      <StyledTableCell>
                         {moment(item.created).format("MMM D YYYY")}
                       </StyledTableCell>
                       <StyledTableCell>{paymentMethodType(item.type)}</StyledTableCell>

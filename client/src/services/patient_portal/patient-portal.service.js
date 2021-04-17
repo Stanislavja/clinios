@@ -174,6 +174,21 @@ class PatientPortalService {
       .then((res) => res.data);
   }
 
+  // Lab billing
+  getLabBilling(patient) {
+    let url = `${API_BASE}/client-portal/lab_billing`;
+    if (patient) {
+        // eslint-disable-next-line max-len
+      url = `${API_BASE}/client-portal/lab_billing/?patient_id=${patient.id}&client_id=${patient.client_id}`;
+    }
+    return axios
+      .get(url, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
+
   // test list
 
   getTestList(patient) {

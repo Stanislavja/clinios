@@ -365,6 +365,11 @@ const routes = [
       },
       {
         guard: AuthGuard,
+        path: "/patient/lab-billing",
+        component: lazy(() => import("./screens/patient-portal/LabBilling")),
+      },
+      {
+        guard: AuthGuard,
         path: "/patient/billing",
         component: lazy(() => import("./screens/patient-portal/Billing")),
       },
