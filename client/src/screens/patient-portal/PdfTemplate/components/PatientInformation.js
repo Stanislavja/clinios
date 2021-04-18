@@ -87,7 +87,7 @@ const PatientInformation = (props) => {
         <Typography className={classes.infoSpace}>
           Phone:
           {" "}
-          {formatPhoneNumber(testProfileInfo.phone_home).replaceAll(" ", "-")}
+          {formatPhoneNumber(testProfileInfo?.phone_home)?.replaceAll(" ", "-")}
         </Typography>
       </Grid>
     </Grid>
