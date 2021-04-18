@@ -47,7 +47,7 @@ class PatientPortalService {
 
   updateAppointment(payload, appointmentId) {
     return axios
-      .post(`${API_BASE}/client-portal/appointment/update/${appointmentId}`, payload, {
+      .put(`${API_BASE}/client-portal/appointment/${appointmentId}`, payload, {
         headers: authHeader(),
       })
       .then((res) => res.data);

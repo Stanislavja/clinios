@@ -21,8 +21,8 @@ router.post(
   [authJwt.verifyToken],
   encountersController.createAppointment
 );
-router.post(
-  "/client-portal/appointment/update/:id",
+router.put(
+  "/client-portal/appointment/:id",
   [authJwt.verifyToken],
   encountersController.updateAppointment
 );
