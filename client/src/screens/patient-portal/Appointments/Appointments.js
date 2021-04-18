@@ -5,7 +5,7 @@ import {
 } from "@material-ui/core";
 import moment from "moment";
 import { useSnackbar } from "notistack";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 import useAuth from "../../../hooks/useAuth";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
@@ -69,12 +69,36 @@ const Appointments = () => {
     date: null,
     time: null,
   });
+  const [isRescheduleAppointment, setIsRescheduleAppointment] = useState(false);
+  const location = useLocation();
 
   const fetchPractitioners = useCallback(() => {
     PatientPortalService.getPractitioners().then((res) => {
       setPractitioners(res.data);
     });
   }, []);
+
+
+  useEffect(() => {
+    const appointment = location?.state?.appointment;
+    if (appointment?.patient_id) {
+      const date = moment(appointment.start_dt).format("YYYY-MM-DD");
+      const minutesFromStartDate = moment(appointment.start_dt).minutes();
+      const time = `${moment(appointment.start_dt).hours()}:${minutesFromStartDate < 10
+        ? `0${minutesFromStartDate}`
+        : minutesFromStartDate}am`;
+      setUserSelection((prevUserSelection) => ({
+        ...prevUserSelection,
+        ...appointment,
+        appointmentType: appointment.appointment_type_id,
+        date,
+        time,
+        practitioner: appointment?.user_id,
+      }));
+      setIsRescheduleAppointment(true);
+      setShowCalendar(true);
+    }
+  }, [location?.state]);
 
   useEffect(() => {
     fetchPractitioners();
@@ -104,19 +128,33 @@ const Appointments = () => {
 
   const bookAppointmentHandler = () => {
     const selectedPractitioner = practitioners.filter((x) => x.user_id === userSelection.practitioner);
+    let selectedAppointemntTypeLength = userSelection?.appointment_type_length || 0;
+    if (!selectedAppointemntTypeLength) {
+      selectedAppointemntTypeLength = appointmentTypes
+        ?.find((item) => item.id === userSelection.appointmentType)?.length;
+    }
+
+
+    const endTime = moment(userSelection.time, "h:ma")
+      .add(selectedAppointemntTypeLength || 0, "minutes")
+      .format("h:m");
+
     if (!!userSelection.time && userSelection.date) {
       const reqBody = {
         data: {
-          provider: {
-            ...selectedPractitioner[0],
-          },
-          ApptStatus: "R",
+          user_id: selectedPractitioner?.[0]?.user_id,
+          // do something with app status because it's going to server each time.
+          ...(!isRescheduleAppointment && { status: "R" }),
           start_dt: `${moment(userSelection.date).format("YYYY-MM-DD")} ${userSelection.time.split("am")[0]}`,
-          end_dt: `${moment(userSelection.date).format("YYYY-MM-DD")} ${userSelection.time.split("am")[0]}`,
-          patient: user,
+          end_dt: `${moment(userSelection.date).format("YYYY-MM-DD")} ${endTime}`,
+          patient_id: user?.id,
+          reschedule: isRescheduleAppointment,
+          appointment_type_id: userSelection.appointmentType,
         },
       };
-      PatientPortalService.bookAppointment(reqBody).then(() => {
+      PatientPortalService[isRescheduleAppointment
+        ? "updateAppointment"
+        : "bookAppointment"](reqBody, userSelection?.id).then(() => {
         setTimeout(() => {
           setShowCalendar(false);
           setAppointmentTypes([]);
@@ -131,13 +169,14 @@ const Appointments = () => {
             pathname: "/patient/appointments/confirmation",
             state: {
               practitionar: selectedPractitioner?.[0]?.name,
-              appointmentType: userSelection?.appointmentType,
+              appointmentLength: selectedAppointemntTypeLength,
               date: userSelection?.date,
               time: userSelection?.time,
+              reschedule: isRescheduleAppointment,
             },
           });
         }, 1000);
-        enqueueSnackbar("Appointment requested successfully", {
+        enqueueSnackbar(`Appointment ${isRescheduleAppointment ? "rescheduled" : "requested"} successfully`, {
           variant: "success",
         });
       });
@@ -192,7 +231,7 @@ const Appointments = () => {
                 disabled={!appointmentTypes.length}
               >
                 {appointmentTypes.map((option) => (
-                  <MenuItem key={option.length} value={option.length}>
+                  <MenuItem key={option.id} value={option.id}>
                     {`${option.appointment_type} - ${option.length} minutes - $${option.fee}`}
                   </MenuItem>
                 ))}
@@ -280,7 +319,7 @@ const Appointments = () => {
                   className={classes.submitBtn}
                   onClick={() => bookAppointmentHandler()}
                 >
-                  Book Appointment
+                  {isRescheduleAppointment ? "Reschedule Appointment" : "Book Appointment"}
                 </Button>
               </Grid>
             </Grid>
