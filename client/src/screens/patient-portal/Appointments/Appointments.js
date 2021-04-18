@@ -142,13 +142,12 @@ const Appointments = () => {
     if (!!userSelection.time && userSelection.date) {
       const reqBody = {
         data: {
-          provider: {
-            ...selectedPractitioner[0],
-          },
-          ApptStatus: "R",
+          user_id: selectedPractitioner?.[0]?.user_id,
+          // do something with app status because it's going to server each time.
+          ...(!isRescheduleAppointment && { status: "R" }),
           start_dt: `${moment(userSelection.date).format("YYYY-MM-DD")} ${userSelection.time.split("am")[0]}`,
           end_dt: `${moment(userSelection.date).format("YYYY-MM-DD")} ${endTime}`,
-          patient: user,
+          patient_id: user?.id,
           reschedule: isRescheduleAppointment,
           appointment_type_id: userSelection.appointmentType,
         },
@@ -177,7 +176,7 @@ const Appointments = () => {
             },
           });
         }, 1000);
-        enqueueSnackbar("Appointment requested successfully", {
+        enqueueSnackbar(`Appointment ${isRescheduleAppointment ? "rescheduled" : "requested"} successfully`, {
           variant: "success",
         });
       });
