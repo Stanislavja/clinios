@@ -58,6 +58,7 @@ import {
   TOGGLE_REQUISITIONS_NEW_DIALOG,
   TOGGLE_REQUISITIONS_EXPAND_DIALOG,
   TOGGLE_TESTS_EXPAND_DIALOG,
+  TOGGLE_TESTS_CHART_EXPAND_DIALOG,
   TOGGLE_DIAGNOSES_NEW_DIALOG,
   TOGGLE_DIAGNOSES_EXPAND_DIALOG,
   TOGGLE_MEDICATION_NEW_DIALOG,
@@ -65,8 +66,8 @@ import {
   TOGGLE_BILLING_NEW_TRANSACTION_DIALOG,
   TOGGLE_BILLING_NEW_DIALOG,
   TOGGLE_BILLING_EXPAND_DIALOG,
+  SET_TEST_NAME,
 } from "./types";
-
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -311,7 +312,6 @@ const reducer = (state = initialState, action) => {
         },
       };
 
-
     // dialog togglers starts here...
     case TOGGLE_PATIENT_INFO_EDIT_DIALOG:
       return {
@@ -487,6 +487,22 @@ const reducer = (state = initialState, action) => {
         tests: {
           ...state.tests,
           expandDialog: !state.tests.expandDialog,
+        },
+      };
+    case TOGGLE_TESTS_CHART_EXPAND_DIALOG:
+      return {
+        ...state,
+        tests: {
+          ...state.tests,
+          expandChartDialog: !state.tests.expandChartDialog,
+        },
+      };
+    case SET_TEST_NAME:
+      return {
+        ...state,
+        tests: {
+          ...state.tests,
+          testName: action.payload,
         },
       };
     case TOGGLE_DIAGNOSES_EXPAND_DIALOG:

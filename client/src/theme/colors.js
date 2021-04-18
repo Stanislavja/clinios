@@ -14,6 +14,8 @@ const Colors = {
   fillGray: "#cccccc",
   iconBackGround: "#EDF8FB",
   lighterText: "#8a8888",
+  graphInRange: "#008000",
+  graphOutRange: "#FFA500",
 };
 
 export default Colors;

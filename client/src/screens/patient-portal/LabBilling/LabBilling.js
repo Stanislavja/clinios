@@ -148,7 +148,7 @@ const LabBilling = () => {
         Lab Billing
       </Typography>
       <Typography component="p" color="textPrimary">
-        This page is used to view lab billing you can take to a Quest Diagnostics Lab
+        This page shows purchases of laboratory tests
       </Typography>
       <TableContainer className={classes.tableContainer}>
         <Table size="small" className={classes.table} aria-label="a dense table">
@@ -169,6 +169,7 @@ const LabBilling = () => {
                   {dateFormat(item.dt)}
                 </StyledTableCell>
                 <StyledTableCell className={classes.secondColumnOfStyledCell}>
+                  $
                   {item.amount}
                 </StyledTableCell>
                 <StyledTableCell
