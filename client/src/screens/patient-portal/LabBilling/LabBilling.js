@@ -169,6 +169,7 @@ const LabBilling = () => {
                   {dateFormat(item.dt)}
                 </StyledTableCell>
                 <StyledTableCell className={classes.secondColumnOfStyledCell}>
+                  $
                   {item.amount}
                 </StyledTableCell>
                 <StyledTableCell
