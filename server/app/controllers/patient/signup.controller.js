@@ -1,6 +1,4 @@
 const Stripe = require("stripe");
-
-const stripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
 const fs = require("fs");
 const bcrypt = require("bcryptjs");
 const moment = require("moment");
@@ -71,6 +69,11 @@ exports.patientSignup = async (req, res) => {
     return res.status(status.bad).send(errorMessage);
   }
 
+  const $sql = `select id, name, stripe_api_key from client where id=${patient.client_id}`;
+
+  const getStripeResponse = await db.query($sql);
+
+  const stripe = Stripe(getStripeResponse[0].stripe_api_key);
   // Create customer on stripe.com
   const customer = await stripe.customers.create({
     email: patient.email,

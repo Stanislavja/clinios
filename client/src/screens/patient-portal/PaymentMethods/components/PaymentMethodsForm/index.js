@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 
 import MaskInput from "../../../../../components/common/MaskInput";
 import Dialog from "../../../../../components/Dialog";
+import useAuth from "../../../../../hooks/useAuth";
 import useDidMountEffect from "../../../../../hooks/useDidMountEffect";
 import PatientService from "../../../../../services/patient.service";
 import { paymentMethodType } from "../../../../../utils/helpers";
@@ -33,7 +34,8 @@ const useStyles = makeStyles((theme) => ({
 
 const PaymentMethodsForm = (props) => {
   const classes = useStyles();
-  const patientId = 1; // TODO:remove static ID
+  const { user } = useAuth();
+  const patientId = user.id; // As patient loggedin as user
   const { enqueueSnackbar } = useSnackbar();
   const {
     isOpen, onClose, reloadData, cardData,
@@ -78,9 +80,11 @@ const PaymentMethodsForm = (props) => {
     e.preventDefault();
     const reqBody = {
       data: {
-        exp: moment(formFields.expiryDate).format("YYYY-MM-DD"),
+        exp: formFields.expiryDate.replace("/", ""),
         type: formFields.cardType[0] || "V",
-        account_number: formFields.cardNumber.replaceAll("/", "").substring(0, 4),
+        cvc: formFields.cvv,
+        account_number: formFields.cardNumber.replaceAll("/", ""),
+        customer_id: user.stripe_customer_id,
       },
     };
     if (isEdit) {
