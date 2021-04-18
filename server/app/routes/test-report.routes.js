@@ -26,9 +26,13 @@ router.get(
   testReports.getLabcpt
 );
 router.get(
-  "/tests/graph/:patientId",
+  "/tests/graph/:patientId/:labId",
   [authJwt.verifyToken],
   testReports.getTestGraph
 );
-
+router.get(
+  "/tests/conventionalrange/:patientId/:cptId",
+  [authJwt.verifyToken],
+  testReports.getConventionalRange
+);
 module.exports = router;

@@ -12,12 +12,12 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/AddCircleOutline";
-import CancelIcon from "@material-ui/icons/CancelOutlined";
-import CardIcon from "@material-ui/icons/CreditCardOutlined";
-import DesktopIcon from "@material-ui/icons/DesktopMacOutlined";
-import MoreVertIcon from "@material-ui/icons/MoreVertOutlined";
-import SaveIcon from "@material-ui/icons/SaveOutlined";
-import { mdiCalendarBlankOutline } from "@mdi/js";
+import CancelIcon from "@material-ui/icons/Cancel";
+import SaveIcon from "@material-ui/icons/CheckCircle";
+import CardIcon from "@material-ui/icons/CreditCard";
+import DesktopIcon from "@material-ui/icons/DesktopMac";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import { mdiCalendarBlankOutline, mdiChartBoxOutline } from "@mdi/js";
 import Icon from "@mdi/react";
 import clsx from "clsx";
 import PropTypes from "prop-types";
@@ -92,6 +92,10 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     cursor: "pointer",
+  },
+  graphIcon: {
+    cursor: "pointer",
+    marginRight: "auto",
   },
   textField: {
     height: 8,
@@ -175,14 +179,24 @@ const PatientCard = (props) => {
           alignItems="center"
           className={`drag-handle 
           ${classes.titleContainer}
-           ${showActions ? classes.leftPadding : classes.fullPadding
-    }`}
+           ${showActions ? classes.leftPadding : classes.fullPadding}`}
         >
           <Typography className={classes.title}>
             {title}
-            {" "}
-          &nbsp; &nbsp;
+            &nbsp; &nbsp;
           </Typography>
+          {title === "All Tests" && (
+            <>
+              <Icon
+                className={classes.graphIcon}
+                onClick={() => {
+                  contentToggleHandler();
+                }}
+                path={mdiChartBoxOutline}
+                size={1}
+              />
+            </>
+          )}
           {title === "Patient" && (
             <>
               <MoreVertIcon className={classes.icon} onClick={handleClick} />
@@ -292,16 +306,16 @@ PatientCard.defaultProps = {
   secondaryButtonText: "Edit",
   icon: null,
   cardInfo: null,
-  primaryButtonHandler: () => { },
-  secondaryButtonHandler: () => { },
-  iconHandler: () => { },
-  searchHandler: () => { },
-  editorSaveHandler: () => { },
-  editorCancelHandler: () => { },
-  updateLayoutHandler: () => { },
-  resetLayoutHandler: () => { },
+  primaryButtonHandler: () => {},
+  secondaryButtonHandler: () => {},
+  iconHandler: () => {},
+  searchHandler: () => {},
+  editorSaveHandler: () => {},
+  editorCancelHandler: () => {},
+  updateLayoutHandler: () => {},
+  resetLayoutHandler: () => {},
   isLayoutUpdated: false,
-  contentToggleHandler: () => { },
+  contentToggleHandler: () => {},
   hasMinHeight: false,
 };
 
