@@ -124,7 +124,7 @@ export const Graph = ({ data, range, conventionalRange }) => {
         lab_dt: d.lab_dt,
         filename: d.filename,
         value: d.value,
-        year: moment(d.lab_dt).format("MMM-YYYY"),
+        year: moment(d.lab_dt).format("MMM YYYY"),
       }));
       setGraphData(tempData);
       setIsLoading(false);
@@ -132,17 +132,17 @@ export const Graph = ({ data, range, conventionalRange }) => {
   }, [data]);
 
   return (
-    <ResponsiveContainer width="100%" height={550}>
+    <ResponsiveContainer width="100%" height={600}>
       {isLoading ? <> </> : (
         <LineChart
           width={1100}
-          height={550}
+          height={600}
           data={graphData}
           margin={{
             top: 5,
             right: 30,
-            left: 20,
-            bottom: 5,
+            left: 0,
+            bottom: 10,
           }}
         >
           <XAxis

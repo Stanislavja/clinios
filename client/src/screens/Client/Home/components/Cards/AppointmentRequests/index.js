@@ -139,6 +139,17 @@ const AppointmentRequests = ({
     onAccept(payload);
   };
 
+
+  const renderAppointmentRequestText = ({
+    name, end_dt, start_dt, reschedule, appointment_type,
+  }, provider) => {
+    const appointmentRequestType = reschedule ? "Reschedule Appointment" : "New Appointment";
+    const formattedStartDate = moment(start_dt).format("ll, h:mm");
+    const formattedEndDate = moment(end_dt).format("h:mm");
+
+    return `${name}, ${appointmentRequestType}, ${appointment_type ? `${appointment_type},` : ""}
+     ${provider}, ${formattedStartDate} - ${formattedEndDate}`;
+  };
   return (
     <Card className={classes.PatientsApptRequest} variant="outlined">
       <Grid
@@ -157,27 +168,7 @@ const AppointmentRequests = ({
           {appointmentRequests.length > 0 ? (
             appointmentRequests.map((appt) => (
               <li key={appt.id}>
-                {moment(appt.created).format("ll")}
-                ,
-                {appt.name}
-                , requests
-                office visits
-                {" "}
-                {moment
-                  .duration(moment(appt.end_dt).diff(moment(appt.start_dt)))
-                  .asMinutes()}
-                {" "}
-                minutes with
-                {" "}
-                {selectedProvider.name}
-                {" "}
-                on
-                {" "}
-                {moment(appt.start_dt).format("ll, h:mm")}
-                {" "}
-                -
-                {" "}
-                {moment(appt.end_dt).format("h:mm")}
+                {renderAppointmentRequestText(appt, selectedProvider.name)}
                 <div className={classes.unreadMsgActions}>
                   <Button onClick={(_) => handleAccept(_, appt)}>Accept</Button>
                   <Button onClick={(_) => handleRejectCall(_, appt)}>

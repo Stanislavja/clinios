@@ -9,5 +9,10 @@ router.get(
   [authJwt.verifyToken],
   paymentMethodController.getPaymentMethods
 );
+router.post(
+  "/client-portal/payment-methods",
+  [authJwt.verifyToken],
+  paymentMethodController.createPaymentMethod
+);
 
 module.exports = router;

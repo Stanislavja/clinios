@@ -12,12 +12,12 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/AddCircleOutline";
-import CancelIcon from "@material-ui/icons/CancelOutlined";
-import CardIcon from "@material-ui/icons/CreditCardOutlined";
-import DesktopIcon from "@material-ui/icons/DesktopMacOutlined";
-import MoreVertIcon from "@material-ui/icons/MoreVertOutlined";
-import SaveIcon from "@material-ui/icons/SaveOutlined";
-import { mdiCalendarBlankOutline, mdiChartLine } from "@mdi/js";
+import CancelIcon from "@material-ui/icons/Cancel";
+import SaveIcon from "@material-ui/icons/CheckCircle";
+import CardIcon from "@material-ui/icons/CreditCard";
+import DesktopIcon from "@material-ui/icons/DesktopMac";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import { mdiCalendarBlankOutline, mdiChartBoxOutline } from "@mdi/js";
 import Icon from "@mdi/react";
 import clsx from "clsx";
 import PropTypes from "prop-types";
@@ -192,7 +192,7 @@ const PatientCard = (props) => {
                 onClick={() => {
                   contentToggleHandler();
                 }}
-                path={mdiChartLine}
+                path={mdiChartBoxOutline}
                 size={1}
               />
             </>

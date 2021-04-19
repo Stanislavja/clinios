@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    border: "2px solid #333",
+    border: "1px solid #333",
     padding: theme.spacing(1),
     background: "#fff",
     borderRadius: "10px",
@@ -20,12 +20,12 @@ const CustomTooltip = ({ payload }) => {
       {payload && payload.length ? (
         <>
           <p>
-            {`Date : ${moment(payload[0]?.payload?.lab_dt).format(
-              "MMMM Do YYYY, h:mm A",
+            {`Date: ${moment(payload[0]?.payload?.lab_dt).format(
+              "MMM D YYYY h:mm A",
             )}`}
           </p>
-          <p>{`File : ${payload[0]?.payload?.filename}`}</p>
-          <p>{`Value : ${payload[0]?.payload?.value}`}</p>
+          <p>{`File: ${payload[0]?.payload?.filename}`}</p>
+          <p>{`Value: ${payload[0]?.payload?.value}`}</p>
         </>
       ) : null}
     </div>

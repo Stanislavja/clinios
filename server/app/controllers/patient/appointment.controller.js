@@ -48,7 +48,7 @@ const getAppointmentTypes = async (req, res) => {
   let $sql;
 
   try {
-    $sql = `select at.appointment_type, at.descr, at.length, at.fee
+    $sql = `select at.id, at.appointment_type, at.descr, at.length, at.fee
     from appointment_type at 
     where at.client_id=${req.client_id} 
     /*and atu.user_id=${practitioner_id}*/
@@ -76,22 +76,30 @@ const getAppointmentTypes = async (req, res) => {
 };
 
 const createAppointment = async (req, res) => {
-  const { start_dt, end_dt, provider, ApptStatus, patient } = req.body.data;
+  const {
+    start_dt,
+    end_dt,
+    user_id,
+    status: appStatus,
+    patient_id,
+    reschedule,
+    appointment_type_id,
+  } = req.body.data;
 
   const db = makeDb(configuration, res);
   try {
     const insertResponse = await db.query(
-      `insert into user_calendar (client_id, user_id, patient_id, start_dt, end_dt, status, created, created_user_id) values (${
+      `insert into user_calendar (client_id, user_id, patient_id, appointment_type_id, start_dt, end_dt, status, reschedule, created, created_user_id) values (${
         req.client_id
-      }, ${provider.user_id}, ${patient.id}, '${moment(
+      }, ${user_id}, ${patient_id}, ${appointment_type_id}, '${moment(
         start_dt,
         "YYYY-MM-DD HH:mm:ss"
       ).format("YYYY-MM-DD HH:mm:ss")}', '${moment(
         end_dt,
         "YYYY-MM-DD HH:mm:ss"
-      ).format("YYYY-MM-DD HH:mm:ss")}', '${ApptStatus}', now(), ${
-        req.user_id
-      })`
+      ).format(
+        "YYYY-MM-DD HH:mm:ss"
+      )}', '${appStatus}', ${reschedule}, now(), ${req.user_id})`
     );
     if (!insertResponse.affectedRows) {
       errorMessage.message = "Insert not successful";
@@ -110,10 +118,39 @@ const createAppointment = async (req, res) => {
   }
 };
 
+const updateAppointment = async (req, res) => {
+  const db = makeDb(configuration, res);
+  const appointmentId = req.params.id;
+  const formData = req.body.data;
+  formData.updated = new Date();
+  formData.updated_user_id = req.user_id;
+
+  try {
+    const updateResponse = await db.query(
+      `update user_calendar set ? where id=${appointmentId}`,
+      [formData]
+    );
+    if (!updateResponse.affectedRows) {
+      errorMessage.message = "Update not successful";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = updateResponse;
+    successMessage.message = "Update successful";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Update not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const Appointments = {
   getAllPractitioner,
   getAppointmentTypes,
   createAppointment,
+  updateAppointment,
 };
 
 module.exports = Appointments;
