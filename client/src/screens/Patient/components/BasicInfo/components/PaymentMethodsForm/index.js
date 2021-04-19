@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 const PaymentMethodsForm = (props) => {
   const classes = useStyles();
   const { state } = usePatientContext();
-  const { patientId } = state;
+  const { patientId, patientInfo } = state;
   const { enqueueSnackbar } = useSnackbar();
   const {
     isOpen, onClose, reloadData, cardData,
@@ -80,11 +80,14 @@ const PaymentMethodsForm = (props) => {
     e.preventDefault();
     const reqBody = {
       data: {
-        exp: moment(formFields.expiryDate).format("YYYY-MM-DD"),
+        exp: formFields.expiryDate.replace("/", ""),
         type: formFields.cardType[0] || "V",
-        account_number: formFields.cardNumber.replaceAll("/", "").substring(0, 4),
+        account_number: formFields.cardNumber.replaceAll("/", ""),
+        cvc: formFields.cvv,
+        customer_id: patientInfo.data.stripe_customer_id,
       },
     };
+
     if (isEdit) {
       const paymentMethodId = cardData.id;
       PatientService.updatePaymentMethod(patientId, paymentMethodId, reqBody).then((response) => {

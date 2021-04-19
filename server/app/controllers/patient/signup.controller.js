@@ -1,3 +1,4 @@
+const Stripe = require("stripe");
 const fs = require("fs");
 const bcrypt = require("bcryptjs");
 const moment = require("moment");
@@ -68,6 +69,26 @@ exports.patientSignup = async (req, res) => {
     return res.status(status.bad).send(errorMessage);
   }
 
+  const $sql = `select id, name, stripe_api_key from client where id=${patient.client_id}`;
+
+  const getStripeResponse = await db.query($sql);
+
+  const stripe = Stripe(getStripeResponse[0].stripe_api_key);
+  // Create customer on stripe.com
+  const customer = await stripe.customers.create({
+    email: patient.email,
+    name: patient.firstname + patient.lastname,
+    address: {
+      city: patient.city,
+      country: patient.country,
+      line1: patient.address,
+      line2: patient.address2,
+      postal_code: patient.postal,
+      state: patient.state,
+    },
+  });
+
+  patient.stripe_customer_id = customer.id;
   try {
     const patientResponse = await db.query(
       "INSERT INTO patient set ?",

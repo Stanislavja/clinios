@@ -586,7 +586,8 @@ const BasicInfo = (props) => {
                       <StyledTableCellLg>{paymentMethodType(item.type)}</StyledTableCellLg>
                       <StyledTableCellLg align="center">{item.account_number}</StyledTableCellLg>
                       <StyledTableCellLg align="center">
-                        {moment(item.exp).format("MMM D YYYY")}
+                        {item.exp
+                          && `${item.exp.toString().substring(0, 2)}/${item.exp.toString().substring(2, 4)}`}
                       </StyledTableCellLg>
                       <StyledTableCellLg align="center">
                         <IconButton onClick={() => editPaymentMethodHandler(item)}>
