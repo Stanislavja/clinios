@@ -91,7 +91,7 @@ import {
   getFourthColumnHeight,
 } from "../../utils/patientLayoutHelpers";
 import ProcessMessagePage from "../ProcessMessage";
-import TestGraph from "../TestGraph/TestGraph";
+import TestGraph from "../TestGraph";
 import {
   AdminNotesForm,
   AdminNotesHistory,
