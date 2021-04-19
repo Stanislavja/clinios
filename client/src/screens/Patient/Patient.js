@@ -91,7 +91,7 @@ import {
   getFourthColumnHeight,
 } from "../../utils/patientLayoutHelpers";
 import ProcessMessagePage from "../ProcessMessage";
-import TestGraph from "../TestGraph/TestGraph";
+import TestGraph from "../TestGraph";
 import {
   AdminNotesForm,
   AdminNotesHistory,
@@ -1276,6 +1276,7 @@ const Patient = () => {
                   key={item.title}
                   title={item.title}
                   data={mapCardContentDataHandlers(item.title)}
+                  showActions={item.showActions}
                   showEditorActions={
                     item.title === "Medical Notes" && !!medicalNotes.editForm
                   }
