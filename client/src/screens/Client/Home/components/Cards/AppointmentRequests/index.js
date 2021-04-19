@@ -139,17 +139,6 @@ const AppointmentRequests = ({
     onAccept(payload);
   };
 
-
-  const renderAppointmentRequestText = ({
-    name, end_dt, start_dt, reschedule, appointment_type,
-  }, provider) => {
-    const appointmentRequestType = reschedule ? "Reschedule Appointment" : "New Appointment";
-    const formattedStartDate = moment(start_dt).format("ll, h:mm");
-    const formattedEndDate = moment(end_dt).format("h:mm");
-
-    return `${name}, ${appointmentRequestType}, ${appointment_type ? `${appointment_type},` : ""}
-     ${provider}, ${formattedStartDate} - ${formattedEndDate}`;
-  };
   return (
     <Card className={classes.PatientsApptRequest} variant="outlined">
       <Grid
@@ -166,20 +155,30 @@ const AppointmentRequests = ({
       <CardContent>
         <ul>
           {appointmentRequests.length > 0 ? (
-            appointmentRequests.map((appt) => (
-              <li key={appt.id}>
-                {renderAppointmentRequestText(appt, selectedProvider.name)}
-                <div className={classes.unreadMsgActions}>
-                  <Button onClick={(_) => handleAccept(_, appt)}>Accept</Button>
-                  <Button onClick={(_) => handleRejectCall(_, appt)}>
-                    Reject
-                  </Button>
-                  <Button onClick={(_) => onMessageClick(_, appt.patient_id)}>
-                    Message
-                  </Button>
-                </div>
-              </li>
-            ))
+            appointmentRequests.map((appt) => {
+              const {
+                name, end_dt, start_dt, reschedule, appointment_type,
+              } = appt;
+              const appointmentRequestType = reschedule ? "Reschedule Appointment" : "New Appointment";
+              const formattedStartDate = moment(start_dt).format("ll, h:mm");
+              const formattedEndDate = moment(end_dt).format("h:mm");
+              return (
+                <li key={appt.id}>
+                  {`${name}, ${appointmentRequestType}, ${appointment_type ? `${appointment_type}` : ""}`}
+                  <br />
+                  {`${selectedProvider.name}, ${formattedStartDate} - ${formattedEndDate}`}
+                  <div className={classes.unreadMsgActions}>
+                    <Button onClick={(_) => handleAccept(_, appt)}>Accept</Button>
+                    <Button onClick={(_) => handleRejectCall(_, appt)}>
+                      Reject
+                    </Button>
+                    <Button onClick={(_) => onMessageClick(_, appt.patient_id)}>
+                      Message
+                    </Button>
+                  </div>
+                </li>
+              );
+            })
           ) : (
             <p />
           )}
