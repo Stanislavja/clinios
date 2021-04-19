@@ -1,3 +1,4 @@
+// TODO: Sample stripe routes to test Stripe APIs. We will remove this file in future.
 const express = require("express");
 const { authJwt } = require("../middlewares");
 const stripeController = require("../controllers/stripe.controller");

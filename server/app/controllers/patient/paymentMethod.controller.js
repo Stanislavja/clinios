@@ -103,7 +103,7 @@ const createPaymentMethod = async (req, res) => {
 
 const PaymentMethod = {
   getPaymentMethods,
-  createPaymentMethod
+  createPaymentMethod,
 };
 
 module.exports = PaymentMethod;
