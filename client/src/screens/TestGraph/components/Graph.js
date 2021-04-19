@@ -31,7 +31,7 @@ function roundNumber(num, scale) {
   return +`${Math.round(`${+arr[0]}e${sig}${+arr[1] + scale}`)}e-${scale}`;
 }
 
-export const Graph = ({ data, range, conventionalRange }) => {
+export const Graph = ({ data, functionalRange, conventionalRange }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [graphData, setGraphData] = useState([]);
   const [low, setLow] = useState(0);
@@ -40,7 +40,7 @@ export const Graph = ({ data, range, conventionalRange }) => {
   /* eslint-disable */
   useEffect(() => {
     const middle = (conventionalRange?.high + conventionalRange?.low) / 2;
-    if (conventionalRange?.high > range?.high) {
+    if (conventionalRange?.high > functionalRange?.high) {
       if (
         Math.round(conventionalRange?.high + middle * 0.12) <
         conventionalRange?.high
@@ -54,16 +54,16 @@ export const Graph = ({ data, range, conventionalRange }) => {
       } else {
         setHigh(Math.round(conventionalRange?.high + middle * 0.12));
       }
-    } else if (range !== true) {
-      if (Math.round(range?.high + middle * 0.12) < range?.high) {
-        const newHigh = range?.high + middle * 0.12;
+    } else if (!!functionalRange) {
+      if (Math.round(functionalRange?.high + middle * 0.12) < functionalRange?.high) {
+        const newHigh = functionalRange?.high + middle * 0.12;
         if (countDecimals(newHigh) > 2) {
           setHigh(roundNumber(newHigh.toFixed(2), 1));
         } else {
           setHigh(newHigh);
         }
       } else {
-        setHigh(Math.round(range?.high + middle * 0.12));
+        setHigh(Math.round(functionalRange?.high + middle * 0.12));
       }
     } else if (
       Math.round(conventionalRange?.high + middle * 0.12) <
@@ -79,17 +79,17 @@ export const Graph = ({ data, range, conventionalRange }) => {
       setHigh(Math.round(conventionalRange?.high + middle * 0.12));
     }
 
-    if (range !== true) {
-      if (conventionalRange?.low < range?.low) {
+    if (!!functionalRange) {
+      if (conventionalRange?.low < functionalRange?.low) {
         if (conventionalRange?.low < 1) {
           setLow(0);
         } else {
           setLow(Math.round(conventionalRange?.low - middle * 0.12));
         }
-      } else if (range?.low < 1) {
+      } else if (functionalRange?.low < 1) {
         setLow(0);
       } else {
-        setLow(Math.round(range?.low - middle * 0.12));
+        setLow(Math.round(functionalRange?.low - middle * 0.12));
       }
     } else if (conventionalRange?.low < 1) {
       setLow(0);
@@ -97,11 +97,11 @@ export const Graph = ({ data, range, conventionalRange }) => {
       setLow(Math.round(conventionalRange?.low - middle * 0.12));
     }
 
-    if (range.low === conventionalRange.low) {
-      setLow(range.low);
+    if (functionalRange.low === conventionalRange.low) {
+      setLow(functionalRange.low);
     }
-    if (range.high === conventionalRange.high) {
-      setHigh(range.high);
+    if (functionalRange.high === conventionalRange.high) {
+      setHigh(functionalRange.high);
     }
   }, [conventionalRange]);
 
@@ -174,9 +174,9 @@ export const Graph = ({ data, range, conventionalRange }) => {
             }}
             stroke="#477fc9"
           />
-          {range !== true && (
+          {!!functionalRange?.high && (
             <ReferenceLine
-              y={range?.high}
+              y={functionalRange?.high}
               label={{
                 position: "insideTopLeft",
                 value: "Functional range",
@@ -186,9 +186,9 @@ export const Graph = ({ data, range, conventionalRange }) => {
               stroke="#477fc9"
             />
           )}
-          {range !== true && (
+          {!!functionalRange?.low && (
             <ReferenceLine
-              y={range?.low}
+              y={functionalRange?.low}
               label={{
                 position: "insideBottomLeft",
                 value: "Functional range",
@@ -231,20 +231,14 @@ Graph.propTypes = {
       value: PropTypes.number,
     })
   ).isRequired,
-  range: PropTypes.oneOfType([
-    PropTypes.shape({
-      high: PropTypes.number,
-      low: PropTypes.number,
-    }),
-    PropTypes.bool,
-  ]).isRequired,
-  conventionalRange: PropTypes.oneOfType([
-    PropTypes.shape({
-      high: PropTypes.number,
-      low: PropTypes.number,
-    }),
-    PropTypes.bool,
-  ]).isRequired,
+  functionalRange: PropTypes.shape({
+    high: PropTypes.number,
+    low: PropTypes.number,
+  }).isRequired,
+  conventionalRange: PropTypes.shape({
+    high: PropTypes.number,
+    low: PropTypes.number,
+  }).isRequired,
 };
 
 export default Graph;

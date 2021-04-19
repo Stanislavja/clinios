@@ -67,12 +67,12 @@ const TestGraph = ({ changeTitle }) => {
 
   const [cptName, setCptName] = useState("");
   const [conventionalRange, setConventionalRange] = useState({});
+  const [functionalRange, setFunctionalRange] = useState({});
   const [labCpt, setLabCpt] = useState([]);
   const [graph, setGraph] = useState(null);
   const [graphFilterData, setGraphFilterData] = useState(null);
   const [testId, setTestId] = useState("");
   const [cptIdCount, setCptIdCount] = useState(0);
-  const [range, setRange] = useState({});
   const ref = useRef(null);
 
   /* eslint-disable */
@@ -144,7 +144,7 @@ const TestGraph = ({ changeTitle }) => {
           patientData?.gender,
           patientAge
         );
-        setRange(data);
+        setFunctionalRange(data);
       }
     }
   }, [graph, testId]);
@@ -238,7 +238,7 @@ const TestGraph = ({ changeTitle }) => {
       {graph && graphFilterData && (
         <Graph
           data={graphFilterData}
-          range={range}
+          functionalRange={functionalRange}
           conventionalRange={conventionalRange}
         />
       )}
