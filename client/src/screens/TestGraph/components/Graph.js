@@ -246,3 +246,5 @@ Graph.propTypes = {
     PropTypes.bool,
   ]).isRequired,
 };
+
+export default Graph;

@@ -14,7 +14,7 @@ import usePatientContext from "../../hooks/usePatientContext";
 import Tests from "../../services/test.service";
 import { calculateFunctionalRange } from "../../utils/FunctionalRange";
 import { calculateAge } from "../../utils/helpers";
-import { Graph } from "./components";
+import Graph from "./components/Graph";
 
 const useStyles = makeStyles((theme) => ({
   root: {
