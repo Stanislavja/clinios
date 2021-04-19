@@ -13,10 +13,10 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/AddCircleOutline";
 import CancelIcon from "@material-ui/icons/Cancel";
-import SaveIcon from "@material-ui/icons/CheckCircle";
 import CardIcon from "@material-ui/icons/CreditCard";
 import DesktopIcon from "@material-ui/icons/DesktopMac";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
+import SaveIcon from "@material-ui/icons/SaveOutlined";
 import { mdiCalendarBlankOutline, mdiChartBoxOutline } from "@mdi/js";
 import Icon from "@mdi/react";
 import clsx from "clsx";
@@ -96,6 +96,7 @@ const useStyles = makeStyles((theme) => ({
   graphIcon: {
     cursor: "pointer",
     marginRight: "auto",
+    marginLeft: theme.spacing(1),
   },
   textField: {
     height: 8,
@@ -183,7 +184,6 @@ const PatientCard = (props) => {
         >
           <Typography className={classes.title}>
             {title}
-            &nbsp; &nbsp;
           </Typography>
           {title === "All Tests" && (
             <>
@@ -306,16 +306,16 @@ PatientCard.defaultProps = {
   secondaryButtonText: "Edit",
   icon: null,
   cardInfo: null,
-  primaryButtonHandler: () => {},
-  secondaryButtonHandler: () => {},
-  iconHandler: () => {},
-  searchHandler: () => {},
-  editorSaveHandler: () => {},
-  editorCancelHandler: () => {},
-  updateLayoutHandler: () => {},
-  resetLayoutHandler: () => {},
+  primaryButtonHandler: () => { },
+  secondaryButtonHandler: () => { },
+  iconHandler: () => { },
+  searchHandler: () => { },
+  editorSaveHandler: () => { },
+  editorCancelHandler: () => { },
+  updateLayoutHandler: () => { },
+  resetLayoutHandler: () => { },
   isLayoutUpdated: false,
-  contentToggleHandler: () => {},
+  contentToggleHandler: () => { },
   hasMinHeight: false,
 };
 

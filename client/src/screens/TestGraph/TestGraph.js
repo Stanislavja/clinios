@@ -14,7 +14,7 @@ import usePatientContext from "../../hooks/usePatientContext";
 import Tests from "../../services/test.service";
 import { calculateFunctionalRange } from "../../utils/FunctionalRange";
 import { calculateAge } from "../../utils/helpers";
-import { Graph } from "./components";
+import Graph from "./components/Graph";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,12 +67,12 @@ const TestGraph = ({ changeTitle }) => {
 
   const [cptName, setCptName] = useState("");
   const [conventionalRange, setConventionalRange] = useState({});
+  const [functionalRange, setFunctionalRange] = useState({});
   const [labCpt, setLabCpt] = useState([]);
   const [graph, setGraph] = useState(null);
   const [graphFilterData, setGraphFilterData] = useState(null);
   const [testId, setTestId] = useState("");
   const [cptIdCount, setCptIdCount] = useState(0);
-  const [range, setRange] = useState({});
   const ref = useRef(null);
 
   /* eslint-disable */
@@ -144,7 +144,7 @@ const TestGraph = ({ changeTitle }) => {
           patientData?.gender,
           patientAge
         );
-        setRange(data);
+        setFunctionalRange(data);
       }
     }
   }, [graph, testId]);
@@ -235,15 +235,15 @@ const TestGraph = ({ changeTitle }) => {
         </IconButton>
       </div>
 
-      {graph && (
+      {graph && graphFilterData && (
         <Graph
           data={graphFilterData}
-          range={range}
+          functionalRange={functionalRange}
           conventionalRange={conventionalRange}
         />
       )}
       <Grid item className={classes.filterButtonContainer}>
-      <Button
+        <Button
           size="medium"
           type="submit"
           variant="contained"

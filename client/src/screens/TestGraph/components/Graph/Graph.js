@@ -12,8 +12,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-import Colors from "../../../theme/colors";
-import CustomTooltip from "./Tooltip";
+import Colors from "../../../../theme/colors";
+import CustomTooltip from "../Tooltip";
 
 const countDecimals = (value) => {
   if (Math.floor(value) === value) return 0;
@@ -31,7 +31,8 @@ function roundNumber(num, scale) {
   return +`${Math.round(`${+arr[0]}e${sig}${+arr[1] + scale}`)}e-${scale}`;
 }
 
-export const Graph = ({ data, range, conventionalRange }) => {
+const Graph = ({ data, functionalRange, conventionalRange }) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [graphData, setGraphData] = useState([]);
   const [low, setLow] = useState(0);
   const [high, setHigh] = useState(0);
@@ -39,7 +40,7 @@ export const Graph = ({ data, range, conventionalRange }) => {
   /* eslint-disable */
   useEffect(() => {
     const middle = (conventionalRange?.high + conventionalRange?.low) / 2;
-    if (conventionalRange?.high > range?.high) {
+    if (conventionalRange?.high > functionalRange?.high) {
       if (
         Math.round(conventionalRange?.high + middle * 0.12) <
         conventionalRange?.high
@@ -53,16 +54,16 @@ export const Graph = ({ data, range, conventionalRange }) => {
       } else {
         setHigh(Math.round(conventionalRange?.high + middle * 0.12));
       }
-    } else if (range !== true) {
-      if (Math.round(range?.high + middle * 0.12) < range?.high) {
-        const newHigh = range?.high + middle * 0.12;
+    } else if (!!functionalRange) {
+      if (Math.round(functionalRange?.high + middle * 0.12) < functionalRange?.high) {
+        const newHigh = functionalRange?.high + middle * 0.12;
         if (countDecimals(newHigh) > 2) {
           setHigh(roundNumber(newHigh.toFixed(2), 1));
         } else {
           setHigh(newHigh);
         }
       } else {
-        setHigh(Math.round(range?.high + middle * 0.12));
+        setHigh(Math.round(functionalRange?.high + middle * 0.12));
       }
     } else if (
       Math.round(conventionalRange?.high + middle * 0.12) <
@@ -78,17 +79,17 @@ export const Graph = ({ data, range, conventionalRange }) => {
       setHigh(Math.round(conventionalRange?.high + middle * 0.12));
     }
 
-    if (range !== true) {
-      if (conventionalRange?.low < range?.low) {
+    if (!!functionalRange) {
+      if (conventionalRange?.low < functionalRange?.low) {
         if (conventionalRange?.low < 1) {
           setLow(0);
         } else {
           setLow(Math.round(conventionalRange?.low - middle * 0.12));
         }
-      } else if (range?.low < 1) {
+      } else if (functionalRange?.low < 1) {
         setLow(0);
       } else {
-        setLow(Math.round(range?.low - middle * 0.12));
+        setLow(Math.round(functionalRange?.low - middle * 0.12));
       }
     } else if (conventionalRange?.low < 1) {
       setLow(0);
@@ -96,11 +97,11 @@ export const Graph = ({ data, range, conventionalRange }) => {
       setLow(Math.round(conventionalRange?.low - middle * 0.12));
     }
 
-    if (range.low === conventionalRange.low) {
-      setLow(range.low);
+    if (functionalRange.low === conventionalRange.low) {
+      setLow(functionalRange.low);
     }
-    if (range.high === conventionalRange.high) {
-      setHigh(range.high);
+    if (functionalRange.high === conventionalRange.high) {
+      setHigh(functionalRange.high);
     }
   }, [conventionalRange]);
 
@@ -126,94 +127,97 @@ export const Graph = ({ data, range, conventionalRange }) => {
         year: moment(d.lab_dt).format("MMM YYYY"),
       }));
       setGraphData(tempData);
+      setIsLoading(false);
     }
   }, [data]);
 
   return (
     <ResponsiveContainer width="100%" height={600}>
-      <LineChart
-        width={1100}
-        height={600}
-        data={graphData}
-        margin={{
-          top: 5,
-          right: 30,
-          left: 0,
-          bottom: 10,
-        }}
-      >
-        <XAxis
-          dataKey="year"
-          interval={0}
-          style={{
-            fontSize: "0.8rem",
-            margin: "2px",
+      {isLoading ? <> </> : (
+        <LineChart
+          width={1100}
+          height={600}
+          data={graphData}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 0,
+            bottom: 10,
           }}
-        />
-        <YAxis
-          type="number"
-          domain={[low, high]}
-          interval={0}
-          tickCount={8}
-          style={{
-            fontSize: "0.8rem",
-            margin: "2px",
-          }}
-        />
-        <Tooltip content={<CustomTooltip />} />
-        <ReferenceLine
-          y={conventionalRange?.high}
-          label={{
-            position: "insideTopLeft",
-            value: "Conventional range",
-            fontSize: "0.6rem",
-            fill: "#477fc9",
-          }}
-          stroke="#477fc9"
-        />
-        {range !== true && (
+        >
+          <XAxis
+            dataKey="year"
+            interval={0}
+            style={{
+              fontSize: "0.8rem",
+              margin: "2px",
+            }}
+          />
+          <YAxis
+            type="number"
+            domain={[low, high]}
+            interval={0}
+            tickCount={8}
+            style={{
+              fontSize: "0.8rem",
+              margin: "2px",
+            }}
+          />
+          <Tooltip content={<CustomTooltip />} />
           <ReferenceLine
-            y={range?.high}
+            y={conventionalRange?.high}
             label={{
               position: "insideTopLeft",
-              value: "Functional range",
+              value: "Conventional range",
               fontSize: "0.6rem",
               fill: "#477fc9",
             }}
             stroke="#477fc9"
           />
-        )}
-        {range !== true && (
+          {!!functionalRange?.high && (
+            <ReferenceLine
+              y={functionalRange?.high}
+              label={{
+                position: "insideTopLeft",
+                value: "Functional range",
+                fontSize: "0.6rem",
+                fill: "#477fc9",
+              }}
+              stroke="#477fc9"
+            />
+          )}
+          {!!functionalRange?.low && (
+            <ReferenceLine
+              y={functionalRange?.low}
+              label={{
+                position: "insideBottomLeft",
+                value: "Functional range",
+                fontSize: "0.6rem",
+                fill: "#477fc9",
+              }}
+              stroke="#477fc9"
+            />
+          )}
           <ReferenceLine
-            y={range?.low}
+            y={conventionalRange?.low}
             label={{
               position: "insideBottomLeft",
-              value: "Functional range",
+              value: "Conventional range",
               fontSize: "0.6rem",
               fill: "#477fc9",
             }}
             stroke="#477fc9"
           />
-        )}
-        <ReferenceLine
-          y={conventionalRange?.low}
-          label={{
-            position: "insideBottomLeft",
-            value: "Conventional range",
-            fontSize: "0.6rem",
-            fill: "#477fc9",
-          }}
-          stroke="#477fc9"
-        />
-        <Line
-          animationDuration={0}
-          strokeWidth={2}
-          type="monotone"
-          dataKey="value"
-          fill="#477fc9"
-          stroke={Colors.graphInRange}
-        />
-      </LineChart>
+          <Line
+            animationDuration={0}
+            strokeWidth={2}
+            type="monotone"
+            dataKey="value"
+            fill="#477fc9"
+            stroke={Colors.graphInRange}
+          />
+        </LineChart>
+      )}
     </ResponsiveContainer>
   );
 };
@@ -227,22 +231,14 @@ Graph.propTypes = {
       value: PropTypes.number,
     })
   ).isRequired,
-  range: PropTypes.oneOfType([
-    PropTypes.shape({
-      high: PropTypes.number,
-      low: PropTypes.number,
-    }),
-    PropTypes.bool,
-  ]).isRequired,
-  conventionalRange: PropTypes.oneOfType([
-    PropTypes.shape({
-      high: PropTypes.number,
-      low: PropTypes.number,
-    }),
-    PropTypes.bool,
-  ]).isRequired,
+  functionalRange: PropTypes.shape({
+    high: PropTypes.number,
+    low: PropTypes.number,
+  }).isRequired,
+  conventionalRange: PropTypes.shape({
+    high: PropTypes.number,
+    low: PropTypes.number,
+  }).isRequired,
 };
 
-Graph.defaultProps = {
-  data: [],
-};
+export default Graph;
