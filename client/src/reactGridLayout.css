@@ -7,8 +7,9 @@
   height: 100%;
 }
 
-.react-grid-item > .react-resizable-handle {
-  bottom: 6px;
+.react-grid-item > .react-resizable-handle.react-resizable-handle-se {
+  bottom: 3px;
+  right: -3px;
 }
 
 .react-grid-item.react-grid-placeholder {
