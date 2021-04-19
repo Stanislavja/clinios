@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 const PaymentMethodsForm = (props) => {
   const classes = useStyles();
   const { user } = useAuth();
-  const patientId = user.id; /*Because on the patient portal the signed-in user will always be a patient and by user.id we use the id of the currently signed-in user, Arslan*/
+  const patientId = user.id; // On the patient portal the signed-in user will always be a patient and by user.id we use the id of the currently signed-in user, Arslan
   const { enqueueSnackbar } = useSnackbar();
   const {
     isOpen, onClose, reloadData, cardData,
