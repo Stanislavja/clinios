@@ -82,7 +82,6 @@ const PaymentMethodsForm = (props) => {
       data: {
         exp: formFields.expiryDate.replace("/", ""),
         type: formFields.cardType[0] || "V",
-        // account_number: Number(formFields.cardNumber.replaceAll("/", "").substring(0, 4)),
         account_number: formFields.cardNumber.replaceAll("/", ""),
         cvc: formFields.cvv,
         customer_id: patientInfo.data.stripe_customer_id,
