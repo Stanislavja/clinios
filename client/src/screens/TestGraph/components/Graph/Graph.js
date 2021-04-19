@@ -12,8 +12,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-import Colors from "../../../theme/colors";
-import CustomTooltip from "./Tooltip";
+import Colors from "../../../../theme/colors";
+import CustomTooltip from "../Tooltip";
 
 const countDecimals = (value) => {
   if (Math.floor(value) === value) return 0;
@@ -31,7 +31,7 @@ function roundNumber(num, scale) {
   return +`${Math.round(`${+arr[0]}e${sig}${+arr[1] + scale}`)}e-${scale}`;
 }
 
-export const Graph = ({ data, functionalRange, conventionalRange }) => {
+const Graph = ({ data, functionalRange, conventionalRange }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [graphData, setGraphData] = useState([]);
   const [low, setLow] = useState(0);
