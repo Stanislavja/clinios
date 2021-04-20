@@ -1188,8 +1188,8 @@ const getDocuments = async (req, res) => {
     $sql = `select l.id, l.created, l.filename, right(l.filename,3) filetype, l.status, l.type, l.lab_dt, l.physician, l.note
       , group_concat('"', lc.cpt_id, '","', c.name, '","', lc.value, '","', lc.range_low, '","', lc.range_high, '"' order by c.name) tests
       from lab l
-      left join lab_cpt lc on lc.lab_id=l.id
-      left join cpt c on c.id=lc.cpt_id
+      left join lab_marker lc on lc.lab_id=l.id
+      left join marker c on c.id=lc.cpt_id
       where l.client_id=${req.client_id}
       and l.patient_id=${patient_id} \n`;
 
@@ -1725,16 +1725,16 @@ const getAllTests = async (req, res) => {
     const dbResponse = await db.query(
       `select lc.cpt_id, c.name, date(lc2.lab_dt) lab_dt, lc2.value, lc2.range_high, lc2.range_low, lc2.unit, lc.count from (
         select lc.cpt_id, max(lc2.lab_id) lab_id, count from (
-        select cpt_id, max(lab_dt) lab_dt, count(*) count
-        from lab_cpt
+        select cpt_id, max(lab_dt) lab_dt, count( * ) count
+        from lab_marker
         where patient_id=${patient_id}
         group by cpt_id
         ) lc
-        left join lab_cpt lc2 on lc2.cpt_id=lc.cpt_id and lc2.lab_dt=lc.lab_dt
+        left join lab_marker lc2 on lc2.cpt_id=lc.cpt_id and lc2.lab_dt=lc.lab_dt
         group by lc.cpt_id
         ) lc
-        left join lab_cpt lc2 on lc2.lab_id=lc.lab_id and lc2.cpt_id=lc.cpt_id
-        left join cpt c on c.id=lc2.cpt_id
+        left join lab_marker lc2 on lc2.lab_id=lc.lab_id and lc2.cpt_id=lc.cpt_id
+        left join marker c on c.id=lc2.cpt_id
         order by c.name
         limit 500`
     );
