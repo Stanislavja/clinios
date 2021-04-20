@@ -35,6 +35,10 @@ const useStyles = makeStyles((theme) => ({
   lockIcon: {
     fontSize: "40px",
   },
+  link: {
+    cursor: "pointer",
+    textDecoration: "underline",
+  },
 }));
 
 const PatientSignUp = () => {
@@ -45,6 +49,7 @@ const PatientSignUp = () => {
   const [client, setClient] = React.useState(null);
   const [clientError, setClientError] = React.useState([]);
   const [errors, setErrors] = React.useState([]);
+  const [signUpSuccess, setSignUpSuccess] = React.useState(false);
 
   useEffect(() => {
     AuthService.getClientCode(clientCode).then(
@@ -81,7 +86,7 @@ const PatientSignUp = () => {
         enqueueSnackbar(`${response.data.message}`, {
           variant: "success",
         });
-        history.push(`/login/${clientCode}`);
+        setSignUpSuccess(true);
       },
       (error) => {
         if (error.response) {
@@ -91,55 +96,86 @@ const PatientSignUp = () => {
     );
   };
 
+  const navigateToLogin = () => {
+    history.push(`/login/${clientCode}`);
+  };
+
+  const RegistrationSuccess = () => (
+    <div className={classes.paper}>
+      <Avatar className={classes.avatar}>
+        <LockOutlinedIcon className={classes.lockIcon} />
+      </Avatar>
+      <Typography
+        component="h1"
+        variant="h2"
+        className={classes.pageTitle}
+      >
+        {`${client && client.name} Registration Confirmation`}
+      </Typography>
+      <Typography variant="body2" gutterBottom>
+        The registration was successful. Please login to the portal
+        {" "}
+        <span aria-hidden="true" className={classes.link} onClick={() => navigateToLogin()}>
+          here
+        </span>
+        .
+      </Typography>
+    </div>
+  );
+
   return (
     <Container component="main" maxWidth="lg">
       <CssBaseline />
-      {clientError.length > 0 ? (
-        <div className={`${classes.paper} ${classes.ErrorSection}`}>
-          <Error errors={clientError} variant="filled" />
-          <Alert icon={false} severity="info">
-            Go back to
-            {" "}
-            <Link to="/">Home page</Link>
-          </Alert>
-        </div>
-      ) : (
-        <>
-          <div className={classes.paper}>
-            <Avatar className={classes.avatar}>
-              <LockOutlinedIcon className={classes.lockIcon} />
-            </Avatar>
-            <Typography
-              component="h1"
-              variant="h2"
-              className={classes.pageTitle}
-            >
-              Register with
-              {" "}
-              {client && client.name}
-            </Typography>
-            <Typography variant="body2" gutterBottom>
-              To register as a new patient, please enter your infromation
-              in the fields below. Please do not use this form if you are
-              already patient.
-            </Typography>
-            <Typography variant="body2" gutterBottom>
-              If you would like to amend your information, please send a
-              Secure Message or call our office.
-            </Typography>
-            <Typography variant="body2" gutterBottom>
-              If you are already a registered patient with online access,
-              you can log in
-              {" "}
-              <Link to={`/login/${clientCode}`}>here</Link>
-            </Typography>
-          </div>
-          <SignupForm
-            onFormSubmit={handleFormSubmit}
-            errors={errors}
-          />
-        </>
+      {signUpSuccess && (
+        <RegistrationSuccess />
       )}
+      {!signUpSuccess && (
+        clientError.length > 0 ? (
+          <div className={`${classes.paper} ${classes.ErrorSection}`}>
+            <Error errors={clientError} variant="filled" />
+            <Alert icon={false} severity="info">
+              Go back to
+              {" "}
+              <Link to="/">Home page</Link>
+            </Alert>
+          </div>
+        ) : (
+          <>
+            <div className={classes.paper}>
+              <Avatar className={classes.avatar}>
+                <LockOutlinedIcon className={classes.lockIcon} />
+              </Avatar>
+              <Typography
+                component="h1"
+                variant="h2"
+                className={classes.pageTitle}
+              >
+                Register with
+                {" "}
+                {client && client.name}
+              </Typography>
+              <Typography variant="body2" gutterBottom>
+                To register as a new patient, please enter your infromation
+                in the fields below. Please do not use this form if you are
+                already patient.
+              </Typography>
+              <Typography variant="body2" gutterBottom>
+                If you would like to amend your information, please send a
+                Secure Message or call our office.
+              </Typography>
+              <Typography variant="body2" gutterBottom>
+                If you are already a registered patient with online access,
+                you can log in
+                {" "}
+                <Link to={`/login/${clientCode}`}>here</Link>
+              </Typography>
+            </div>
+            <SignupForm
+              onFormSubmit={handleFormSubmit}
+              errors={errors}
+            />
+          </>
+        ))}
     </Container>
   );
 };

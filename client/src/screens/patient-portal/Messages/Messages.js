@@ -40,6 +40,12 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     margin: "10px 0 16px 0",
   },
+  labelBold: {
+    fontWeight: "bold",
+  },
+  mr1: {
+    marginRight: theme.spacing(1),
+  },
 }));
 
 export default function Messages() {
@@ -142,19 +148,18 @@ export default function Messages() {
               <Grid container spacing={4} alignItems="flex-start">
                 <Grid item xs={6}>
                   <Typography component="p" variant="body2" color="textPrimary">
-                    <span style={{ fontWeight: "bold" }}>Time: </span>
-                    {" "}
-                    {moment(msg.created).format("ll, h:mm")}
-                    {" "}
-                    <span style={{ fontWeight: "bold" }}>Subject: </span>
-                    {" "}
-                    {msg.subject}
-                    {" "}
-                    <span style={{ fontWeight: "bold" }}>From: </span>
-                    {msg.user_to_from || msg.patient_to_from}
-                    {" "}
-                    <span style={{ fontWeight: "bold" }}>To: </span>
-                    {msg.user_to_name ? msg.user_to_name : "You"}
+                    <span className={classes.labelBold}>Time: </span>
+                    <span className={classes.mr1}>
+                      {moment(msg.created).format("ll, h:mm")}
+                    </span>
+                    <span className={classes.labelBold}>From: </span>
+                    <span className={classes.mr1}>
+                      {msg.user_to_from || msg.patient_to_from}
+                    </span>
+                    <span className={classes.labelBold}>To: </span>
+                    <span className={classes.mr1}>
+                      {msg.user_to_name ? msg.user_to_name : "You"}
+                    </span>
                     <br />
                     {msg.message}
                   </Typography>

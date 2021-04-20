@@ -173,7 +173,7 @@ const ProcessMessage = (props) => {
             )
         }
       </Box>
-      {!selectedMessage && ( // hidden on patient page
+      {(!selectedMessage && Boolean(messages.length)) && ( // hidden on patient page
         <Grid
           container
           className={classes.actionsContainer}
