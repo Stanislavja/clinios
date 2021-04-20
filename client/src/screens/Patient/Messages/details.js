@@ -149,7 +149,6 @@ const MessagesDetails = (props) => {
           <TableHead>
             <TableRow>
               <StyledTableCell>Created</StyledTableCell>
-              <StyledTableCell>Subject</StyledTableCell>
               <StyledTableCell>From</StyledTableCell>
               <StyledTableCell>To</StyledTableCell>
               <StyledTableCell>Message</StyledTableCell>
@@ -163,7 +162,6 @@ const MessagesDetails = (props) => {
                   <TableCell component="th" scope="row">
                     {moment(row.created).format("MMM D YYYY")}
                   </TableCell>
-                  <TableCell>{row.subject}</TableCell>
                   <TableCell>{row.user_to_from || "Patient"}</TableCell>
                   <TableCell>{row.user_to_name || "Patient"}</TableCell>
                   <TableCell>{row.message}</TableCell>
