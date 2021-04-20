@@ -51,6 +51,7 @@ const StyledTableCell = withStyles((theme) => ({
   },
   body: {
     fontSize: 14,
+    whiteSpace: "nowrap"
   },
 }))(TableCell);
 
@@ -159,11 +160,11 @@ const MessagesDetails = (props) => {
             {!!data && data.length
               ? data.map((row) => (
                 <StyledTableRow key={row.id}>
-                  <TableCell component="th" scope="row">
+                  <StyledTableCell component="th" scope="row">
                     {moment(row.created).format("MMM D YYYY")}
-                  </TableCell>
-                  <TableCell>{row.user_to_from || "Patient"}</TableCell>
-                  <TableCell>{row.user_to_name || "Patient"}</TableCell>
+                  </StyledTableCell>
+                  <StyledTableCell>{row.user_to_from || "Patient"}</StyledTableCell>
+                  <StyledTableCell>{row.user_to_name || "Patient"}</StyledTableCell>
                   <TableCell>{row.message}</TableCell>
                   <TableCell className={classes.actions}>
                     <IconButton
