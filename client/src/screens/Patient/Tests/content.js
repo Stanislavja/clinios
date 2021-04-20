@@ -148,7 +148,7 @@ const TestsContent = () => {
         };
         tempTestsArray.push(newTest);
       }
-      tempTestsArray = orderBy(tempTestsArray, (item) => item.name.toLowerCase());
+      tempTestsArray = orderBy(tempTestsArray, (item) => item.name?.toLowerCase());
       setTests([...tempTestsArray]);
     } else {
       setTests([]);
