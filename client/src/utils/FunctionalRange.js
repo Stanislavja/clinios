@@ -5,22 +5,22 @@ M=Male
 
 export function calculateFunctionalRange(test, gender, age) {
   const range = {};
-  if (test === "82947") { /* Glucose */
+  if (test === 866) { /* Glucose */
     range.low = 82.0;
     range.high = 88.0;
     return range;
   }
-  if (test === "83036") { /* A1C */
+  if (test === 950) { /* A1C */
     range.low = 5.0;
     range.high = 5.3;
     return range;
   }
-  if (test === "84681") { /* C‐peptide */
+  if (test === 384) { /* C‐peptide */
     range.low = 1.1;
     range.high = 2.1;
     return range;
   }
-  if (test === "82465") { /* Cholesterol Total */
+  if (test === 505) { /* Cholesterol Total */
     if (age <= 60) {
       range.low = 120;
       range.high = 240;
@@ -39,7 +39,7 @@ export function calculateFunctionalRange(test, gender, age) {
       }
     }
   }
-  if (test === "83721") { /* LDL Cholesterol */
+  if (test === 1132) { /* LDL Cholesterol */
     if (age <= 60) {
       range.low = 80;
       range.high = 170;
@@ -51,7 +51,7 @@ export function calculateFunctionalRange(test, gender, age) {
       return range;
     }
   }
-  if (test === "83718") { /* HDL Cholesterol */
+  if (test === 936) { /* HDL Cholesterol */
     if (gender === "M") {
       range.low = 55;
       range.high = 75;
@@ -63,47 +63,47 @@ export function calculateFunctionalRange(test, gender, age) {
       return range;
     }
   }
-  if (test === "VLDL") { /* VLDL Cholesterol */
+  if (test === 1929) { /* VLDL Cholesterol */
     range.low = 0.0;
     range.high = 20.0;
     return range;
   }
-  if (test === "84478") { /* Triglycerides */
+  if (test === 1853) { /* Triglycerides */
     range.low = 50.0;
     range.high = 90.0;
     return range;
   }
-  if (test === "84295") { /* Sodium */
+  if (test === 1695) { /* Sodium */
     range.low = 139.0;
     range.high = 142.0;
     return range;
   }
-  if (test === "84132") { /* Potassium */
+  if (test === 1483) { /* Potassium */
     range.low = 4.0;
     range.high = 4.4;
     return range;
   }
-  if (test === "82374") { /* Carbon Dioxide */
+  if (test === 446) { /* Carbon Dioxide */
     range.low = 25.0;
     range.high = 28.0;
     return range;
   }
-  if (test === "82435") { /* Chloride */
+  if (test === 502) { /* Chloride */
     range.low = 102.0;
     range.high = 105.0;
     return range;
   }
-  if (test === "83735") { /* Magnesium */
+  if (test === 1193) { /* Magnesium */
     range.low = 2.0;
     range.high = 2.3;
     return range;
   }
-  if (test === "82310") { /* Calcium */
+  if (test === 426) { /* Calcium */
     range.low = 9.4;
     range.high = 9.8;
     return range;
   }
-  if (test === "84100") { /* Phosphorus */
+  if (test === 1450) { /* Phosphorus */
     if (gender === "M") {
       range.low = 3.0;
       range.high = 3.5;
@@ -115,7 +115,7 @@ export function calculateFunctionalRange(test, gender, age) {
       return range;
     }
   }
-  if (test === "84550") { /* Uric Acid */
+  if (test === 1885) { /* Uric Acid */
     if (gender === "M") {
       range.low = 3.7;
       range.high = 5.5;
@@ -127,17 +127,17 @@ export function calculateFunctionalRange(test, gender, age) {
       return range;
     }
   }
-  if (test === "84520") { /* BUN */
+  if (test === 1881) { /* BUN */
     range.low = 12.0;
     range.high = 19.0;
     return range;
   }
-  if (test === "82565") { /* Creatinine */
+  if (test === 611) { /* Creatinine */
     range.low = 0.9;
     range.high = 1.3;
     return range;
   }
-  if (test === "84450") { /* AST */
+  if (test === 301) { /* AST */
     if (gender === "M") {
       range.low = 12;
       range.high = 25;
@@ -149,7 +149,7 @@ export function calculateFunctionalRange(test, gender, age) {
       return range;
     }
   }
-  if (test === "84460") { /* ALT */
+  if (test === 224) { /* ALT */
     if (gender === "M") {
       range.low = 13;
       range.high = 22;
@@ -161,7 +161,7 @@ export function calculateFunctionalRange(test, gender, age) {
       return range;
     }
   }
-  if (test === "82977") { /* GGT */
+  if (test === 859) { /* GGT */
     if (gender === "M") {
       range.low = 12;
       range.high = 24;
@@ -173,37 +173,37 @@ export function calculateFunctionalRange(test, gender, age) {
       return range;
     }
   }
-  if (test === "83615") { /* Lactate dehydrogenase */
+  if (test === 3006) { /* Lactate dehydrogenase */
     range.low = 140.0;
     range.high = 175.0;
     return range;
   }
-  if (test === "84075") { /* Alkaline Phosphatase */
+  if (test === 170) { /* Alkaline Phosphatase */
     range.low = 40.0;
     range.high = 80.0;
     return range;
   }
-  if (test === "82247") { /* Bilirubin Total */
+  if (test === 348) { /* Bilirubin Total */
     range.low = 0.5;
     range.high = 0.8;
     return range;
   }
-  if (test === "84155") { /* Protein Total */
+  if (test === 1531) { /* Protein Total */
     range.low = 6.59;
     range.high = 8.0;
     return range;
   }
-  if (test === "82040") { /* Albumin */
+  if (test === 160) { /* Albumin */
     range.low = 4.5;
     range.high = 5.0;
     return range;
   }
-  if (test === "Globulin") { /* Globulin */
+  if (test === 864) { /* Globulin */
     range.low = 1.9;
     range.high = 3.0;
     return range;
   }
-  if (test === "85041") { /* RBC */
+  if (test === 1561) { /* RBC */
     if (gender === "M") {
       range.low = 4.8;
       range.high = 5.5;
@@ -215,7 +215,7 @@ export function calculateFunctionalRange(test, gender, age) {
       return range;
     }
   }
-  if (test === "85018") { /* Hemoglobin */
+  if (test === 948) { /* Hemoglobin */
     if (gender === "M") {
       range.low = 13;
       range.high = 16;
@@ -227,7 +227,7 @@ export function calculateFunctionalRange(test, gender, age) {
       return range;
     }
   }
-  if (test === "85014") { /* Hematocrit */
+  if (test === 947) { /* Hematocrit */
     if (gender === "M") {
       range.low = 44;
       range.high = 49;
@@ -239,66 +239,66 @@ export function calculateFunctionalRange(test, gender, age) {
       return range;
     }
   }
-  if (test === "MCV") { /* MCV */
+  if (test === 1216) { /* MCV */
     range.low = 84.0;
     range.high = 90.0;
     return range;
   }
-  if (test === "MCH") { /* MCH */
+  if (test === 1214) { /* MCH */
     range.low = 28.0;
     range.high = 32.0;
   }
-  if (test === "MCHC") { /* MCHC */
+  if (test === 1215) { /* MCHC */
     range.low = 33.0;
     range.high = 35.0;
     return range;
   }
-  if (test === "RDW") { /* RDW */
+  if (test === 1570) { /* RDW */
     range.low = 0.0;
     range.high = 13.0;
     return range;
   }
-  if (test === "85048") { /* WBC */
+  if (test === 1950) { /* WBC */
     range.low = 3.5;
     range.high = 6.0;
     return range;
   }
-  if (test === "NeutPerc") { /* Neutrophils % */
+  if (test === 1318) { /* Neutrophils % */
     range.low = 50.0;
     range.high = 60.0;
     return range;
   }
-  if (test === "LymphPerc") { /* Lymphocytes % */
+  if (test === 1187) { /* Lymphocytes % */
     range.low = 30.0;
     range.high = 35.0;
     return range;
   }
-  if (test === "MonoPerc") { /* Monocytes % */
+  if (test === 1269) { /* Monocytes % */
     range.low = 0.0;
     range.high = 7.0;
     return range;
   }
-  if (test === "EosPerc") { /* Eosinophil % */
+  if (test === 750) { /* Eosinophil % */
     range.low = 0.0;
     range.high = 3.0;
     return range;
   }
-  if (test === "BasoPerc") { /* Basophil % */
+  if (test === 328) { /* Basophil % */
     range.low = 0.0;
     range.high = 1.0;
     return range;
   }
-  if (test === "85049") { /* Platelets */
+  if (test === 1473) { /* Platelets */
     range.low = 225.0;
     range.high = 275.0;
     return range;
   }
-  if (test === "83540") { /* Iron */
+  if (test === 1082) { /* Iron */
     range.low = 80.0;
     range.high = 100.0;
     return range;
   }
-  if (test === "82728") { /* Ferritin */
+  if (test === 791) { /* Ferritin */
     if (gender === "M") {
       range.low = 75;
       range.high = 150;
@@ -317,7 +317,7 @@ export function calculateFunctionalRange(test, gender, age) {
       }
     }
   }
-  if (test === "83550") { /* TIBC */
+  if (test === 1081) { /* TIBC */
     if (gender === "M") {
       range.low = 250;
       range.high = 370;
@@ -329,117 +329,119 @@ export function calculateFunctionalRange(test, gender, age) {
       return range;
     }
   }
-  if (test === "TSPerc") { /* Iron Saturation */
+  if (test === 8) { /* Iron Saturation */
     range.low = 24.0;
     range.high = 35.0;
     return range;
   }
-  if (test === "84378") { /* GlycoMark */
+  if (test === 887) { /* GlycoMark */
     range.low = 15.0;
     range.high = 30.0;
     return range;
   }
-  if (test === "UIBC") { /* UIBC */
+  if (test === 3011) { /* UIBC */
     range.low = 155.0;
     range.high = 355.0;
     return range;
   }
-  if (test === "BUNCR") { /* BUN/Creatinine Ratio */
+  if (test === 378) { /* BUN/Creatinine Ratio */
     range.low = 13.0;
     range.high = 20.0;
     return range;
   }
-  if (test === "82565") { /* eGFR */
+  if (test === 611) { /* eGFR */
     range.low = 59.0;
     range.high = 127.0;
     return range;
   }
-  if (test === "ANIONGAP") { /* Anion Gap */
+  /*
+  if (test === "ANIONGAP?") { // Anion Gap
     range.low = 7.0;
     range.high = 12.0;
     return range;
   }
-  if (test === "AGRatio") { /* Albumin/Globulin Ratio */
+  */
+  if (test === 161) { /* Albumin/Globulin Ratio */
     range.low = 1.5;
     range.high = 2.0;
     return range;
   }
-  if (test === "84443") { /* TSH */
+  if (test === 1862) { /* TSH */
     range.low = 1.8;
     range.high = 3.0;
     return range;
   }
-  if (test === "84480") { /* T3 Total */
+  if (test === 1760) { /* T3 Total */
     range.low = 100;
     range.high = 180;
     return range;
   }
-  if (test === "84481") { /* T3 Free */
+  if (test === 1759) { /* T3 Free */
     range.low = 3.0;
     range.high = 4.0;
     return range;
   }
-  if (test === "84436") { /* T4 Total */
+  if (test === 1761) { /* T4 Total */
     range.low = 6.0;
     range.high = 12.0;
     return range;
   }
-  if (test === "84439") { /* T4 Free */
+  if (test === 1762) { /* T4 Free */
     range.low = 1.0;
     range.high = 1.5;
     return range;
   }
-  if (test === "84479") { /* T3 Uptake */
+  if (test === 1758) { /* T3 Uptake */
     range.low = 28.0;
     range.high = 38.0;
     return range;
   }
-  if (test === "86800") { /* Thyroglobulin Ab */
+  if (test === 1790) { /* Thyroglobulin Ab */
     range.low = 0.0;
     range.high = 32.0;
     return range;
   }
-  if (test === "86376") { /* Thyroid Peroxidase Ab */
+  if (test === 1793) { /* Thyroid Peroxidase Ab */
     range.low = 0.0;
     range.high = 15.0;
     return range;
   }
-  if (test === "84482") { /* T3 Reverse */
+  if (test === 1757) { /* T3 Reverse */
     range.low = 9.0;
     range.high = 33.0;
     return range;
   }
-  if (test === "FT4I") { /* Free T4 Index (T7) */
+  if (test === 818) { /* Free T4 Index (T7) */
     range.low = 1.2;
     range.high = 4.9;
     return range;
   }
-  if (test === "82306") { /* Vitamin D 25 Hydroxy */
+  if (test === 1921) { /* Vitamin D 25 Hydroxy */
     range.low = 50.0;
     range.high = 100.0;
     return range;
   }
-  if (test === "86141") { /* C-Reactive Protein */
+  if (test === 394) { /* C-Reactive Protein */
     range.low = 0.0;
     range.high = 1.0;
     return range;
   }
-  if (test === "83090") { /* Homocysteine */
+  if (test === 999) { /* Homocysteine */
     range.low = 0.0;
     range.high = 7.0;
     return range;
   }
-  if (test === "84255") { /* Selenium */
+  if (test === 1655) { /* Selenium */
     range.low = 100.0;
     range.high = 140.0;
     return range;
   }
-  if (test === "Osmolarity") { /* Calculated */
+  if (test === 3008) { /* Osmolarity (Derived) */
     range.low = 288;
     range.high = 292;
     return range;
   }
-  if (test === "ViscosityHighShear") { /* Calculated */
+  if (test === 3012) { /* Viscosity High Shear (Derived) */
     if (gender === "M") {
       range.low = 15.3;
       range.high = 19.1;
@@ -451,17 +453,17 @@ export function calculateFunctionalRange(test, gender, age) {
       return range;
     }
   }
-  if (test === "AnionGapNaClHCO3") { /* Calculated */
+  if (test === 3000) { /* Anion Gap (Na-Cl-HCO3) (Derived) */
     range.low = 7;
     range.high = 12;
     return range;
   }
-  if (test === "UrineSG") { /* Urine Specific Gravity */
-    range.low = "1.005";
-    range.high = "1.025";
+  if (test === 1706) { /* Urine Specific Gravity */
+    range.low = 1.005;
+    range.high = 1.025;
     return range;
   }
-  if (test === "RHR") { /* resting heart rate */
+  if (test === "RHR?") { /* Resting heart rate */
     if (age >= 19 && age <= 25) {
       if (gender === "F") {
         range.low = 54;

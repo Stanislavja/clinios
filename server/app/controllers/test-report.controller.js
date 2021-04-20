@@ -32,7 +32,7 @@ const getPageTitle = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const $sql = `select name
-    from cpt 
+    from marker 
     where id = '${cptId}'`;
 
     const dbResponse = await db.query($sql);
@@ -57,7 +57,7 @@ const getLabcptByLabId = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const $sql = `select cpt_id
-   from lab_cpt
+   from lab_marker
    where patient_id=${req.patient_id || patientId}
    and lab_id='${labId}'
    order by line_nbr
@@ -86,10 +86,10 @@ const getLabcpt = async (req, res) => {
   try {
     const $sql = `select c.id, c.name from (
     select distinct lc.cpt_id
-    from lab_cpt lc
+    from lab_marker lc
     where lc.patient_id=${req.patient_id || patientId}
     ) lc
-    left join cpt c on c.id=lc.cpt_id
+    left join marker c on c.id=lc.cpt_id
     order by c.name
     limit 200`;
 
@@ -114,9 +114,8 @@ const getTestGraph = async (req, res) => {
 
   const db = makeDb(configuration, res);
   try {
-    const $sql = `select lc.lab_id, lc.lab_dt, lc.cpt_id, lc.value, lc.range_low, lc.range_high, lc.unit, /*c.name,*/ l.filename, lc.client_id
-    from lab_cpt lc
-    /*left join cpt c on c.id=lc.cpt_id*/
+    const $sql = `select lc.lab_id, lc.lab_dt, lc.cpt_id, lc.value, lc.range_low, lc.range_high, lc.unit, l.filename, lc.client_id
+    from lab_marker lc
     left join lab l on l.id=lc.lab_id
     where lc.patient_id=${req.patient_id || patientId}
     and lc.cpt_id='${labId}'
@@ -144,7 +143,7 @@ const getConventionalRange = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const $sql = `select lc.lab_id, lc.lab_dt, lc.cpt_id, lc.value, lc.range_low, lc.range_high, lc.unit, l.filename, lc.client_id
-    from lab_cpt lc
+    from lab_marker lc
     left join lab l on l.id=lc.lab_id
     where lc.patient_id=${req.patient_id || patientId}
     and lc.cpt_id='${cptId}'

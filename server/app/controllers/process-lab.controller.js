@@ -280,8 +280,8 @@ const getLabValues = async (req, res) => {
   try {
     const dbResponse = await db.query(
       `select c.id, c.name, lc.value, lc.range_low, lc.range_high, lc.unit
-      from lab_cpt lc
-      left join cpt c on c.id=lc.cpt_id
+      from lab_marker lc
+      left join marker c on c.id=lc.cpt_id
       where lc.lab_id=${labId}
       and lc.client_id=${req.client_id}
       order by lc.line_nbr
