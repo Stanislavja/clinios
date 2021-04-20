@@ -185,6 +185,7 @@ const Patient = () => {
     handouts,
     documents,
     encounters,
+    editorText,
     medicalNotes,
     allergies,
     messages,
@@ -647,8 +648,6 @@ const Patient = () => {
     fd.append("patient_id", patientId);
     createDocument(fd);
   };
-
-  const { editorText } = state;
 
   const updateAdminNotes = () => {
     if (editorText !== patientData.admin_note) {
