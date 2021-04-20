@@ -51,7 +51,7 @@ const StyledTableCell = withStyles((theme) => ({
   },
   body: {
     fontSize: 14,
-    whiteSpace: "nowrap"
+    whiteSpace: "nowrap",
   },
 }))(TableCell);
 

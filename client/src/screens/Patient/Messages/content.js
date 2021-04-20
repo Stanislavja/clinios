@@ -196,7 +196,7 @@ const MessagesContent = (props) => {
                     color="textPrimary"
                   >
                     From:
-                    </Typography>
+                  </Typography>
                   <Typography
                     component="span"
                     variant="body1"
@@ -214,7 +214,7 @@ const MessagesContent = (props) => {
                     color="textPrimary"
                   >
                     To:
-                    </Typography>
+                  </Typography>
                   <Typography
                     component="span"
                     variant="body1"

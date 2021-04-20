@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
   mr1: {
     marginRight: theme.spacing(1),
-  }
+  },
 }));
 
 export default function Messages() {
