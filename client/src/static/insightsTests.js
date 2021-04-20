@@ -1,7 +1,7 @@
 export const InsightsTests = [
   {
     test: "RBC",
-    id: "85041",
+    id: 1561,
     iron: 0,
     blood: 0,
     inflammation: 0,
@@ -13,7 +13,7 @@ export const InsightsTests = [
   },
   {
     test: "Hemoglobin",
-    id: "85018",
+    id: 948,
     iron: 0,
     blood: 0,
     inflammation: 0,
@@ -25,7 +25,7 @@ export const InsightsTests = [
   },
   {
     test: "Hematocrit",
-    id: "85014",
+    id: 947,
     iron: 0,
     blood: 0,
     inflammation: 0,
@@ -37,7 +37,7 @@ export const InsightsTests = [
   },
   {
     test: "MCV",
-    id: "MCV",
+    id: 1216,
     iron: 0,
     blood: null,
     inflammation: 0,
@@ -49,7 +49,7 @@ export const InsightsTests = [
   },
   {
     test: "MCH",
-    id: "MCH",
+    id: 1214,
     iron: 0,
     blood: null,
     inflammation: 0,
@@ -61,7 +61,7 @@ export const InsightsTests = [
   },
   {
     test: "MCHC",
-    id: "MCHC",
+    id: 1215,
     iron: 0,
     blood: null,
     inflammation: 0,
@@ -73,7 +73,7 @@ export const InsightsTests = [
   },
   {
     test: "RDW",
-    id: "RDW",
+    id: 1570,
     iron: 1,
     blood: null,
     inflammation: null,
@@ -85,7 +85,7 @@ export const InsightsTests = [
   },
   {
     test: "Iron",
-    id: "83540",
+    id: 1082,
     iron: 0,
     blood: 0,
     inflammation: null,
@@ -97,7 +97,7 @@ export const InsightsTests = [
   },
   {
     test: "Ferritin",
-    id: "82728",
+    id: 791,
     iron: 0,
     blood: 0,
     inflammation: 1,
@@ -109,7 +109,7 @@ export const InsightsTests = [
   },
   {
     test: "TIBC",
-    id: "83550",
+    id: 1081,
     iron: 1,
     blood: 1,
     inflammation: null,
