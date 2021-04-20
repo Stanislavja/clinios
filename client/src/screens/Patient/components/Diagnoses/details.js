@@ -120,14 +120,6 @@ const DiagnosesDetails = (props) => {
         enqueueSnackbar(`${response.data.message}`, { variant: "success" });
         closeDeleteDialog();
         reloadData();
-      })
-      .catch((error) => {
-        const resMessage = (error.response
-          && error.response.data
-          && error.response.data.message)
-          || error.message
-          || error.toString();
-        enqueueSnackbar(`${resMessage}`, { variant: "error" });
       });
   };
 
@@ -145,16 +137,6 @@ const DiagnosesDetails = (props) => {
           variant: "success",
         });
         reloadData();
-      })
-      .catch((error) => {
-        const resMessage = (error.response
-          && error.response.data
-          && error.response.data.message)
-          || error.message
-          || error.toString();
-        enqueueSnackbar(resMessage, {
-          variant: "error",
-        });
       });
   };
 
