@@ -166,7 +166,7 @@ const MessagesContent = (props) => {
       </Menu>
       {data.map((item, index) => (
         <Grid key={item.id}>
-          <Grid container spacing={1}>
+          <Grid container spacing={1} className={classes.inputRow}>
             <Grid item className={classes.dateText}>
               {/* <Typography
                 component="span"
@@ -188,62 +188,40 @@ const MessagesContent = (props) => {
 
             <Grid item xs>
               <Grid container>
-                {!!item.user_to_from && (
-                  <Grid item xs={4}>
-                    <Typography
-                      component="span"
-                      variant="body1"
-                      className={`${classes.text12} ${classes.label}`}
-                      color="textPrimary"
-                    >
-                      From:
-                    </Typography>
-                    <Typography
-                      component="span"
-                      variant="body1"
-                      className={classes.text12}
-                      color="textPrimary"
-                    >
-                      {item.user_to_from || ""}
-                    </Typography>
-                  </Grid>
-                )}
-                {!!item.user_to_name && (
-                  <Grid item xs={4}>
-                    <Typography
-                      component="span"
-                      variant="body1"
-                      className={`${classes.text12} ${classes.label}`}
-                      color="textPrimary"
-                    >
-                      To:
-                    </Typography>
-                    <Typography
-                      component="span"
-                      variant="body1"
-                      className={classes.text12}
-                      color="textPrimary"
-                    >
-                      {item.user_to_name || ""}
-                    </Typography>
-                  </Grid>
-                )}
-                <Grid item xs={!item.user_to_name || !item.user_to_from ? true : 4}>
+                <Grid item xs={6}>
                   <Typography
                     component="span"
                     variant="body1"
                     className={`${classes.text12} ${classes.label}`}
                     color="textPrimary"
                   >
-                    Subject:
-                  </Typography>
+                    From:
+                    </Typography>
                   <Typography
                     component="span"
                     variant="body1"
                     className={classes.text12}
                     color="textPrimary"
                   >
-                    {item.subject}
+                    {item.user_to_from || "Patient"}
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography
+                    component="span"
+                    variant="body1"
+                    className={`${classes.text12} ${classes.label}`}
+                    color="textPrimary"
+                  >
+                    To:
+                    </Typography>
+                  <Typography
+                    component="span"
+                    variant="body1"
+                    className={classes.text12}
+                    color="textPrimary"
+                  >
+                    {item.user_to_name || "Patient"}
                   </Typography>
                 </Grid>
               </Grid>
