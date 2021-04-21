@@ -7,6 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 
+import useAuth from "../../../hooks/useAuth";
 import MessagesService from "../../../services/patient_portal/messages.service";
 import MessageModal from "./components/MessageModal";
 
@@ -50,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Messages() {
   const classes = useStyles();
+  const { user } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const [messages, setMessages] = useState([]);
   const [selectedMessage, setSelectedMessage] = useState(null);
@@ -112,6 +114,8 @@ export default function Messages() {
     return title;
   }, [modalView]);
 
+  const userName = `${user.firstname} ${user.lastname}`;
+
   return (
     <>
       {open && (
@@ -158,7 +162,7 @@ export default function Messages() {
                     </span>
                     <span className={classes.labelBold}>To: </span>
                     <span className={classes.mr1}>
-                      {msg.user_to_name ? msg.user_to_name : "You"}
+                      {msg.user_to_name ? msg.user_to_name : userName}
                     </span>
                     <br />
                     {msg.message}

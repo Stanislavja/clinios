@@ -47,6 +47,8 @@ const MessagesContent = (props) => {
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuth();
   const { state, dispatch } = usePatientContext();
+  const patientData = state.patientInfo.data;
+  const patientName = `${patientData.firstname} ${patientData.lastname}`;
   const { data, selectedMessage } = state.messages;
   const { patientId } = state;
 
@@ -203,7 +205,7 @@ const MessagesContent = (props) => {
                     className={classes.text12}
                     color="textPrimary"
                   >
-                    {item.user_to_from || "Patient"}
+                    {item.user_to_from || patientName}
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
@@ -221,7 +223,7 @@ const MessagesContent = (props) => {
                     className={classes.text12}
                     color="textPrimary"
                   >
-                    {item.user_to_name || "Patient"}
+                    {item.user_to_name || patientName}
                   </Typography>
                 </Grid>
               </Grid>

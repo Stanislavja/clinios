@@ -125,19 +125,19 @@ const Home = () => {
         {header && ReactHtmlParser(header.header)}
       </Alert>
       {Boolean(upcomingAppointments?.length)
-       && upcomingAppointments?.filter(((appointment) => appointment?.status !== "D"))?.map((appointment) => (
-         <Box component="div" className={classes.BoxStyle}>
-           <p>
-             {renderAppointmentRowText(appointment)}
-             <Link
-               to={{ pathname: "/patient/appointments", state: { appointment } }}
-               className={classes.rescheduleLink}
-             >
-               Request Reschedule Appointment
-             </Link>
-           </p>
-         </Box>
-       ))}
+        && upcomingAppointments?.filter(((appointment) => appointment?.status !== "D")).map((appointment) => (
+          <Box component="div" className={classes.BoxStyle} key={appointment.id}>
+            <p>
+              {renderAppointmentRowText(appointment)}
+              <Link
+                to={{ pathname: "/patient/appointments", state: { appointment } }}
+                className={classes.rescheduleLink}
+              >
+                Request Reschedule Appointment
+              </Link>
+            </p>
+          </Box>
+        ))}
 
       {clientForms && (
         <Box component="div" className={classes.formBox}>

@@ -80,8 +80,8 @@ const TestsContent = () => {
 
   const hasValue = (value) => !((typeof value === "undefined") || (value === null));
 
-  const hasTestValue = (value, testsArray) => {
-    const matchArray = testsArray.filter((x) => x.name === value);
+  const hasTestValue = (value, cptId, testsArray) => {
+    const matchArray = testsArray.filter((x) => x.cpt_id === cptId);
     let res = null;
     if (matchArray.length) {
       const [firstEl] = matchArray;
@@ -93,14 +93,15 @@ const TestsContent = () => {
   const addCalculatedTests = useCallback(() => {
     if (!!data && data.length) {
       let tempTestsArray = [...data];
-      const sodiumTest = hasTestValue("Sodium", data);
-      const potassiumTest = hasTestValue("Potassium", data);
-      const glucoseTest = hasTestValue("Glucose", data);
-      const ureaTest = hasTestValue("Urea Nitrogen (Bun)", data);
+      const sodiumTest = hasTestValue("Sodium", 1695, data);
+      const potassiumTest = hasTestValue("Potassium", 1483, data);
+      const glucoseTest = hasTestValue("Glucose", 866, data);
+      const ureaTest = hasTestValue("Urea Nitrogen", 1881, data);
+
       if (!!sodiumTest && !!potassiumTest && !!glucoseTest && !!ureaTest) {
         const newTest = {
           count: 1,
-          cpt_id: "Osmolarity",
+          cpt_id: 3008,
           lab_dt: new Date(),
           name: "Osmolarity (Derived)",
           unit: "",
@@ -109,12 +110,12 @@ const TestsContent = () => {
         };
         tempTestsArray.push(newTest);
       }
-      const hematocritTest = hasTestValue("Hematocrit", data);
-      const proteinTotalTest = hasTestValue("Protein, Total", data);
+      const hematocritTest = hasTestValue("Hematocrit", 947, data);
+      const proteinTotalTest = hasTestValue("Protein, Total", 1531, data);
       if (!!hematocritTest && !!proteinTotalTest) {
         const newTest = {
           count: 1,
-          cpt_id: "ViscosityHighShear",
+          cpt_id: 3012,
           lab_dt: new Date(),
           name: "Viscosity High Shear (Derived)",
           unit: "",
@@ -122,12 +123,12 @@ const TestsContent = () => {
         };
         tempTestsArray.push(newTest);
       }
-      const ironTest = hasTestValue("Iron, Total", data);
-      const transferrinTest = hasTestValue("Transferrin", data);
+      const ironTest = hasTestValue("Iron, Total", 1082, data);
+      const transferrinTest = hasTestValue("Transferrin", 1836, data);
       if (!!ironTest && !!transferrinTest) {
         const newTest = {
           count: 1,
-          cpt_id: "TransferrinSaturation",
+          cpt_id: 3013,
           lab_dt: new Date(),
           name: "Transferrin saturation (Derived)",
           unit: "",
@@ -135,12 +136,12 @@ const TestsContent = () => {
         };
         tempTestsArray.push(newTest);
       }
-      const chlorideTest = hasTestValue("Chloride", data);
-      const carbonDioxideTest = hasTestValue("Carbon Dioxide", data);
+      const chlorideTest = hasTestValue("Chloride", 502, data);
+      const carbonDioxideTest = hasTestValue("Carbon Dioxide", 446, data);
       if (!!sodiumTest && !!chlorideTest && !!carbonDioxideTest) {
         const newTest = {
           count: 1,
-          cpt_id: "AnionGapNaClHCO3",
+          cpt_id: 3000,
           lab_dt: new Date(),
           name: "Anion Gap (Na-Cl-HCO3) (Derived)",
           unit: "",

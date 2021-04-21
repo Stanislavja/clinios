@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 
+import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -25,6 +26,11 @@ import {
 import PatientService from "../../../services/patient.service";
 
 const useStyles = makeStyles((theme) => ({
+  newButton: {
+    position: "absolute",
+    right: "20%",
+    top: "10px",
+  },
   button: {
     padding: theme.spacing(1),
   },
@@ -78,6 +84,8 @@ const MessagesDetails = (props) => {
 
   const { user } = useAuth();
   const { state, dispatch } = usePatientContext();
+  const patientData = state.patientInfo.data;
+  const patientName = `${patientData.firstname} ${patientData.lastname}`;
   const { data } = state.messages;
   const { patientId } = state;
 
@@ -137,6 +145,13 @@ const MessagesDetails = (props) => {
         applyForm={() => deleteItemHandler(selectedItem)}
         cancelForm={closeDeleteDialog}
       />
+      <Button
+        variant="outlined"
+        className={classes.newButton}
+        onClick={() => dispatch(toggleMessageDialog())}
+      >
+        New
+      </Button>
       <TableContainer className={classes.tableContainer}>
         <Table size="small" className={classes.table}>
           <TableHead>
@@ -155,8 +170,8 @@ const MessagesDetails = (props) => {
                   <StyledTableCell component="th" scope="row">
                     {moment(row.created).format("MMM D YYYY")}
                   </StyledTableCell>
-                  <StyledTableCell>{row.user_to_from || "Patient"}</StyledTableCell>
-                  <StyledTableCell>{row.user_to_name || "Patient"}</StyledTableCell>
+                  <StyledTableCell>{row.user_to_from || patientName}</StyledTableCell>
+                  <StyledTableCell>{row.user_to_name || patientName}</StyledTableCell>
                   <TableCell>{row.message}</TableCell>
                   <TableCell className={classes.actions}>
                     <IconButton

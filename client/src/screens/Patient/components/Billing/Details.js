@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Typography } from "@material-ui/core";
+import { Typography, Button } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -20,9 +20,11 @@ import usePatientContext from "../../../../hooks/usePatientContext";
 import { toggleNewTransactionDialog, setSelectedBilling } from "../../../../providers/Patient/actions";
 import PatientService from "../../../../services/patient.service";
 
-const useStyles = makeStyles((theme) => ({
-  button: {
-    padding: theme.spacing(1),
+const useStyles = makeStyles(() => ({
+  newButton: {
+    position: "absolute",
+    right: "20%",
+    top: "10px",
   },
   tableContainer: {
     minWidth: 650,
@@ -103,6 +105,13 @@ const BillingDetails = (props) => {
         applyForm={() => deleteItemHandler(selectedItem)}
         cancelForm={closeDeleteDialog}
       />
+      <Button
+        variant="outlined"
+        className={classes.newButton}
+        onClick={() => dispatch(toggleNewTransactionDialog())}
+      >
+        New
+      </Button>
       <TableContainer className={classes.tableContainer}>
         <Table size="small" className={classes.table}>
           <TableHead>
