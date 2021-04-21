@@ -111,14 +111,6 @@ const Requisitions = (props) => {
       .then((response) => {
         enqueueSnackbar(`${response.data.message}`, { variant: "success" });
         onClose();
-      })
-      .catch((error) => {
-        const resMessage = (error.response
-          && error.response.data
-          && error.response.data.message)
-          || error.message
-          || error.toString();
-        enqueueSnackbar(`${resMessage}`, { variant: "error" });
       });
   };
 

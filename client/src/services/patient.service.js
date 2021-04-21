@@ -694,8 +694,8 @@ class Patient {
     );
   }
 
-  deleteRequisitions(patientId) {
-    return axios.delete(`${API_BASE}/patient/${patientId}/requisitions`, {
+  deleteRequisitions(patientId, requisitionId) {
+    return axios.delete(`${API_BASE}/patient/${patientId}/requisitions/${requisitionId}`, {
       headers: authHeader(),
     });
   }

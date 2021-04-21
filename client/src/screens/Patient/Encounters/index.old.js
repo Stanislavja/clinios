@@ -148,14 +148,6 @@ const Encounters = (props) => {
           enqueueSnackbar(`${response.data.message}`, { variant: "success" });
           reloadData();
           dispatch(toggleEncountersDialog());
-        })
-        .catch((error) => {
-          const resMessage = (error.response
-            && error.response.data
-            && error.response.data.message)
-            || error.message
-            || error.toString();
-          enqueueSnackbar(`${resMessage}`, { variant: "error" });
         });
     } else {
       const reqBody = {
@@ -173,14 +165,6 @@ const Encounters = (props) => {
           enqueueSnackbar(`${response.data.message}`, { variant: "success" });
           reloadData();
           dispatch(toggleEncountersDialog());
-        })
-        .catch((error) => {
-          const resMessage = (error.response
-            && error.response.data
-            && error.response.data.message)
-            || error.message
-            || error.toString();
-          enqueueSnackbar(`${resMessage}`, { variant: "error" });
         });
     }
   };

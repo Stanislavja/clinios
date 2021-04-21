@@ -152,14 +152,6 @@ const DocumentsContent = (props) => {
       .then((response) => {
         enqueueSnackbar(`${response.data.message}`, { variant: "success" });
         reloadData();
-      })
-      .catch((error) => {
-        const resMessage = (error.response
-          && error.response.data
-          && error.response.data.message)
-          || error.message
-          || error.toString();
-        enqueueSnackbar(`${resMessage}`, { variant: "error" });
       });
   };
 
@@ -198,7 +190,7 @@ const DocumentsContent = (props) => {
     let flagResults = [];
     if (!!trimmedValues && trimmedValues.length) {
       flagResults = trimmedValues.map((value) => {
-        const testCPTid = value[0];
+        const testCPTid = Number(value[0]);
         const testName = value[1];
         const resultValue = Number(value[2]);
         const convRangeLow = Number(value[3]);

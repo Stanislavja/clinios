@@ -185,6 +185,7 @@ const Patient = () => {
     handouts,
     documents,
     encounters,
+    editorText,
     medicalNotes,
     allergies,
     messages,
@@ -637,14 +638,6 @@ const Patient = () => {
       .then((response) => {
         enqueueSnackbar(`${response.data.message}`, { variant: "success" });
         fetchDocuments();
-      })
-      .catch((error) => {
-        const resMessage = (error.response
-          && error.response.data
-          && error.response.data.message)
-          || error.message
-          || error.toString();
-        enqueueSnackbar(`${resMessage}`, { variant: "error" });
       });
   };
 
@@ -655,8 +648,6 @@ const Patient = () => {
     fd.append("patient_id", patientId);
     createDocument(fd);
   };
-
-  const { editorText } = state;
 
   const updateAdminNotes = () => {
     if (editorText !== patientData.admin_note) {
@@ -673,14 +664,6 @@ const Patient = () => {
           fetchPatientData();
           fetchAdminNotesHistory();
           dispatch(toggleAdminFormDialog());
-        })
-        .catch((error) => {
-          const resMessage = (error.response
-            && error.response.data
-            && error.response.data.message[0].msg)
-            || error.message
-            || error.toString();
-          enqueueSnackbar(`${resMessage}`, { variant: "error" });
         });
     } else {
       dispatch(toggleAdminFormDialog());
@@ -702,14 +685,6 @@ const Patient = () => {
           fetchPatientData();
           fetchMedicalNotes();
           dispatch(toggleMedicalNotesFormDialog());
-        })
-        .catch((error) => {
-          const resMessage = (error.response
-            && error.response.data
-            && error.response.data.message)
-            || error.message
-            || error.toString();
-          enqueueSnackbar(`${resMessage}`, { variant: "error" });
         });
     } else {
       dispatch(toggleMedicalNotesFormDialog());
