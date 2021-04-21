@@ -2,6 +2,7 @@ import React, { useState, useCallback } from "react";
 
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -25,6 +26,11 @@ import {
 import PatientService from "../../../services/patient.service";
 
 const useStyles = makeStyles((theme) => ({
+  newButton: {
+    position: "absolute",
+    right: "20%",
+    top: "10px",
+  },
   button: {
     padding: theme.spacing(1),
   },
@@ -139,6 +145,13 @@ const MessagesDetails = (props) => {
         applyForm={() => deleteItemHandler(selectedItem)}
         cancelForm={closeDeleteDialog}
       />
+      <Button
+        variant="outlined"
+        className={classes.newButton}
+        onClick={() => dispatch(toggleMessageDialog())}
+      >
+        New
+      </Button>
       <TableContainer className={classes.tableContainer}>
         <Table size="small" className={classes.table}>
           <TableHead>
