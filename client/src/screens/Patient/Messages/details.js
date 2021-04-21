@@ -78,6 +78,8 @@ const MessagesDetails = (props) => {
 
   const { user } = useAuth();
   const { state, dispatch } = usePatientContext();
+  const patientData = state.patientInfo.data;
+  const patientName = `${patientData.firstname} ${patientData.lastname}`;
   const { data } = state.messages;
   const { patientId } = state;
 
@@ -155,8 +157,8 @@ const MessagesDetails = (props) => {
                   <StyledTableCell component="th" scope="row">
                     {moment(row.created).format("MMM D YYYY")}
                   </StyledTableCell>
-                  <StyledTableCell>{row.user_to_from || "Patient"}</StyledTableCell>
-                  <StyledTableCell>{row.user_to_name || "Patient"}</StyledTableCell>
+                  <StyledTableCell>{row.user_to_from || patientName}</StyledTableCell>
+                  <StyledTableCell>{row.user_to_name || patientName}</StyledTableCell>
                   <TableCell>{row.message}</TableCell>
                   <TableCell className={classes.actions}>
                     <IconButton
