@@ -125,7 +125,7 @@ const Home = () => {
         {header && ReactHtmlParser(header.header)}
       </Alert>
       {Boolean(upcomingAppointments?.length)
-        && upcomingAppointments?.filter(((appointment) => appointment?.status !== "D"))?.map((appointment) => (
+        && upcomingAppointments?.filter(((appointment) => appointment?.status !== "D")).map((appointment) => (
           <Box component="div" className={classes.BoxStyle} key={appointment.id}>
             <p>
               {renderAppointmentRowText(appointment)}
@@ -134,7 +134,7 @@ const Home = () => {
                 className={classes.rescheduleLink}
               >
                 Request Reschedule Appointment
-             </Link>
+              </Link>
             </p>
           </Box>
         ))}
