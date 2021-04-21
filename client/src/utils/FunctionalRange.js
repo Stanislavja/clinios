@@ -458,6 +458,11 @@ export function calculateFunctionalRange(test, gender, age) {
     range.high = 12;
     return range;
   }
+  if (test === 3013) { /* Transferrin saturation (Derived) */
+    range.low = 30;
+    range.high = 40;
+    return range;
+  }
   if (test === 1706) { /* Urine Specific Gravity */
     range.low = 1.005;
     range.high = 1.025;
