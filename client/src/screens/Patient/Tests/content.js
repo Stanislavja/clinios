@@ -101,7 +101,7 @@ const TestsContent = () => {
       if (!!sodiumTest && !!potassiumTest && !!glucoseTest && !!ureaTest) {
         const newTest = {
           count: 1,
-          cpt_id: "Osmolarity",
+          cpt_id: 3008,
           lab_dt: new Date(),
           name: "Osmolarity (Derived)",
           unit: "",
@@ -115,7 +115,7 @@ const TestsContent = () => {
       if (!!hematocritTest && !!proteinTotalTest) {
         const newTest = {
           count: 1,
-          cpt_id: "ViscosityHighShear",
+          cpt_id: 3012,
           lab_dt: new Date(),
           name: "Viscosity High Shear (Derived)",
           unit: "",
@@ -141,7 +141,7 @@ const TestsContent = () => {
       if (!!sodiumTest && !!chlorideTest && !!carbonDioxideTest) {
         const newTest = {
           count: 1,
-          cpt_id: "AnionGapNaClHCO3",
+          cpt_id: 3000,
           lab_dt: new Date(),
           name: "Anion Gap (Na-Cl-HCO3) (Derived)",
           unit: "",
