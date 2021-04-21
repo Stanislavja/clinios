@@ -74,7 +74,6 @@ import {
   togglePaymentDialog,
   togglePatientAppointmentHistoryDialog,
   resetSelectedMessage,
-  setTestName,
 } from "../../providers/Patient/actions";
 import initialState from "../../providers/Patient/initialState";
 import PatientService from "../../services/patient.service";
@@ -231,11 +230,6 @@ const Patient = () => {
     });
   };
 
-  const changeTestGraphTitle = (title) => {
-    if (title) {
-      dispatch(setTestName(title));
-    }
-  };
   const generateLayout = () => {
     const y = 4;
     const firstlayout = FirstColumnPatientCards.map((item) => ({
@@ -1178,7 +1172,7 @@ const Patient = () => {
         <Dialog
           open={tests.expandChartDialog}
           title={tests.testName}
-          message={<TestGraph changeTitle={changeTestGraphTitle} />}
+          message={<TestGraph />}
           applyForm={() => dispatch(toggleTestsChartExpandDialog())}
           cancelForm={() => dispatch(toggleTestsChartExpandDialog())}
           hideActions

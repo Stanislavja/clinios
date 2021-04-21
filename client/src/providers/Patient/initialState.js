@@ -62,7 +62,7 @@ const initialState = {
     data: [],
     expandDialog: false,
     expandChartDialog: false,
-    testName: "Test Chart",
+    testName: "",
   },
   diagnoses: {
     data: [],
