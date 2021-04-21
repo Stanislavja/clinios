@@ -225,7 +225,7 @@ const Graph = ({ data, functionalRange, conventionalRange }) => {
 Graph.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string,
+      id: PropTypes.number,
       lab_dt: PropTypes.string,
       filename: PropTypes.string,
       value: PropTypes.number,
