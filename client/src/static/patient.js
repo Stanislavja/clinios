@@ -134,11 +134,11 @@ export const FourthColumnPatientCards = [
   },
   {
     title: "Insights",
-    showActions: false,
+    showActions: true,
     showSearch: false,
     data: [],
-    primaryButtonText: "History",
-    secondaryButtonText: "Edit",
+    primaryButtonText: "Expand",
+    secondaryButtonText: null,
     icon: null,
   },
 ];

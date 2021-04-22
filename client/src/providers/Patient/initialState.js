@@ -85,6 +85,11 @@ const initialState = {
     expandDialog: false,
     newTransactionDialog: false,
   },
+  insights: {
+    data: [],
+    newDialog: false,
+    expandDialog: false,
+  },
 };
 
 export default initialState;
