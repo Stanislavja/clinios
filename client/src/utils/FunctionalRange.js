@@ -570,12 +570,12 @@ export function calculatePercentage(rangeLow, rangeHigh, lastValue) {
     flag: "",
   };
   if (lastValue < rangeLow) {
-    let value = Math.round(Math.abs(Number(((lastValue / rangeLow) * 100) - 100)));
+    const value = Math.round(Math.abs(Number(((lastValue / rangeLow) * 100) - 100)));
     result.value = value;
     result.flag = value ? "Low" : "";
   }
   if (lastValue > rangeHigh) {
-    let value = Math.round(Math.abs(Number(((lastValue / rangeHigh) * 100) - 100)));
+    const value = Math.round(Math.abs(Number(((lastValue / rangeHigh) * 100) - 100)));
     result.value = value;
     result.flag = value ? "High" : "";
   }

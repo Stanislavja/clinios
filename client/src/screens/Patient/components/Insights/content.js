@@ -148,10 +148,10 @@ const InsightsContent = () => {
     }
   };
 
-  const calculateStatus = (flag, icon) => {
+  const calculateStatus = (flag, icon, value) => {
     if ((flag === "Low" && icon === 0) || (flag === "High" && icon === 1)) {
       return (
-        <span className={classes.status}>1%</span>
+        <span className={classes.status}>{value}%</span>
       );
     }
     return null;
@@ -195,22 +195,22 @@ const InsightsContent = () => {
                       <TableCell>
                         {row.ironNormal ? <span className={classes.mr}>N</span> : ""}
                         {renderIcon(row.iron)}
-                        {calculateStatus(flag.icon, row.iron)}
+                        {calculateStatus(flag.icon, row.iron, flag.number)}
                       </TableCell>
                       <TableCell>
                         {row.bloodNormal ? <span className={classes.mr}>N</span> : ""}
                         {renderIcon(row.blood)}
-                        {calculateStatus(flag.icon, row.blood)}
+                        {calculateStatus(flag.icon, row.blood, flag.number)}
                       </TableCell>
                       <TableCell>
                         {row.inflammationNormal ? <span className={classes.mr}>N</span> : ""}
                         {renderIcon(row.inflammation)}
-                        {calculateStatus(flag.icon, row.inflammation)}
+                        {calculateStatus(flag.icon, row.inflammation, flag.number)}
                       </TableCell>
                       <TableCell>
                         {row.hemolyticNormal ? <span className={classes.mr}>N</span> : ""}
                         {renderIcon(row.hemolytic)}
-                        {calculateStatus(flag.icon, row.hemolytic)}
+                        {calculateStatus(flag.icon, row.hemolytic, flag.number)}
                       </TableCell>
                     </StyledTableRow>
                   );
