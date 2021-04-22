@@ -140,22 +140,24 @@ const EncountersContent = (props) => {
             </Grid>
 
             <Grid className={classes.inputRow}>
-              <Typography className={`${classes.text12} ${classes.label}`} color="textPrimary">
+              {/* removed from below ${classes.label} */}
+              <Typography className={`${classes.text12}`} color="textPrimary">
                 Notes:
               </Typography>
               <Typography className={classes.text12} color="textPrimary">
-                {item.notes ? item.notes : "No notes found..."}
+                {/* {item.notes ? item.notes : "No notes found..."} */}
+                {item.notes}
               </Typography>
             </Grid>
 
             <Grid className={classes.inputRow}>
-              <Typography className={`${classes.text12} ${classes.label}`} color="textPrimary">
+              {/* removed from below ${classes.label} */}
+              <Typography className={`${classes.text12}`} color="textPrimary">
                 Treatment Plan:
               </Typography>
               <Typography className={classes.text12} color="textPrimary">
-                {item.treatment
-                  ? item.treatment
-                  : "No treatment found..."}
+                {/* {item.treatment ? item.treatment : "No treatment found..."} */}
+                {item.treatment}
               </Typography>
             </Grid>
 
