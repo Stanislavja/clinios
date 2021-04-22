@@ -13,7 +13,7 @@ import moment from "moment";
 
 import usePatientContext from "../../../../hooks/usePatientContext";
 import { InsightsTests, MissingTests } from "../../../../static/insightsTests";
-import { calculateFunctionalRange, calculatePercentageFlag } from "../../../../utils/FunctionalRange";
+import { calculateFunctionalRange, calculatePercentage } from "../../../../utils/FunctionalRange";
 import { calculateAge } from "../../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
@@ -33,10 +33,10 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 12,
   },
   mr: {
-    marginRight: theme.spacing(1),
+    marginRight: theme.spacing(0.5),
   },
   status: {
-    marginLeft: theme.spacing(1),
+    marginLeft: theme.spacing(0.5),
     color: "orange",
   },
 }));
@@ -113,22 +113,18 @@ const InsightsContent = () => {
     filterRequiredTests();
   }, [filterRequiredTests]);
 
-  const getFlag = (value, functionalRange) => {
-    const flag = {};
+  const getFlag = (val, functionalRange) => {
+    const result = {};
     if (hasValue(functionalRange.low) && hasValue(functionalRange.high)) {
-      flag.value = `${calculatePercentageFlag(functionalRange.low, functionalRange.high, value.value)
-      }`;
-    } else if (hasValue(value.range_low) && hasValue(value.range_high)) {
-      flag.value = `${calculatePercentageFlag(value.range_low, value.range_high, value.value)}`;
+      const { value, flag } = calculatePercentage(functionalRange.low, functionalRange.high, val.value);
+      result.number = value;
+      result.icon = flag;
+    } else if (hasValue(val.range_low) && hasValue(val.range_high)) {
+      const { value, flag } = calculatePercentage(val.range_low, val.range_high, val.value);
+      result.number = value;
+      result.icon = flag;
     }
-    if (flag.value) {
-      if (flag.value.includes("Low")) {
-        flag.icon = "low";
-      } else if (flag.value.includes("High")) {
-        flag.icon = "high";
-      }
-    }
-    return flag;
+    return result;
   };
 
   const getRange = (value, functionalRange) => {
@@ -152,10 +148,13 @@ const InsightsContent = () => {
     }
   };
 
-  const calculateStatus = (flag, icon) => {
-    if ((flag === "low" && icon === 0) || (flag === "high" && icon === 1)) {
+  const calculateStatus = (flag, icon, value) => {
+    if ((flag === "Low" && icon === 0) || (flag === "High" && icon === 1)) {
       return (
-        <span className={classes.status}>Yes</span>
+        <span className={classes.status}>
+          {value}
+          %
+        </span>
       );
     }
     return null;
@@ -194,27 +193,27 @@ const InsightsContent = () => {
                       <TableCell>{row.value}</TableCell>
                       <TableCell>{range.value}</TableCell>
                       <TableCell>
-                        {flag.value}
+                        {flag.number > 0 ? `${flag.icon} ${flag.number}%` : ""}
                       </TableCell>
                       <TableCell>
                         {row.ironNormal ? <span className={classes.mr}>N</span> : ""}
                         {renderIcon(row.iron)}
-                        {calculateStatus(flag.icon, row.iron)}
+                        {calculateStatus(flag.icon, row.iron, flag.number)}
                       </TableCell>
                       <TableCell>
                         {row.bloodNormal ? <span className={classes.mr}>N</span> : ""}
                         {renderIcon(row.blood)}
-                        {calculateStatus(flag.icon, row.blood)}
+                        {calculateStatus(flag.icon, row.blood, flag.number)}
                       </TableCell>
                       <TableCell>
                         {row.inflammationNormal ? <span className={classes.mr}>N</span> : ""}
                         {renderIcon(row.inflammation)}
-                        {calculateStatus(flag.icon, row.inflammation)}
+                        {calculateStatus(flag.icon, row.inflammation, flag.number)}
                       </TableCell>
                       <TableCell>
                         {row.hemolyticNormal ? <span className={classes.mr}>N</span> : ""}
                         {renderIcon(row.hemolytic)}
-                        {calculateStatus(flag.icon, row.hemolytic)}
+                        {calculateStatus(flag.icon, row.hemolytic, flag.number)}
                       </TableCell>
                     </StyledTableRow>
                   );

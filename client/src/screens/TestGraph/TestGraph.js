@@ -7,10 +7,10 @@ import { mdiArrowLeftBold, mdiArrowRightBold } from "@mdi/js";
 import Icon from "@mdi/react";
 import moment from "moment";
 import { useSnackbar } from "notistack";
-import PropTypes from "prop-types";
 
 import useAuth from "../../hooks/useAuth";
 import usePatientContext from "../../hooks/usePatientContext";
+import { setTestName } from "../../providers/Patient/actions";
 import Tests from "../../services/test.service";
 import { calculateFunctionalRange } from "../../utils/FunctionalRange";
 import { calculateAge } from "../../utils/helpers";
@@ -58,11 +58,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TestGraph = ({ changeTitle }) => {
+const TestGraph = () => {
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
   const { user } = useAuth();
-  const { state } = usePatientContext();
+  const { state, dispatch } = usePatientContext();
   const patientData = state.patientInfo.data;
 
   const [cptName, setCptName] = useState("");
@@ -77,8 +77,9 @@ const TestGraph = ({ changeTitle }) => {
 
   /* eslint-disable */
   useEffect(() => {
-    if (cptName[0]?.name) {
-      changeTitle(cptName[0].name);
+    const testTitle = cptName[0]?.name;
+    if (!!testTitle) {
+      dispatch(setTestName(testTitle));
     }
   }, [cptName]);
 
@@ -317,7 +318,5 @@ const TestGraph = ({ changeTitle }) => {
     </div>
   );
 };
-TestGraph.propTypes = {
-  changeTitle: PropTypes.func.isRequired,
-};
+
 export default TestGraph;

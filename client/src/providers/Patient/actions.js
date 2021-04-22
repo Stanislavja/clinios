@@ -63,6 +63,7 @@ import {
   TOGGLE_REQUISITIONS_NEW_DIALOG,
   TOGGLE_REQUISITIONS_EXPAND_DIALOG,
   TOGGLE_DOCUMENTS_EXPAND_DIALOG,
+  TOGGLE_INSIGHTS_EXPAND_DIALOG,
   TOGGLE_TESTS_EXPAND_DIALOG,
   TOGGLE_TESTS_CHART_EXPAND_DIALOG,
   SET_TEST_NAME,
@@ -335,6 +336,10 @@ export const toggleRequisitionExpandDialog = () => ({
 
 export const toggleDocumentsExpandDialog = () => ({
   type: TOGGLE_DOCUMENTS_EXPAND_DIALOG,
+});
+
+export const toggleInsightsExpandDialog = () => ({
+  type: TOGGLE_INSIGHTS_EXPAND_DIALOG,
 });
 
 export const toggleTestsExpandDialog = () => ({

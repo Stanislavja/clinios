@@ -74,7 +74,7 @@ import {
   togglePaymentDialog,
   togglePatientAppointmentHistoryDialog,
   resetSelectedMessage,
-  setTestName,
+  toggleInsightsExpandDialog,
 } from "../../providers/Patient/actions";
 import initialState from "../../providers/Patient/initialState";
 import PatientService from "../../services/patient.service";
@@ -194,6 +194,7 @@ const Patient = () => {
     diagnoses,
     medications,
     billing,
+    insights,
   } = state;
 
   const { selectedMessage, messageType, messageDialogPage } = messages;
@@ -231,11 +232,6 @@ const Patient = () => {
     });
   };
 
-  const changeTestGraphTitle = (title) => {
-    if (title) {
-      dispatch(setTestName(title));
-    }
-  };
   const generateLayout = () => {
     const y = 4;
     const firstlayout = FirstColumnPatientCards.map((item) => ({
@@ -511,6 +507,8 @@ const Patient = () => {
         return dispatch(toggleDiagnosesDialog());
       case "Requisitions":
         return dispatch(toggleRequisitionDialog());
+      case "Insights":
+        return dispatch(toggleInsightsExpandDialog());
       default:
         return () => { };
     }
@@ -1178,12 +1176,24 @@ const Patient = () => {
         <Dialog
           open={tests.expandChartDialog}
           title={tests.testName}
-          message={<TestGraph changeTitle={changeTestGraphTitle} />}
+          message={<TestGraph />}
           applyForm={() => dispatch(toggleTestsChartExpandDialog())}
           cancelForm={() => dispatch(toggleTestsChartExpandDialog())}
           hideActions
           size="lg"
           fullHeight
+        />
+      )}
+
+      {!!insights.expandDialog && (
+        <Dialog
+          open={insights.expandDialog}
+          title="Insights"
+          message={<InsightsCardContent />}
+          applyForm={() => dispatch(toggleInsightsExpandDialog())}
+          cancelForm={() => dispatch(toggleInsightsExpandDialog())}
+          hideActions
+          size="lg"
         />
       )}
 

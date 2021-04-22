@@ -66,6 +66,7 @@ import {
   TOGGLE_BILLING_NEW_TRANSACTION_DIALOG,
   TOGGLE_BILLING_NEW_DIALOG,
   TOGGLE_BILLING_EXPAND_DIALOG,
+  TOGGLE_INSIGHTS_EXPAND_DIALOG,
   SET_TEST_NAME,
 } from "./types";
 
@@ -567,6 +568,14 @@ const reducer = (state = initialState, action) => {
         billing: {
           ...state.billing,
           newDialog: !state.billing.newDialog,
+        },
+      };
+    case TOGGLE_INSIGHTS_EXPAND_DIALOG:
+      return {
+        ...state,
+        insights: {
+          ...state.insights,
+          expandDialog: !state.insights.expandDialog,
         },
       };
     default:
