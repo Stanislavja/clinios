@@ -33,12 +33,10 @@ const search = async (req, res) => {
   let $sql;
 
   try {
-    $sql = `select t.dt, tt.name, t.amount, e.title encounter_title, t.cpt_id, c.name cpt_name, t.note, t.patient_id
-      , concat(u.firstname, ' ', u.lastname) patient_name, t.created, t.client_id
+    $sql = `select t.dt, tt.name, t.amount, e.title encounter_title, t.note, t.patient_id, concat(u.firstname, ' ', u.lastname) patient_name, t.created, t.client_id
       from tran t
       left join tran_type tt on tt.id=t.type_id
       left join user u on u.id=t.patient_id
-      left join cpt c on c.id=t.cpt_id
       left join encounter e on e.id=t.encounter_id
       where t.client_id=${req.client_id} \n`;
     if (amount1) {

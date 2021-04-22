@@ -4,12 +4,11 @@ const { errorMessage, successMessage, status } = require("../helpers/status");
 const getReportFinanceDetail = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
-    const dbResponse = await db.query(`select t.dt, tt.name, t.amount, e.title encounter_title, t.cpt_id, c.name cpt_name, t.note, t.patient_id hyperlink
+    const dbResponse = await db.query(`select t.dt, tt.name, t.amount, e.title encounter_title, t.note, t.patient_id hyperlink
     , concat(u.firstname, ' ', u.lastname) patient_name, t.created
     from tran t
     left join tran_type tt on tt.id=t.type_id
     left join user u on u.id=t.patient_id
-    left join cpt c on c.id=t.cpt_id
     left join encounter e on e.id=t.encounter_id
     where t.client_id=${req.client_id}
     and t.dt>="${req.query.dateFrom}"
