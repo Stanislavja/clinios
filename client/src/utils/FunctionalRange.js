@@ -458,7 +458,7 @@ export function calculateFunctionalRange(test, gender, age) {
     range.high = 12;
     return range;
   }
-  if (test === 3013) { /* Transferrin saturation (Derived) */
+  if (test === 3013) { /* Transferrin percent saturation (Derived) */
     range.low = .24;
     range.high = .35;
     return range;
