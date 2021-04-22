@@ -563,3 +563,21 @@ export function calculatePercentageFlag(rangeLow, rangeHigh, lastValue) {
   }
   return percentage;
 }
+
+export function calculatePercentage(rangeLow, rangeHigh, lastValue) {
+  const result = {
+    value: 0,
+    flag: "",
+  };
+  if (lastValue < rangeLow) {
+    let value = Math.round(Math.abs(Number(((lastValue / rangeLow) * 100) - 100)));
+    result.value = value;
+    result.flag = value ? "Low" : "";
+  }
+  if (lastValue > rangeHigh) {
+    let value = Math.round(Math.abs(Number(((lastValue / rangeHigh) * 100) - 100)));
+    result.value = value;
+    result.flag = value ? "High" : "";
+  }
+  return result;
+}
