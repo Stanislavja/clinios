@@ -151,7 +151,10 @@ const InsightsContent = () => {
   const calculateStatus = (flag, icon, value) => {
     if ((flag === "Low" && icon === 0) || (flag === "High" && icon === 1)) {
       return (
-        <span className={classes.status}>{value}%</span>
+        <span className={classes.status}>
+          {value}
+          %
+        </span>
       );
     }
     return null;
