@@ -458,9 +458,14 @@ export function calculateFunctionalRange(test, gender, age) {
     range.high = 12;
     return range;
   }
-  if (test === 3013) { /* Transferrin saturation (Derived) */
-    range.low = 30;
-    range.high = 40;
+  if (test === 3013) { /* Transferrin percent saturation (Derived) */
+    range.low = 0.24;
+    range.high = 0.35;
+    return range;
+  }
+  if (test === 1589) { /* Reticulocyte count */
+    range.low = 0.6;
+    range.high = 2.6;
     return range;
   }
   if (test === 1706) { /* Urine Specific Gravity */

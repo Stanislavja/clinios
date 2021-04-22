@@ -85,29 +85,22 @@ const FinanceDetailTable = ({ financeDetail }) => {
         >
           <TableHead>
             <TableRow>
-              <StyledTableCell padding="checkbox">Name</StyledTableCell>
-              <StyledTableCell padding="checkbox">
-                Encounter Tile
-              </StyledTableCell>
               <StyledTableCell padding="checkbox">Date</StyledTableCell>
+              <StyledTableCell padding="checkbox">Billing Type</StyledTableCell>
               <StyledTableCell padding="checkbox">Amount</StyledTableCell>
+              <StyledTableCell padding="checkbox">Encounter Tile</StyledTableCell>
               <StyledTableCell padding="checkbox">Note</StyledTableCell>
-              <StyledTableCell padding="checkbox">CPT Name</StyledTableCell>
-              <StyledTableCell padding="checkbox">Created</StyledTableCell>
               <StyledTableCell padding="checkbox">Patient</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {financeDetail.map((detail) => (
               <StyledTableRow key={detail.id}>
-                <TableCell padding="checkbox" component="th" scope="row">
-                  {detail.name}
-                </TableCell>
-                <TableCell padding="checkbox">
-                  {detail.encounter_title}
-                </TableCell>
                 <TableCell padding="checkbox">
                   {detail.dt ? moment(detail.dt).format("lll") : ""}
+                </TableCell>
+                <TableCell padding="checkbox" component="th" scope="row">
+                  {detail.name}
                 </TableCell>
                 <TableCell padding="checkbox">
                   <NumberFormat
@@ -116,6 +109,9 @@ const FinanceDetailTable = ({ financeDetail }) => {
                     thousandSeparator
                     prefix="$"
                   />
+                </TableCell>
+                <TableCell padding="checkbox">
+                  {detail.encounter_title}
                 </TableCell>
                 {detail.note && detail.note.length > 40 ? (
                   <LightTooltip title={detail.note}>
@@ -134,10 +130,6 @@ const FinanceDetailTable = ({ financeDetail }) => {
                     {detail.note || ""}
                   </TableCell>
                 )}
-                <TableCell padding="checkbox">{detail.cpt_name}</TableCell>
-                <TableCell padding="checkbox">
-                  {detail.created ? moment(detail.created).format("lll") : ""}
-                </TableCell>
                 <TableCell
                   padding="checkbox"
                   className={classes.detailLink}
@@ -162,7 +154,6 @@ FinanceDetailTable.propTypes = {
       dt: PropTypes.string,
       note: PropTypes.string,
       amount: PropTypes.number,
-      cpt_name: PropTypes.string,
       created: PropTypes.string,
       hyperlink: PropTypes.string,
       patient_name: PropTypes.string,

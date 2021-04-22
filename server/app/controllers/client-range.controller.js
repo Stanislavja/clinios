@@ -10,7 +10,7 @@ const getClientRanges = async (req, res) => {
     , cr.created, concat(u.firstname, ' ', u.lastname) created_user, cr.updated
     , concat(u2.firstname, ' ', u2.lastname) updated_user 
     from client_range cr
-    left join cpt c on c.id=cr.cpt_id
+    left join marker c on c.id=cr.cpt_id
     left join user u on u.id=cr.created_user_id
     left join user u2 on u2.id=cr.updated_user_id
     where cr.client_id=${req.client_id}
@@ -151,7 +151,7 @@ const getClientRange = async (req, res) => {
       , cr.created, concat(u.firstname, ' ', u.lastname) created_user
       , cr.updated, concat(u2.firstname, ' ', u2.lastname) updated_user
       from client_range cr
-      left join cpt c on c.id=cr.cpt_id
+      left join marker c on c.id=cr.cpt_id
       left join user u on u.id=cr.created_user_id
       left join user u2 on u2.id=cr.updated_user_id
       where cr.client_id=${req.client_id}
