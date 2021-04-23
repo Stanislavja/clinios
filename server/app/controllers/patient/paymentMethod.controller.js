@@ -96,7 +96,7 @@ const createPaymentMethod = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.message = "Insert not successful";
+    errorMessage.message = err.message;
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
