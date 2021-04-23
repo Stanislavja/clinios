@@ -9,6 +9,8 @@ import {
   TableCell,
 } from "@material-ui/core";
 import PropTypes from "prop-types";
+import { getMarkerDefinition } from "../../../../utils/markerDefinition";
+import { getMarkerInterpretation } from "../../../../utils/markerInterpretation";
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -22,20 +24,27 @@ const useStyles = makeStyles((theme) => ({
   },
   main: {
     "& table, th, td": {
-      border: "1px solid black",
+      border: "1px solid #37474f",
       borderCollapse: "collapse",
+    },
+    "& th": {
+      whiteSpace: "noWrap",
     },
   },
 }));
 
 const MarkerDefinition = ({ data }) => {
   const classes = useStyles();
+  const markerId = data?.cpt_id || data?.id;
+  const markerExplanation = getMarkerDefinition(markerId);
+  const markerInterpretation = getMarkerInterpretation(markerId);
+  console.log({ data, markerExplanation, markerInterpretation })
 
   return (
-    <Box maxWidth={650}>
+    <Box maxWidth={1000}>
       <Grid className={classes.main}>
         <Typography className={classes.mb2}>
-          {data.name}
+          {markerExplanation}
         </Typography>
         <Table size="small" aria-label="elevated-table" className={classes.mb2}>
           <TableHead>
@@ -49,11 +58,11 @@ const MarkerDefinition = ({ data }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {[1, 2, 3].map((item) => (
+            {markerInterpretation?.high.map((item) => (
               <TableRow key={item}>
-                <TableCell>{item}</TableCell>
-                <TableCell>{item}</TableCell>
-                <TableCell>{item}</TableCell>
+                <TableCell>{item.condition}</TableCell>
+                <TableCell>{item.comment}</TableCell>
+                <TableCell>{item.evidence}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -71,11 +80,11 @@ const MarkerDefinition = ({ data }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {[1, 2, 3].map((item) => (
+            {markerInterpretation?.low.map((item) => (
               <TableRow key={item}>
-                <TableCell>{item}</TableCell>
-                <TableCell>{item}</TableCell>
-                <TableCell>{item}</TableCell>
+                <TableCell>{item.condition}</TableCell>
+                <TableCell>{item.comment}</TableCell>
+                <TableCell>{item.evidence}</TableCell>
               </TableRow>
             ))}
           </TableBody>
