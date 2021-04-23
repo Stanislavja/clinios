@@ -17,10 +17,12 @@ const getPaymentMethods = async (req, res) => {
 
   let $sql;
   try {
-    $sql = `select *
+    $sql = `select id, patient_id, type, account_number, exp, status, stripe_payment_method_token, client_id, created, created_user_id, updated, updated_user_id
     from payment_method
     where patient_id=${patient_id}
-    order by id`;
+    and (status is null or status <> 'D')
+    order by id
+    `;
 
     const dbResponse = await db.query($sql);
 
