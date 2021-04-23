@@ -39,7 +39,6 @@ const MarkerDefinition = ({ data }) => {
   const markerId = data?.cpt_id || data?.id;
   const markerExplanation = getMarkerDefinition(markerId);
   const markerInterpretation = getMarkerInterpretation(markerId);
-  console.log({ data, markerExplanation, markerInterpretation });
 
   return (
     <Box maxWidth={1000}>

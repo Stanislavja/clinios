@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 export const getMarkerInterpretation = (marker) => {
   const data = {
     high: [],

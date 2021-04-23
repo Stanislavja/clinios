@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 export const getMarkerDefinition = (marker) => {
   let data = "";
 
