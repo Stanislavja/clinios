@@ -11,10 +11,12 @@ import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import moment from "moment";
 
+import Popover from "../../../../components/common/Popover";
 import usePatientContext from "../../../../hooks/usePatientContext";
 import { InsightsTests, MissingTests } from "../../../../static/insightsTests";
 import { calculateFunctionalRange, calculatePercentage } from "../../../../utils/FunctionalRange";
 import { calculateAge } from "../../../../utils/helpers";
+import MarkerDefinition from "../MarkerDefinition";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -88,6 +90,18 @@ const InsightsContent = () => {
   const patientAge = Number(calculateAge(dob).split(" ")[0]);
 
   const [tests, setTests] = useState([]);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [selectedMarker, setSelectedMarker] = React.useState(null);
+
+  const handlePopoverOpen = (event, marker) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedMarker(marker);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+    setSelectedMarker(null);
+  };
 
   const hasValue = (value) => !((typeof value === "undefined") || (value === null));
 
@@ -160,8 +174,21 @@ const InsightsContent = () => {
     return null;
   };
 
+  const showPopover = Boolean(selectedMarker);
+
   return (
     <>
+      {
+        showPopover && (
+          <Popover
+            open={showPopover}
+            anchorEl={anchorEl}
+            handlePopoverClose={handlePopoverClose}
+          >
+            <MarkerDefinition data={selectedMarker} />
+          </Popover>
+        )
+      }
       {!!tests && tests.length
         ? (
           <TableContainer>
@@ -186,7 +213,12 @@ const InsightsContent = () => {
                   const range = getRange(row, functionalRange);
                   return (
                     <StyledTableRow key={row.name}>
-                      <TableCell>{row.name}</TableCell>
+                      <TableCell
+                        onMouseEnter={(e) => handlePopoverOpen(e, row)}
+                        onMouseLeave={handlePopoverClose}
+                      >
+                        {row.name}
+                      </TableCell>
                       <TableCell>
                         {row.lab_dt ? moment(row.lab_dt).format("MMM D YYYY") : ""}
                       </TableCell>
