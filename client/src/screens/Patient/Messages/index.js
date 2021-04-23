@@ -96,7 +96,7 @@ const NewMessage = (props) => {
   return (
     <>
       <form onSubmit={onMessageSend}>
-        <Grid className={classes.formInput} item md={4}>
+        {/* <Grid className={classes.formInput} item md={4}>
           <TextField
             autoFocus
             required
@@ -112,7 +112,7 @@ const NewMessage = (props) => {
               readOnly: isReplyDialog,
             }}
           />
-        </Grid>
+        </Grid> */}
         <Grid item lg={2}>
           <Typography gutterBottom variant="body1" color="textPrimary">
             Message

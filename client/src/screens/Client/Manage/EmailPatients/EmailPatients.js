@@ -211,7 +211,7 @@ export default function EmailPatients() {
         </FormControl>
       </div>
       <div className={classes.fields}>
-        <TextField
+        {/* <TextField
           className={classes.subject}
           value={subject}
           variant="outlined"
@@ -223,7 +223,7 @@ export default function EmailPatients() {
           autoFocus
           onChange={(event) => setSubject(event.target.value)}
           size="small"
-        />
+        /> */}
         <TextField
           fullWidth
           variant="outlined"

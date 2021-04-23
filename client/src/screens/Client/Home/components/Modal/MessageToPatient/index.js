@@ -182,7 +182,7 @@ const MessageToPatient = ({
               </Alert>
             ))}
           <div className={classes.root}>
-            <FormControl component="div" className={classes.formControl}>
+            {/* <FormControl component="div" className={classes.formControl}>
               <TextField
                 value={message.subject}
                 className={classes.subject}
@@ -198,7 +198,7 @@ const MessageToPatient = ({
                 autoFocus
                 onChange={(event) => handleOnChange(event)}
               />
-            </FormControl>
+            </FormControl> */}
             <Typography component="p" variant="body2" color="textPrimary">
               Message
             </Typography>

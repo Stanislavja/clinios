@@ -141,6 +141,7 @@ const MessageModal = (props) => {
                 id: "age-native-simple",
               }}
               label="To"
+              className={classes.gutterBottom}
             >
               <option aria-label="None" value="" />
               {users.map((user) => (
@@ -150,7 +151,7 @@ const MessageModal = (props) => {
               ))}
             </Select>
           </FormControl>
-          <TextField
+          {/* <TextField
             fullWidth
             margin="normal"
             variant="outlined"
@@ -159,7 +160,7 @@ const MessageModal = (props) => {
             value={subject}
             onChange={(event) => setSubject(event.target.value)}
             className={classes.gutterBottom}
-          />
+          /> */}
           <TextField
             variant="outlined"
             name="notes"
