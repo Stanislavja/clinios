@@ -94,7 +94,12 @@ const getPatientPaymentMethod = async (req, res) => {
   let $sql;
 
   try {
-    $sql = `select id, type, account_number, exp, created from payment_method where patient_id=${patient_id} order by 1`;
+    $sql = `select id, type, account_number, exp, created 
+    from payment_method 
+    where patient_id=${patient_id}
+    and (status is null or status <> 'D')
+    order by 1
+    `;
 
     const dbResponse = await db.query($sql);
     if (!dbResponse) {

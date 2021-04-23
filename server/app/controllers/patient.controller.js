@@ -956,6 +956,7 @@ const getBillingPaymentOptions = async (req, res) => {
       `select id, type, account_number, exp, stripe_payment_method_token, created
       from payment_method
       where patient_id=${patient_id}
+      and (status is null or status <> 'D')
       order by 1`
     );
 
@@ -2537,6 +2538,7 @@ const getPaymentMethods = async (req, res) => {
       `select id, type, account_number, exp, stripe_payment_method_token, created
       from payment_method
       where patient_id=${patient_id}
+      and (status is null or status <> 'D')
       order by 1`
     );
 
