@@ -11,9 +11,11 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 
+import Popover from "../../../../components/common/Popover";
 import { StyledTableCellSm, StyledTableRowSm } from "../../../../components/common/StyledTable";
 import LabService from "../../../../services/lab.service";
 import { calculateFunctionalRange, calculatePercentageFlag } from "../../../../utils/FunctionalRange";
+import MarkerDefinition from "../../../Patient/components/MarkerDefinition";
 import GraphDialog from "./component/GraphDialog";
 
 const useStyles = makeStyles(() => ({
@@ -31,6 +33,18 @@ const LabValues = (props) => {
   const [labValues, setLabValues] = useState([]);
   const [selectedGraph, setSelectedGraph] = useState(null);
   const [showGraphDialog, setShowGraphDialog] = useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [selectedMarker, setSelectedMarker] = React.useState(null);
+
+  const handlePopoverOpen = (event, marker) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedMarker(marker);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+    setSelectedMarker(null);
+  };
 
   const fetchLabValues = useCallback(() => {
     LabService.getLabValues(labId).then((res) => {
@@ -53,6 +67,8 @@ const LabValues = (props) => {
 
   const hasValue = (value) => !((typeof value === "undefined") || (value === null));
 
+  const showPopover = Boolean(selectedMarker);
+
   return (
     <>
       {!!showGraphDialog && (
@@ -62,6 +78,17 @@ const LabValues = (props) => {
           onClose={toggleGraphDialog}
         />
       )}
+      {
+        showPopover && (
+          <Popover
+            open={showPopover}
+            anchorEl={anchorEl}
+            handlePopoverClose={handlePopoverClose}
+          >
+            <MarkerDefinition data={selectedMarker} />
+          </Popover>
+        )
+      }
       <TableContainer>
         <Table size="small" aria-label="simple table">
           <TableHead>
@@ -85,7 +112,12 @@ const LabValues = (props) => {
                     className={classes.cursorPointer}
                     onClick={() => rowClickHandler(row)}
                   >
-                    <StyledTableCellSm>{row.name}</StyledTableCellSm>
+                    <StyledTableCellSm
+                      onMouseEnter={(e) => handlePopoverOpen(e, row)}
+                      onMouseLeave={handlePopoverClose}
+                    >
+                      {row.name}
+                    </StyledTableCellSm>
                     <StyledTableCellSm>{row.value}</StyledTableCellSm>
                     <StyledTableCellSm>
                       {hasValue(row.range_low) && hasValue(row.range_high) && (
