@@ -1,11 +1,10 @@
 export const getMarkerInterpretation = (marker) => {
-
-  let data = {
+  const data = {
     high: [],
     low: [],
   };
 
-  //Glucose
+  // Glucose
   if (marker === 866) {
     data.high = [
       {
@@ -38,4 +37,4 @@ export const getMarkerInterpretation = (marker) => {
     ];
   }
   return data;
-}
+};

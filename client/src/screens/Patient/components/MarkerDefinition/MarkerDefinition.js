@@ -9,6 +9,7 @@ import {
   TableCell,
 } from "@material-ui/core";
 import PropTypes from "prop-types";
+
 import { getMarkerDefinition } from "../../../../utils/markerDefinition";
 import { getMarkerInterpretation } from "../../../../utils/markerInterpretation";
 
@@ -38,7 +39,7 @@ const MarkerDefinition = ({ data }) => {
   const markerId = data?.cpt_id || data?.id;
   const markerExplanation = getMarkerDefinition(markerId);
   const markerInterpretation = getMarkerInterpretation(markerId);
-  console.log({ data, markerExplanation, markerInterpretation })
+  console.log({ data, markerExplanation, markerInterpretation });
 
   return (
     <Box maxWidth={1000}>
@@ -59,7 +60,7 @@ const MarkerDefinition = ({ data }) => {
           </TableHead>
           <TableBody>
             {markerInterpretation?.high.map((item) => (
-              <TableRow key={item}>
+              <TableRow key={item.condition}>
                 <TableCell>{item.condition}</TableCell>
                 <TableCell>{item.comment}</TableCell>
                 <TableCell>{item.evidence}</TableCell>
@@ -81,7 +82,7 @@ const MarkerDefinition = ({ data }) => {
           </TableHead>
           <TableBody>
             {markerInterpretation?.low.map((item) => (
-              <TableRow key={item}>
+              <TableRow key={item.condition}>
                 <TableCell>{item.condition}</TableCell>
                 <TableCell>{item.comment}</TableCell>
                 <TableCell>{item.evidence}</TableCell>
@@ -96,7 +97,8 @@ const MarkerDefinition = ({ data }) => {
 
 MarkerDefinition.propTypes = {
   data: PropTypes.shape({
-    name: PropTypes.string,
+    id: PropTypes.number,
+    cpt_id: PropTypes.number,
   }).isRequired,
 };
 

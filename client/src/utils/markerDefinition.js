@@ -1,5 +1,4 @@
 export const getMarkerDefinition = (marker) => {
-
   let data = "";
 
   if (marker === 160) {
@@ -71,34 +70,34 @@ export const getMarkerDefinition = (marker) => {
   if (marker === 502) {
     data = `Chloride is a type of electrolyte. Electrolytes are electrically charged minerals that help control the amount of fluids and the balance of acids and bases in the body. Chloride is often measured along with other electrolytes to diagnose or monitor conditions such as kidney disease, heart failure, liver disease, and high blood pressure.
       `;
-    //medlineplus.gov
+    // medlineplus.gov
   }
 
   if (marker === 611) {
     data = `Creatinine is a waste product made by the muscles as part of regular, everyday activity. Normally, the kidneys filter creatinine from the blood and send it out of the body in the urine. If there is a problem with the kidneys, creatinine can build up in the blood and less will be released in urine.
       `;
-    //medlineplus.gov
+    // medlineplus.gov
   }
 
   if (marker === 675) {
     data = `DHEA Sulfate (dehydroepiandrosterone sulfate) is a male sex hormone that is found in both men and women. DHEAS plays an important role in making the male sex hormone testosterone and the female sex hormone estrogen.  DHEAS is mostly made in the adrenal glands, two small glands located above the kidneys. Smaller amounts of DHEAS are made in a man’s testicles and in a woman’s ovaries.
       `;
-    //medlineplus.gov
+    // medlineplus.gov
   }
 
   if (marker === 3001) {
     data = `Erythrocyte sedimentation rate (ESR) measures how quickly erythrocytes (red blood cells) settle at the bottom of a test tube that contains a blood sample. Normally, red blood cells settle relatively slowly. A faster-than-normal rate may indicate inflammation in the body. Inflammation is part of your immune response system.
       `;
-    //medlineplus.gov
+    // medlineplus.gov
   }
 
   if (marker === 732 || marker === 733 || marker === 734 || marker === 858) {
     data = `Estimated glomerular filtration rate (eGFR) shows how well the kidneys are working. The kidneys have tiny filters called glomeruli. These filters help remove waste and excess fluid from the blood. A GFR test estimates how much blood passes through these filters each minute. A GFR can be measured directly, but it is a complicated test, requiring specialized providers. So GFR is most often estimated using a test called an estimated GFR or eGFR.
       `;
-    //medlineplus.gov
+    // medlineplus.gov
   }
 
-  //Estrogens
+  // Estrogens
 
   if (marker === 791) {
     data = `Ferritin is a intracellular protein that stores iron and releases it in a controlled fashion. /*Wikipedia*/
@@ -108,7 +107,7 @@ export const getMarkerDefinition = (marker) => {
       Low levels of ferritin can be found when iron stores are exhausted, well before the serum iron level has become affected. In the setting of anemia, low serum ferritin is a very specific biomarker for iron deficiency anemia. /*Labcorp*/
       Serum ferritin decrease is the earliest indicator of iron deficiency if inflammation is absent. /*Labcorp TIBC page*/        
       `;
-    //https://www.labcorp.com/tests/004598/ferritin
+    // https://www.labcorp.com/tests/004598/ferritin
   }
 
   if (marker === 821) {
@@ -117,62 +116,62 @@ export const getMarkerDefinition = (marker) => {
       In men, FSH helps control the production of sperm. Normally, FSH levels in men do not change very much.
       In children, FSH levels are usually low until puberty, when levels begin to rise. In girls, it helps signal the ovaries to make estrogen. In boys, it helps signal the testes to make testosterone.
       `;
-    //medlineplus.gov
+    // medlineplus.gov
   }
 
   if (marker === 859) {
     data = `Gamma-glutamyl transferase (GGT) is an enzyme found throughout the body, but it is mostly found in the liver. When the liver is damaged, GGT may leak into the bloodstream. High levels of GGT in the blood may be a sign of liver disease or damage to the bile ducts. Bile ducts are tubes that carry bile in and out of the liver. Bile is a fluid made by the liver. It is important for digestion.  A GGT test can't diagnose the specific cause of liver disease. So it is usually done along with or after other liver function tests, most often an alkaline phosphatase (ALP) test. ALP is another type of liver enzyme. It's often used to help diagnose bone disorders as well as liver disease.
       `;
-    //medlineplus.gov
+    // medlineplus.gov
   }
 
   if (marker === 864) {
     data = `Globulins are a group of proteins in your blood. They are made in your liver by your immune system. Globulins play an important role in liver function, blood clotting, and fighting infection. 
       `;
-    //medlineplus.gov
+    // medlineplus.gov
   }
 
   if (marker === 866) {
     data = `Glucose is the main sugar found in blood. It comes from the food one eats, and is the body's main source of energy. The blood carries glucose to all of the body's cells to use for energy.
       `;
-    //https://medlineplus.gov/bloodsugar.html
-    //https://medlineplus.gov/lab-tests/blood-glucose-test/
+    // https://medlineplus.gov/bloodsugar.html
+    // https://medlineplus.gov/lab-tests/blood-glucose-test/
   }
 
   if (marker === 944) {
     data = `Helicobacter pylori (H. pylori) is a type of bacteria that infects the digestive system. Many people with H. pylori will never have symptoms of infection. But for others, the bacteria can cause a variety of digestive disorders. These include gastritis (inflammation of the stomach), peptic ulcers (sores in the stomach, small intestine, or esophagus), and certain types of stomach cancer.
       `;
-    //medlineplus.gov
+    // medlineplus.gov
   }
 
   if (marker === 947) {
     data = `Hematocrit is the volume percentage of red blood cells in blood.
       `;
-    //Wikipedia
+    // Wikipedia
   }
 
   if (marker === 950) {
     data = `Hemoglobin A1c (HbA1c) measures the amount of glucose attached to hemoglobin. Hemoglobin is the part of red blood cells that carries oxygen from your lungs to the rest of the body. An HbA1c test shows what the average amount of glucose attached to hemoglobin has been over the past three months. It's a three-month average because that's typically how long a red blood cell lives.
       `;
-    //medlineplus.gov
+    // medlineplus.gov
   }
 
   if (marker === 948) {
     data = `Hemoglobin is a protein in the red blood cells that carries oxygen from the lungs to the rest of the body.
       `;
-    //medlineplus.gov
+    // medlineplus.gov
   }
 
   if (marker === 999) {
     data = `Homocysteine is a type of amino acid used to make proteins. Normally, vitamin B12, vitamin B6, and folic acid break down homocysteine and change it into other substances the body needs. There should be very little homocysteine left in the bloodstream. If there are high levels of homocysteine in the blood, it may be a sign of a vitamin deficiency, heart disease, or homocystinuria, which is a rare inherited disorder.
       `;
-    //medlineplus.gov
+    // medlineplus.gov
   }
 
   if (marker === 1052) {
     data = `Insulin is a hormone that helps move blood sugar, known as glucose, from your bloodstream into your cells.  At first, insulin resistance causes the body to make extra insulin, to make up for ineffective insulin. Extra insulin in the bloodstream can cause hypoglycemia. But insulin resistance tends to get worse over time. Eventually, it decreases your body's ability to make insulin. As insulin levels drop, blood sugar levels rise. 
       `;
-    //medlineplus.gov
+    // medlineplus.gov
   }
 
   if (marker === 1082) {
@@ -183,7 +182,7 @@ export const getMarkerDefinition = (marker) => {
   if (marker === 3006) {
     data = `Lactate dehydrogenase (LDH), also known as lactic acid dehydrogenase, is a type of protein, known as an enzyme.  LDH plays an important role in making the body's energy.  It is found in almost all the body's tissues, including those in the blood, heart, kidneys, brain, and lungs.  When these tissues are damaged, they release LDH into the bloodstream or other body fluids.  If LDH blood or fluid levels are high, it may mean certain tissues in the body have been damaged by disease or injury.
       `;
-    //medlineplus.gov
+    // medlineplus.gov
   }
 
   if (marker === 1154) {
@@ -195,19 +194,19 @@ export const getMarkerDefinition = (marker) => {
       
       In children, LH levels are usually low in early childhood, and begin to rise a couple of years before the start of puberty. In girls, LH helps signal the ovaries to make estrogen. In boys, it helps signal the testes to make testosterone.
       `;
-    //medlineplus.gov
+    // medlineplus.gov
   }
 
   if (marker === 1193) {
     data = `Magnesium is a type of electrolyte, which are electrically charged minerals.  The body needs magnesium to help your muscles, nerves, and heart work properly. Magnesium also helps control blood pressure and blood sugar.  Most of the body's magnesium is in the bones and cells.  A small amount is found in the blood. 
       `;
-    //medlineplus.gov
+    // medlineplus.gov
   }
 
   if (marker === 1216) {
     data = `MCV (mean corpuscular volume) measures the average size of the red blood cells, also known as erythrocytes. Red blood cells move oxygen from the lungs to every cell in your body.
       `;
-    //medlineplus.gov
+    // medlineplus.gov
   }
 
   if (marker === 1248) {
@@ -220,38 +219,38 @@ export const getMarkerDefinition = (marker) => {
   if (marker === 1280) {
     data = `MPV stands for mean platelet volume. Platelets are small blood cells that are essential for blood clotting, the process that helps stop bleeding after an injury. An MPV blood test measures the average size of platelets. MPV can help diagnose bleeding disorders and diseases of the bone marrow.
       `;
-    //medlineplus.gov
+    // medlineplus.gov
   }
 
   if (marker === 1373) {
     data = `Osmolality measures the concentration of all chemical particles found in the fluid part of blood.
       `;
-    //https://medlineplus.gov/ency/article/003463.htm
+    // https://medlineplus.gov/ency/article/003463.htm
   }
 
   if (marker === 1406) {
     data = `Parathyroid Hormone (PTH), also known as parathormone, is made by your parathyroid glands. These are four pea-sized glands in your neck. PTH controls the level of calcium in the blood. Calcium is a mineral that keeps bones and teeth healthy and strong. It's also essential for the proper functioning of the nerves, muscles, and heart.  If calcium blood levels are too low, your parathyroid glands will release PTH into the blood. This causes calcium levels to rise. If calcium blood levels are too high, these glands will stop making PTH.
       `;
-    //medlineplus.gov
+    // medlineplus.gov
   }
 
   if (marker === 1450) {
     data = `Phosphate is an electrically charged particle that contains the mineral phosphorus. /*https://medlineplus.gov/*/
       Calcium and phosphate in the body react in opposite ways: as blood calcium levels rise, phosphate levels fall. A hormone called parathyroid hormone (PTH) regulates the levels of calcium and phosphorus in the blood.  /*https://www.uofmhealth.org/health-library/hw202265 */
       `;
-    //medlineplus.gov
+    // medlineplus.gov
   }
 
   if (marker === 1473) {
     data = `Platelets, also known as thrombocytes, are small blood cells that are essential for blood clotting. Clotting is the process that helps stop bleeding after an injury.  A platelet count test measures the number of platelets in the blood. A lower than normal platelet count is called thrombocytopenia. This condition can cause one to bleed too much after a cut or other injury that causes bleeding. A higher than normal platelet count is called thrombocytosis. This can make a blood clot more than is needed.  Blood clots can be dangerous because they can block blood flow.
       `;
-    //medlineplus.gov
+    // medlineplus.gov
   }
 
   if (marker === 1483) {
     data = `Potassium is a type of electrolyte. Electrolytes are electrically charged minerals that help control muscle and nerve activity, maintain fluid levels, and perform other important functions. The body needs potassium to help the heart and muscles work properly. 
       `;
-    //medlineplus.gov
+    // medlineplus.gov
   }
 
   if (marker === 1508 || marker === 1509) {
@@ -261,36 +260,36 @@ export const getMarkerDefinition = (marker) => {
 
       Progesterone levels in a pregnant woman are about 10 times higher than they are in a woman who is not pregnant. Men also make progesterone, but in much smaller amounts. In men, progesterone is made by the adrenal glands and testes.
       `;
-    //medlineplus.gov
+    // medlineplus.gov
   }
 
   if (marker === 1570) {
     data = `Red cell distribution width (RDW) test is a measurement of the volume and size of the red blood cells.
       `;
-    //medlineplus.gov
+    // medlineplus.gov
   }
 
   if (marker === 1589) {
     data = `Reticulocytes are immature red blood cells.  /*Wikipedia*/
       Increased in acute and chronic hemorrhage, and hemolytic anemias.  /*Labcorp*/
       `;
-    //https://www.labcorp.com/tests/001321/iron-and-total-iron-binding-capacity-tibc
+    // https://www.labcorp.com/tests/001321/iron-and-total-iron-binding-capacity-tibc
   }
 
-  //***bookmark?***
+  //* **bookmark?***
 
   if (marker === 1700) {
     data = `Soluble transferrin receptors are protensins in the blood.  /*Own*/
       Anemia of chronic disease and iron deficiency anemia, the most common forms of anemia, are differentiated primarily by estimates of iron status. Standard measures of iron status, such as ferritin, total iron-binding capacity, and serum iron are directly affected by chronic disease. In contrast, soluble transferrin receptor (sTfR) is elevated in iron deficiency but is not appreciably affected by chronic disease.  /*Labcorp*/
       `;
-    //https://www.labcorp.com/tests/143305/soluble-transferrin-receptor
+    // https://www.labcorp.com/tests/143305/soluble-transferrin-receptor
   }
 
   if (marker === 1081) {
     data = `Total iron-binding capacity (TIBC) measures the blood's ability to attach itself to iron and transport it around the body. /*https://www.nhs.uk/conditions/tibc-test/*/
       Used for the differential diagnosis of anemia.  /*Labcorp and me*/
       `;
-    //https://www.labcorp.com/tests/001321/iron-and-total-iron-binding-capacity-tibc
+    // https://www.labcorp.com/tests/001321/iron-and-total-iron-binding-capacity-tibc
   }
 
   if (marker === 1836) {
@@ -301,10 +300,9 @@ export const getMarkerDefinition = (marker) => {
       Increased in iron deficiency anemia. It is decreased in chronic inflammatory states.  /*Labcorp*/
       Tranferrin is a more direct measurement than TIBC but a little more expensive.  /*My version of Dr Alan C and Dr CM*/
       `;
-    //https://www.labcorp.com/tests/004937/transferrin
-    //https://www.merckmanuals.com/-/media/Manual/LabTests/TransferrinandIronBindingCapacityTIBCUIBC.html
+    // https://www.labcorp.com/tests/004937/transferrin
+    // https://www.merckmanuals.com/-/media/Manual/LabTests/TransferrinandIronBindingCapacityTIBCUIBC.html
   }
 
   return data;
-
-}
+};
