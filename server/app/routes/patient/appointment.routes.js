@@ -10,6 +10,12 @@ router.get(
   encountersController.getAllPractitioner
 );
 
+router.get(
+  "/client-portal/practitioner-dates",
+  [authJwt.verifyToken],
+  encountersController.getPractitionerDates
+);
+
 router.post(
   "/client-portal/appointment-types",
   [authJwt.verifyToken],

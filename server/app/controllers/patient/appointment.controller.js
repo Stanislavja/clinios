@@ -40,6 +40,39 @@ const getAllPractitioner = async (req, res) => {
   }
 };
 
+const getPractitionerDates = async (req, res) => {
+  const db = makeDb(configuration, res);
+  let { client_id } = req.query;
+
+  if (typeof client_id === "undefined") {
+    // eslint-disable-next-line prefer-destructuring
+    client_id = req.client_id;
+  }
+  let $sql;
+
+  try {
+    $sql = `select user_id, date_start, date_end, time_start, time_end, monday, tuesday, wednesday, thursday, friday, active
+    from user_schedule
+    where client_id=${client_id} 
+    and time_start > current_date()`;
+
+    const dbResponse = await db.query($sql);
+
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = dbResponse;
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.info("err:", err);
+    errorMessage.message = "Select not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const getAppointmentTypes = async (req, res) => {
   const db = makeDb(configuration, res);
 
@@ -148,6 +181,7 @@ const updateAppointment = async (req, res) => {
 
 const Appointments = {
   getAllPractitioner,
+  getPractitionerDates,
   getAppointmentTypes,
   createAppointment,
   updateAppointment,
