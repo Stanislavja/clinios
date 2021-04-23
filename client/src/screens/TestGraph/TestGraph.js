@@ -206,6 +206,10 @@ const TestGraph = () => {
     }
   };
 
+  const markerDefinitionProps = {
+    id: testId,
+  }
+
   return (
     <div className={classes.root} ref={ref}>
       <Grid container>
@@ -320,7 +324,7 @@ const TestGraph = () => {
           </Grid>
         </Grid>
         <Grid item md={4} xs={12}>
-          <MarkerDefinition data={cptName?.[0] || {}} />
+          <MarkerDefinition data={markerDefinitionProps} />
         </Grid>
       </Grid>
     </div>
