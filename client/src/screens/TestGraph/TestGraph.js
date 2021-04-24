@@ -208,6 +208,7 @@ const TestGraph = () => {
 
   const markerDefinitionProps = {
     id: testId,
+    name: cptName[0]?.name
   }
 
   return (

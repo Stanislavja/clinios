@@ -43,6 +43,9 @@ const MarkerDefinition = ({ data }) => {
   return (
     <Box maxWidth={1000}>
       <Grid className={classes.main}>
+        <Typography variant="h3" className={classes.mb2}>
+          {data.name}
+        </Typography>
         <Typography className={classes.mb2}>
           {markerExplanation}
         </Typography>
@@ -96,6 +99,7 @@ const MarkerDefinition = ({ data }) => {
 
 MarkerDefinition.propTypes = {
   data: PropTypes.shape({
+    name: PropTypes.string,
     id: PropTypes.number,
     cpt_id: PropTypes.number,
   }).isRequired,
