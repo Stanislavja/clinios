@@ -14,14 +14,8 @@ import { getMarkerDefinition } from "../../../../utils/markerDefinition";
 import { getMarkerInterpretation } from "../../../../utils/markerInterpretation";
 
 const useStyles = makeStyles((theme) => ({
-  divider: {
-    margin: theme.spacing(2, 0),
-  },
   mb2: {
     marginBottom: theme.spacing(2),
-  },
-  text: {
-    fontSize: 14,
   },
   main: {
     "& table, th, td": {
@@ -30,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
     },
     "& th": {
       whiteSpace: "noWrap",
+      fontWeight: 600,
     },
   },
 }));
