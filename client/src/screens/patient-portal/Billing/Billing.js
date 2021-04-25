@@ -45,7 +45,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 const StyledTableCell = withStyles(() => ({
   head: {
     whiteSpace: "nowrap",
