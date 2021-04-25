@@ -200,7 +200,7 @@ export default function Messages() {
               <Divider className={classes.divider} />
             </div>
           ))}
-          {messages.length === 0 && <p>No records found!</p>}
+          {/* {messages.length === 0 && <p>No records found!</p>} */}
         </div>
       </div>
     </>
