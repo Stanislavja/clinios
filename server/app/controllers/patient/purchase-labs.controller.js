@@ -1,3 +1,4 @@
+const Stripe = require("stripe");
 const { configuration, makeDb } = require("../../db/db.js");
 const {
   errorMessage,
@@ -35,7 +36,6 @@ const getPurchaseLabs = async (req, res) => {
   }
 };
 
-// TODO: incomplete and waiting for further instruction on CLIN-80
 const createPurchaseLabs = async (req, res) => {
   const formData = req.body.data;
   const trancData = {
@@ -50,6 +50,29 @@ const createPurchaseLabs = async (req, res) => {
 
   const db = makeDb(configuration, res);
   try {
+
+    const stripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
+    const intentData = {
+      payment_method: formData.stripe_payment_method_token,
+      customer: formData.customer_id,
+      description: `${formData.note}; patient_id: ${req.user_id}`,
+      amount: Number(formData.amount) * 100, // it accepts cents
+      currency: "usd",
+      confirmation_method: "manual",
+      confirm: true,
+    };
+
+    const intent = await stripe.paymentIntents.create(intentData);
+
+    if (intent.status === "succeeded") {
+      trancData.pp_status = 1;
+      trancData.pp_return = JSON.stringify(intent);
+    } else {
+      console.log("error:", intent);
+      trancData.pp_status = -1;
+      trancData.pp_return = JSON.stringify(intent);
+    }
+
     const insertResponse = await db.query(`insert into tranc set ?`, [
       trancData,
     ]);
