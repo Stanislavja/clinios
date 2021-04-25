@@ -170,7 +170,7 @@ const LabBilling = () => {
                 </StyledTableCell>
                 <StyledTableCell className={classes.secondColumnOfStyledCell}>
                   $
-                  {item.amount}
+                  {item?.amount?.toFixed(2)}
                 </StyledTableCell>
                 <StyledTableCell
                   className={clsx(classes.tableTestsCell, classes.thirdColumnOfStyledCell)}

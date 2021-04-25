@@ -178,7 +178,7 @@ const Billing = () => {
                       <StyledTableCell>{item.account_num || "-"}</StyledTableCell>
                       <StyledTableCell>
                         $
-                        {item.amount}
+                        {item?.amount?.toFixed(2)}
                       </StyledTableCell>
                       <StyledTableCell
                         className={classes.centered}

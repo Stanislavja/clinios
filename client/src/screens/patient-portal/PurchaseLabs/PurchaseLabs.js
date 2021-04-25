@@ -241,7 +241,7 @@ const PurchaseLabs = () => {
                               <TableCell>{lab.lab_company_name}</TableCell>
                               <TableCell>
                                 $
-                                {lab.price}
+                                {lab?.price?.toFixed(2)}
                               </TableCell>
                             </TableRow>
                           );
