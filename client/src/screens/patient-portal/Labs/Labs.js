@@ -236,17 +236,17 @@ const Labs = () => {
       </Grid>
 
       <Grid item sm={4} xs={12}>
-        <TableContainer className={classes.tableContainer}>
-          <Table size="small" className={classes.table}>
-            <TableHead>
-              <TableRow>
-                <StyledTableCell>Created</StyledTableCell>
-                <StyledTableCell>Filename</StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {tableData.length ? (
-                tableData.map((item) => (
+        {Boolean(tableData.length) && (
+          <TableContainer className={classes.tableContainer}>
+            <Table size="small" className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>Created</StyledTableCell>
+                  <StyledTableCell>Filename</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {tableData.map((item) => (
                   <StyledTableRow
                     key={`${item.created}_${item.filename}`}
                     onClick={() => handleDocumentClick(item)}
@@ -258,19 +258,12 @@ const Labs = () => {
                       {item.filename}
                     </StyledTableCell>
                   </StyledTableRow>
-                ))
-              ) : (
-                <StyledTableRow>
-                  <StyledTableCell colSpan={2}>
-                    <Typography className={classes.resMessage}>
-                      No Documents Found...
-                    </Typography>
-                  </StyledTableCell>
-                </StyledTableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
+
       </Grid>
       {isLabModalOpen
         && (
