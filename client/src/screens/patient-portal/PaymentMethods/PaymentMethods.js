@@ -149,20 +149,20 @@ const PaymentMethods = () => {
           </Button>
         </Grid>
         <Grid item md={6} sm={8} xs={12}>
-          <TableContainer className={classes.tableContainer}>
-            <Table size="small" className={classes.table}>
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell>Date</StyledTableCell>
-                  <StyledTableCell>Type</StyledTableCell>
-                  <StyledTableCell>Card Number</StyledTableCell>
-                  <StyledTableCell>Edit</StyledTableCell>
-                  <StyledTableCell>Delete</StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {paymentMethods.length ? (
-                  paymentMethods.map((item) => (
+          {Boolean(paymentMethods.length) && (
+            <TableContainer className={classes.tableContainer}>
+              <Table size="small" className={classes.table}>
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell>Date</StyledTableCell>
+                    <StyledTableCell>Type</StyledTableCell>
+                    <StyledTableCell>Card Number</StyledTableCell>
+                    <StyledTableCell>Edit</StyledTableCell>
+                    <StyledTableCell>Delete</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {paymentMethods.map((item) => (
                     <StyledTableRow key={item.id}>
                       <StyledTableCell>
                         {moment(item.created).format("MMM D YYYY")}
@@ -194,19 +194,11 @@ const PaymentMethods = () => {
                         </Button>
                       </StyledTableCell>
                     </StyledTableRow>
-                  ))
-                ) : (
-                  <StyledTableRow>
-                    <StyledTableCell colSpan={2}>
-                      <Typography className={classes.resMessage}>
-                        No Payment Methods Found...
-                      </Typography>
-                    </StyledTableCell>
-                  </StyledTableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
         </Grid>
       </div>
     </>

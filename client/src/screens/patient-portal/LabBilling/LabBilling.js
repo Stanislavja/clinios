@@ -83,7 +83,6 @@ const StyledTableCell = withStyles((theme) => ({
   },
 }))(TableCell);
 
-
 const LabBilling = () => {
   const classes = useStyles();
   const { lastVisitedPatient } = useAuth();
@@ -150,39 +149,40 @@ const LabBilling = () => {
       <Typography component="p" color="textPrimary">
         This page shows purchases of laboratory tests
       </Typography>
-      <TableContainer className={classes.tableContainer}>
-        <Table size="small" className={classes.table} aria-label="a dense table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>Date</StyledTableCell>
-              <StyledTableCell>Amount</StyledTableCell>
-              <StyledTableCell>Tests</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {labBillingList.map((item) => (
-              <TableRow style={{
-                border: "none",
-              }}
-              >
-                <StyledTableCell className={classes.firstColumnOfStyledCell}>
-                  {dateFormat(item.dt)}
-                </StyledTableCell>
-                <StyledTableCell className={classes.secondColumnOfStyledCell}>
-                  $
-                  {item?.amount?.toFixed(2)}
-                </StyledTableCell>
-                <StyledTableCell
-                  className={clsx(classes.tableTestsCell, classes.thirdColumnOfStyledCell)}
-                  onClick={() => fetchReportInformation(item.id)}
-                >
-                  {item.tests}
-                </StyledTableCell>
+      {Boolean(labBillingList.length) && (
+        <TableContainer className={classes.tableContainer}>
+          <Table size="small" className={classes.table} aria-label="a dense table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Date</StyledTableCell>
+                <StyledTableCell>Amount</StyledTableCell>
+                <StyledTableCell>Tests</StyledTableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {labBillingList.map((item) => (
+                <TableRow style={{
+                  border: "none",
+                }}
+                >
+                  <StyledTableCell className={classes.firstColumnOfStyledCell}>
+                    {dateFormat(item.dt)}
+                  </StyledTableCell>
+                  <StyledTableCell className={classes.secondColumnOfStyledCell}>
+                    {item.amount}
+                  </StyledTableCell>
+                  <StyledTableCell
+                    className={clsx(classes.tableTestsCell, classes.thirdColumnOfStyledCell)}
+                    onClick={() => fetchReportInformation(item.id)}
+                  >
+                    {item.tests}
+                  </StyledTableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
       {testProfileInfo && profileTests && (
         <div style={{ display: "none" }}>
           <PdfTemplate testProfileInfo={testProfileInfo} profileTests={profileTests} ref={componentRef} />

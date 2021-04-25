@@ -154,22 +154,21 @@ const Billing = () => {
         >
           This page is used to view billings.
         </Typography>
-
         <Grid item md={10} sm={12} xs={12}>
-          <TableContainer className={classes.tableContainer}>
-            <Table size="small" className={classes.table}>
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell>Date</StyledTableCell>
-                  <StyledTableCell>Transaction Type</StyledTableCell>
-                  <StyledTableCell>Account Number</StyledTableCell>
-                  <StyledTableCell>Amount</StyledTableCell>
-                  <StyledTableCell align="center">View</StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {billings.length ? (
-                  billings.map((item) => (
+          {Boolean(billings.length) && (
+            <TableContainer className={classes.tableContainer}>
+              <Table size="small" className={classes.table}>
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell>Date</StyledTableCell>
+                    <StyledTableCell>Transaction Type</StyledTableCell>
+                    <StyledTableCell>Account Number</StyledTableCell>
+                    <StyledTableCell>Amount</StyledTableCell>
+                    <StyledTableCell align="center">View</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {billings.map((item) => (
                     <StyledTableRow key={`${item.dt}_${item.amount}_${item.tran_type}`}>
                       <StyledTableCell component="th" scope="item">
                         {moment(item.dt).format("MMM D YYYY")}
@@ -189,43 +188,35 @@ const Billing = () => {
                         />
                       </StyledTableCell>
                     </StyledTableRow>
-                  ))
-                ) : (
-                  <StyledTableRow>
-                    <StyledTableCell colSpan={2}>
-                      <Typography className={classes.resMessage}>
-                        No Billings Found...
-                      </Typography>
-                    </StyledTableCell>
-                  </StyledTableRow>
-                )}
-                {(hasValue(balance) && billings.length) ? (
-                  <StyledTableRow>
-                    <StyledTableCell colSpan={2} />
-                    <StyledTableCell
-                      align="right"
-                      classes={{ body: classes.shiftContent }}
-                    >
-                      <Typography className={classes.resMessage}>
-                        Balance
-                      </Typography>
-                    </StyledTableCell>
-                    <StyledTableCell
-                      className={clsx(
-                        classes.borderTop,
-                        classes.shiftContent,
-                      )}
-                    >
-                      <Typography className={classes.resMessage}>
-                        $
-                        {balance}
-                      </Typography>
-                    </StyledTableCell>
-                  </StyledTableRow>
-                ) : null}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                  ))}
+                  {(hasValue(balance) && billings.length) ? (
+                    <StyledTableRow>
+                      <StyledTableCell colSpan={2} />
+                      <StyledTableCell
+                        align="right"
+                        classes={{ body: classes.shiftContent }}
+                      >
+                        <Typography className={classes.resMessage}>
+                          Balance
+                        </Typography>
+                      </StyledTableCell>
+                      <StyledTableCell
+                        className={clsx(
+                          classes.borderTop,
+                          classes.shiftContent,
+                        )}
+                      >
+                        <Typography className={classes.resMessage}>
+                          $
+                          {balance}
+                        </Typography>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ) : null}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
         </Grid>
       </div>
     </>
