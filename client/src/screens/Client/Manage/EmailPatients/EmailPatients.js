@@ -240,7 +240,6 @@ export default function EmailPatients() {
           size="small"
         />
         <Button
-          // disabled={!subject || !message}
           disabled={!message}
           variant="contained"
           color="primary"
