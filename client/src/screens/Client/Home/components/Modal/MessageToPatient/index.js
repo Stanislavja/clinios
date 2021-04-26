@@ -182,6 +182,7 @@ const MessageToPatient = ({
               </Alert>
             ))}
           <div className={classes.root}>
+            {/* Commented out as per CLIN-114 */}
             {/* <FormControl component="div" className={classes.formControl}>
               <TextField
                 value={message.subject}

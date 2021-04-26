@@ -96,6 +96,7 @@ const NewMessage = (props) => {
   return (
     <>
       <form onSubmit={onMessageSend}>
+        {/* Commented out as per CLIN-114 */}
         {/* <Grid className={classes.formInput} item md={4}>
           <TextField
             autoFocus

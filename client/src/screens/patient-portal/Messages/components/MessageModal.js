@@ -151,6 +151,7 @@ const MessageModal = (props) => {
               ))}
             </Select>
           </FormControl>
+          {/* Commented out as per CLIN-114 */}
           {/* <TextField
             fullWidth
             margin="normal"

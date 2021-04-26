@@ -211,6 +211,7 @@ export default function EmailPatients() {
         </FormControl>
       </div>
       <div className={classes.fields}>
+        {/* Commented out as per CLIN-114 */}
         {/* <TextField
           className={classes.subject}
           value={subject}
