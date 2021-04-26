@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import {
   Typography, makeStyles, Grid, Box,
@@ -29,68 +29,83 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MarkerDefinition = ({ data }) => {
+const MarkerDefinition = ({ data, showTitle, showHigh, showLow }) => {
   const classes = useStyles();
   const markerId = data?.cpt_id || data?.id;
   const markerExplanation = getMarkerDefinition(markerId);
   const markerInterpretation = getMarkerInterpretation(markerId);
 
+  const hasHighData = useMemo(() => Boolean(markerInterpretation?.high.length), [markerInterpretation?.high])
+  const hasLowData = useMemo(() => Boolean(markerInterpretation?.low.length), [markerInterpretation?.low])
+
   return (
-    <Box maxWidth={1000}>
+    <Box maxWidth={700}>
       <Grid className={classes.main}>
-        <Typography variant="h4" className={classes.mb2}>
-          {data.name}
-        </Typography>
+        {showTitle && (
+          <Typography variant="h4" className={classes.mb2}>
+            {data.name}
+          </Typography>
+        )}
         <Typography className={classes.mb2}>
           {markerExplanation}
         </Typography>
-        <Table size="small" aria-label="elevated-table" className={classes.mb2}>
-          <TableHead>
-            <TableRow>
-              <TableCell colSpan={3}>Elevated</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Condition</TableCell>
-              <TableCell>Comment</TableCell>
-              <TableCell>Strength of Evidence</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {markerInterpretation?.high.map((item) => (
-              <TableRow key={item.condition}>
-                <TableCell>{item.condition}</TableCell>
-                <TableCell>{item.comment}</TableCell>
-                <TableCell>{item.evidence}</TableCell>
+        {(showHigh && hasHighData) && (
+          <Table size="small" aria-label="elevated-table" className={classes.mb2}>
+            <TableHead>
+              <TableRow>
+                <TableCell colSpan={3}>Elevated</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+              <TableRow>
+                <TableCell>Condition</TableCell>
+                <TableCell>Comment</TableCell>
+                <TableCell>Evidence</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {markerInterpretation?.high.map((item) => (
+                <TableRow key={item.condition}>
+                  <TableCell>{item.condition}</TableCell>
+                  <TableCell>{item.comment}</TableCell>
+                  <TableCell>{item.evidence}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
 
-        <Table size="small" aria-label="decreased-table">
-          <TableHead>
-            <TableRow>
-              <TableCell colSpan={3}>Decreased</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Condition</TableCell>
-              <TableCell>Comment</TableCell>
-              <TableCell>Strength of Evidence</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {markerInterpretation?.low.map((item) => (
-              <TableRow key={item.condition}>
-                <TableCell>{item.condition}</TableCell>
-                <TableCell>{item.comment}</TableCell>
-                <TableCell>{item.evidence}</TableCell>
+        {(showLow && hasLowData) && (
+          <Table size="small" aria-label="decreased-table">
+            <TableHead>
+              <TableRow>
+                <TableCell colSpan={3}>Decreased</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+              <TableRow>
+                <TableCell>Condition</TableCell>
+                <TableCell>Comment</TableCell>
+                <TableCell>Evidence</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {markerInterpretation?.low.map((item) => (
+                <TableRow key={item.condition}>
+                  <TableCell>{item.condition}</TableCell>
+                  <TableCell>{item.comment}</TableCell>
+                  <TableCell>{item.evidence}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </Grid>
     </Box>
   );
 };
+
+MarkerDefinition.defaultProps = {
+  showTitle: true,
+  showHigh: true,
+  showLow: true,
+}
 
 MarkerDefinition.propTypes = {
   data: PropTypes.shape({
@@ -98,6 +113,9 @@ MarkerDefinition.propTypes = {
     id: PropTypes.number,
     cpt_id: PropTypes.number,
   }).isRequired,
+  showTitle: PropTypes.bool,
+  showHigh: PropTypes.bool,
+  showLow: PropTypes.bool,
 };
 
 export default MarkerDefinition;
