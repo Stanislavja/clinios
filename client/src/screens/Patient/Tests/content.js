@@ -1,7 +1,8 @@
 import React, {
-  useState, useEffect, useCallback, useMemo,
+  useState, useEffect, useCallback,
 } from "react";
 
+import Grid from "@material-ui/core/Grid";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -42,11 +43,11 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: "21px",
     fontSize: 12,
   },
-  cursorPointer: {
-    cursor: "pointer",
+  iconContainer: {
     "& svg": {
+      cursor: "pointer",
       position: "relative",
-      top: theme.spacing(0.5),
+      top: 3,
     },
   },
 }));
@@ -188,8 +189,12 @@ const TestsContent = () => {
     addCalculatedTests();
   }, [addCalculatedTests]);
 
-  // eslint-disable-next-line max-len
-  const showPopover = useMemo(() => Boolean(selectedMarker && (getMarkerDefinition(selectedMarker.cpt_id).length || (getMarkerInterpretation(selectedMarker.cpt_id).low.length && getMarkerInterpretation(selectedMarker.cpt_id).high.length))), [selectedMarker]);
+  const showPopoverIcon = (marker) => (
+    // eslint-disable-next-line max-len
+    Boolean(getMarkerDefinition(marker.cpt_id).length || (getMarkerInterpretation(marker.cpt_id).low.length && getMarkerInterpretation(marker.cpt_id).high.length))
+  );
+
+  const showPopover = Boolean(selectedMarker);
 
   return (
     <>
@@ -227,15 +232,18 @@ const TestsContent = () => {
                 return (
                   <StyledTableRow key={row.name}>
                     <TableCell>{row.name}</TableCell>
-                    <TableCell
-                      className={classes.cursorPointer}
-                      onMouseEnter={(e) => handlePopoverOpen(e, row)}
-                      onMouseLeave={handlePopoverClose}
-                    >
-                      <Icon
-                        path={mdiInformationOutline}
-                        size={0.85}
-                      />
+                    <TableCell className={classes.iconContainer}>
+                      {showPopoverIcon(row) && (
+                        <Grid
+                          onMouseEnter={(e) => handlePopoverOpen(e, row)}
+                          onMouseLeave={handlePopoverClose}
+                        >
+                          <Icon
+                            path={mdiInformationOutline}
+                            size={0.85}
+                          />
+                        </Grid>
+                      )}
                     </TableCell>
                     <TableCell>
                       {row.lab_dt ? moment(row.lab_dt).format("MMM D YYYY") : ""}
