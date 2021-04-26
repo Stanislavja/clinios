@@ -55,6 +55,27 @@ const useStyles = makeStyles((theme) => ({
   text14: {
     fontSize: 14,
   },
+  fileNameTextStyle: {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    fontSize: 14,
+    display: "inline-block",
+    width: "70%",
+    marginBottom: "-2px",
+    [theme.breakpoints.up("xl")]: {
+      width: "75%",
+    },
+  },
+  createdTextStyle: {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    fontSize: 14,
+    display: "inline-block",
+    width: "65%",
+    marginBottom: "-2px",
+  },
   label: {
     fontWeight: 600,
     marginBottom: theme.spacing(2),
@@ -441,7 +462,7 @@ const Lab = (props) => {
                 <Grid container className={classes.mb1}>
                   <Grid
                     item
-                    md={4}
+                    md={5}
                     className={classes.mb1}
                   >
                     <Typography
@@ -450,30 +471,19 @@ const Lab = (props) => {
                     >
                       Filename:
                     </Typography>
-                    {labData?.filename?.length > 15
-                      ? (
-                        <Tooltip title={labData?.filename}>
-                          <Typography
-                            component="span"
-                            className={classes.text14}
-                          >
-                            {`${labData?.filename?.slice(0, 15)}...`}
-                          </Typography>
-                        </Tooltip>
-                      )
-                      : (
-                        <Typography
-                          component="span"
-                          className={classes.text14}
-                        >
-                          {labData?.filename}
-                        </Typography>
-                      )}
+                    <Tooltip title={labData?.filename}>
+                      <Typography
+                        component="span"
+                        className={classes.fileNameTextStyle}
+                      >
+                        {`${labData?.filename}`}
+                      </Typography>
+                    </Tooltip>
                   </Grid>
 
                   <Grid
                     item
-                    md={5}
+                    md={4}
                   >
                     <Typography
                       component="span"
@@ -481,12 +491,20 @@ const Lab = (props) => {
                     >
                       Created:
                     </Typography>
-                    <Typography
+                    <Tooltip title={dateTimeFormat(labData?.created)}>
+                      <Typography
+                        component="span"
+                        className={classes.createdTextStyle}
+                      >
+                        {dateTimeFormat(labData?.created)}
+                      </Typography>
+                    </Tooltip>
+                    {/* <Typography
                       component="span"
                       className={classes.text14}
                     >
                       {dateTimeFormat(labData?.created)}
-                    </Typography>
+                    </Typography> */}
                   </Grid>
 
                   <Grid
