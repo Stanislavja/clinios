@@ -333,4 +333,4 @@ export const dateTimeFormat = (date) => moment(date).format("MMM D YYYY hh:mm A"
 
 export const hasValue = (value) => !((typeof value === "undefined") || (value === null));
 
-export const stringWithoutComments = (string) => string.replace(/(\/\*[^*]*\*\/)|(\/\/[^*]*)/g, '');
+export const stringWithoutComments = (string) => string.replace(/(\/\*[^*]*\*\/)|(\/\/[^*]*)/g, "");
