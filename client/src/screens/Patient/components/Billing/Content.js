@@ -109,7 +109,7 @@ const BillingContent = (props) => {
               color="textPrimary"
             >
               $
-              {item.amount}
+              {item.amount?.toFixed(2)}
             </Typography>
           </Grid>
           <Grid item className={classes.block}>
