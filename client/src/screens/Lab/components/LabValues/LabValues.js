@@ -13,9 +13,9 @@ import PropTypes from "prop-types";
 
 import Popover from "../../../../components/common/Popover";
 import { StyledTableCellSm, StyledTableRowSm } from "../../../../components/common/StyledTable";
+import { calculateFunctionalRange, calculatePercentageFlag } from "../../../../utils/FunctionalRange";
 import { getMarkerDefinition } from "../../../../utils/markerDefinition";
 import { getMarkerInterpretation } from "../../../../utils/markerInterpretation";
-import { calculateFunctionalRange, calculatePercentageFlag } from "../../../../utils/FunctionalRange";
 import MarkerDefinition from "../../../Patient/components/MarkerDefinition";
 import GraphDialog from "./component/GraphDialog";
 

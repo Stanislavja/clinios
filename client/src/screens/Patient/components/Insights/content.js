@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, {
+  useState, useEffect, useCallback, useMemo,
+} from "react";
 
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -14,10 +16,10 @@ import moment from "moment";
 import Popover from "../../../../components/common/Popover";
 import usePatientContext from "../../../../hooks/usePatientContext";
 import { InsightsTests, MissingTests } from "../../../../static/insightsTests";
-import { getMarkerDefinition } from "../../../../utils/markerDefinition";
-import { getMarkerInterpretation } from "../../../../utils/markerInterpretation";
 import { calculateFunctionalRange, calculatePercentage } from "../../../../utils/FunctionalRange";
 import { calculateAge } from "../../../../utils/helpers";
+import { getMarkerDefinition } from "../../../../utils/markerDefinition";
+import { getMarkerInterpretation } from "../../../../utils/markerInterpretation";
 import MarkerDefinition from "../MarkerDefinition";
 
 const useStyles = makeStyles((theme) => ({
