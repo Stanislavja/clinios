@@ -323,10 +323,12 @@ export function isEmpty(obj) {
   return Object.keys(obj).length === 0;
 }
 
-export function noOp() {}
+export function noOp() { }
 
 export const pickerDateFormat = (date) => moment(date).format("MMM DD YYYY");
 
 export const dateFormat = (date) => moment(date).format("MMM D YYYY");
 
 export const dateTimeFormat = (date) => moment(date).format("MMM D YYYY hh:mm A");
+
+export const hasValue = (value) => !((typeof value === "undefined") || (value === null));
