@@ -14,6 +14,7 @@ import { setTestName } from "../../providers/Patient/actions";
 import Tests from "../../services/test.service";
 import { calculateFunctionalRange } from "../../utils/FunctionalRange";
 import { calculateAge } from "../../utils/helpers";
+import MarkerDefinition from "../Patient/components/MarkerDefinition";
 import Graph from "./components/Graph";
 
 const useStyles = makeStyles((theme) => ({
@@ -205,115 +206,130 @@ const TestGraph = () => {
     }
   };
 
+  const markerDefinitionProps = {
+    id: testId,
+    name: cptName[0]?.name
+  }
+
   return (
     <div className={classes.root} ref={ref}>
-      <div className={classes.graphArrowIconContainer}>
-        <IconButton
-          disabled={cptIdCount <= 0}
-          onClick={previousCpt}
-          className={classes.graphArrowIcon}
-        >
-          <Icon
-            path={mdiArrowLeftBold}
-            size={1.3}
-            horizontal
-            vertical
-            rotate={180}
-          />
-        </IconButton>
-        <IconButton
-          disabled={cptIdCount >= labCpt?.data?.length}
-          onClick={nextCpt}
-          className={classes.graphArrowIcon}
-        >
-          <Icon
-            path={mdiArrowRightBold}
-            size={1.3}
-            horizontal
-            vertical
-            rotate={180}
-          />
-        </IconButton>
-      </div>
+      <Grid container spacing={3}>
+        <Grid item md={8} xs={12}>
+          <div className={classes.graphArrowIconContainer}>
+            <IconButton
+              disabled={cptIdCount <= 0}
+              onClick={previousCpt}
+              className={classes.graphArrowIcon}
+            >
+              <Icon
+                path={mdiArrowLeftBold}
+                size={1.3}
+                horizontal
+                vertical
+                rotate={180}
+              />
+            </IconButton>
+            <IconButton
+              disabled={cptIdCount >= labCpt?.data?.length}
+              onClick={nextCpt}
+              className={classes.graphArrowIcon}
+            >
+              <Icon
+                path={mdiArrowRightBold}
+                size={1.3}
+                horizontal
+                vertical
+                rotate={180}
+              />
+            </IconButton>
+          </div>
 
-      {graph && graphFilterData && (
-        <Graph
-          data={graphFilterData}
-          functionalRange={functionalRange}
-          conventionalRange={conventionalRange}
-        />
-      )}
-      <Grid item className={classes.filterButtonContainer}>
-        <Button
-          size="medium"
-          type="submit"
-          variant="contained"
-          color="default"
-          className={classes.filterbutton}
-          onClick={() => filterDate("all")}
-        >
-          All
-        </Button>
-        <Button
-          size="medium"
-          type="submit"
-          variant="contained"
-          color="default"
-          className={classes.filterbutton}
-          onClick={() => filterDate("year_4")}
-        >
-          4 Years
-        </Button>
-        <Button
-          size="medium"
-          type="submit"
-          variant="contained"
-          color="default"
-          className={classes.filterbutton}
-          onClick={() => filterDate("year_3")}
-        >
-          3 Years
-        </Button>
-        <Button
-          size="medium"
-          type="submit"
-          variant="contained"
-          color="default"
-          className={classes.filterbutton}
-          onClick={() => filterDate("year_2")}
-        >
-          2 Years
-        </Button>
-        <Button
-          size="medium"
-          type="submit"
-          variant="contained"
-          color="default"
-          className={classes.filterbutton}
-          onClick={() => filterDate("year_1")}
-        >
-          1 Year
-        </Button>
-        <Button
-          size="medium"
-          type="submit"
-          variant="contained"
-          color="default"
-          className={classes.filterbutton}
-          onClick={() => filterDate("month_6")}
-        >
-          6 Months
-        </Button>
-        <Button
-          size="medium"
-          type="submit"
-          variant="contained"
-          color="default"
-          className={classes.filterbutton}
-          onClick={() => filterDate("month_3")}
-        >
-          3 Months
-        </Button>
+          {graph && graphFilterData && (
+            <Graph
+              data={graphFilterData}
+              functionalRange={functionalRange}
+              conventionalRange={conventionalRange}
+            />
+          )}
+          <Grid item className={classes.filterButtonContainer}>
+            <Button
+              size="medium"
+              type="submit"
+              variant="contained"
+              color="default"
+              className={classes.filterbutton}
+              onClick={() => filterDate("all")}
+            >
+              All
+            </Button>
+            <Button
+              size="medium"
+              type="submit"
+              variant="contained"
+              color="default"
+              className={classes.filterbutton}
+              onClick={() => filterDate("year_4")}
+            >
+              4 Years
+            </Button>
+            <Button
+              size="medium"
+              type="submit"
+              variant="contained"
+              color="default"
+              className={classes.filterbutton}
+              onClick={() => filterDate("year_3")}
+            >
+              3 Years
+            </Button>
+            <Button
+              size="medium"
+              type="submit"
+              variant="contained"
+              color="default"
+              className={classes.filterbutton}
+              onClick={() => filterDate("year_2")}
+            >
+              2 Years
+            </Button>
+            <Button
+              size="medium"
+              type="submit"
+              variant="contained"
+              color="default"
+              className={classes.filterbutton}
+              onClick={() => filterDate("year_1")}
+            >
+              1 Year
+            </Button>
+            <Button
+              size="medium"
+              type="submit"
+              variant="contained"
+              color="default"
+              className={classes.filterbutton}
+              onClick={() => filterDate("month_6")}
+            >
+              6 Months
+            </Button>
+            <Button
+              size="medium"
+              type="submit"
+              variant="contained"
+              color="default"
+              className={classes.filterbutton}
+              onClick={() => filterDate("month_3")}
+            >
+              3 Months
+            </Button>
+          </Grid>
+        </Grid>
+        <Grid item md={4} xs={12}>
+          <MarkerDefinition
+            showTitle={false}
+            data={markerDefinitionProps}
+          />
+        </Grid>
       </Grid>
     </div>
   );

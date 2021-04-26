@@ -98,7 +98,7 @@ const ConfirmEmail = ({
                   </div>
                   <div className={classes.record}>
                     <p>Subject:</p>
-                    <p>{emailData.subject}</p>
+                    <p>{emailData?.subject}</p>
                   </div>
                   <div className={classes.record}>
                     <p>message:</p>
@@ -142,7 +142,7 @@ ConfirmEmail.propTypes = {
   onSave: PropTypes.func.isRequired,
   emailData: PropTypes.shape({
     emailStatus: PropTypes.string,
-    subject: PropTypes.string,
+    // subject: PropTypes.string,
     message: PropTypes.string,
   }).isRequired,
 };

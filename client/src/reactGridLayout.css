@@ -12,6 +12,10 @@
   right: -3px;
 }
 
+.react-grid-item > .react-resizable-handle::after {
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
 .react-grid-item.react-grid-placeholder {
   background: #2979ff;
   opacity: 0.5;

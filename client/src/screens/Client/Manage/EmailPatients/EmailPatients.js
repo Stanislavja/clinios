@@ -134,7 +134,7 @@ const isLessThan30Minutes = (createdTime) => (
 export default function EmailPatients() {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  const [subject, setSubject] = useState("");
+  // const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [emailHistory, setEmailHistory] = useState([]);
   const [emailStatus, setEmailStatus] = useState("");
@@ -211,7 +211,8 @@ export default function EmailPatients() {
         </FormControl>
       </div>
       <div className={classes.fields}>
-        <TextField
+        {/* Commented out as per CLIN-114 */}
+        {/* <TextField
           className={classes.subject}
           value={subject}
           variant="outlined"
@@ -223,7 +224,7 @@ export default function EmailPatients() {
           autoFocus
           onChange={(event) => setSubject(event.target.value)}
           size="small"
-        />
+        /> */}
         <TextField
           fullWidth
           variant="outlined"
@@ -239,7 +240,7 @@ export default function EmailPatients() {
           size="small"
         />
         <Button
-          disabled={!subject || !message}
+          disabled={!message}
           variant="contained"
           color="primary"
           className={classes.next}
@@ -353,7 +354,7 @@ export default function EmailPatients() {
             onClose={() => setIsModalOpen(false)}
             onSave={(data) => handleSave(data)}
             emailData={{
-              subject,
+              // subject,
               emailStatus,
               message,
             }}

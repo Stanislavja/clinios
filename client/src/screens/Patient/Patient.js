@@ -1180,7 +1180,7 @@ const Patient = () => {
           applyForm={() => dispatch(toggleTestsChartExpandDialog())}
           cancelForm={() => dispatch(toggleTestsChartExpandDialog())}
           hideActions
-          size="lg"
+          size="xl"
           fullHeight
         />
       )}

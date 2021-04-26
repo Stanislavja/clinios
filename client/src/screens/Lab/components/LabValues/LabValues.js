@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useMemo } from "react";
 
 import {
   Typography,
@@ -11,9 +11,12 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 
+import Popover from "../../../../components/common/Popover";
 import { StyledTableCellSm, StyledTableRowSm } from "../../../../components/common/StyledTable";
-import LabService from "../../../../services/lab.service";
 import { calculateFunctionalRange, calculatePercentageFlag } from "../../../../utils/FunctionalRange";
+import { getMarkerDefinition } from "../../../../utils/markerDefinition";
+import { getMarkerInterpretation } from "../../../../utils/markerInterpretation";
+import MarkerDefinition from "../../../Patient/components/MarkerDefinition";
 import GraphDialog from "./component/GraphDialog";
 
 const useStyles = makeStyles(() => ({
@@ -24,23 +27,24 @@ const useStyles = makeStyles(() => ({
 
 const LabValues = (props) => {
   const classes = useStyles();
-  const { labId, patientData } = props;
+  const { labValues, patientData } = props;
   const patientAge = patientData.age;
   const { gender } = patientData;
 
-  const [labValues, setLabValues] = useState([]);
   const [selectedGraph, setSelectedGraph] = useState(null);
   const [showGraphDialog, setShowGraphDialog] = useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [selectedMarker, setSelectedMarker] = React.useState(null);
 
-  const fetchLabValues = useCallback(() => {
-    LabService.getLabValues(labId).then((res) => {
-      setLabValues(res.data);
-    });
-  }, [labId]);
+  const handlePopoverOpen = (event, marker) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedMarker(marker);
+  };
 
-  useEffect(() => {
-    fetchLabValues();
-  }, [fetchLabValues]);
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+    setSelectedMarker(null);
+  };
 
   const toggleGraphDialog = () => {
     setShowGraphDialog((prevState) => !prevState);
@@ -48,10 +52,13 @@ const LabValues = (props) => {
 
   const rowClickHandler = (row) => {
     setSelectedGraph(row);
-    toggleGraphDialog();
+    // toggleGraphDialog();
   };
 
   const hasValue = (value) => !((typeof value === "undefined") || (value === null));
+
+  // eslint-disable-next-line max-len
+  const showPopover = useMemo(() => Boolean(selectedMarker && getMarkerDefinition(selectedMarker.id).length && (getMarkerInterpretation(selectedMarker.id).low.length && getMarkerInterpretation(selectedMarker.id).high.length)), [selectedMarker]);
 
   return (
     <>
@@ -62,6 +69,17 @@ const LabValues = (props) => {
           onClose={toggleGraphDialog}
         />
       )}
+      {
+        showPopover && (
+          <Popover
+            open={showPopover}
+            anchorEl={anchorEl}
+            handlePopoverClose={handlePopoverClose}
+          >
+            <MarkerDefinition data={selectedMarker} />
+          </Popover>
+        )
+      }
       <TableContainer>
         <Table size="small" aria-label="simple table">
           <TableHead>
@@ -85,7 +103,12 @@ const LabValues = (props) => {
                     className={classes.cursorPointer}
                     onClick={() => rowClickHandler(row)}
                   >
-                    <StyledTableCellSm>{row.name}</StyledTableCellSm>
+                    <StyledTableCellSm
+                      onMouseEnter={(e) => handlePopoverOpen(e, row)}
+                      onMouseLeave={handlePopoverClose}
+                    >
+                      {row.name}
+                    </StyledTableCellSm>
                     <StyledTableCellSm>{row.value}</StyledTableCellSm>
                     <StyledTableCellSm>
                       {hasValue(row.range_low) && hasValue(row.range_high) && (
@@ -140,11 +163,15 @@ const LabValues = (props) => {
 };
 
 LabValues.propTypes = {
-  labId: PropTypes.number.isRequired,
   patientData: PropTypes.shape({
     gender: PropTypes.string,
     age: PropTypes.string,
   }).isRequired,
+  labValues: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.number,
+    }),
+  ).isRequired,
 };
 
 export default LabValues;

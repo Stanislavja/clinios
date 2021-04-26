@@ -67,7 +67,8 @@ const NewMessage = (props) => {
       title="New Message"
       message={(
         <form onSubmit={onMessageSend}>
-          <Grid className={classes.formInput} item md={4}>
+          {/* Commented out as per CLIN-114 */}
+          {/* <Grid className={classes.formInput} item md={4}>
             <TextField
               required
               variant="standard"
@@ -79,7 +80,7 @@ const NewMessage = (props) => {
               value={formFields.subject}
               onChange={(e) => handleInputChange(e)}
             />
-          </Grid>
+          </Grid> */}
           <Grid item lg={2}>
             <Typography gutterBottom variant="body1" color="textPrimary">
               Message

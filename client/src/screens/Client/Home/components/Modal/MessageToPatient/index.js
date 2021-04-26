@@ -7,11 +7,11 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import FormControl from "@material-ui/core/FormControl";
+// import FormControl from "@material-ui/core/FormControl";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
-import TextField from "@material-ui/core/TextField";
+// import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/CloseOutlined";
 import Alert from "@material-ui/lab/Alert";
@@ -182,7 +182,8 @@ const MessageToPatient = ({
               </Alert>
             ))}
           <div className={classes.root}>
-            <FormControl component="div" className={classes.formControl}>
+            {/* Commented out as per CLIN-114 */}
+            {/* <FormControl component="div" className={classes.formControl}>
               <TextField
                 value={message.subject}
                 className={classes.subject}
@@ -198,7 +199,7 @@ const MessageToPatient = ({
                 autoFocus
                 onChange={(event) => handleOnChange(event)}
               />
-            </FormControl>
+            </FormControl> */}
             <Typography component="p" variant="body2" color="textPrimary">
               Message
             </Typography>
