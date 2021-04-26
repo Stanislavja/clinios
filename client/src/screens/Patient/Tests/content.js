@@ -10,6 +10,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
+import ViewIcon from "@material-ui/icons/VisibilityOutlined";
 import { orderBy } from "lodash";
 import moment from "moment";
 
@@ -39,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
   noRecordsMessage: {
     lineHeight: "21px",
     fontSize: 12,
+  },
+  cursorPointer: {
+    cursor: "pointer",
   },
 }));
 
@@ -199,7 +203,7 @@ const TestsContent = () => {
         <Table size="small" className={classes.table}>
           <TableHead>
             <TableRow>
-              <StyledTableCell>Test</StyledTableCell>
+              <StyledTableCell colSpan={2}>Test</StyledTableCell>
               <StyledTableCell>Last Date</StyledTableCell>
               <StyledTableCell>Last Result</StyledTableCell>
               <StyledTableCell>Conv Range</StyledTableCell>
@@ -217,11 +221,13 @@ const TestsContent = () => {
                 const functionalRange = calculateFunctionalRange(row.cpt_id, gender, patientAge);
                 return (
                   <StyledTableRow key={row.name}>
+                    <TableCell>{row.name}</TableCell>
                     <TableCell
+                      className={classes.cursorPointer}
                       onMouseEnter={(e) => handlePopoverOpen(e, row)}
                       onMouseLeave={handlePopoverClose}
                     >
-                      {row.name}
+                      <ViewIcon fontSize="small" />
                     </TableCell>
                     <TableCell>
                       {row.lab_dt ? moment(row.lab_dt).format("MMM D YYYY") : ""}
