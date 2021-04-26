@@ -29,14 +29,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MarkerDefinition = ({ data, showTitle, showHigh, showLow }) => {
+const MarkerDefinition = ({
+  data, showTitle, showHigh, showLow,
+}) => {
   const classes = useStyles();
   const markerId = data?.cpt_id || data?.id;
   const markerExplanation = getMarkerDefinition(markerId);
   const markerInterpretation = getMarkerInterpretation(markerId);
 
-  const hasHighData = useMemo(() => Boolean(markerInterpretation?.high.length), [markerInterpretation?.high])
-  const hasLowData = useMemo(() => Boolean(markerInterpretation?.low.length), [markerInterpretation?.low])
+  // eslint-disable max-len
+  const hasHighData = useMemo(() => Boolean(markerInterpretation?.high.length), [markerInterpretation?.high]);
+  const hasLowData = useMemo(() => Boolean(markerInterpretation?.low.length), [markerInterpretation?.low]);
 
   return (
     <Box maxWidth={700}>
@@ -105,7 +108,7 @@ MarkerDefinition.defaultProps = {
   showTitle: true,
   showHigh: true,
   showLow: true,
-}
+};
 
 MarkerDefinition.propTypes = {
   data: PropTypes.shape({

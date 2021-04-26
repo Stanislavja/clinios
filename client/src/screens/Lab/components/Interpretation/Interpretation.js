@@ -39,13 +39,11 @@ const Interpretation = (props) => {
           output.name = item.name;
           resData.push(output);
         }
-      })
+      });
       resData = orderBy(resData, ["value"], ["desc"]);
-      setLabData([...resData])
+      setLabData([...resData]);
     }
-  }, [labValues, functionalRange, gender, patientAge])
-
-  console.log(labData)
+  }, [labValues, functionalRange, gender, patientAge]);
 
   return (
     <>
@@ -59,13 +57,14 @@ const Interpretation = (props) => {
         </Grid>
       ))}
     </>
-  )
+  );
 };
 
 Interpretation.propTypes = {
   patientData: PropTypes.shape({
     gender: PropTypes.string,
     age: PropTypes.string,
+    functionalRange: PropTypes.number,
   }).isRequired,
   labValues: PropTypes.arrayOf(
     PropTypes.shape({
