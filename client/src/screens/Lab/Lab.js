@@ -723,7 +723,7 @@ const Lab = (props) => {
               <Grid
                 className={classes.borderSection}
               >
-                <Typography gutterBottom variant="h5">Values</Typography>
+                {/* <Typography gutterBottom variant="h5">Values</Typography> */}
                 {!!labData && (
                   <LabValues
                     labValues={labValues}
@@ -736,7 +736,7 @@ const Lab = (props) => {
               <Grid
                 className={classes.borderSection}
               >
-                <Typography gutterBottom variant="h5">Value Interpretation</Typography>
+                {/* <Typography gutterBottom variant="h5">Value Interpretation</Typography> */}
                 <Interpretation
                   labValues={labValues}
                   patientData={patientData}
