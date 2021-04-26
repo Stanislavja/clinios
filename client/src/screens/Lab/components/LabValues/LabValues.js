@@ -50,7 +50,7 @@ const LabValues = (props) => {
 
   const rowClickHandler = (row) => {
     setSelectedGraph(row);
-    toggleGraphDialog();
+    // toggleGraphDialog();
   };
 
   const hasValue = (value) => !((typeof value === "undefined") || (value === null));

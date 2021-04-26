@@ -17,31 +17,30 @@ const Interpretation = (props) => {
 
   useEffect(() => {
     if (labValues.length) {
-      let resData = [];
+      let tempData = [];
       labValues.forEach((item) => {
-        const id = item?.id;
-        const low = item?.range_low;
-        const high = item?.range_high;
-        const value = item?.value;
+        const {
+          id, value, range_low, range_high,
+        } = item;
         let output;
         if (functionalRange) {
           const funcRange = calculateFunctionalRange(id, gender, patientAge);
-          if (hasValue(funcRange.low) && hasValue(funcRange?.low)) {
+          if (hasValue(funcRange.low) && hasValue(funcRange?.high)) {
             output = calculatePercentage(funcRange.low, funcRange.high, value);
-          } else if (hasValue(low) && hasValue(high)) {
-            output = calculatePercentage(low, high, value);
+          } else if (hasValue(range_low) && hasValue(range_high)) {
+            output = calculatePercentage(range_low, range_high, value);
           }
-        } else if (hasValue(low) && hasValue(high)) {
-          output = calculatePercentage(low, high, value);
+        } else if (hasValue(range_low) && hasValue(range_high)) {
+          output = calculatePercentage(range_low, range_high, value);
         }
         if (output?.flag.length) {
           output.id = id;
           output.name = item.name;
-          resData.push(output);
+          tempData.push(output);
         }
       });
-      resData = orderBy(resData, ["value"], ["desc"]);
-      setLabData([...resData]);
+      tempData = orderBy(tempData, ["value"], ["desc"]);
+      setLabData([...tempData]);
     }
   }, [labValues, functionalRange, gender, patientAge]);
 
