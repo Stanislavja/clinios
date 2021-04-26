@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect, useState, useCallback, useMemo,
+} from "react";
 
 import {
   Button, Container, CssBaseline, makeStyles,
@@ -53,9 +55,7 @@ const Schedule = () => {
   const [searchResult, setSearchResult] = useState([]);
   const [fetchingCompleted, setFetchingCompleted] = useState(false);
 
-  const payload = {
-    userId,
-  };
+  const payload = useMemo(() => ({ userId }), [userId]);
 
   const getUserList = () => {
     ScheduleService.getAllUsers().then((res) => {
@@ -63,16 +63,17 @@ const Schedule = () => {
     });
   };
 
-  useEffect(() => {
-    getUserList();
-  }, []);
-
-  const fetchScheduleSearch = () => {
+  const fetchScheduleSearch = useCallback(() => {
     ScheduleService.search(payload).then((res) => {
       setSearchResult(res.data.data);
       setFetchingCompleted(true);
     });
-  };
+  }, [payload]);
+
+  useEffect(() => {
+    getUserList();
+    fetchScheduleSearch();
+  }, [fetchScheduleSearch]);
 
   const handleChangeOfUserId = (e) => {
     setUserId(e.target.value);
