@@ -42,7 +42,7 @@ const MarkerDefinition = ({
   const hasLowData = useMemo(() => Boolean(markerInterpretation?.low.length), [markerInterpretation?.low]);
 
   return (
-    <Box maxWidth={700}>
+    <Box maxWidth={900}>
       <Grid className={classes.main}>
         {showTitle && (
           <Typography variant="h4" className={classes.mb2}>
