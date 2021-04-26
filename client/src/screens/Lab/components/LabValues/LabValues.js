@@ -57,6 +57,7 @@ const LabValues = (props) => {
 
   const hasValue = (value) => !((typeof value === "undefined") || (value === null));
 
+  // eslint-disable-next-line max-len
   const showPopover = useMemo(() => Boolean(selectedMarker && getMarkerDefinition(selectedMarker.id).length && (getMarkerInterpretation(selectedMarker.id).low.length && getMarkerInterpretation(selectedMarker.id).high.length)), [selectedMarker]);
 
   return (

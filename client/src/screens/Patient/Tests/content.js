@@ -179,6 +179,7 @@ const TestsContent = () => {
     addCalculatedTests();
   }, [addCalculatedTests]);
 
+  // eslint-disable-next-line max-len
   const showPopover = useMemo(() => Boolean(selectedMarker && getMarkerDefinition(selectedMarker.cpt_id).length && (getMarkerInterpretation(selectedMarker.cpt_id).low.length && getMarkerInterpretation(selectedMarker.cpt_id).high.length)), [selectedMarker]);
 
   return (
