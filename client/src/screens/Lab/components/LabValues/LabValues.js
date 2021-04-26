@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 
 import {
   Typography,
@@ -13,7 +13,6 @@ import PropTypes from "prop-types";
 
 import Popover from "../../../../components/common/Popover";
 import { StyledTableCellSm, StyledTableRowSm } from "../../../../components/common/StyledTable";
-import LabService from "../../../../services/lab.service";
 import { calculateFunctionalRange, calculatePercentageFlag } from "../../../../utils/FunctionalRange";
 import MarkerDefinition from "../../../Patient/components/MarkerDefinition";
 import GraphDialog from "./component/GraphDialog";
@@ -26,11 +25,10 @@ const useStyles = makeStyles(() => ({
 
 const LabValues = (props) => {
   const classes = useStyles();
-  const { labId, patientData } = props;
+  const { labValues, patientData } = props;
   const patientAge = patientData.age;
   const { gender } = patientData;
 
-  const [labValues, setLabValues] = useState([]);
   const [selectedGraph, setSelectedGraph] = useState(null);
   const [showGraphDialog, setShowGraphDialog] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -45,16 +43,6 @@ const LabValues = (props) => {
     setAnchorEl(null);
     setSelectedMarker(null);
   };
-
-  const fetchLabValues = useCallback(() => {
-    LabService.getLabValues(labId).then((res) => {
-      setLabValues(res.data);
-    });
-  }, [labId]);
-
-  useEffect(() => {
-    fetchLabValues();
-  }, [fetchLabValues]);
 
   const toggleGraphDialog = () => {
     setShowGraphDialog((prevState) => !prevState);
@@ -172,11 +160,15 @@ const LabValues = (props) => {
 };
 
 LabValues.propTypes = {
-  labId: PropTypes.number.isRequired,
   patientData: PropTypes.shape({
     gender: PropTypes.string,
     age: PropTypes.string,
   }).isRequired,
+  labValues: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.number,
+    }),
+  ).isRequired,
 };
 
 export default LabValues;
