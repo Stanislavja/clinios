@@ -10,7 +10,8 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
-import ViewIcon from "@material-ui/icons/VisibilityOutlined";
+import { mdiInformationOutline } from "@mdi/js";
+import Icon from "@mdi/react";
 import { orderBy } from "lodash";
 import moment from "moment";
 
@@ -43,6 +44,10 @@ const useStyles = makeStyles((theme) => ({
   },
   cursorPointer: {
     cursor: "pointer",
+    "& svg": {
+      position: "relative",
+      top: theme.spacing(0.5),
+    },
   },
 }));
 
@@ -227,7 +232,10 @@ const TestsContent = () => {
                       onMouseEnter={(e) => handlePopoverOpen(e, row)}
                       onMouseLeave={handlePopoverClose}
                     >
-                      <ViewIcon fontSize="small" />
+                      <Icon
+                        path={mdiInformationOutline}
+                        size={0.85}
+                      />
                     </TableCell>
                     <TableCell>
                       {row.lab_dt ? moment(row.lab_dt).format("MMM D YYYY") : ""}
@@ -273,7 +281,7 @@ const TestsContent = () => {
               })
               : (
                 <StyledTableRow>
-                  <TableCell colSpan={10}>
+                  <TableCell colSpan={11}>
                     <Typography className={classes.noRecordsMessage} align="center" variant="body1">
                       No Records Found...
                     </Typography>
