@@ -156,13 +156,13 @@ const InformationTable = (props) => {
           <Grid container>
             <Typography variant="h5">Responsible Party</Typography>
             <Typography variant="h5" className={classes.billTypeTypo}>
-              <span className={clsx(classes.fontWeight800, classes.fontSize14)}>Bill Type : </span>
+              <span className={clsx(classes.fontWeight800, classes.fontSize14)}>Bill Type: </span>
               Client
             </Typography>
           </Grid>
           <Typography className={clsx(classes.infoSpace, classes.clientTypo)} variant="h4">
             <span className={clsx(classes.fontWeight1000, classes.clientTypoHeading)}>Client #:</span>
-            <span className={classes.ml4}>{testProfileInfo.ulta_order}</span>
+            <span className={classes.ml4}>97512437</span>
 
           </Typography>
           <Typography className={classes.infoSpace}>Ultra Lab Tests, LLC</Typography>

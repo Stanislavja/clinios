@@ -159,7 +159,7 @@ const PurchaseLabs = () => {
       <Alert
         open={isConfirmDialog}
         title="Purchase Confirmation"
-        message={`Confirm purchase of $${total}?`}
+        message={`Confirm purchase of $${total?.toFixed(2)}?`}
         applyButtonText="Confirm"
         cancelButtonText="Cancel"
         applyForm={() => handleOnSubmit()}
@@ -184,7 +184,7 @@ const PurchaseLabs = () => {
                     This is a confirmation that you have purchased lab(s) for
                     <span className={classes.boldPrice}>
                       $
-                      {total}
+                      {total?.toFixed(2)}
                     </span>
                   </Typography>
                   <Typography variant="h5" gutterBottom>
@@ -241,7 +241,7 @@ const PurchaseLabs = () => {
                               <TableCell>{lab.lab_company_name}</TableCell>
                               <TableCell>
                                 $
-                                {lab.price}
+                                {lab?.price?.toFixed(2)}
                               </TableCell>
                             </TableRow>
                           );
@@ -249,7 +249,7 @@ const PurchaseLabs = () => {
                         <div className={classes.Total}>
                           <span>Total:</span>
                           $
-                          {total}
+                          {total?.toFixed(2)}
                         </div>
                       </TableBody>
                     </Table>

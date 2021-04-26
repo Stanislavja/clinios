@@ -23,6 +23,7 @@ import FileViewer from "react-file-viewer";
 import { pdfjs, Document, Page } from "react-pdf";
 import { Link } from "react-router-dom";
 
+import Tooltip from "../../components/common/CustomTooltip";
 import useDebounce from "../../hooks/useDebounce";
 import LabService from "../../services/lab.service";
 import { DocumentOptions } from "../../static/lab";
@@ -449,17 +450,30 @@ const Lab = (props) => {
                     >
                       Filename:
                     </Typography>
-                    <Typography
-                      component="span"
-                      className={classes.text14}
-                    >
-                      {labData?.filename}
-                    </Typography>
+                    {labData?.filename?.length > 15
+                      ? (
+                        <Tooltip title={labData?.filename}>
+                          <Typography
+                            component="span"
+                            className={classes.text14}
+                          >
+                            {`${labData?.filename?.slice(0, 15)}...`}
+                          </Typography>
+                        </Tooltip>
+                      )
+                      : (
+                        <Typography
+                          component="span"
+                          className={classes.text14}
+                        >
+                          {labData?.filename}
+                        </Typography>
+                      )}
                   </Grid>
 
                   <Grid
                     item
-                    md={4}
+                    md={5}
                   >
                     <Typography
                       component="span"
@@ -477,7 +491,7 @@ const Lab = (props) => {
 
                   <Grid
                     item
-                    md={4}
+                    md={3}
                   >
                     <Typography
                       component="span"
@@ -495,7 +509,7 @@ const Lab = (props) => {
 
                   <Grid
                     item
-                    md={4}
+                    md={5}
                   >
                     <Typography
                       component="span"
@@ -513,7 +527,7 @@ const Lab = (props) => {
 
                   <Grid
                     item
-                    md={4}
+                    md={3}
                   >
                     <Typography
                       component="span"

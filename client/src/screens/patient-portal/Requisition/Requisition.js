@@ -150,31 +150,34 @@ const Encounters = () => {
       <Typography component="p" color="textPrimary">
         This page is used to view lab requisitions you can take to a Quest Diagnostics Lab
       </Typography>
-      <TableContainer className={classes.tableContainer}>
-        <Table size="small" className={classes.table} aria-label="a dense table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>Date</StyledTableCell>
-              <StyledTableCell>Tests</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {testList.map((list) => (
-              <TableRow className={classes.tableRow}>
-                <StyledTableCell className={classes.firstColumnforStyledTableCell}>
-                  {dateFormat(list.dt)}
-                </StyledTableCell>
-                <StyledTableCell
-                  className={clsx(classes.tableTestsCell, classes.secondColumnforStyledTableCell)}
-                  onClick={() => fetchReportInformation(list.id)}
-                >
-                  {list.tests}
-                </StyledTableCell>
+      {Boolean(testList.length) && (
+        <TableContainer className={classes.tableContainer}>
+          <Table size="small" className={classes.table} aria-label="a dense table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Date</StyledTableCell>
+                <StyledTableCell>Tests</StyledTableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {testList.map((list) => (
+                <TableRow className={classes.tableRow}>
+                  <StyledTableCell className={classes.firstColumnforStyledTableCell}>
+                    {dateFormat(list.dt)}
+                  </StyledTableCell>
+                  <StyledTableCell
+                    className={clsx(classes.tableTestsCell, classes.secondColumnforStyledTableCell)}
+                    onClick={() => fetchReportInformation(list.id)}
+                  >
+                    {list.tests}
+                  </StyledTableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+
       {testProfileInfo && profileTests && (
         <div style={{ display: "none" }}>
           <PdfTemplate testProfileInfo={testProfileInfo} profileTests={profileTests} ref={componentRef} />

@@ -1320,7 +1320,7 @@ const Patient = () => {
                   updateMinHeight={updateMinHeight}
                   cardInfo={
                     item.title === "Billing" && patientBalance !== null
-                      ? `Balance $${patientBalance}`
+                      ? `Balance $${patientBalance?.toFixed(2)}`
                       : ""
                   }
                 />

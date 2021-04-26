@@ -40,16 +40,14 @@ const Prescriptions = () => {
         Prescriptions
       </Typography>
       {
-        prescriptions.length
-          ? prescriptions.map((item) => (
-            <Typography
-              key={item.id}
-              gutterBottom
-            >
-              {item.id}
-            </Typography>
-          ))
-          : <Typography>No prescriptions found...</Typography>
+        Boolean(prescriptions.length) && prescriptions.map((item) => (
+          <Typography
+            key={item.id}
+            gutterBottom
+          >
+            {item.id}
+          </Typography>
+        ))
       }
     </div>
   );

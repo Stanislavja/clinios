@@ -112,7 +112,7 @@ const Appointments = ({ appointments, onEdit, onDelete }) => {
                 </TableCell>
               )}
               <TableCell padding="checkbox">{appointment.length}</TableCell>
-              <TableCell padding="checkbox">{appointment.fee}</TableCell>
+              <TableCell padding="checkbox">{`$${appointment.fee?.toFixed(2)}`}</TableCell>
               <TableCell padding="checkbox">{appointment.allow_patients_schedule ? "Yes" : "No"}</TableCell>
               {appointment.note && appointment.note.length > 0 ? (
                 <LightTooltip title={appointment.note}>

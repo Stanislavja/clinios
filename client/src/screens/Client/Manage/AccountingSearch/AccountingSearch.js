@@ -95,8 +95,8 @@ NumberFormatCustom.propTypes = {
 
 export default function AccountingSearch() {
   const classes = useStyles();
-  const [amountFrom, setAmountFrom] = useState("0");
-  const [amountTo, setAmountTo] = useState("100");
+  const [amountFrom, setAmountFrom] = useState("0.00");
+  const [amountTo, setAmountTo] = useState("100.00");
   const [dateFrom, setDateFrom] = useState(
     moment().subtract(7, "days").format("YYYY-MM-DD"),
   );
@@ -180,7 +180,7 @@ export default function AccountingSearch() {
                   variant="outlined"
                   value={amountTo}
                   id="amountTo"
-                  onChange={(event) => setAmountTo(event.target.value)}
+                  onChange={(event) => setAmountTo(String(Number(event.target.value)?.toFixed(2)))}
                   className={`${classes.textField} ${classes.amount}`}
                   InputProps={{
                     inputComponent: NumberFormatCustom,
