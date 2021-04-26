@@ -26,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
       whiteSpace: "noWrap",
       fontWeight: 600,
     },
+    "& td": {
+      verticalAlign: "baseline",
+    },
   },
 }));
 
