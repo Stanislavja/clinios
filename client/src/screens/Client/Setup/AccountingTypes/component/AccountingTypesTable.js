@@ -80,6 +80,7 @@ const AccountingTypesTable = ({ result }) => {
                 </TableCell>
                 <TableCell padding="checkbox">
                   <NumberFormat
+                    decimalScale={2}
                     value={type.amount}
                     displayType="text"
                     thousandSeparator
