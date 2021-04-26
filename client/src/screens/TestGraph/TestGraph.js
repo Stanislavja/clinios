@@ -213,7 +213,7 @@ const TestGraph = () => {
 
   return (
     <div className={classes.root} ref={ref}>
-      <Grid container>
+      <Grid container spacing={3}>
         <Grid item md={8} xs={12}>
           <div className={classes.graphArrowIconContainer}>
             <IconButton
@@ -325,7 +325,10 @@ const TestGraph = () => {
           </Grid>
         </Grid>
         <Grid item md={4} xs={12}>
-          <MarkerDefinition data={markerDefinitionProps} />
+          <MarkerDefinition
+            showTitle={false}
+            data={markerDefinitionProps}
+          />
         </Grid>
       </Grid>
     </div>
