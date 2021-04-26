@@ -148,6 +148,7 @@ const Lab = (props) => {
   const [showUserHistory, setShowUserHistory] = useState(false);
   const [showMessageDialog, setShowMessageDialog] = useState(false);
   const [showGoBack, setShowGoBack] = useState(false);
+  const [labValues, setLabValues] = useState([]);
 
   // pdf doc
   const [file, setFile] = useState("");
@@ -207,6 +208,18 @@ const Lab = (props) => {
     getLabInformation();
     fetchAssigneeUsers();
   }, [getLabInformation, fetchAssigneeUsers]);
+
+  const fetchLabValues = useCallback((labId) => {
+    LabService.getLabValues(labId).then((res) => {
+      setLabValues(res.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (labData?.id) {
+      fetchLabValues(labData?.id);
+    }
+  }, [fetchLabValues, labData]);
 
   useEffect(() => {
     if (labData) {
@@ -294,6 +307,7 @@ const Lab = (props) => {
   const patientData = useMemo(() => ({
     age: calculateAge(labData?.dob),
     gender: labData?.gender,
+    functionalRange: labData?.functional_range || 1,
   }), [labData]);
 
   return (
@@ -697,7 +711,10 @@ const Lab = (props) => {
               >
                 <Typography gutterBottom variant="h5">Values</Typography>
                 {!!labData && (
-                  <LabValues labId={labData.id} patientData={patientData} />
+                  <LabValues
+                    labValues={labValues}
+                    patientData={patientData}
+                  />
                 )}
               </Grid>
             </Grid>
@@ -706,7 +723,10 @@ const Lab = (props) => {
                 className={classes.borderSection}
               >
                 <Typography gutterBottom variant="h5">Value Interpretation</Typography>
-                <Interpretation />
+                <Interpretation
+                  labValues={labValues}
+                  patientData={patientData}
+                />
               </Grid>
             </Grid>
           </Grid>
