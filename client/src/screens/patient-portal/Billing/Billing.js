@@ -208,7 +208,7 @@ const Billing = () => {
                       >
                         <Typography className={classes.resMessage}>
                           $
-                          {balance}
+                          {balance?.toFixed(2)}
                         </Typography>
                       </StyledTableCell>
                     </StyledTableRow>
