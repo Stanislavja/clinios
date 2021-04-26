@@ -169,7 +169,7 @@ const LabBilling = () => {
                     {dateFormat(item.dt)}
                   </StyledTableCell>
                   <StyledTableCell className={classes.secondColumnOfStyledCell}>
-                    {item?.amount?.toFixed(2)}
+                    ${item?.amount?.toFixed(2)}
                   </StyledTableCell>
                   <StyledTableCell
                     className={clsx(classes.tableTestsCell, classes.thirdColumnOfStyledCell)}
