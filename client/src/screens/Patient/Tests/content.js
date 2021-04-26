@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, {
+  useState, useEffect, useCallback, useMemo,
+} from "react";
 
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -15,6 +17,8 @@ import Popover from "../../../components/common/Popover";
 import usePatientContext from "../../../hooks/usePatientContext";
 import { calculateFunctionalRange, calculatePercentageFlag } from "../../../utils/FunctionalRange";
 import { calculateAge } from "../../../utils/helpers";
+import { getMarkerDefinition } from "../../../utils/markerDefinition";
+import { getMarkerInterpretation } from "../../../utils/markerInterpretation";
 import MarkerDefinition from "../components/MarkerDefinition";
 
 const useStyles = makeStyles((theme) => ({
@@ -175,7 +179,7 @@ const TestsContent = () => {
     addCalculatedTests();
   }, [addCalculatedTests]);
 
-  const showPopover = Boolean(selectedMarker);
+  const showPopover = useMemo(() => Boolean(selectedMarker && getMarkerDefinition(selectedMarker.cpt_id).length && (getMarkerInterpretation(selectedMarker.cpt_id).low.length && getMarkerInterpretation(selectedMarker.cpt_id).high.length)), [selectedMarker]);
 
   return (
     <>

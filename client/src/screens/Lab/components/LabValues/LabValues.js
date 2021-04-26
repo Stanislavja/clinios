@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 
 import {
   Typography,
@@ -13,6 +13,8 @@ import PropTypes from "prop-types";
 
 import Popover from "../../../../components/common/Popover";
 import { StyledTableCellSm, StyledTableRowSm } from "../../../../components/common/StyledTable";
+import { getMarkerDefinition } from "../../../../utils/markerDefinition";
+import { getMarkerInterpretation } from "../../../../utils/markerInterpretation";
 import { calculateFunctionalRange, calculatePercentageFlag } from "../../../../utils/FunctionalRange";
 import MarkerDefinition from "../../../Patient/components/MarkerDefinition";
 import GraphDialog from "./component/GraphDialog";
@@ -55,7 +57,7 @@ const LabValues = (props) => {
 
   const hasValue = (value) => !((typeof value === "undefined") || (value === null));
 
-  const showPopover = Boolean(selectedMarker);
+  const showPopover = useMemo(() => Boolean(selectedMarker && getMarkerDefinition(selectedMarker.id).length && (getMarkerInterpretation(selectedMarker.id).low.length && getMarkerInterpretation(selectedMarker.id).high.length)), [selectedMarker]);
 
   return (
     <>
