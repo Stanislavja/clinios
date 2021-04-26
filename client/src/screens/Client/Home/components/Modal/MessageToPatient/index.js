@@ -5,7 +5,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
+// import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 // import FormControl from "@material-ui/core/FormControl";
 import IconButton from "@material-ui/core/IconButton";
@@ -171,9 +171,11 @@ const MessageToPatient = ({
             [classes.contentWithLoading]: isLoading, // only when isLoading === true
           })}
         >
+          {/*
           <DialogContentText id="alert-dialog-description">
             Send a secure message
           </DialogContentText>
+          */ }
           {errors
             && errors.map((error, index) => (
               // eslint-disable-next-line react/no-array-index-key
@@ -206,7 +208,7 @@ const MessageToPatient = ({
             <TextareaAutosize
               className={classes.textArea}
               aria-label="minimum height"
-              placeholder="Message..."
+              // placeholder="Message..."
               name="message"
               value={message.message}
               onChange={(event) => handleOnChange(event)}
