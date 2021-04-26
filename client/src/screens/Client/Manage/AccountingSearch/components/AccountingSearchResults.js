@@ -1,7 +1,6 @@
 import React from "react";
 
-import { makeStyles, withStyles } from "@material-ui/core";
-import Paper from "@material-ui/core/Paper";
+import { makeStyles, withStyles } from "@material-ui/core"
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -9,9 +8,10 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Tooltip from "@material-ui/core/Tooltip";
-import moment from "moment";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
+
+import { dateTimeFormat } from "../../../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -102,7 +102,7 @@ export default function AccountingSearchResults(props) {
   const amount = results.reduce((a, b) => a + b.amount, 0);
   return (
     <div className={classes.root}>
-      <TableContainer component={Paper} className={classes.tableContainer}>
+      <TableContainer className={classes.tableContainer}>
         <Table
           size="small"
           className={classes.table}
@@ -114,8 +114,6 @@ export default function AccountingSearchResults(props) {
               <StyledTableCell padding="checkbox">Type</StyledTableCell>
               <StyledTableCell padding="checkbox">Amount</StyledTableCell>
               <StyledTableCell padding="checkbox">Encounter</StyledTableCell>
-              <StyledTableCell padding="checkbox">CPT ID</StyledTableCell>
-              <StyledTableCell padding="checkbox">CPT Name</StyledTableCell>
               <StyledTableCell padding="checkbox">Note</StyledTableCell>
               <StyledTableCell padding="checkbox">Patient</StyledTableCell>
               <StyledTableCell padding="checkbox">Created</StyledTableCell>
@@ -131,13 +129,13 @@ export default function AccountingSearchResults(props) {
                   component="th"
                   scope="row"
                 >
-                  {moment(result.dt).format("lll")}
+                  {dateTimeFormat(result.dt)}
                 </TableCell>
                 <TableCell padding="checkbox" component="th" scope="row">
                   {result.name}
                 </TableCell>
                 <TableCell padding="checkbox">{`$${result.amount}`}</TableCell>
-                {result.encounter_title.length > 40 ? (
+                {result.encounter_title?.length > 40 ? (
                   <LightTooltip title={result.encounter_title}>
                     <TableCell
                       padding="checkbox"
@@ -152,26 +150,6 @@ export default function AccountingSearchResults(props) {
                     className={classes.overFlowControl}
                   >
                     {result.encounter_title}
-                  </TableCell>
-                )}
-                <TableCell padding="checkbox">
-                  {result.cpt_id ? result.cpt_id : ""}
-                </TableCell>
-                {result.cpt_name && result.cpt_name.length > 40 ? (
-                  <LightTooltip title={result.cpt_name ? result.cpt_name : ""}>
-                    <TableCell
-                      padding="checkbox"
-                      className={classes.overFlowControl}
-                    >
-                      {result.cpt_name ? result.cpt_name : ""}
-                    </TableCell>
-                  </LightTooltip>
-                ) : (
-                  <TableCell
-                    padding="checkbox"
-                    className={classes.overFlowControl}
-                  >
-                    {result.cpt_name ? result.cpt_name : ""}
                   </TableCell>
                 )}
                 {result.note && result.note.length > 40 ? (
@@ -199,15 +177,15 @@ export default function AccountingSearchResults(props) {
                   {result.patient_name}
                 </TableCell>
                 <TableCell padding="checkbox">
-                  {moment(result.created).format("lll")}
+                  {dateTimeFormat(result.created)}
                 </TableCell>
               </StyledTableRow>
             ))}
             <TotalTableRow>
-              <TableCell padding="checkbox" colSpan={2} align="right">
+              <TableCell colSpan={2} align="right">
                 Total
               </TableCell>
-              <TableCell padding="checkbox">
+              <TableCell>
                 <div>{`$${amount}`}</div>
               </TableCell>
             </TotalTableRow>
