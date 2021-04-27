@@ -49,11 +49,27 @@ const createPurchaseLabs = async (req, res) => {
   };
 
   const db = makeDb(configuration, res);
-  try {
-
+  try { 
     const stripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
+    
+    // if customer_id is null then create a customer 
+    if(!formData.customer_id){
+      const getPatientDetails = await db.query(`select id, email, firstname, lastname, gender from patient where id=${req.user_id}`);
+      const existingPatient = getPatientDetails[0];
+
+      const customer = await stripe.customers.create({
+        email: existingPatient.email,
+        name: existingPatient.firstname + existingPatient.lastname
+      });
+      formData.customer_id = customer.id;
+      console.log('customer:', customer)
+    }
+    //TODO:: Check if clinios_stripe_customer_id
+      // create if it's not there and use it.
+    //TODO:: Get this payment method for clinios account
+
     const intentData = {
-      payment_method: formData.stripe_payment_method_token,
+      payment_method: formData.clinios_stripe_payment_method_token,
       customer: formData.customer_id,
       description: `${formData.note}; patient_id: ${req.user_id}`,
       amount: Number(formData.amount) * 100, // it accepts cents

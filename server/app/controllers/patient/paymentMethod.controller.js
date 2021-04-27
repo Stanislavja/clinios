@@ -62,26 +62,39 @@ const createPaymentMethod = async (req, res) => {
 
   const getStripeResponse = await db.query($sql);
   try {
+    // Create payment method for client(Doctor) account
     const stripe = Stripe(getStripeResponse[0].stripe_api_key);
+    const card = {
+      number: formData.account_number,
+      exp_month: formData.exp.substring(0, 2),
+      exp_year: formData.exp.substring(2, 4),
+      cvc: formData.cvc,
+    };
+
     const paymentMethod = await stripe.paymentMethods.create({
       type: "card",
-      card: {
-        number: formData.account_number,
-        exp_month: formData.exp.substring(0, 2),
-        exp_year: formData.exp.substring(2, 4),
-        cvc: formData.cvc,
-      },
+      card: card,
     });
 
     formData.stripe_payment_method_token = paymentMethod.id;
+
+    // Attach payment method to a customer for client(Doctor) account
+    await stripe.paymentMethods.attach(paymentMethod.id, {
+      customer: formData.stripe_customer_id,
+    });
+    // End Create payment method for client(Doctor) account
+    
+    //Attach this Payment method to Clinios account as well.
+    const cliniosStripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
+    const cliniosPaymentMethod = await cliniosStripe.paymentMethods.create({
+      type: "card",
+      card: card,
+    });
+    formData.clinios_stripe_payment_method_token = cliniosPaymentMethod.id;
     formData.account_number = formData.account_number.substring(0, 4);
 
-    // Attach payment method to a customer
-    await stripe.paymentMethods.attach(paymentMethod.id, {
-      customer: formData.customer_id,
-    });
-
-    delete formData.customer_id; // Delete customer_id as it's not on payment_method table
+    delete formData.stripe_customer_id; // Delete customer_id as it's not on payment_method table
+    delete formData.clinios_stripe_customer_id; // Delete customer_id as it's not on payment_method table
     delete formData.cvc; // Delete cvc as it's not on payment_method table
     const insertResponse = await db.query("insert into payment_method set ? ", [
       formData,
