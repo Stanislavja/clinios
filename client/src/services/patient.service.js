@@ -709,7 +709,7 @@ class Patient {
   }
 
   createPaymentMethod(patientId, data) {
-    return axios.post(`${API_BASE}/client-portal/payment-methods`, data, {
+    return axios.post(`${API_BASE}/patient/${patientId}/payment-methods`, data, {
       headers: authHeader(),
     })
       .then((res) => res.data);

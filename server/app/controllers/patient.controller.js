@@ -2491,7 +2491,7 @@ const deletePaymentMethod = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.message = "Error deleting layout";
+    errorMessage.message = "Error deleting payment method.";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
