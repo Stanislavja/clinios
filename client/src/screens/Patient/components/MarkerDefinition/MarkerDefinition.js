@@ -49,7 +49,7 @@ const MarkerDefinition = ({
     <Box maxWidth={900}>
       <Grid className={classes.main}>
         {showTitle && (
-          <Typography variant="h4" className={classes.mb2}>
+          <Typography variant="h4" gutterBottom>
             {data.name}
           </Typography>
         )}
