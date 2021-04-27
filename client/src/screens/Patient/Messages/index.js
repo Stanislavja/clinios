@@ -121,6 +121,7 @@ const NewMessage = (props) => {
         </Grid>
         <Grid className={classes.formInput} item md={12}>
           <TextField
+            autoFocus
             required
             variant="outlined"
             name="message"
