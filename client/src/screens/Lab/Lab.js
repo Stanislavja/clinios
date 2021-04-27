@@ -17,6 +17,9 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Pagination from "@material-ui/lab/Pagination";
+import { mdiOpenInNew } from "@mdi/js";
+import Icon from "@mdi/react";
+import clsx from "clsx";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 import FileViewer from "react-file-viewer";
@@ -126,6 +129,17 @@ const useStyles = makeStyles((theme) => ({
   relativePosition: {
     position: "relative",
   },
+  patientFirstColumn: {
+    maxWidth: "46%",
+    flexBasis: "46%",
+  },
+  openPatientIconSecondColumn: {
+    maxWidth: "5%",
+  },
+  documentTypeSecondColumn: {
+    maxWidth: "48.6667%",
+    flexBasis: "49.6667%",
+  },
   resultsContainer: {
     position: "absolute",
     zIndex: 2,
@@ -148,6 +162,11 @@ const useStyles = makeStyles((theme) => ({
       right: "17%",
       top: "7px",
     },
+  },
+  patientIcon: {
+    // marginBottom: theme.spacing(1 / 2),
+    marginRight: theme.spacing(1),
+    color: "rgba(0, 0, 0, 0.38)",
   },
 }));
 
@@ -499,12 +518,6 @@ const Lab = (props) => {
                         {dateTimeFormat(labData?.created)}
                       </Typography>
                     </Tooltip>
-                    {/* <Typography
-                      component="span"
-                      className={classes.text14}
-                    >
-                      {dateTimeFormat(labData?.created)}
-                    </Typography> */}
                   </Grid>
 
                   <Grid
@@ -581,12 +594,12 @@ const Lab = (props) => {
 
                 </Grid>
                 <form onSubmit={onFormSubmit}>
-                  <Grid container spacing={1}>
+                  <Grid container spacing={1} alignItems="center">
                     <Grid
                       item
                       sm={6}
-                      xs={12}
-                      className={classes.relativePosition}
+                      xs={11}
+                      className={clsx(classes.relativePosition, classes.patientFirstColumn)}
                     >
                       <TextField
                         required
@@ -619,8 +632,31 @@ const Lab = (props) => {
 
                     <Grid
                       item
-                      sm={6}
+                      sm={2}
+                      xs={1}
+                      alignItems="center"
+                      className={classes.openPatientIconSecondColumn}
+                    >
+                      <Link
+                        to={`/patients/${patientId}`}
+                        className={classes.patientIcon}
+                        target="_blank"
+                      >
+                        <Icon
+                          path={mdiOpenInNew}
+                          size={1}
+                          horizontal
+                          vertical
+                          rotate={180}
+                        />
+                      </Link>
+                    </Grid>
+
+                    <Grid
+                      item
+                      sm={4}
                       xs={12}
+                      className={classes.documentTypeSecondColumn}
                     >
                       <TextField
                         select
