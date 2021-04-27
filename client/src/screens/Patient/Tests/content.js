@@ -1,7 +1,8 @@
 import React, {
-  useState, useEffect, useCallback, useMemo,
+  useState, useEffect, useCallback,
 } from "react";
 
+import Grid from "@material-ui/core/Grid";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -10,6 +11,8 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
+import { mdiInformationOutline } from "@mdi/js";
+import Icon from "@mdi/react";
 import { orderBy } from "lodash";
 import moment from "moment";
 
@@ -39,6 +42,13 @@ const useStyles = makeStyles((theme) => ({
   noRecordsMessage: {
     lineHeight: "21px",
     fontSize: 12,
+  },
+  iconContainer: {
+    "& svg": {
+      cursor: "pointer",
+      position: "relative",
+      top: 3,
+    },
   },
 }));
 
@@ -179,8 +189,12 @@ const TestsContent = () => {
     addCalculatedTests();
   }, [addCalculatedTests]);
 
-  // eslint-disable-next-line max-len
-  const showPopover = useMemo(() => Boolean(selectedMarker && getMarkerDefinition(selectedMarker.cpt_id).length && (getMarkerInterpretation(selectedMarker.cpt_id).low.length && getMarkerInterpretation(selectedMarker.cpt_id).high.length)), [selectedMarker]);
+  const showPopoverIcon = (marker) => (
+    // eslint-disable-next-line max-len
+    Boolean(getMarkerDefinition(marker.cpt_id).length || (getMarkerInterpretation(marker.cpt_id).low.length && getMarkerInterpretation(marker.cpt_id).high.length))
+  );
+
+  const showPopover = Boolean(selectedMarker);
 
   return (
     <>
@@ -199,7 +213,7 @@ const TestsContent = () => {
         <Table size="small" className={classes.table}>
           <TableHead>
             <TableRow>
-              <StyledTableCell>Test</StyledTableCell>
+              <StyledTableCell colSpan={2}>Test</StyledTableCell>
               <StyledTableCell>Last Date</StyledTableCell>
               <StyledTableCell>Last Result</StyledTableCell>
               <StyledTableCell>Conv Range</StyledTableCell>
@@ -217,11 +231,19 @@ const TestsContent = () => {
                 const functionalRange = calculateFunctionalRange(row.cpt_id, gender, patientAge);
                 return (
                   <StyledTableRow key={row.name}>
-                    <TableCell
-                      onMouseEnter={(e) => handlePopoverOpen(e, row)}
-                      onMouseLeave={handlePopoverClose}
-                    >
-                      {row.name}
+                    <TableCell>{row.name}</TableCell>
+                    <TableCell className={classes.iconContainer}>
+                      {showPopoverIcon(row) && (
+                        <Grid
+                          onMouseEnter={(e) => handlePopoverOpen(e, row)}
+                          onMouseLeave={handlePopoverClose}
+                        >
+                          <Icon
+                            path={mdiInformationOutline}
+                            size={0.85}
+                          />
+                        </Grid>
+                      )}
                     </TableCell>
                     <TableCell>
                       {row.lab_dt ? moment(row.lab_dt).format("MMM D YYYY") : ""}
@@ -267,7 +289,7 @@ const TestsContent = () => {
               })
               : (
                 <StyledTableRow>
-                  <TableCell colSpan={10}>
+                  <TableCell colSpan={11}>
                     <Typography className={classes.noRecordsMessage} align="center" variant="body1">
                       No Records Found...
                     </Typography>

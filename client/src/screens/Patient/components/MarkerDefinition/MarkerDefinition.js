@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 
+import { stringWithoutComments } from "../../../../utils/helpers";
 import { getMarkerDefinition } from "../../../../utils/markerDefinition";
 import { getMarkerInterpretation } from "../../../../utils/markerInterpretation";
 
@@ -25,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
     "& th": {
       whiteSpace: "noWrap",
       fontWeight: 600,
+    },
+    "& td": {
+      verticalAlign: "top",
     },
   },
 }));
@@ -50,7 +54,7 @@ const MarkerDefinition = ({
           </Typography>
         )}
         <Typography className={classes.mb2}>
-          {markerExplanation}
+          {stringWithoutComments(markerExplanation)}
         </Typography>
         {(showHigh && hasHighData) && (
           <Table size="small" aria-label="elevated-table" className={classes.mb2}>
