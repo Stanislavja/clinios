@@ -5,22 +5,22 @@ const PaymentMethodController = require("../../controllers/patient/paymentMethod
 const router = express.Router();
 
 router.get(
-  "/client-portal/payment-methods",
+  "/patient-portal/payment-methods",
   [authJwt.verifyToken],
   PaymentMethodController.getPaymentMethods
 );
 router.post(
-  "/client-portal/payment-methods",
+  "/patient-portal/payment-methods",
   [authJwt.verifyToken],
   PaymentMethodController.createPaymentMethod
 );
 router.put(
-  "/client-portal/payment-methods/:id",
+  "/patient-portal/payment-methods/:id",
   [authJwt.verifyToken],
   PaymentMethodController.updatePaymentMethod
 );
 router.delete(
-  "/client-portal/payment-methods/:id",
+  "/patient-portal/payment-methods/:id",
   [authJwt.verifyToken],
   PaymentMethodController.deletePaymentMethod
 );
