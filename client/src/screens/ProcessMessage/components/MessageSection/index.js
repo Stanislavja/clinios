@@ -20,8 +20,11 @@ import {
   TableRow,
   MenuItem,
 } from "@material-ui/core";
+import { mdiOpenInNew } from "@mdi/js";
+import Icon from "@mdi/react";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 import { StyledTableCellSm, StyledTableRowSm } from "../../../../components/common/StyledTable";
 import useAuth from "../../../../hooks/useAuth";
@@ -71,6 +74,16 @@ const useStyles = makeStyles((theme) => ({
       display: "none",
     },
   },
+  patientIconLink: {
+    display: "inline-block",
+    color: "rgba(0, 0, 0, 0.38)",
+  },
+  patientIcon: {
+    width: "1.1rem !important",
+    height: "1.1rem !important",
+    marginBottom: "-5px",
+    marginLeft: "4px",
+  },
 }));
 
 const StatusSelectionFields = [
@@ -93,7 +106,7 @@ const MessageSection = (props) => {
   } = props;
   const {
     id, created, user_to_name, patient_from_name, subject, message: messageString,
-    status, note_assign, user_id_to,
+    status, note_assign, user_id_to, patient_id_from,
   } = message;
 
   const [statusSelection, setStatusSelection] = useState(status);
@@ -156,7 +169,7 @@ const MessageSection = (props) => {
           message={message}
         />
       )}
-      <Grid item lg={5} xs={12}>
+      <Grid item lg={6} xs={12}>
         <Grid container spacing={1}>
           <Grid item xs>
             <Typography
@@ -177,7 +190,7 @@ const MessageSection = (props) => {
             </Typography>
           </Grid>
 
-          <Grid item xs>
+          <Grid item xs alignItems="center">
             <Typography
               component="span"
               variant="body1"
@@ -193,6 +206,21 @@ const MessageSection = (props) => {
               color="textPrimary"
             >
               {patient_from_name}
+
+              <Link
+                to={`/patients/${patient_id_from}`}
+                className={classes.patientIconLink}
+                target="_blank"
+              >
+                <Icon
+                  className={classes.patientIcon}
+                  path={mdiOpenInNew}
+                  size={1}
+                  horizontal
+                  vertical
+                  rotate={180}
+                />
+              </Link>
             </Typography>
           </Grid>
           <Grid item xs>
@@ -441,6 +469,7 @@ MessageSection.propTypes = {
     patient_from_name: PropTypes.string,
     subject: PropTypes.string,
     message: PropTypes.string,
+    patient_id_from: PropTypes.number,
   }).isRequired,
 };
 
