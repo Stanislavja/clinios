@@ -86,9 +86,8 @@ const Encounters = () => {
                   <span style={{ fontWeight: "bold" }}>To: </span>
                   {item?.patient_to ? item.patient_to : "You"}
                   <br />
-                  {item.treatment
-                    ? item.treatment
-                    : "No treatment found..."}
+                  {/* {item.treatment ? item.treatment: "No treatment found..."} */}
+                  {item.treatment}
                 </Typography>
               </Grid>
               {index + 1 !== encounters.length && <Divider className={classes.divider} />}
