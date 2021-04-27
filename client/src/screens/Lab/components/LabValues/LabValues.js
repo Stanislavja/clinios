@@ -1,6 +1,7 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 
 import {
+  Grid,
   Typography,
   TableContainer,
   Table,
@@ -9,6 +10,8 @@ import {
   TableRow,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { mdiInformationOutline } from "@mdi/js";
+import Icon from "@mdi/react";
 import PropTypes from "prop-types";
 
 import Popover from "../../../../components/common/Popover";
@@ -22,6 +25,13 @@ import GraphDialog from "./component/GraphDialog";
 const useStyles = makeStyles(() => ({
   cursorPointer: {
     cursor: "pointer",
+  },
+  iconContainer: {
+    "& svg": {
+      cursor: "pointer",
+      position: "relative",
+      top: 3,
+    },
   },
 }));
 
@@ -57,8 +67,12 @@ const LabValues = (props) => {
 
   const hasValue = (value) => !((typeof value === "undefined") || (value === null));
 
-  // eslint-disable-next-line max-len
-  const showPopover = useMemo(() => Boolean(selectedMarker && getMarkerDefinition(selectedMarker.id).length && (getMarkerInterpretation(selectedMarker.id).low.length && getMarkerInterpretation(selectedMarker.id).high.length)), [selectedMarker]);
+  const showPopoverIcon = (marker) => (
+    // eslint-disable-next-line max-len
+    Boolean(getMarkerDefinition(marker.id).length || (getMarkerInterpretation(marker.id).low.length && getMarkerInterpretation(marker.id).high.length))
+  );
+
+  const showPopover = Boolean(selectedMarker);
 
   return (
     <>
@@ -84,7 +98,7 @@ const LabValues = (props) => {
         <Table size="small" aria-label="simple table">
           <TableHead>
             <TableRow>
-              <StyledTableCellSm>Test</StyledTableCellSm>
+              <StyledTableCellSm colSpan={2}>Test</StyledTableCellSm>
               <StyledTableCellSm>Result</StyledTableCellSm>
               <StyledTableCellSm>Conventional Range</StyledTableCellSm>
               <StyledTableCellSm>Conventional Flag</StyledTableCellSm>
@@ -103,11 +117,21 @@ const LabValues = (props) => {
                     className={classes.cursorPointer}
                     onClick={() => rowClickHandler(row)}
                   >
-                    <StyledTableCellSm
-                      onMouseEnter={(e) => handlePopoverOpen(e, row)}
-                      onMouseLeave={handlePopoverClose}
-                    >
+                    <StyledTableCellSm>
                       {row.name}
+                    </StyledTableCellSm>
+                    <StyledTableCellSm className={classes.iconContainer}>
+                      {showPopoverIcon(row) && (
+                        <Grid
+                          onMouseEnter={(e) => handlePopoverOpen(e, row)}
+                          onMouseLeave={handlePopoverClose}
+                        >
+                          <Icon
+                            path={mdiInformationOutline}
+                            size={0.85}
+                          />
+                        </Grid>
+                      )}
                     </StyledTableCellSm>
                     <StyledTableCellSm>{row.value}</StyledTableCellSm>
                     <StyledTableCellSm>

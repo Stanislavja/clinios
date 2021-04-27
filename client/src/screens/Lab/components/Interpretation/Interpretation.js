@@ -46,7 +46,7 @@ const Interpretation = (props) => {
 
   return (
     <>
-      {labData.length && labData.map((item) => (
+      {Boolean(labData.length) && labData.map((item) => (
         <Grid key={item.id}>
           <MarkerDefinition
             data={item}

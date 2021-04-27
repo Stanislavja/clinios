@@ -206,6 +206,7 @@ const MessageToPatient = ({
               Message
             </Typography>
             <TextareaAutosize
+              autoFocus
               className={classes.textArea}
               aria-label="minimum height"
               // placeholder="Message..."

@@ -179,7 +179,7 @@ const InsightsContent = () => {
   };
 
   // eslint-disable-next-line max-len
-  const showPopover = useMemo(() => Boolean(selectedMarker && getMarkerDefinition(selectedMarker.cpt_id).length && (getMarkerInterpretation(selectedMarker.cpt_id).low.length && getMarkerInterpretation(selectedMarker.cpt_id).high.length)), [selectedMarker]);
+  const showPopover = useMemo(() => Boolean(selectedMarker && (getMarkerDefinition(selectedMarker.cpt_id).length || (getMarkerInterpretation(selectedMarker.cpt_id).low.length && getMarkerInterpretation(selectedMarker.cpt_id).high.length))), [selectedMarker]);
 
   return (
     <>

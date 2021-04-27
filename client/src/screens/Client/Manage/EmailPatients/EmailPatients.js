@@ -226,6 +226,7 @@ export default function EmailPatients() {
           size="small"
         /> */}
         <TextField
+          autoFocus
           fullWidth
           variant="outlined"
           label="Message"
