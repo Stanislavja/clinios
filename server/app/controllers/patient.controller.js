@@ -2405,7 +2405,7 @@ const createPaymentMethod = async (req, res) => {
 
     const paymentMethod = await stripe.paymentMethods.create({
       type: "card",
-      card: card,
+      card,
     });
 
     formData.stripe_payment_method_token = paymentMethod.id;
@@ -2415,11 +2415,11 @@ const createPaymentMethod = async (req, res) => {
       customer: formData.customer_id,
     });
 
-    //Attach this Payment method to Clinios account as well.
+    // Attach this Payment method to Clinios account as well.
     const cliniosStripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
     const cliniosPaymentMethod = await cliniosStripe.paymentMethods.create({
       type: "card",
-      card: card,
+      card,
     });
     formData.clinios_stripe_payment_method_token = cliniosPaymentMethod.id;
     formData.account_number = formData.account_number.substring(0, 4);
