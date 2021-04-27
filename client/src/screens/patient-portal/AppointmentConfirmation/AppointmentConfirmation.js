@@ -18,7 +18,9 @@ const useStyles = makeStyles((theme) => ({
 const AppointmentConfirmation = () => {
   const classes = useStyles();
   const location = useLocation();
-  const { practitioner, date, time, reschedule } = location.state;
+  const {
+    practitioner, date, time, reschedule,
+  } = location.state;
 
   return (
     <div className={classes.root}>
