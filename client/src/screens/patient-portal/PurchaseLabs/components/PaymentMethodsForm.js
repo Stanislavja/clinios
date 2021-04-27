@@ -4,7 +4,6 @@ import {
   TextField, Button, Grid, Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 
@@ -61,9 +60,12 @@ const PaymentMethodsForm = (props) => {
     e.preventDefault();
     const reqBody = {
       data: {
-        exp: moment(formFields.expiryDate).format("YYYY-MM-DD"),
+        exp: formFields.expiryDate.replace("/", ""),
         type: formFields.cardType[0] || "V",
-        account_number: formFields.cardNumber.replaceAll("/", "").substring(0, 4),
+        cvc: formFields.cvv,
+        account_number: formFields.cardNumber.replaceAll("/", ""),
+        stripe_customer_id: user.stripe_customer_id,
+        clinios_stripe_customer_id: user.clinios_stripe_customer_id,
       },
     };
     PatientService.createPaymentMethod(user.id, reqBody).then((response) => {
