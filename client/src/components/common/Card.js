@@ -46,12 +46,15 @@ const useStyles = makeStyles((theme) => ({
     top: 0,
     background: theme.palette.common.white,
     zIndex: 2,
+    "& button": {
+      minWidth: 0
+    }
   },
   fullPadding: {
     padding: 8,
   },
   leftPadding: {
-    padding: "0 0 0 8px",
+    padding: "0 4px 0 8px",
   },
   title: {
     fontWeight: "600",
