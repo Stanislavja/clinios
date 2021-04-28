@@ -47,8 +47,8 @@ const useStyles = makeStyles((theme) => ({
     background: theme.palette.common.white,
     zIndex: 2,
     "& button": {
-      minWidth: 0
-    }
+      minWidth: 0,
+    },
   },
   fullPadding: {
     padding: 8,
