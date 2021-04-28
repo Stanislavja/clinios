@@ -158,7 +158,7 @@ const Appointments = () => {
     setShowCalendar(true);
   };
 
-  const bookAppointmentHandler = () => {
+  const appointmentBookingHandler = () => {
     const selectedPractitioner = practitioners.filter((x) => x.user_id === userSelection.practitioner);
     let selectedAppointemntTypeLength = userSelection?.appointment_type_length || 0;
     if (!selectedAppointemntTypeLength) {
@@ -356,7 +356,7 @@ const Appointments = () => {
                       color="primary"
                       variant="contained"
                       className={classes.submitBtn}
-                      onClick={() => bookAppointmentHandler()}
+                      onClick={() => appointmentBookingHandler()}
                     >
                       {isRescheduleAppointment ? "Reschedule Appointment" : "Book Appointment"}
                     </Button>
@@ -372,7 +372,7 @@ const Appointments = () => {
                 className={classes.centerContainer}
               >
                 <Typography variant="h3" gutterBottom>
-                  No Time Slots Available for this practitioner
+                  No time slots available for this practitioner
                 </Typography>
                 <Button
                   variant="outlined"
