@@ -18,7 +18,7 @@ import usePatientContext from "../../../../hooks/usePatientContext";
 import { toggleNewTransactionDialog, resetBilling } from "../../../../providers/Patient/actions";
 import PatientService from "../../../../services/patient.service";
 import { TransactionFormFields } from "../../../../static/transactionForm";
-import { convertTransactionTypes } from "../../../../utils/helpers";
+import { convertTransactionTypes, pickerDateFormat } from "../../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
   formInput: {
@@ -60,7 +60,7 @@ const NewTransactionForm = (props) => {
   const { selectedBilling } = state.billing;
 
   const updateFields = () => {
-    formFields.date = moment(selectedBilling.dt).format("YYYY-MM-DD");
+    formFields.date = pickerDateFormat(selectedBilling.dt);
     formFields.type = convertTransactionTypes(selectedBilling.tran_type);
     formFields.paymentType = selectedBilling.payment_type;
     formFields.amount = selectedBilling.amount;
@@ -249,7 +249,7 @@ const NewTransactionForm = (props) => {
             inputVariant="outlined"
             name="date"
             id="date"
-            format="dd/MM/yyyy"
+            format="MMM dd yyyy"
             label="Date"
             value={formFields.date}
             onChange={handleDateChange}
