@@ -14,7 +14,7 @@ const getBillings = async (req, res) => {
   }
   let $sql;
   try {
-    $sql = `select t.encounter_id, t.dt, tt.name tran_type, t.payment_type, pm.account_number, t.amount
+    $sql = `select t.encounter_id, t.dt, tt.name tran_type, pm.type payment_type, pm.account_number, t.amount
     from tran t
     left join tran_type tt on tt.id=t.type_id
     left join payment_method pm on pm.id=t.payment_method_id

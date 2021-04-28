@@ -835,7 +835,7 @@ const getBilling = async (req, res) => {
   }
   try {
     const dbResponse = await db.query(
-      `select t.id, t.dt, t.amount, tt.name tran_type, e.title encounter_title, t.note, t.payment_type, pm.account_number
+      `select t.id, t.dt, t.amount, tt.name tran_type, e.title encounter_title, t.note, pm.type payment_type, pm.account_number
         from tran t
         left join encounter e on e.id=t.encounter_id
         left join tran_type tt on tt.id=t.type_id
