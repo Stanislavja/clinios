@@ -15,35 +15,35 @@ export const TransactionFormFields = [
     type: "number",
     options: [],
   },
-  {
-    name: "paymentType",
-    id: "paymentType",
-    label: "Payment Type",
-    baseType: "select",
-    type: null,
-    options: [
-      {
-        label: "",
-        value: "",
-      },
-      {
-        label: "Card",
-        value: "C",
-      },
-      {
-        label: "ACH",
-        value: "A",
-      },
-      {
-        label: "Cheque",
-        value: "CH",
-      },
-      {
-        label: "Other",
-        value: "O",
-      },
-    ],
-  },
+  // {
+  //   name: "paymentType",
+  //   id: "paymentType",
+  //   label: "Payment Type",
+  //   baseType: "select",
+  //   type: null,
+  //   options: [
+  //     {
+  //       label: "",
+  //       value: "",
+  //     },
+  //     {
+  //       label: "Card",
+  //       value: "C",
+  //     },
+  //     {
+  //       label: "ACH",
+  //       value: "A",
+  //     },
+  //     {
+  //       label: "Cheque",
+  //       value: "CH",
+  //     },
+  //     {
+  //       label: "Other",
+  //       value: "O",
+  //     },
+  //   ],
+  // },
   {
     name: "accountNum",
     id: "paymentOptions",
