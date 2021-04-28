@@ -334,3 +334,9 @@ export const dateTimeFormat = (date) => moment(date).format("MMM D YYYY hh:mm A"
 export const hasValue = (value) => !((typeof value === "undefined") || (value === null));
 
 export const stringWithoutComments = (string) => string.replace(/(\/\*[^*]*\*\/)|(\/\/[^*]*)/g, "");
+
+export const urlify = (text) => {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  // eslint-disable-next-line quotes
+  return text.replace(urlRegex, '<a href="$1" target="_blank">$1</a>');
+};

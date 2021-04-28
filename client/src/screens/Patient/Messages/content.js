@@ -16,6 +16,7 @@ import {
   setSelectedMessage, resetSelectedMessage, toggleMessageDialog, toggleMessageDialogPage, setMessageType,
 } from "../../../providers/Patient/actions";
 import PatientService from "../../../services/patient.service";
+import { urlify } from "../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
   inputRow: {
@@ -239,9 +240,8 @@ const MessagesContent = (props) => {
               variant="body1"
               className={classes.text12}
               color="textPrimary"
-            >
-              {item.message}
-            </Typography>
+              dangerouslySetInnerHTML={{ __html: urlify(item.message) }}
+            />
           </Grid>
           {data.length !== index + 1 && <Divider className={classes.divider} />}
         </Grid>

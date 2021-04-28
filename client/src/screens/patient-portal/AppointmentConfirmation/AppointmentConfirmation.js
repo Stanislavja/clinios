@@ -1,11 +1,9 @@
 import React from "react";
 
-import {
-  makeStyles, Typography,
-} from "@material-ui/core";
-import moment from "moment";
+import { makeStyles, Typography } from "@material-ui/core";
 import { useLocation } from "react-router-dom";
 
+import { dateFormat } from "../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
 const AppointmentConfirmation = () => {
   const classes = useStyles();
   const location = useLocation();
+  const {
+    practitioner, date, time, reschedule,
+  } = location.state;
 
   return (
     <div className={classes.root}>
@@ -29,7 +30,7 @@ const AppointmentConfirmation = () => {
         color="textPrimary"
         className={classes.title}
       >
-        {`Appointment ${location?.state?.reschedule ? "Reschedule" : "Request"} Confirmation`}
+        {`Appointment ${reschedule ? "Reschedule" : "Request"} Confirmation`}
       </Typography>
       <Typography
         component="h1"
@@ -37,11 +38,9 @@ const AppointmentConfirmation = () => {
         color="textPrimary"
 
       >
-        {`An appointment at ${moment(location?.state?.date).format("ll")} ${location?.state?.time}
-         to ${moment(location?.state?.time?.split("am")[0], "HH:mm")
-      .add(location?.state?.appointmentLength, "minutes").format("h:mma")}
-         with ${location?.state?.practitionar} has been
-          ${location?.state?.reschedule ? "Rescheduled" : "Requested"}.`}
+        {`An appointment on ${dateFormat(date)} at ${time.time_start} to ${time.time_end}
+         with ${practitioner} has been
+          ${reschedule ? "Rescheduled" : "Requested"}.`}
       </Typography>
     </div>
   );
