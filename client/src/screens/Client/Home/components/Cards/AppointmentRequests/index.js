@@ -6,8 +6,11 @@ import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import { mdiOpenInNew } from "@mdi/js";
+import Icon from "@mdi/react";
 import moment from "moment";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 import Colors from "../../../../../../theme/colors";
 
@@ -100,6 +103,16 @@ const useStyles = makeStyles((theme) => ({
       fontSize: "13px",
     },
   },
+  patientIconLink: {
+    display: "inline-block",
+    color: "rgba(0, 0, 0, 0.38)",
+  },
+  patientIcon: {
+    width: "1rem !important",
+    height: "1rem !important",
+    marginBottom: "-5px",
+    marginLeft: "4px",
+  },
 }));
 
 const AppointmentRequests = ({
@@ -157,14 +170,29 @@ const AppointmentRequests = ({
           {appointmentRequests.length > 0 ? (
             appointmentRequests.map((appt) => {
               const {
-                name, end_dt, start_dt, reschedule, appointment_type,
+                name, end_dt, start_dt, reschedule, appointment_type, patient_id,
               } = appt;
               const appointmentRequestType = reschedule ? "Reschedule Appointment" : "New Appointment";
               const formattedStartDate = moment(start_dt).format("ll, h:mm");
               const formattedEndDate = moment(end_dt).format("h:mm");
               return (
                 <li key={appt.id}>
-                  {`${name}, ${appointmentRequestType}, ${appointment_type ? `${appointment_type}` : ""}`}
+                  {name}
+                  <Link
+                    to={`/patients/${patient_id}`}
+                    className={classes.patientIconLink}
+                    target="_blank"
+                  >
+                    <Icon
+                      className={classes.patientIcon}
+                      path={mdiOpenInNew}
+                      size={1}
+                      horizontal
+                      vertical
+                      rotate={180}
+                    />
+                  </Link>
+                  {` , ${appointmentRequestType}, ${appointment_type ? `${appointment_type}` : ""}`}
                   <br />
                   {`${selectedProvider.name}, ${formattedStartDate} - ${formattedEndDate}`}
                   <div className={classes.unreadMsgActions}>
