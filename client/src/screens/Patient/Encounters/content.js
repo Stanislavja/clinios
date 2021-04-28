@@ -14,6 +14,7 @@ import Alert from "../../../components/Alert";
 import usePatientContext from "../../../hooks/usePatientContext";
 import { toggleEncountersDialog, setEncounter } from "../../../providers/Patient/actions";
 import PatientService from "../../../services/patient.service";
+import { urlify } from "../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
   inputRow: {
@@ -140,25 +141,25 @@ const EncountersContent = (props) => {
             </Grid>
 
             <Grid className={classes.inputRow}>
-              {/* removed from below ${classes.label} */}
               <Typography className={`${classes.text12}`} color="textPrimary">
                 Notes:
               </Typography>
-              <Typography className={classes.text12} color="textPrimary">
-                {/* {item.notes ? item.notes : "No notes found..."} */}
-                {item.notes}
-              </Typography>
+              <Typography
+                className={classes.text12}
+                color="textPrimary"
+                dangerouslySetInnerHTML={{ __html: urlify(item.notes) }}
+              />
             </Grid>
 
             <Grid className={classes.inputRow}>
-              {/* removed from below ${classes.label} */}
               <Typography className={`${classes.text12}`} color="textPrimary">
                 Treatment Plan:
               </Typography>
-              <Typography className={classes.text12} color="textPrimary">
-                {/* {item.treatment ? item.treatment : "No treatment found..."} */}
-                {item.treatment}
-              </Typography>
+              <Typography
+                className={classes.text12}
+                color="textPrimary"
+                dangerouslySetInnerHTML={{ __html: urlify(item.treatment) }}
+              />
             </Grid>
 
             {index + 1 !== data.length && <Divider className={classes.divider} />}
