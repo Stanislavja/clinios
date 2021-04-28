@@ -982,14 +982,16 @@ const createBilling = async (req, res) => {
 
   const formData = req.body.data;
   formData.patient_id = patient_id;
+  formData.client_id = req.client_id;
+  formData.user_id = req.user_id;
   formData.created = new Date();
   formData.created_user_id = req.user_id;
 
   const db = makeDb(configuration, res);
 
   const $sql = `select p.id, c.name, c.stripe_api_key from patient p
-  left join client c on c.id=p.client_id
-  where p.id=${patient_id}`;
+    left join client c on c.id=p.client_id
+    where p.id=${patient_id}`;
 
   const getStripeResponse = await db.query($sql);
 
