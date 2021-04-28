@@ -19,7 +19,7 @@ import { Link } from "react-router-dom";
 
 import Alert from "../../../components/Alert";
 import useAuth from "../../../hooks/useAuth";
-import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
+import PaymentMethodService from "../../../services/patient_portal/payment-method.service";
 import PurchaseLabsService from "../../../services/patient_portal/purchase-lab.service";
 import { paymentMethodType } from "../../../utils/helpers";
 import PaymentMethodsForm from "./components/PaymentMethodsForm";
@@ -80,7 +80,7 @@ const PurchaseLabs = () => {
   const [showPurchaseConfirmation, setShowPurchaseConfirmation] = useState(false);
 
   const fetchPaymentMethods = useCallback(() => {
-    PatientPortalService.getPaymentMethods(lastVisitedPatient).then((res) => {
+    PaymentMethodService.getPaymentMethods(lastVisitedPatient).then((res) => {
       setPaymentMethods(
         [...res.data, {
           id: 999,

@@ -10,7 +10,7 @@ import PropTypes from "prop-types";
 import MaskInput from "../../../../components/common/MaskInput";
 import Dialog from "../../../../components/Dialog";
 import useAuth from "../../../../hooks/useAuth";
-import PatientService from "../../../../services/patient.service";
+import PaymentMethodService from "../../../../services/patient_portal/payment-method.service";
 
 const useStyles = makeStyles((theme) => ({
   formContainer: {
@@ -68,7 +68,7 @@ const PaymentMethodsForm = (props) => {
         clinios_stripe_customer_id: user.clinios_stripe_customer_id,
       },
     };
-    PatientService.createPaymentMethod(user.id, reqBody).then((response) => {
+    PaymentMethodService.createPaymentMethod(reqBody).then((response) => {
       enqueueSnackbar(`${response.message}`, { variant: "success" });
       reloadData();
       onClose();

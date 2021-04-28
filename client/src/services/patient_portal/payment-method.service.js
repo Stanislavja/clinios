@@ -11,9 +11,21 @@ class PaymentMethodService {
       .then((res) => res.data);
   }
 
-  create(data) {
+  createPaymentMethod(data) {
     return axios
       .post(`${API_BASE}/patient-portal/payment-methods`, data, { headers: authHeader() })
+      .then((res) => res.data);
+  }
+
+  updatePaymentMethod(paymentMethodId, data) {
+    return axios
+      .put(
+        `${API_BASE}/patient-portal/payment-methods/${paymentMethodId}`,
+        data,
+        {
+          headers: authHeader(),
+        },
+      )
       .then((res) => res.data);
   }
 }

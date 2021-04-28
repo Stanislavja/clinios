@@ -12,7 +12,7 @@ import MaskInput from "../../../../../components/common/MaskInput";
 import Dialog from "../../../../../components/Dialog";
 import useAuth from "../../../../../hooks/useAuth";
 import useDidMountEffect from "../../../../../hooks/useDidMountEffect";
-import PatientService from "../../../../../services/patient.service";
+import PaymentMethodService from "../../../../../services/patient_portal/payment-method.service";
 import { paymentMethodType } from "../../../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
@@ -84,18 +84,19 @@ const PaymentMethodsForm = (props) => {
         type: formFields.cardType[0] || "V",
         cvc: formFields.cvv,
         account_number: formFields.cardNumber.replaceAll("/", ""),
-        customer_id: user.stripe_customer_id,
+        stripe_customer_id: user.stripe_customer_id,
+        clinios_stripe_customer_id: user.clinios_stripe_customer_id,
       },
     };
     if (isEdit) {
       const paymentMethodId = cardData.id;
-      PatientService.updatePaymentMethod(patientId, paymentMethodId, reqBody).then((response) => {
+      PaymentMethodService.updatePaymentMethod(patientId, paymentMethodId, reqBody).then((response) => {
         enqueueSnackbar(`${response.message}`, { variant: "success" });
         reloadData();
         onClose();
       });
     } else {
-      PatientService.createPaymentMethod(patientId, reqBody).then((response) => {
+      PaymentMethodService.createPaymentMethod(reqBody).then((response) => {
         enqueueSnackbar(`${response.message}`, { variant: "success" });
         reloadData();
         onClose();

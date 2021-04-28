@@ -64,16 +64,24 @@ const createPurchaseLabs = async (req, res) => {
         name: existingPatient.firstname + existingPatient.lastname,
       });
       formData.customer_id = customer.id;
+
       console.log("customer:", customer);
     }
-    // TODO:: Check if clinios_stripe_customer_id
-    // create if it's not there and use it.
-    // TODO:: Get this payment method for clinios account
+    // TODO:: attach this payment method to this customer first.
+    // Attach payment method to a customer for client(Doctor) account
+    await stripe.paymentMethods.attach(
+      formData.clinios_stripe_payment_method_token,
+      {
+        customer: formData.customer_id,
+      }
+    );
 
     const intentData = {
       payment_method: formData.clinios_stripe_payment_method_token,
       customer: formData.customer_id,
-      description: `${formData.note}; patient_id: ${req.user_id}`,
+      description: `${JSON.stringify(formData.cpt_ids)}; patient_id: ${
+        req.user_id
+      }`,
       amount: Number(formData.amount) * 100, // it accepts cents
       currency: "usd",
       confirmation_method: "manual",
