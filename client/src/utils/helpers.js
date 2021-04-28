@@ -77,7 +77,7 @@ export const formatPhoneNumber = (phoneNumber) => {
   if (match) {
     return `${match[1]} ${match[2]} ${match[3]}`;
   }
-  return null;
+  return `${cleaned.slice(0, 3)} ${cleaned.slice(3, 6)} ${cleaned.slice(6)}`;
 };
 
 export const formatDate = (date) => {
