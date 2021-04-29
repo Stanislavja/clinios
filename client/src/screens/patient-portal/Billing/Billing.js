@@ -16,6 +16,7 @@ import moment from "moment";
 
 import useAuth from "../../../hooks/useAuth";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
+import { hasValue } from "../../../utils/helpers";
 import NewTransactionForm from "./components/NewTransactionForm";
 import ViewTransactionDetails from "./components/ViewTransactionDetails";
 
@@ -101,8 +102,6 @@ const Billing = () => {
     fetchBillings();
     fetchBalance();
   }, [fetchBillings, fetchBalance]);
-
-  const hasValue = (value) => !((typeof value === "undefined") || (value === null));
 
   return (
     <>

@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import Popover from "../../../../components/common/Popover";
 import { StyledTableCellSm, StyledTableRowSm } from "../../../../components/common/StyledTable";
 import { calculateFunctionalRange, calculatePercentageFlag } from "../../../../utils/FunctionalRange";
+import { hasValue } from "../../../../utils/helpers";
 import { getMarkerDefinition } from "../../../../utils/markerDefinition";
 import { getMarkerInterpretation } from "../../../../utils/markerInterpretation";
 import MarkerDefinition from "../../../Patient/components/MarkerDefinition";
@@ -64,8 +65,6 @@ const LabValues = (props) => {
     setSelectedGraph(row);
     // toggleGraphDialog();
   };
-
-  const hasValue = (value) => !((typeof value === "undefined") || (value === null));
 
   const showPopoverIcon = (marker) => (
     // eslint-disable-next-line max-len

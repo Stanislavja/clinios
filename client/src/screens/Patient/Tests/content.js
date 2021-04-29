@@ -19,7 +19,7 @@ import moment from "moment";
 import Popover from "../../../components/common/Popover";
 import usePatientContext from "../../../hooks/usePatientContext";
 import { calculateFunctionalRange, calculatePercentageFlag } from "../../../utils/FunctionalRange";
-import { calculateAge } from "../../../utils/helpers";
+import { calculateAge, hasValue } from "../../../utils/helpers";
 import { getMarkerDefinition } from "../../../utils/markerDefinition";
 import { getMarkerInterpretation } from "../../../utils/markerInterpretation";
 import MarkerDefinition from "../components/MarkerDefinition";
@@ -105,8 +105,6 @@ const TestsContent = () => {
     setAnchorEl(null);
     setSelectedMarker(null);
   };
-
-  const hasValue = (value) => !((typeof value === "undefined") || (value === null));
 
   const hasTestValue = (value, cptId, testsArray) => {
     const matchArray = testsArray.filter((x) => x.cpt_id === cptId);
