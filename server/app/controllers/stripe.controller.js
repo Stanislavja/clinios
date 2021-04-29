@@ -5,7 +5,6 @@ const { errorMessage, successMessage, status } = require("../helpers/status");
 
 const listOfCustomers = async (req, res) => {
   try {
-    console.log("stripe:", stripe);
     const customers = await stripe.customers.list({
       limit: 3,
     });

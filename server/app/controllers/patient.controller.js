@@ -978,12 +978,11 @@ const getBillingPaymentOptions = async (req, res) => {
 
 const createBilling = async (req, res) => {
   const { patient_id } = req.params;
-  const { payment_type, type_id } = req.body.data;
+  const { type_id } = req.body.data;
 
   const formData = req.body.data;
   formData.patient_id = patient_id;
   formData.client_id = req.client_id;
-  formData.user_id = req.user_id;
   formData.created = new Date();
   formData.created_user_id = req.user_id;
 
@@ -997,27 +996,27 @@ const createBilling = async (req, res) => {
 
   // transaction type 2 'Service Credit' and 3 'Payment' are stored in the database as negative numbers, david march 2021
   if (type_id === 2 || type_id === 3) {
-    if (payment_type === "C") {
-      const stripe = Stripe(getStripeResponse[0].stripe_api_key);
-      const intentData = {
-        payment_method: formData.stripe_payment_method_token,
-        customer: formData.customer_id,
-        description: `${formData.note}; patient_id: ${patient_id}`,
-        amount: Number(formData.amount) * 100, // it accepts cents
-        currency: "usd",
-        confirmation_method: "manual",
-        confirm: true,
-      };
-      const intent = await stripe.paymentIntents.create(intentData);
-      if (intent.status === "succeeded") {
-        formData.pp_status = 1;
-        formData.pp_return = JSON.stringify(intent);
-      } else {
-        console.log("error:", intent);
-        formData.pp_status = -1;
-        formData.pp_return = JSON.stringify(intent);
-      }
+    // if (payment_type === "C") {
+    const stripe = Stripe(getStripeResponse[0].stripe_api_key);
+    const intentData = {
+      payment_method: formData.stripe_payment_method_token,
+      customer: formData.customer_id,
+      description: `${formData.note}; patient_id: ${patient_id}`,
+      amount: Number(formData.amount) * 100, // it accepts cents
+      currency: "usd",
+      confirmation_method: "manual",
+      confirm: true,
+    };
+    const intent = await stripe.paymentIntents.create(intentData);
+    if (intent.status === "succeeded") {
+      formData.pp_status = 1;
+      formData.pp_return = JSON.stringify(intent);
+    } else {
+      console.log("error:", intent);
+      formData.pp_status = -1;
+      formData.pp_return = JSON.stringify(intent);
     }
+    // }
     // Change for localdatabase
     formData.amount *= -1;
   }

@@ -44,7 +44,7 @@ const createPurchaseLabs = async (req, res) => {
     type_id: 1,
     dt: new Date(),
     created: new Date(),
-    amount: formData.amount,
+    amount: formData.amount * -1,
     payment_method_id: formData.payment_method_id,
   };
 
@@ -64,10 +64,12 @@ const createPurchaseLabs = async (req, res) => {
         name: existingPatient.firstname + existingPatient.lastname,
       });
       formData.customer_id = customer.id;
-
+      // Update patient corp_stripe_customer_id field
+      await db.query(
+        `update patient set corp_stripe_customer_id='${customer.id}' where id=${req.user_id}`
+      );
       console.log("customer:", customer);
     }
-    // TODO:: attach this payment method to this customer first.
     // Attach payment method to a customer for client(Doctor) account
     await stripe.paymentMethods.attach(
       formData.corp_stripe_payment_method_token,

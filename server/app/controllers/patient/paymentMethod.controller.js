@@ -80,10 +80,10 @@ const createPaymentMethod = async (req, res) => {
           postal_code: formData.postal,
           city: formData.city,
           state: formData.state,
-          country: formData.country
-        }
-      }
-    }
+          country: formData.country,
+        },
+      },
+    };
 
     const paymentMethod = await stripe.paymentMethods.create(cardData);
 
@@ -97,7 +97,9 @@ const createPaymentMethod = async (req, res) => {
 
     // Attach this Payment method to Clinios account as well.
     const cliniosStripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
-    const cliniosPaymentMethod = await cliniosStripe.paymentMethods.create(cardData);
+    const cliniosPaymentMethod = await cliniosStripe.paymentMethods.create(
+      cardData
+    );
     formData.corp_stripe_payment_method_token = cliniosPaymentMethod.id;
     formData.account_number = formData.account_number.substring(0, 4);
 
