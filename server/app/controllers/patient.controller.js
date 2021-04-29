@@ -2423,7 +2423,7 @@ const createPaymentMethod = async (req, res) => {
       type: "card",
       card,
     });
-    formData.clinios_stripe_payment_method_token = cliniosPaymentMethod.id;
+    formData.corp_stripe_payment_method_token = cliniosPaymentMethod.id;
     formData.account_number = formData.account_number.substring(0, 4);
 
     delete formData.customer_id; // Delete customer_id as it's not on payment_method table

@@ -65,7 +65,7 @@ const PaymentMethodsForm = (props) => {
         cvc: formFields.cvv,
         account_number: formFields.cardNumber.replaceAll("/", ""),
         stripe_customer_id: user.stripe_customer_id,
-        clinios_stripe_customer_id: user.clinios_stripe_customer_id,
+        corp_stripe_customer_id: user.corp_stripe_customer_id,
       },
     };
     PaymentMethodService.createPaymentMethod(reqBody).then((response) => {

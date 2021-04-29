@@ -17,7 +17,7 @@ const getPaymentMethods = async (req, res) => {
 
   let $sql;
   try {
-    $sql = `select id, patient_id, type, account_number, exp, status, stripe_payment_method_token, clinios_stripe_payment_method_token,
+    $sql = `select id, patient_id, type, account_number, exp, status, stripe_payment_method_token, corp_stripe_payment_method_token,
       client_id, created, created_user_id, updated, updated_user_id
       from payment_method
       where patient_id=${patient_id}
@@ -91,11 +91,11 @@ const createPaymentMethod = async (req, res) => {
       type: "card",
       card,
     });
-    formData.clinios_stripe_payment_method_token = cliniosPaymentMethod.id;
+    formData.corp_stripe_payment_method_token = cliniosPaymentMethod.id;
     formData.account_number = formData.account_number.substring(0, 4);
 
     delete formData.stripe_customer_id; // Delete customer_id as it's not on payment_method table
-    delete formData.clinios_stripe_customer_id; // Delete customer_id as it's not on payment_method table
+    delete formData.corp_stripe_customer_id; // Delete customer_id as it's not on payment_method table
     delete formData.cvc; // Delete cvc as it's not on payment_method table
     const insertResponse = await db.query("insert into payment_method set ? ", [
       formData,

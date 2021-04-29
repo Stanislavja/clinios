@@ -70,14 +70,14 @@ const createPurchaseLabs = async (req, res) => {
     // TODO:: attach this payment method to this customer first.
     // Attach payment method to a customer for client(Doctor) account
     await stripe.paymentMethods.attach(
-      formData.clinios_stripe_payment_method_token,
+      formData.corp_stripe_payment_method_token,
       {
         customer: formData.customer_id,
       }
     );
 
     const intentData = {
-      payment_method: formData.clinios_stripe_payment_method_token,
+      payment_method: formData.corp_stripe_payment_method_token,
       customer: formData.customer_id,
       description: `${JSON.stringify(formData.cpt_ids)}; patient_id: ${
         req.user_id

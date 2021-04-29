@@ -139,8 +139,8 @@ const PurchaseLabs = () => {
     const payload = {
       data: {
         payment_method_id: selectedPaymentMethod,
-        clinios_stripe_payment_method_token: paymentMethodForStripe[0].clinios_stripe_payment_method_token,
-        customer_id: user.clinios_stripe_customer_id, // As Clinios account
+        corp_stripe_payment_method_token: paymentMethodForStripe[0].corp_stripe_payment_method_token,
+        customer_id: user.corp_stripe_customer_id, // As Clinios account
         amount: total,
         cpt_ids: selected,
       },
