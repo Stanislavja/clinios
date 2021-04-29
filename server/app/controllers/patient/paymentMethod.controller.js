@@ -58,24 +58,34 @@ const createPaymentMethod = async (req, res) => {
 
   const db = makeDb(configuration, res);
   const $sql = `select p.id, c.name, c.stripe_api_key from patient p
-  left join client c on c.id=p.client_id
-  where p.id=${patient_id}`;
+    left join client c on c.id=p.client_id
+    where p.id=${patient_id}`;
 
   const getStripeResponse = await db.query($sql);
   try {
     // Create payment method for client(Doctor) account
     const stripe = Stripe(getStripeResponse[0].stripe_api_key);
-    const card = {
-      number: formData.account_number,
-      exp_month: formData.exp.substring(0, 2),
-      exp_year: formData.exp.substring(2, 4),
-      cvc: formData.cvc,
-    };
-
-    const paymentMethod = await stripe.paymentMethods.create({
+    const cardData = {
       type: "card",
-      card,
-    });
+      card: {
+        number: formData.account_number,
+        exp_month: formData.exp.substring(0, 2),
+        exp_year: formData.exp.substring(2, 4),
+        cvc: formData.cvc,
+      },
+      billing_details: {
+        address: {
+          line1: formData.address,
+          line2: formData.address2,
+          postal_code: formData.postal,
+          city: formData.city,
+          state: formData.state,
+          country: formData.country
+        }
+      }
+    }
+
+    const paymentMethod = await stripe.paymentMethods.create(cardData);
 
     formData.stripe_payment_method_token = paymentMethod.id;
 
@@ -87,10 +97,7 @@ const createPaymentMethod = async (req, res) => {
 
     // Attach this Payment method to Clinios account as well.
     const cliniosStripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
-    const cliniosPaymentMethod = await cliniosStripe.paymentMethods.create({
-      type: "card",
-      card,
-    });
+    const cliniosPaymentMethod = await cliniosStripe.paymentMethods.create(cardData);
     formData.corp_stripe_payment_method_token = cliniosPaymentMethod.id;
     formData.account_number = formData.account_number.substring(0, 4);
 

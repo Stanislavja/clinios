@@ -66,6 +66,10 @@ const PaymentMethodsForm = (props) => {
     cardNumber: "",
     cvv: "",
     expiryDate: "",
+    address: "",
+    address2: "",
+    city: "",
+    postal: "",
   });
 
   const [country, setCountry] = useState("");
@@ -131,8 +135,15 @@ const PaymentMethodsForm = (props) => {
         account_number: formFields.cardNumber.replaceAll("/", ""),
         stripe_customer_id: user.stripe_customer_id,
         corp_stripe_customer_id: user.corp_stripe_customer_id,
+        address: formFields.address,
+        address2: formFields.address2,
+        city: formFields.city,
+        postal: formFields.postal,
+        country: country[1],
+        state: region,
       },
     };
+
     if (isEdit) {
       const paymentMethodId = cardData.id;
       PaymentMethodService.updatePaymentMethod(patientId, paymentMethodId, reqBody).then((response) => {
