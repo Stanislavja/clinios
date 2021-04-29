@@ -5,6 +5,7 @@ import FullCalendar from "@fullcalendar/react"; // this import should be at the 
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction"; // needed for dayClick
 import timeGridPlugin from "@fullcalendar/timegrid";
+import moment from "moment";
 import PropTypes from "prop-types";
 
 function renderEventContent(eventInfo) {
@@ -28,6 +29,9 @@ function renderEventContent(eventInfo) {
   );
 }
 
+const currentDate = moment().format("YYYY-MM-DD");
+const oneYear = moment().add(365, "days").format("YYYY-MM-DD");
+
 const EventCalendar = ({ events, onDayClick, onEventClick }) => (
   <FullCalendar
     plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -42,6 +46,10 @@ const EventCalendar = ({ events, onDayClick, onEventClick }) => (
     eventContent={renderEventContent}
     dateClick={(arg) => onDayClick(arg.dateStr)}
     eventClick={(info) => onEventClick(info)}
+    validRange={{
+      start: currentDate,
+      end: oneYear,
+    }}
   />
 );
 
