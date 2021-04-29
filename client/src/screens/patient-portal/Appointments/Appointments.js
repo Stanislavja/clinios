@@ -8,6 +8,7 @@ import { useSnackbar } from "notistack";
 import { useHistory, useLocation } from "react-router-dom";
 
 import useAuth from "../../../hooks/useAuth";
+import useDidMountEffect from "../../../hooks/useDidMountEffect";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 import Calendar from "./Calendar";
 
@@ -43,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   currentDate: {
-    paddingBottom: theme.spacing(4.75),
+    paddingBottom: theme.spacing(5),
 
     [theme.breakpoints.down("md")]: {
       paddingBottom: theme.spacing(2),
@@ -51,6 +52,11 @@ const useStyles = makeStyles((theme) => ({
   },
   ml1: {
     marginLeft: theme.spacing(1),
+  },
+  noWrap: {
+    [theme.breakpoints.up("md")]: {
+      whiteSpace: "nowrap",
+    },
   },
   centerContainer: {
     position: "absolute",
@@ -67,7 +73,10 @@ const Appointments = () => {
   const { user } = useAuth();
   const [practitioners, setPractitioners] = useState([]);
   const [practitionerDateTimes, setPractitionerDateTimes] = useState([]);
+  const [timeSlots, setTimeSlots] = useState([]);
+  const [bookedAppointments, setBookedAppointments] = useState([]);
   const [appointmentTypes, setAppointmentTypes] = useState([]);
+  const [appointmentLength, setAppointmentLength] = useState(null);
   const [showCalendar, setShowCalendar] = useState(false);
   const [userSelection, setUserSelection] = useState({
     practitioner: "",
@@ -81,6 +90,12 @@ const Appointments = () => {
   const fetchPractitioners = useCallback(() => {
     PatientPortalService.getPractitioners().then((res) => {
       setPractitioners(res.data);
+    });
+  }, []);
+
+  const fetchBookedAppointments = useCallback(() => {
+    PatientPortalService.getBookedAppointments().then((res) => {
+      setBookedAppointments(res.data);
     });
   }, []);
 
@@ -115,13 +130,13 @@ const Appointments = () => {
 
   useEffect(() => {
     fetchPractitioners();
-  }, [fetchPractitioners]);
+    fetchBookedAppointments();
+  }, [fetchPractitioners, fetchBookedAppointments]);
 
   const calendarSelectionHandler = (value) => {
     const type = "date";
     const selectedDay = moment(value, "YYYY-MM-DD HH:mm:ss").format("dddd");
-    const availableDays = Object.keys(practitionerDateTimes[0]);
-    const isAvailable = availableDays.find((element) => element === selectedDay.toLowerCase());
+    const isAvailable = practitionerDateTimes[0][selectedDay.toLowerCase()];
     if (isAvailable) {
       setUserSelection({
         ...userSelection,
@@ -150,6 +165,11 @@ const Appointments = () => {
         setAppointmentTypes(res.data);
       });
       fetchPractitionersAvailableDates(practitionerId);
+    }
+    if (type === "appointmentType") {
+      let apptLength = appointmentTypes.find((item) => item.id === value)?.length;
+      apptLength = apptLength === 45 ? 60 : apptLength;
+      setAppointmentLength(apptLength);
     }
   };
 
@@ -215,6 +235,71 @@ const Appointments = () => {
       });
     }
   };
+
+  /* eslint-disable */
+  const makeTimeIntervals = (startTime, endTime, increment) => {
+    startTime = startTime.toString().split(":");
+    endTime = endTime.toString().split(":");
+    increment = parseInt(increment, 10);
+
+    var pad = (n) => { return (n < 10) ? "0" + n.toString() : n; },
+      startHr = parseInt(startTime[0], 10),
+      startMin = parseInt(startTime[1], 10),
+      endHr = parseInt(endTime[0], 10),
+      // endMin = parseInt(endTime[1], 10),
+      currentHr = startHr,
+      currentMin = startMin,
+      previous = currentHr + ":" + pad(currentMin),
+      current = "",
+      r = [];
+
+    do {
+      currentMin += increment;
+      if ((currentMin % 60) === 0 || currentMin > 60) {
+        currentMin = (currentMin === 60) ? 0 : currentMin - 60;
+        currentHr += 1;
+      }
+      current = currentHr + ":" + pad(currentMin);
+      r.push(previous + " - " + current);
+      previous = current;
+    } while (currentHr !== endHr);
+
+    return r;
+  };
+  /* eslint-enable */
+
+  useDidMountEffect(() => {
+    if (practitionerDateTimes.length && appointmentLength) {
+      let timeIntervalSlots = [];
+      practitionerDateTimes.forEach((item) => {
+        const slots = makeTimeIntervals(item.time_start, item.time_end, appointmentLength);
+        timeIntervalSlots = [...timeIntervalSlots, ...slots];
+      });
+      setTimeSlots([...timeIntervalSlots]);
+    }
+  }, [practitionerDateTimes, appointmentLength]);
+
+  const getTimingLabel = (timing) => {
+    const start = timing.split("-")[0].trim();
+    const end = timing.split("-")[1].trim();
+    const startTime = moment(start, ["HH.mm"]).format("hh:mm A");
+    const endTime = moment(end, ["HH.mm"]).format("hh:mm A");
+    return `${startTime} - ${endTime}`;
+  };
+
+  const getCalendarEvents = useCallback(() => {
+    const events = bookedAppointments.map((booking) => (
+      {
+        title: "Booked",
+        date: moment(booking.start_dt).format("YYYY-MM-DD"),
+        backgroundColor: "#ffab40",
+      }
+    ));
+    const userSelectionDate = userSelection.date
+      ? [{ title: "Selected", date: userSelection.date }]
+      : [];
+    return [...events, ...userSelectionDate];
+  }, [userSelection.date, bookedAppointments]);
 
   return (
     <div className={classes.root}>
@@ -292,7 +377,7 @@ const Appointments = () => {
                 >
                   Please select a date and time
                 </Typography>
-                <Grid item lg={8} md={8} sm={12} xs={12}>
+                <Grid item lg={8} md={9} sm={12} xs={12}>
                   <Grid
                     container
                     className={classes.calendarContainer}
@@ -300,13 +385,8 @@ const Appointments = () => {
                   >
                     <Grid item lg={9} md={9} sm={9} xs={9}>
                       <Calendar
-                        events={
-                          userSelection.date
-                            ? [{ title: "Selected", date: userSelection.date }]
-                            : []
-                        }
+                        events={getCalendarEvents()}
                         onDayClick={(val) => calendarSelectionHandler(val)}
-                        onEventClick={(val) => calendarSelectionHandler(val)}
                       />
                     </Grid>
                     <Grid item lg={3} md={3} sm={3} xs={3}>
@@ -316,33 +396,30 @@ const Appointments = () => {
                         color="textPrimary"
                         className={classes.currentDate}
                       >
-                        {userSelection.date
-                          ? moment(userSelection.date).format("dddd, DD")
-                          : moment().format("dddd, DD")}
-                        <span className={classes.ml1}>
-                          {userSelection.time?.id
-                            ? `${userSelection.time?.time_start} - ${userSelection.time?.time_end}` : ""}
+                        <span className={classes.noWrap}>
+                          {userSelection.date
+                            ? moment(userSelection.date).format("dddd, MMM DD YYYY")
+                            : moment().format("dddd, MMM DD YYYY")}
                         </span>
                       </Typography>
                       {
-                        practitionerDateTimes.map((timing) => (
+                        timeSlots.map((timing, index) => (
                           <Button
-                            key={timing.label}
+                            key={timing}
                             onClick={() => {
                               const timingObject = {
-                                id: timing.id,
-                                time_start: timing.time_start,
-                                time_end: timing.time_end,
+                                id: index,
+                                time_start: timing.split("-")[0].trim(),
+                                time_end: timing.split("-")[1].trim(),
                               };
                               userSelectionHandler("time", timingObject);
                             }}
                             className={classes.timingBox}
-                            variant={userSelection.time?.id === timing.id ? "contained" : "outlined"}
+                            variant={userSelection.time?.id === index ? "contained" : "outlined"}
                             color="primary"
                             fullWidth
                           >
-                            {`${timing.time_start} - ${timing.time_end}`}
-                            {/* {timing.label} */}
+                            {getTimingLabel(timing)}
                           </Button>
                         ))
                       }
