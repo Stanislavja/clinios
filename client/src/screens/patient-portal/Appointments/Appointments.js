@@ -143,7 +143,7 @@ const Appointments = () => {
         [type]: value,
       });
     } else {
-      enqueueSnackbar(`${selectedDay} is not available for this doctor`, {
+      enqueueSnackbar(`There are no open times on ${selectedDay}.`, {
         variant: "error",
       });
     }
@@ -246,7 +246,6 @@ const Appointments = () => {
       startHr = parseInt(startTime[0], 10),
       startMin = parseInt(startTime[1], 10),
       endHr = parseInt(endTime[0], 10),
-      // endMin = parseInt(endTime[1], 10),
       currentHr = startHr,
       currentMin = startMin,
       previous = currentHr + ":" + pad(currentMin),
