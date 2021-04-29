@@ -325,7 +325,7 @@ const Encounters = (props) => {
                   <Grid className={classes.formInput}>
                     <Grid item lg={6}>
                       <Typography gutterBottom variant="h6" color="textPrimary">
-                        Treatment Plan (Not Visible to Patients)
+                        Treatment Plan (Visible to Patients)
                       </Typography>
                     </Grid>
                     <Grid item md={12}>
