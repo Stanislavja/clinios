@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
-import { makeStyles, withStyles } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import FormControl from "@material-ui/core/FormControl";
+import {
+  makeStyles, withStyles,
+  RadioGroup,
+  Radio,
+  FormControlLabel,
+} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import InputLabel from "@material-ui/core/InputLabel";
 import Paper from "@material-ui/core/Paper";
-import Select from "@material-ui/core/Select";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -55,6 +56,10 @@ const useStyles = makeStyles((theme) => ({
     textOverflow: "ellipsis",
     overflow: "hidden",
     whiteSpace: "nowrap",
+  },
+  statusGroup: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
   },
 }));
 
@@ -105,7 +110,7 @@ export default function Support() {
     SupportAPI.getStatus().then((res) => setCaseStatus(res.data.data));
   };
 
-  const fetchStatusSupport = () => {
+  const fetchStatusSupport = useCallback(() => {
     SupportAPI.getSuport(cases).then((res) => {
       if (res.data.data.length > 0) {
         setSearchResults(res.data.data);
@@ -114,11 +119,16 @@ export default function Support() {
         setNodata("None Found");
       }
     });
-  };
+  }, [cases]);
+
+  useEffect(() => {
+    fetchStatusSupport();
+  }, [cases, fetchStatusSupport]);
 
   useEffect(() => {
     fetchStatus();
   }, []);
+
   return (
     <div className={classes.root}>
       <Grid container direction="column">
@@ -130,37 +140,31 @@ export default function Support() {
             This page is used for support
           </Typography>
         </Grid>
-        <Grid item xs={12} sm={2}>
-          <FormControl variant="outlined" size="small" className={classes.customSelect}>
-            <InputLabel htmlFor="opneCases">Case Status</InputLabel>
-            <Select
-              native
-              labelId="opneCases"
-              id="openCases"
-              value={cases}
-              onChange={(event) => setCases(event.target.value)}
-              label="Case Status"
-            >
-              <option aria-label="None" value="" />
-              {caseStatus.map((status) => (
-                <option key={status.id} value={status.id}>
-                  {status.name}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} sm={2}>
-          <Button
-            margin="normal"
-            size="small"
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={() => fetchStatusSupport()}
+        <Grid item xs={12} sm={12}>
+          <RadioGroup
+            className={classes.statusGroup}
+            row
+            value={cases}
+            onChange={(event) => setCases(event.target.value)}
+            name="generic"
+            defaultValue="all"
+            aria-label="position"
           >
-            Search
-          </Button>
+            {caseStatus.map((status) => (
+              <FormControlLabel
+                key={status.id}
+                value={status.id}
+                label={status.name}
+                control={<Radio color="primary" />}
+              />
+            ))}
+            <FormControlLabel
+              key={Math.random()}
+              value=""
+              label="All"
+              control={<Radio color="primary" />}
+            />
+          </RadioGroup>
         </Grid>
       </Grid>
 

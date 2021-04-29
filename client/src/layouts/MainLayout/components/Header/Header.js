@@ -10,7 +10,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import InputIcon from "@material-ui/icons/InputOutlined";
 import MenuIcon from "@material-ui/icons/MenuOutlined";
 import PropTypes from "prop-types";
-import { Link as RouterLink, useHistory, useLocation } from "react-router-dom";
+import { Link as RouterLink, useHistory } from "react-router-dom";
 
 import Logo from "../../../../assets/img/Logo.png";
 import useAuth from "../../../../hooks/useAuth";
@@ -56,10 +56,8 @@ const useStyles = makeStyles((theme) => ({
 const Header = ({ ...props }) => {
   const classes = useStyles();
   const history = useHistory();
-  const location = useLocation();
   const { isAuthenticated, user, logout } = useAuth();
   const { onSidebarOpen } = props;
-  const routeValidationRegex = new RegExp("/login/|/signup/|/forgot/");
 
   const handleLogout = async () => {
     try {
@@ -84,7 +82,7 @@ const Header = ({ ...props }) => {
         </RouterLink>
         <Hidden mdDown>
           <div className={classes.navItems}>
-            {isAuthenticated ? (
+            {isAuthenticated && (
               <>
                 <IconButton
                   className={classes.signOutButton}
@@ -93,19 +91,6 @@ const Header = ({ ...props }) => {
                 >
                   <InputIcon />
                 </IconButton>
-              </>
-            ) : (
-              <>
-                {!(routeValidationRegex.test(location.pathname)) && (
-                  <>
-                    <RouterLink to="/signup_client" className={classes.link}>
-                      Sign Up
-                    </RouterLink>
-                    <RouterLink to="/login_client" className={classes.link}>
-                      Login
-                    </RouterLink>
-                  </>
-                )}
               </>
             )}
           </div>
