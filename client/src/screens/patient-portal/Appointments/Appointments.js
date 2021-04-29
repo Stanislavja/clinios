@@ -359,7 +359,7 @@ const Appointments = () => {
                       className={classes.submitBtn}
                       onClick={() => appointmentBookingHandler()}
                     >
-                      {isRescheduleAppointment ? "Reschedule Appointment" : "Book Appointment"}
+                      {isRescheduleAppointment ? "Request Reschedule Appointment" : "Request New Appointment"}
                     </Button>
                   </Grid>
                 </Grid>
