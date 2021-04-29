@@ -16,6 +16,12 @@ router.get(
   encountersController.getPractitionerDates
 );
 
+router.get(
+  "/client-portal/current-appointments",
+  [authJwt.verifyToken],
+  encountersController.getCurrentAppointments
+);
+
 router.post(
   "/client-portal/appointment-types",
   [authJwt.verifyToken],
