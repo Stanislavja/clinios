@@ -15,6 +15,7 @@ function renderEventContent(eventInfo) {
         style={{
           color: "#fff",
           backgroundColor: eventInfo.event.backgroundColor,
+          borderColor: eventInfo.event.backgroundColor,
           width: "100%",
           padding: "3px 5px",
           borderRadius: "3px",
@@ -32,7 +33,7 @@ function renderEventContent(eventInfo) {
 const currentDate = moment().format("YYYY-MM-DD");
 const oneYear = moment().add(365, "days").format("YYYY-MM-DD");
 
-const EventCalendar = ({ events, onDayClick, onEventClick }) => (
+const EventCalendar = ({ events, onDayClick }) => (
   <FullCalendar
     plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
     headerToolbar={{
@@ -45,7 +46,6 @@ const EventCalendar = ({ events, onDayClick, onEventClick }) => (
     events={events}
     eventContent={renderEventContent}
     dateClick={(arg) => onDayClick(arg.dateStr)}
-    eventClick={(info) => onEventClick(info)}
     validRange={{
       start: currentDate,
       end: oneYear,
@@ -55,7 +55,6 @@ const EventCalendar = ({ events, onDayClick, onEventClick }) => (
 
 EventCalendar.propTypes = {
   onDayClick: PropTypes.func.isRequired,
-  onEventClick: PropTypes.func.isRequired,
   events: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,
