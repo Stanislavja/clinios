@@ -43,7 +43,7 @@ export const getMarkerDefinition = (marker) => {
       `;
   }
 
-  if (marker === 345) {
+  if (marker === 345 || marker === 348) {
     data = `Bilirubin is a yellowish substance made during the body's normal process of breaking down red blood cells. Bilirubin is found in bile, a fluid in the liver that helps one digest food. If the liver is healthy, it will remove most of the bilirubin from the body. If the liver is damaged, bilirubin can leak out of the liver and into the blood. When too much bilirubin gets into the bloodstream, it can cause jaundice, a condition that causes skin and eyes to turn yellow. /*https://medlineplus.gov/lab-tests/bilirubin-blood-test/ */
       `;
   }
@@ -59,9 +59,20 @@ export const getMarkerDefinition = (marker) => {
       `;
   }
 
+  if (marker === 394) {
+    data = `C-reactive protein (CRP) is a protein made by your liver. It's sent into your bloodstream in response to inflammation.
+      `;
+  }
+
   if (marker === 426) {
     data = `Calcium is one of the most important minerals in your body. You need calcium for healthy bones and teeth. Calcium is also essential for proper functioning of your nerves, muscles, and heart. About 99% of your body's calcium is stored in your bones. The remaining 1% circulates in the blood. If there is too much or too little calcium in the blood, it may be a sign of bone disease, thyroid disease, kidney disease, or other medical conditions. /*https://medlineplus.gov/lab-tests/calcium-blood-test/ */
       `;
+  }
+
+  if (marker === 432) {
+    data = `Ionized calcium is calcium in your blood that is not attached to proteins. It is also called free calcium.
+      `;
+    // https://medlineplus.gov/
   }
 
   if (marker === 446) {
@@ -75,7 +86,12 @@ export const getMarkerDefinition = (marker) => {
     // medlineplus.gov
   }
 
-  if (marker === 611) {
+  if (marker === 584 || marker === 593) {
+    data = `Cortisol is made by your adrenal glands, two small glands located above the kidneys. `;
+    // medlineplus.gov
+  }
+
+  if (marker === 611 || marker ==619) {
     data = `Creatinine is a waste product made by the muscles as part of regular, everyday activity. Normally, the kidneys filter creatinine from the blood and send it out of the body in the urine. If there is a problem with the kidneys, creatinine can build up in the blood and less will be released in urine.
       `;
     // medlineplus.gov
@@ -84,6 +100,11 @@ export const getMarkerDefinition = (marker) => {
   if (marker === 675) {
     data = `DHEA Sulfate (dehydroepiandrosterone sulfate) is a male sex hormone that is found in both men and women. DHEAS plays an important role in making the male sex hormone testosterone and the female sex hormone estrogen.  DHEAS is mostly made in the adrenal glands, two small glands located above the kidneys. Smaller amounts of DHEAS are made in a man’s testicles and in a woman’s ovaries.
       `;
+    // medlineplus.gov
+  }
+
+  if (marker === 119 || marker ==750) {
+    data = `Eosinophils are a type of white blood cell. They help fight off infections and play a role in your body's immune response.`;
     // medlineplus.gov
   }
 
@@ -290,30 +311,6 @@ export const getMarkerDefinition = (marker) => {
     // medlineplus.gov
   }
 
-  if (marker === 1853) {
-    data = `Triglycerides are a type of fat in your body. If you eat more calories than you need, the extra calories are changed into triglycerides. These triglycerides are stored in your fat cells for later use. When your body needs energy, triglycerides are released into your bloodstream to provide fuel for your muscles to work.
-      `;
-    // medlineplus.gov
-  }
-
-  if (marker === 1862) {
-    data = `TSH is made in a gland in the brain called the pituitary. When thyroid levels in your body are low, the pituitary gland makes more TSH. When thyroid levels are high, the pituitary gland makes less TSH.
-      `;
-    // medlineplus.gov
-  }
-
-  if (marker === 1885) {
-    data = `Uric acid is a normal waste product that's made when the body breaks down chemicals called purines.  Most uric acid dissolves in your blood, goes to the kidneys, then leaves the body through your urine. If your body makes too much uric acid or doesn't release enough into your urine, it can make crystals that form in your joints. This condition is known as gout, a form of arthritis that causes painful inflammation in and around the joints.
-      `;
-    // medlineplus.gov
-  }
-
-  if (marker === 0) {
-    data = `White blood cells are part of the immune system. They help your body fight off infections and other diseases.  When you get sick, your body makes more white blood cells to fight the bacteria, viruses, or other foreign substances causing your illness. This increases your white blood count.
-      `;
-    // medlineplus.gov
-  }
-
   if (marker === 1700) {
     data = `Soluble transferrin receptors are protensins in the blood.  /*Own*/
       Anemia of chronic disease and iron deficiency anemia, the most common forms of anemia, are differentiated primarily by estimates of iron status. Standard measures of iron status, such as ferritin, total iron-binding capacity, and serum iron are directly affected by chronic disease. In contrast, soluble transferrin receptor (sTfR) is elevated in iron deficiency but is not appreciably affected by chronic disease.  /*Labcorp*/
@@ -338,6 +335,30 @@ export const getMarkerDefinition = (marker) => {
       `;
     // https://www.labcorp.com/tests/004937/transferrin
     // https://www.merckmanuals.com/-/media/Manual/LabTests/TransferrinandIronBindingCapacityTIBCUIBC.html
+  }
+
+  if (marker === 1853) {
+    data = `Triglycerides are a type of fat in your body. If you eat more calories than you need, the extra calories are changed into triglycerides. These triglycerides are stored in your fat cells for later use. When your body needs energy, triglycerides are released into your bloodstream to provide fuel for your muscles to work.
+      `;
+    // medlineplus.gov
+  }
+
+  if (marker === 1862) {
+    data = `TSH is made in a gland in the brain called the pituitary. When thyroid levels in your body are low, the pituitary gland makes more TSH. When thyroid levels are high, the pituitary gland makes less TSH.
+      `;
+    // medlineplus.gov
+  }
+
+  if (marker === 1885) {
+    data = `Uric acid is a normal waste product that's made when the body breaks down chemicals called purines.  Most uric acid dissolves in your blood, goes to the kidneys, then leaves the body through your urine. If your body makes too much uric acid or doesn't release enough into your urine, it can make crystals that form in your joints. This condition is known as gout, a form of arthritis that causes painful inflammation in and around the joints.
+      `;
+    // medlineplus.gov
+  }
+
+  if (marker === 1950 || marker === 1963) {
+    data = `White blood cells are part of the immune system. They help your body fight off infections and other diseases.  When you get sick, your body makes more white blood cells to fight the bacteria, viruses, or other foreign substances causing your illness. This increases your white blood count.
+      `;
+    // medlineplus.gov
   }
 
   return data;
