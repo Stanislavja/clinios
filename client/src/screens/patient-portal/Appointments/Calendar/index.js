@@ -5,7 +5,6 @@ import FullCalendar from "@fullcalendar/react"; // this import should be at the 
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction"; // needed for dayClick
 import timeGridPlugin from "@fullcalendar/timegrid";
-import moment from "moment";
 import PropTypes from "prop-types";
 
 function renderEventContent(eventInfo) {

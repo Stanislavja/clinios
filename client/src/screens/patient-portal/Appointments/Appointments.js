@@ -3,18 +3,18 @@ import React, { useState, useEffect, useCallback } from "react";
 import {
   makeStyles, Grid, TextField, Typography, MenuItem, Button, Box,
 } from "@material-ui/core";
-import Alert from '@material-ui/lab/Alert';
+import BackIcon from "@material-ui/icons/ArrowBack";
+import WarningIcon from "@material-ui/icons/Warning";
+import Alert from "@material-ui/lab/Alert";
 import moment from "moment";
-import BackIcon from '@material-ui/icons/ArrowBack';
-import WarningIcon from '@material-ui/icons/Warning';
 import { useSnackbar } from "notistack";
 import { useHistory, useLocation } from "react-router-dom";
 
 import useAuth from "../../../hooks/useAuth";
 import useDidMountEffect from "../../../hooks/useDidMountEffect";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
-import Calendar from "./Calendar";
 import { getDatesArray } from "../../../utils/helpers";
+import Calendar from "./Calendar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
   },
   errorIcon: {
     position: "relative",
-    top: 5
+    top: 5,
   },
 }));
 
@@ -119,15 +119,12 @@ const Appointments = () => {
         const appts = response.map((booking) => ({
           start_time: moment(booking.start_dt).format("hh:mm"),
           end_time: moment(booking.end_dt).format("hh:mm"),
-          ...booking
+          ...booking,
         }));
         setBookedAppointments(appts);
       }
     });
   }, []);
-
-  console.log("asdasdasd", bookedAppointments)
-  console.log("timeSlots", timeSlots)
 
   const fetchPractitionersAvailableDates = useCallback((practitionerId) => {
     PatientPortalService.getPractitionerDates().then((res) => {
@@ -165,9 +162,9 @@ const Appointments = () => {
 
   const calendarSelectionHandler = (date) => {
     let value;
-    if (date?.event) { //event clicked
+    if (date?.event) { // event clicked
       value = moment(date.event._instance.range.start).format("YYYY-MM-DD");
-    } else { //day clicked
+    } else { // day clicked
       value = date;
     }
 
@@ -181,6 +178,7 @@ const Appointments = () => {
         [type]: value,
       });
       // filter time slots for selected date
+      // eslint-disable-next-line max-len
       const selectedDates = bookedAppointments.filter((x) => moment(x.start_dt).format("YYYY-MM-DD") === value);
       const selectedTimes = selectedDates.map((time) => ({
         startTime: time.start_time,
@@ -190,14 +188,14 @@ const Appointments = () => {
         startTime: moment(slot.split("-")[0].trim(), ["HH.mm"]).format("hh:mm"),
         endTime: moment(slot.split("-")[1].trim(), ["HH.mm"]).format("hh:mm"),
       }));
-      const filteredSlots = timeSlotMap.filter(ar => !selectedTimes.find(rm =>
-        (rm.startTime === ar.startTime || ar.endTime === rm.endTime)))
-      console.log({
-        selectedDates, selectedTimes, filteredSlots
-      })
+      // eslint-disable-next-line max-len
+      const filteredSlots = timeSlotMap.filter((ar) => !selectedTimes.find((rm) => (rm.startTime === ar.startTime || ar.endTime === rm.endTime)));
+      // console.log({
+      //   selectedDates, selectedTimes, filteredSlots
+      // })
       setFilteredTimeSlots([...filteredSlots]);
       if (!filteredSlots.length) {
-        setErrorMessage("There are no open times on this day.")
+        setErrorMessage("There are no open times on this day.");
       }
     } else {
       setErrorMessage(`There are no open times on ${selectedDay}.`);
@@ -205,7 +203,7 @@ const Appointments = () => {
       setUserSelection({
         ...userSelection,
         [type]: null,
-        [time]: null
+        [time]: null,
       });
     }
   };
@@ -351,7 +349,7 @@ const Appointments = () => {
       ? [{ title: "Selected", date: userSelection.date }]
       : [];
     return [...events, ...userSelectionDate];
-  }, [userSelection.date, bookedAppointments]);
+  }, [userSelection.date]);
 
   return (
     <div className={classes.root}>
@@ -482,9 +480,6 @@ const Appointments = () => {
                   </Grid>
                   {Boolean(errorMessage.length) && (
                     <Grid item lg={4} md={3}>
-                      {/* <Typography variant="h5" color="error" align="center">
-                        <WarningIcon className={classes.errorIcon} /> {errorMessage}
-                      </Typography> */}
                       <Alert severity="error" icon={<WarningIcon fontSize="inherit" />}>
                         {errorMessage}
                       </Alert>
@@ -501,7 +496,7 @@ const Appointments = () => {
                       <Button
                         type="submit"
                         variant="outlined"
-                        onClick={() => setShowCalendar(prevState => !prevState)}
+                        onClick={() => setShowCalendar((prevState) => !prevState)}
                         startIcon={<BackIcon />}
                       >
                         Back
