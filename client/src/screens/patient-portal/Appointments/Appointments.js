@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 
 import {
-  makeStyles, Grid, TextField, Typography, MenuItem, Button, Box,
+  makeStyles, Grid, TextField, Typography, MenuItem, Button, Box, Collapse,
 } from "@material-ui/core";
 import BackIcon from "@material-ui/icons/ArrowBack";
-import WarningIcon from "@material-ui/icons/Warning";
 import Alert from "@material-ui/lab/Alert";
 import moment from "moment";
 import { useSnackbar } from "notistack";
@@ -47,11 +46,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   currentDate: {
-    paddingBottom: theme.spacing(5),
-
-    [theme.breakpoints.down("md")]: {
-      paddingBottom: theme.spacing(2),
-    },
+    minHeight: theme.spacing(8),
   },
   ml1: {
     marginLeft: theme.spacing(1),
@@ -191,18 +186,33 @@ const Appointments = () => {
   };
 
   const calendarSelectionHandler = (date) => {
+    const type = "date";
     let value;
     if (date?.event) { // event clicked
       value = moment(date.event._instance.range.start).format("YYYY-MM-DD");
     } else { // day clicked
       value = date;
-      const yearDifference = moment(date).diff(oneYear, "days");
-      if (moment(value).isBefore() || yearDifference > 0) { // past date and greater than one year
+      const yearDifference = moment(date).diff(practitionerDateTimes[0]?.date_end || oneYear, "days");
+      if (moment(value).isBefore()) { // past date
+        setErrorMessage("Can not select a past date.");
+        setFilteredTimeSlots([]);
+        setUserSelection({
+          ...userSelection,
+          [type]: null,
+        });
+        return;
+      }
+      if (yearDifference > 0) { // greater than one year
+        setErrorMessage("There are no open times on this day.");
+        setFilteredTimeSlots([]);
+        setUserSelection({
+          ...userSelection,
+          [type]: null,
+        });
         return;
       }
     }
 
-    const type = "date";
     setErrorMessage("");
     const selectedDay = moment(value, "YYYY-MM-DD HH:mm:ss").format("dddd");
     const isAvailable = practitionerDateTimes[0][selectedDay.toLowerCase()];
@@ -289,10 +299,12 @@ const Appointments = () => {
         }, 1000);
         enqueueSnackbar(
           `Appointment ${isRescheduleAppointment ? "rescheduled" : "requested"} successfully`, {
+            `Appointment ${isRescheduleAppointment ? "rescheduled" : "requested"} successfully`, {
             variant: "success",
           },
         );
       });
+        });
     } else {
       setErrorMessage("Date & Time selection is required");
     }
@@ -343,8 +355,8 @@ const Appointments = () => {
   const getTimingLabel = (timing) => {
     const start = timing.startTime;
     const end = timing.endTime;
-    const startTime = moment(start, ["HH.mm"]).format("hh:mm A");
-    const endTime = moment(end, ["HH.mm"]).format("hh:mm A");
+    const startTime = moment(start, ["HH.mm"]).format("h:mm A");
+    const endTime = moment(end, ["HH.mm"]).format("h:mm A");
     return `${startTime} - ${endTime}`;
   };
 
@@ -358,7 +370,8 @@ const Appointments = () => {
         }
       });
     }
-    const availableDates = getDatesArray(currentDate, oneYear, holidays).map((date) => ({
+    const dateLimit = practitionerDateTimes[0].date_end || oneYear;
+    const availableDates = getDatesArray(currentDate, dateLimit, holidays).map((date) => ({
       title: "Available",
       date,
       backgroundColor: "#008B00",
@@ -460,44 +473,50 @@ const Appointments = () => {
                       />
                     </Grid>
                     <Grid item lg={3} md={3} sm={3} xs={3}>
-                      <Typography
-                        variant="h4"
-                        component="h1"
-                        color="textPrimary"
-                        className={classes.currentDate}
-                      >
-                        <span className={classes.noWrap}>
-                          {userSelection.date
-                            ? moment(userSelection.date).format("dddd, MMM DD YYYY")
-                            : moment().format("dddd, MMM DD YYYY")}
-                        </span>
-                      </Typography>
+                      <Grid className={classes.currentDate}>
+                        <Typography
+                          variant="h4"
+                          component="h1"
+                          color="textPrimary"
+                        >
+                          <span className={classes.noWrap}>
+                            {userSelection.date
+                              ? moment(userSelection.date).format("dddd, MMM D YYYY")
+                              : ""}
+                          </span>
+                        </Typography>
+                      </Grid>
                       {Boolean(errorMessage.length) && (
-                        <Alert severity="error" icon={<WarningIcon fontSize="inherit" />}>
+                        <Alert severity="info">
                           {errorMessage}
                         </Alert>
                       )}
-                      {
-                        userSelection?.date && filteredTimeSlots.map((timing, index) => (
-                          <Button
-                            key={`${timing.startTime}-${timing.endTime}`}
-                            onClick={() => {
-                              const timingObject = {
-                                id: index,
-                                time_start: timing.startTime,
-                                time_end: timing.endTime,
-                              };
-                              userSelectionHandler("time", timingObject);
-                            }}
-                            className={classes.timingBox}
-                            variant={userSelection.time?.id === index ? "contained" : "outlined"}
-                            color="primary"
-                            fullWidth
-                          >
-                            {getTimingLabel(timing)}
-                          </Button>
-                        ))
-                      }
+                      <Collapse
+                        in={userSelection?.date && filteredTimeSlots.length}
+                        timeout={500}
+                      >
+                        {
+                          userSelection?.date && filteredTimeSlots.map((timing, index) => (
+                            <Button
+                              key={`${timing.startTime}-${timing.endTime}`}
+                              onClick={() => {
+                                const timingObject = {
+                                  id: index,
+                                  time_start: timing.startTime,
+                                  time_end: timing.endTime,
+                                };
+                                userSelectionHandler("time", timingObject);
+                              }}
+                              className={classes.timingBox}
+                              variant={userSelection.time?.id === index ? "contained" : "outlined"}
+                              color="primary"
+                              fullWidth
+                            >
+                              {getTimingLabel(timing)}
+                            </Button>
+                          ))
+                        }
+                      </Collapse>
                     </Grid>
                   </Grid>
                 </Grid>
