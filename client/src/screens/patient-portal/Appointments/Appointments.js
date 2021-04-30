@@ -117,8 +117,8 @@ const Appointments = () => {
       const response = res.data;
       if (response.length) {
         const appts = response.map((booking) => ({
-          start_time: moment(booking.start_dt).format("hh:mm"),
-          end_time: moment(booking.end_dt).format("hh:mm"),
+          start_time: moment(booking.start_dt).format("HH:mm"),
+          end_time: moment(booking.end_dt).format("HH:mm"),
           ...booking,
         }));
         setBookedAppointments(appts);
@@ -185,8 +185,8 @@ const Appointments = () => {
         endTime: time.end_time,
       }));
       const timeSlotMap = timeSlots.map((slot) => ({
-        startTime: moment(slot.split("-")[0].trim(), ["HH.mm"]).format("hh:mm"),
-        endTime: moment(slot.split("-")[1].trim(), ["HH.mm"]).format("hh:mm"),
+        startTime: moment(slot.split("-")[0].trim(), ["HH.mm"]).format("HH:mm"),
+        endTime: moment(slot.split("-")[1].trim(), ["HH.mm"]).format("HH:mm"),
       }));
       // eslint-disable-next-line max-len
       const filteredSlots = timeSlotMap.filter((ar) => !selectedTimes.find((rm) => (rm.startTime === ar.startTime || ar.endTime === rm.endTime)));
@@ -427,80 +427,68 @@ const Appointments = () => {
                 >
                   Please select a date and time
                 </Typography>
-                <Grid container spacing={5}>
-                  <Grid item lg={8} md={9} sm={12} xs={12}>
-                    <Grid
-                      container
-                      className={classes.calendarContainer}
-                      spacing={3}
-                    >
-                      <Grid item lg={9} md={9} sm={9} xs={9}>
-                        <Calendar
-                          events={getCalendarEvents()}
-                          onDayClick={(val) => calendarSelectionHandler(val)}
-                          onEventClick={(val) => calendarSelectionHandler(val)}
-                        />
-                      </Grid>
-                      <Grid item lg={3} md={3} sm={3} xs={3}>
-                        <Typography
-                          variant="h4"
-                          component="h1"
-                          color="textPrimary"
-                          className={classes.currentDate}
-                        >
-                          <span className={classes.noWrap}>
-                            {userSelection.date
-                              ? moment(userSelection.date).format("dddd, MMM DD YYYY")
-                              : moment().format("dddd, MMM DD YYYY")}
-                          </span>
-                        </Typography>
-                        {
-                          userSelection?.date && filteredTimeSlots.map((timing, index) => (
-                            <Button
-                              key={`${timing.startTime}-${timing.endTime}`}
-                              onClick={() => {
-                                const timingObject = {
-                                  id: index,
-                                  time_start: timing.startTime,
-                                  time_end: timing.endTime,
-                                };
-                                userSelectionHandler("time", timingObject);
-                              }}
-                              className={classes.timingBox}
-                              variant={userSelection.time?.id === index ? "contained" : "outlined"}
-                              color="primary"
-                              fullWidth
-                            >
-                              {getTimingLabel(timing)}
-                            </Button>
-                          ))
-                        }
-                      </Grid>
+                <Grid item lg={9} md={9} sm={12} xs={12}>
+                  <Grid
+                    container
+                    className={classes.calendarContainer}
+                    spacing={3}
+                  >
+                    <Grid item lg={9} md={9} sm={9} xs={9}>
+                      <Calendar
+                        events={getCalendarEvents()}
+                        onDayClick={(val) => calendarSelectionHandler(val)}
+                        onEventClick={(val) => calendarSelectionHandler(val)}
+                      />
+                    </Grid>
+                    <Grid item lg={3} md={3} sm={3} xs={3}>
+                      <Typography
+                        variant="h4"
+                        component="h1"
+                        color="textPrimary"
+                        className={classes.currentDate}
+                      >
+                        <span className={classes.noWrap}>
+                          {userSelection.date
+                            ? moment(userSelection.date).format("dddd, MMM DD YYYY")
+                            : moment().format("dddd, MMM DD YYYY")}
+                        </span>
+                      </Typography>
+                      {Boolean(errorMessage.length) && (
+                        <Alert severity="error" icon={<WarningIcon fontSize="inherit" />}>
+                          {errorMessage}
+                        </Alert>
+                      )}
+                      {
+                        userSelection?.date && filteredTimeSlots.map((timing, index) => (
+                          <Button
+                            key={`${timing.startTime}-${timing.endTime}`}
+                            onClick={() => {
+                              const timingObject = {
+                                id: index,
+                                time_start: timing.startTime,
+                                time_end: timing.endTime,
+                              };
+                              userSelectionHandler("time", timingObject);
+                            }}
+                            className={classes.timingBox}
+                            variant={userSelection.time?.id === index ? "contained" : "outlined"}
+                            color="primary"
+                            fullWidth
+                          >
+                            {getTimingLabel(timing)}
+                          </Button>
+                        ))
+                      }
                     </Grid>
                   </Grid>
-                  {Boolean(errorMessage.length) && (
-                    <Grid item lg={4} md={3}>
-                      <Alert severity="error" icon={<WarningIcon fontSize="inherit" />}>
-                        {errorMessage}
-                      </Alert>
-                    </Grid>
-                  )}
                 </Grid>
                 <Box mt={3}>
-                  <Grid item md={8}>
+                  <Grid item md={9}>
                     <Grid
                       container
                       justify="space-between"
                       alignItems="center"
                     >
-                      <Button
-                        type="submit"
-                        variant="outlined"
-                        onClick={() => setShowCalendar((prevState) => !prevState)}
-                        startIcon={<BackIcon />}
-                      >
-                        Back
-                      </Button>
                       <Button
                         type="submit"
                         color="primary"
@@ -509,6 +497,14 @@ const Appointments = () => {
                         onClick={() => appointmentBookingHandler()}
                       >
                         {isRescheduleAppointment ? "Reschedule Appointment" : "Book Appointment"}
+                      </Button>
+                      <Button
+                        type="submit"
+                        variant="outlined"
+                        onClick={() => setShowCalendar((prevState) => !prevState)}
+                        startIcon={<BackIcon />}
+                      >
+                        Back
                       </Button>
                     </Grid>
                   </Grid>
