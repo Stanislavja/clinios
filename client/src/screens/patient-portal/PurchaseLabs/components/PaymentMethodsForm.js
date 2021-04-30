@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import {
   TextField, Button, Grid, Typography,
+  colors,
 } from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -44,6 +45,10 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonsContainer: {
     margin: theme.spacing(3, 0),
+  },
+  cancelButton: {
+    borderColor: colors.orange[600],
+    color: colors.orange[600],
   },
 }));
 
@@ -262,10 +267,15 @@ const PaymentMethodsForm = (props) => {
           </Grid>
 
           <Grid container className={classes.buttonsContainer} justify="space-between">
-            <Button variant="outlined" type="submit">
+            <Button variant="outlined" color="primary" type="submit">
               Add Method
             </Button>
-            <Button variant="outlined" onClick={() => onClose()}>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => onClose()}
+              className={classes.cancelButton}
+            >
               Cancel
             </Button>
           </Grid>
