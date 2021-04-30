@@ -1,21 +1,40 @@
 import React, { useEffect, useState } from "react";
 
 import {
-  TextField, Button, Grid, Typography,
+  TextField, Button, Grid, Typography, colors,
 } from "@material-ui/core";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
+import CloseIcon from "@material-ui/icons/CloseOutlined";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
+import { CountryRegionData } from "react-country-region-selector";
 
+import CountrySelect from "../../../../../components/common/CountrySelect";
 import MaskInput from "../../../../../components/common/MaskInput";
-import Dialog from "../../../../../components/Dialog";
+import RegionSelect from "../../../../../components/common/RegionSelect";
 import useAuth from "../../../../../hooks/useAuth";
 import useDidMountEffect from "../../../../../hooks/useDidMountEffect";
-import PatientService from "../../../../../services/patient.service";
+import PaymentMethodService from "../../../../../services/patient_portal/payment-method.service";
 import { paymentMethodType } from "../../../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
+  title: {
+    backgroundColor: theme.palette.primary.light,
+    "& h2": {
+      color: "#fff",
+    },
+  },
+  closeButton: {
+    position: "absolute",
+    right: theme.spacing(1 / 2),
+    top: theme.spacing(1 / 2),
+    color: "#ffffff",
+  },
   formContainer: {
     margin: theme.spacing(3, 0),
   },
@@ -29,6 +48,10 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonsContainer: {
     margin: theme.spacing(3, 0),
+  },
+  cancelButton: {
+    borderColor: colors.orange[600],
+    color: colors.orange[600],
   },
 }));
 
@@ -47,7 +70,29 @@ const PaymentMethodsForm = (props) => {
     cardNumber: "",
     cvv: "",
     expiryDate: "",
+    address: "",
+    address2: "",
+    city: "",
+    postal: "",
   });
+
+  const [country, setCountry] = useState("");
+  const [region, setRegion] = useState("");
+
+  useEffect(() => {
+    const selectedCountry = CountryRegionData.filter(
+      (countryArray) => countryArray[1] === formFields.country,
+    );
+    if (selectedCountry.length) { // country and state is present in the db
+      setCountry(selectedCountry[0]);
+      const regions = selectedCountry[0][2].split("|").map((regionPair) => {
+        const [regionName = null, regionInShort] = regionPair.split("~");
+        return [regionName, regionInShort];
+      });
+      const selectedRegion = regions.filter((x) => x[1] === formFields.state);
+      setRegion(selectedRegion[0][1]);
+    }
+  }, [formFields]);
 
   const updateFields = () => {
     formFields.cardType = paymentMethodType(cardData.type);
@@ -71,9 +116,17 @@ const PaymentMethodsForm = (props) => {
     });
   };
 
-  const handleInputChnage = (e) => {
+  const handleInputChange = (e) => {
     const { value, name } = e.target;
     updateFormState(name, value);
+  };
+
+  const handleCountryRegion = (identifier, value) => {
+    if (identifier === "country") {
+      setCountry(value);
+    } else if (identifier === "region") {
+      setRegion(value);
+    }
   };
 
   const onFormSubmit = (e) => {
@@ -84,18 +137,26 @@ const PaymentMethodsForm = (props) => {
         type: formFields.cardType[0] || "V",
         cvc: formFields.cvv,
         account_number: formFields.cardNumber.replaceAll("/", ""),
-        customer_id: user.stripe_customer_id,
+        stripe_customer_id: user.stripe_customer_id,
+        corp_stripe_customer_id: user.corp_stripe_customer_id,
+        address: formFields.address,
+        address2: formFields.address2,
+        city: formFields.city,
+        postal: formFields.postal,
+        country: country[1],
+        state: region,
       },
     };
+
     if (isEdit) {
       const paymentMethodId = cardData.id;
-      PatientService.updatePaymentMethod(patientId, paymentMethodId, reqBody).then((response) => {
+      PaymentMethodService.updatePaymentMethod(patientId, paymentMethodId, reqBody).then((response) => {
         enqueueSnackbar(`${response.message}`, { variant: "success" });
         reloadData();
         onClose();
       });
     } else {
-      PatientService.createPaymentMethod(patientId, reqBody).then((response) => {
+      PaymentMethodService.createPaymentMethod(reqBody).then((response) => {
         enqueueSnackbar(`${response.message}`, { variant: "success" });
         reloadData();
         onClose();
@@ -126,82 +187,165 @@ const PaymentMethodsForm = (props) => {
   return (
     <Dialog
       open={isOpen}
-      title={" "}
-      message={(
-        <>
-          <Typography variant="h3" color="textSecondary">
-            {`${isEdit ? "Edit" : "Add"} Payment Method`}
-          </Typography>
-          <form onSubmit={onFormSubmit}>
-            <Grid className={classes.formContainer}>
-              <Grid>
-                <MaskInput
-                  required
-                  className={classes.gutterBottom}
-                  type="text"
-                  name="cardNumber"
-                  label="Card Number"
-                  margin="dense"
-                  variant="outlined"
-                  value={formFields.cardNumber}
-                  mask="9999/9999/9999/9999"
-                  onChange={(e) => handleInputChnage(e)}
-                />
-                {!!formFields.cardType && formFields.cardType.length ? (
-                  <Typography gutterBottom>{formFields.cardType}</Typography>
-                )
-                  : null}
-              </Grid>
-
-              <Grid>
-                <TextField
-                  required
-                  variant="outlined"
-                  margin="dense"
-                  name="cvv"
-                  id="cvv"
-                  type="number"
-                  label="CVV"
-                  className={classes.gutterBottom}
-                  value={formFields.cvv}
-                  onChange={(e) => handleInputChnage(e)}
-                  onInput={(e) => {
-                    e.target.value = Math.max(0, parseInt(e.target.value, 10)).toString().slice(0, 3);
-                  }}
-                />
-              </Grid>
-
-              <Grid>
-                <MaskInput
-                  required
-                  className={classes.gutterBottom}
-                  type="text"
-                  name="expiryDate"
-                  label="Validity"
-                  margin="dense"
-                  variant="outlined"
-                  value={formFields.expiryDate}
-                  mask="99/99"
-                  onChange={(e) => handleInputChnage(e)}
-                />
-              </Grid>
+      onClose={onClose}
+      fullWidth
+      maxWidth="xs"
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title" className={classes.title}>
+        {`${isEdit ? "Edit" : "Add"} Payment Method`}
+        <IconButton aria-label="Close" className={classes.closeButton} onClick={onClose}>
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent className={classes.content}>
+        <form onSubmit={onFormSubmit}>
+          <Grid className={classes.formContainer}>
+            <Grid>
+              <MaskInput
+                required
+                fullWidth
+                className={classes.gutterBottom}
+                type="text"
+                name="cardNumber"
+                label="Card Number"
+                margin="dense"
+                variant="outlined"
+                value={formFields.cardNumber}
+                mask="9999/9999/9999/9999"
+                onChange={(e) => handleInputChange(e)}
+              />
+              {!!formFields.cardType && formFields.cardType.length ? (
+                <Typography gutterBottom>{formFields.cardType}</Typography>
+              )
+                : null}
+            </Grid>
+            <Grid>
+              <TextField
+                required
+                variant="outlined"
+                margin="dense"
+                name="cvv"
+                id="cvv"
+                type="number"
+                label="CVV"
+                className={classes.gutterBottom}
+                value={formFields.cvv}
+                onChange={(e) => handleInputChange(e)}
+                onInput={(e) => {
+                  e.target.value = Math.max(0, parseInt(e.target.value, 10)).toString().slice(0, 3);
+                }}
+              />
             </Grid>
 
-            <Grid container className={classes.buttonsContainer} justify="space-between">
-              <Button variant="outlined" type="submit">
-                {`${isEdit ? "Edit" : "Add"} Method`}
-              </Button>
-              <Button variant="outlined" onClick={() => onClose()}>
-                Cancel
-              </Button>
+            <Grid>
+              <MaskInput
+                required
+                className={classes.gutterBottom}
+                type="text"
+                name="expiryDate"
+                label="Validity"
+                margin="dense"
+                variant="outlined"
+                value={formFields.expiryDate}
+                mask="99/99"
+                onChange={(e) => handleInputChange(e)}
+              />
             </Grid>
-          </form>
-        </>
-      )}
-      cancelForm={() => onClose()}
-      hideActions
-      size="xs"
-    />
+            <Grid>
+              <TextField
+                className={classes.gutterBottom}
+                label="Address"
+                name="address"
+                value={formFields.address}
+                fullWidth
+                onChange={(e) => handleInputChange(e)}
+                margin="dense"
+                variant="outlined"
+              />
+            </Grid>
+            <Grid>
+              <TextField
+                className={classes.gutterBottom}
+                label="Address Line 2"
+                name="address2"
+                value={formFields.address2}
+                fullWidth
+                onChange={(e) => handleInputChange(e)}
+                margin="dense"
+                variant="outlined"
+              />
+            </Grid>
+            <Grid>
+              <TextField
+                className={classes.gutterBottom}
+                label="City"
+                name="city"
+                value={formFields.city}
+                fullWidth
+                onChange={(e) => handleInputChange(e)}
+                margin="dense"
+                variant="outlined"
+              />
+            </Grid>
+            <Grid>
+              <TextField
+                className={classes.gutterBottom}
+                label="Zip/Postal"
+                name="postal"
+                value={formFields.postal}
+                fullWidth
+                onChange={(e) => handleInputChange(e)}
+                margin="dense"
+                variant="outlined"
+              />
+            </Grid>
+            <Grid>
+              <CountrySelect
+                id="country-select"
+                error={null}
+                name="country-select"
+                helperText=""
+                label="Country"
+                handleChange={(identifier, value) => handleCountryRegion(identifier, value)}
+                country={country}
+                margin="dense"
+                variant="outlined"
+              />
+            </Grid>
+            <Grid>
+              <RegionSelect
+                id="state-select"
+                error={null}
+                name="state-select"
+                helperText=""
+                label="State"
+                handleChange={(identifier, value) => handleCountryRegion(identifier, value)}
+                country={country}
+                region={region}
+                margin="dense"
+                variant="outlined"
+              />
+            </Grid>
+          </Grid>
+
+          <Grid container className={classes.buttonsContainer} justify="space-between">
+            <Button color="primary" variant="outlined" type="submit">
+              {`${isEdit ? "Edit" : "Add"} Method`}
+            </Button>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => onClose()}
+              className={classes.cancelButton}
+            >
+              Cancel
+            </Button>
+          </Grid>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 };
 

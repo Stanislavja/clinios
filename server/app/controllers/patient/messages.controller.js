@@ -20,7 +20,7 @@ const getAllMessages = async (req, res) => {
     , concat(u2.firstname, ' ', u2.lastname) user_to_name
     , concat(p.firstname, ' ', p.lastname) patient_to_from
     , concat(p2.firstname, ' ', p2.lastname) patient_to_name
-    , m.subject , m.message
+    , m.message
     from message m
     left join user u on u.id=m.user_id_from
     left join user u2 on u2.id=m.user_id_to

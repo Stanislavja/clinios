@@ -1,18 +1,27 @@
 const express = require("express");
 const { authJwt } = require("../../middlewares");
-const paymentMethodController = require("../../controllers/patient/paymentMethod.controller");
+const PaymentMethodController = require("../../controllers/patient/paymentMethod.controller");
 
 const router = express.Router();
 
 router.get(
-  "/client-portal/payment-methods",
+  "/patient-portal/payment-methods",
   [authJwt.verifyToken],
-  paymentMethodController.getPaymentMethods
+  PaymentMethodController.getPaymentMethods
 );
 router.post(
-  "/client-portal/payment-methods",
+  "/patient-portal/payment-methods",
   [authJwt.verifyToken],
-  paymentMethodController.createPaymentMethod
+  PaymentMethodController.createPaymentMethod
 );
-
+router.put(
+  "/patient-portal/payment-methods/:id",
+  [authJwt.verifyToken],
+  PaymentMethodController.updatePaymentMethod
+);
+router.delete(
+  "/patient-portal/payment-methods/:id",
+  [authJwt.verifyToken],
+  PaymentMethodController.deletePaymentMethod
+);
 module.exports = router;

@@ -142,7 +142,7 @@ const EncountersContent = (props) => {
 
             <Grid className={classes.inputRow}>
               <Typography className={`${classes.text12}`} color="textPrimary">
-                Notes:
+                Internal Notes:
               </Typography>
               <Typography
                 className={classes.text12}
