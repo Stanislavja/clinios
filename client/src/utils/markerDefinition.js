@@ -272,13 +272,47 @@ export const getMarkerDefinition = (marker) => {
   }
 
   if (marker === 1589) {
-    data = `Reticulocytes are immature red blood cells.  /*Wikipedia*/
-      Increased in acute and chronic hemorrhage, and hemolytic anemias.  /*Labcorp*/
+    data = `Reticulocytes are red blood cells that are still developing. They are also known as immature red blood cells. Reticulocytes are made in the bone marrow and sent into the bloodstream. About two days after they form, they develop into mature red blood cells. These red blood cells move oxygen from your lungs to every cell in the body. /*medlineplus.gov/*/
+    Reticulocytes are increased in acute and chronic hemorrhage, and hemolytic anemias.  /*Labcorp*/
       `;
     // https://www.labcorp.com/tests/001321/iron-and-total-iron-binding-capacity-tibc
   }
 
-  //* **bookmark?***
+  if (marker === 1677) {
+    data = `Sex hormone binding globulin is a protein made by the liver and attaches itself to sex hormones found in both men and women. SHBG controls how much of these hormones are delivered to the body's tissues. SHBG test is mostly used to look at testosterone. SHBG levels can show if there is too much or too little testosterone being used by the body.
+      `;
+    // medlineplus.gov
+  }
+
+  if (marker === 1695) {
+    data = ` Sodium is a type of electrolyte. Electrolytes are electrically charged minerals that help maintain fluid levels and the balance of acids and bases. Sodium also helps the nerves and muscles work properly.  Once the body takes in enough sodium, the kidneys get rid of the rest in urine.    
+      `;
+    // medlineplus.gov
+  }
+
+  if (marker === 1853) {
+    data = `Triglycerides are a type of fat in your body. If you eat more calories than you need, the extra calories are changed into triglycerides. These triglycerides are stored in your fat cells for later use. When your body needs energy, triglycerides are released into your bloodstream to provide fuel for your muscles to work.
+      `;
+    // medlineplus.gov
+  }
+
+  if (marker === 1862) {
+    data = `TSH is made in a gland in the brain called the pituitary. When thyroid levels in your body are low, the pituitary gland makes more TSH. When thyroid levels are high, the pituitary gland makes less TSH.
+      `;
+    // medlineplus.gov
+  }
+
+  if (marker === 1885) {
+    data = `Uric acid is a normal waste product that's made when the body breaks down chemicals called purines.  Most uric acid dissolves in your blood, goes to the kidneys, then leaves the body through your urine. If your body makes too much uric acid or doesn't release enough into your urine, it can make crystals that form in your joints. This condition is known as gout, a form of arthritis that causes painful inflammation in and around the joints.
+      `;
+    // medlineplus.gov
+  }
+
+  if (marker === 0) {
+    data = `White blood cells are part of the immune system. They help your body fight off infections and other diseases.  When you get sick, your body makes more white blood cells to fight the bacteria, viruses, or other foreign substances causing your illness. This increases your white blood count.
+      `;
+    // medlineplus.gov
+  }
 
   if (marker === 1700) {
     data = `Soluble transferrin receptors are protensins in the blood.  /*Own*/
