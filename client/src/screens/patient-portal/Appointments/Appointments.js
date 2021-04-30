@@ -300,12 +300,10 @@ const Appointments = () => {
         }, 1000);
         enqueueSnackbar(
           `Appointment ${isRescheduleAppointment ? "rescheduled" : "requested"} successfully`, {
-            `Appointment ${isRescheduleAppointment ? "rescheduled" : "requested"} successfully`, {
             variant: "success",
           },
         );
       });
-        });
     } else {
       setErrorMessage("Date & Time selection is required");
     }
