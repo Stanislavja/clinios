@@ -341,9 +341,7 @@ export const urlify = (text) => {
   return text.replace(urlRegex, '<a href="$1" target="_blank">$1</a>');
 };
 
-export const capitalize = (string) => {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
+export const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1);
 
 export const getDatesArray = (startDate, endDate, holidays) => {
   const dateArray = [];

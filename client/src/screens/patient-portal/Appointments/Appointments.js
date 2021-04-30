@@ -356,7 +356,7 @@ const Appointments = () => {
         if (!practitionerDateTimes[0][day]) {
           holidays.push(capitalize(day));
         }
-      })
+      });
     }
     const availableDates = getDatesArray(currentDate, oneYear, holidays).map((date) => ({
       title: "Available",
