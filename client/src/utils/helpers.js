@@ -340,3 +340,14 @@ export const urlify = (text) => {
   // eslint-disable-next-line quotes
   return text.replace(urlRegex, '<a href="$1" target="_blank">$1</a>');
 };
+
+export const getDatesArray = (startDate, stopDate) => {
+  var dateArray = [];
+  var currentDate = moment(startDate);
+  var stopDate = moment(stopDate);
+  while (currentDate <= stopDate) {
+    dateArray.push(moment(currentDate).format('YYYY-MM-DD'))
+    currentDate = moment(currentDate).add(1, 'days');
+  }
+  return dateArray;
+}
