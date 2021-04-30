@@ -341,12 +341,18 @@ export const urlify = (text) => {
   return text.replace(urlRegex, '<a href="$1" target="_blank">$1</a>');
 };
 
-export const getDatesArray = (startDate, endDate) => {
+export const capitalize = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+export const getDatesArray = (startDate, endDate, holidays) => {
   const dateArray = [];
   let currentDate = moment(startDate);
   const stopDate = moment(endDate);
   while (currentDate <= stopDate) {
-    dateArray.push(moment(currentDate).format("YYYY-MM-DD"));
+    if (!holidays.includes(moment(currentDate).format("dddd"))) { // skip holidays
+      dateArray.push(moment(currentDate).format("YYYY-MM-DD"));
+    }
     currentDate = moment(currentDate).add(1, "days");
   }
   return dateArray;
