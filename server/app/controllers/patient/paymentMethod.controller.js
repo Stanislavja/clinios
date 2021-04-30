@@ -17,11 +17,12 @@ const getPaymentMethods = async (req, res) => {
 
   let $sql;
   try {
-    $sql = `select id, patient_id, type, account_number, exp, status, stripe_payment_method_token, client_id, created, created_user_id, updated, updated_user_id
-    from payment_method
-    where patient_id=${patient_id}
-    and (status is null or status <> 'D')
-    order by id
+    $sql = `select id, patient_id, type, account_number, exp, status, stripe_payment_method_token, corp_stripe_payment_method_token,
+      client_id, created, created_user_id, updated, updated_user_id
+      from payment_method
+      where patient_id=${patient_id}
+      and (status is null or status <> 'D')
+      order by id
     `;
 
     const dbResponse = await db.query($sql);
@@ -57,13 +58,14 @@ const createPaymentMethod = async (req, res) => {
 
   const db = makeDb(configuration, res);
   const $sql = `select p.id, c.name, c.stripe_api_key from patient p
-  left join client c on c.id=p.client_id
-  where p.id=${patient_id}`;
+    left join client c on c.id=p.client_id
+    where p.id=${patient_id}`;
 
   const getStripeResponse = await db.query($sql);
   try {
+    // Create payment method for client(Doctor) account
     const stripe = Stripe(getStripeResponse[0].stripe_api_key);
-    const paymentMethod = await stripe.paymentMethods.create({
+    const cardData = {
       type: "card",
       card: {
         number: formData.account_number,
@@ -71,17 +73,38 @@ const createPaymentMethod = async (req, res) => {
         exp_year: formData.exp.substring(2, 4),
         cvc: formData.cvc,
       },
-    });
+      billing_details: {
+        address: {
+          line1: formData.address,
+          line2: formData.address2,
+          postal_code: formData.postal,
+          city: formData.city,
+          state: formData.state,
+          country: formData.country,
+        },
+      },
+    };
+
+    const paymentMethod = await stripe.paymentMethods.create(cardData);
 
     formData.stripe_payment_method_token = paymentMethod.id;
+
+    // Attach payment method to a customer for client(Doctor) account
+    await stripe.paymentMethods.attach(paymentMethod.id, {
+      customer: formData.stripe_customer_id,
+    });
+    // End Create payment method for client(Doctor) account
+
+    // Attach this Payment method to Clinios account as well.
+    const cliniosStripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
+    const cliniosPaymentMethod = await cliniosStripe.paymentMethods.create(
+      cardData
+    );
+    formData.corp_stripe_payment_method_token = cliniosPaymentMethod.id;
     formData.account_number = formData.account_number.substring(0, 4);
 
-    // Attach payment method to a customer
-    await stripe.paymentMethods.attach(paymentMethod.id, {
-      customer: formData.customer_id,
-    });
-
-    delete formData.customer_id; // Delete customer_id as it's not on payment_method table
+    delete formData.stripe_customer_id; // Delete customer_id as it's not on payment_method table
+    delete formData.corp_stripe_customer_id; // Delete customer_id as it's not on payment_method table
     delete formData.cvc; // Delete cvc as it's not on payment_method table
     const insertResponse = await db.query("insert into payment_method set ? ", [
       formData,
@@ -96,7 +119,58 @@ const createPaymentMethod = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.message = "Insert not successful";
+    errorMessage.message = err.message;
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+const updatePaymentMethod = async (req, res) => {
+  const { patient_id, id } = req.params;
+  const { type, account_number, exp } = req.body.data;
+  const db = makeDb(configuration, res);
+  try {
+    const $sql = `update payment_method set type='${type}', account_number=${account_number}, exp='${exp}',
+    updated= now(), updated_user_id='${req.user_id}' where patient_id=${patient_id} and id='${id}'`;
+
+    const updateResponse = await db.query($sql);
+    if (!updateResponse.affectedRows) {
+      errorMessage.message = "Update not successful";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = updateResponse;
+    successMessage.message = "Update successful";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Update not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
+const deletePaymentMethod = async (req, res) => {
+  const db = makeDb(configuration, res);
+  const { id } = req.params;
+
+  try {
+    const dbResponse = await db.query(
+      `delete from payment_method where id=${id} and patient_id=${req.user_id}`
+    );
+    if (!dbResponse) {
+      errorMessage.message = "None found";
+      return res.status(status.notfound).send(errorMessage);
+    }
+
+    successMessage.data = dbResponse;
+    successMessage.message = "Delete successful";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "Error deleting payment method";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -106,6 +180,8 @@ const createPaymentMethod = async (req, res) => {
 const PaymentMethod = {
   getPaymentMethods,
   createPaymentMethod,
+  updatePaymentMethod,
+  deletePaymentMethod,
 };
 
 module.exports = PaymentMethod;

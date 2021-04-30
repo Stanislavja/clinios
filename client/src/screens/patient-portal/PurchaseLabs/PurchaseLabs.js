@@ -19,7 +19,7 @@ import { Link } from "react-router-dom";
 
 import Alert from "../../../components/Alert";
 import useAuth from "../../../hooks/useAuth";
-import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
+import PaymentMethodService from "../../../services/patient_portal/payment-method.service";
 import PurchaseLabsService from "../../../services/patient_portal/purchase-lab.service";
 import { paymentMethodType } from "../../../utils/helpers";
 import PaymentMethodsForm from "./components/PaymentMethodsForm";
@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
 const PurchaseLabs = () => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
-  const { lastVisitedPatient } = useAuth();
+  const { lastVisitedPatient, user } = useAuth();
   const [selected, setSelected] = useState([]);
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
@@ -80,7 +80,7 @@ const PurchaseLabs = () => {
   const [showPurchaseConfirmation, setShowPurchaseConfirmation] = useState(false);
 
   const fetchPaymentMethods = useCallback(() => {
-    PatientPortalService.getPaymentMethods(lastVisitedPatient).then((res) => {
+    PaymentMethodService.getPaymentMethods(lastVisitedPatient).then((res) => {
       setPaymentMethods(
         [...res.data, {
           id: 999,
@@ -134,13 +134,18 @@ const PurchaseLabs = () => {
   };
 
   const handleOnSubmit = () => {
+    const paymentMethodForStripe = paymentMethods.filter((p) => p.id === Number(selectedPaymentMethod));
+
     const payload = {
       data: {
         payment_method_id: selectedPaymentMethod,
+        corp_stripe_payment_method_token: paymentMethodForStripe[0].corp_stripe_payment_method_token,
+        customer_id: user.corp_stripe_customer_id, // As Clinios account
         amount: total,
         cpt_ids: selected,
       },
     };
+
     PurchaseLabsService.create(payload).then(() => {
       enqueueSnackbar(`Lab purchased successfully!`, {
         variant: "success",
@@ -274,6 +279,9 @@ const PurchaseLabs = () => {
                       {paymentMethods.map((pm) => (
                         <option key={pm.id} value={pm.id}>
                           {paymentMethodType(pm.type)}
+                          (
+                          {pm.account_number}
+                          )
                         </option>
                       ))}
                     </Select>

@@ -12,7 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import moment from "moment";
 
 import useAuth from "../../../hooks/useAuth";
-import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
+import PaymentMethodService from "../../../services/patient_portal/payment-method.service";
 import { paymentMethodType } from "../../../utils/helpers";
 import PaymentMethodsForm from "./components/PaymentMethodsForm";
 
@@ -85,7 +85,7 @@ const PaymentMethods = () => {
   const [selectedPaymentMethod, setSelectedPayment] = useState(null);
 
   const fetchPaymentMethods = useCallback(() => {
-    PatientPortalService.getPaymentMethods(lastVisitedPatient).then((res) => {
+    PaymentMethodService.getPaymentMethods(lastVisitedPatient).then((res) => {
       setPaymentMethods(res.data);
     });
   }, [lastVisitedPatient]);

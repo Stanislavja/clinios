@@ -145,10 +145,10 @@ class PatientPortalService {
 
   // Payment Methods
   getPaymentMethods(patient) {
-    let url = `${API_BASE}/client-portal/payment-methods`;
+    let url = `${API_BASE}/patient-portal/payment-methods`;
     if (patient) {
       // eslint-disable-next-line max-len
-      url = `${API_BASE}/client-portal/payment-methods/?patient_id=${patient.id}&client_id=${patient.client_id}`;
+      url = `${API_BASE}/patient-portal/payment-methods/?patient_id=${patient.id}&client_id=${patient.client_id}`;
     }
     return axios
       .get(url, {

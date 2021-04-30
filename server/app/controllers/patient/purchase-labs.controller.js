@@ -1,3 +1,4 @@
+const Stripe = require("stripe");
 const { configuration, makeDb } = require("../../db/db.js");
 const {
   errorMessage,
@@ -35,7 +36,6 @@ const getPurchaseLabs = async (req, res) => {
   }
 };
 
-// TODO: incomplete and waiting for further instruction on CLIN-80
 const createPurchaseLabs = async (req, res) => {
   const formData = req.body.data;
   const trancData = {
@@ -44,12 +44,63 @@ const createPurchaseLabs = async (req, res) => {
     type_id: 1,
     dt: new Date(),
     created: new Date(),
-    amount: formData.amount,
+    amount: formData.amount * -1,
     payment_method_id: formData.payment_method_id,
   };
 
   const db = makeDb(configuration, res);
   try {
+    const stripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
+
+    // if customer_id is null then create a customer
+    if (!formData.customer_id) {
+      const getPatientDetails = await db.query(
+        `select id, email, firstname, lastname, gender from patient where id=${req.user_id}`
+      );
+      const existingPatient = getPatientDetails[0];
+
+      const customer = await stripe.customers.create({
+        email: existingPatient.email,
+        name: existingPatient.firstname + existingPatient.lastname,
+      });
+      formData.customer_id = customer.id;
+      // Update patient corp_stripe_customer_id field
+      await db.query(
+        `update patient set corp_stripe_customer_id='${customer.id}' where id=${req.user_id}`
+      );
+      console.log("customer:", customer);
+    }
+    // Attach payment method to a customer for client(Doctor) account
+    await stripe.paymentMethods.attach(
+      formData.corp_stripe_payment_method_token,
+      {
+        customer: formData.customer_id,
+      }
+    );
+
+    const intentData = {
+      payment_method: formData.corp_stripe_payment_method_token,
+      customer: formData.customer_id,
+      description: `${JSON.stringify(formData.cpt_ids)}; patient_id: ${
+        req.user_id
+      }`,
+      amount: Number(formData.amount) * 100, // it accepts cents
+      currency: "usd",
+      confirmation_method: "manual",
+      confirm: true,
+    };
+
+    const intent = await stripe.paymentIntents.create(intentData);
+
+    if (intent.status === "succeeded") {
+      trancData.pp_status = 1;
+      trancData.pp_return = JSON.stringify(intent);
+    } else {
+      console.log("error:", intent);
+      trancData.pp_status = -1;
+      trancData.pp_return = JSON.stringify(intent);
+    }
+
     const insertResponse = await db.query(`insert into tranc set ?`, [
       trancData,
     ]);

@@ -100,7 +100,6 @@ const NewTransactionForm = (props) => {
         data: {
           dt: moment(formFields.date).format("YYYY-MM-DD hh:mm"),
           type_id: formFields.type,
-          payment_type: formFields.paymentType,
           amount: formFields.amount,
           note: formFields.notes,
           payment_method_id: formFields.accountNum,

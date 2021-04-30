@@ -292,7 +292,9 @@ const BasicInfo = (props) => {
           >
             Pharmacy
           </Button>
-          <Button
+
+          {/* // TODO:: David wanted to hide this section.
+      <Button
             disableRipple
             className={clsx({
               [classes.tab]: true,
@@ -301,7 +303,7 @@ const BasicInfo = (props) => {
             onClick={() => handleChange(3)}
           >
             Payment Methods
-          </Button>
+          </Button> */}
         </Grid>
       </Box>
 

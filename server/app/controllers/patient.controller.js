@@ -978,44 +978,45 @@ const getBillingPaymentOptions = async (req, res) => {
 
 const createBilling = async (req, res) => {
   const { patient_id } = req.params;
-  const { payment_type, type_id } = req.body.data;
+  const { type_id } = req.body.data;
 
   const formData = req.body.data;
   formData.patient_id = patient_id;
+  formData.client_id = req.client_id;
   formData.created = new Date();
   formData.created_user_id = req.user_id;
 
   const db = makeDb(configuration, res);
 
   const $sql = `select p.id, c.name, c.stripe_api_key from patient p
-  left join client c on c.id=p.client_id
-  where p.id=${patient_id}`;
+    left join client c on c.id=p.client_id
+    where p.id=${patient_id}`;
 
   const getStripeResponse = await db.query($sql);
 
   // transaction type 2 'Service Credit' and 3 'Payment' are stored in the database as negative numbers, david march 2021
   if (type_id === 2 || type_id === 3) {
-    if (payment_type === "C") {
-      const stripe = Stripe(getStripeResponse[0].stripe_api_key);
-      const intentData = {
-        payment_method: formData.stripe_payment_method_token,
-        customer: formData.customer_id,
-        description: `${formData.note}; patient_id: ${patient_id}`,
-        amount: Number(formData.amount) * 100, // it accepts cents
-        currency: "usd",
-        confirmation_method: "manual",
-        confirm: true,
-      };
-      const intent = await stripe.paymentIntents.create(intentData);
-      if (intent.status === "succeeded") {
-        formData.pp_status = 1;
-        formData.pp_return = JSON.stringify(intent);
-      } else {
-        console.log("error:", intent);
-        formData.pp_status = -1;
-        formData.pp_return = JSON.stringify(intent);
-      }
+    // if (payment_type === "C") {
+    const stripe = Stripe(getStripeResponse[0].stripe_api_key);
+    const intentData = {
+      payment_method: formData.stripe_payment_method_token,
+      customer: formData.customer_id,
+      description: `${formData.note}; patient_id: ${patient_id}`,
+      amount: Number(formData.amount) * 100, // it accepts cents
+      currency: "usd",
+      confirmation_method: "manual",
+      confirm: true,
+    };
+    const intent = await stripe.paymentIntents.create(intentData);
+    if (intent.status === "succeeded") {
+      formData.pp_status = 1;
+      formData.pp_return = JSON.stringify(intent);
+    } else {
+      console.log("error:", intent);
+      formData.pp_status = -1;
+      formData.pp_return = JSON.stringify(intent);
     }
+    // }
     // Change for localdatabase
     formData.amount *= -1;
   }
@@ -2396,23 +2397,33 @@ const createPaymentMethod = async (req, res) => {
   const getStripeResponse = await db.query($sql);
   try {
     const stripe = Stripe(getStripeResponse[0].stripe_api_key);
+    const card = {
+      number: formData.account_number,
+      exp_month: formData.exp.substring(0, 2),
+      exp_year: formData.exp.substring(2, 4),
+      cvc: formData.cvc,
+    };
+
     const paymentMethod = await stripe.paymentMethods.create({
       type: "card",
-      card: {
-        number: formData.account_number,
-        exp_month: formData.exp.substring(0, 2),
-        exp_year: formData.exp.substring(2, 4),
-        cvc: formData.cvc,
-      },
+      card,
     });
 
     formData.stripe_payment_method_token = paymentMethod.id;
-    formData.account_number = formData.account_number.substring(0, 4);
 
     // Attach payment method to a customer
     await stripe.paymentMethods.attach(paymentMethod.id, {
       customer: formData.customer_id,
     });
+
+    // Attach this Payment method to Clinios account as well.
+    const cliniosStripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
+    const cliniosPaymentMethod = await cliniosStripe.paymentMethods.create({
+      type: "card",
+      card,
+    });
+    formData.corp_stripe_payment_method_token = cliniosPaymentMethod.id;
+    formData.account_number = formData.account_number.substring(0, 4);
 
     delete formData.customer_id; // Delete customer_id as it's not on payment_method table
     const insertResponse = await db.query("insert into payment_method set ? ", [
@@ -2428,7 +2439,7 @@ const createPaymentMethod = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.message = "Insert not successful";
+    errorMessage.message = err.message;
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
@@ -2481,7 +2492,7 @@ const deletePaymentMethod = async (req, res) => {
     return res.status(status.created).send(successMessage);
   } catch (err) {
     console.log("err", err);
-    errorMessage.message = "Error deleting layout";
+    errorMessage.message = "Error deleting payment method.";
     return res.status(status.error).send(errorMessage);
   } finally {
     await db.close();
