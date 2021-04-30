@@ -13,7 +13,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 import useDidMountEffect from "../../../hooks/useDidMountEffect";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
-import { getDatesArray } from "../../../utils/helpers";
+import { getDatesArray, capitalize } from "../../../utils/helpers";
 import Calendar from "./Calendar";
 
 const useStyles = makeStyles((theme) => ({
@@ -75,13 +75,6 @@ const useStyles = makeStyles((theme) => ({
 
 const currentDate = moment().format("YYYY-MM-DD");
 const oneYear = moment().add(365, "days").format("YYYY-MM-DD");
-const availableDates = getDatesArray(currentDate, oneYear).map((date) => ({
-
-  title: "Available",
-  date,
-  backgroundColor: "#008B00",
-
-}));
 
 const Appointments = () => {
   const classes = useStyles();
@@ -106,9 +99,21 @@ const Appointments = () => {
   const [isRescheduleAppointment, setIsRescheduleAppointment] = useState(false);
   const location = useLocation();
 
+  const resetUserSelection = () => {
+    setUserSelection({
+      ...userSelection,
+      date: null,
+      time: null,
+    })
+  }
+
   const fetchPractitioners = useCallback(() => {
     PatientPortalService.getPractitioners().then((res) => {
-      setPractitioners(res.data);
+      const doctors = res.data;
+      setPractitioners(doctors);
+      if (doctors.length) {
+        userSelectionHandler("practitioner", 1); // first user
+      }
     });
   }, []);
 
@@ -166,6 +171,10 @@ const Appointments = () => {
       value = moment(date.event._instance.range.start).format("YYYY-MM-DD");
     } else { // day clicked
       value = date;
+      const yearDifference = moment(date).diff(oneYear, 'days');
+      if (moment(value).isBefore() || yearDifference > 0) { // past date and greater than one year
+        return true;
+      }
     }
 
     const type = "date";
@@ -199,12 +208,7 @@ const Appointments = () => {
       }
     } else {
       setErrorMessage(`There are no open times on ${selectedDay}.`);
-      const time = "time";
-      setUserSelection({
-        ...userSelection,
-        [type]: null,
-        [time]: null,
-      });
+      resetUserSelection();
     }
   };
 
@@ -344,12 +348,26 @@ const Appointments = () => {
   };
 
   const getCalendarEvents = useCallback(() => {
+    const holidays = ["Saturday", "Sunday"];
+    const days = ["monday", "tuesday", "wednesday", "thursday", "friday"];
+    if (practitionerDateTimes.length) {
+      days.forEach((day) => {
+        if (!practitionerDateTimes[0][day]) {
+          holidays.push(capitalize(day));
+        }
+      })
+    }
+    const availableDates = getDatesArray(currentDate, oneYear, holidays).map((date) => ({
+      title: "Available",
+      date,
+      backgroundColor: "#008B00",
+    }));
     const events = [...availableDates];
     const userSelectionDate = userSelection.date
       ? [{ title: "Selected", date: userSelection.date }]
       : [];
     return [...events, ...userSelectionDate];
-  }, [userSelection.date]);
+  }, [userSelection.date, showCalendar]);
 
   return (
     <div className={classes.root}>
@@ -501,7 +519,11 @@ const Appointments = () => {
                       <Button
                         type="submit"
                         variant="outlined"
-                        onClick={() => setShowCalendar((prevState) => !prevState)}
+                        onClick={() => {
+                          setShowCalendar((prevState) => !prevState);
+                          setFilteredTimeSlots([]);
+                          resetUserSelection();
+                        }}
                         startIcon={<BackIcon />}
                       >
                         Back
