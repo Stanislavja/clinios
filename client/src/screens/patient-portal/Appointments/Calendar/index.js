@@ -30,10 +30,7 @@ function renderEventContent(eventInfo) {
   );
 }
 
-const currentDate = moment().format("YYYY-MM-DD");
-const oneYear = moment().add(365, "days").format("YYYY-MM-DD");
-
-const EventCalendar = ({ events, onDayClick }) => (
+const EventCalendar = ({ events, onDayClick, onEventClick }) => (
   <FullCalendar
     plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
     headerToolbar={{
@@ -46,15 +43,13 @@ const EventCalendar = ({ events, onDayClick }) => (
     events={events}
     eventContent={renderEventContent}
     dateClick={(arg) => onDayClick(arg.dateStr)}
-    validRange={{
-      start: currentDate,
-      end: oneYear,
-    }}
+    eventClick={(info) => onEventClick(info)}
   />
 );
 
 EventCalendar.propTypes = {
   onDayClick: PropTypes.func.isRequired,
+  onEventClick: PropTypes.func.isRequired,
   events: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,
