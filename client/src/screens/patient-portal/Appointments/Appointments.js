@@ -192,8 +192,9 @@ const Appointments = () => {
       value = moment(date.event._instance.range.start).format("YYYY-MM-DD");
     } else { // day clicked
       value = date;
-      const yearDifference = moment(date).diff(practitionerDateTimes[0]?.date_end || oneYear, "days");
-      if (moment(value).isBefore()) { // past date
+      const lowerDaysDifference = moment(date).diff(currentDate, "days");
+      const upperDaysDifference = moment(date).diff(practitionerDateTimes[0]?.date_end || oneYear, "days");
+      if (lowerDaysDifference < 0) { // past date
         setErrorMessage("Can not select a past date.");
         setFilteredTimeSlots([]);
         setUserSelection({
@@ -202,7 +203,7 @@ const Appointments = () => {
         });
         return;
       }
-      if (yearDifference > 0) { // greater than one year
+      if (upperDaysDifference > 0) { // greater than one year
         setErrorMessage("There are no open times on this day.");
         setFilteredTimeSlots([]);
         setUserSelection({
