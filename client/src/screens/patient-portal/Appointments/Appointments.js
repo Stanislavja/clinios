@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
 
 import {
-  makeStyles, Grid, TextField, Typography, MenuItem, Button,
+  makeStyles, Grid, TextField, Typography, MenuItem, Button, Box,
 } from "@material-ui/core";
+import Alert from '@material-ui/lab/Alert';
 import moment from "moment";
+import BackIcon from '@material-ui/icons/ArrowBack';
+import WarningIcon from '@material-ui/icons/Warning';
 import { useSnackbar } from "notistack";
 import { useHistory, useLocation } from "react-router-dom";
 
@@ -11,6 +14,7 @@ import useAuth from "../../../hooks/useAuth";
 import useDidMountEffect from "../../../hooks/useDidMountEffect";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 import Calendar from "./Calendar";
+import { getDatesArray } from "../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
     width: 400,
   },
   submitBtn: {
-    marginTop: theme.spacing(2),
     minWidth: 120,
   },
   calendarContainer: {
@@ -64,6 +67,20 @@ const useStyles = makeStyles((theme) => ({
     top: "50%",
     transform: "translate(-50%, -50%)",
   },
+  errorIcon: {
+    position: "relative",
+    top: 5
+  },
+}));
+
+const currentDate = moment().format("YYYY-MM-DD");
+const oneYear = moment().add(365, "days").format("YYYY-MM-DD");
+const availableDates = getDatesArray(currentDate, oneYear).map((date) => ({
+
+  title: "Available",
+  date,
+  backgroundColor: "#008B00",
+
 }));
 
 const Appointments = () => {
@@ -71,9 +88,11 @@ const Appointments = () => {
   const { enqueueSnackbar } = useSnackbar();
   const history = useHistory();
   const { user } = useAuth();
+  const [errorMessage, setErrorMessage] = useState("");
   const [practitioners, setPractitioners] = useState([]);
   const [practitionerDateTimes, setPractitionerDateTimes] = useState([]);
   const [timeSlots, setTimeSlots] = useState([]);
+  const [filteredTimeSlots, setFilteredTimeSlots] = useState([]);
   const [bookedAppointments, setBookedAppointments] = useState([]);
   const [appointmentTypes, setAppointmentTypes] = useState([]);
   const [appointmentLength, setAppointmentLength] = useState(null);
@@ -95,9 +114,20 @@ const Appointments = () => {
 
   const fetchBookedAppointments = useCallback(() => {
     PatientPortalService.getBookedAppointments().then((res) => {
-      setBookedAppointments(res.data);
+      const response = res.data;
+      if (response.length) {
+        const appts = response.map((booking) => ({
+          start_time: moment(booking.start_dt).format("hh:mm"),
+          end_time: moment(booking.end_dt).format("hh:mm"),
+          ...booking
+        }));
+        setBookedAppointments(appts);
+      }
     });
   }, []);
+
+  console.log("asdasdasd", bookedAppointments)
+  console.log("timeSlots", timeSlots)
 
   const fetchPractitionersAvailableDates = useCallback((practitionerId) => {
     PatientPortalService.getPractitionerDates().then((res) => {
@@ -133,8 +163,16 @@ const Appointments = () => {
     fetchBookedAppointments();
   }, [fetchPractitioners, fetchBookedAppointments]);
 
-  const calendarSelectionHandler = (value) => {
+  const calendarSelectionHandler = (date) => {
+    let value;
+    if (date?.event) { //event clicked
+      value = moment(date.event._instance.range.start).format("YYYY-MM-DD");
+    } else { //day clicked
+      value = date;
+    }
+
     const type = "date";
+    setErrorMessage("");
     const selectedDay = moment(value, "YYYY-MM-DD HH:mm:ss").format("dddd");
     const isAvailable = practitionerDateTimes[0][selectedDay.toLowerCase()];
     if (isAvailable) {
@@ -142,9 +180,32 @@ const Appointments = () => {
         ...userSelection,
         [type]: value,
       });
+      // filter time slots for selected date
+      const selectedDates = bookedAppointments.filter((x) => moment(x.start_dt).format("YYYY-MM-DD") === value);
+      const selectedTimes = selectedDates.map((time) => ({
+        startTime: time.start_time,
+        endTime: time.end_time,
+      }));
+      const timeSlotMap = timeSlots.map((slot) => ({
+        startTime: moment(slot.split("-")[0].trim(), ["HH.mm"]).format("hh:mm"),
+        endTime: moment(slot.split("-")[1].trim(), ["HH.mm"]).format("hh:mm"),
+      }));
+      const filteredSlots = timeSlotMap.filter(ar => !selectedTimes.find(rm =>
+        (rm.startTime === ar.startTime || ar.endTime === rm.endTime)))
+      console.log({
+        selectedDates, selectedTimes, filteredSlots
+      })
+      setFilteredTimeSlots([...filteredSlots]);
+      if (!filteredSlots.length) {
+        setErrorMessage("There are no open times on this day.")
+      }
     } else {
-      enqueueSnackbar(`There are no open times on ${selectedDay}.`, {
-        variant: "error",
+      setErrorMessage(`There are no open times on ${selectedDay}.`);
+      const time = "time";
+      setUserSelection({
+        ...userSelection,
+        [type]: null,
+        [time]: null
       });
     }
   };
@@ -230,9 +291,7 @@ const Appointments = () => {
         );
       });
     } else {
-      enqueueSnackbar("Date & Time selection is required", {
-        variant: "error",
-      });
+      setErrorMessage("Date & Time selection is required");
     }
   };
 
@@ -248,7 +307,7 @@ const Appointments = () => {
       endHr = parseInt(endTime[0], 10),
       currentHr = startHr,
       currentMin = startMin,
-      previous = currentHr + ":" + pad(currentMin),
+      previous = pad(currentHr) + ":" + pad(currentMin),
       current = "",
       r = [];
 
@@ -279,21 +338,15 @@ const Appointments = () => {
   }, [practitionerDateTimes, appointmentLength]);
 
   const getTimingLabel = (timing) => {
-    const start = timing.split("-")[0].trim();
-    const end = timing.split("-")[1].trim();
+    const start = timing.startTime;
+    const end = timing.endTime;
     const startTime = moment(start, ["HH.mm"]).format("hh:mm A");
     const endTime = moment(end, ["HH.mm"]).format("hh:mm A");
     return `${startTime} - ${endTime}`;
   };
 
   const getCalendarEvents = useCallback(() => {
-    const events = bookedAppointments.map((booking) => (
-      {
-        title: "Booked",
-        date: moment(booking.start_dt).format("YYYY-MM-DD"),
-        backgroundColor: "#ffab40",
-      }
-    ));
+    const events = [...availableDates];
     const userSelectionDate = userSelection.date
       ? [{ title: "Selected", date: userSelection.date }]
       : [];
@@ -376,69 +429,95 @@ const Appointments = () => {
                 >
                   Please select a date and time
                 </Typography>
-                <Grid item lg={8} md={9} sm={12} xs={12}>
-                  <Grid
-                    container
-                    className={classes.calendarContainer}
-                    spacing={3}
-                  >
-                    <Grid item lg={9} md={9} sm={9} xs={9}>
-                      <Calendar
-                        events={getCalendarEvents()}
-                        onDayClick={(val) => calendarSelectionHandler(val)}
-                      />
-                    </Grid>
-                    <Grid item lg={3} md={3} sm={3} xs={3}>
-                      <Typography
-                        variant="h4"
-                        component="h1"
-                        color="textPrimary"
-                        className={classes.currentDate}
-                      >
-                        <span className={classes.noWrap}>
-                          {userSelection.date
-                            ? moment(userSelection.date).format("dddd, MMM DD YYYY")
-                            : moment().format("dddd, MMM DD YYYY")}
-                        </span>
-                      </Typography>
-                      {
-                        timeSlots.map((timing, index) => (
-                          <Button
-                            key={timing}
-                            onClick={() => {
-                              const timingObject = {
-                                id: index,
-                                time_start: timing.split("-")[0].trim(),
-                                time_end: timing.split("-")[1].trim(),
-                              };
-                              userSelectionHandler("time", timingObject);
-                            }}
-                            className={classes.timingBox}
-                            variant={userSelection.time?.id === index ? "contained" : "outlined"}
-                            color="primary"
-                            fullWidth
-                          >
-                            {getTimingLabel(timing)}
-                          </Button>
-                        ))
-                      }
-                    </Grid>
-                  </Grid>
-                  <Grid
-                    container
-                    justify="center"
-                  >
-                    <Button
-                      type="submit"
-                      color="primary"
-                      variant="contained"
-                      className={classes.submitBtn}
-                      onClick={() => appointmentBookingHandler()}
+                <Grid container spacing={5}>
+                  <Grid item lg={8} md={9} sm={12} xs={12}>
+                    <Grid
+                      container
+                      className={classes.calendarContainer}
+                      spacing={3}
                     >
-                      {isRescheduleAppointment ? "Reschedule Appointment" : "Book Appointment"}
-                    </Button>
+                      <Grid item lg={9} md={9} sm={9} xs={9}>
+                        <Calendar
+                          events={getCalendarEvents()}
+                          onDayClick={(val) => calendarSelectionHandler(val)}
+                          onEventClick={(val) => calendarSelectionHandler(val)}
+                        />
+                      </Grid>
+                      <Grid item lg={3} md={3} sm={3} xs={3}>
+                        <Typography
+                          variant="h4"
+                          component="h1"
+                          color="textPrimary"
+                          className={classes.currentDate}
+                        >
+                          <span className={classes.noWrap}>
+                            {userSelection.date
+                              ? moment(userSelection.date).format("dddd, MMM DD YYYY")
+                              : moment().format("dddd, MMM DD YYYY")}
+                          </span>
+                        </Typography>
+                        {
+                          userSelection?.date && filteredTimeSlots.map((timing, index) => (
+                            <Button
+                              key={`${timing.startTime}-${timing.endTime}`}
+                              onClick={() => {
+                                const timingObject = {
+                                  id: index,
+                                  time_start: timing.startTime,
+                                  time_end: timing.endTime,
+                                };
+                                userSelectionHandler("time", timingObject);
+                              }}
+                              className={classes.timingBox}
+                              variant={userSelection.time?.id === index ? "contained" : "outlined"}
+                              color="primary"
+                              fullWidth
+                            >
+                              {getTimingLabel(timing)}
+                            </Button>
+                          ))
+                        }
+                      </Grid>
+                    </Grid>
                   </Grid>
+                  {Boolean(errorMessage.length) && (
+                    <Grid item lg={4} md={3}>
+                      {/* <Typography variant="h5" color="error" align="center">
+                        <WarningIcon className={classes.errorIcon} /> {errorMessage}
+                      </Typography> */}
+                      <Alert severity="error" icon={<WarningIcon fontSize="inherit" />}>
+                        {errorMessage}
+                      </Alert>
+                    </Grid>
+                  )}
                 </Grid>
+                <Box mt={3}>
+                  <Grid item md={8}>
+                    <Grid
+                      container
+                      justify="space-between"
+                      alignItems="center"
+                    >
+                      <Button
+                        type="submit"
+                        variant="outlined"
+                        onClick={() => setShowCalendar(prevState => !prevState)}
+                        startIcon={<BackIcon />}
+                      >
+                        Back
+                      </Button>
+                      <Button
+                        type="submit"
+                        color="primary"
+                        variant="contained"
+                        className={classes.submitBtn}
+                        onClick={() => appointmentBookingHandler()}
+                      >
+                        {isRescheduleAppointment ? "Reschedule Appointment" : "Book Appointment"}
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </Box>
               </>
             ) : (
               <Grid
