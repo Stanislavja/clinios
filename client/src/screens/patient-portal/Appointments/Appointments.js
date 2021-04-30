@@ -99,13 +99,37 @@ const Appointments = () => {
   const [isRescheduleAppointment, setIsRescheduleAppointment] = useState(false);
   const location = useLocation();
 
-  const resetUserSelection = () => {
+  const fetchPractitionersAvailableDates = useCallback((practitionerId) => {
+    PatientPortalService.getPractitionerDates().then((res) => {
+      const resData = res.data;
+      const filtered = resData.filter((x) => x.user_id === practitionerId);
+      setPractitionerDateTimes([...filtered]);
+    });
+  }, []);
+
+  const userSelectionHandler = (type, value) => {
     setUserSelection({
       ...userSelection,
-      date: null,
-      time: null,
-    })
-  }
+      [type]: value,
+    });
+    if (type === "practitioner") {
+      const practitionerId = value;
+      const reqBody = {
+        data: {
+          practitioner_id: practitionerId,
+        },
+      };
+      PatientPortalService.getAppointmentTypesByPractitionerId(reqBody).then((res) => {
+        setAppointmentTypes(res.data);
+      });
+      fetchPractitionersAvailableDates(practitionerId);
+    }
+    if (type === "appointmentType") {
+      let apptLength = appointmentTypes.find((item) => item.id === value)?.length;
+      apptLength = apptLength === 45 ? 60 : apptLength;
+      setAppointmentLength(apptLength);
+    }
+  };
 
   const fetchPractitioners = useCallback(() => {
     PatientPortalService.getPractitioners().then((res) => {
@@ -115,6 +139,7 @@ const Appointments = () => {
         userSelectionHandler("practitioner", 1); // first user
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchBookedAppointments = useCallback(() => {
@@ -128,14 +153,6 @@ const Appointments = () => {
         }));
         setBookedAppointments(appts);
       }
-    });
-  }, []);
-
-  const fetchPractitionersAvailableDates = useCallback((practitionerId) => {
-    PatientPortalService.getPractitionerDates().then((res) => {
-      const resData = res.data;
-      const filtered = resData.filter((x) => x.user_id === practitionerId);
-      setPractitionerDateTimes([...filtered]);
     });
   }, []);
 
@@ -165,15 +182,23 @@ const Appointments = () => {
     fetchBookedAppointments();
   }, [fetchPractitioners, fetchBookedAppointments]);
 
+  const resetUserSelection = () => {
+    setUserSelection({
+      ...userSelection,
+      date: null,
+      time: null,
+    });
+  };
+
   const calendarSelectionHandler = (date) => {
     let value;
     if (date?.event) { // event clicked
       value = moment(date.event._instance.range.start).format("YYYY-MM-DD");
     } else { // day clicked
       value = date;
-      const yearDifference = moment(date).diff(oneYear, 'days');
+      const yearDifference = moment(date).diff(oneYear, "days");
       if (moment(value).isBefore() || yearDifference > 0) { // past date and greater than one year
-        return true;
+        return;
       }
     }
 
@@ -209,30 +234,6 @@ const Appointments = () => {
     } else {
       setErrorMessage(`There are no open times on ${selectedDay}.`);
       resetUserSelection();
-    }
-  };
-
-  const userSelectionHandler = (type, value) => {
-    setUserSelection({
-      ...userSelection,
-      [type]: value,
-    });
-    if (type === "practitioner") {
-      const practitionerId = value;
-      const reqBody = {
-        data: {
-          practitioner_id: practitionerId,
-        },
-      };
-      PatientPortalService.getAppointmentTypesByPractitionerId(reqBody).then((res) => {
-        setAppointmentTypes(res.data);
-      });
-      fetchPractitionersAvailableDates(practitionerId);
-    }
-    if (type === "appointmentType") {
-      let apptLength = appointmentTypes.find((item) => item.id === value)?.length;
-      apptLength = apptLength === 45 ? 60 : apptLength;
-      setAppointmentLength(apptLength);
     }
   };
 
@@ -367,7 +368,7 @@ const Appointments = () => {
       ? [{ title: "Selected", date: userSelection.date }]
       : [];
     return [...events, ...userSelectionDate];
-  }, [userSelection.date, showCalendar]);
+  }, [userSelection.date, practitionerDateTimes]);
 
   return (
     <div className={classes.root}>
@@ -523,6 +524,7 @@ const Appointments = () => {
                           setShowCalendar((prevState) => !prevState);
                           setFilteredTimeSlots([]);
                           resetUserSelection();
+                          setErrorMessage("");
                         }}
                         startIcon={<BackIcon />}
                       >
