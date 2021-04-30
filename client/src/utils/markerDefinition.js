@@ -126,9 +126,10 @@ export const getMarkerDefinition = (marker) => {
     data = `Ferritin is a intracellular protein that stores iron and releases it in a controlled fashion. /*Wikipedia*/
       Ferritin is found in virtually all cells of the body and serves as the cellular storage repository for iron. /*Labcorp*/
       Decreased in iron deficiency anemia and increased in iron overload. Ferritin levels correlate with and are useful in evaluation of total body storage iron. /*Labcorp*/
-      Ferritin is an acute-phase reactant.  /*Labcorp*/
       Low levels of ferritin can be found when iron stores are exhausted, well before the serum iron level has become affected. In the setting of anemia, low serum ferritin is a very specific biomarker for iron deficiency anemia. /*Labcorp*/
-      Serum ferritin decrease is the earliest indicator of iron deficiency if inflammation is absent. /*Labcorp TIBC page*/        
+      Serum ferritin decrease is the earliest indicator of iron deficiency if inflammation is absent. /*Labcorp TIBC page*/
+      Ferritin is an acute-phase reactant.  /*Labcorp*/
+      Ferritin is increased in inflammation, and iron-deficient patients undergoing inflammatory responses may have normal ferritin values. /*https://academic.oup.com/ajcp/article/145/6/778/2836697*/
       `;
     // https://www.labcorp.com/tests/004598/ferritin
   }
