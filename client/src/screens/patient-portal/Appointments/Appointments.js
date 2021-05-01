@@ -139,7 +139,7 @@ const Appointments = () => {
 
   const fetchBookedAppointments = useCallback((practitionerId) => {
     const params = {
-        practitioner_id: practitionerId,
+      practitioner_id: practitionerId,
     };
     PatientPortalService.getBookedAppointments(null, params).then((res) => {
       const response = res.data;
