@@ -120,6 +120,9 @@ const createPurchaseLabs = async (req, res) => {
           await db.query(`insert into tranc_detail set ?`, [trancDetailsData]);
         });
       }
+
+      await db.query(`
+        update patient_cpt set tranc_id=${insertResponse.insertId} where cpt_id IN ('${formData.cpt_ids}')`);
     }
     successMessage.data = insertResponse;
     successMessage.message = "Insert successful";
