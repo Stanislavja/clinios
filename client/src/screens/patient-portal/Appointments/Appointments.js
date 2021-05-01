@@ -175,7 +175,7 @@ const Appointments = () => {
       fetchPractitionersAvailableDates();
       setAppointmentLength(appointment?.appointment_type_length);
     }
-  }, [location?.state]);
+  }, [location?.state, fetchPractitionersAvailableDates]);
 
   useEffect(() => {
     fetchPractitioners();
