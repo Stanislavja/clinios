@@ -245,7 +245,7 @@ const PaymentMethodsForm = (props) => {
                 className={classes.gutterBottom}
                 type="text"
                 name="expiryDate"
-                label="Validity"
+                label="Expiration"
                 margin="dense"
                 variant="outlined"
                 value={formFields.expiryDate}
