@@ -137,8 +137,11 @@ const Appointments = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const fetchBookedAppointments = useCallback(() => {
-    PatientPortalService.getBookedAppointments().then((res) => {
+  const fetchBookedAppointments = useCallback((practitionerId) => {
+    const params = {
+        practitioner_id: practitionerId,
+    };
+    PatientPortalService.getBookedAppointments(null, params).then((res) => {
       const response = res.data;
       if (response.length) {
         const appts = response.map((booking) => ({
@@ -174,8 +177,11 @@ const Appointments = () => {
 
   useEffect(() => {
     fetchPractitioners();
-    fetchBookedAppointments();
-  }, [fetchPractitioners, fetchBookedAppointments]);
+  }, [fetchPractitioners]);
+
+  useDidMountEffect(() => {
+    fetchBookedAppointments(userSelection.practitioner);
+  }, [userSelection.practitioner]);
 
   const resetUserSelection = () => {
     setUserSelection({
