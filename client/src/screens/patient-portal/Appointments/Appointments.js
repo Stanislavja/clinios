@@ -180,7 +180,10 @@ const Appointments = () => {
   }, [fetchPractitioners]);
 
   useDidMountEffect(() => {
-    fetchBookedAppointments(userSelection.practitioner);
+    const practitionerId = userSelection.practitioner;
+    if (practitionerId) {
+      fetchBookedAppointments(practitionerId);
+    }
   }, [userSelection.practitioner]);
 
   const resetUserSelection = () => {
