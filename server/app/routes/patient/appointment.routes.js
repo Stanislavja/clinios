@@ -17,9 +17,9 @@ router.get(
 );
 
 router.get(
-  "/client-portal/current-appointments",
+  "/client-portal/booked-appointments",
   [authJwt.verifyToken],
-  encountersController.getCurrentAppointments
+  encountersController.getBookedAppointments
 );
 
 router.post(

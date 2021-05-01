@@ -73,9 +73,10 @@ const getPractitionerDates = async (req, res) => {
   }
 };
 
-const getCurrentAppointments = async (req, res) => {
+const getBookedAppointments = async (req, res) => {
   const db = makeDb(configuration, res);
   let { client_id } = req.query;
+  const { practitioner_id } = req.query;
 
   if (typeof client_id === "undefined") {
     // eslint-disable-next-line prefer-destructuring
@@ -87,7 +88,7 @@ const getCurrentAppointments = async (req, res) => {
     $sql = `select start_dt, end_dt, patient_id, user_id
     from user_calendar
     where client_id=${req.client_id}
-    and user_id=${req.user_id}
+    and user_id=${practitioner_id}
     and status in ('A', 'R')
     and start_dt>now()`;
 
@@ -217,7 +218,7 @@ const updateAppointment = async (req, res) => {
 const Appointments = {
   getAllPractitioner,
   getPractitionerDates,
-  getCurrentAppointments,
+  getBookedAppointments,
   getAppointmentTypes,
   createAppointment,
   updateAppointment,
