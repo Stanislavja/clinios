@@ -172,6 +172,8 @@ const Appointments = () => {
       }));
       setIsRescheduleAppointment(true);
       setShowCalendar(true);
+      fetchPractitionersAvailableDates();
+      setAppointmentLength(appointment?.appointment_type_length);
     }
   }, [location?.state]);
 
@@ -500,7 +502,7 @@ const Appointments = () => {
                         </Alert>
                       )}
                       <Collapse
-                        in={userSelection?.date && filteredTimeSlots.length}
+                        in={Boolean(userSelection?.date && filteredTimeSlots.length)}
                         timeout={500}
                       >
                         {
