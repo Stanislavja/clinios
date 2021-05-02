@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 import {
   TextField, Button, Grid, Typography, colors,
@@ -19,6 +19,7 @@ import MaskInput from "../../../../../components/common/MaskInput";
 import RegionSelect from "../../../../../components/common/RegionSelect";
 import useAuth from "../../../../../hooks/useAuth";
 import useDidMountEffect from "../../../../../hooks/useDidMountEffect";
+import PatientPortalService from "../../../../../services/patient_portal/patient-portal.service";
 import PaymentMethodService from "../../../../../services/patient_portal/payment-method.service";
 import { paymentMethodType } from "../../../../../utils/helpers";
 
@@ -93,6 +94,21 @@ const PaymentMethodsForm = (props) => {
       setRegion(selectedRegion[0][1]);
     }
   }, [formFields]);
+
+  const fetchProfile = useCallback(() => {
+    PatientPortalService.getProfile().then((res) => {
+      const profile = res.data?.[0];
+      setFormFields((formFieldValues) => ({
+        ...formFieldValues,
+        ...profile,
+      }));
+    });
+  }, []);
+
+
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
 
   const updateFields = () => {
     formFields.cardType = paymentMethodType(cardData.type);

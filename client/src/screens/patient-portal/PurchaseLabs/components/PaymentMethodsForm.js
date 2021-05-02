@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import {
   TextField, Button, Grid, Typography,
@@ -12,11 +12,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/CloseOutlined";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
+import { CountryRegionData } from "react-country-region-selector";
 
 import CountrySelect from "../../../../components/common/CountrySelect";
 import MaskInput from "../../../../components/common/MaskInput";
 import RegionSelect from "../../../../components/common/RegionSelect";
 import useAuth from "../../../../hooks/useAuth";
+import PatientPortalService from "../../../../services/patient_portal/patient-portal.service";
 import PaymentMethodService from "../../../../services/patient_portal/payment-method.service";
 
 const useStyles = makeStyles((theme) => ({
@@ -72,6 +74,20 @@ const PaymentMethodsForm = (props) => {
   const [country, setCountry] = useState("");
   const [region, setRegion] = useState("");
 
+  useEffect(() => {
+    const selectedCountry = CountryRegionData.filter(
+      (countryArray) => countryArray[1] === formFields.country,
+    );
+    if (selectedCountry.length) { // country and state is present in the db
+      setCountry(selectedCountry[0]);
+      const regions = selectedCountry[0][2].split("|").map((regionPair) => {
+        const [regionName = null, regionInShort] = regionPair.split("~");
+        return [regionName, regionInShort];
+      });
+      const selectedRegion = regions.filter((x) => x[1] === formFields.state);
+      setRegion(selectedRegion[0][1]);
+    }
+  }, [formFields]);
 
   const updateFormState = (key, value) => {
     setFormFields({
@@ -93,6 +109,21 @@ const PaymentMethodsForm = (props) => {
       setRegion(value);
     }
   };
+
+  const fetchProfile = useCallback(() => {
+    PatientPortalService.getProfile().then((res) => {
+      const profile = res.data?.[0];
+      setFormFields((formFieldValues) => ({
+        ...formFieldValues,
+        ...profile,
+      }));
+    });
+  }, []);
+
+
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
 
   const onFormSubmit = (e) => {
     e.preventDefault();
