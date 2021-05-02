@@ -98,7 +98,7 @@ const LabValues = (props) => {
         <Table size="small" aria-label="simple table">
           <TableHead>
             <TableRow>
-              <StyledTableCellSm colSpan={2}>Test</StyledTableCellSm>
+              <StyledTableCellSm colSpan={2}>Marker</StyledTableCellSm>
               <StyledTableCellSm>Result</StyledTableCellSm>
               <StyledTableCellSm>Conventional Range</StyledTableCellSm>
               <StyledTableCellSm>Conventional Flag</StyledTableCellSm>

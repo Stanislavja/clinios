@@ -200,7 +200,7 @@ const PurchaseLabs = () => {
                     >
                       click here
                     </Link>
-                    to print your test requisition.
+                    to print your lab requisition.
                   </Typography>
                 </Box>
               </>

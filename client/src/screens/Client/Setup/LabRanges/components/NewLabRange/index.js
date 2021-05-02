@@ -148,7 +148,7 @@ const NewLabRange = (props) => {
           onClose();
         });
       } else {
-        enqueueSnackbar(`Please select test`, { variant: "error" });
+        enqueueSnackbar(`Please select marker`, { variant: "error" });
       }
     } else { /* edit scenario */
       const editItemId = selectedItem.id;
@@ -201,7 +201,7 @@ const NewLabRange = (props) => {
                   <TextField
                     fullWidth
                     autoFocus={!!isNewDialog}
-                    label="Test"
+                    label="Marker"
                     size="small"
                     variant="outlined"
                     value={searchText}

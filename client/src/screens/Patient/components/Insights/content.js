@@ -200,7 +200,7 @@ const InsightsContent = () => {
             <Table size="small">
               <TableHead>
                 <TableRow>
-                  <StyledTableCell>Test</StyledTableCell>
+                  <StyledTableCell>Marker</StyledTableCell>
                   <StyledTableCell>Date</StyledTableCell>
                   <StyledTableCell>Value</StyledTableCell>
                   <StyledTableCell>Range</StyledTableCell>
