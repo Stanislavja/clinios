@@ -141,7 +141,7 @@ const Pharmacies = () => {
         <Grid className={classes.halfSectionCard}>
           <Grid container spacing={3}>
             {pharmacies.map((pharmacy, index) => (
-              <Grid key={pharmacy.name} item md={4}>
+              <Grid key={pharmacy.name} item md={6}>
                 <Typography variant="h4" color="textPrimary">
                   Pharmacy #
                   {" "}
