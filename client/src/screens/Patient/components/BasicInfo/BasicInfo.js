@@ -294,7 +294,7 @@ const BasicInfo = (props) => {
           </Button>
 
           {/* // TODO:: David wanted to hide this section.
-      <Button
+          <Button
             disableRipple
             className={clsx({
               [classes.tab]: true,

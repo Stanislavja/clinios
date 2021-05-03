@@ -1,6 +1,7 @@
 import React from "react";
 
 import { makeStyles, Typography } from "@material-ui/core";
+import moment from "moment";
 import { useLocation } from "react-router-dom";
 
 import { dateFormat } from "../../../utils/helpers";
@@ -22,6 +23,10 @@ const AppointmentConfirmation = () => {
     practitioner, date, time, reschedule,
   } = location.state;
 
+  const { time_start, time_end } = time;
+  const startTime = moment(time_start, ["HH.mm"]).format("h:mm A");
+  const endTime = moment(time_end, ["HH.mm"]).format("h:mm A");
+
   return (
     <div className={classes.root}>
       <Typography
@@ -38,7 +43,7 @@ const AppointmentConfirmation = () => {
         color="textPrimary"
 
       >
-        {`An appointment on ${dateFormat(date)} at ${time.time_start} to ${time.time_end}
+        {`An appointment on ${dateFormat(date)} at ${startTime} to ${endTime}
          with ${practitioner} has been
           ${reschedule ? "Rescheduled" : "Requested"}.`}
       </Typography>

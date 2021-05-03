@@ -329,6 +329,8 @@ export const pickerDateFormat = (date) => moment(date).format("MMM DD YYYY");
 
 export const dateFormat = (date) => moment(date).format("MMM D YYYY");
 
+export const dayDateFormat = (date) => moment(date).format("dddd MMM D YYYY");
+
 export const dateTimeFormat = (date) => moment(date).format("MMM D YYYY hh:mm A");
 
 export const hasValue = (value) => !((typeof value === "undefined") || (value === null));
@@ -339,4 +341,19 @@ export const urlify = (text) => {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   // eslint-disable-next-line quotes
   return text.replace(urlRegex, '<a href="$1" target="_blank">$1</a>');
+};
+
+export const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1);
+
+export const getDatesArray = (startDate, endDate, holidays) => {
+  const dateArray = [];
+  let currentDate = moment(startDate);
+  const stopDate = moment(endDate);
+  while (currentDate <= stopDate) {
+    if (!holidays.includes(moment(currentDate).format("dddd"))) { // skip holidays
+      dateArray.push(moment(currentDate).format("YYYY-MM-DD"));
+    }
+    currentDate = moment(currentDate).add(1, "days");
+  }
+  return dateArray;
 };

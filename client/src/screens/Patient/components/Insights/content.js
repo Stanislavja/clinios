@@ -17,7 +17,7 @@ import Popover from "../../../../components/common/Popover";
 import usePatientContext from "../../../../hooks/usePatientContext";
 import { InsightsTests, MissingTests } from "../../../../static/insightsTests";
 import { calculateFunctionalRange, calculatePercentage } from "../../../../utils/FunctionalRange";
-import { calculateAge } from "../../../../utils/helpers";
+import { calculateAge, hasValue } from "../../../../utils/helpers";
 import { getMarkerDefinition } from "../../../../utils/markerDefinition";
 import { getMarkerInterpretation } from "../../../../utils/markerInterpretation";
 import MarkerDefinition from "../MarkerDefinition";
@@ -106,8 +106,6 @@ const InsightsContent = () => {
     setAnchorEl(null);
     setSelectedMarker(null);
   };
-
-  const hasValue = (value) => !((typeof value === "undefined") || (value === null));
 
   const filterRequiredTests = useCallback(() => {
     if (!!data && data.length) {
