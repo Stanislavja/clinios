@@ -222,7 +222,6 @@ const PurchaseLabs = () => {
                         <TableRow>
                           <TableCell>Select</TableCell>
                           <TableCell>Lab Name</TableCell>
-                          <TableCell>Lab Company</TableCell>
                           <TableCell>Price</TableCell>
                         </TableRow>
                       </TableHead>
@@ -243,7 +242,6 @@ const PurchaseLabs = () => {
                                 />
                               </TableCell>
                               <TableCell>{lab.cpt_name}</TableCell>
-                              <TableCell>{lab.lab_company_name}</TableCell>
                               <TableCell>
                                 $
                                 {lab?.price?.toFixed(2)}
