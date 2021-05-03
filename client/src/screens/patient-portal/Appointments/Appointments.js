@@ -196,12 +196,20 @@ const Appointments = () => {
     });
   };
 
+  const setCalendarTime = (selectedTime) => {
+    const time = "time";
+    setUserSelection((prevUserSelection) => ({
+      ...prevUserSelection,
+      [time]: selectedTime,
+    }));
+  };
+
   const setCalendarDate = (selectedDate) => {
     const date = "date";
-    setUserSelection({
-      ...userSelection,
+    setUserSelection((prevUserSelection) => ({
+      ...prevUserSelection,
       [date]: selectedDate,
-    });
+    }));
   };
 
   const calendarSelectionHandler = (date) => {
@@ -218,6 +226,7 @@ const Appointments = () => {
         setErrorMessage(isPastDate ? "Can not select a past date." : "There are no open times on this day.");
         setFilteredTimeSlots([]);
         setCalendarDate(value);
+        setCalendarTime(null);
         return;
       }
     }
@@ -250,6 +259,7 @@ const Appointments = () => {
     } else {
       setErrorMessage(`There are no open times on ${dayDateFormat(value)}.`);
       setFilteredTimeSlots([]);
+      setCalendarTime(null);
     }
   };
 
@@ -386,7 +396,6 @@ const Appointments = () => {
       : [];
     return [...events, ...userSelectionDate];
   }, [userSelection.date, practitionerDateTimes]);
-  console.log("userSelection", userSelection.date)
 
   return (
     <div className={classes.root}>
