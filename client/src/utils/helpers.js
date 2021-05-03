@@ -329,6 +329,8 @@ export const pickerDateFormat = (date) => moment(date).format("MMM DD YYYY");
 
 export const dateFormat = (date) => moment(date).format("MMM D YYYY");
 
+export const dayDateFormat = (date) => moment(date).format("dddd MMM D YYYY");
+
 export const dateTimeFormat = (date) => moment(date).format("MMM D YYYY hh:mm A");
 
 export const hasValue = (value) => !((typeof value === "undefined") || (value === null));
