@@ -157,15 +157,32 @@ const deletePaymentMethod = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const dbResponse = await db.query(
-      `delete from payment_method where id=${id} and patient_id=${req.user_id}`
-    );
-    if (!dbResponse) {
-      errorMessage.message = "None found";
-      return res.status(status.notfound).send(errorMessage);
-    }
+    const paymentOnTranc = await db.query(
+      `select 1 from payment_method pm
+      left join tran t on t.payment_method_id=pm.id
+      where pm.id=${id} limit 1
+      `);
 
-    successMessage.data = dbResponse;
+      if (paymentOnTranc.length > 0) {
+        const updateResponse = await db.query(
+          `update payment_method set status='D' where id=${id} and patient_id=${req.user_id}`
+        );
+        if (!updateResponse) {
+          errorMessage.message = "None found";
+          return res.status(status.notfound).send(errorMessage);
+        }
+        successMessage.data = updateResponse;
+      } else {
+        const dbResponse = await db.query(
+          `delete from payment_method where id=${id} and patient_id=${req.user_id}`
+        );
+        if (!dbResponse) {
+          errorMessage.message = "None found";
+          return res.status(status.notfound).send(errorMessage);
+        }
+        successMessage.data = dbResponse;
+      }
+
     successMessage.message = "Delete successful";
     return res.status(status.created).send(successMessage);
   } catch (err) {
