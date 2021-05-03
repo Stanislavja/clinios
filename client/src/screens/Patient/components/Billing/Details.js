@@ -155,7 +155,7 @@ const BillingDetails = (props) => {
               ))
               : (
                 <StyledTableRow>
-                  <TableCell colSpan={6}>
+                  <TableCell colSpan={7}>
                     <Typography align="center" variant="body1">
                       No Records Found...
                     </Typography>
