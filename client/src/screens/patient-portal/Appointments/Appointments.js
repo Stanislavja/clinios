@@ -12,7 +12,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
 import useDidMountEffect from "../../../hooks/useDidMountEffect";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
-import { getDatesArray, capitalize } from "../../../utils/helpers";
+import { getDatesArray, capitalize, dayDateFormat } from "../../../utils/helpers";
 import Calendar from "./Calendar";
 
 const useStyles = makeStyles((theme) => ({
@@ -196,8 +196,15 @@ const Appointments = () => {
     });
   };
 
+  const setCalendarDate = (selectedDate) => {
+    const date = "date";
+    setUserSelection({
+      ...userSelection,
+      [date]: selectedDate,
+    });
+  };
+
   const calendarSelectionHandler = (date) => {
-    const type = "date";
     let value;
     if (date?.event) { // event clicked
       value = moment(date.event._instance.range.start).format("YYYY-MM-DD");
@@ -205,34 +212,21 @@ const Appointments = () => {
       value = date;
       const lowerDaysDifference = moment(date).diff(currentDate, "days");
       const upperDaysDifference = moment(date).diff(practitionerDateTimes[0]?.date_end || oneYear, "days");
-      if (lowerDaysDifference < 0) { // past date
-        setErrorMessage("Can not select a past date.");
+      const isPastDate = lowerDaysDifference < 0;
+      const isFutureUnAvailableDate = upperDaysDifference > 0;
+      if (isPastDate || isFutureUnAvailableDate) { // past date or greater than date limit
+        setErrorMessage(isPastDate ? "Can not select a past date." : "There are no open times on this day.");
         setFilteredTimeSlots([]);
-        setUserSelection({
-          ...userSelection,
-          [type]: null,
-        });
-        return;
-      }
-      if (upperDaysDifference > 0) { // greater than one year
-        setErrorMessage("There are no open times on this day.");
-        setFilteredTimeSlots([]);
-        setUserSelection({
-          ...userSelection,
-          [type]: null,
-        });
+        setCalendarDate(value);
         return;
       }
     }
 
+    setCalendarDate(value);
     setErrorMessage("");
     const selectedDay = moment(value, "YYYY-MM-DD HH:mm:ss").format("dddd");
     const isAvailable = practitionerDateTimes[0][selectedDay.toLowerCase()];
     if (isAvailable) {
-      setUserSelection({
-        ...userSelection,
-        [type]: value,
-      });
       // filter time slots for selected date
       // eslint-disable-next-line max-len
       const selectedDates = bookedAppointments.filter((x) => moment(x.start_dt).format("YYYY-MM-DD") === value);
@@ -254,8 +248,8 @@ const Appointments = () => {
         setErrorMessage("There are no open times on this day.");
       }
     } else {
-      setErrorMessage(`There are no open times on ${selectedDay}.`);
-      resetUserSelection();
+      setErrorMessage(`There are no open times on ${dayDateFormat(value)}.`);
+      setFilteredTimeSlots([]);
     }
   };
 
@@ -392,6 +386,7 @@ const Appointments = () => {
       : [];
     return [...events, ...userSelectionDate];
   }, [userSelection.date, practitionerDateTimes]);
+  console.log("userSelection", userSelection.date)
 
   return (
     <div className={classes.root}>
