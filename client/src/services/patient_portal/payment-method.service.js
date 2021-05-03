@@ -28,6 +28,12 @@ class PaymentMethodService {
       )
       .then((res) => res.data);
   }
+
+  deletePaymentMethod(id) {
+    return axios
+      .delete(`${API_BASE}/patient-portal/payment-methods/${id}`, { headers: authHeader() })
+      .then((res) => res.data);
+  }
 }
 
 export default new PaymentMethodService();

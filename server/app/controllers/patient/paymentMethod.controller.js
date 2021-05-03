@@ -157,13 +157,10 @@ const deletePaymentMethod = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const paymentOnTranc = await db.query(
-      `select 1 from payment_method pm
-      left join tran t on t.payment_method_id=pm.id
-      where pm.id=${id} limit 1
-      `);
+    const paymentOnTran = await db.query(`select 1 from tran where payment_method_id=${id} limit 1`);
+    const paymentOnTranc = await db.query(`select 1 from tranc where payment_method_id=${id} limit 1`);
 
-      if (paymentOnTranc.length > 0) {
+      if ((paymentOnTran.length > 0) || (paymentOnTranc.length > 0)) {
         const updateResponse = await db.query(
           `update payment_method set status='D' where id=${id} and patient_id=${req.user_id}`
         );

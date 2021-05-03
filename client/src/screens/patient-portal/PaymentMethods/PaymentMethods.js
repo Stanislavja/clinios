@@ -10,6 +10,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 
 import useAuth from "../../../hooks/useAuth";
 import PaymentMethodService from "../../../services/patient_portal/payment-method.service";
@@ -79,6 +80,7 @@ const StyledTableRow = withStyles(() => ({
 
 const PaymentMethods = () => {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const { lastVisitedPatient } = useAuth();
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [paymentMethodDialog, setNewPaymentDialog] = useState(false);
@@ -100,7 +102,12 @@ const PaymentMethods = () => {
   };
 
   const onItemDelete = (item) => {
-    setSelectedPayment(item);
+    PaymentMethodService.deletePaymentMethod(item.id).then(() => {
+      enqueueSnackbar(`Payment method deleted successfully!`, {
+        variant: "success",
+      });
+      fetchPaymentMethods();
+    });
   };
 
   const closeDialog = () => {
