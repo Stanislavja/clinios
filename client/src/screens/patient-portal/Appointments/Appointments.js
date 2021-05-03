@@ -266,6 +266,7 @@ const Appointments = () => {
   const onFormSubmit = (e) => {
     e.preventDefault();
     setShowCalendar(true);
+    calendarSelectionHandler(currentDate); // select current date by default
   };
 
   const appointmentBookingHandler = () => {
@@ -390,11 +391,11 @@ const Appointments = () => {
       date,
       backgroundColor: "#008B00",
     }));
-    const events = [...availableDates];
-    const userSelectionDate = userSelection.date
-      ? [{ title: "Selected", date: userSelection.date }]
-      : [];
-    return [...events, ...userSelectionDate];
+    // const events = [...availableDates];
+    // const userSelectionDate = userSelection.date
+    //   ? [{ title: "Selected", date: userSelection.date }]
+    //   : [];
+    return availableDates;
   }, [userSelection.date, practitionerDateTimes]);
 
   return (
