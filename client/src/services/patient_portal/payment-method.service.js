@@ -22,9 +22,7 @@ class PaymentMethodService {
       .put(
         `${API_BASE}/patient-portal/payment-methods/${paymentMethodId}`,
         data,
-        {
-          headers: authHeader(),
-        },
+        { headers: authHeader() },
       )
       .then((res) => res.data);
   }
