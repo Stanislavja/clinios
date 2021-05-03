@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 
 import {
   makeStyles, Grid, TextField, Typography, MenuItem, Button, Box, Collapse,
@@ -94,6 +94,9 @@ const Appointments = () => {
   const [isRescheduleAppointment, setIsRescheduleAppointment] = useState(false);
   const location = useLocation();
 
+  const isRescheduledAppointment = useMemo(() => location?.state?.appointment , [location?.state?.appointment]);
+  console.log("location?.state?.appointment", isRescheduledAppointment)
+
   const fetchPractitionersAvailableDates = useCallback((practitionerId) => {
     PatientPortalService.getPractitionerDates().then((res) => {
       const resData = res.data;
@@ -130,7 +133,7 @@ const Appointments = () => {
     PatientPortalService.getPractitioners().then((res) => {
       const doctors = res.data;
       setPractitioners(doctors);
-      if (doctors.length) {
+      if (doctors.length && !isRescheduledAppointment) {
         userSelectionHandler("practitioner", 1); // first user
       }
     });
@@ -157,11 +160,12 @@ const Appointments = () => {
   useEffect(() => {
     const appointment = location?.state?.appointment;
     if (appointment?.patient_id) {
+      console.log(appointment)
       const date = moment(appointment.start_dt).format("YYYY-MM-DD");
-      const minutesFromStartDate = moment(appointment.start_dt).minutes();
-      const time = `${moment(appointment.start_dt).hours()}:${minutesFromStartDate < 10
-        ? `0${minutesFromStartDate}`
-        : minutesFromStartDate}am`;
+      const time = {
+        time_start: moment(appointment.start_dt).format("HH:mm"),
+        time_end: moment(appointment.end_dt).format("HH:mm"),
+      }
       setUserSelection((prevUserSelection) => ({
         ...prevUserSelection,
         ...appointment,
@@ -172,10 +176,11 @@ const Appointments = () => {
       }));
       setIsRescheduleAppointment(true);
       setShowCalendar(true);
-      fetchPractitionersAvailableDates();
+      fetchPractitionersAvailableDates(appointment?.user_id);
       setAppointmentLength(appointment?.appointment_type_length);
     }
   }, [location?.state, fetchPractitionersAvailableDates]);
+  console.log("userselection", userSelection)
 
   useEffect(() => {
     fetchPractitioners();
