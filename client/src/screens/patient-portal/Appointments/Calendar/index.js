@@ -6,6 +6,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction"; // needed for dayClick
 import timeGridPlugin from "@fullcalendar/timegrid";
 import PropTypes from "prop-types";
+import "./calendar.css";
 
 function renderEventContent(eventInfo) {
   return (
@@ -43,6 +44,7 @@ const EventCalendar = ({ events, onDayClick, onEventClick }) => (
     eventContent={renderEventContent}
     dateClick={(arg) => onDayClick(arg.dateStr)}
     eventClick={(info) => onEventClick(info)}
+    selectable
   />
 );
 
