@@ -244,14 +244,11 @@ const PaymentMethodsForm = (props) => {
                 margin="dense"
                 name="cvv"
                 id="cvv"
-                type="number"
+                type="text"
                 label="CVV"
                 className={classes.gutterBottom}
                 value={formFields.cvv}
                 onChange={(e) => handleInputChange(e)}
-                onInput={(e) => {
-                  e.target.value = Math.max(0, parseInt(e.target.value, 10)).toString().slice(0, 3);
-                }}
               />
             </Grid>
 

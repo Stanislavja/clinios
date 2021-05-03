@@ -52,7 +52,7 @@ const createPaymentMethod = async (req, res) => {
   // const { type, account_number, exp } = req.body.data;
   const formData = req.body.data;
   formData.client_id = req.client_id;
-  formData.created_user_id = req.user_id;
+  //formData.created_user_id = req.user_id;
   formData.patient_id = patient_id;
   formData.created = new Date();
 
