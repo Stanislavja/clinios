@@ -225,7 +225,6 @@ class PatientPortalService {
 
 
   // test list
-
   getTestList(patient) {
     let url = `${API_BASE}/client-portal/lab_requisitions/test-list`;
     if (patient) {

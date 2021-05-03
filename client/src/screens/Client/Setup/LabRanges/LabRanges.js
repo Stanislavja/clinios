@@ -261,7 +261,7 @@ const LabRanges = () => {
           <Table size="small" className={classes.table}>
             <TableHead>
               <TableRow>
-                <StyledTableCellSm>Test</StyledTableCellSm>
+                <StyledTableCellSm>Marker</StyledTableCellSm>
                 <StyledTableCellSm>Sequence</StyledTableCellSm>
                 <StyledTableCellSm>Compare Item</StyledTableCellSm>
                 <StyledTableCellSm>Operator</StyledTableCellSm>

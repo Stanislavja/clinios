@@ -93,7 +93,7 @@ const TestGraph = () => {
           setCptName(data);
         },
         () => {
-          enqueueSnackbar(`Unable to fetch test by id ${testId}.`, {
+          enqueueSnackbar(`Unable to fetch by id ${testId}.`, {
             variant: "error",
           });
         }

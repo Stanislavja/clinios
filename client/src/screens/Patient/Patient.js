@@ -277,7 +277,7 @@ const Patient = () => {
       y,
       w: 6,
       h: 6,
-      i: "All Tests",
+      i: "All Markers",
     };
     setLayout([
       ...firstlayout,
@@ -1163,7 +1163,7 @@ const Patient = () => {
       {!!tests.expandDialog && (
         <Dialog
           open={tests.expandDialog}
-          title="All Tests"
+          title="All Markers"
           message={<TestsCardContent />}
           applyForm={() => dispatch(toggleTestsExpandDialog())}
           cancelForm={() => dispatch(toggleTestsExpandDialog())}
@@ -1344,9 +1344,9 @@ const Patient = () => {
                 updateMinHeight={updateMinHeight}
               />
             </Grid>
-            <Grid key="All Tests">
+            <Grid key="All Markers">
               <Card
-                title="All Tests"
+                title="All Markers"
                 data={<TestsCardContent />}
                 showActions
                 primaryButtonText="Expand"

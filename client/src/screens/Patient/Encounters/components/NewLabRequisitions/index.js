@@ -139,7 +139,7 @@ const Requisitions = (props) => {
     <>
       <Grid className={classes.heading} container justify="space-between">
         <Typography variant="h3" color="textSecondary">
-          Select Lab Test
+          Select Lab
         </Typography>
       </Grid>
       <Grid container spacing={1}>

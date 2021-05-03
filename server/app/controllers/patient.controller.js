@@ -2258,8 +2258,9 @@ const getRequisitions = async (req, res) => {
         left join lab_company lc on lc.id=c.lab_company_id
         where pc.patient_id=${patient_id}
         and pc.completed_dt is null
-        order by c.name
-        limit 100`
+        order by pc.created desc
+        limit 500
+        `
     );
     if (!dbResponse) {
       errorMessage.message = "None found";

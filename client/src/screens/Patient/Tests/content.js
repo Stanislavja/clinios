@@ -211,7 +211,7 @@ const TestsContent = () => {
         <Table size="small" className={classes.table}>
           <TableHead>
             <TableRow>
-              <StyledTableCell colSpan={2}>Test</StyledTableCell>
+              <StyledTableCell colSpan={2}>Marker</StyledTableCell>
               <StyledTableCell>Last Date</StyledTableCell>
               <StyledTableCell>Last Result</StyledTableCell>
               <StyledTableCell>Conv Range</StyledTableCell>

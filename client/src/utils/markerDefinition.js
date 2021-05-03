@@ -181,9 +181,10 @@ export const getMarkerDefinition = (marker) => {
   }
 
   if (marker === 948) {
-    data = `Hemoglobin is a protein in the red blood cells that carries oxygen from the lungs to the rest of the body.
-      `;
-    // medlineplus.gov
+    data = `Hemoglobin is the iron-containing oxygen-transport protein in red blood cells. Hemoglobin in blood carries oxygen from the lungs to the rest of the body. There it releases the oxygen to permit aerobic respiration to provide energy to power the functions of the organism in the process called metabolism.
+      `; //wiki edited
+
+    // old medlineplus.gov: Hemoglobin is a protein in the red blood cells that carries oxygen from the lungs to the rest of the body.
   }
 
   if (marker === 999) {

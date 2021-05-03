@@ -66,7 +66,7 @@ const PurchaseConfirm = ({
           {" "}
           <Link to="/patient/labs-requisition">click here</Link>
           {" "}
-          to print your test requisition.
+          to print your lab requisition.
         </Typography>
       </DialogContent>
       <DialogActions classes={{ root: classes.actionsContainer }}>

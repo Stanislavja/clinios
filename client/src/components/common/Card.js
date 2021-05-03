@@ -188,7 +188,7 @@ const PatientCard = (props) => {
           <Typography className={classes.title}>
             {title}
           </Typography>
-          {title === "All Tests" && (
+          {title === "All Markers" && (
             <>
               <Icon
                 className={classes.graphIcon}
