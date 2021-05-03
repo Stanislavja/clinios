@@ -391,12 +391,8 @@ const Appointments = () => {
       date,
       backgroundColor: "#008B00",
     }));
-    // const events = [...availableDates];
-    // const userSelectionDate = userSelection.date
-    //   ? [{ title: "Selected", date: userSelection.date }]
-    //   : [];
     return availableDates;
-  }, [userSelection.date, practitionerDateTimes]);
+  }, [practitionerDateTimes]);
 
   return (
     <div className={classes.root}>
