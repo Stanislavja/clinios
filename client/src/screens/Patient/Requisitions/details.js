@@ -113,7 +113,7 @@ const RequisitionsDetails = (props) => {
             <TableRow>
               <StyledTableCell>Created</StyledTableCell>
               <StyledTableCell>ID</StyledTableCell>
-              <StyledTableCell>CPT ID</StyledTableCell>
+              <StyledTableCell>Marker ID</StyledTableCell>
               <StyledTableCell>Name</StyledTableCell>
               <StyledTableCell>Lab Name</StyledTableCell>
               <StyledTableCell align="center">Actions</StyledTableCell>
