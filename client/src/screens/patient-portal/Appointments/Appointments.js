@@ -69,6 +69,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const currentDate = moment().format("YYYY-MM-DD");
+const tomorrowDate = moment().add(1, "days").format("YYYY-MM-DD");
 const oneYear = moment().add(365, "days").format("YYYY-MM-DD");
 
 const Appointments = () => {
@@ -222,8 +223,10 @@ const Appointments = () => {
       const upperDaysDifference = moment(date).diff(practitionerDateTimes[0]?.date_end || oneYear, "days");
       const isPastDate = lowerDaysDifference < 0;
       const isFutureUnAvailableDate = upperDaysDifference > 0;
-      if (isPastDate || isFutureUnAvailableDate) { // past date or greater than date limit
-        setErrorMessage(isPastDate ? "Can not select a past date." : "There are no open times on this day.");
+      const isTodayDate = lowerDaysDifference === 0;
+      if (isTodayDate || isPastDate || isFutureUnAvailableDate) { // past date or greater than date limit
+        // eslint-disable-next-line max-len
+        setErrorMessage(isPastDate ? "Can not select a past date." : isTodayDate ? `There are no open times on ${dayDateFormat(value)}.` : "There are no open times on this day.");
         setFilteredTimeSlots([]);
         setCalendarDate(value);
         setCalendarTime(null);
@@ -266,7 +269,7 @@ const Appointments = () => {
   const onFormSubmit = (e) => {
     e.preventDefault();
     setShowCalendar(true);
-    calendarSelectionHandler(currentDate); // select current date by default
+    calendarSelectionHandler(tomorrowDate); // select tomorrow date by default
   };
 
   const appointmentBookingHandler = () => {
@@ -386,7 +389,8 @@ const Appointments = () => {
       });
     }
     const dateLimit = practitionerDateTimes[0].date_end || oneYear;
-    const availableDates = getDatesArray(currentDate, dateLimit, holidays).map((date) => ({
+    // using tomorrowDate: allow user to book appts from tomorrow
+    const availableDates = getDatesArray(tomorrowDate, dateLimit, holidays).map((date) => ({
       title: "Available",
       date,
       backgroundColor: "#008B00",
