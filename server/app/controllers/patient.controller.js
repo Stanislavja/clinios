@@ -994,9 +994,8 @@ const createBilling = async (req, res) => {
 
   const getStripeResponse = await db.query($sql);
 
-  // transaction type 2 'Service Credit' and 3 'Payment' are stored in the database as negative numbers, david march 2021
-  if (type_id === 2 || type_id === 3) {
-    // if (payment_type === "C") {
+  // transaction type 3 'Payment' and 3 'Payment refund' goes to stripe
+  if (type_id === 3 || type_id === 4) {
     const stripe = Stripe(getStripeResponse[0].stripe_api_key);
     const intentData = {
       payment_method: formData.stripe_payment_method_token,
@@ -1016,7 +1015,10 @@ const createBilling = async (req, res) => {
       formData.pp_status = -1;
       formData.pp_return = JSON.stringify(intent);
     }
-    // }
+  }
+
+  // transaction type 2 'Service Credit' and 3 'Payment' are stored in the database as negative numbers, david march 2021
+  if (type_id === 2 || type_id === 3) {
     // Change for localdatabase
     formData.amount *= -1;
   }
