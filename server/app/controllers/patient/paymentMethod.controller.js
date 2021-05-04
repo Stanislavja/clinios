@@ -52,7 +52,6 @@ const createPaymentMethod = async (req, res) => {
   // const { type, account_number, exp } = req.body.data;
   const formData = req.body.data;
   formData.client_id = req.client_id;
-  formData.created_user_id = req.user_id;
   formData.patient_id = patient_id;
   formData.created = new Date();
 
@@ -127,14 +126,73 @@ const createPaymentMethod = async (req, res) => {
 };
 
 const updatePaymentMethod = async (req, res) => {
-  const { patient_id, id } = req.params;
-  const { type, account_number, exp } = req.body.data;
-  const db = makeDb(configuration, res);
-  try {
-    const $sql = `update payment_method set type='${type}', account_number=${account_number}, exp='${exp}',
-    updated= now(), updated_user_id='${req.user_id}' where patient_id=${patient_id} and id='${id}'`;
+  const { id } = req.params;
+  const formData = req.body.data;
+  formData.updated_user_id = req.user_id;
+  formData.patient_id = req.user_id;
+  formData.updated = new Date();
 
-    const updateResponse = await db.query($sql);
+  const db = makeDb(configuration, res);
+  const $sql = `select p.id, c.name, c.stripe_api_key from patient p
+    left join client c on c.id=p.client_id
+    where p.id=${req.user_id}`;
+
+  const getStripeResponse = await db.query($sql);
+  try {
+    // Create payment method for client(Doctor) account
+    const stripe = Stripe(getStripeResponse[0].stripe_api_key);
+    const cardData = {
+      card: {
+        exp_month: formData.exp.substring(0, 2),
+        exp_year: formData.exp.substring(2, 4),
+      },
+      billing_details: {
+        address: {
+          line1: formData.address,
+          line2: formData.address2,
+          postal_code: formData.postal,
+          city: formData.city,
+          state: formData.state,
+          country: formData.country,
+        },
+      },
+    };
+
+    // update payment method on stripe account
+    stripe.paymentMethods
+      .update(formData.stripe_payment_method_token, cardData)
+      .then(
+        () => {
+          // nothing to do with the result
+        },
+        (error) => {
+          console.info("Doctor payment method update error:", error.message);
+        }
+      );
+    // update payment method on Clinios stripe account
+    const cliniosStripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
+    cliniosStripe.paymentMethods
+      .update(formData.stripe_payment_method_token, cardData)
+      .then(
+        () => {
+          // Nothing to do with result
+        },
+        (error) => {
+          console.info("Corp payment method update error:", error.message);
+        }
+      );
+
+    formData.account_number = formData.account_number.substring(0, 4);
+
+    delete formData.stripe_customer_id; // Delete customer_id as it's not on payment_method table
+    delete formData.corp_stripe_customer_id; // Delete customer_id as it's not on payment_method table
+    delete formData.cvc; // Delete cvc as it's not on payment_method table
+
+    const updateResponse = await db.query(
+      `update payment_method set ? where patient_id=${req.user_id} and id='${id}'`,
+      formData
+    );
+
     if (!updateResponse.affectedRows) {
       errorMessage.message = "Update not successful";
       return res.status(status.notfound).send(errorMessage);
@@ -157,15 +215,33 @@ const deletePaymentMethod = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const dbResponse = await db.query(
-      `delete from payment_method where id=${id} and patient_id=${req.user_id}`
+    const paymentOnTran = await db.query(
+      `select 1 from tran where payment_method_id=${id} limit 1`
     );
-    if (!dbResponse) {
-      errorMessage.message = "None found";
-      return res.status(status.notfound).send(errorMessage);
+    const paymentOnTranc = await db.query(
+      `select 1 from tranc where payment_method_id=${id} limit 1`
+    );
+
+    if (paymentOnTran.length > 0 || paymentOnTranc.length > 0) {
+      const updateResponse = await db.query(
+        `update payment_method set status='D' where id=${id} and patient_id=${req.user_id}`
+      );
+      if (!updateResponse) {
+        errorMessage.message = "None found";
+        return res.status(status.notfound).send(errorMessage);
+      }
+      successMessage.data = updateResponse;
+    } else {
+      const dbResponse = await db.query(
+        `delete from payment_method where id=${id} and patient_id=${req.user_id}`
+      );
+      if (!dbResponse) {
+        errorMessage.message = "None found";
+        return res.status(status.notfound).send(errorMessage);
+      }
+      successMessage.data = dbResponse;
     }
 
-    successMessage.data = dbResponse;
     successMessage.message = "Delete successful";
     return res.status(status.created).send(successMessage);
   } catch (err) {

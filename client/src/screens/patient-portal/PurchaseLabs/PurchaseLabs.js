@@ -277,9 +277,9 @@ const PurchaseLabs = () => {
                       {paymentMethods.map((pm) => (
                         <option key={pm.id} value={pm.id}>
                           {paymentMethodType(pm.type)}
-                          (
-                          {pm.account_number}
-                          )
+                          {pm.id !== 999 ? (
+                            ` (${pm.account_number})`
+                          ) : ""}
                         </option>
                       ))}
                     </Select>

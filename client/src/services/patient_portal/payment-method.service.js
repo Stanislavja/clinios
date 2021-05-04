@@ -22,10 +22,14 @@ class PaymentMethodService {
       .put(
         `${API_BASE}/patient-portal/payment-methods/${paymentMethodId}`,
         data,
-        {
-          headers: authHeader(),
-        },
+        { headers: authHeader() },
       )
+      .then((res) => res.data);
+  }
+
+  deletePaymentMethod(id) {
+    return axios
+      .delete(`${API_BASE}/patient-portal/payment-methods/${id}`, { headers: authHeader() })
       .then((res) => res.data);
   }
 }
