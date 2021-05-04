@@ -102,7 +102,7 @@ const NewTransactionForm = (props) => {
           type_id: formFields.type,
           amount: formFields.amount,
           note: formFields.notes,
-          payment_method_id: formFields.accountNum,
+          payment_method_id: (formFields.accountNum !== "") ? formFields.accountNum : null,
           stripe_payment_method_token: selectedPaymentMethod[0]?.stripe_payment_method_token,
           customer_id: patientInfo.data.stripe_customer_id,
         },
