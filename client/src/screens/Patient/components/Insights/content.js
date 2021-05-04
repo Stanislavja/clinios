@@ -205,8 +205,11 @@ const InsightsContent = () => {
                   <StyledTableCell>Flag</StyledTableCell>
                   <StyledTableCell>Iron Deficiency</StyledTableCell>
                   <StyledTableCell>Blood Loss</StyledTableCell>
-                  <StyledTableCell>Inflammation</StyledTableCell>
-                  <StyledTableCell>Hemolytic</StyledTableCell>
+                  <StyledTableCell>Anemia of Inflammation</StyledTableCell>
+                  <StyledTableCell>Hemolytic Anemia</StyledTableCell>
+                  <StyledTableCell>Hemochromatosis / Hemosiderosis</StyledTableCell>
+                  <StyledTableCell>Sideroblastic Anemia</StyledTableCell>
+                  <StyledTableCell>Iron Poisoning</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -249,6 +252,21 @@ const InsightsContent = () => {
                         {row.hemolyticNormal ? <span className={classes.mr}>N</span> : ""}
                         {renderIcon(row.hemolytic)}
                         {calculateStatus(flag.icon, row.hemolytic, flag.number)}
+                      </TableCell>
+                      <TableCell>
+                        {row.hemochromatosisNormal ? <span className={classes.mr}>N</span> : ""}
+                        {renderIcon(row.hemochromatosis)}
+                        {calculateStatus(flag.icon, row.hemochromatosis, flag.number)}
+                      </TableCell>
+                      <TableCell>
+                        {row.sideroblasticNormal ? <span className={classes.mr}>N</span> : ""}
+                        {renderIcon(row.sideroblastic)}
+                        {calculateStatus(flag.icon, row.sideroblastic, flag.number)}
+                      </TableCell>
+                      <TableCell>
+                        {row.ironPoisoningNormal ? <span className={classes.mr}>N</span> : ""}
+                        {renderIcon(row.ironPoisoning)}
+                        {calculateStatus(flag.icon, row.ironPoisoning, flag.number)}
                       </TableCell>
                     </StyledTableRow>
                   );
