@@ -9,7 +9,6 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/CloseOutlined";
-import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 import { CountryRegionData } from "react-country-region-selector";
@@ -59,11 +58,11 @@ const useStyles = makeStyles((theme) => ({
 const PaymentMethodsForm = (props) => {
   const classes = useStyles();
   const { user } = useAuth();
-  const patientId = user.id; // On the patient portal the signed-in user will always be a patient and by user.id we use the id of the currently signed-in user, Arslan
   const { enqueueSnackbar } = useSnackbar();
   const {
     isOpen, onClose, reloadData, cardData,
   } = props;
+
   const isEdit = Boolean(cardData);
 
   const [formFields, setFormFields] = useState({
@@ -113,8 +112,7 @@ const PaymentMethodsForm = (props) => {
   const updateFields = () => {
     formFields.cardType = paymentMethodType(cardData.type);
     formFields.cardNumber = cardData.account_number;
-    // formFields.cvv = cardData.account_number;
-    formFields.expiryDate = moment(cardData.exp).format("MM-YY");
+    formFields.expiryDate = cardData.exp;
     setFormFields({ ...formFields });
   };
 
@@ -166,7 +164,15 @@ const PaymentMethodsForm = (props) => {
 
     if (isEdit) {
       const paymentMethodId = cardData.id;
-      PaymentMethodService.updatePaymentMethod(patientId, paymentMethodId, reqBody).then((response) => {
+      const updateFormData = {
+        ...reqBody,
+        data: {
+          ...reqBody.data,
+          corp_stripe_payment_method_token: cardData.corp_stripe_payment_method_token,
+          stripe_payment_method_token: cardData.stripe_payment_method_token,
+        },
+      };
+      PaymentMethodService.updatePaymentMethod(paymentMethodId, updateFormData).then((response) => {
         enqueueSnackbar(`${response.message}`, { variant: "success" });
         reloadData();
         onClose();
@@ -240,18 +246,16 @@ const PaymentMethodsForm = (props) => {
             <Grid>
               <TextField
                 required
+                disabled={isEdit}
                 variant="outlined"
                 margin="dense"
                 name="cvv"
                 id="cvv"
-                type="number"
+                type="text"
                 label="CVV"
                 className={classes.gutterBottom}
                 value={formFields.cvv}
                 onChange={(e) => handleInputChange(e)}
-                onInput={(e) => {
-                  e.target.value = Math.max(0, parseInt(e.target.value, 10)).toString().slice(0, 3);
-                }}
               />
             </Grid>
 
@@ -378,6 +382,8 @@ PaymentMethodsForm.propTypes = {
     type: PropTypes.string,
     exp: PropTypes.string,
     account_number: PropTypes.string,
+    corp_stripe_payment_method_token: PropTypes.string,
+    stripe_payment_method_token: PropTypes.string,
   }),
 };
 
