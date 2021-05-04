@@ -3,7 +3,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import {
   makeStyles, Grid, TextField, Typography, MenuItem, Button, Box, Collapse,
 } from "@material-ui/core";
-import BackIcon from "@material-ui/icons/ArrowBack";
 import Alert from "@material-ui/lab/Alert";
 import moment from "moment";
 import { useSnackbar } from "notistack";
@@ -189,14 +188,6 @@ const Appointments = () => {
     }
   }, [userSelection.practitioner]);
 
-  const resetUserSelection = () => {
-    setUserSelection({
-      ...userSelection,
-      date: null,
-      time: null,
-    });
-  };
-
   const setCalendarTime = (selectedTime) => {
     const time = "time";
     setUserSelection((prevUserSelection) => ({
@@ -269,7 +260,9 @@ const Appointments = () => {
   const onFormSubmit = (e) => {
     e.preventDefault();
     setShowCalendar(true);
-    practitionerDateTimes.length && calendarSelectionHandler(tomorrowDate); // select tomorrow date by default
+    if (practitionerDateTimes.length) {
+      calendarSelectionHandler(tomorrowDate); // select tomorrow date by default
+    }
   };
 
   const appointmentBookingHandler = () => {
@@ -296,33 +289,33 @@ const Appointments = () => {
       PatientPortalService[isRescheduleAppointment
         ? "updateAppointment"
         : "bookAppointment"](reqBody, userSelection?.id).then(() => {
-          setTimeout(() => {
-            setShowCalendar(false);
-            setAppointmentTypes([]);
-            setUserSelection({
-              ...userSelection,
-              practitioner: "",
-              appointmentType: "",
-              date: null,
-              time: null,
-            });
-            history.push({
-              pathname: "/patient/appointments/confirmation",
-              state: {
-                practitioner: selectedPractitioner?.[0]?.name,
-                appointmentLength: selectedAppointemntTypeLength,
-                date: userSelection?.date,
-                time: userSelection?.time,
-                reschedule: isRescheduleAppointment,
-              },
-            });
-          }, 1000);
-          enqueueSnackbar(
-            `Appointment ${isRescheduleAppointment ? "rescheduled" : "requested"} successfully`, {
+        setTimeout(() => {
+          setShowCalendar(false);
+          setAppointmentTypes([]);
+          setUserSelection({
+            ...userSelection,
+            practitioner: "",
+            appointmentType: "",
+            date: null,
+            time: null,
+          });
+          history.push({
+            pathname: "/patient/appointments/confirmation",
+            state: {
+              practitioner: selectedPractitioner?.[0]?.name,
+              appointmentLength: selectedAppointemntTypeLength,
+              date: userSelection?.date,
+              time: userSelection?.time,
+              reschedule: isRescheduleAppointment,
+            },
+          });
+        }, 1000);
+        enqueueSnackbar(
+          `Appointment ${isRescheduleAppointment ? "rescheduled" : "requested"} successfully`, {
             variant: "success",
           },
-          );
-        });
+        );
+      });
     } else {
       setErrorMessage("Date & Time selection is required");
     }
@@ -456,7 +449,7 @@ const Appointments = () => {
               className={classes.submitBtn}
             >
               Submit
-                </Button>
+            </Button>
           </Grid>
         </form>
       </Grid>
@@ -561,7 +554,7 @@ const Appointments = () => {
           >
             <Typography variant="h3" gutterBottom>
               No time slots available for this practitioner
-          </Typography>
+            </Typography>
           </Grid>
         ))}
     </div>
