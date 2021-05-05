@@ -261,7 +261,12 @@ const Appointments = () => {
     e.preventDefault();
     setShowCalendar(true);
     if (practitionerDateTimes.length) {
-      calendarSelectionHandler(tomorrowDate); // select tomorrow date by default
+      const selectedDate = userSelection.date;
+      if (selectedDate) {
+        calendarSelectionHandler(selectedDate); // selected date by default
+      } else { // when calendar first loads
+        calendarSelectionHandler(tomorrowDate); // select tomorrow date by default
+      }
     }
   };
 
