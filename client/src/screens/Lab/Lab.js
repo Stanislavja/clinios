@@ -558,7 +558,7 @@ const Lab = (props) => {
 
                   <Grid
                     item
-                    md={3}
+                    md={4}
                   >
                     <Typography
                       component="span"
@@ -576,7 +576,7 @@ const Lab = (props) => {
 
                   <Grid
                     item
-                    md={4}
+                    md={3}
                   >
                     <Typography
                       component="span"
