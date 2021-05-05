@@ -63,11 +63,13 @@ const NewTransactionForm = (props) => {
     if (selectedBilling) { // only for edit billing dialog
       // eslint-disable-next-line max-len
       const selectedAccountNumber = paymentOptions.find((p) => p.account_number === selectedBilling.account_number);
-      const name = "accountNum";
-      setFormFields({
-        ...formFields,
-        [name]: selectedAccountNumber.id,
-      });
+      if (selectedAccountNumber) {
+        const name = "accountNum";
+        setFormFields({
+          ...formFields,
+          [name]: selectedAccountNumber.id,
+        });
+      }
     }
   }, [paymentOptions]);
 
