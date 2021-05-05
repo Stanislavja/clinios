@@ -11,6 +11,12 @@ class SupportAPI {
   getSuport = (status) => axios.get(`${API_BASE}/support?cStatus=${status}`, {
     headers: authHeader(),
   });
+
+  createCase(data) {
+    return axios.post(`${API_BASE}/support`, data, {
+      headers: authHeader(),
+    });
+  }
 }
 
 export default new SupportAPI();
