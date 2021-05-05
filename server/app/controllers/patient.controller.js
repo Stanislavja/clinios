@@ -869,6 +869,9 @@ const updateBilling = async (req, res) => {
   formData.updated = new Date();
   formData.updated_user_id = req.user_id;
 
+  // Delete customer_id as it's not on our table
+  delete formData.customer_id;
+
   const db = makeDb(configuration, res);
   try {
     const updateResponse = await db.query(
