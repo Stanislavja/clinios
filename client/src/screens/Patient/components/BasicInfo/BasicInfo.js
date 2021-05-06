@@ -64,6 +64,8 @@ const useStyles = makeStyles((theme) => ({
   tab: {
     paddingLeft: 0,
     paddingRight: 0,
+    paddingBottom: 0,
+    lineHeight: 1.25,
     minWidth: "unset",
     marginRight: theme.spacing(2),
     borderRadius: 0,

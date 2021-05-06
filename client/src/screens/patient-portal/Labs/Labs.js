@@ -37,8 +37,8 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
   },
   tabSelected: {
-    paddingBottom: 5,
-    margin: "5px 16px 5px 0",
+    paddingBottom: 0,
+    margin: "5px 16px 6px 0",
     fontSize: 14,
     cursor: "pointer",
     borderBottom: `2px solid ${theme.palette.primary.main}`,
