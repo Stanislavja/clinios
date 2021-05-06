@@ -35,9 +35,11 @@ const getCellClassName = (dayInfo, selected) => {
   const { date } = dayInfo;
   const isSelectedDay = moment(date).format("YYYY-MM-DD") === selected;
   return isSelectedDay ? "selected-day" : "";
-}
+};
 
-const EventCalendar = ({ events, onDayClick, onEventClick, selectedDate }) => (
+const EventCalendar = ({
+  events, onDayClick, onEventClick, selectedDate,
+}) => (
   <FullCalendar
     plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
     headerToolbar={{
@@ -65,7 +67,7 @@ EventCalendar.propTypes = {
       date: PropTypes.string.isRequired,
     }),
   ).isRequired,
-  selectedDate: PropTypes.any.isRequired,
+  selectedDate: PropTypes.string.isRequired,
 };
 
 export default EventCalendar;
