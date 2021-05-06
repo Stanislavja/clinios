@@ -47,7 +47,7 @@ export const TransactionFormFields = [
   {
     name: "accountNum",
     id: "paymentOptions",
-    label: "Card / Bank Account",
+    label: "Payment Method",
     baseType: "select",
     type: "number",
     options: [],
