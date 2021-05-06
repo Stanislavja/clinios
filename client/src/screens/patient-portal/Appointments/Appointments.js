@@ -380,7 +380,7 @@ const Appointments = () => {
     if (!showCalendar) { // show calendar if not visible
       setShowCalendar(true);
     }
-  }
+  };
 
   const getTimingLabel = (timing) => {
     const start = timing.startTime;
