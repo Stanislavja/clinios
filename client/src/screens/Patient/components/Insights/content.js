@@ -207,10 +207,26 @@ const InsightsContent = () => {
                   <StyledTableCell>Flag</StyledTableCell>
                   <StyledTableCell>Iron Deficiency</StyledTableCell>
                   <StyledTableCell>Blood Loss</StyledTableCell>
-                  <StyledTableCell>Anemia of<br />Inflammation</StyledTableCell>
-                  <StyledTableCell>Hemolytic<br />Anemia</StyledTableCell>
-                  <StyledTableCell>Hemochromatosis /<br />Hemosiderosis</StyledTableCell>
-                  <StyledTableCell>Sideroblastic<br />Anemia</StyledTableCell>
+                  <StyledTableCell>
+                    Anemia of
+                    <br />
+                    Inflammation
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    Hemolytic
+                    <br />
+                    Anemia
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    Hemochromatosis /
+                    <br />
+                    Hemosiderosis
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    Sideroblastic
+                    <br />
+                    Anemia
+                  </StyledTableCell>
                   <StyledTableCell>Iron Poisoning</StyledTableCell>
                 </TableRow>
               </TableHead>
