@@ -199,38 +199,6 @@ const Appointments = () => {
     }));
   };
 
-  const apptTypeSelectionHandler = (value) => {
-    const name = "appointmentType";
-    setUserSelection((prevUserSelection) => ({
-      ...prevUserSelection,
-      [name]: value,
-    }));
-    let apptLength = appointmentTypes.find((item) => item.id === value)?.length;
-    apptLength = apptLength === 45 ? 60 : apptLength;
-    setAppointmentLength(apptLength);
-
-    if (practitionerDateTimes.length) {
-      //generating time slots
-      let timeIntervalSlots = [];
-      practitionerDateTimes.forEach((item) => {
-        const slots = makeTimeIntervals(item.time_start, item.time_end, apptLength);
-        timeIntervalSlots = [...timeIntervalSlots, ...slots];
-      });
-      setTimeSlots([...timeIntervalSlots]);
-      const selectedDate = userSelection.date;
-      if (selectedDate) {
-        calendarSelectionHandler(selectedDate, timeIntervalSlots); // selected date by default
-      } else { // when calendar first loads
-        calendarSelectionHandler(tomorrowDate, timeIntervalSlots); // select tomorrow date by default
-      }
-    }
-    if (!showCalendar) { // show calendar if not visible
-      setShowCalendar(true);
-    }
-  }
-
-  console.log("asdasdasd", { timeSlots, filteredTimeSlots, appointmentLength })
-
   const calendarSelectionHandler = (date, timeIntervalSlots) => {
     let value;
     if (date?.event) { // event clicked
@@ -264,7 +232,7 @@ const Appointments = () => {
         startTime: time.start_time,
         endTime: time.end_time,
       }));
-      let timeSlotsArray = timeIntervalSlots ? timeIntervalSlots : timeSlots;
+      const timeSlotsArray = timeIntervalSlots || timeSlots;
       const timeSlotMap = timeSlotsArray.map((slot) => ({
         startTime: moment(slot.split("-")[0].trim(), ["HH.mm"]).format("HH:mm"),
         endTime: moment(slot.split("-")[1].trim(), ["HH.mm"]).format("HH:mm"),
@@ -383,6 +351,36 @@ const Appointments = () => {
       calendarSelectionHandler(userSelection.date, timeIntervalSlots);
     }
   }, [practitionerDateTimes, appointmentLength]);
+
+  const apptTypeSelectionHandler = (value) => {
+    const name = "appointmentType";
+    setUserSelection((prevUserSelection) => ({
+      ...prevUserSelection,
+      [name]: value,
+    }));
+    let apptLength = appointmentTypes.find((item) => item.id === value)?.length;
+    apptLength = apptLength === 45 ? 60 : apptLength;
+    setAppointmentLength(apptLength);
+
+    if (practitionerDateTimes.length) {
+      // generating time slots
+      let timeIntervalSlots = [];
+      practitionerDateTimes.forEach((item) => {
+        const slots = makeTimeIntervals(item.time_start, item.time_end, apptLength);
+        timeIntervalSlots = [...timeIntervalSlots, ...slots];
+      });
+      setTimeSlots([...timeIntervalSlots]);
+      const selectedDate = userSelection.date;
+      if (selectedDate) {
+        calendarSelectionHandler(selectedDate, timeIntervalSlots); // selected date by default
+      } else { // when calendar first loads
+        calendarSelectionHandler("2021-05-10", timeIntervalSlots); // select tomorrow date by default
+      }
+    }
+    if (!showCalendar) { // show calendar if not visible
+      setShowCalendar(true);
+    }
+  }
 
   const getTimingLabel = (timing) => {
     const start = timing.startTime;
