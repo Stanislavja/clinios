@@ -53,6 +53,8 @@ const StyledTableCell = withStyles(() => ({
     whiteSpace: "nowrap",
     fontWeight: 700,
     padding: "0px 6px 2px 2px",
+    verticalAlign: "baseline",
+    lineHeight: 1.25,
   },
   body: {
     fontSize: 12,
@@ -205,10 +207,10 @@ const InsightsContent = () => {
                   <StyledTableCell>Flag</StyledTableCell>
                   <StyledTableCell>Iron Deficiency</StyledTableCell>
                   <StyledTableCell>Blood Loss</StyledTableCell>
-                  <StyledTableCell>Anemia of Inflammation</StyledTableCell>
-                  <StyledTableCell>Hemolytic Anemia</StyledTableCell>
-                  <StyledTableCell>Hemochromatosis / Hemosiderosis</StyledTableCell>
-                  <StyledTableCell>Sideroblastic Anemia</StyledTableCell>
+                  <StyledTableCell>Anemia of<br />Inflammation</StyledTableCell>
+                  <StyledTableCell>Hemolytic<br />Anemia</StyledTableCell>
+                  <StyledTableCell>Hemochromatosis /<br />Hemosiderosis</StyledTableCell>
+                  <StyledTableCell>Sideroblastic<br />Anemia</StyledTableCell>
                   <StyledTableCell>Iron Poisoning</StyledTableCell>
                 </TableRow>
               </TableHead>
