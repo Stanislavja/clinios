@@ -5,6 +5,7 @@ import FullCalendar from "@fullcalendar/react"; // this import should be at the 
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction"; // needed for dayClick
 import timeGridPlugin from "@fullcalendar/timegrid";
+import moment from "moment";
 import PropTypes from "prop-types";
 import "./calendar.css";
 
@@ -30,7 +31,13 @@ function renderEventContent(eventInfo) {
   );
 }
 
-const EventCalendar = ({ events, onDayClick, onEventClick }) => (
+const getCellClassName = (dayInfo, selected) => {
+  const { date } = dayInfo;
+  const isSelectedDay = moment(date).format("YYYY-MM-DD") === selected;
+  return isSelectedDay ? "selected-day" : "";
+}
+
+const EventCalendar = ({ events, onDayClick, onEventClick, selectedDate }) => (
   <FullCalendar
     plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
     headerToolbar={{
@@ -42,6 +49,7 @@ const EventCalendar = ({ events, onDayClick, onEventClick }) => (
     weekends
     events={events}
     eventContent={renderEventContent}
+    dayCellClassNames={(arg) => getCellClassName(arg, selectedDate)}
     dateClick={(arg) => onDayClick(arg.dateStr)}
     eventClick={(info) => onEventClick(info)}
     selectable
@@ -57,6 +65,7 @@ EventCalendar.propTypes = {
       date: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  selectedDate: PropTypes.any.isRequired,
 };
 
 export default EventCalendar;
