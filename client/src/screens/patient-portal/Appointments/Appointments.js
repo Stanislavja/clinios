@@ -28,6 +28,8 @@ const useStyles = makeStyles((theme) => ({
   },
   submitBtn: {
     minWidth: 120,
+    background: "#008B00",
+    minHeight: 50,
   },
   calendarContainer: {
     marginTop: theme.spacing(1),
@@ -65,6 +67,21 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     top: 5,
   },
+  messageBox: {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: theme.spacing(2),
+    backgroundColor: "rgb(232, 243, 252)",
+    padding: "6px 16px",
+    fontSize: 14,
+    lineHeight: 21,
+    borderRadius: 4,
+    minHeight: 50,
+
+    "& p": {
+      color: "rgb(12, 54, 91)",
+    }
+  }
 }));
 
 const currentDate = moment().format("YYYY-MM-DD");
@@ -480,6 +497,7 @@ const Appointments = () => {
                     events={getCalendarEvents()}
                     onDayClick={(val) => calendarSelectionHandler(val)}
                     onEventClick={(val) => calendarSelectionHandler(val)}
+                    selectedDate={userSelection.date}
                   />
                 </Grid>
                 <Grid item lg={3} md={3} sm={3} xs={3}>
@@ -505,6 +523,11 @@ const Appointments = () => {
                     in={Boolean(userSelection?.date && filteredTimeSlots.length)}
                     timeout={500}
                   >
+                    <Grid className={classes.messageBox}>
+                      <Typography>
+                        Please select one of the following times.
+                    </Typography>
+                    </Grid>
                     {
                       userSelection?.date && filteredTimeSlots.map((timing, index) => (
                         <Button
@@ -526,29 +549,20 @@ const Appointments = () => {
                         </Button>
                       ))
                     }
+                    <Button
+                      fullWidth
+                      type="submit"
+                      color="secondary"
+                      variant="contained"
+                      className={classes.submitBtn}
+                      onClick={() => appointmentBookingHandler()}
+                    >
+                      {isRescheduleAppointment ? "Reschedule Appointment" : "Book Appointment"}
+                    </Button>
                   </Collapse>
                 </Grid>
               </Grid>
             </Grid>
-            <Box mt={3}>
-              <Grid item md={9}>
-                <Grid
-                  container
-                  justify="center"
-                  alignItems="center"
-                >
-                  <Button
-                    type="submit"
-                    color="primary"
-                    variant="contained"
-                    className={classes.submitBtn}
-                    onClick={() => appointmentBookingHandler()}
-                  >
-                    {isRescheduleAppointment ? "Reschedule Appointment" : "Book Appointment"}
-                  </Button>
-                </Grid>
-              </Grid>
-            </Box>
           </Box>
         ) : (
           <Grid
