@@ -391,7 +391,7 @@ const Appointments = () => {
       if (selectedDate) {
         calendarSelectionHandler(selectedDate, timeIntervalSlots); // selected date by default
       } else { // when calendar first loads
-        calendarSelectionHandler("2021-05-10", timeIntervalSlots); // select tomorrow date by default
+        calendarSelectionHandler(tomorrowDate, timeIntervalSlots); // select tomorrow date by default
       }
     }
     if (!showCalendar) { // show calendar if not visible
