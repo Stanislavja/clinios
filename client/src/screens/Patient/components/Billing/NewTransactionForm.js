@@ -234,7 +234,7 @@ const NewTransactionForm = (props) => {
       <Alert
         open={showConfirmationDialog}
         title="Confirmation"
-        message="Are you sure you want to create this billing?"
+        message="Are you sure you want to create this payment?"
         applyButtonText="Continue"
         cancelButtonText="Cancel"
         applyForm={createBilling}
