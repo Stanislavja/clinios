@@ -277,33 +277,33 @@ const Appointments = () => {
       PatientPortalService[isRescheduleAppointment
         ? "updateAppointment"
         : "bookAppointment"](reqBody, userSelection?.id).then(() => {
-        setTimeout(() => {
-          setShowCalendar(false);
-          setAppointmentTypes([]);
-          setUserSelection({
-            ...userSelection,
-            practitioner: "",
-            appointmentType: "",
-            date: null,
-            time: null,
-          });
-          history.push({
-            pathname: "/patient/appointments/confirmation",
-            state: {
-              practitioner: selectedPractitioner?.[0]?.name,
-              appointmentLength: selectedAppointemntTypeLength,
-              date: userSelection?.date,
-              time: userSelection?.time,
-              reschedule: isRescheduleAppointment,
-            },
-          });
-        }, 1000);
-        enqueueSnackbar(
-          `Appointment ${isRescheduleAppointment ? "rescheduled" : "requested"} successfully`, {
+          setTimeout(() => {
+            setShowCalendar(false);
+            setAppointmentTypes([]);
+            setUserSelection({
+              ...userSelection,
+              practitioner: "",
+              appointmentType: "",
+              date: null,
+              time: null,
+            });
+            history.push({
+              pathname: "/patient/appointments/confirmation",
+              state: {
+                practitioner: selectedPractitioner?.[0]?.name,
+                appointmentLength: selectedAppointemntTypeLength,
+                date: userSelection?.date,
+                time: userSelection?.time,
+                reschedule: isRescheduleAppointment,
+              },
+            });
+          }, 1000);
+          enqueueSnackbar(
+            `Appointment ${isRescheduleAppointment ? "rescheduled" : "requested"} successfully`, {
             variant: "success",
           },
-        );
-      });
+          );
+        });
     } else {
       setErrorMessage("Date & Time selection is required");
     }
@@ -380,7 +380,7 @@ const Appointments = () => {
     if (!showCalendar) { // show calendar if not visible
       setShowCalendar(true);
     }
-  }
+  };
 
   const getTimingLabel = (timing) => {
     const start = timing.startTime;
