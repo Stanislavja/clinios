@@ -119,11 +119,6 @@ const Appointments = () => {
       });
       fetchPractitionersAvailableDates(practitionerId);
     }
-    if (type === "appointmentType") {
-      let apptLength = appointmentTypes.find((item) => item.id === value)?.length;
-      apptLength = apptLength === 45 ? 60 : apptLength;
-      setAppointmentLength(apptLength);
-    }
   };
 
   const fetchPractitioners = useCallback(() => {
@@ -204,7 +199,39 @@ const Appointments = () => {
     }));
   };
 
-  const calendarSelectionHandler = (date) => {
+  const apptTypeSelectionHandler = (value) => {
+    const name = "appointmentType";
+    setUserSelection((prevUserSelection) => ({
+      ...prevUserSelection,
+      [name]: value,
+    }));
+    let apptLength = appointmentTypes.find((item) => item.id === value)?.length;
+    apptLength = apptLength === 45 ? 60 : apptLength;
+    setAppointmentLength(apptLength);
+
+    if (practitionerDateTimes.length) {
+      //generating time slots
+      let timeIntervalSlots = [];
+      practitionerDateTimes.forEach((item) => {
+        const slots = makeTimeIntervals(item.time_start, item.time_end, apptLength);
+        timeIntervalSlots = [...timeIntervalSlots, ...slots];
+      });
+      setTimeSlots([...timeIntervalSlots]);
+      const selectedDate = userSelection.date;
+      if (selectedDate) {
+        calendarSelectionHandler(selectedDate, timeIntervalSlots); // selected date by default
+      } else { // when calendar first loads
+        calendarSelectionHandler(tomorrowDate, timeIntervalSlots); // select tomorrow date by default
+      }
+    }
+    if (!showCalendar) { // show calendar if not visible
+      setShowCalendar(true);
+    }
+  }
+
+  console.log("asdasdasd", { timeSlots, filteredTimeSlots, appointmentLength })
+
+  const calendarSelectionHandler = (date, timeIntervalSlots) => {
     let value;
     if (date?.event) { // event clicked
       value = moment(date.event._instance.range.start).format("YYYY-MM-DD");
@@ -237,7 +264,8 @@ const Appointments = () => {
         startTime: time.start_time,
         endTime: time.end_time,
       }));
-      const timeSlotMap = timeSlots.map((slot) => ({
+      let timeSlotsArray = timeIntervalSlots ? timeIntervalSlots : timeSlots;
+      const timeSlotMap = timeSlotsArray.map((slot) => ({
         startTime: moment(slot.split("-")[0].trim(), ["HH.mm"]).format("HH:mm"),
         endTime: moment(slot.split("-")[1].trim(), ["HH.mm"]).format("HH:mm"),
       }));
@@ -254,19 +282,6 @@ const Appointments = () => {
       setErrorMessage(`There are no open times on ${dayDateFormat(value)}.`);
       setFilteredTimeSlots([]);
       setCalendarTime(null);
-    }
-  };
-
-  const onFormSubmit = (e) => {
-    e.preventDefault();
-    setShowCalendar(true);
-    if (practitionerDateTimes.length) {
-      const selectedDate = userSelection.date;
-      if (selectedDate) {
-        calendarSelectionHandler(selectedDate); // selected date by default
-      } else { // when calendar first loads
-        calendarSelectionHandler(tomorrowDate); // select tomorrow date by default
-      }
     }
   };
 
@@ -365,6 +380,7 @@ const Appointments = () => {
         timeIntervalSlots = [...timeIntervalSlots, ...slots];
       });
       setTimeSlots([...timeIntervalSlots]);
+      calendarSelectionHandler(userSelection.date, timeIntervalSlots);
     }
   }, [practitionerDateTimes, appointmentLength]);
 
@@ -398,76 +414,63 @@ const Appointments = () => {
 
   return (
     <div className={classes.root}>
-      <Typography
-        component="h1"
-        variant="h2"
-        color="textPrimary"
-        className={classes.title}
-      >
-        Appointments
-      </Typography>
+      <Box mb={2}>
+        <Typography
+          component="h1"
+          variant="h2"
+          color="textPrimary"
+          className={classes.title}
+        >
+          Appointments
+        </Typography>
+        <Typography
+          variant="h5"
+          color="textPrimary"
+          className={classes.title}
+        >
+          Please select a date and time
+        </Typography>
+      </Box>
       <Grid item lg={3} md={4} sm={6} xs={12}>
-        <form onSubmit={onFormSubmit}>
-          <TextField
-            select
-            required
-            variant="outlined"
-            label="Select Practitioner"
-            margin="dense"
-            fullWidth
-            value={userSelection.practitioner}
-            className={classes.inputFix}
-            onChange={(e) => userSelectionHandler("practitioner", e.target.value)}
-          >
-            {practitioners.map((option) => (
-              <MenuItem key={option.user_id} value={option.user_id}>
-                {option.name}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            select
-            required
-            variant="outlined"
-            label="Select Appointment Type"
-            margin="dense"
-            fullWidth
-            value={userSelection.appointmentType}
-            className={classes.inputFix}
-            onChange={(e) => userSelectionHandler("appointmentType", e.target.value)}
-            disabled={!appointmentTypes.length}
-          >
-            {appointmentTypes.map((option) => (
-              <MenuItem key={option.id} value={option.id}>
-                {`${option.appointment_type} - ${option.length} minutes - $${option.fee}`}
-              </MenuItem>
-            ))}
-          </TextField>
-          <Grid
-            container
-            justify="center"
-          >
-            <Button
-              type="submit"
-              color="primary"
-              variant="contained"
-              className={classes.submitBtn}
-            >
-              Submit
-            </Button>
-          </Grid>
-        </form>
+        <TextField
+          select
+          required
+          variant="outlined"
+          label="Select Practitioner"
+          margin="dense"
+          fullWidth
+          value={userSelection.practitioner}
+          className={classes.inputFix}
+          onChange={(e) => userSelectionHandler("practitioner", e.target.value)}
+        >
+          {practitioners.map((option) => (
+            <MenuItem key={option.user_id} value={option.user_id}>
+              {option.name}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          select
+          required
+          variant="outlined"
+          label="Select Appointment Type"
+          margin="dense"
+          fullWidth
+          value={userSelection.appointmentType}
+          className={classes.inputFix}
+          onChange={(e) => apptTypeSelectionHandler(e.target.value)}
+          disabled={!appointmentTypes.length}
+        >
+          {appointmentTypes.map((option) => (
+            <MenuItem key={option.id} value={option.id}>
+              {`${option.appointment_type} - ${option.length} minutes - $${option.fee}`}
+            </MenuItem>
+          ))}
+        </TextField>
       </Grid>
       {showCalendar && (
         practitionerDateTimes.length ? (
           <Box mt={3}>
-            <Typography
-              variant="h5"
-              color="textPrimary"
-              className={classes.title}
-            >
-              Please select a date and time
-            </Typography>
             <Grid item lg={9} md={9} sm={12} xs={12}>
               <Grid
                 container
