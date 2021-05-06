@@ -1729,7 +1729,7 @@ const getAllTests = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select lc.cpt_id, c.name, date(lc2.lab_dt) lab_dt, lc2.value, lc2.range_high, lc2.range_low, lc2.unit, lc.count from (
+      `select lc.cpt_id marker_id, c.name, date(lc2.lab_dt) lab_dt, lc2.value, lc2.range_high, lc2.range_low, lc2.unit, lc.count from (
         select lc.cpt_id, max(lc2.lab_id) lab_id, count from (
         select cpt_id, max(lab_dt) lab_dt, count( * ) count
         from lab_marker

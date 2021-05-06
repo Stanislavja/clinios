@@ -37,7 +37,7 @@ const MarkerDefinition = ({
   data, showTitle, showHigh, showLow,
 }) => {
   const classes = useStyles();
-  const markerId = data?.cpt_id || data?.id;
+  const markerId = data?.marker_id || data?.id;
   const markerExplanation = getMarkerDefinition(markerId);
   const markerInterpretation = getMarkerInterpretation(markerId);
 
@@ -118,7 +118,7 @@ MarkerDefinition.propTypes = {
   data: PropTypes.shape({
     name: PropTypes.string,
     id: PropTypes.number,
-    cpt_id: PropTypes.number,
+    marker_id: PropTypes.number,
   }).isRequired,
   showTitle: PropTypes.bool,
   showHigh: PropTypes.bool,

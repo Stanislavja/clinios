@@ -59,6 +59,20 @@ const NewTransactionForm = (props) => {
 
   const { selectedBilling } = state.billing;
 
+  useDidMountEffect(() => {
+    if (selectedBilling) { // only for edit billing dialog
+      // eslint-disable-next-line max-len
+      const selectedAccountNumber = paymentOptions.find((p) => p.account_number === selectedBilling.account_number);
+      if (selectedAccountNumber) {
+        const name = "accountNum";
+        setFormFields({
+          ...formFields,
+          [name]: selectedAccountNumber.id,
+        });
+      }
+    }
+  }, [paymentOptions]);
+
   const updateFields = () => {
     formFields.date = pickerDateFormat(selectedBilling.dt);
     formFields.type = convertTransactionTypes(selectedBilling.tran_type);
