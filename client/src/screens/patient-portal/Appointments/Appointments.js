@@ -80,8 +80,8 @@ const useStyles = makeStyles((theme) => ({
 
     "& p": {
       color: "rgb(12, 54, 91)",
-    }
-  }
+    },
+  },
 }));
 
 const currentDate = moment().format("YYYY-MM-DD");
@@ -526,7 +526,7 @@ const Appointments = () => {
                     <Grid className={classes.messageBox}>
                       <Typography>
                         Please select one of the following times.
-                    </Typography>
+                      </Typography>
                     </Grid>
                     {
                       userSelection?.date && filteredTimeSlots.map((timing, index) => (
