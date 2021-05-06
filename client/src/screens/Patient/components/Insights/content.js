@@ -114,7 +114,7 @@ const InsightsContent = () => {
       const tempArray = [];
       InsightsTests.forEach((test) => {
         data.forEach((allTest) => {
-          if (test.id === allTest.cpt_id) {
+          if (test.id === allTest.marker_id) {
             tempArray.push({
               ...allTest,
               ...test,
@@ -179,7 +179,7 @@ const InsightsContent = () => {
   };
 
   // eslint-disable-next-line max-len
-  const showPopover = useMemo(() => Boolean(selectedMarker && (getMarkerDefinition(selectedMarker.cpt_id).length || (getMarkerInterpretation(selectedMarker.cpt_id).low.length && getMarkerInterpretation(selectedMarker.cpt_id).high.length))), [selectedMarker]);
+  const showPopover = useMemo(() => Boolean(selectedMarker && (getMarkerDefinition(selectedMarker.marker_id).length || (getMarkerInterpretation(selectedMarker.marker_id).low.length && getMarkerInterpretation(selectedMarker.marker_id).high.length))), [selectedMarker]);
 
   return (
     <>
@@ -232,7 +232,7 @@ const InsightsContent = () => {
               </TableHead>
               <TableBody>
                 {tests.map((row) => {
-                  const functionalRange = calculateFunctionalRange(row.cpt_id, gender, patientAge);
+                  const functionalRange = calculateFunctionalRange(row.marker_id, gender, patientAge);
                   const flag = getFlag(row, functionalRange);
                   const range = getRange(row, functionalRange);
                   return (

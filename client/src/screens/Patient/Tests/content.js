@@ -107,7 +107,7 @@ const TestsContent = () => {
   };
 
   const hasTestValue = (value, cptId, testsArray) => {
-    const matchArray = testsArray.filter((x) => x.cpt_id === cptId);
+    const matchArray = testsArray.filter((x) => x.marker_id === cptId);
     let res = null;
     if (matchArray.length) {
       const [firstEl] = matchArray;
@@ -127,7 +127,7 @@ const TestsContent = () => {
       if (!!sodiumTest && !!potassiumTest && !!glucoseTest && !!ureaTest) {
         const newTest = {
           count: 1,
-          cpt_id: 3008,
+          marker_id: 3008,
           lab_dt: new Date(),
           name: "Osmolarity (Derived)",
           unit: "",
@@ -141,7 +141,7 @@ const TestsContent = () => {
       if (!!hematocritTest && !!proteinTotalTest) {
         const newTest = {
           count: 1,
-          cpt_id: 3012,
+          marker_id: 3012,
           lab_dt: new Date(),
           name: "Viscosity High Shear (Derived)",
           unit: "",
@@ -154,7 +154,7 @@ const TestsContent = () => {
       if (!!ironTest && !!transferrinTest) {
         const newTest = {
           count: 1,
-          cpt_id: 3013,
+          marker_id: 3013,
           lab_dt: new Date(),
           name: "Transferrin Percent Saturation (Derived)",
           unit: "",
@@ -167,7 +167,7 @@ const TestsContent = () => {
       if (!!sodiumTest && !!chlorideTest && !!carbonDioxideTest) {
         const newTest = {
           count: 1,
-          cpt_id: 3000,
+          marker_id: 3000,
           lab_dt: new Date(),
           name: "Anion Gap (Na-Cl-HCO3) (Derived)",
           unit: "",
@@ -189,7 +189,7 @@ const TestsContent = () => {
 
   const showPopoverIcon = (marker) => (
     // eslint-disable-next-line max-len
-    Boolean(getMarkerDefinition(marker.cpt_id).length || (getMarkerInterpretation(marker.cpt_id).low.length && getMarkerInterpretation(marker.cpt_id).high.length))
+    Boolean(getMarkerDefinition(marker.marker_id).length || (getMarkerInterpretation(marker.marker_id).low.length && getMarkerInterpretation(marker.marker_id).high.length))
   );
 
   const showPopover = Boolean(selectedMarker);
@@ -226,7 +226,7 @@ const TestsContent = () => {
           <TableBody>
             {!!tests && tests.length
               ? tests.map((row) => {
-                const functionalRange = calculateFunctionalRange(row.cpt_id, gender, patientAge);
+                const functionalRange = calculateFunctionalRange(row.marker_id, gender, patientAge);
                 return (
                   <StyledTableRow key={row.name}>
                     <TableCell>{row.name}</TableCell>
