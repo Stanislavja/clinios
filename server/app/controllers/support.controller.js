@@ -42,7 +42,7 @@ const getStatus = async (req, res) => {
   try {
     $sql = `select id, name
       from case_status
-      order by id
+      order by name desc
       limit 10 \n`;
 
     const dbResponse = await db.query($sql);
