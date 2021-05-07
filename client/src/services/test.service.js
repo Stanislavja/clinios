@@ -15,7 +15,7 @@ class Tests {
   }
 
   getLabCpt(patientId) {
-    return axios.get(`${API_BASE}/tests/lab-cpt/${patientId}`, {
+    return axios.get(`${API_BASE}/tests/lab-marker/${patientId}`, {
       headers: authHeader(),
     });
   }
