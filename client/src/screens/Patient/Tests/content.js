@@ -127,6 +127,7 @@ const TestsContent = () => {
 
       if (!!sodiumTest && !!potassiumTest && !!glucoseTest && !!ureaTest) {
         const newTest = {
+          isCustom: true,
           count: 1,
           marker_id: 3008,
           lab_dt: new Date(),
@@ -141,6 +142,7 @@ const TestsContent = () => {
       const proteinTotalTest = hasTestValue("Protein, Total", 1531, data);
       if (!!hematocritTest && !!proteinTotalTest) {
         const newTest = {
+          isCustom: true,
           count: 1,
           marker_id: 3012,
           lab_dt: new Date(),
@@ -154,6 +156,7 @@ const TestsContent = () => {
       const transferrinTest = hasTestValue("Transferrin", 1836, data);
       if (!!ironTest && !!transferrinTest) {
         const newTest = {
+          isCustom: true,
           count: 1,
           marker_id: 3013,
           lab_dt: new Date(),
@@ -167,6 +170,7 @@ const TestsContent = () => {
       const carbonDioxideTest = hasTestValue("Carbon Dioxide", 446, data);
       if (!!sodiumTest && !!chlorideTest && !!carbonDioxideTest) {
         const newTest = {
+          isCustom: true,
           count: 1,
           marker_id: 3000,
           lab_dt: new Date(),
@@ -291,13 +295,15 @@ const TestsContent = () => {
                       align="center"
                       className={classes.iconContainer}
                     >
-                      <Icon
-                        onClick={() => {
-                          toggleGraphDialog(row);
-                        }}
-                        path={mdiChartBoxOutline}
-                        size={0.85}
-                      />
+                      {!row.isCustom && (
+                        <Icon
+                          onClick={() => {
+                            toggleGraphDialog(row);
+                          }}
+                          path={mdiChartBoxOutline}
+                          size={0.85}
+                        />
+                      )}
                     </TableCell>
                   </StyledTableRow>
                 );
