@@ -85,7 +85,8 @@ const BasicInfoContent = () => {
     }
     const minutes = minutesDiff > 0
       ? minutesDiff > hoursDiff * 60 ? minutesDiff - hoursDiff * 60 : minutesDiff : 0;
-    return daysDiff > 1 ? `${daysDiff} days` : hoursDiff
+
+    return daysDiff > 0 ? `${daysDiff} days` : hoursDiff
       ? `${minutes ? `${hoursDiff} hours and ${minutes} minutes` : `${hoursDiff} hours`}`
       : `${minutesDiff} minutes`;
   };
