@@ -12,6 +12,8 @@ import {
   dateDiffInDays,
   dateDiffInMonths,
   dateDiffInYears,
+  dateDiffInHours,
+  dateDiffInMinutes,
 } from "../../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
@@ -65,20 +67,27 @@ const BasicInfoContent = () => {
     fetchNextAppointment();
   }, [patientId]);
 
+
   const calculateDateDifference = () => {
     const d1 = new Date();
     const d2 = new Date(nextAppointment);
-
+    const minutesDiff = dateDiffInMinutes(d1, d2);
+    const hoursDiff = dateDiffInHours(d1, d2);
     const daysDiff = dateDiffInDays(d1, d2);
     const monthsDiff = dateDiffInMonths(d1, d2);
     const yearsDiff = dateDiffInYears(d1, d2);
+
 
     if (yearsDiff > 0) {
       return yearsDiff > 1 ? `${yearsDiff} years` : `${yearsDiff} year`;
     } if (monthsDiff > 0) {
       return monthsDiff > 1 ? `${monthsDiff} months` : `${monthsDiff} month`;
     }
-    return daysDiff > 1 ? `${daysDiff} days` : `${daysDiff} day`;
+    const minutes = minutesDiff > 0
+      ? minutesDiff > hoursDiff * 60 ? minutesDiff - hoursDiff * 60 : minutesDiff : 0;
+    return daysDiff > 1 ? `${daysDiff} days` : hoursDiff
+      ? `${minutes ? `${hoursDiff} hours and ${minutes} minutes` : `${hoursDiff} hours`}`
+      : `${minutesDiff} minutes`;
   };
 
   const mapGender = (value) => {
