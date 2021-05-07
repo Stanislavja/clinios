@@ -1,6 +1,6 @@
 const express = require("express");
 const { authJwt } = require("../middlewares");
-const testReports = require("../controllers/test-report.controller.js");
+const testReports = require("../controllers/marker-report.controller.js");
 
 const router = express.Router();
 
