@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 
 import { Grid, Typography, IconButton } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import DeleteIcon from "@material-ui/icons/DeleteOutline";
+import { mdiTextBoxOutline } from "@mdi/js";
+import Icon from "@mdi/react";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 
 import Alert from "../../../../components/Alert";
 import Tooltip from "../../../../components/common/CustomTooltip";
+import Dialog from "../../../../components/Dialog";
 import usePatientContext from "../../../../hooks/usePatientContext";
 import PatientService from "../../../../services/patient.service";
+import SampleDocViewer from "../../Encounters/components/SampleDocViewer";
 
 const useStyles = makeStyles((theme) => ({
   inputRow: {
@@ -55,6 +59,7 @@ const HandoutsContent = (props) => {
 
   const { reloadData } = props;
 
+  const [showPreviewDialog, setShowPreviewDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
@@ -68,6 +73,16 @@ const HandoutsContent = (props) => {
     setShowDeleteDialog((prevstate) => !prevstate);
   };
 
+  const openPreviewDialog = (item) => {
+    setSelectedItem(item);
+    setShowPreviewDialog((prevstate) => !prevstate);
+  };
+
+  const closePreviewDialog = () => {
+    setSelectedItem(null);
+    setShowPreviewDialog((prevstate) => !prevstate);
+  };
+
   const deleteItemHandler = (item) => {
     const handoutId = item.handout_id;
     PatientService.deleteHandout(patientId, handoutId)
@@ -78,8 +93,21 @@ const HandoutsContent = (props) => {
       });
   };
 
+  // eslint-disable-next-line max-len
+  const filePath = useMemo(() => `${process.env.REACT_APP_API_URL}static/patient/${selectedItem?.filename}`, [selectedItem]);
+
   return (
     <>
+      {showPreviewDialog && (
+        <Dialog
+          open={showPreviewDialog}
+          title="Handout Detail"
+          message={<SampleDocViewer filePath={filePath} />}
+          cancelForm={closePreviewDialog}
+          hideActions
+          size="md"
+        />
+      )}
       <Alert
         open={showDeleteDialog}
         title="Confirm Delete"
@@ -128,6 +156,14 @@ const HandoutsContent = (props) => {
                 )
             }
             <Grid item className={classes.blockAction}>
+              <IconButton
+                onClick={() => openPreviewDialog(item)}
+              >
+                <Icon
+                  path={mdiTextBoxOutline}
+                  size={0.7}
+                />
+              </IconButton>
               <IconButton
                 onClick={() => openDeleteDialog(item)}
               >
