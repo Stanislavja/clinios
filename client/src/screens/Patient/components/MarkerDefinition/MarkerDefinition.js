@@ -41,7 +41,6 @@ const MarkerDefinition = ({
   const markerExplanation = getMarkerDefinition(markerId);
   const markerInterpretation = getMarkerInterpretation(markerId);
 
-  // eslint-disable max-len
   const hasHighData = useMemo(() => Boolean(markerInterpretation?.high.length), [markerInterpretation?.high]);
   const hasLowData = useMemo(() => Boolean(markerInterpretation?.low.length), [markerInterpretation?.low]);
 
