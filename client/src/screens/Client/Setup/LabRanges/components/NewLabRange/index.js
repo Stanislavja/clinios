@@ -191,7 +191,7 @@ const NewLabRange = (props) => {
   return (
     <Dialog
       open={isOpen}
-      title={`${isNewDialog ? "New" : "Edit"} Functional Range`}
+      title={`${isNewDialog ? "New" : "Edit"} Marker Range`}
       message={(
         <>
           <Grid item lg={8}>
