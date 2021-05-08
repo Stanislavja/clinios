@@ -292,7 +292,7 @@ const TestsContent = () => {
                     <TableCell>{row.unit}</TableCell>
                     <TableCell>{row.count}</TableCell>
                     <TableCell
-                      align="center"
+                      align="left"
                       className={classes.iconContainer}
                     >
                       {!row.isDerived && (
