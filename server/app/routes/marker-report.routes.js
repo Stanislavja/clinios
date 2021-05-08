@@ -6,24 +6,24 @@ const router = express.Router();
 
 router.get("/tests", [authJwt.verifyToken], testReports.getFunctionalRange);
 router.get(
-  "/tests/page-title/:cptId",
+  "/tests/page-title/:markerId",
   [authJwt.verifyToken],
   testReports.getPageTitle
 );
 router.get(
   "/tests/lab-marker/:patientId/:labId",
   [authJwt.verifyToken],
-  testReports.getLabcptByLabId
+  testReports.getLabMarkerByLabId
 );
 router.get(
   "/tests/lab-marker/:patientId/lab/:labId",
   [authJwt.verifyToken],
-  testReports.getLabcptByLabId
+  testReports.getLabMarkerByLabId
 );
 router.get(
   "/tests/lab-marker/:patientId",
   [authJwt.verifyToken],
-  testReports.getLabcpt
+  testReports.getLabMarker
 );
 router.get(
   "/tests/graph/:patientId/:labId",
@@ -31,7 +31,7 @@ router.get(
   testReports.getTestGraph
 );
 router.get(
-  "/tests/conventionalrange/:patientId/:cptId",
+  "/tests/conventionalrange/:patientId/:markerId",
   [authJwt.verifyToken],
   testReports.getConventionalRange
 );

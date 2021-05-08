@@ -123,7 +123,7 @@ const TestGraph = () => {
             low: data[data.length - 1].range_low,
           };
           const graphData = res?.data.data.map((d) => ({
-            id: d.cpt_id,
+            id: d.marker_id,
             lab_dt: d.lab_dt,
             filename: d.filename,
             value: d.value,
