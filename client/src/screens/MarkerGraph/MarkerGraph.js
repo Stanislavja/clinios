@@ -10,7 +10,7 @@ import { useSnackbar } from "notistack";
 
 import useAuth from "../../hooks/useAuth";
 import usePatientContext from "../../hooks/usePatientContext";
-import { setTestName } from "../../providers/Patient/actions";
+import { setTestName, setSelectedTest } from "../../providers/Patient/actions";
 import Tests from "../../services/test.service";
 import { calculateFunctionalRange } from "../../utils/FunctionalRange";
 import { calculateAge } from "../../utils/helpers";
@@ -65,6 +65,7 @@ const TestGraph = () => {
   const { user } = useAuth();
   const { state, dispatch } = usePatientContext();
   const patientData = state.patientInfo.data;
+  const { selectedTest } = state.tests;
 
   const [cptName, setCptName] = useState("");
   const [conventionalRange, setConventionalRange] = useState({});
@@ -74,15 +75,29 @@ const TestGraph = () => {
   const [graphFilterData, setGraphFilterData] = useState(null);
   const [testId, setTestId] = useState("");
   const [cptIdCount, setCptIdCount] = useState(0);
+  const [initGraphLoaded, setInitGraphLoaded] = useState(false); // flag for graph icon row click
   const ref = useRef(null);
 
   /* eslint-disable */
   useEffect(() => {
-    const testTitle = cptName[0]?.name;
-    if (!!testTitle) {
-      dispatch(setTestName(testTitle));
+    if (selectedTest && !initGraphLoaded) { // user clicks table row graph icon 
+      dispatch(setTestName(selectedTest.name));
+    } else {
+      const testTitle = cptName[0]?.name;
+      if (!!testTitle) {
+        dispatch(setTestName(testTitle));
+      }
     }
-  }, [cptName]);
+  }, [cptName, selectedTest]);
+
+  useEffect(() => { // componentWillUnmount
+    return () => {
+      if (!!selectedTest) {
+        dispatch(setTestName(""));
+        dispatch(setSelectedTest(null));
+      }
+    }
+  }, [selectedTest]);
 
   /* eslint-disable */
   useEffect(() => {
@@ -124,17 +139,19 @@ const TestGraph = () => {
         }
       );
     }
-    Tests.getLabCpt(user.id).then(
-      (res) => {
-        const data = res?.data;
-        setLabCpt(data);
-      },
-      () => {
-        enqueueSnackbar("Unable to fetch Activity history.", {
-          variant: "error",
-        });
-      }
-    );
+    if (!initGraphLoaded) { //  FIX::Api was being called on every arrow button click 
+      Tests.getLabCpt(user.id).then(
+        (res) => {
+          const data = res?.data;
+          setLabCpt(data);
+        },
+        () => {
+          enqueueSnackbar("Unable to fetch Activity history.", {
+            variant: "error",
+          });
+        }
+      );
+    }
   }, [testId]);
 
   useEffect(() => {
@@ -152,7 +169,14 @@ const TestGraph = () => {
   }, [graph, testId]);
 
   useEffect(() => {
-    if (labCpt?.data?.length > 0 && labCpt.data[cptIdCount]) {
+    if (selectedTest && !initGraphLoaded) { // user clicks table row graph icon
+      if (labCpt?.data?.length > 0) {
+        const markerIndex = labCpt.data.findIndex(x => x.id === selectedTest.marker_id);
+        setCptIdCount(markerIndex);
+        setInitGraphLoaded(true);
+      }
+      setTestId(selectedTest.marker_id);
+    } else if (labCpt?.data?.length > 0 && labCpt.data[cptIdCount]) {
       setTestId(labCpt.data[cptIdCount].id);
     }
   }, [labCpt, cptIdCount]);
@@ -230,7 +254,7 @@ const TestGraph = () => {
               />
             </IconButton>
             <IconButton
-              disabled={cptIdCount >= labCpt?.data?.length}
+              disabled={cptIdCount + 1 >= labCpt?.data?.length}
               onClick={nextCpt}
               className={classes.graphArrowIcon}
             >

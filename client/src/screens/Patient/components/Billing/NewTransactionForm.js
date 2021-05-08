@@ -1,4 +1,6 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, {
+  useEffect, useState, useCallback, useMemo,
+} from "react";
 
 import {
   TextField,
@@ -243,6 +245,15 @@ const NewTransactionForm = (props) => {
     return true;
   }, [formFields.paymentType, formFields.type]);
 
+  const checkIfDisabled = useMemo(() => {
+    const paymentType = selectedBilling?.payment_type;
+    // only for editing
+    if (selectedBilling && (paymentType === "C" || paymentType === "CH")) {
+      return true;
+    }
+    return false;
+  }, [selectedBilling]);
+
   return (
     <>
       <Alert
@@ -268,6 +279,7 @@ const NewTransactionForm = (props) => {
             onChange={handleDateChange}
             fullWidth
             required
+            disabled={checkIfDisabled}
           />
         </Grid>
         {TransactionFormFields.map((item) => (
@@ -292,6 +304,7 @@ const NewTransactionForm = (props) => {
                   onChange={(e) => handleInputChnage(e)}
                   error={item.name === "amount" ? hasAmountError : false}
                   helperText={hasAmountError && "Amount should be greater than 0"}
+                  disabled={checkIfDisabled}
                 />
               ) : (
                 <TextField
@@ -305,6 +318,7 @@ const NewTransactionForm = (props) => {
                   required={checkIfRequired(item.name)}
                   fullWidth
                   onChange={(e) => handleInputChnage(e)}
+                  disabled={checkIfDisabled}
                 >
                   {!!item.options && item.options.length ? item.options.map((option) => (
                     <MenuItem className={classes.menuOption} key={option.value} value={option.value}>

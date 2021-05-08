@@ -84,7 +84,7 @@ app.use(baseAPIPath, require("./app/routes/patient/purchase-labs.routes"));
 
 app.use(baseAPIPath, require("./app/routes/myself.routes"));
 app.use(baseAPIPath, require("./app/routes/index.routes"));
-app.use(baseAPIPath, require("./app/routes/test-report.routes"));
+app.use(baseAPIPath, require("./app/routes/marker-report.routes"));
 app.use(baseAPIPath, require("./app/routes/client-range.routes"));
 
 // Corporate Portal

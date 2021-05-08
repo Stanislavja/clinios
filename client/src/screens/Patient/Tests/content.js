@@ -11,13 +11,14 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
-import { mdiInformationOutline } from "@mdi/js";
+import { mdiInformationOutline, mdiChartBoxOutline } from "@mdi/js";
 import Icon from "@mdi/react";
 import { orderBy } from "lodash";
 import moment from "moment";
 
 import Popover from "../../../components/common/Popover";
 import usePatientContext from "../../../hooks/usePatientContext";
+import { toggleTestsChartExpandDialog, setSelectedTest } from "../../../providers/Patient/actions";
 import { calculateFunctionalRange, calculatePercentageFlag } from "../../../utils/FunctionalRange";
 import { calculateAge, hasValue } from "../../../utils/helpers";
 import { getMarkerDefinition } from "../../../utils/markerDefinition";
@@ -87,7 +88,7 @@ const StyledTableRow = withStyles((theme) => ({
 
 const TestsContent = () => {
   const classes = useStyles();
-  const { state } = usePatientContext();
+  const { state, dispatch } = usePatientContext();
   const { data } = state.tests;
   const { gender, dob } = state.patientInfo.data;
   const patientAge = Number(calculateAge(dob).split(" ")[0]);
@@ -126,6 +127,7 @@ const TestsContent = () => {
 
       if (!!sodiumTest && !!potassiumTest && !!glucoseTest && !!ureaTest) {
         const newTest = {
+          isDerived: true,
           count: 1,
           marker_id: 3008,
           lab_dt: new Date(),
@@ -140,6 +142,7 @@ const TestsContent = () => {
       const proteinTotalTest = hasTestValue("Protein, Total", 1531, data);
       if (!!hematocritTest && !!proteinTotalTest) {
         const newTest = {
+          isDerived: true,
           count: 1,
           marker_id: 3012,
           lab_dt: new Date(),
@@ -153,6 +156,7 @@ const TestsContent = () => {
       const transferrinTest = hasTestValue("Transferrin", 1836, data);
       if (!!ironTest && !!transferrinTest) {
         const newTest = {
+          isDerived: true,
           count: 1,
           marker_id: 3013,
           lab_dt: new Date(),
@@ -166,6 +170,7 @@ const TestsContent = () => {
       const carbonDioxideTest = hasTestValue("Carbon Dioxide", 446, data);
       if (!!sodiumTest && !!chlorideTest && !!carbonDioxideTest) {
         const newTest = {
+          isDerived: true,
           count: 1,
           marker_id: 3000,
           lab_dt: new Date(),
@@ -193,6 +198,11 @@ const TestsContent = () => {
   );
 
   const showPopover = Boolean(selectedMarker);
+
+  const toggleGraphDialog = (test) => {
+    dispatch(setSelectedTest(test));
+    dispatch(toggleTestsChartExpandDialog());
+  };
 
   return (
     <>
@@ -281,7 +291,20 @@ const TestsContent = () => {
                     </TableCell>
                     <TableCell>{row.unit}</TableCell>
                     <TableCell>{row.count}</TableCell>
-                    <TableCell>{row.detail}</TableCell>
+                    <TableCell
+                      align="center"
+                      className={classes.iconContainer}
+                    >
+                      {!row.isDerived && (
+                        <Icon
+                          onClick={() => {
+                            toggleGraphDialog(row);
+                          }}
+                          path={mdiChartBoxOutline}
+                          size={0.85}
+                        />
+                      )}
+                    </TableCell>
                   </StyledTableRow>
                 );
               })

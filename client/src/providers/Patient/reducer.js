@@ -68,6 +68,7 @@ import {
   TOGGLE_BILLING_EXPAND_DIALOG,
   TOGGLE_INSIGHTS_EXPAND_DIALOG,
   SET_TEST_NAME,
+  SET_SELECTED_TEST,
 } from "./types";
 
 const reducer = (state = initialState, action) => {
@@ -504,6 +505,14 @@ const reducer = (state = initialState, action) => {
         tests: {
           ...state.tests,
           testName: action.payload,
+        },
+      };
+    case SET_SELECTED_TEST:
+      return {
+        ...state,
+        tests: {
+          ...state.tests,
+          selectedTest: action.payload,
         },
       };
     case TOGGLE_DIAGNOSES_EXPAND_DIALOG:

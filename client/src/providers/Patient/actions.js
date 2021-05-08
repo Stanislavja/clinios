@@ -67,6 +67,7 @@ import {
   TOGGLE_TESTS_EXPAND_DIALOG,
   TOGGLE_TESTS_CHART_EXPAND_DIALOG,
   SET_TEST_NAME,
+  SET_SELECTED_TEST,
 } from "./types";
 
 export const setEncounter = (encounter) => ({
@@ -353,4 +354,9 @@ export const toggleTestsChartExpandDialog = () => ({
 export const setTestName = (testName) => ({
   type: SET_TEST_NAME,
   payload: testName,
+});
+
+export const setSelectedTest = (test) => ({
+  type: SET_SELECTED_TEST,
+  payload: test,
 });

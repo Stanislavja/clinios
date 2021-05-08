@@ -1,6 +1,6 @@
 const express = require("express");
 const { authJwt } = require("../middlewares");
-const testReports = require("../controllers/test-report.controller.js");
+const testReports = require("../controllers/marker-report.controller.js");
 
 const router = express.Router();
 
@@ -11,17 +11,17 @@ router.get(
   testReports.getPageTitle
 );
 router.get(
-  "/tests/lab-cpt/:patientId/:labId",
+  "/tests/lab-marker/:patientId/:labId",
   [authJwt.verifyToken],
   testReports.getLabcptByLabId
 );
 router.get(
-  "/tests/lab-cpt/:patientId/lab/:labId",
+  "/tests/lab-marker/:patientId/lab/:labId",
   [authJwt.verifyToken],
   testReports.getLabcptByLabId
 );
 router.get(
-  "/tests/lab-cpt/:patientId",
+  "/tests/lab-marker/:patientId",
   [authJwt.verifyToken],
   testReports.getLabcpt
 );

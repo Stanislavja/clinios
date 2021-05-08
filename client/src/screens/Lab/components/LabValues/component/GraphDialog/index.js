@@ -3,7 +3,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import Dialog from "../../../../../../components/Dialog";
-import TestGraph from "../../../../../TestGraph";
+import TestGraph from "../../../../../MarkerGraph";
 
 const GraphDialog = (props) => {
   const {
