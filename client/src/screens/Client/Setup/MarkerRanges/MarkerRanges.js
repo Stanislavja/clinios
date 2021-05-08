@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LabRanges = () => {
+const MarkerRanges = () => {
   const classes = useStyles();
   const { user: { client_id, firstname, lastname } } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
@@ -320,4 +320,4 @@ const LabRanges = () => {
   );
 };
 
-export default LabRanges;
+export default MarkerRanges;
