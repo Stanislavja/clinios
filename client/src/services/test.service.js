@@ -8,13 +8,13 @@ class Tests {
     return axios.get(`${API_BASE}/tests`, { headers: authHeader() });
   }
 
-  getTestCptName(cptId) {
+  getTestMarkerName(cptId) {
     return axios.get(`${API_BASE}/tests/page-title/${cptId}`, {
       headers: authHeader(),
     });
   }
 
-  getLabCpt(patientId) {
+  getLabMarker(patientId) {
     return axios.get(`${API_BASE}/tests/lab-marker/${patientId}`, {
       headers: authHeader(),
     });
