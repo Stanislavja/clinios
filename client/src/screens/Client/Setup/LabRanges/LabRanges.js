@@ -171,7 +171,7 @@ const LabRanges = () => {
       <Alert
         open={showResetDialog}
         title="Confirm Reset"
-        message="Are you sure you want to reset all custom lab ranges to the original values?"
+        message="Are you sure you want to reset all custom marker ranges to the original values?"
         applyButtonText="Reset"
         cancelButtonText="Cancel"
         applyForm={applyResetHandler}
@@ -180,7 +180,7 @@ const LabRanges = () => {
       <Alert
         open={showDeleteDialog}
         title="Confirm Delete"
-        message="Are you sure you want to delete this functional range?"
+        message="Are you sure you want to delete this custom marker range?"
         applyButtonText="Delete"
         cancelButtonText="Cancel"
         applyForm={() => deleteItemHandler(selectedRange)}
@@ -214,7 +214,7 @@ const LabRanges = () => {
                 color="textPrimary"
                 className={classes.title}
               >
-                Functional Lab Ranges
+                Marker Ranges
               </Typography>
               <Button
                 variant="outlined"
@@ -235,7 +235,7 @@ const LabRanges = () => {
                     className={classes.pointerEnable} // enable clicking on switch only
                   />
                 )}
-                label="Use Functional Range"
+                label="Use Custom Marker Ranges"
                 labelPlacement="start"
                 classes={{
                   label: classes.switchLabel,
@@ -307,7 +307,7 @@ const LabRanges = () => {
                   <StyledTableRowSm>
                     <TableCell colSpan={10}>
                       <Typography className={classes.text} align="center" variant="body1">
-                        {isLoading ? "Fetching Lab Ranges..." : "No Records Found..."}
+                        {isLoading ? "Fetching marker ranges..." : "No Records Found..."}
                       </Typography>
                     </TableCell>
                   </StyledTableRowSm>
