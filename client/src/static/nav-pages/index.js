@@ -161,7 +161,7 @@ export const client_pages = [
       {
         id: 312,
         icon: TimelineIcon,
-        title: "Lab Ranges",
+        title: "Marker Ranges",
         href: "/setup/lab-ranges",
       },
       {

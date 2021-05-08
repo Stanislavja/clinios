@@ -44,7 +44,7 @@ const deleteClientRange = async (req, res) => {
     `);
 
     await db.query(
-      `insert into user_log values (${req.client_id}, ${req.user_id}, now(), null, 'Deleted lab range ${cpt_name}')`
+      `insert into user_log values (${req.client_id}, ${req.user_id}, now(), null, 'Deleted marker range ${cpt_name}')`
     );
 
     if (!deleteResponse.affectedRows) {
@@ -74,7 +74,7 @@ const resetClientRange = async (req, res) => {
       from client_range 
       where client_id=1`);
     await db.query(
-      `insert into user_log values (${req.client_id}, ${req.user_id}, now(), null, 'Reset all custom lab ranges')`
+      `insert into user_log values (${req.client_id}, ${req.user_id}, now(), null, 'Reset all custom marker ranges')`
     );
 
     successMessage.data = insertResponse;
