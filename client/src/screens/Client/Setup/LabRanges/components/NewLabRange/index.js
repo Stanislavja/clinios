@@ -89,7 +89,7 @@ const NewLabRange = (props) => {
     formFields.created = `${createdDate} ${selectedItem.created_user || ""}`;
     formFields.updated = `${updatedDate} ${selectedItem.updated_user || ""}`;
     setFormFields({ ...formFields });
-    setSearchText(selectedItem.cpt_name);
+    setSearchText(selectedItem.marker_name);
   };
 
   useEffect(() => {
@@ -131,7 +131,7 @@ const NewLabRange = (props) => {
     e.preventDefault();
     const reqBody = {
       data: {
-        cpt_id: isNewDialog ? selectedTest?.id : selectedItem?.cpt_id,
+        marker_id: isNewDialog ? selectedTest?.id : selectedItem?.marker_id,
         seq: Number(formFields.sequence),
         compare_item: formFields.compareItem,
         compare_operator: formFields.compareOperator,
@@ -407,8 +407,8 @@ NewLabRange.propTypes = {
   userName: PropTypes.string.isRequired,
   selectedItem: PropTypes.shape({
     id: PropTypes.number,
-    cpt_id: PropTypes.string,
-    cpt_name: PropTypes.string,
+    marker_id: PropTypes.string,
+    marker_name: PropTypes.string,
     seq: PropTypes.number,
     compare_item: PropTypes.string,
     compare_operator: PropTypes.string,
