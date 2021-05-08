@@ -90,8 +90,8 @@ import {
   getThirdColumnHeight,
   getFourthColumnHeight,
 } from "../../utils/patientLayoutHelpers";
+import MarkerGraph from "../MarkerGraph";
 import ProcessMessagePage from "../ProcessMessage";
-import TestGraph from "../MarkerGraph";
 import {
   AdminNotesForm,
   AdminNotesHistory,
@@ -1176,7 +1176,7 @@ const Patient = () => {
         <Dialog
           open={tests.expandChartDialog}
           title={tests.testName}
-          message={<TestGraph />}
+          message={<MarkerGraph />}
           applyForm={() => dispatch(toggleTestsChartExpandDialog())}
           cancelForm={() => dispatch(toggleTestsChartExpandDialog())}
           hideActions
