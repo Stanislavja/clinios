@@ -109,7 +109,6 @@ const Requisitions = (props) => {
   }, [fetchLabCompanyList, fetchRecentTests, fetchFavoriteTests]);
 
   const onFormSubmit = (selectedTest) => {
-    debugger
     const reqBody = {
       data: {
         marker_id: selectedTest.marker_id,

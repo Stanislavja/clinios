@@ -104,7 +104,7 @@ const Requisitions = (props) => {
   const onFormSubmit = () => {
     const reqBody = {
       data: {
-        cpt_id: selectedLab.id,
+        marker_id: selectedLab.id,
       },
     };
     PatientService.createRequisition(patientId, reqBody)

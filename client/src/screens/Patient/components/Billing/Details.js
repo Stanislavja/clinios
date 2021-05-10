@@ -120,7 +120,6 @@ const BillingDetails = (props) => {
               <StyledTableCell>Amount</StyledTableCell>
               <StyledTableCell>Transaction Type</StyledTableCell>
               <StyledTableCell>Encounter Title</StyledTableCell>
-              <StyledTableCell>CPT Procedure</StyledTableCell>
               <StyledTableCell>Notes</StyledTableCell>
               <StyledTableCell align="center">Actions</StyledTableCell>
             </TableRow>
@@ -138,7 +137,6 @@ const BillingDetails = (props) => {
                   </TableCell>
                   <TableCell>{item.tran_type}</TableCell>
                   <TableCell>{item.encounter_title}</TableCell>
-                  <TableCell>{item.cpt_procedure || ""}</TableCell>
                   <TableCell>{item.note || ""}</TableCell>
                   <TableCell align="center">
                     <IconButton onClick={() => editBillingHandler(item)}>
@@ -155,7 +153,7 @@ const BillingDetails = (props) => {
               ))
               : (
                 <StyledTableRow>
-                  <TableCell colSpan={7}>
+                  <TableCell colSpan={6}>
                     <Typography align="center" variant="body1">
                       No Records Found...
                     </Typography>

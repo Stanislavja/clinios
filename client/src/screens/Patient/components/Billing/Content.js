@@ -132,17 +132,6 @@ const BillingContent = (props) => {
               {item.encounter_title}
             </Typography>
           </Grid> */}
-          {!!item.cpt_procedure && (
-            <Grid item className={classes.block}>
-              <Typography
-                component="span"
-                className={classes.text12}
-                color="textPrimary"
-              >
-                {item.cpt_procedure}
-              </Typography>
-            </Grid>
-          )}
           <Grid item className={classes.blockAction}>
             <IconButton
               onClick={() => editItemHandler(item)}

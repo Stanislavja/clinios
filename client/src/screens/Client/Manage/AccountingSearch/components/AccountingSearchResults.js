@@ -201,8 +201,6 @@ AccountingSearchResults.propTypes = {
     PropTypes.shape({
       amount: PropTypes.number.isRequired,
       client_id: PropTypes.number.isRequired,
-      cpt_id: PropTypes.string,
-      cpt_name: PropTypes.string,
       created: PropTypes.string.isRequired,
       encounter_title: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
