@@ -119,8 +119,8 @@ const TestGraph = () => {
         (res) => {
           const data = res?.data?.data;
           const cRange = {
-            high: data[data.length - 1].range_high,
-            low: data[data.length - 1].range_low,
+            high: Number(data[data.length - 1].range_high),
+            low: Number(data[data.length - 1].range_low),
           };
           const graphData = res?.data.data.map((d) => ({
             id: d.marker_id,
