@@ -48,7 +48,7 @@ const BillingProcedures = () => {
         <Table size="small">
           <TableHead>
             <TableRow>
-              <StyledTableCellSm>CPT</StyledTableCellSm>
+              <StyledTableCellSm>Marker</StyledTableCellSm>
               <StyledTableCellSm>Procedure</StyledTableCellSm>
               <StyledTableCellSm>Fee</StyledTableCellSm>
               <StyledTableCellSm>Amount</StyledTableCellSm>
