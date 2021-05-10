@@ -1858,7 +1858,7 @@ const searchTests = async (req, res) => {
 
   const db = makeDb(configuration, res);
   try {
-    let $sql = `select c.id cpt_id, lc.name lab_name, c.name, case when cc.cpt_id is not null then true end favorite
+    let $sql = `select c.id marker_id, lc.name lab_name, c.name, case when cc.cpt_id is not null then true end favorite
       from cpt c
       left join lab_company lc on lc.id=c.lab_company_id
       left join client_cpt cc on cc.client_id=${req.client_id}
@@ -1895,7 +1895,7 @@ const getRecentTests = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select c.id cpt_id, lc.name lab_name, c.name, case when cc.cpt_id is not null  then true end favorite
+      `select c.id marker_id, lc.name lab_name, c.name, case when cc.cpt_id is not null  then true end favorite
       from patient_cpt pc
       left join cpt c on c.id=pc.cpt_id
       left join lab_company lc on lc.id=c.lab_company_id
@@ -1924,7 +1924,7 @@ const getFavoriteTests = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select c.id cpt_id, lc.name lab_name, c.name, case when cc.cpt_id is not null then true end favorite
+      `select c.id marker_id, lc.name lab_name, c.name, case when cc.cpt_id is not null then true end favorite
       from cpt c
       left join lab_company lc on lc.id=c.lab_company_id
       join client_cpt cc on cc.client_id=${req.client_id}
@@ -2257,7 +2257,7 @@ const getRequisitions = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select pc.created, pc.id, c.name cpt_name, c.id cpt_id, lc.name lab_name
+      `select pc.created, pc.id, c.name marker_name, c.id marker_id, lc.name lab_name
         from patient_cpt pc
         left join cpt c on c.id=pc.cpt_id
         left join lab_company lc on lc.id=c.lab_company_id
@@ -2285,12 +2285,12 @@ const getRequisitions = async (req, res) => {
 
 const createRequisitions = async (req, res) => {
   const { patient_id } = req.params;
-  const { cpt_id } = req.body.data;
+  const { marker_id } = req.body.data;
   const db = makeDb(configuration, res);
   try {
     const insertResponse = await db.query(
       `insert into patient_cpt (patient_id, cpt_id, client_id, created, created_user_id) 
-      values (${patient_id}, '${cpt_id}', ${req.client_id}, now(), ${req.user_id})`
+      values (${patient_id}, '${marker_id}', ${req.client_id}, now(), ${req.user_id})`
     );
 
     if (!insertResponse.affectedRows) {

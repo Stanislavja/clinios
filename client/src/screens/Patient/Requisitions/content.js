@@ -97,15 +97,15 @@ const RequisitionsContent = (props) => {
               {moment(item.created).format("MMM D YYYY")}
             </Typography>
             {
-              !!item.cpt_name && item.cpt_name.length > 30
+              !!item.marker_name && item.marker_name.length > 30
                 ? (
-                  <Tooltip title={item.cpt_name}>
+                  <Tooltip title={item.marker_name}>
                     <Typography
                       component="span"
                       className={`${classes.text12} ${classes.fullWidth}`}
                       color="textPrimary"
                     >
-                      {item.cpt_name}
+                      {item.marker_name}
                     </Typography>
                   </Tooltip>
                 )
@@ -115,7 +115,7 @@ const RequisitionsContent = (props) => {
                     className={`${classes.text12} ${classes.fullWidth}`}
                     color="textPrimary"
                   >
-                    {item.cpt_name}
+                    {item.marker_name}
                   </Typography>
                 )
             }
