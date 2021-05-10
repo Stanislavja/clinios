@@ -8,8 +8,8 @@ class Tests {
     return axios.get(`${API_BASE}/tests`, { headers: authHeader() });
   }
 
-  getTestMarkerName(cptId) {
-    return axios.get(`${API_BASE}/tests/page-title/${cptId}`, {
+  getTestMarkerName(markerId) {
+    return axios.get(`${API_BASE}/tests/page-title/${markerId}`, {
       headers: authHeader(),
     });
   }
@@ -26,9 +26,9 @@ class Tests {
     });
   }
 
-  getConventionalRange(patientId, cptId) {
+  getConventionalRange(patientId, markerId) {
     return axios.get(
-      `${API_BASE}/tests/conventionalrange/${patientId}/${cptId}`,
+      `${API_BASE}/tests/conventionalrange/${patientId}/${markerId}`,
       { headers: authHeader() },
     );
   }
