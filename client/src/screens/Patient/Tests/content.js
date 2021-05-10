@@ -133,8 +133,8 @@ const TestsContent = () => {
           lab_dt: new Date(),
           name: "Osmolarity (Derived)",
           unit: "",
-          value: ((1.9 * (sodiumTest.value + potassiumTest.value))
-            + glucoseTest.value + (ureaTest.value * 0.5) + 5).toFixed(1),
+          value: ((1.9 * (+sodiumTest.value + +potassiumTest.value))
+            + +glucoseTest.value + (+ureaTest.value * 0.5) + 5).toFixed(1),
         };
         tempTestsArray.push(newTest);
       }
@@ -148,7 +148,8 @@ const TestsContent = () => {
           lab_dt: new Date(),
           name: "Viscosity High Shear (Derived)",
           unit: "",
-          value: ((0.12 * hematocritTest.value) + (0.17 * ((proteinTotalTest.value * 10) - 2.07))).toFixed(1),
+          value:
+            ((0.12 * +hematocritTest.value) + (0.17 * ((+proteinTotalTest.value * 10) - 2.07))).toFixed(1),
         };
         tempTestsArray.push(newTest);
       }
@@ -162,7 +163,7 @@ const TestsContent = () => {
           lab_dt: new Date(),
           name: "Transferrin Percent Saturation (Derived)",
           unit: "",
-          value: ((ironTest.value / transferrinTest.value) * 0.709).toFixed(1),
+          value: ((+ironTest.value / +transferrinTest.value) * 0.709).toFixed(1),
         };
         tempTestsArray.push(newTest);
       }
@@ -176,7 +177,7 @@ const TestsContent = () => {
           lab_dt: new Date(),
           name: "Anion Gap (Na-Cl-HCO3) (Derived)",
           unit: "",
-          value: (sodiumTest.value - (chlorideTest.value + carbonDioxideTest.value)).toFixed(1),
+          value: (+sodiumTest.value - (+chlorideTest.value + +carbonDioxideTest.value)).toFixed(1),
         };
         tempTestsArray.push(newTest);
       }
