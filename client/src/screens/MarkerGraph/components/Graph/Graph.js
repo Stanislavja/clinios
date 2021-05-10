@@ -13,6 +13,7 @@ import {
 } from "recharts";
 
 import Colors from "../../../../theme/colors";
+import { round1 } from "../../../../utils/helpers";
 import CustomTooltip from "../Tooltip";
 
 const countDecimals = (value) => {
@@ -168,7 +169,7 @@ const Graph = ({ data, functionalRange, conventionalRange }) => {
             y={conventionalRange?.high}
             label={{
               position: "insideTopLeft",
-              value: "Conventional range",
+              value: `Conventional range ${round1(conventionalRange?.high)}`,
               fontSize: "0.6rem",
               fill: "#477fc9",
             }}
@@ -179,7 +180,7 @@ const Graph = ({ data, functionalRange, conventionalRange }) => {
               y={functionalRange?.high}
               label={{
                 position: "insideTopLeft",
-                value: "Functional range",
+                value: `Functional range ${round1(functionalRange?.high)}`,
                 fontSize: "0.6rem",
                 fill: "#477fc9",
               }}
@@ -191,7 +192,7 @@ const Graph = ({ data, functionalRange, conventionalRange }) => {
               y={functionalRange?.low}
               label={{
                 position: "insideBottomLeft",
-                value: "Functional range",
+                value: `Functional range ${round1(functionalRange?.low)}`,
                 fontSize: "0.6rem",
                 fill: "#477fc9",
               }}
@@ -202,7 +203,7 @@ const Graph = ({ data, functionalRange, conventionalRange }) => {
             y={conventionalRange?.low}
             label={{
               position: "insideBottomLeft",
-              value: "Conventional range",
+              value: `Conventional range ${round1(conventionalRange?.low)}`,
               fontSize: "0.6rem",
               fill: "#477fc9",
             }}
