@@ -107,8 +107,8 @@ const TestsContent = () => {
     setSelectedMarker(null);
   };
 
-  const hasTestValue = (value, cptId, testsArray) => {
-    const matchArray = testsArray.filter((x) => x.marker_id === cptId);
+  const hasTestValue = (value, markerId, testsArray) => {
+    const matchArray = testsArray.filter((x) => x.marker_id === markerId);
     let res = null;
     if (matchArray.length) {
       const [firstEl] = matchArray;
