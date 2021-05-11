@@ -71,6 +71,7 @@ const PurchaseLabs = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { lastVisitedPatient, user } = useAuth();
   const [selected, setSelected] = useState([]);
+  const [selectedLabs, setSelectedLabs] = useState([]);
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [total, setTotal] = useState(0);
@@ -107,8 +108,9 @@ const PurchaseLabs = () => {
   };
 
   const calculateTotal = (selectedLabIds) => {
-    const selectedLabs = labs.filter((lab) => selectedLabIds.includes(lab.id));
-    const sumOfSelectedLabs = selectedLabs.reduce((acc, lab) => (acc + lab.price), 0);
+    const sLabs = labs.filter((lab) => selectedLabIds.includes(lab.cpt_id));
+    setSelectedLabs(sLabs);
+    const sumOfSelectedLabs = sLabs.reduce((acc, lab) => (acc + lab.price), 0);
     setTotal(sumOfSelectedLabs);
   };
 
@@ -143,6 +145,7 @@ const PurchaseLabs = () => {
         customer_id: user.corp_stripe_customer_id, // As Clinios account
         amount: total,
         cpt_ids: selected,
+        selectedLabs,
       },
     };
 
@@ -157,7 +160,7 @@ const PurchaseLabs = () => {
     });
   };
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
+  const isSelected = (cpt_id) => selected.indexOf(cpt_id) !== -1;
 
   return (
     <>
@@ -181,7 +184,6 @@ const PurchaseLabs = () => {
                   color="textPrimary"
                   className={classes.title}
                 >
-
                   Purchase Lab Confirmation
                 </Typography>
                 <Box mt={2}>
@@ -227,16 +229,17 @@ const PurchaseLabs = () => {
                       </TableHead>
                       <TableBody>
                         {labs.map((lab) => {
-                          const isChecked = isSelected(lab.id);
+                          const isChecked = isSelected(lab.cpt_id);
                           return (
                             <TableRow
                               hover
-                              onClick={(event) => handleClick(event, lab.id)}
+                              key={lab.cpt_id}
+                              onClick={(event) => handleClick(event, lab.cpt_id)}
                               role="checkbox"
                             >
                               <TableCell component="th" scope="row">
                                 <Checkbox
-                                  onClick={(event) => handleClick(event, lab.id)}
+                                  onClick={(event) => handleClick(event, lab.cpt_id)}
                                   className={classes.selectCheckbox}
                                   checked={isChecked}
                                 />
@@ -249,14 +252,14 @@ const PurchaseLabs = () => {
                             </TableRow>
                           );
                         })}
-                        <div className={classes.Total}>
-                          <span>Total:</span>
-                          $
-                          {total?.toFixed(2)}
-                        </div>
                       </TableBody>
                     </Table>
                   </TableContainer>
+                  <div className={classes.Total}>
+                    <span>Total:</span>
+                    $
+                    {total?.toFixed(2)}
+                  </div>
                   <FormControl
                     variant="outlined"
                     className={classes.customSelect}

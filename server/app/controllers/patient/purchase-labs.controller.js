@@ -9,7 +9,7 @@ const {
 const getPurchaseLabs = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
-    const $sql = `select c.id, c.name cpt_name, c.price, pc.created, lc.name lab_company_name
+    const $sql = `select pc.id patient_cpt_id, c.id cpt_id, c.name cpt_name, c.price, pc.created, lc.name lab_company_name
     from patient_cpt pc
     left join tranc t on t.id = pc.tranc_id
     left join cpt c on c.id=pc.cpt_id
@@ -17,8 +17,7 @@ const getPurchaseLabs = async (req, res) => {
     where pc.patient_id=${req.user_id}
     and pc.tranc_id is null
     order by c.name
-    limit 100
-    `;
+    limit 100`;
 
     const dbResponse = await db.query($sql);
 
@@ -114,9 +113,10 @@ const createPurchaseLabs = async (req, res) => {
         tranc_id: insertResponse.insertId,
         cpt_id: formData.cpt_ids,
       };
-      if (formData.cpt_ids.length > 0) {
-        formData.cpt_ids.map(async (cpt_id) => {
-          trancDetailsData.cpt_id = cpt_id;
+      if (formData.selectedLabs.length > 0) {
+        formData.selectedLabs.map(async (lab) => {
+          trancDetailsData.cpt_id = lab.cpt_id;
+          trancDetailsData.patient_cpt_id = lab.patient_cpt_id;
           await db.query(`insert into tranc_detail set ?`, [trancDetailsData]);
         });
       }
