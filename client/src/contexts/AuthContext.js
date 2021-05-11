@@ -93,7 +93,7 @@ const AuthContext = createContext({
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(isDev() ? logger(reducer) : reducer, initialAuthState);
-  const [cookies] = useCookies(["last_viewed_patient_id"]);
+  const [cookies] = useCookies();
 
   const updateLastVisitedPatient = async (patientId) => {
     try {
@@ -120,6 +120,7 @@ export const AuthProvider = ({ children }) => {
     const { accessToken, user } = response.data.data;
     setSession(accessToken);
     const patientId = cookies[`${user.id}-last_viewed_patient_id`];
+
     updateLastVisitedPatient(patientId);
     dispatch({
       type: "LOGIN",
