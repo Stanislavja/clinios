@@ -93,15 +93,7 @@ const resetClientRange = async (req, res) => {
 
 const updateClientRange = async (req, res) => {
   const { id } = req.params;
-  const {
-    marker_id,
-    range_low,
-    range_high,
-    seq,
-    compare_item,
-    compare_operator,
-    compare_to,
-  } = req.body.data;
+  const { marker_id, range_low, range_high, seq, compare_item, compare_operator, compare_to } = req.body.data;
 
   const db = makeDb(configuration, res);
   try {
