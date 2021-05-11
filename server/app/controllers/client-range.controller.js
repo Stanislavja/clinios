@@ -5,7 +5,8 @@ const { errorMessage, successMessage, status } = require("../helpers/status");
 const getClientRanges = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
-    const dbResponse = await db.query(`select cr.id, cr.cpt_id marker_id, c.name marker_name, cr.seq, cr.compare_item, cr.compare_operator,
+    const dbResponse = await db.query(
+      `select cr.id, cr.cpt_id marker_id, c.name marker_name, cr.seq, cr.compare_item, cr.compare_operator,
      cr.compare_to, cr.range_low, cr.range_high
     , cr.created, concat(u.firstname, ' ', u.lastname) created_user, cr.updated
     , concat(u2.firstname, ' ', u2.lastname) updated_user 
@@ -15,7 +16,8 @@ const getClientRanges = async (req, res) => {
     left join user u2 on u2.id=cr.updated_user_id
     where cr.client_id=${req.client_id}
     order by c.name, cr.seq
-    `);
+    `
+    );
 
     if (!dbResponse) {
       errorMessage.message = "None found";
@@ -143,7 +145,13 @@ const updateClientRange = async (req, res) => {
 };
 
 const getClientRange = async (req, res) => {
-  const { marker_id, seq, compare_item, compare_operator, compare_to } = req.query;
+  const {
+    marker_id,
+    seq,
+    compare_item,
+    compare_operator,
+    compare_to,
+  } = req.query;
   const db = makeDb(configuration, res);
   try {
     const dbResponse = await db.query(`
