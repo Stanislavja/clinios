@@ -72,7 +72,7 @@ const SearchResults = ({ results, noContent, handleClose }) => {
                       className={classes.avatar}
                       component={RouterLink}
                       src={(result && result.avatar) || ""}
-                      to="/"
+                      to={`/patients/${result.id}`}
                     />
                   </ListItemAvatar>
                   <ListItemText
