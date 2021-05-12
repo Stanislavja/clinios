@@ -63,7 +63,8 @@ const createPurchaseLabs = async (req, res) => {
         name: existingPatient.firstname + existingPatient.lastname,
       });
       formData.customer_id = customer.id;
-      // Update patient corp_stripe_customer_id field
+      // When patient initially signs up, a stripe customer id is created instantly for the doctor.
+      // When patient buys a lab, only then is a stripe corp customer id created for Clinios, David May 2021.
       await db.query(
         `update patient set corp_stripe_customer_id='${customer.id}' where id=${req.user_id}`
       );
@@ -121,8 +122,10 @@ const createPurchaseLabs = async (req, res) => {
         });
       }
 
-      await db.query(`
-        update patient_cpt set tranc_id=${insertResponse.insertId} where cpt_id IN ('${formData.cpt_ids}')`);
+      await db.query(`update patient_cpt 
+      set tranc_id=${insertResponse.insertId} 
+      where cpt_id in ('${formData.cpt_ids}')
+      `);
     }
     successMessage.data = insertResponse;
     successMessage.message = "Insert successful";
