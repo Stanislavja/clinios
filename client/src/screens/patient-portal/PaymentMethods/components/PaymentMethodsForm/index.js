@@ -111,7 +111,11 @@ const PaymentMethodsForm = (props) => {
 
   const updateFields = () => {
     formFields.cardType = paymentMethodType(cardData.type);
-    formFields.cardNumber = cardData.account_number;
+    if (isEdit) {
+      formFields.cardNumber = `____/____/____/${cardData.account_number}`;
+    } else {
+      formFields.cardNumber = cardData.account_number;
+    }
     formFields.expiryDate = cardData.exp;
     setFormFields({ ...formFields });
   };
@@ -228,6 +232,8 @@ const PaymentMethodsForm = (props) => {
               <MaskInput
                 required
                 fullWidth
+                autoFocus={!isEdit}
+                disabled={isEdit}
                 className={classes.gutterBottom}
                 type="text"
                 name="cardNumber"
@@ -262,6 +268,7 @@ const PaymentMethodsForm = (props) => {
             <Grid>
               <MaskInput
                 required
+                autoFocus={isEdit}
                 className={classes.gutterBottom}
                 type="text"
                 name="expiryDate"
