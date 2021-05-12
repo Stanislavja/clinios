@@ -81,7 +81,7 @@ const createPurchaseLabs = async (req, res) => {
     const intentData = {
       payment_method: formData.corp_stripe_payment_method_token,
       customer: formData.customer_id,
-      description: `${JSON.stringify(formData.cpt_ids)}; patient_id: ${
+      description: `${JSON.stringify(formData.patient_cpt_ids)}; patient_id: ${
         req.user_id
       }`,
       amount: Number(formData.amount) * 100, // it accepts cents
@@ -112,7 +112,7 @@ const createPurchaseLabs = async (req, res) => {
     if (insertResponse.insertId) {
       const trancDetailsData = {
         tranc_id: insertResponse.insertId,
-        cpt_id: formData.cpt_ids,
+        // cpt_id: formData.cpt_ids,
       };
       if (formData.selectedLabs.length > 0) {
         formData.selectedLabs.map(async (lab) => {
@@ -122,10 +122,8 @@ const createPurchaseLabs = async (req, res) => {
         });
       }
 
-      await db.query(`update patient_cpt 
-      set tranc_id=${insertResponse.insertId} 
-      where cpt_id in ('${formData.cpt_ids}')
-      `);
+      await db.query(`update patient_cpt set tranc_id=${insertResponse.insertId} 
+      where cpt_id in ('${formData.patient_cpt_ids}')`);
     }
     successMessage.data = insertResponse;
     successMessage.message = "Insert successful";

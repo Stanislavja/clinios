@@ -108,7 +108,7 @@ const PurchaseLabs = () => {
   };
 
   const calculateTotal = (selectedLabIds) => {
-    const sLabs = labs.filter((lab) => selectedLabIds.includes(lab.cpt_id));
+    const sLabs = labs.filter((lab) => selectedLabIds.includes(lab.patient_cpt_id));
     setSelectedLabs(sLabs);
     const sumOfSelectedLabs = sLabs.reduce((acc, lab) => (acc + lab.price), 0);
     setTotal(sumOfSelectedLabs);
@@ -137,14 +137,13 @@ const PurchaseLabs = () => {
 
   const handleOnSubmit = () => {
     const paymentMethodForStripe = paymentMethods.filter((p) => p.id === Number(selectedPaymentMethod));
-
     const payload = {
       data: {
         payment_method_id: selectedPaymentMethod,
         corp_stripe_payment_method_token: paymentMethodForStripe[0].corp_stripe_payment_method_token,
         customer_id: user.corp_stripe_customer_id, // As Clinios account
         amount: total,
-        cpt_ids: selected,
+        patient_cpt_ids: selected,
         selectedLabs,
       },
     };
@@ -160,7 +159,7 @@ const PurchaseLabs = () => {
     });
   };
 
-  const isSelected = (cpt_id) => selected.indexOf(cpt_id) !== -1;
+  const isSelected = (patient_cpt_id) => selected.indexOf(patient_cpt_id) !== -1;
 
   return (
     <>
@@ -229,17 +228,17 @@ const PurchaseLabs = () => {
                       </TableHead>
                       <TableBody>
                         {labs.map((lab) => {
-                          const isChecked = isSelected(lab.cpt_id);
+                          const isChecked = isSelected(lab.patient_cpt_id);
                           return (
                             <TableRow
                               hover
-                              key={lab.cpt_id}
-                              onClick={(event) => handleClick(event, lab.cpt_id)}
+                              key={lab.patient_cpt_id}
+                              onClick={(event) => handleClick(event, lab.patient_cpt_id)}
                               role="checkbox"
                             >
                               <TableCell component="th" scope="row">
                                 <Checkbox
-                                  onClick={(event) => handleClick(event, lab.cpt_id)}
+                                  onClick={(event) => handleClick(event, lab.patient_cpt_id)}
                                   className={classes.selectCheckbox}
                                   checked={isChecked}
                                 />
