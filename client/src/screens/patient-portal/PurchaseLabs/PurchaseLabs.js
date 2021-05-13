@@ -71,6 +71,7 @@ const PurchaseLabs = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { lastVisitedPatient, user } = useAuth();
   const [selected, setSelected] = useState([]);
+  const [selectedLabs, setSelectedLabs] = useState([]);
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [total, setTotal] = useState(0);
@@ -107,8 +108,9 @@ const PurchaseLabs = () => {
   };
 
   const calculateTotal = (selectedLabIds) => {
-    const selectedLabs = labs.filter((lab) => selectedLabIds.includes(lab.id));
-    const sumOfSelectedLabs = selectedLabs.reduce((acc, lab) => (acc + lab.price), 0);
+    const sLabs = labs.filter((lab) => selectedLabIds.includes(lab.patient_cpt_id));
+    setSelectedLabs(sLabs);
+    const sumOfSelectedLabs = sLabs.reduce((acc, lab) => (acc + lab.price), 0);
     setTotal(sumOfSelectedLabs);
   };
 
@@ -135,14 +137,14 @@ const PurchaseLabs = () => {
 
   const handleOnSubmit = () => {
     const paymentMethodForStripe = paymentMethods.filter((p) => p.id === Number(selectedPaymentMethod));
-
     const payload = {
       data: {
         payment_method_id: selectedPaymentMethod,
         corp_stripe_payment_method_token: paymentMethodForStripe[0].corp_stripe_payment_method_token,
         customer_id: user.corp_stripe_customer_id, // As Clinios account
         amount: total,
-        cpt_ids: selected,
+        patient_cpt_ids: selected,
+        selectedLabs,
       },
     };
 
@@ -157,7 +159,7 @@ const PurchaseLabs = () => {
     });
   };
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
+  const isSelected = (patient_cpt_id) => selected.indexOf(patient_cpt_id) !== -1;
 
   return (
     <>
@@ -181,7 +183,6 @@ const PurchaseLabs = () => {
                   color="textPrimary"
                   className={classes.title}
                 >
-
                   Purchase Lab Confirmation
                 </Typography>
                 <Box mt={2}>
@@ -227,16 +228,17 @@ const PurchaseLabs = () => {
                       </TableHead>
                       <TableBody>
                         {labs.map((lab) => {
-                          const isChecked = isSelected(lab.id);
+                          const isChecked = isSelected(lab.patient_cpt_id);
                           return (
                             <TableRow
                               hover
-                              onClick={(event) => handleClick(event, lab.id)}
+                              key={lab.patient_cpt_id}
+                              onClick={(event) => handleClick(event, lab.patient_cpt_id)}
                               role="checkbox"
                             >
                               <TableCell component="th" scope="row">
                                 <Checkbox
-                                  onClick={(event) => handleClick(event, lab.id)}
+                                  onClick={(event) => handleClick(event, lab.patient_cpt_id)}
                                   className={classes.selectCheckbox}
                                   checked={isChecked}
                                 />
@@ -249,14 +251,14 @@ const PurchaseLabs = () => {
                             </TableRow>
                           );
                         })}
-                        <div className={classes.Total}>
-                          <span>Total:</span>
-                          $
-                          {total?.toFixed(2)}
-                        </div>
                       </TableBody>
                     </Table>
                   </TableContainer>
+                  <div className={classes.Total}>
+                    <span>Total:</span>
+                    $
+                    {total?.toFixed(2)}
+                  </div>
                   <FormControl
                     variant="outlined"
                     className={classes.customSelect}

@@ -9,7 +9,7 @@ const {
 const getPurchaseLabs = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
-    const $sql = `select c.id, c.name cpt_name, c.price, pc.created, lc.name lab_company_name
+    const $sql = `select pc.id patient_cpt_id, c.id cpt_id, c.name cpt_name, c.price, pc.created, lc.name lab_company_name
     from patient_cpt pc
     left join tranc t on t.id = pc.tranc_id
     left join cpt c on c.id=pc.cpt_id
@@ -17,8 +17,7 @@ const getPurchaseLabs = async (req, res) => {
     where pc.patient_id=${req.user_id}
     and pc.tranc_id is null
     order by c.name
-    limit 100
-    `;
+    limit 100`;
 
     const dbResponse = await db.query($sql);
 
@@ -64,7 +63,8 @@ const createPurchaseLabs = async (req, res) => {
         name: existingPatient.firstname + existingPatient.lastname,
       });
       formData.customer_id = customer.id;
-      // Update patient corp_stripe_customer_id field
+      // When patient initially signs up, a stripe customer id is created instantly for the doctor.
+      // When patient buys a lab, only then is a stripe corp customer id created for Clinios, David May 2021.
       await db.query(
         `update patient set corp_stripe_customer_id='${customer.id}' where id=${req.user_id}`
       );
@@ -81,7 +81,7 @@ const createPurchaseLabs = async (req, res) => {
     const intentData = {
       payment_method: formData.corp_stripe_payment_method_token,
       customer: formData.customer_id,
-      description: `${JSON.stringify(formData.cpt_ids)}; patient_id: ${
+      description: `${JSON.stringify(formData.patient_cpt_ids)}; patient_id: ${
         req.user_id
       }`,
       amount: Number(formData.amount) * 100, // it accepts cents
@@ -112,17 +112,18 @@ const createPurchaseLabs = async (req, res) => {
     if (insertResponse.insertId) {
       const trancDetailsData = {
         tranc_id: insertResponse.insertId,
-        cpt_id: formData.cpt_ids,
+        // cpt_id: formData.cpt_ids,
       };
-      if (formData.cpt_ids.length > 0) {
-        formData.cpt_ids.map(async (cpt_id) => {
-          trancDetailsData.cpt_id = cpt_id;
+      if (formData.selectedLabs.length > 0) {
+        formData.selectedLabs.map(async (lab) => {
+          trancDetailsData.cpt_id = lab.cpt_id;
+          trancDetailsData.patient_cpt_id = lab.patient_cpt_id;
           await db.query(`insert into tranc_detail set ?`, [trancDetailsData]);
         });
       }
 
-      await db.query(`
-        update patient_cpt set tranc_id=${insertResponse.insertId} where cpt_id IN ('${formData.cpt_ids}')`);
+      await db.query(`update patient_cpt set tranc_id=${insertResponse.insertId} 
+      where cpt_id in ('${formData.patient_cpt_ids}')`);
     }
     successMessage.data = insertResponse;
     successMessage.message = "Insert successful";

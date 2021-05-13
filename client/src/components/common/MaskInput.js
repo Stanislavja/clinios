@@ -6,11 +6,24 @@ import InputMask from "react-input-mask";
 
 const MaskInput = (props) => {
   const {
-    className, required, fullWidth, type, name, label, margin, variant, value, mask, onChange,
+    className,
+    disabled,
+    required,
+    fullWidth,
+    type,
+    name,
+    label,
+    autoFocus,
+    margin,
+    variant,
+    value,
+    mask,
+    onChange,
   } = props;
 
   return (
     <InputMask
+      disabled={disabled}
       mask={mask}
       value={value}
       onChange={onChange}
@@ -18,6 +31,8 @@ const MaskInput = (props) => {
       {(inputProps) => (
         <TextField
           {...inputProps}
+          disabled={disabled}
+          autoFocus={autoFocus}
           required={required}
           fullWidth={fullWidth}
           name={name}
@@ -41,7 +56,9 @@ MaskInput.defaultProps = {
   variant: "outlined",
   value: "",
   mask: "",
+  autoFocus: false,
   required: false,
+  disabled: false,
   fullWidth: false,
 };
 
@@ -54,6 +71,8 @@ MaskInput.propTypes = {
   variant: PropTypes.string,
   value: PropTypes.string,
   mask: PropTypes.string,
+  autoFocus: PropTypes.bool,
+  disabled: PropTypes.bool,
   required: PropTypes.bool,
   fullWidth: PropTypes.bool,
   onChange: PropTypes.func.isRequired,

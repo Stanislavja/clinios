@@ -104,6 +104,19 @@ export const formatPdfDate = (date) => {
   return [day, month, year].join("/");
 };
 
+export const dateDiffInMinutes = (d1, d2) => {
+  const t2 = d2.getTime();
+  const t1 = d1.getTime();
+
+  return parseInt(Math.abs(t1 - t2) / 60000, 10);
+};
+
+export const dateDiffInHours = (d1, d2) => {
+  const t2 = d2.getTime();
+  const t1 = d1.getTime();
+  return parseInt(Math.abs(t1 - t2) / 36e5, 10);
+};
+
 export const dateDiffInDays = (d1, d2) => {
   const t2 = d2.getTime();
   const t1 = d1.getTime();
