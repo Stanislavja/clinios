@@ -27,13 +27,13 @@ const getFunctionalRange = async (req, res) => {
 };
 
 const getPageTitle = async (req, res) => {
-  const { cptId } = req.params;
+  const { markerId } = req.params;
 
   const db = makeDb(configuration, res);
   try {
     const $sql = `select name
     from marker 
-    where id = '${cptId}'`;
+    where id = '${markerId}'`;
 
     const dbResponse = await db.query($sql);
 
@@ -51,7 +51,7 @@ const getPageTitle = async (req, res) => {
   }
 };
 
-const getLabcptByLabId = async (req, res) => {
+const getLabMarkerByLabId = async (req, res) => {
   const { patientId, labId } = req.params;
 
   const db = makeDb(configuration, res);
@@ -79,7 +79,7 @@ const getLabcptByLabId = async (req, res) => {
   }
 };
 
-const getLabcpt = async (req, res) => {
+const getLabMarker = async (req, res) => {
   const { patientId } = req.params;
 
   const db = makeDb(configuration, res);
@@ -114,7 +114,7 @@ const getTestGraph = async (req, res) => {
 
   const db = makeDb(configuration, res);
   try {
-    const $sql = `select lc.lab_id, lc.lab_dt, lc.cpt_id, lc.value, lc.range_low, lc.range_high, lc.unit, l.filename, lc.client_id
+    const $sql = `select lc.lab_id, lc.lab_dt, lc.cpt_id marker_id, lc.value, lc.range_low, lc.range_high, lc.unit, l.filename, lc.client_id
     from lab_marker lc
     left join lab l on l.id=lc.lab_id
     where lc.patient_id=${req.patient_id || patientId}
@@ -139,14 +139,14 @@ const getTestGraph = async (req, res) => {
 };
 
 const getConventionalRange = async (req, res) => {
-  const { patientId, cptId } = req.params;
+  const { patientId, markerId } = req.params;
   const db = makeDb(configuration, res);
   try {
-    const $sql = `select lc.lab_id, lc.lab_dt, lc.cpt_id, lc.value, lc.range_low, lc.range_high, lc.unit, l.filename, lc.client_id
+    const $sql = `select lc.lab_id, lc.lab_dt, lc.cpt_id marker_id, lc.value, lc.range_low, lc.range_high, lc.unit, l.filename, lc.client_id
     from lab_marker lc
     left join lab l on l.id=lc.lab_id
     where lc.patient_id=${req.patient_id || patientId}
-    and lc.cpt_id='${cptId}'
+    and lc.cpt_id='${markerId}'
     order by lc.lab_dt, lc.lab_id
     limit 200`;
 
@@ -169,8 +169,8 @@ const getConventionalRange = async (req, res) => {
 const testReport = {
   getFunctionalRange,
   getPageTitle,
-  getLabcptByLabId,
-  getLabcpt,
+  getLabMarkerByLabId,
+  getLabMarker,
   getTestGraph,
   getConventionalRange,
 };

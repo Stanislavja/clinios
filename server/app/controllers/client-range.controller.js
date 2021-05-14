@@ -5,7 +5,8 @@ const { errorMessage, successMessage, status } = require("../helpers/status");
 const getClientRanges = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
-    const dbResponse = await db.query(`select cr.id, cr.cpt_id, c.name cpt_name, cr.seq, cr.compare_item, cr.compare_operator,
+    const dbResponse = await db.query(
+      `select cr.id, cr.cpt_id marker_id, c.name marker_name, cr.seq, cr.compare_item, cr.compare_operator,
      cr.compare_to, cr.range_low, cr.range_high
     , cr.created, concat(u.firstname, ' ', u.lastname) created_user, cr.updated
     , concat(u2.firstname, ' ', u2.lastname) updated_user 
@@ -15,7 +16,8 @@ const getClientRanges = async (req, res) => {
     left join user u2 on u2.id=cr.updated_user_id
     where cr.client_id=${req.client_id}
     order by c.name, cr.seq
-    `);
+    `
+    );
 
     if (!dbResponse) {
       errorMessage.message = "None found";
@@ -34,7 +36,7 @@ const getClientRanges = async (req, res) => {
 
 const deleteClientRange = async (req, res) => {
   const { id } = req.params;
-  const { cpt_name } = req.body.data;
+  const { marker_name } = req.body.data;
   const db = makeDb(configuration, res);
   try {
     const deleteResponse = await db.query(`
@@ -44,7 +46,7 @@ const deleteClientRange = async (req, res) => {
     `);
 
     await db.query(
-      `insert into user_log values (${req.client_id}, ${req.user_id}, now(), null, 'Deleted marker range ${cpt_name}')`
+      `insert into user_log values (${req.client_id}, ${req.user_id}, now(), null, 'Deleted marker range ${marker_name}')`
     );
 
     if (!deleteResponse.affectedRows) {
@@ -70,7 +72,7 @@ const resetClientRange = async (req, res) => {
   try {
     await db.query(`delete from client_range where client_id=${req.client_id}`);
     const insertResponse = await db.query(`insert into client_range
-      select null, ${req.client_id}, cpt_id, seq, compare_item, compare_operator, compare_to, range_low, range_high, now(), ${req.user_id}, now(), ${req.user_id}
+      select null, ${req.client_id}, cpt_id marker_id, seq, compare_item, compare_operator, compare_to, range_low, range_high, now(), ${req.user_id}, now(), ${req.user_id}
       from client_range 
       where client_id=1`);
     await db.query(
@@ -92,7 +94,7 @@ const resetClientRange = async (req, res) => {
 const updateClientRange = async (req, res) => {
   const { id } = req.params;
   const {
-    cpt_id,
+    marker_id,
     range_low,
     range_high,
     seq,
@@ -105,7 +107,7 @@ const updateClientRange = async (req, res) => {
   try {
     let $sql;
 
-    $sql = `update client_range set cpt_id='${cpt_id}', range_low=${range_low}, range_high=${range_high}`;
+    $sql = `update client_range set cpt_id='${marker_id}', range_low=${range_low}, range_high=${range_high}`;
 
     if (seq && typeof seq !== "undefined") {
       $sql += `, seq='${seq}'`;
@@ -143,11 +145,12 @@ const updateClientRange = async (req, res) => {
 };
 
 const getClientRange = async (req, res) => {
-  const { cpt_id, seq, compare_item, compare_operator, compare_to } = req.query;
+  const { marker_id, seq, compare_item, compare_operator, compare_to } = req.query;
+
   const db = makeDb(configuration, res);
   try {
     const dbResponse = await db.query(`
-      select cr.cpt_id, c.name cpt_name, cr.seq, cr.compare_item, cr.compare_operator, cr.compare_to, cr.range_low, cr.range_high
+      select cr.cpt_id marker_id, c.name marker_name, cr.seq, cr.compare_item, cr.compare_operator, cr.compare_to, cr.range_low, cr.range_high
       , cr.created, concat(u.firstname, ' ', u.lastname) created_user
       , cr.updated, concat(u2.firstname, ' ', u2.lastname) updated_user
       from client_range cr
@@ -155,7 +158,7 @@ const getClientRange = async (req, res) => {
       left join user u on u.id=cr.created_user_id
       left join user u2 on u2.id=cr.updated_user_id
       where cr.client_id=${req.client_id}
-      and cr.cpt_id='${cpt_id}'
+      and cr.cpt_id='${marker_id}'
       and cr.seq='${seq}'
       and cr.compare_item='${compare_item}'
       and cr.compare_operator='${compare_operator}'
@@ -179,10 +182,14 @@ const getClientRange = async (req, res) => {
 
 const createClientRange = async (req, res) => {
   const db = makeDb(configuration, res);
+  const { marker_id } = req.body.data;
   const client_range = req.body.data;
+  client_range.cpt_id = marker_id;
   client_range.created_user_id = req.user_id;
   client_range.client_id = req.client_id;
   client_range.created = new Date();
+
+  delete req.body.data.marker_id; // deleting otherwise request fails
 
   try {
     const insertResponse = await db.query(

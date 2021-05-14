@@ -155,7 +155,8 @@ const NewTransactionForm = (props) => {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
-    if (formFields.type === 3 || formFields.type === 4) {
+    // As per CLIN-148 condition-1
+    if (!selectedBilling && (formFields.type === 3 || formFields.type === 4)) {
       openConfirmationDialog();
     } else {
       createBilling();
@@ -279,7 +280,8 @@ const NewTransactionForm = (props) => {
             onChange={handleDateChange}
             fullWidth
             required
-            disabled={checkIfDisabled}
+            // As per CLIN-148 condition-2
+            disabled={checkIfDisabled || (formFields.type === 3 || formFields.type === 4)}
           />
         </Grid>
         {TransactionFormFields.map((item) => (

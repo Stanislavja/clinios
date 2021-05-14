@@ -67,14 +67,14 @@ const TestGraph = () => {
   const patientData = state.patientInfo.data;
   const { selectedTest } = state.tests;
 
-  const [cptName, setCptName] = useState("");
+  const [markerName, setMarkerName] = useState("");
   const [conventionalRange, setConventionalRange] = useState({});
   const [functionalRange, setFunctionalRange] = useState({});
-  const [labCpt, setLabCpt] = useState([]);
+  const [labMarker, setLabMarker] = useState([]);
   const [graph, setGraph] = useState(null);
   const [graphFilterData, setGraphFilterData] = useState(null);
   const [testId, setTestId] = useState("");
-  const [cptIdCount, setCptIdCount] = useState(0);
+  const [markerIdCount, setMarkerIdCount] = useState(0);
   const [initGraphLoaded, setInitGraphLoaded] = useState(false); // flag for graph icon row click
   const ref = useRef(null);
 
@@ -83,12 +83,12 @@ const TestGraph = () => {
     if (selectedTest && !initGraphLoaded) { // user clicks table row graph icon 
       dispatch(setTestName(selectedTest.name));
     } else {
-      const testTitle = cptName[0]?.name;
+      const testTitle = markerName[0]?.name;
       if (!!testTitle) {
         dispatch(setTestName(testTitle));
       }
     }
-  }, [cptName, selectedTest]);
+  }, [markerName, selectedTest]);
 
   useEffect(() => { // componentWillUnmount
     return () => {
@@ -102,10 +102,10 @@ const TestGraph = () => {
   /* eslint-disable */
   useEffect(() => {
     if (testId) {
-      Tests.getTestCptName(testId).then(
+      Tests.getTestMarkerName(testId).then(
         (res) => {
           const data = res?.data?.data;
-          setCptName(data);
+          setMarkerName(data);
         },
         () => {
           enqueueSnackbar(`Unable to fetch by id ${testId}.`, {
@@ -119,11 +119,11 @@ const TestGraph = () => {
         (res) => {
           const data = res?.data?.data;
           const cRange = {
-            high: data[data.length - 1].range_high,
-            low: data[data.length - 1].range_low,
+            high: Number(data[data.length - 1].range_high),
+            low: Number(data[data.length - 1].range_low),
           };
           const graphData = res?.data.data.map((d) => ({
-            id: d.cpt_id,
+            id: d.marker_id,
             lab_dt: d.lab_dt,
             filename: d.filename,
             value: d.value,
@@ -140,10 +140,10 @@ const TestGraph = () => {
       );
     }
     if (!initGraphLoaded) { //  FIX::Api was being called on every arrow button click 
-      Tests.getLabCpt(user.id).then(
+      Tests.getLabMarker(user.id).then(
         (res) => {
           const data = res?.data;
-          setLabCpt(data);
+          setLabMarker(data);
         },
         () => {
           enqueueSnackbar("Unable to fetch Activity history.", {
@@ -170,25 +170,25 @@ const TestGraph = () => {
 
   useEffect(() => {
     if (selectedTest && !initGraphLoaded) { // user clicks table row graph icon
-      if (labCpt?.data?.length > 0) {
-        const markerIndex = labCpt.data.findIndex(x => x.id === selectedTest.marker_id);
-        setCptIdCount(markerIndex);
+      if (labMarker?.data?.length > 0) {
+        const markerIndex = labMarker.data.findIndex(x => x.id === selectedTest.marker_id);
+        setMarkerIdCount(markerIndex);
         setInitGraphLoaded(true);
       }
       setTestId(selectedTest.marker_id);
-    } else if (labCpt?.data?.length > 0 && labCpt.data[cptIdCount]) {
-      setTestId(labCpt.data[cptIdCount].id);
+    } else if (labMarker?.data?.length > 0 && labMarker.data[markerIdCount]) {
+      setTestId(labMarker.data[markerIdCount].id);
     }
-  }, [labCpt, cptIdCount]);
+  }, [labMarker, markerIdCount]);
 
-  const previousCpt = () => {
-    if (cptIdCount > 0) {
-      setCptIdCount(cptIdCount - 1);
+  const previousMarker = () => {
+    if (markerIdCount > 0) {
+      setMarkerIdCount(markerIdCount - 1);
     }
   };
-  const nextCpt = () => {
-    if (labCpt?.data?.length > cptIdCount) {
-      setCptIdCount(cptIdCount + 1);
+  const nextMarker = () => {
+    if (labMarker?.data?.length > markerIdCount) {
+      setMarkerIdCount(markerIdCount + 1);
     }
   };
 
@@ -232,7 +232,7 @@ const TestGraph = () => {
 
   const markerDefinitionProps = {
     id: testId,
-    name: cptName[0]?.name
+    name: markerName[0]?.name
   }
 
   return (
@@ -241,8 +241,8 @@ const TestGraph = () => {
         <Grid item md={8} xs={12}>
           <div className={classes.graphArrowIconContainer}>
             <IconButton
-              disabled={cptIdCount <= 0}
-              onClick={previousCpt}
+              disabled={markerIdCount <= 0}
+              onClick={previousMarker}
               className={classes.graphArrowIcon}
             >
               <Icon
@@ -254,8 +254,8 @@ const TestGraph = () => {
               />
             </IconButton>
             <IconButton
-              disabled={cptIdCount + 1 >= labCpt?.data?.length}
-              onClick={nextCpt}
+              disabled={markerIdCount + 1 >= labMarker?.data?.length}
+              onClick={nextMarker}
               className={classes.graphArrowIcon}
             >
               <Icon

@@ -242,8 +242,8 @@ const routes = [
       },
       {
         exact: true,
-        path: "/setup/lab-ranges",
-        component: lazy(() => import("./screens/Client/Setup/LabRanges")),
+        path: "/setup/marker-ranges",
+        component: lazy(() => import("./screens/Client/Setup/MarkerRanges")),
       },
       {
         exact: true,

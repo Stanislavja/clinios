@@ -111,7 +111,7 @@ const Requisitions = (props) => {
   const onFormSubmit = (selectedTest) => {
     const reqBody = {
       data: {
-        cpt_id: selectedTest.cpt_id,
+        marker_id: selectedTest.marker_id,
       },
     };
     PatientService.createRequisition(patientId, reqBody)
@@ -190,7 +190,7 @@ const Requisitions = (props) => {
                 {tests.length
                   ? tests.map((item) => (
                     <StyledTableRowSm
-                      key={item.cpt_id}
+                      key={item.marker_id}
                       className={classes.pointer}
                       onClick={() => onFormSubmit(item)}
                     >
@@ -240,7 +240,7 @@ const Requisitions = (props) => {
                   {recentTests.length
                     ? recentTests.map((item) => (
                       <StyledTableRowSm
-                        key={item.cpt_id}
+                        key={item.marker_id}
                         className={classes.pointer}
                         onClick={() => onFormSubmit(item)}
                       >
@@ -291,7 +291,7 @@ const Requisitions = (props) => {
                   {favoriteTests.length
                     ? favoriteTests.map((item) => (
                       <StyledTableRowSm
-                        key={item.cpt_id}
+                        key={item.marker_id}
                         className={classes.pointer}
                         onClick={() => onFormSubmit(item)}
                       >

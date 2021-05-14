@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LabRanges = () => {
+const MarkerRanges = () => {
   const classes = useStyles();
   const { user: { client_id, firstname, lastname } } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
@@ -140,7 +140,7 @@ const LabRanges = () => {
     const deleteItemId = item.id;
     const reqBody = {
       data: {
-        cpt_id: item.cpt_id,
+        marker_id: item.marker_id,
         seq: item.seq,
         compare_item: item.compare_item,
         compare_operator: item.compare_operator,
@@ -276,8 +276,8 @@ const LabRanges = () => {
             <TableBody>
               {labRanges && labRanges.length
                 ? labRanges.map((item) => (
-                  <StyledTableRowSm key={`${item.cpt_id}_${item.cpt_name}_${item.range_low}_${item.seq}`}>
-                    <TableCell>{item.cpt_name}</TableCell>
+                  <StyledTableRowSm key={`${item.marker_id}_${item.marker_name}_${item.seq}`}>
+                    <TableCell>{item.marker_name}</TableCell>
                     <TableCell>{item.seq}</TableCell>
                     <TableCell>{labRangeTableTranslation(item.compare_item)}</TableCell>
                     <TableCell>{item.compare_operator}</TableCell>
@@ -320,4 +320,4 @@ const LabRanges = () => {
   );
 };
 
-export default LabRanges;
+export default MarkerRanges;

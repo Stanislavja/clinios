@@ -177,7 +177,7 @@ const DocumentsContent = (props) => {
 
     const trimmedValues = !!allTestsArray && allTestsArray.length && allTestsArray.map((test) => {
       const tests = test.map((elem, index) => {
-        if (index === 0 || index === 1) { // cpt_id and name
+        if (index === 0 || index === 1) { // marker_id and name
           return elem.replace(/["]/g, ``);
         }
         return Number(elem.replace(/["]/g, ``));
@@ -185,17 +185,17 @@ const DocumentsContent = (props) => {
       return tests;
     });
 
-    // format:: cpt_id, name, value, rangeLow, rangeHigh
+    // format:: marker_id, name, value, rangeLow, rangeHigh
 
     let flagResults = [];
     if (!!trimmedValues && trimmedValues.length) {
       flagResults = trimmedValues.map((value) => {
-        const testCPTid = Number(value[0]);
+        const testMarkerid = Number(value[0]);
         const testName = value[1];
         const resultValue = Number(value[2]);
         const convRangeLow = Number(value[3]);
         const convRangeHigh = Number(value[4]);
-        const funcRange = calculateFunctionalRange(testCPTid, gender, patientAge);
+        const funcRange = calculateFunctionalRange(testMarkerid, gender, patientAge);
         const funcRangeLow = funcRange.low;
         const funcRangeHigh = funcRange.high;
         const conventionalFlag = calculatePercentageFlag(convRangeLow, convRangeHigh, resultValue);

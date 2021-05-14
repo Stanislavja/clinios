@@ -370,3 +370,5 @@ export const getDatesArray = (startDate, endDate, holidays) => {
   }
   return dateArray;
 };
+
+export const round1 = (number) => Number(number).toFixed(1);
