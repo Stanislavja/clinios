@@ -145,7 +145,14 @@ const updateClientRange = async (req, res) => {
 };
 
 const getClientRange = async (req, res) => {
-  const { marker_id, seq, compare_item, compare_operator, compare_to } = req.query;
+  const {
+    marker_id,
+    seq,
+    compare_item,
+    compare_operator,
+    compare_to,
+  } = req.query;
+
   const db = makeDb(configuration, res);
   try {
     const dbResponse = await db.query(`

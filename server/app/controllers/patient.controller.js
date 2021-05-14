@@ -1458,7 +1458,16 @@ const createEncounter = async (req, res) => {
 
 const updateEncounter = async (req, res) => {
   const { patient_id, id } = req.params;
-  const { dt, type_id, title, notes, treatment, read_dt, lab_bill_to } = req.body.data;
+
+  const {
+    dt,
+    type_id,
+    title,
+    notes,
+    treatment,
+    read_dt,
+    lab_bill_to,
+  } = req.body.data;
 
   const db = makeDb(configuration, res);
   try {
