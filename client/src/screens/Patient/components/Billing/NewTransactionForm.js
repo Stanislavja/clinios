@@ -8,8 +8,10 @@ import {
   Grid,
   MenuItem,
 } from "@material-ui/core";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 import { KeyboardDatePicker } from "@material-ui/pickers";
+import clsx from "clsx";
 import moment from "moment";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
@@ -31,6 +33,14 @@ const useStyles = makeStyles((theme) => ({
     color: "#37474f",
     margin: theme.spacing(1, 0),
   },
+  circularProgress: {
+    position: "absolute",
+    left: "50%",
+  },
+  modalConentBelow: { opacity: "1" },
+  contentWithLoading: {
+    opacity: "0.5",
+  },
   m2: {
     margin: theme.spacing(2, 0),
   },
@@ -50,6 +60,7 @@ const NewTransactionForm = (props) => {
   const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
   const [transactionTypes, setTransactionTypes] = useState([]);
   const [paymentOptions, setPaymentOptions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [formFields, setFormFields] = useState({
     date: new Date(),
     type: "",
@@ -111,6 +122,7 @@ const NewTransactionForm = (props) => {
 
   const createBilling = () => {
     if (+formFields.amount > 0) { /* shorthand to convert string => number */
+      setIsLoading(true);
       const selectedPaymentMethod = paymentOptions.filter((p) => p.id === formFields.accountNum);
       const reqBody = {
         data: {
@@ -130,6 +142,7 @@ const NewTransactionForm = (props) => {
           .then((response) => {
             enqueueSnackbar(`${response.message}`, { variant: "success" });
             reloadData();
+            setIsLoading(false);
             dispatch(toggleNewTransactionDialog());
           });
       } else {
@@ -137,6 +150,7 @@ const NewTransactionForm = (props) => {
           .then((response) => {
             enqueueSnackbar(`${response.data.message}`, { variant: "success" });
             reloadData();
+            setIsLoading(false);
             dispatch(toggleNewTransactionDialog());
           });
       }
@@ -266,96 +280,113 @@ const NewTransactionForm = (props) => {
         applyForm={createBilling}
         cancelForm={closeConfirmationDialog}
       />
-      <form onSubmit={onFormSubmit}>
-        <Grid item md={4} className={classes.formInput}>
-          <KeyboardDatePicker
-            key="date"
-            margin="dense"
-            inputVariant="outlined"
-            name="date"
-            id="date"
-            format="MMM dd yyyy"
-            label="Date"
-            value={formFields.date}
-            onChange={handleDateChange}
-            fullWidth
-            required
-            // As per CLIN-148 condition-2
-            disabled={checkIfDisabled || (formFields.type === 3 || formFields.type === 4)}
-          />
-        </Grid>
-        {TransactionFormFields.map((item) => (
-          <Grid
-            key={item.name}
-            container
-            alignItems="center"
-            className={classes.formInput}
-          >
-            <Grid item md={4} xs={12}>
-              {item.baseType === "input" ? (
-                <TextField
-                  variant="outlined"
-                  margin="dense"
-                  label={item.label}
-                  name={item.name}
-                  id={item.id}
-                  type={item.type}
-                  required
-                  fullWidth
-                  value={formFields[item.name]}
-                  onChange={(e) => handleInputChnage(e)}
-                  error={item.name === "amount" ? hasAmountError : false}
-                  helperText={hasAmountError && "Amount should be greater than 0"}
-                  disabled={checkIfDisabled}
-                />
-              ) : (
-                <TextField
-                  select
-                  variant="outlined"
-                  margin="dense"
-                  label={item.label}
-                  id={item.id}
-                  name={item.name}
-                  value={formFields[item.name]}
-                  required={checkIfRequired(item.name)}
-                  fullWidth
-                  onChange={(e) => handleInputChnage(e)}
-                  disabled={checkIfDisabled}
-                >
-                  {!!item.options && item.options.length ? item.options.map((option) => (
-                    <MenuItem className={classes.menuOption} key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))
-                  : renderOptionsForDropdowns(item.id)}
-                </TextField>
-              )}
-            </Grid>
+      {isLoading && (
+        <div
+          className={classes.circularProgress}
+          style={{
+            textAlign: "center",
+          }}
+        >
+          <CircularProgress />
+        </div>
+      )}
+      <div
+        className={clsx({
+          [classes.modalConentBelow]: true, // always apply
+          [classes.contentWithLoading]: isLoading, // only when isLoading === true
+        })}
+      >
+        <form onSubmit={onFormSubmit}>
+          <Grid item md={4} className={classes.formInput}>
+            <KeyboardDatePicker
+              key="date"
+              margin="dense"
+              inputVariant="outlined"
+              name="date"
+              id="date"
+              format="MMM dd yyyy"
+              label="Date"
+              value={formFields.date}
+              onChange={handleDateChange}
+              fullWidth
+              required
+                // As per CLIN-148 condition-2
+              disabled={checkIfDisabled || (formFields.type === 3 || formFields.type === 4)}
+            />
           </Grid>
-        ))}
-        <Grid item md={12} className={classes.m2}>
-          <TextField
-            variant="outlined"
-            name="notes"
-            label="Notes"
-            type="text"
-            fullWidth
-            value={formFields.notes}
-            onChange={(e) => handleInputChnage(e)}
-            multiline
-            rows={5}
-          />
-        </Grid>
+          {TransactionFormFields.map((item) => (
+            <Grid
+              key={item.name}
+              container
+              alignItems="center"
+              className={classes.formInput}
+            >
+              <Grid item md={4} xs={12}>
+                {item.baseType === "input" ? (
+                  <TextField
+                    variant="outlined"
+                    margin="dense"
+                    label={item.label}
+                    name={item.name}
+                    id={item.id}
+                    type={item.type}
+                    required
+                    fullWidth
+                    value={formFields[item.name]}
+                    onChange={(e) => handleInputChnage(e)}
+                    error={item.name === "amount" ? hasAmountError : false}
+                    helperText={hasAmountError && "Amount should be greater than 0"}
+                    disabled={checkIfDisabled}
+                  />
+                ) : (
+                  <TextField
+                    select
+                    variant="outlined"
+                    margin="dense"
+                    label={item.label}
+                    id={item.id}
+                    name={item.name}
+                    value={formFields[item.name]}
+                    required={checkIfRequired(item.name)}
+                    fullWidth
+                    onChange={(e) => handleInputChnage(e)}
+                    disabled={checkIfDisabled}
+                  >
+                    {!!item.options && item.options.length ? item.options.map((option) => (
+                      <MenuItem className={classes.menuOption} key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))
+                    : renderOptionsForDropdowns(item.id)}
+                  </TextField>
+                )}
+              </Grid>
+            </Grid>
+          ))}
+          <Grid item md={12} className={classes.m2}>
+            <TextField
+              variant="outlined"
+              name="notes"
+              label="Notes"
+              type="text"
+              fullWidth
+              value={formFields.notes}
+              onChange={(e) => handleInputChnage(e)}
+              multiline
+              rows={5}
+            />
+          </Grid>
 
-        <Grid container justify="space-between">
-          <Button
-            variant="outlined"
-            type="submit"
-          >
-            Save
-          </Button>
-        </Grid>
-      </form>
+          <Grid container justify="space-between">
+            <Button
+              variant="outlined"
+              type="submit"
+            >
+              Save
+            </Button>
+          </Grid>
+        </form>
+      </div>
     </>
   );
 };

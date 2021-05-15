@@ -3,12 +3,14 @@ import React, { useEffect, useState, useCallback } from "react";
 import {
   TextField, Button, Grid, Typography, colors,
 } from "@material-ui/core";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 import CloseIcon from "@material-ui/icons/CloseOutlined";
+import clsx from "clsx";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 import { CountryRegionData } from "react-country-region-selector";
@@ -46,6 +48,10 @@ const useStyles = makeStyles((theme) => ({
     color: "#37474f",
     marginBottom: theme.spacing(2),
   },
+  modalConentBelow: { opacity: "1" },
+  contentWithLoading: {
+    opacity: "0.5",
+  },
   buttonsContainer: {
     margin: theme.spacing(3, 0),
   },
@@ -78,6 +84,7 @@ const PaymentMethodsForm = (props) => {
 
   const [country, setCountry] = useState("");
   const [region, setRegion] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const selectedCountry = CountryRegionData.filter(
@@ -149,6 +156,7 @@ const PaymentMethodsForm = (props) => {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const reqBody = {
       data: {
         exp: formFields.expiryDate.replace("/", ""),
@@ -185,6 +193,7 @@ const PaymentMethodsForm = (props) => {
       PaymentMethodService.createPaymentMethod(reqBody).then((response) => {
         enqueueSnackbar(`${response.message}`, { variant: "success" });
         reloadData();
+        setIsLoading(false);
         onClose();
       });
     }
@@ -226,151 +235,167 @@ const PaymentMethodsForm = (props) => {
         </IconButton>
       </DialogTitle>
       <DialogContent className={classes.content}>
-        <form onSubmit={onFormSubmit}>
-          <Grid className={classes.formContainer}>
-            <Grid>
-              <MaskInput
-                required
-                fullWidth
-                autoFocus={!isEdit}
-                disabled={isEdit}
-                className={classes.gutterBottom}
-                type="text"
-                name="cardNumber"
-                label="Card Number"
-                margin="dense"
-                variant="outlined"
-                value={formFields.cardNumber}
-                mask="9999/9999/9999/9999"
-                onChange={(e) => handleInputChange(e)}
-              />
-              {!!formFields.cardType && formFields.cardType.length ? (
-                <Typography gutterBottom>{formFields.cardType}</Typography>
-              )
-                : null}
-            </Grid>
-            <Grid>
-              <TextField
-                required
-                disabled={isEdit}
-                variant="outlined"
-                margin="dense"
-                name="cvv"
-                id="cvv"
-                type="text"
-                label="CVV"
-                className={classes.gutterBottom}
-                value={formFields.cvv}
-                onChange={(e) => handleInputChange(e)}
-              />
+        {isLoading && (
+          <div
+            style={{
+              textAlign: "center",
+            }}
+          >
+            <CircularProgress />
+          </div>
+        )}
+        <div
+          className={clsx({
+            [classes.modalConentBelow]: true, // always apply
+            [classes.contentWithLoading]: isLoading, // only when isLoading === true
+          })}
+        >
+          <form onSubmit={onFormSubmit}>
+            <Grid className={classes.formContainer}>
+              <Grid>
+                <MaskInput
+                  required
+                  fullWidth
+                  autoFocus={!isEdit}
+                  disabled={isEdit}
+                  className={classes.gutterBottom}
+                  type="text"
+                  name="cardNumber"
+                  label="Card Number"
+                  margin="dense"
+                  variant="outlined"
+                  value={formFields.cardNumber}
+                  mask="9999/9999/9999/9999"
+                  onChange={(e) => handleInputChange(e)}
+                />
+                {!!formFields.cardType && formFields.cardType.length ? (
+                  <Typography gutterBottom>{formFields.cardType}</Typography>
+                )
+                  : null}
+              </Grid>
+              <Grid>
+                <TextField
+                  required
+                  disabled={isEdit}
+                  variant="outlined"
+                  margin="dense"
+                  name="cvv"
+                  id="cvv"
+                  type="text"
+                  label="CVV"
+                  className={classes.gutterBottom}
+                  value={formFields.cvv}
+                  onChange={(e) => handleInputChange(e)}
+                />
+              </Grid>
+
+              <Grid>
+                <MaskInput
+                  required
+                  autoFocus={isEdit}
+                  className={classes.gutterBottom}
+                  type="text"
+                  name="expiryDate"
+                  label="Expiration"
+                  margin="dense"
+                  variant="outlined"
+                  value={formFields.expiryDate}
+                  mask="99/99"
+                  onChange={(e) => handleInputChange(e)}
+                />
+              </Grid>
+              <Grid>
+                <TextField
+                  className={classes.gutterBottom}
+                  label="Address"
+                  name="address"
+                  value={formFields.address}
+                  fullWidth
+                  onChange={(e) => handleInputChange(e)}
+                  margin="dense"
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid>
+                <TextField
+                  className={classes.gutterBottom}
+                  label="Address Line 2"
+                  name="address2"
+                  value={formFields.address2}
+                  fullWidth
+                  onChange={(e) => handleInputChange(e)}
+                  margin="dense"
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid>
+                <TextField
+                  className={classes.gutterBottom}
+                  label="City"
+                  name="city"
+                  value={formFields.city}
+                  fullWidth
+                  onChange={(e) => handleInputChange(e)}
+                  margin="dense"
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid>
+                <TextField
+                  className={classes.gutterBottom}
+                  label="Zip/Postal"
+                  name="postal"
+                  value={formFields.postal}
+                  fullWidth
+                  onChange={(e) => handleInputChange(e)}
+                  margin="dense"
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid>
+                <CountrySelect
+                  id="country-select"
+                  error={null}
+                  name="country-select"
+                  helperText=""
+                  label="Country"
+                  handleChange={(identifier, value) => handleCountryRegion(identifier, value)}
+                  country={country}
+                  margin="dense"
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid>
+                <RegionSelect
+                  id="state-select"
+                  error={null}
+                  name="state-select"
+                  helperText=""
+                  label="State"
+                  handleChange={(identifier, value) => handleCountryRegion(identifier, value)}
+                  country={country}
+                  region={region}
+                  margin="dense"
+                  variant="outlined"
+                />
+              </Grid>
             </Grid>
 
-            <Grid>
-              <MaskInput
-                required
-                autoFocus={isEdit}
-                className={classes.gutterBottom}
-                type="text"
-                name="expiryDate"
-                label="Expiration"
-                margin="dense"
+            <Grid container className={classes.buttonsContainer} justify="space-between">
+              <Button color="primary" variant="outlined" type="submit">
+                {`${isEdit ? "Edit" : "Add"} Method`}
+              </Button>
+              <Button
+                size="small"
                 variant="outlined"
-                value={formFields.expiryDate}
-                mask="99/99"
-                onChange={(e) => handleInputChange(e)}
-              />
+                onClick={() => onClose()}
+                className={classes.cancelButton}
+              >
+                Cancel
+              </Button>
             </Grid>
-            <Grid>
-              <TextField
-                className={classes.gutterBottom}
-                label="Address"
-                name="address"
-                value={formFields.address}
-                fullWidth
-                onChange={(e) => handleInputChange(e)}
-                margin="dense"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid>
-              <TextField
-                className={classes.gutterBottom}
-                label="Address Line 2"
-                name="address2"
-                value={formFields.address2}
-                fullWidth
-                onChange={(e) => handleInputChange(e)}
-                margin="dense"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid>
-              <TextField
-                className={classes.gutterBottom}
-                label="City"
-                name="city"
-                value={formFields.city}
-                fullWidth
-                onChange={(e) => handleInputChange(e)}
-                margin="dense"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid>
-              <TextField
-                className={classes.gutterBottom}
-                label="Zip/Postal"
-                name="postal"
-                value={formFields.postal}
-                fullWidth
-                onChange={(e) => handleInputChange(e)}
-                margin="dense"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid>
-              <CountrySelect
-                id="country-select"
-                error={null}
-                name="country-select"
-                helperText=""
-                label="Country"
-                handleChange={(identifier, value) => handleCountryRegion(identifier, value)}
-                country={country}
-                margin="dense"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid>
-              <RegionSelect
-                id="state-select"
-                error={null}
-                name="state-select"
-                helperText=""
-                label="State"
-                handleChange={(identifier, value) => handleCountryRegion(identifier, value)}
-                country={country}
-                region={region}
-                margin="dense"
-                variant="outlined"
-              />
-            </Grid>
-          </Grid>
-
-          <Grid container className={classes.buttonsContainer} justify="space-between">
-            <Button color="primary" variant="outlined" type="submit">
-              {`${isEdit ? "Edit" : "Add"} Method`}
-            </Button>
-            <Button
-              size="small"
-              variant="outlined"
-              onClick={() => onClose()}
-              className={classes.cancelButton}
-            >
-              Cancel
-            </Button>
-          </Grid>
-        </form>
+          </form>
+        </div>
       </DialogContent>
     </Dialog>
   );
