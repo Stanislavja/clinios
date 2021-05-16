@@ -422,7 +422,7 @@ export function calculateFunctionalRange(marker, gender, age) {
     return range;
   }
   if (marker === 394) { /* C-Reactive Protein */
-    range.low = 0.0;
+    range.low = 0.1;
     range.high = 1.0;
     return range;
   }

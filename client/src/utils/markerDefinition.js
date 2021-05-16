@@ -39,7 +39,7 @@ export const getMarkerDefinition = (marker) => {
   }
 
   if (marker === 113 || marker === 328) {
-    data = `Basophils are a type of white blood cell and a type of granulocyte, which is a type of white blood cell that has small granules.  Granules are small particles with enzymes that are released during allergic reactions and asthma.   /*https://www.cancer.gov/publications/dictionaries/cancer-terms/def/basophil edited */
+    data = `Basophils are a type of white blood cell and a type of granulocyte, which is a type of white blood cell that has small granules.  Granules are small particles with enzymes that are released during allergic reactions and asthma. /*https://www.cancer.gov/publications/dictionaries/cancer-terms/def/basophil edited */
       `;
   }
 
@@ -120,7 +120,11 @@ export const getMarkerDefinition = (marker) => {
     // medlineplus.gov
   }
 
-  // Estrogens
+  if (marker === 764) {
+    data = `Estrogen Total Serum is the sum of estrone (E1), estradiol (E2), and estriol (E3).
+      `;
+      //self
+  }
 
   if (marker === 791) {
     data = `Ferritin is a intracellular protein that stores iron and releases it in a controlled fashion. /*Wikipedia*/
@@ -160,6 +164,12 @@ export const getMarkerDefinition = (marker) => {
       `;
     // https://medlineplus.gov/bloodsugar.html
     // https://medlineplus.gov/lab-tests/blood-glucose-test/
+  }
+
+  if (marker === 887) {
+    data = `GlycoMark measures 1,5-Anhydroglucitol (1,5-AG), a glucose-like sugar found in most foods.  GlycoMark detects recent hyperglycemia and hyperglycemic excursions.
+      `;
+      //GlycoMark website
   }
 
   if (marker === 944) {
@@ -308,7 +318,7 @@ export const getMarkerDefinition = (marker) => {
   }
 
   if (marker === 1695) {
-    data = ` Sodium is a type of electrolyte. Electrolytes are electrically charged minerals that help maintain fluid levels and the balance of acids and bases. Sodium also helps the nerves and muscles work properly.  Once the body takes in enough sodium, the kidneys get rid of the rest in urine.    
+    data = ` Sodium is a type of electrolyte. Electrolytes are electrically charged minerals that help maintain fluid levels and the balance of acids and bases. Sodium also helps the nerves and muscles work properly.  Once the body takes in enough sodium, the kidneys get rid of the rest in urine.
       `;
     // medlineplus.gov
   }
