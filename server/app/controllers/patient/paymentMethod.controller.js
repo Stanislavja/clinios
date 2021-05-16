@@ -94,12 +94,12 @@ const createPaymentMethod = async (req, res) => {
     });
     // End Create payment method for client(Doctor) account
 
-    // Attach this Payment method to Clinios account as well.
-    const cliniosStripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
-    const cliniosPaymentMethod = await cliniosStripe.paymentMethods.create(
+    // Attach this Payment method to corp account as well.
+    const corpStripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
+    const corpPaymentMethod = await corpStripe.paymentMethods.create(
       cardData
     );
-    formData.corp_stripe_payment_method_token = cliniosPaymentMethod.id;
+    formData.corp_stripe_payment_method_token = corpPaymentMethod.id;
     formData.account_number = formData.account_number.substring(0, 4);
 
     delete formData.stripe_customer_id; // Delete customer_id as it's not on payment_method table
@@ -169,9 +169,9 @@ const updatePaymentMethod = async (req, res) => {
           console.info("Doctor payment method update error:", error.message);
         }
       );
-    // update payment method on Clinios stripe account
-    const cliniosStripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
-    cliniosStripe.paymentMethods
+    // update payment method on corp stripe account
+    const corpStripe = Stripe(process.env.STRIPE_PRIVATE_KEY);
+    corpStripe.paymentMethods
       .update(formData.stripe_payment_method_token, cardData)
       .then(
         () => {

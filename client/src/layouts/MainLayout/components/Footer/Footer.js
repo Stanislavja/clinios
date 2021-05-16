@@ -31,7 +31,7 @@ export default function Footer() {
           {"Copyright © "}
           {" "}
           {new Date().getFullYear()}
-          {" Clinios"}
+          {" AvonEMR"}
         </CustomTypography>
       </Box>
     </Container>

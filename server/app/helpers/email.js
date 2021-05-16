@@ -37,7 +37,7 @@ const signUpConfirmationTemplate = (user, url) => {
   <p>To confirm your email address click or copy the following link:</p>
   <a href=${url}>${url}</a>
 
-  <p>–-Clinios</p>
+  <p>–-AvonEMR</p>
   `;
 
   return { from, to, subject, html };
@@ -59,7 +59,7 @@ const getPasswordResetURL = (user, userType, token) => {
 const resetPasswordTemplate = (user, url) => {
   const from = process.env.EMAIL_LOGIN;
   const to = user.email;
-  const subject = "Clinios Password Reset";
+  const subject = "Password Reset";
   const html = `
   <p>Hey ${user.firstname || user.email},</p>
   <p>You can use the following link to reset your password.  It will expire in one hour.</p>
@@ -78,7 +78,7 @@ const resetPasswordTemplate = (user, url) => {
 const newAppointmentTemplate = (patient, appointmentDate, provider) => {
   const from = process.env.EMAIL_LOGIN;
   const to = patient.email;
-  const subject = "New Appointment | Clinios";
+  const subject = "New Appointment";
   const html = `
     <p>Hi ${patient.firstname},</p>
     <p>A new appointment was created for you on <b>${appointmentDate}</b> with ${provider.name}.</p>
@@ -95,7 +95,7 @@ const newAppointmentTemplate = (patient, appointmentDate, provider) => {
 const cancelAppointmentTemplate = (patient, appointmentDate, providerName) => {
   const from = process.env.EMAIL_LOGIN;
   const to = patient.email;
-  const subject = "Cancel Appointment | Clinios";
+  const subject = "Cancel Appointment";
   const html = `
     <p>Hi ${patient.firstname},</p>
     <p>Your appointment on <b>${appointmentDate}</b> with ${providerName}  was cancelled.</p>
@@ -117,7 +117,7 @@ const updateAppointmentTemplate = (
 ) => {
   const from = process.env.EMAIL_LOGIN;
   const to = patient.email;
-  const subject = "Update Appointment | Clinios";
+  const subject = "Update Appointment";
   const html = `
     <p>Hi ${patient.firstname},</p>
     <p>Your appointment on <b>${old_appointment_date}</b> with ${providerName}  was changed to <b>${new_appointment_date}</b>.</p>

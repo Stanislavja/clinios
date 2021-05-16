@@ -141,7 +141,7 @@ const PurchaseLabs = () => {
       data: {
         payment_method_id: selectedPaymentMethod,
         corp_stripe_payment_method_token: paymentMethodForStripe[0].corp_stripe_payment_method_token,
-        customer_id: user.corp_stripe_customer_id, // As Clinios account
+        customer_id: user.corp_stripe_customer_id,
         amount: total,
         patient_cpt_ids: selected,
         selectedLabs,
