@@ -42,7 +42,6 @@ const useStyles = makeStyles((theme) => ({
   title: {
     display: "none",
     color: "#fff",
-    textTransform: "uppercase",
     letterSpacing: "0.1em",
     fontWeight: 700,
     fontSize: "18px",
