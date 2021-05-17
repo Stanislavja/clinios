@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 const CustomRouterLink = forwardRef((props, ref) => (
   <div ref={ref} style={{ flexGrow: 1 }}>
     {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-    <RouterLink {...props} />
+    <RouterLink exact {...props} />
   </div>
 ));
 
