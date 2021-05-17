@@ -201,7 +201,7 @@ const Topbar = (props) => {
         <div className={classes.headerWithNav}>
           <Typography className={classes.title} variant="h6" noWrap>
             <RouterLink to={user.login_url || "/dashboard"} className={classes.titleAsLogo}>
-              Avon
+              AvonEMR
             </RouterLink>
           </Typography>
           <Hidden mdDown>
