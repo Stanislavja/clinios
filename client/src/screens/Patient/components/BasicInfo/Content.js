@@ -8,7 +8,6 @@ import usePatientContext from "../../../../hooks/usePatientContext";
 import PatientService from "../../../../services/patient.service";
 import {
   calculateAge,
-  formatPhoneNumber,
   dateDiffInDays,
   dateDiffInMonths,
   dateDiffInYears,
@@ -221,7 +220,7 @@ const BasicInfoContent = () => {
           onFocus={() => { }} // for onMouseOver
           onBlur={() => { }} // for onMouseOut
         >
-          {formatPhoneNumber(data.phone_home)}
+          {data.phone_home}
         </Typography>
       </Grid>
 
@@ -242,7 +241,7 @@ const BasicInfoContent = () => {
           onFocus={() => { }} // for onMouseOver
           onBlur={() => { }} // for onMouseOut
         >
-          {formatPhoneNumber(data.phone_cell)}
+          {data.phone_cell}
         </Typography>
       </Grid>
 
