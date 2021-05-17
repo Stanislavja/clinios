@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
   circularProgress: {
     position: "absolute",
+    textAlign: "center",
     left: "50%",
   },
   modalConentBelow: { opacity: "1" },
@@ -281,12 +282,7 @@ const NewTransactionForm = (props) => {
         cancelForm={closeConfirmationDialog}
       />
       {isLoading && (
-        <div
-          className={classes.circularProgress}
-          style={{
-            textAlign: "center",
-          }}
-        >
+        <div className={classes.circularProgress}>
           <CircularProgress />
         </div>
       )}

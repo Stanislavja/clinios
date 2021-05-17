@@ -182,10 +182,11 @@ const updatePaymentMethod = async (req, res) => {
         }
       );
 
-    formData.account_number = formData.account_number.substring(0, 4);
+    // formData.account_number = formData.account_number.substring(0, 4);
 
     delete formData.stripe_customer_id; // Delete customer_id as it's not on payment_method table
     delete formData.corp_stripe_customer_id; // Delete customer_id as it's not on payment_method table
+    delete formData.account_number; // We're not allowed to change account number
     delete formData.cvc; // Delete cvc as it's not on payment_method table
 
     const updateResponse = await db.query(

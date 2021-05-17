@@ -48,6 +48,11 @@ const useStyles = makeStyles((theme) => ({
     color: "#37474f",
     marginBottom: theme.spacing(2),
   },
+  circularProgress: {
+    position: "absolute",
+    textAlign: "center",
+    left: "50%",
+  },
   modalConentBelow: { opacity: "1" },
   contentWithLoading: {
     opacity: "0.5",
@@ -236,11 +241,7 @@ const PaymentMethodsForm = (props) => {
       </DialogTitle>
       <DialogContent className={classes.content}>
         {isLoading && (
-          <div
-            style={{
-              textAlign: "center",
-            }}
-          >
+          <div className={classes.circularProgress}>
             <CircularProgress />
           </div>
         )}
