@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from "react";
 
 import {
-  makeStyles, Typography, Grid, Box,
+  makeStyles, Typography, Grid, Box, withStyles,
 } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -32,10 +32,10 @@ const useStyles = makeStyles((theme) => ({
   },
   customSelect: {
     width: "220px",
-    marginTop: theme.spacing(5),
+    marginTop: theme.spacing(2.5),
   },
   title: {
-    paddingBottom: theme.spacing(1),
+    paddingBottom: theme.spacing(0.5),
   },
   table: {
     "& th": {
@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
   purchaseButton: {
     display: "block",
     width: "220px",
-    marginTop: theme.spacing(3.5),
+    marginTop: theme.spacing(2.5),
   },
   boldPrice: {
     fontWeight: "bold",
@@ -65,6 +65,40 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(0, 0.5),
   },
 }));
+
+const StyledTableCell = withStyles(() => ({
+  head: {
+    whiteSpace: "nowrap",
+    fontSize: 14,
+    fontWeight: 700,
+    padding: "6px 24px 6px 2px",
+    borderBottom: "unset",
+  },
+  body: {
+    fontSize: 14,
+    borderBottom: "unset",
+  },
+}))(TableCell);
+
+const StyledTableRow = withStyles(() => ({
+  root: {
+    fontSize: 14,
+    cursor: "pointer",
+    "& th": {
+      fontSize: 14,
+      whiteSpace: "nowrap",
+      padding: "0px 16px 0px 2px",
+      lineHeight: "16px",
+    },
+    "& td": {
+      fontSize: 14,
+      whiteSpace: "nowrap",
+      padding: "0px 16px 0px 2px",
+      lineHeight: "16px",
+    },
+  },
+}))(TableRow);
+
 
 const PurchaseLabs = () => {
   const classes = useStyles();
@@ -221,34 +255,34 @@ const PurchaseLabs = () => {
                     <Table size="small" className={classes.table} aria-label="a dense table">
                       <TableHead>
                         <TableRow>
-                          <TableCell>Select</TableCell>
-                          <TableCell>Lab Name</TableCell>
-                          <TableCell>Price</TableCell>
+                          <StyledTableCell>Select</StyledTableCell>
+                          <StyledTableCell>Lab Name</StyledTableCell>
+                          <StyledTableCell>Price</StyledTableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
                         {labs.map((lab) => {
                           const isChecked = isSelected(lab.patient_cpt_id);
                           return (
-                            <TableRow
+                            <StyledTableRow
                               hover
                               key={lab.patient_cpt_id}
                               onClick={(event) => handleClick(event, lab.patient_cpt_id)}
                               role="checkbox"
                             >
-                              <TableCell component="th" scope="row">
+                              <StyledTableCell scope="item">
                                 <Checkbox
                                   onClick={(event) => handleClick(event, lab.patient_cpt_id)}
                                   className={classes.selectCheckbox}
                                   checked={isChecked}
                                 />
-                              </TableCell>
-                              <TableCell>{lab.cpt_name}</TableCell>
-                              <TableCell>
+                              </StyledTableCell>
+                              <StyledTableCell scope="item">{lab.cpt_name}</StyledTableCell>
+                              <StyledTableCell scope="item">
                                 $
                                 {lab?.price?.toFixed(2)}
-                              </TableCell>
-                            </TableRow>
+                              </StyledTableCell>
+                            </StyledTableRow>
                           );
                         })}
                       </TableBody>

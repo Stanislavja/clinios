@@ -11,7 +11,10 @@ const useStyles = makeStyles((theme) => ({
     padding: "40px 0px",
   },
   title: {
-    paddingBottom: theme.spacing(1),
+    paddingBottom: theme.spacing(0.5),
+  },
+  subTitle: {
+    paddingBottom: theme.spacing(2),
   },
 }));
 
@@ -28,9 +31,10 @@ const Profile = () => {
         Profile
       </Typography>
       <Typography
-        variant="h5"
+        component="h5"
+        variant="body1"
         color="textPrimary"
-        className={classes.title}
+        className={classes.subTitle}
       >
         This page is used to set your own personal information.
       </Typography>
