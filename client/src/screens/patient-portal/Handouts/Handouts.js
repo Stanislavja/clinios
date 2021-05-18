@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 
 import {
-  Container,
   CssBaseline,
   makeStyles,
 } from "@material-ui/core";
@@ -17,16 +16,17 @@ import PatientPortalService from "../../../services/patient_portal/patient-porta
 import HandoutDocumentViewerModal from "./components/modal/HandoutDocumentViewerModal";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
+  paper: {
     paddingTop: theme.spacing(5),
-    paddingBottom: theme.spacing(5),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "left",
   },
   handouts: {
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(2),
   },
   title: {
-    marginBottom: theme.spacing(1.5),
+    marginBottom: theme.spacing(0.5),
   },
   listItem: {
     paddingLeft: theme.spacing(0),
@@ -57,14 +57,14 @@ const Handouts = () => {
   return (
     <>
       <CssBaseline />
-      <Container maxWidth={false} className={classes.root}>
+      <div className={classes.paper}>
         <Typography component="h1" variant="h2" color="textPrimary" className={classes.title}>
           Handouts
         </Typography>
-        <Typography component="h1" variant="h5" color="textPrimary">
+        <Typography component="h5" variant="body1" color="textPrimary">
           This page is used to view handouts from your provider.
         </Typography>
-        <List component="nav" aria-label="main mailbox folders" className={classes.handouts}>
+        <List aria-label="main mailbox folders" className={classes.handouts}>
           {
             handouts.length
               ? handouts.map((item) => (
@@ -85,7 +85,7 @@ const Handouts = () => {
               : <Typography>No handouts found...</Typography>
           }
         </List>
-      </Container>
+      </div>
 
       <HandoutDocumentViewerModal
         filePath={selectedFilepath}

@@ -26,7 +26,10 @@ const useStyles = makeStyles((theme) => ({
     padding: "40px 0px",
   },
   title: {
-    paddingBottom: theme.spacing(1),
+    paddingBottom: theme.spacing(0.5),
+  },
+  subTitle: {
+    fontSize: "14px",
   },
   viewIcon: {
     cursor: "pointer",
@@ -43,6 +46,9 @@ const useStyles = makeStyles((theme) => ({
   },
   textButton: {
     cursor: "pointer",
+  },
+  makePaymentButton: {
+    marginLeft: theme.spacing(4),
   },
 }));
 
@@ -127,7 +133,7 @@ const Billing = () => {
         >
           <Grid
             container
-            justify="space-between"
+            justify="flex-start"
           >
             <Typography
               component="h1"
@@ -139,7 +145,9 @@ const Billing = () => {
             </Typography>
             <Button
               variant="outlined"
+              color="primary"
               onClick={() => setNewPaymentDialog(true)}
+              className={classes.makePaymentButton}
             >
               Make Payment
             </Button>
@@ -149,7 +157,7 @@ const Billing = () => {
         <Typography
           variant="h5"
           color="textPrimary"
-          className={classes.title}
+          className={classes.subTitle}
         >
           This page is used to view billings.
         </Typography>

@@ -14,10 +14,10 @@ const useStyles = makeStyles((theme) => ({
     padding: "40px 0px",
   },
   mainContainer: {
-    margin: theme.spacing(1, 0),
+    margin: theme.spacing(2, 0),
   },
   title: {
-    paddingBottom: theme.spacing(1),
+    paddingBottom: theme.spacing(0.5),
   },
   inputRow: {
     marginBottom: theme.spacing(0.5),
@@ -62,7 +62,8 @@ const Encounters = () => {
         Encounters
       </Typography>
       <Typography
-        variant="h5"
+        component="h5"
+        variant="body1"
         color="textPrimary"
         className={classes.title}
       >
