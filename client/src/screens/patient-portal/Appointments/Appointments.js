@@ -110,6 +110,7 @@ const Appointments = () => {
   });
   const [isRescheduleAppointment, setIsRescheduleAppointment] = useState(false);
   const location = useLocation();
+  const isReschedule = location?.state?.appointment;
 
   const fetchPractitionersAvailableDates = useCallback((practitionerId) => {
     PatientPortalService.getPractitionerDates().then((res) => {
@@ -119,31 +120,37 @@ const Appointments = () => {
     });
   }, []);
 
+  const fetchAppointmentTypesByPractitioner = useCallback((practitionerId) => {
+    const reqBody = {
+      data: {
+        practitioner_id: practitionerId,
+      },
+    };
+    PatientPortalService.getAppointmentTypesByPractitionerId(reqBody).then((res) => {
+      setAppointmentTypes(res.data);
+    });
+    fetchPractitionersAvailableDates(practitionerId);
+  }, []);
+
   const userSelectionHandler = (type, value) => {
     setUserSelection({
       ...userSelection,
       [type]: value,
     });
-    if (type === "practitioner") {
-      const practitionerId = value;
-      const reqBody = {
-        data: {
-          practitioner_id: practitionerId,
-        },
-      };
-      PatientPortalService.getAppointmentTypesByPractitionerId(reqBody).then((res) => {
-        setAppointmentTypes(res.data);
-      });
-      fetchPractitionersAvailableDates(practitionerId);
-    }
   };
 
   const fetchPractitioners = useCallback(() => {
     PatientPortalService.getPractitioners().then((res) => {
       const doctors = res.data;
       setPractitioners(doctors);
-      if (doctors.length) {
-        userSelectionHandler("practitioner", 1); // first user
+      if (doctors.length && !isReschedule) {
+        const practitionerId = 1; // select first user page loads
+        const type = "practitioner";
+        setUserSelection({
+          ...userSelection,
+          [type]: practitionerId
+        });
+        fetchAppointmentTypesByPractitioner(practitionerId);
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -166,14 +173,19 @@ const Appointments = () => {
     });
   }, []);
 
+  console.log("#######", userSelection)
+
   useEffect(() => {
     const appointment = location?.state?.appointment;
     if (appointment?.patient_id) {
       const date = moment(appointment.start_dt).format("YYYY-MM-DD");
-      const minutesFromStartDate = moment(appointment.start_dt).minutes();
-      const time = `${moment(appointment.start_dt).hours()}:${minutesFromStartDate < 10
-        ? `0${minutesFromStartDate}`
-        : minutesFromStartDate}am`;
+      // const minutesFromStartDate = moment(appointment.start_dt).minutes();
+      const startTime = moment(appointment.start_dt).format("H:mm");
+      const endTime = moment(appointment.end_dt).format("H:mm");
+      const time = {
+        time_start: startTime,
+        time_end: endTime,
+      };
       setUserSelection((prevUserSelection) => ({
         ...prevUserSelection,
         ...appointment,
@@ -184,7 +196,8 @@ const Appointments = () => {
       }));
       setIsRescheduleAppointment(true);
       setShowCalendar(true);
-      fetchPractitionersAvailableDates();
+      fetchPractitionersAvailableDates(appointment?.user_id);
+      fetchAppointmentTypesByPractitioner(appointment?.user_id);
       setAppointmentLength(appointment?.appointment_type_length);
     }
   }, [location?.state, fetchPractitionersAvailableDates]);
@@ -195,7 +208,7 @@ const Appointments = () => {
 
   useDidMountEffect(() => {
     const practitionerId = userSelection.practitioner;
-    if (practitionerId) {
+    if (practitionerId && !isReschedule) {
       fetchBookedAppointments(practitionerId);
     }
   }, [userSelection.practitioner]);
@@ -427,6 +440,18 @@ const Appointments = () => {
     return availableDates;
   }, [practitionerDateTimes]);
 
+  const getTimingBoxVariant = useCallback((timing) => {
+    console.log(timing);
+    let variant = "outlined";
+    const userSelectedTime = userSelection?.time;
+    const startTime = timing.startTime;
+    const endTime = timing.endTime;
+    if (userSelectedTime?.time_start === startTime && userSelectedTime?.time_end === endTime) {
+      variant = "contained";
+    }
+    return variant;
+  }, [userSelection.time]);
+
   return (
     <div className={classes.root}>
       <Box mb={2}>
@@ -542,6 +567,7 @@ const Appointments = () => {
                           }}
                           className={classes.timingBox}
                           variant={userSelection.time?.id === index ? "contained" : "outlined"}
+                          variant={getTimingBoxVariant(timing)}
                           color="primary"
                           fullWidth
                         >
