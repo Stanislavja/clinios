@@ -130,7 +130,7 @@ const Appointments = () => {
       setAppointmentTypes(res.data);
     });
     fetchPractitionersAvailableDates(practitionerId);
-  }, []);
+  }, [fetchPractitionersAvailableDates]);
 
   const userSelectionHandler = (type, value) => {
     setUserSelection({
@@ -148,7 +148,7 @@ const Appointments = () => {
         const type = "practitioner";
         setUserSelection({
           ...userSelection,
-          [type]: practitionerId
+          [type]: practitionerId,
         });
         fetchAppointmentTypesByPractitioner(practitionerId);
       }
@@ -173,15 +173,13 @@ const Appointments = () => {
     });
   }, []);
 
-  console.log("#######", userSelection)
-
   useEffect(() => {
     const appointment = location?.state?.appointment;
     if (appointment?.patient_id) {
       const date = moment(appointment.start_dt).format("YYYY-MM-DD");
       // const minutesFromStartDate = moment(appointment.start_dt).minutes();
-      const startTime = moment(appointment.start_dt).format("H:mm");
-      const endTime = moment(appointment.end_dt).format("H:mm");
+      const startTime = moment(appointment.start_dt).format("HH:mm");
+      const endTime = moment(appointment.end_dt).format("HH:mm");
       const time = {
         time_start: startTime,
         time_end: endTime,
@@ -200,7 +198,7 @@ const Appointments = () => {
       fetchAppointmentTypesByPractitioner(appointment?.user_id);
       setAppointmentLength(appointment?.appointment_type_length);
     }
-  }, [location?.state, fetchPractitionersAvailableDates]);
+  }, [location?.state, fetchPractitionersAvailableDates, fetchAppointmentTypesByPractitioner]);
 
   useEffect(() => {
     fetchPractitioners();
@@ -441,11 +439,9 @@ const Appointments = () => {
   }, [practitionerDateTimes]);
 
   const getTimingBoxVariant = useCallback((timing) => {
-    console.log(timing);
     let variant = "outlined";
     const userSelectedTime = userSelection?.time;
-    const startTime = timing.startTime;
-    const endTime = timing.endTime;
+    const { startTime, endTime } = timing;
     if (userSelectedTime?.time_start === startTime && userSelectedTime?.time_end === endTime) {
       variant = "contained";
     }
@@ -566,7 +562,6 @@ const Appointments = () => {
                             userSelectionHandler("time", timingObject);
                           }}
                           className={classes.timingBox}
-                          variant={userSelection.time?.id === index ? "contained" : "outlined"}
                           variant={getTimingBoxVariant(timing)}
                           color="primary"
                           fullWidth
