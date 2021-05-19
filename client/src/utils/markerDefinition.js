@@ -91,7 +91,7 @@ export const getMarkerDefinition = (marker) => {
     // medlineplus.gov
   }
 
-  if (marker === 611 || marker ==619) {
+  if (marker === 611 || marker === 619) {
     data = `Creatinine is a waste product made by the muscles as part of regular, everyday activity. Normally, the kidneys filter creatinine from the blood and send it out of the body in the urine. If there is a problem with the kidneys, creatinine can build up in the blood and less will be released in urine.
       `;
     // medlineplus.gov
@@ -103,7 +103,7 @@ export const getMarkerDefinition = (marker) => {
     // medlineplus.gov
   }
 
-  if (marker === 119 || marker ==750) {
+  if (marker === 119 || marker === 750) {
     data = `Eosinophils are a type of white blood cell. They help fight off infections and play a role in your body's immune response.`;
     // medlineplus.gov
   }
@@ -123,7 +123,7 @@ export const getMarkerDefinition = (marker) => {
   if (marker === 764) {
     data = `Estrogen Total Serum is the sum of estrone (E1), estradiol (E2), and estriol (E3).
       `;
-      //self
+    //self
   }
 
   if (marker === 791) {
@@ -169,7 +169,7 @@ export const getMarkerDefinition = (marker) => {
   if (marker === 887) {
     data = `GlycoMark measures 1,5-Anhydroglucitol (1,5-AG), a glucose-like sugar found in most foods.  GlycoMark detects recent hyperglycemia and hyperglycemic excursions.
       `;
-      //GlycoMark website
+    // GlycoMark website
   }
 
   if (marker === 944) {
@@ -371,6 +371,106 @@ export const getMarkerDefinition = (marker) => {
     data = `White blood cells are part of the immune system. They help your body fight off infections and other diseases.  When you get sick, your body makes more white blood cells to fight the bacteria, viruses, or other foreign substances causing your illness. This increases your white blood count.
       `;
     // medlineplus.gov
+  }
+
+  if (marker === 936) { // Cholesterol HDL
+    data = `High-density lipoproteins (HDL) collect fat molecules from the body's cells and take them back to the liver. HDLs are sometimes referred to as good lipoprotein because higher concentrations correlate with low rates of atherosclerosis progression.
+      `;
+    // Wikipedia
+  }
+
+  if (marker === 1132) { // Cholesterol LDL
+    data = `Low-density lipoprotein (LDL) is one of the five major groups of lipoprotein which transport all fat molecules around the body.
+      `;
+    // Wikipedia
+  }
+
+  if (marker === 1327) { // Cholesterol Non HDL
+    data = `Non HDL Cholesterol is total cholesterol minus HDL.
+      `;
+    // Wikipedia
+  }
+
+  if (marker === 505) { // Cholesterol Total
+    data = `Cholesterol is biosynthesized by all animal cells and is an essential structural component of animal cell membranes. 
+      `;
+    // Wikipedia
+  }
+
+  if (marker === 1929) { // Cholesterol VLDL
+    data = `Very-low-density lipoproteins (VLDL) carry newly synthesised triglycerides from the liver to adipose tissue.
+      `;
+    // Wikipedia
+  }
+
+  if (marker === 573) { // Copper
+    data = `Serum copper increases under the influence of inflammatory conditions and estrogen.
+    Serum copper is elevated in pregnancy, in patients on estrogens and estrogen-containing contraceptive drugs, in rheumatoid arthritis, and a number of other pathologic entities.
+      `;
+    // Labcorp
+  }
+
+  if (marker === 813) { // Folate Serum
+    data = `Used to detect folate deficiency; monitor therapy with folate; evaluate megaloblastic and macrocytic anemia;
+      `;
+    // Labcorp
+  }
+
+  if (marker === 818) { // Free T4 Index (T7)  
+    data = `Free T4 Index is a computation that estimates free T4 from T4 Total and T3 Uptake.
+      `;
+    // Labcorp
+  }
+
+  if (marker === 871) { // Glucose-6-Phosphate  
+    data = `Glucose-6-phosphate dehydrogenase deficiency is a genetic disorder that occurs almost exclusively in males. This condition mainly affects red blood cells, which carry oxygen from the lungs to tissues throughout the body. In affected individuals, a defect in an enzyme called glucose-6-phosphate dehydrogenase causes red blood cells to break down prematurely. This destruction of red blood cells is called hemolysis.  The most common medical problem associated with glucose-6-phosphate dehydrogenase deficiency is hemolytic anemia, which occurs when red blood cells are destroyed faster than the body can replace them. 
+      `;
+    // https://medlineplus.gov/genetics/condition/glucose-6-phosphate-dehydrogenase-deficiency/
+  }
+
+  if (marker === 3002 || marker === 3005) { // Granulocytes
+    data = `Granulocytes are a type of white blood cell that has small granules. These granules contain proteins. The specific types of granulocytes are neutrophils, eosinophils, and basophils.  Granulocytes, specifically neutrophils, help the body fight bacterial infections. The number of granulocytes in the body usually increases when there is a serious infection. People with a lower number of granulocytes are more likely to develop bad infections more often.
+      `;
+    // https://medlineplus.gov/ency/article/003440.htm
+  }
+
+  if (marker === 3003 || marker === 3004) { // Granulocytes Immature   
+    data = `Immature granulocytes are white blood cells that have not fully developed before being released from the bone marrow into the blood.
+      `;
+  }
+
+  if (marker === 120 || marker === 1187) { // Lymphocytes   
+    data = `A lymphocyte is a type of white blood cell that is part of the immune system. There are two main types of lymphocytes: B cells and T cells. The B cells produce antibodies that are used to attack invading bacteria, viruses, and toxins. The T cells destroy the body's own cells that have themselves been taken over by viruses or become cancerous.
+      `;
+    // https://www.genome.gov/genetics-glossary/Lymphocyte
+  }
+
+  if (marker === 1214) { // MCH   
+    data = `The mean corpuscular hemoglobin (MCH) is the average amount of hemoglobin per red blood cell.
+      `;
+    // https://www.genome.gov/genetics-glossary/Lymphocyte
+  }
+
+  if (marker === 1215) { // MCHC   
+    data = `The mean corpuscular hemoglobin concentration (MCHC) is the average concentration of hemoglobin in red blood cells.
+      `;
+  }
+
+  if (marker === 122 || marker === 1269) { // Monocytes   
+    data = `Monocytes are a type of white blood cell. They help fight bacteria, viruses, and other infections.
+      `;
+  }
+
+  if (marker === 124 || marker === 1318) { // Neutrophils   
+    data = `Neutrophils are the most abundant type of granulocytes and make up 40% to 70% of all white blood cells in humans.
+      `;
+    // Wikipedia
+  }
+
+  if (marker === 126) { // Nucleated RBC   
+    data = `A nucleated red blood cell (NRBC) is a red blood cell that contains a cell nucleus. RBCs normally contain a nucleus only during the very early stages of the cell's life. If NRBCs are identified on an adult's complete blood count, it suggests that there is a very high demand for the bone marrow to produce RBCs, and immature RBCs are being released into circulation.
+      `;
+    // Wikipedia
   }
 
   return data;
