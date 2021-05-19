@@ -36,7 +36,7 @@ export default function Footer() {
           {"Copyright © "}
           {" "}
           {new Date().getFullYear()}
-          {` Clinios - User ${user.firstname} ${user.lastname}`}
+          {` AvonEMR - User ${user.firstname} ${user.lastname}`}
         </CustomTypography>
       </Box>
     </Container>

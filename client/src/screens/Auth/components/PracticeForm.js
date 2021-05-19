@@ -452,7 +452,7 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
               Check here to indicate that you have read and agree to the terms
               of the
               {" "}
-              <Link href="/agreement">Clinios Customer Agreement</Link>
+              <Link href="/agreement">Customer Agreement</Link>
             </span>
           </div>
         )}

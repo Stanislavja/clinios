@@ -51,7 +51,7 @@ export default function Footer() {
           {"Copyright © "}
           {" "}
           {new Date().getFullYear()}
-          {" Clinios"}
+          {" AvonEMR"}
           {" "}
           - User
           {" "}
