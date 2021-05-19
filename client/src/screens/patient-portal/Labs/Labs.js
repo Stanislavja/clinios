@@ -43,8 +43,9 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
     borderBottom: `2px solid ${theme.palette.primary.main}`,
   },
-  w100: {
-    minWidth: 100,
+  newButton: {
+    fontSize: "14px",
+    marginLeft: theme.spacing(4),
   },
 }));
 
@@ -170,7 +171,7 @@ const Labs = () => {
       >
         <Grid
           container
-          justify="space-between"
+          justify="flex-start"
         >
           <Typography
             component="h1"
@@ -183,7 +184,8 @@ const Labs = () => {
           <Button
             component="label"
             variant="outlined"
-            className={classes.w100}
+            color="primary"
+            className={classes.newButton}
           >
             New
             <input

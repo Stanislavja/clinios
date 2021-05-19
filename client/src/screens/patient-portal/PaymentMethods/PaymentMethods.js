@@ -22,14 +22,17 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: "40px 0px",
   },
-  title: {
-    paddingBottom: theme.spacing(1),
+  titleSection: {
+    display: "flex",
+    alignItems: "center",
   },
-  btnContainer: {
-    margin: theme.spacing(1, 0),
+  title: {
+    paddingBottom: theme.spacing(0.5),
   },
   btn: {
-    minWidth: 120,
+    fontSize: "14px",
+    marginLeft: theme.spacing(4),
+    marginBottom: theme.spacing(1),
   },
   actionButtonStyle: {
     minWidth: 0,
@@ -128,33 +131,32 @@ const PaymentMethods = () => {
         />
       )}
       <div className={classes.root}>
-        <Typography
-          component="h1"
-          variant="h2"
-          color="textPrimary"
-          className={classes.title}
-        >
-          Payment Methods
-        </Typography>
-        <Typography
-          variant="h5"
-          color="textPrimary"
-          className={classes.title}
-        >
-          This page is used to manage credit cards or bank accounts used to pay invoices.
-        </Typography>
-        <Grid
-          container
-          className={classes.btnContainer}
-        >
+        <div className={classes.titleSection}>
+          <Typography
+            component="h1"
+            variant="h2"
+            color="textPrimary"
+            className={classes.title}
+          >
+            Payment Methods
+          </Typography>
           <Button
             variant="outlined"
+            color="primary"
             className={classes.btn}
             onClick={() => setNewPaymentDialog(true)}
           >
             New
           </Button>
-        </Grid>
+        </div>
+        <Typography
+          component="h5"
+          variant="body1"
+          color="textPrimary"
+          className={classes.title}
+        >
+          This page is used to manage credit cards or bank accounts used to pay invoices.
+        </Typography>
         <Grid item md={6} sm={8} xs={12}>
           {Boolean(paymentMethods.length) && (
             <TableContainer className={classes.tableContainer}>

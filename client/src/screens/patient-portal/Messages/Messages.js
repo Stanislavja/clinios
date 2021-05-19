@@ -33,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
   newMessage: {
     fontSize: "14px",
     marginLeft: theme.spacing(4),
-    marginBottom: theme.spacing(1),
   },
   content: {
     marginTop: "30px",

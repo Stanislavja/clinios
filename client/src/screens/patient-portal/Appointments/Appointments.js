@@ -20,7 +20,11 @@ const useStyles = makeStyles((theme) => ({
     padding: "40px 0px",
   },
   title: {
+    paddingBottom: theme.spacing(0.5),
+  },
+  subTitle: {
     paddingBottom: theme.spacing(1),
+    fontSize: "14px",
   },
   inputFix: {
     marginBottom: theme.spacing(1),
@@ -36,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     borderRadius: 5,
     boxShadow: "-1px 0px 19px -4px rgba(0,17,1,0.45)",
+    margin: "0",
   },
   timingBox: {
     marginBottom: theme.spacing(2),
@@ -462,7 +467,7 @@ const Appointments = () => {
         <Typography
           variant="h5"
           color="textPrimary"
-          className={classes.title}
+          className={classes.subTitle}
         >
           Please select a date and time
         </Typography>
