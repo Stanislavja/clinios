@@ -81,7 +81,7 @@ const Encounters = () => {
               <Grid className={classes.inputRow} container>
                 <Typography component="p" variant="body2" color="textPrimary">
                   <span style={{ fontWeight: "bold" }}>Date: </span>
-                  {` ${moment(item.dt).format("ll, hh:mmA")} `}
+                  {` ${moment(item.dt).format("ll, h:mmA")} `}
                   <span style={{ fontWeight: "bold" }}>From: </span>
                   {` ${item?.user_from || item?.patient_from} `}
                   <span style={{ fontWeight: "bold" }}>To: </span>
