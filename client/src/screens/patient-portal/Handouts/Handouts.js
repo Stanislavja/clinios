@@ -12,6 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdfOutlined";
 import moment from "moment";
 
+import useAuth from "../../../hooks/useAuth";
 import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 import HandoutDocumentViewerModal from "./components/modal/HandoutDocumentViewerModal";
 
@@ -35,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Handouts = () => {
   const classes = useStyles();
+  const { user } = useAuth();
   const [handouts, setHandouts] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedFilepath, setSelectedFilepath] = useState(null);
@@ -50,7 +52,7 @@ const Handouts = () => {
   }, [fetchHandouts]);
 
   const handleOnClick = (_, filename) => {
-    setSelectedFilepath(`${process.env.REACT_APP_API_URL}static/patient/${filename}`);
+    setSelectedFilepath(`${process.env.REACT_APP_API_URL}static/handouts/c${user.client_id}_${filename}`);
     setIsOpen(true);
   };
 
