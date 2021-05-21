@@ -39,11 +39,7 @@ const deleteClientRange = async (req, res) => {
   const { marker_name } = req.body.data;
   const db = makeDb(configuration, res);
   try {
-    const deleteResponse = await db.query(`
-      delete 
-        from client_range 
-        where id=${id}
-    `);
+    const deleteResponse = await db.query(`delete from client_range where id=?`, [id]);
 
     await db.query(
       `insert into user_log values (${req.client_id}, ${req.user_id}, now(), null, 'Deleted marker range ${marker_name}')`
@@ -158,12 +154,12 @@ const getClientRange = async (req, res) => {
       left join user u on u.id=cr.created_user_id
       left join user u2 on u2.id=cr.updated_user_id
       where cr.client_id=${req.client_id}
-      and cr.cpt_id='${marker_id}'
-      and cr.seq='${seq}'
-      and cr.compare_item='${compare_item}'
-      and cr.compare_operator='${compare_operator}'
-      and cr.compare_to='${compare_to}'
-    `);
+      and cr.cpt_id=?
+      and cr.seq=?
+      and cr.compare_item=?
+      and cr.compare_operator=?
+      and cr.compare_to=?
+    `, [marker_id, seq, compare_item, compare_operator, compare_to]);
 
     if (!dbResponse) {
       errorMessage.message = "None found";

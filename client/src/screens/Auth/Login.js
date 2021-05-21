@@ -97,11 +97,7 @@ const Login = () => {
         >
           Physician Login
         </Typography>
-        {
-          errors.length > 0 && <Error errors={errors} />
-        }
-
-
+        <Error errors={errors} />
         <form
           className={classes.form}
           noValidate

@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const moment = require("moment");
 const { validationResult } = require("express-validator");
 const config = require("../../config");
 const { configuration, makeDb } = require("../db/db.js");
@@ -65,10 +64,6 @@ exports.signin = async (req, res) => {
   }
 
   // update user login_dt
-  const now = moment().format("YYYY-MM-DD HH:mm:ss");
-  /*await db.query(
-    `UPDATE user SET login_dt='${now}', updated= now(), updated_user_id='${user.id}' WHERE id =${user.id}`
-  );*/
   await db.query(
     `UPDATE user SET login_dt=now(), updated= now(), updated_user_id=? WHERE id =?`, [user.id, user.id]
   );
