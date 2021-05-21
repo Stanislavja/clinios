@@ -3,10 +3,10 @@ import React, { useEffect, useState, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Pagination from "@material-ui/lab/Pagination";
 import throttle from "lodash/throttle";
-import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import FileViewer from "react-file-viewer";
+import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
 import { pdfjs, Document, Page } from "react-pdf";
+
 
 pdfjs
   .GlobalWorkerOptions
@@ -38,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
     background: "red",
     textAlign: "center",
   },
+  "my-doc-viewer-style": {
+    background: "#fff !important",
+  },
 }));
 
 const checkFileExtension = (fileName) => fileName.substring(fileName.lastIndexOf(".") + 1);
@@ -46,7 +49,6 @@ const PatientLabDocumentViewer = ({
   documentName, patientId,
 }) => {
   const classes = useStyles();
-  const { enqueueSnackbar } = useSnackbar();
   const [file, setFile] = useState("");
   const [totalPages, setTotalPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
@@ -69,11 +71,6 @@ const PatientLabDocumentViewer = ({
     setPageNumber(value);
   };
 
-  const onError = (e) => {
-    enqueueSnackbar(e, { variant: "error" });
-    console.error("onError", e);
-  };
-
   const setPdfSize = () => {
     if (pdfWrapper && pdfWrapper.current) {
       setInitialWidth(pdfWrapper.current.getBoundingClientRect().width);
@@ -87,7 +84,6 @@ const PatientLabDocumentViewer = ({
       window.removeEventListener("resize", throttle(setPdfSize, 3000));
     };
   }, []);
-
 
   return (
     <>
@@ -108,10 +104,19 @@ const PatientLabDocumentViewer = ({
           </div>
         )
         : (
-          <FileViewer
-            fileType={type}
-            filePath={file}
-            onError={onError}
+          <DocViewer
+            className={classes["my-doc-viewer-style"]}
+            config={{
+              header: {
+                disableHeader: true,
+                disableFileName: true,
+                retainURLParams: true,
+              },
+            }}
+            pluginRenderers={DocViewerRenderers}
+            documents={[
+              { uri: file },
+            ]}
           />
         )}
     </>
