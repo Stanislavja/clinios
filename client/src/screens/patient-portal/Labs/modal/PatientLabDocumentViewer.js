@@ -3,11 +3,11 @@ import React, { useEffect, useState, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Pagination from "@material-ui/lab/Pagination";
 import throttle from "lodash/throttle";
-import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
 import FileViewer from "react-file-viewer";
 import { pdfjs, Document, Page } from "react-pdf";
+
 
 pdfjs
   .GlobalWorkerOptions
@@ -50,7 +50,6 @@ const PatientLabDocumentViewer = ({
   documentName, patientId,
 }) => {
   const classes = useStyles();
-  const { enqueueSnackbar } = useSnackbar();
   const [file, setFile] = useState("");
   const [totalPages, setTotalPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
@@ -71,11 +70,6 @@ const PatientLabDocumentViewer = ({
 
   const handleChange = (event, value) => {
     setPageNumber(value);
-  };
-
-  const onError = (e) => {
-    enqueueSnackbar(e, { variant: "error" });
-    console.error("onError", e);
   };
 
   const setPdfSize = () => {
