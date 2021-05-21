@@ -110,14 +110,15 @@ const deleteAppointment = async (req, res) => {
     errorMessage.message = errors.array();
     return res.status(status.error).send(errorMessage);
   }
+  const { id } = req.params;
   const db = makeDb(configuration, res);
   try {
     const deleteApptResponse = await db.query(
-      `delete from appointment_type_user where appointment_type_id=${req.params.id}`
+      `delete from appointment_type_user where appointment_type_id=?`, [id]
     );
     console.log("deleteApptResponse:", deleteApptResponse);
     const deleteResponse = await db.query(
-      `delete from appointment_type where id=${req.params.id}`
+      `delete from appointment_type where id=?`, [id]
     );
 
     if (!deleteResponse.affectedRows) {
