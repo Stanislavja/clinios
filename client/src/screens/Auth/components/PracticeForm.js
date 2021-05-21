@@ -13,7 +13,7 @@ import _ from "lodash";
 import PropTypes from "prop-types";
 
 import AuthService from "../../../services/auth.service";
-import { getAcronym } from "../../../utils/helpers";
+import { getAcronym, removeSpecialCharFromString } from "../../../utils/helpers";
 import TextFieldWithError from "./TextFieldWithError";
 
 const useStyles = makeStyles((theme) => ({
@@ -63,7 +63,8 @@ const PracticeForm = ({ onFormSubmit, ...props }) => {
   const [fieldErrors, setFieldErrors] = useState([]);
 
   useEffect(() => {
-    const clientCodeAcc = getAcronym(name.trim());
+    const nameWithoutSpeChar = removeSpecialCharFromString(name);
+    const clientCodeAcc = getAcronym(nameWithoutSpeChar.trim());
     setClientCode(clientCodeAcc);
   }, [name]);
 
