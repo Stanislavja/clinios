@@ -14,15 +14,21 @@ import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useSnackbar } from "notistack";
 
+import Logo from "../../assets/img/Logo.png";
 import Error from "../../components/common/Error";
 import useAuth from "../../hooks/useAuth";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(2),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    boxShadow: "0 15px 35px 0 rgb(60 66 87 / 8%), 0 5px 15px 0 rgb(0 0 0 / 12%)",
+    padding: theme.spacing(2),
+  },
+  marginTop: {
+    marginTop: theme.spacing(16),
   },
   avatar: {
     margin: theme.spacing(1),
@@ -41,6 +47,9 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+  },
+  Logo: {
+    maxWidth: "180px",
   },
 }));
 
@@ -85,95 +94,99 @@ const Login = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon className={classes.lockIcon} />
-        </Avatar>
-        <Typography
-          component="h1"
-          variant="h2"
-          className={classes.pageTitle}
-        >
-          Physician Login
-        </Typography>
-        <Error errors={errors} />
-        <form
-          className={classes.form}
-          noValidate
-          onSubmit={(event) => onFormSubmit(event)}
-        >
-          <TextField
-            value={email}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            onChange={(event) => setEmail(event.target.value)}
-            inputProps={{ maxLength: 255 }}
-            helperText={`${email.length >= 255
-              ? "Enter an email between 255 charecter"
-              : ""
-            }`}
-          />
-          <TextField
-            value={password}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange={(event) => setPassword(event.target.value)}
-            inputProps={{ maxLength: 128 }}
-            helperText={`${password.length >= 128
-              ? "Enter a password between 128 charecter"
-              : ""
-            }`}
-          />
-          <FormControlLabel
-            control={(
-              <Checkbox
-                value="remember"
-                color="primary"
-                checked={isChecked}
-                onChange={(event) => setIsChecked(event.target.checked)}
-              />
-            )}
-            label="Remember me"
-          />
-          <Button
-            type="submit"
-            disabled={!email || !password}
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
+      <Grid className={classes.marginTop}>
+        <img src={Logo} alt="AvonHealth" className={classes.Logo} />
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon className={classes.lockIcon} />
+          </Avatar>
+          <Typography
+            component="h1"
+            variant="h2"
+            className={classes.pageTitle}
           >
-            Sign In
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="/forgot-password" variant="body2">
-                Forgot password?
-              </Link>
+            Physician Login
+          </Typography>
+          <Error errors={errors} />
+
+          <form
+            className={classes.form}
+            noValidate
+            onSubmit={(event) => onFormSubmit(event)}
+          >
+            <TextField
+              value={email}
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              onChange={(event) => setEmail(event.target.value)}
+              inputProps={{ maxLength: 255 }}
+              helperText={`${email.length >= 255
+                ? "Enter an email between 255 charecter"
+                : ""
+              }`}
+            />
+            <TextField
+              value={password}
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              onChange={(event) => setPassword(event.target.value)}
+              inputProps={{ maxLength: 128 }}
+              helperText={`${password.length >= 128
+                ? "Enter a password between 128 charecter"
+                : ""
+              }`}
+            />
+            <FormControlLabel
+              control={(
+                <Checkbox
+                  value="remember"
+                  color="primary"
+                  checked={isChecked}
+                  onChange={(event) => setIsChecked(event.target.checked)}
+                />
+              )}
+              label="Remember me"
+            />
+            <Button
+              type="submit"
+              disabled={!email || !password}
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link href="/forgot-password" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="/signup_client" variant="body2">
+                  Don&apos;t have an account? Sign Up
+                </Link>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Link href="/signup_client" variant="body2">
-                Don&apos;t have an account? Sign Up
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
+          </form>
+        </div>
+      </Grid>
     </Container>
   );
 };

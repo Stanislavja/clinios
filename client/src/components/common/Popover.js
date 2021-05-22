@@ -10,6 +10,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(1.5),
+    pointerEvents: "auto",
   },
 }));
 
@@ -38,6 +39,8 @@ const MouseOverPopover = (props) => {
       }}
       onClose={handlePopoverClose}
       disableRestoreFocus
+      // keep the paopover open if hover on popover content
+      PaperProps={{ onMouseLeave: handlePopoverClose }}
     >
       {children}
     </Popover>
