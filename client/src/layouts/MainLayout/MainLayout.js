@@ -6,7 +6,7 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 
-import { Header, Footer, Sidebar } from "./components";
+import { /* Header, */ Footer, Sidebar } from "./components";
 
 
 const useStyles = makeStyles(() => ({
@@ -33,9 +33,9 @@ const MainLayout = ({ children }) => {
     defaultMatches: true,
   });
 
-  const handleSidebarOpen = () => {
-    setOpenSidebar(true);
-  };
+  // const handleSidebarOpen = () => {
+  //   setOpenSidebar(true);
+  // };
 
   const handleSidebarClose = () => {
     setOpenSidebar(false);
@@ -48,7 +48,8 @@ const MainLayout = ({ children }) => {
         [classes.shiftContent]: isDesktop,
       })}
     >
-      <Header onSidebarOpen={handleSidebarOpen} />
+      {/* Removed as per CLIN-155 */}
+      {/* <Header onSidebarOpen={handleSidebarOpen} /> */}
       <Sidebar
         onClose={handleSidebarClose}
         open={openSidebar}
