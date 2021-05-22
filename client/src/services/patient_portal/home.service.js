@@ -30,6 +30,7 @@ class HomeService {
       .then((res) => res.data);
   }
 
+  // appointments
   getUpcomingAppointments(patient) {
     let url = `${API_BASE}/client-portal/upcoming-appointments`;
     if (patient) {
