@@ -68,15 +68,10 @@ const Login = () => {
       //  variant: "success",
       // });
     } catch (error) {
-      console.error(error);
       enqueueSnackbar("Unable to login", {
         variant: "error",
       });
-      setErrors([
-        {
-          msg: error.message,
-        },
-      ]);
+      setErrors(error.message);
     }
   };
 
@@ -87,6 +82,7 @@ const Login = () => {
       setPassword(localStorage.password);
     }
   }, []);
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -102,7 +98,6 @@ const Login = () => {
           Physician Login
         </Typography>
         <Error errors={errors} />
-
         <form
           className={classes.form}
           noValidate

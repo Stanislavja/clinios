@@ -133,7 +133,7 @@ exports.sendSignupConfirmationEmail = async (req, res) => {
 
   // update token field on that user table
   await db.query(
-    `UPDATE user SET token='${accesstToken}', updated= now() WHERE id =${user.id}`
+    `UPDATE user SET token=?, updated= now() WHERE id =?`, [accesstToken, user.id]
   );
 
   // send mail with defined transport object
@@ -183,7 +183,7 @@ exports.resendSignupConfirmationEmail = async (req, res) => {
     accesstToken = usePasswordHashToMakeToken(user);
     // update token field on that user table
     await db.query(
-      `UPDATE user SET token='${accesstToken}', updated= now() WHERE id =${user.id}`
+      `UPDATE user SET token=?, updated= now() WHERE id =?`, [accesstToken, user.id]
     );
   }
   const url = getEmailVerificationURL(user, accesstToken);

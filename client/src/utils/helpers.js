@@ -9,6 +9,8 @@ export const getAcronym = (str) => {
   return matches.join("");
 };
 
+export const removeSpecialCharFromString = (str) => str.replace(/[^a-zA-Z ]/g, "");
+
 export const removeEmpty = (obj) => {
   const newObj = {};
   Object.keys(obj).forEach((prop) => {

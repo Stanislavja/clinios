@@ -93,7 +93,6 @@ const addHandouts = async (req, res) => {
       return res.status(status.error).send(errorMessage);
     }
 
-    const { notes } = req.body;
     const uploadedFilename = req.file.originalname.replace(/\s/g, '_');
     const db = makeDb(configuration, res);
     try {
@@ -110,8 +109,16 @@ const addHandouts = async (req, res) => {
         return res.status(status.error).send(errorMessage);
       }
 
+      const handoutData = req.body;
+      handoutData.client_id = req.client_id;
+      handoutData.filename = uploadedFilename;
+      handoutData.created = new Date();
+      handoutData.created_user_id = req.user_id;
+
+      delete handoutData.patient_id;
+      
       const insertResponse = await db.query(
-        `insert into handout (client_id, filename, notes, created, created_user_id) values (${req.client_id}, '${uploadedFilename}', '${notes}', now(), ${req.user_id})`
+        `insert into handout set ?`, [handoutData]
       );
 
       if (!insertResponse.affectedRows) {
