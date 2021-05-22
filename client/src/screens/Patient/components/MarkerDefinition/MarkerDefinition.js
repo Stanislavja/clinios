@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 
-import { stringWithoutComments } from "../../../../utils/helpers";
+import { stringWithoutComments, urlify } from "../../../../utils/helpers";
 import { getMarkerDefinition } from "../../../../utils/markerDefinition";
 import { getMarkerInterpretation } from "../../../../utils/markerInterpretation";
 
@@ -71,7 +71,9 @@ const MarkerDefinition = ({
               {markerInterpretation?.high.map((item) => (
                 <TableRow key={item.condition}>
                   <TableCell>{item.condition}</TableCell>
-                  <TableCell>{item.comment}</TableCell>
+                  <TableCell
+                    dangerouslySetInnerHTML={{ __html: urlify(item.comment) }}
+                  />
                   <TableCell>{item.evidence}</TableCell>
                 </TableRow>
               ))}
@@ -95,7 +97,9 @@ const MarkerDefinition = ({
               {markerInterpretation?.low.map((item) => (
                 <TableRow key={item.condition}>
                   <TableCell>{item.condition}</TableCell>
-                  <TableCell>{item.comment}</TableCell>
+                  <TableCell
+                    dangerouslySetInnerHTML={{ __html: urlify(item.comment) }}
+                  />
                   <TableCell>{item.evidence}</TableCell>
                 </TableRow>
               ))}
