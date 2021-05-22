@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const moment = require("moment");
 const { validationResult } = require("express-validator");
 const config = require("../../config");
 const { configuration, makeDb } = require("../db/db.js");
@@ -22,10 +21,9 @@ exports.signin = async (req, res) => {
 
   const db = makeDb(configuration, res);
 
-  const $sql = `SELECT u.id, u.admin, u.client_id, u.firstname, u.lastname, u.email, u.password, u.sign_dt, u.email_confirm_dt,
-     c.name, c.calendar_start_time, c.calendar_end_time FROM user u
-     left join client c on c.id=u.client_id WHERE u.email='${req.body.email}'`;
-  const rows = await db.query($sql);
+  const rows = await db.query(`SELECT u.id, u.admin, u.client_id, u.firstname, u.lastname, u.email,
+   u.password, u.sign_dt, u.email_confirm_dt, c.name, c.calendar_start_time, c.calendar_end_time FROM user u
+   left join client c on c.id=u.client_id WHERE u.email=?`, [req.body.email]);
 
   const user = rows[0];
   if (!user) {
@@ -66,9 +64,8 @@ exports.signin = async (req, res) => {
   }
 
   // update user login_dt
-  const now = moment().format("YYYY-MM-DD HH:mm:ss");
   await db.query(
-    `UPDATE user SET login_dt='${now}', updated= now(), updated_user_id='${user.id}' WHERE id =${user.id}`
+    `UPDATE user SET login_dt=now(), updated= now(), updated_user_id=? WHERE id =?`, [user.id, user.id]
   );
 
   const token = jwt.sign(

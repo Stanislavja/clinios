@@ -7,7 +7,8 @@ const getHistory = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const dbResponse = await db.query(
-      `select e.created, e.message, e.subject, concat(u.firstname, ' ', u.lastname) created_user, e.status, e.client_id
+      `select e.created, e.message, e.subject, concat(u.firstname, ' ', u.lastname) created_user,
+       e.status_active, e.status_inactive, e.send_status, e.client_id
         from email_bulk_history e
         left join user u on u.id=e.created_user_id
         where e.client_id=${req.client_id}
@@ -32,12 +33,15 @@ const getHistory = async (req, res) => {
 };
 
 const createEmailHistory = async (req, res) => {
-  const { subject, message } = req.body.data;
-  const { emailStatus } = req.body.data;
+  const formData = req.body.data;
+  formData.client_id = req.client_id;
+  formData.created = new Date();
+  formData.created_user_id = req.user_id;
+
   const db = makeDb(configuration, res);
   try {
     const insertResponse = await db.query(
-      `insert into email_bulk_history (client_id, subject, message, status, created, created_user_id) values (${req.client_id}, '${subject}', '${message}', '${emailStatus}', now(), ${req.user_id})`
+      `insert into email_bulk_history set ?`, [formData]
     );
 
     if (!insertResponse.affectedRows) {
@@ -61,13 +65,10 @@ const updateEmailHistory = async (req, res) => {
 
   const db = makeDb(configuration, res);
   try {
-    const $sql = `update email_bulk_history set message='${emailData.message}',
-     subject='${emailData.subject}', status='${emailData.status}'
-      where client_id='${emailData.client_id}' and created='${moment(
+    const updateResponse = await db.query(`update email_bulk_history set ? 
+    where client_id='${emailData.client_id}' and created='${moment(
       emailData.created
-    ).format("YYYY-MM-DD HH:mm:ss")}'`;
-
-    const updateResponse = await db.query($sql);
+    ).format("YYYY-MM-DD HH:mm:ss")}'`, [emailData]);
 
     if (!updateResponse.affectedRows) {
       errorMessage.message = "Update not successful";
