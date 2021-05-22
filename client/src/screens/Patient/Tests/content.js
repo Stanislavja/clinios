@@ -245,7 +245,7 @@ const TestsContent = () => {
                       {showPopoverIcon(row) && (
                         <Grid
                           onMouseEnter={(e) => handlePopoverOpen(e, row)}
-                        // onMouseLeave={handlePopoverClose}
+                        // onMouseLeave={handlePopoverClose} // this will enable the user to click links inside Popover
                         >
                           <Icon
                             path={mdiInformationOutline}
