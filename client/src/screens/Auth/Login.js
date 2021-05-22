@@ -111,7 +111,7 @@ const Login = () => {
             className={classes.pageTitle}
           >
             Physician Login
-        </Typography>
+          </Typography>
           <Error errors={errors} />
 
           <form
@@ -135,7 +135,7 @@ const Login = () => {
               helperText={`${email.length >= 255
                 ? "Enter an email between 255 charecter"
                 : ""
-                }`}
+              }`}
             />
             <TextField
               value={password}
@@ -153,7 +153,7 @@ const Login = () => {
               helperText={`${password.length >= 128
                 ? "Enter a password between 128 charecter"
                 : ""
-                }`}
+              }`}
             />
             <FormControlLabel
               control={(
@@ -175,17 +175,17 @@ const Login = () => {
               className={classes.submit}
             >
               Sign In
-          </Button>
+            </Button>
             <Grid container>
               <Grid item xs>
                 <Link href="/forgot-password" variant="body2">
                   Forgot password?
-              </Link>
+                </Link>
               </Grid>
               <Grid item>
                 <Link href="/signup_client" variant="body2">
                   Don&apos;t have an account? Sign Up
-              </Link>
+                </Link>
               </Grid>
             </Grid>
           </form>

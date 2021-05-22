@@ -2,8 +2,8 @@ import React from "react";
 
 import AppBar from "@material-ui/core/AppBar";
 import { makeStyles } from "@material-ui/core/styles";
-import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import Toolbar from "@material-ui/core/Toolbar";
+import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import clsx from "clsx";
 import PropTypes from "prop-types";
 
