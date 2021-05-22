@@ -245,7 +245,7 @@ const TestsContent = () => {
                       {showPopoverIcon(row) && (
                         <Grid
                           onMouseEnter={(e) => handlePopoverOpen(e, row)}
-                          onMouseLeave={handlePopoverClose}
+                        // onMouseLeave={handlePopoverClose}
                         >
                           <Icon
                             path={mdiInformationOutline}
