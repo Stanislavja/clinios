@@ -33,7 +33,7 @@ const getAll = async (req, res) => {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const dest = `${process.env.UPLOAD_DIR}/client`;
+    const dest = `${process.env.UPLOAD_DIR}/handouts`;
     // eslint-disable-next-line prefer-arrow-callback
     fs.access(dest, function (error) {
       if (error) {
@@ -47,7 +47,7 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     const fileName = `c${req.client_id}_${file.originalname
       .split(" ")
-      .join("-")}`;
+      .join("_")}`;
     cb(null, fileName);
   },
 });
@@ -94,7 +94,7 @@ const addHandouts = async (req, res) => {
     }
 
     const { notes } = req.body;
-    const uploadedFilename = req.file.originalname;
+    const uploadedFilename = req.file.originalname.replace(/\s/g, '_');
     const db = makeDb(configuration, res);
     try {
       const existingHandout = await db.query(

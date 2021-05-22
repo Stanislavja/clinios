@@ -12,6 +12,7 @@ import PropTypes from "prop-types";
 import Alert from "../../../../components/Alert";
 import Tooltip from "../../../../components/common/CustomTooltip";
 import Dialog from "../../../../components/Dialog";
+import useAuth from "../../../../hooks/useAuth";
 import usePatientContext from "../../../../hooks/usePatientContext";
 import PatientService from "../../../../services/patient.service";
 import SampleDocViewer from "../../Encounters/components/SampleDocViewer";
@@ -54,6 +55,7 @@ const HandoutsContent = (props) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const { state } = usePatientContext();
+  const { user } = useAuth();
   const { patientId } = state;
   const { data } = state.handouts;
 
@@ -94,7 +96,7 @@ const HandoutsContent = (props) => {
   };
 
   // eslint-disable-next-line max-len
-  const filePath = useMemo(() => `${process.env.REACT_APP_API_URL}static/patient/${selectedItem?.filename}`, [selectedItem]);
+  const filePath = useMemo(() => `${process.env.REACT_APP_API_URL}static/handouts/c${user.client_id}_${selectedItem?.filename}`, [user, selectedItem]);
 
   return (
     <>

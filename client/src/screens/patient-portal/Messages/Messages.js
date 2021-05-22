@@ -153,7 +153,7 @@ export default function Messages() {
                   <Typography component="p" variant="body2" color="textPrimary">
                     <span className={classes.labelBold}>Time: </span>
                     <span className={classes.mr1}>
-                      {moment(msg.created).format("ll, h:mm")}
+                      {moment(msg.created).format("ll, h:mmA")}
                     </span>
                     <span className={classes.labelBold}>From: </span>
                     <span className={classes.mr1}>

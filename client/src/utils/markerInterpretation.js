@@ -10,30 +10,70 @@ export const getMarkerInterpretation = (marker) => {
   if (marker === 866) {
     data.high = [
       {
-        condition: "Acromegaly",
-        comment: "Acromegaly is a disease caused by a chronic excess of growth hormone (GH) and consequently by increased circulating insulin-like growth factor 1 (IGF-1). Excess GH stimulates gluconeogenesis and lipolysis, causing hyperglycemia and elevated free fatty acid levels.",
+        condition: "Insulin resistance",
+        prevalence: "Common in general population",
+        comment: `Insulin is released by the pancreas in response to carbohydrates consumed in the diet. In states of insulin resistance, the same amount of insulin does not have the same effect on glucose transport and blood sugar levels, and the pancreas makes extra insulin to make up for it. For a while, this will work and the blood sugar levels will stay normal. Over time, though, the pancreas won't be able to keep up and the blood sugar levels will go up.
+
+        https://doi.org/10.1111/j.1749-6632.2002.tb04262.x
+        https://www.ncbi.nlm.nih.gov/books/NBK507839/
+        https://doi.org/10.1038/s41598-019-42700-1
+        `,
         evidence: "Strong",
       },
       {
-        condition: "Acute stress (Stress hyperglycemia)",
-        comment: "The neuroendocrine response to stress is characterized by excessive gluconeogenesis, glycogenolysis and insulin resistance. Stress hyperglycemia, however, appears to be caused predominantly by increased hepatic output of glucose rather than impaired tissue glucose extraction",
+        condition: "Acute stress",
+        prevalance: "Common in people who have experienced a recent traumatic life event.",
+        comment: `The neuroendocrine response to stress is characterized by excessive gluconeogenesis, glycogenolysis and insulin resistance. Stress hyperglycemia, however, appears to be caused predominantly by increased hepatic output of glucose rather than impaired tissue glucose extraction.
+
+        https://doi.org/10.1016/s0749-0704(05)70154-8
+        https://doi.org/10.1038/s41598-020-58679-z
+        https://doi.org/10.1186/cc12514
+        `,
         evidence: "Strong",
       },
       {
-        condition: "Chronic kidney disease",
-        comment: "The accumulation of uremic toxins and increased parathyroid hormone levels in patients with chronic renal failure (CRF) cause insulin resistance in tissues, particularly skeletal muscle tissues.",
+        condition: "Hyperadrenal function/ Cushing syndrome",
+        prevalance: "Common in general population",
+        comment: `Cushing’s disease is a severe clinical condition caused by a pituitary adenoma hypersecreting adrenocorticotropic hormone (ACTH). The persistently high levels of ACTH lead to chronic hypersecretion of cortisol by the adrenal glands, which negatively affects many tissues and organs in the body. Chronic hypercortisolism blocks or impedes the action of insulin on peripheral tissues, such as liver, muscle and adipose tissue, leading to increased insulin resistance, and it partially inhibits insulin release by the pancreatic beta-cells.
+
+        https://doi.org/10.1007/s11102-013-0483-3
+        https://doi.org/10.3389/fendo.2018.00284
+        https://doi.org/10.1159/000314319
+        `,
+        evidence: "Strong",
+      },
+      {
+        condition: "Overactive thyroid (hyperthyroidism)",
+        prevalance: "Common in general population",
+        comment: `The elevated plasma glucose levels in hyperthyroidism may be explained by increased rates of endogenous glucose production, due mainly to increased gluconeogenesis.
+
+        https://doi.org/10.1210/jcem-63-1-62
+        https://doi.org/10.1155/2013/390534
+        https://doi.org/10.4061/2011/439463
+        `,
+        evidence: "Strong",
+      },
+      {
+        condition: "Pancreatitis",
+        prevalance: "Common in general population",
+        comment: `High blood sugar (Hyperglycemia) during acute pancreatitis (AP) can be due to abnormalities in insulin secretion, increase in counterregulatory hormones release, or decrease in glucose utilization by peripheral tissues.
+
+        https://doi.org/10.1016/j.jpeds.2010.09.066
+        https://doi.org/10.1016/j.sjbs.2018.11.012
+        https://pubmed.ncbi.nlm.nih.gov/12653076/
+        `,
         evidence: "Strong",
       },
     ];
     data.low = [
       {
-        condition: "Adrenal insufficiency",
-        comment: "Depleted cortisol increases insulin sensitivity in patients with adrenal insufficiency and is thought to involve hypoglycemia. The hypoglycemia related to adrenal insufficiency is thought to be more common in neonates and children than in adults. Cortisol is a catabolic hormone influencing carbohydrate, lipid, and protein metabolism.",
-        evidence: "Strong",
-      },
-      {
-        condition: "Hypopituitarism",
-        comment: "Insufficient Adrenocorticotropic hormone (ACTH) secretion by pituitary glands  results in cortisol deficiency; therefore, hypopituitarism may cause hypoglycemic events in diabetic patients.",
+        condition: "Hypothyroidism",
+        prevalance: "Common in general population",
+        comment: `Hypothyroidism is linked with various hormonal biochemical and nervous system abnormalities, which may contribute to hypoglycemia.
+
+        https://doi.org/10.4103/2230-8210.126517
+        https://www.thetrp.net/text.asp?2017/14/3/127/216212
+       `,
         evidence: "Strong",
       },
     ];
