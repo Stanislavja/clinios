@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
+import Pagination from "@material-ui/lab/Pagination";
+import throttle from "lodash/throttle";
+import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
 import FileViewer from "react-file-viewer";
 import { pdfjs, Document, Page } from "react-pdf";
-
 
 pdfjs
   .GlobalWorkerOptions
@@ -42,15 +44,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const checkFileExtension = (fileName) => fileName.substring(fileName.lastIndexOf(".") + 1);
+
 const PatientLabDocumentViewer = ({
   documentName, patientId,
 }) => {
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
   const [file, setFile] = useState("");
+  const [totalPages, setTotalPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [type, setType] = useState("");
+  const [initialWidth, setInitialWidth] = useState(580);
+  const pdfWrapper = useRef(null);
 
   useEffect(() => {
     const filePath = `${process.env.REACT_APP_API_URL}static/patient/pid${patientId}_${documentName}`;
     setFile(filePath);
+    const fileType = checkFileExtension(filePath);
+    setType(fileType);
   }, [documentName, patientId]);
 
   const onDocumentLoadSuccess = ({ numPages }) => {
