@@ -168,7 +168,7 @@ const PatientLogin = () => {
             className={classes.pageTitle}
           >
             Patient Sign in
-        </Typography>
+          </Typography>
 
           <Error errors={apiErrors} />
 
@@ -228,18 +228,18 @@ const PatientLogin = () => {
               type="submit"
             >
               Sign In
-          </Button>
+            </Button>
           </form>
           <Grid container className={classes.meta}>
             <Grid item xs={6}>
               <Link href={`/signup/${clientCode}`} variant="body2">
                 Don&apos;t have an account? Register.
-            </Link>
+              </Link>
             </Grid>
             <Grid item xs={6} className={classes.forgotPass}>
               <Link href={`/forgot/${clientCode}`} variant="body2">
                 Forgot your password? Reset.
-            </Link>
+              </Link>
             </Grid>
           </Grid>
         </div>
