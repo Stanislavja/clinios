@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
   Logo: {
     textAlign: "center",
-    // marginTop: theme.spacing(2),
+    marginTop: theme.spacing(2),
     "& img": {
       width: "100%",
       maxWidth: 180,
