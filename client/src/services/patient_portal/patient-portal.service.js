@@ -88,6 +88,14 @@ class PatientPortalService {
       .then((res) => res.data);
   }
 
+  cancelRequestRescheduleAppointment(id) {
+    return axios
+      .delete(`${API_BASE}/client-portal/appointment/${id}`, {
+        headers: authHeader(),
+      })
+      .then((res) => res.data);
+  }
+
   // encounters
   getEncounters(patient) {
     let url = `${API_BASE}/client-portal/encounters`;
