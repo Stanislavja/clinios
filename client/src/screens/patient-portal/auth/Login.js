@@ -22,12 +22,15 @@ import { Image } from "./components";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(4),
+    marginTop: theme.spacing(2),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     boxShadow: "0 15px 35px 0 rgb(60 66 87 / 8%), 0 5px 15px 0 rgb(0 0 0 / 12%)",
     padding: theme.spacing(2),
+  },
+  marginTop: {
+    marginTop: theme.spacing(16),
   },
   Logo: {
     textAlign: "center",
@@ -147,98 +150,100 @@ const PatientLogin = () => {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.Logo}>
-        <Image
-          lassName="clientLogo"
-          src={`${process.env.REACT_APP_API_URL}static/client/c${clientId}_logo.png`}
-          alt="Client Logo"
-        />
-      </div>
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon className={classes.lockIcon} />
-        </Avatar>
-        <Typography
-          component="h1"
-          variant="h2"
-          className={classes.pageTitle}
-        >
-          Patient Sign in
+      <Grid className={classes.marginTop}>
+        <div className={classes.Logo}>
+          <Image
+            lassName="clientLogo"
+            src={`${process.env.REACT_APP_API_URL}static/client/c${clientId}_logo.png`}
+            alt="Client Logo"
+          />
+        </div>
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon className={classes.lockIcon} />
+          </Avatar>
+          <Typography
+            component="h1"
+            variant="h2"
+            className={classes.pageTitle}
+          >
+            Patient Sign in
         </Typography>
 
-        <Error errors={apiErrors} />
+          <Error errors={apiErrors} />
 
-        <form
-          className={clsx({
-            [classes.form]: true, // always apply
-            [classes.withErrors]: errors.length > 0, // only when isLoading === true
-          })}
-          noValidate
-          onSubmit={handleSubmit(onFormSubmit)}
-        >
-          <TextField
-            disabled={errors.length > 0}
-            value={email}
-            type="email"
-            variant="outlined"
-            margin="normal"
-            inputRef={register({
-              required: "You must provide the email address!",
-              pattern: {
-                // eslint-disable-next-line max-len, no-useless-escape
-                value: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                message: "You must provide a valid email address!",
-              },
+          <form
+            className={clsx({
+              [classes.form]: true, // always apply
+              [classes.withErrors]: errors.length > 0, // only when isLoading === true
             })}
-            error={!!errors.email}
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            fullWidth
-            autoFocus
-            required
-            onChange={(event) => setEmail(event.target.value)}
-            helperText={errors?.email?.message}
-          />
-          <TextField
-            disabled={errors.length > 0}
-            value={password}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange={(event) => setPassword(event.target.value)}
-          />
-          <Button
-            disabled={!email || !password || errors.length > 0}
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            type="submit"
+            noValidate
+            onSubmit={handleSubmit(onFormSubmit)}
           >
-            Sign In
+            <TextField
+              disabled={errors.length > 0}
+              value={email}
+              type="email"
+              variant="outlined"
+              margin="normal"
+              inputRef={register({
+                required: "You must provide the email address!",
+                pattern: {
+                  // eslint-disable-next-line max-len, no-useless-escape
+                  value: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                  message: "You must provide a valid email address!",
+                },
+              })}
+              error={!!errors.email}
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              fullWidth
+              autoFocus
+              required
+              onChange={(event) => setEmail(event.target.value)}
+              helperText={errors?.email?.message}
+            />
+            <TextField
+              disabled={errors.length > 0}
+              value={password}
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              onChange={(event) => setPassword(event.target.value)}
+            />
+            <Button
+              disabled={!email || !password || errors.length > 0}
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              type="submit"
+            >
+              Sign In
           </Button>
-        </form>
-        <Grid container className={classes.meta}>
-          <Grid item xs={6}>
-            <Link href={`/signup/${clientCode}`} variant="body2">
-              Don&apos;t have an account? Register.
+          </form>
+          <Grid container className={classes.meta}>
+            <Grid item xs={6}>
+              <Link href={`/signup/${clientCode}`} variant="body2">
+                Don&apos;t have an account? Register.
             </Link>
-          </Grid>
-          <Grid item xs={6} className={classes.forgotPass}>
-            <Link href={`/forgot/${clientCode}`} variant="body2">
-              Forgot your password? Reset.
+            </Grid>
+            <Grid item xs={6} className={classes.forgotPass}>
+              <Link href={`/forgot/${clientCode}`} variant="body2">
+                Forgot your password? Reset.
             </Link>
+            </Grid>
           </Grid>
-        </Grid>
-      </div>
+        </div>
+      </Grid>
     </Container>
   );
 };
