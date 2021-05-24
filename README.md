@@ -13,9 +13,9 @@
 1. Install MySQL
 2. Load file mysql_start.txt
 
-To query the database we recommend MySQL Workbench https://www.mysql.com/products/workbench/
+To query the database use MySQL Workbench https://www.mysql.com/products/workbench/
 
-## Client
+## Frontend
 
 Setup:
 
@@ -28,7 +28,7 @@ To run:
 1. `yarn start` or `npm run dev`
 2. Open [http://localhost:3000](http://localhost:3000)
 
-## API
+## Backend
 
 Setup:
 
@@ -40,7 +40,6 @@ Setup:
 To run:
 
 1. `yarn dev` or `npm run dev` for development, `yarn start` for production
-2. API end point would be `http://localhost:5001`
 
 ## Prettier
 
