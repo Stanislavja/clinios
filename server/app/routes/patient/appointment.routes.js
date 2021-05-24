@@ -1,5 +1,5 @@
 const express = require("express");
-const { authJwt } = require("../../middlewares");
+const { authJwt, authorization } = require("../../middlewares");
 const appointmentsController = require("../../controllers/patient/appointment.controller");
 
 const router = express.Router();
@@ -30,17 +30,17 @@ router.post(
 
 router.post(
   "/client-portal/appointment",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   appointmentsController.createAppointment
 );
 router.put(
   "/client-portal/appointment/:id",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   appointmentsController.updateAppointment
 );
 router.delete(
   "/client-portal/appointment/:id",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   appointmentsController.cancelRequestRescheduleAppointment
 );
 
