@@ -1,5 +1,5 @@
 const express = require("express");
-const { authJwt } = require("../../middlewares");
+const { authJwt, authorization } = require("../../middlewares");
 const billingsController = require("../../controllers/patient/billings.controller");
 
 const router = express.Router();
@@ -18,7 +18,7 @@ router.get(
 
 router.post(
   "/client-portal/billings",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   billingsController.createBilling
 );
 

@@ -1,5 +1,5 @@
 const express = require("express");
-const { authJwt } = require("../middlewares");
+const { authJwt, authorization } = require("../middlewares");
 const ClientPortalHeader = require("../controllers/patient-portal-header.controller");
 
 const router = express.Router();
@@ -11,7 +11,7 @@ router.get(
 );
 router.put(
   "/patient-portal-header/:id",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   ClientPortalHeader.editClientPortalHeader
 );
 

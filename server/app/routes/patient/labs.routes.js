@@ -1,5 +1,5 @@
 const express = require("express");
-const { authJwt } = require("../../middlewares");
+const { authJwt, authorization } = require("../../middlewares");
 const lanbsController = require("../../controllers/patient/labs.controller");
 
 const router = express.Router();
@@ -12,7 +12,7 @@ router.get(
 
 router.post(
   "/client-portal/labs",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   lanbsController.createLabs
 );
 

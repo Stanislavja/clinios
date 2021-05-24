@@ -1,5 +1,5 @@
 const express = require("express");
-const { authJwt } = require("../middlewares");
+const { authJwt, authorization } = require("../middlewares");
 const Users = require("../controllers/users.controller");
 
 const router = express.Router();
@@ -17,7 +17,7 @@ router.get(
   [authJwt.verifyToken],
   Users.getLastVisitedPatient
 );
-router.post("/user", [authJwt.verifyToken], Users.createNewUser);
-router.put("/user/:id", [authJwt.verifyToken], Users.updateUser);
+router.post("/user", [authJwt.verifyToken, authorization.isReadOnly], Users.createNewUser);
+router.put("/user/:id", [authJwt.verifyToken, authorization.isReadOnly], Users.updateUser);
 
 module.exports = router;

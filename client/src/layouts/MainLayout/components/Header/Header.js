@@ -78,7 +78,7 @@ const Header = ({ ...props }) => {
     >
       <Toolbar className={classes.toolbar}>
         <RouterLink to="/">
-          <img src={Logo} alt="AvonHealth" className={classes.Logo} />
+          <img src={Logo} alt="Logo" className={classes.Logo} />
         </RouterLink>
         <Hidden mdDown>
           <div className={classes.navItems}>
