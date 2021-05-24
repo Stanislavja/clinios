@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
 
+import { Button } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import { Alert } from "@material-ui/lab";
 import moment from "moment";
+import { useSnackbar } from "notistack";
 import ReactHtmlParser from "react-html-parser";
 import { Link } from "react-router-dom";
 
 import useAuth from "../../../hooks/useAuth";
 import HomeService from "../../../services/patient_portal/home.service";
+import PatientPortalService from "../../../services/patient_portal/patient-portal.service";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -58,6 +61,13 @@ const useStyles = makeStyles((theme) => ({
   },
   rescheduleLink: {
     marginLeft: theme.spacing(1),
+    fontSize: 14,
+    color: "rgb(85, 26, 139)",
+    letterSpacing: "-0.05px",
+    lineHeight: "21px",
+    margin: 0,
+    padding: 0,
+    textDecorationLine: "underline",
   },
 }));
 
@@ -67,6 +77,7 @@ const Home = () => {
   const { lastVisitedPatient } = useAuth();
   const [clientForms, setClientForms] = useState({});
   const [upcomingAppointments, setUpcomingAppointments] = useState({});
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     HomeService.getClientHeader(lastVisitedPatient).then(
@@ -94,6 +105,19 @@ const Home = () => {
       },
     );
   }, [lastVisitedPatient]);
+
+  const handleCancelRequestRescheduleAppointmentCancel = (appointmentId) => {
+    PatientPortalService.cancelRequestRescheduleAppointment(appointmentId).then(
+      () => {
+        enqueueSnackbar(`Appointment canceled successfully`, {
+          variant: "success",
+        });
+      },
+      (error) => {
+        console.error("error", error);
+      },
+    );
+  };
 
   const formatAppointmentType = (status) => {
     if (status === "A") {
@@ -129,12 +153,25 @@ const Home = () => {
           <Box component="div" className={classes.BoxStyle} key={appointment.id}>
             <p>
               {renderAppointmentRowText(appointment)}
-              <Link
-                to={{ pathname: "/patient/appointments", state: { appointment } }}
-                className={classes.rescheduleLink}
-              >
-                Request Reschedule Appointment
-              </Link>
+              {appointment?.reschedule_id === null && (
+                <Link
+                  to={{ pathname: "/patient/appointments", state: { appointment } }}
+                  className={classes.rescheduleLink}
+                >
+                  Request Reschedule Appointment
+                </Link>
+              )}
+              {appointment?.reschedule_id !== null && (
+                <Button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleCancelRequestRescheduleAppointmentCancel(appointment?.id);
+                  }}
+                  className={classes.rescheduleLink}
+                >
+                  Cancel Request Reschedule Appointment
+                </Button>
+              )}
             </p>
           </Box>
         ))}

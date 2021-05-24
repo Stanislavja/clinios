@@ -151,14 +151,13 @@ const createAppointment = async (req, res) => {
     user_id,
     status: appStatus,
     patient_id,
-    reschedule,
     appointment_type_id,
   } = req.body.data;
 
   const db = makeDb(configuration, res);
   try {
     const insertResponse = await db.query(
-      `insert into user_calendar (client_id, user_id, patient_id, appointment_type_id, start_dt, end_dt, status, reschedule, created, created_user_id) values (${
+      `insert into user_calendar (client_id, user_id, patient_id, appointment_type_id, start_dt, end_dt, status, created, created_user_id) values (${
         req.client_id
       }, ${user_id}, ${patient_id}, ${appointment_type_id}, '${moment(
         start_dt,
@@ -166,9 +165,7 @@ const createAppointment = async (req, res) => {
       ).format("YYYY-MM-DD HH:mm:ss")}', '${moment(
         end_dt,
         "YYYY-MM-DD HH:mm:ss"
-      ).format(
-        "YYYY-MM-DD HH:mm:ss"
-      )}', '${appStatus}', ${reschedule}, now(), ${req.user_id})`
+      ).format("YYYY-MM-DD HH:mm:ss")}', '${appStatus}', now(), ${req.user_id})`
     );
     if (!insertResponse.affectedRows) {
       errorMessage.message = "Insert not successful";
@@ -215,6 +212,30 @@ const updateAppointment = async (req, res) => {
   }
 };
 
+const cancelRequestRescheduleAppointment = async (req, res) => {
+  // TODO: The logic of this controller might change later. 
+  const db = makeDb(configuration, res);
+  const appointmentId = req.params.id;
+  try {
+    const deletedResponse = await db.query(
+      `delete from user_calendar where id=?`, [appointmentId]
+    );
+    if (!deletedResponse.affectedRows) {
+      errorMessage.message = "deletion not successful";
+      return res.status(status.notfound).send(errorMessage);
+    }
+    successMessage.data = deletedResponse;
+    successMessage.message = "delete successful";
+    return res.status(status.created).send(successMessage);
+  } catch (err) {
+    console.log("err", err);
+    errorMessage.message = "delete not successful";
+    return res.status(status.error).send(errorMessage);
+  } finally {
+    await db.close();
+  }
+};
+
 const Appointments = {
   getAllPractitioner,
   getPractitionerDates,
@@ -222,6 +243,7 @@ const Appointments = {
   getAppointmentTypes,
   createAppointment,
   updateAppointment,
+  cancelRequestRescheduleAppointment,
 };
 
 module.exports = Appointments;
