@@ -24,7 +24,6 @@ import { Image } from "./components";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(2),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -38,8 +37,10 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     marginTop: theme.spacing(2),
     "& img": {
-      width: "100%",
       maxWidth: 180,
+      width: 170,
+      height: 65,
+      objectFit: "contain",
     },
     "& p": {
       fontSize: "16px",

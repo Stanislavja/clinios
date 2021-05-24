@@ -20,7 +20,6 @@ import useAuth from "../../hooks/useAuth";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(2),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -50,6 +49,9 @@ const useStyles = makeStyles((theme) => ({
   },
   Logo: {
     maxWidth: "180px",
+    width: 170,
+    height: 65,
+    objectFit: "contain",
   },
 }));
 
