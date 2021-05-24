@@ -170,7 +170,7 @@ router.post(
 );
 router.put(
   "/patient/:patient_id/encounters/:id",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   Patient.updateEncounter
 );
 router.delete(

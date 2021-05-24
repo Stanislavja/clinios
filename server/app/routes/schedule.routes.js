@@ -5,7 +5,7 @@ const Schedule = require("../controllers/schedule.controller");
 const router = express.Router();
 
 router.get("/setup/schedule/users", [authJwt.verifyToken], Schedule.getAllUser);
-router.post("/setup/schedule/search", [authJwt.verifyToken, authorization.isReadOnly], Schedule.search);
+router.post("/setup/schedule/search", [authJwt.verifyToken], Schedule.search);
 router.post(
   "/setup/schedule",
   [authJwt.verifyToken, authorization.isReadOnly],
