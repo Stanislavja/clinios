@@ -1,5 +1,5 @@
 const express = require("express");
-const { authJwt } = require("../middlewares");
+const { authJwt, authorization } = require("../middlewares");
 const IndexController = require("../controllers/index.controller");
 
 const router = express.Router();
@@ -18,7 +18,7 @@ router.get(
 );
 router.put(
   "/auth/client/functional-range",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   IndexController.updateFunctionalRange
 );
 router.get("/auth/patient", [authJwt.verifyToken], IndexController.getPatient);

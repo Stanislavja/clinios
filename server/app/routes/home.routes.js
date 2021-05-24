@@ -1,5 +1,5 @@
 const express = require("express");
-const { authJwt } = require("../middlewares");
+const { authJwt, authorization } = require("../middlewares");
 const homeController = require("../controllers/home.controller.js");
 
 const router = express.Router();
@@ -21,17 +21,17 @@ router.get(
 );
 router.post(
   "/appointments/events",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   homeController.createAppointment
 );
 router.put(
   "/appointments/events/cancel/:id",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   homeController.cancelAppointment
 );
 router.put(
   "/appointments/events/update/:id",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   homeController.updateAppointment
 );
 router.get(

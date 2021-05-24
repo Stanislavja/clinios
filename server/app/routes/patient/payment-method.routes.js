@@ -1,5 +1,5 @@
 const express = require("express");
-const { authJwt } = require("../../middlewares");
+const { authJwt, authorization } = require("../../middlewares");
 const PaymentMethodController = require("../../controllers/patient/paymentMethod.controller");
 
 const router = express.Router();
@@ -11,17 +11,17 @@ router.get(
 );
 router.post(
   "/patient-portal/payment-methods",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   PaymentMethodController.createPaymentMethod
 );
 router.put(
   "/patient-portal/payment-methods/:id",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   PaymentMethodController.updatePaymentMethod
 );
 router.delete(
   "/patient-portal/payment-methods/:id",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   PaymentMethodController.deletePaymentMethod
 );
 module.exports = router;

@@ -1,12 +1,12 @@
 const express = require("express");
-const { authJwt } = require("../middlewares");
+const { authJwt, authorization } = require("../middlewares");
 const controller = require("../controllers/patient-delete.controller");
 
 const router = express.Router();
 
 router.delete(
   "/patient-delete/:id",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   controller.deletePatient
 );
 

@@ -14,14 +14,14 @@ router.get(
 // Send Signup confirmation email
 router.post(
   "/email/send/verification",
-  fieldValidation.validate("sendConfirmationEmail"),
+  [fieldValidation.validate("sendConfirmationEmail")],
   controller.sendSignupConfirmationEmail
 );
 
 // Resend Signup confirmation email
 router.post(
   "/email/resend/verification",
-  fieldValidation.validate("resendConfirmationEmail"),
+  [fieldValidation.validate("resendConfirmationEmail")],
   controller.resendSignupConfirmationEmail
 );
 

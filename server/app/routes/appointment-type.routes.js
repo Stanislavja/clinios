@@ -1,5 +1,5 @@
 const express = require("express");
-const { authJwt } = require("../middlewares");
+const { authJwt, authorization } = require("../middlewares");
 const AppointmentTypes = require("../controllers/appointment-type.controller.js");
 const fieldValidation = require("../helpers/fieldValidation");
 
@@ -12,17 +12,17 @@ router.get(
 );
 router.post(
   "/appointment-types",
-  [fieldValidation.validate("createAppointmentType"), authJwt.verifyToken],
+  [fieldValidation.validate("createAppointmentType"), authJwt.verifyToken, authorization.isReadOnly],
   AppointmentTypes.create
 );
 router.put(
   "/appointment-types/:appointmentId",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   AppointmentTypes.update
 );
 router.delete(
   "/appointment-types/:id",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   AppointmentTypes.deleteAppointment
 );
 

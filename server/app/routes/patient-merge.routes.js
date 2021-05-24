@@ -1,9 +1,9 @@
 const express = require("express");
-const { authJwt } = require("../middlewares");
+const { authJwt, authorization } = require("../middlewares");
 const controller = require("../controllers/patient-merge.controller");
 
 const router = express.Router();
 
-router.post("/patient-merge", [authJwt.verifyToken], controller.mergePatient);
+router.post("/patient-merge", [authJwt.verifyToken, authorization.isReadOnly], controller.mergePatient);
 
 module.exports = router;
