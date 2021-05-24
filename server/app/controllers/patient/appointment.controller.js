@@ -218,7 +218,7 @@ const cancelRequestRescheduleAppointment = async (req, res) => {
   const appointmentId = req.params.id;
   try {
     const deletedResponse = await db.query(
-      `delete from user_calendar where id=${appointmentId}`
+      `delete from user_calendar where id=?`, [appointmentId]
     );
     if (!deletedResponse.affectedRows) {
       errorMessage.message = "deletion not successful";
