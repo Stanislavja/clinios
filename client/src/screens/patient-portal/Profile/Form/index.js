@@ -171,11 +171,6 @@ const ProfileForm = () => {
           variant: "success",
         });
       },
-      () => {
-        enqueueSnackbar("Unable to update profile", {
-          variant: "error",
-        });
-      },
     );
   };
 
