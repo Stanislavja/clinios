@@ -1,5 +1,5 @@
 {
-  "name": "AvonEMR-api",
+  "name": "AvonEHR-api",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",

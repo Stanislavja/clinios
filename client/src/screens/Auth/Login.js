@@ -95,7 +95,7 @@ const Login = () => {
   return (
     <Container component="main" maxWidth="xs">
       <Grid className={classes.marginTop}>
-        <img src={Logo} alt="AvonHealth" className={classes.Logo} />
+        <img src={Logo} alt="Logo" className={classes.Logo} />
         <CssBaseline />
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
