@@ -18,7 +18,7 @@ const Header = () => {
   return (
     <Grid container justify="space-between">
       <Grid item>
-        <img src="https://content.ultalabtests.com/static/images/Logo.png" alt="logo" />
+        <img src="https://content.ultalabtests.com/static/images/Logo.svg" alt="logo" />
       </Grid>
       <Grid item>
         <Typography variant="h5" className={classes.questDiagnosticHeading}>

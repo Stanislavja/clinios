@@ -14,7 +14,7 @@ import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useSnackbar } from "notistack";
 
-import Logo from "../../assets/img/Logo.png";
+import Logo from "../../assets/img/Logo.svg";
 import Error from "../../components/common/Error";
 import useAuth from "../../hooks/useAuth";
 
