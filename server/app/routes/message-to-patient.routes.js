@@ -1,5 +1,5 @@
 const express = require("express");
-const { authJwt } = require("../middlewares");
+const { authJwt, authorization } = require("../middlewares");
 const formsController = require("../controllers/message-to-patient.controller.js");
 
 const router = express.Router();
@@ -9,10 +9,10 @@ router.get(
   [authJwt.verifyToken],
   formsController.getMessageById
 );
-router.post("/message", [authJwt.verifyToken], formsController.createMessage);
+router.post("/message", [authJwt.verifyToken, authorization.isReadOnly], formsController.createMessage);
 router.put(
   "/message/:id",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   formsController.updateMessage
 );
 

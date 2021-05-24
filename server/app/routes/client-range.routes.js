@@ -1,5 +1,5 @@
 const express = require("express");
-const { authJwt } = require("../middlewares");
+const { authJwt, authorization } = require("../middlewares");
 const ClientRange = require("../controllers/client-range.controller.js");
 
 const router = express.Router();
@@ -11,23 +11,23 @@ router.get(
 );
 router.delete(
   "/client-range/:id",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   ClientRange.deleteClientRange
 );
 router.post(
   "/client-range/reset",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   ClientRange.resetClientRange
 );
 router.put(
   "/client-range/:id",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   ClientRange.updateClientRange
 );
 router.get("/client-range", [authJwt.verifyToken], ClientRange.getClientRange);
 router.post(
   "/client-range",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   ClientRange.createClientRange
 );
 router.get(

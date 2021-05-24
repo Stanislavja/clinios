@@ -1,5 +1,5 @@
 const express = require("express");
-const { authJwt } = require("../middlewares");
+const { authJwt, authorization } = require("../middlewares");
 const userMessagesController = require("../controllers/message-to-user.controller.js");
 
 const router = express.Router();
@@ -21,12 +21,12 @@ router.get(
 );
 router.post(
   "/user/message",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   userMessagesController.createMessage
 );
 router.put(
   "/user/messages/:id",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   userMessagesController.updateMessage
 );
 router.get(

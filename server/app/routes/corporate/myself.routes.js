@@ -1,5 +1,5 @@
 const express = require("express");
-const { authJwt } = require("../../middlewares");
+const { authJwt, authorization } = require("../../middlewares");
 const controller = require("../../controllers/corporate/myself.controller");
 
 const router = express.Router();
@@ -12,7 +12,7 @@ router.get(
 
 router.put(
   "/corporate/myself/profile/:userId",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   controller.updateProfile
 );
 

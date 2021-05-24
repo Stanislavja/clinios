@@ -1,5 +1,5 @@
 const express = require("express");
-const { authJwt } = require("../middlewares");
+const { authJwt, authorization } = require("../middlewares");
 const ProcessLab = require("../controllers/process-lab.controller.js");
 
 const router = express.Router();
@@ -22,8 +22,8 @@ router.get(
   [authJwt.verifyToken],
   ProcessLab.getLabUserHistory
 );
-router.post("/labs", [authJwt.verifyToken], ProcessLab.createLab);
-router.put("/labs/:labId", [authJwt.verifyToken], ProcessLab.updateLabStatus);
-router.put("/labs/:labId/update", [authJwt.verifyToken], ProcessLab.updateLab);
+router.post("/labs", [authJwt.verifyToken, authorization.isReadOnly], ProcessLab.createLab);
+router.put("/labs/:labId", [authJwt.verifyToken, authorization.isReadOnly], ProcessLab.updateLabStatus);
+router.put("/labs/:labId/update", [authJwt.verifyToken, authorization.isReadOnly], ProcessLab.updateLab);
 
 module.exports = router;

@@ -1,5 +1,5 @@
 const express = require("express");
-const { authJwt } = require("../../middlewares");
+const { authJwt, authorization } = require("../../middlewares");
 const PurchaseLabsController = require("../../controllers/patient/purchase-labs.controller");
 
 const router = express.Router();
@@ -11,7 +11,7 @@ router.get(
 );
 router.post(
   "/patient-portal/purchase-labs",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   PurchaseLabsController.createPurchaseLabs
 );
 

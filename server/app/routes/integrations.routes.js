@@ -1,5 +1,5 @@
 const express = require("express");
-const { authJwt } = require("../middlewares");
+const { authJwt, authorization } = require("../middlewares");
 const Integrations = require("../controllers/integrations.controller.js");
 
 const router = express.Router();
@@ -9,6 +9,6 @@ router.get(
   [authJwt.verifyToken],
   Integrations.getIntegrations
 );
-router.put("/integrations/", [authJwt.verifyToken], Integrations.update);
+router.put("/integrations/", [authJwt.verifyToken, authorization.isReadOnly], Integrations.update);
 
 module.exports = router;
