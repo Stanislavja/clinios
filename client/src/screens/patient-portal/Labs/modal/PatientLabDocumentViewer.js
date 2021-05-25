@@ -1,11 +1,13 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, {
+  useEffect, useState, useRef,
+} from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Pagination from "@material-ui/lab/Pagination";
 import throttle from "lodash/throttle";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
-import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
+import DocViewer, { DocViewerRenderers } from "react-docs-viewer";
 import FileViewer from "react-file-viewer";
 import { pdfjs, Document, Page } from "react-pdf";
 
