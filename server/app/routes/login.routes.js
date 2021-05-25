@@ -7,7 +7,6 @@ const router = express.Router();
 // auth Routes
 router.post(
   "/auth/login",
-  fieldValidation.validate("login"),
   controller.signin
 );
 

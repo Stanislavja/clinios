@@ -13,11 +13,6 @@ const { errorMessage, successMessage, status } = require("../helpers/status");
  */
 exports.signin = async (req, res) => {
   // Check for validation errors
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    errorMessage.message = errors.array();
-    return res.status(status.bad).send(errorMessage);
-  }
 
   const db = makeDb(configuration, res);
 
