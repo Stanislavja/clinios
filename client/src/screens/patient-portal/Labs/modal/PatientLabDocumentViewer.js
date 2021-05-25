@@ -5,8 +5,11 @@ import Pagination from "@material-ui/lab/Pagination";
 import throttle from "lodash/throttle";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
+import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
 import FileViewer from "react-file-viewer";
 import { pdfjs, Document, Page } from "react-pdf";
+
+const checkFileExtension = (fileName) => fileName.substring(fileName.lastIndexOf(".") + 1);
 
 pdfjs
   .GlobalWorkerOptions
@@ -38,9 +41,10 @@ const useStyles = makeStyles((theme) => ({
     background: "red",
     textAlign: "center",
   },
+  "my-doc-viewer-style": {
+    background: "#fff !important",
+  },
 }));
-
-const checkFileExtension = (fileName) => fileName.substring(fileName.lastIndexOf(".") + 1);
 
 const PatientLabDocumentViewer = ({
   documentName, patientId,
@@ -88,32 +92,53 @@ const PatientLabDocumentViewer = ({
     };
   }, []);
 
-
+  const renderDocumentView = () => {
+    if (type && type === "pdf") {
+      return (
+        <div className={classes.PDFViewer} ref={pdfWrapper}>
+          <Document
+            file={(file)}
+            onLoadSuccess={onDocumentLoadSuccess}
+          >
+            <Page pageNumber={pageNumber} width={initialWidth} />
+          </Document>
+          {totalPages && (
+            <div className={classes.PaginationWrap}>
+              <Pagination count={totalPages} shape="rounded" onChange={handleChange} />
+            </div>
+          )}
+        </div>
+      );
+    }
+    if (type === "docx") {
+      return (
+        <FileViewer
+          fileType={type}
+          filePath={file}
+          onError={onError}
+        />
+      );
+    }
+    return (
+      <DocViewer
+        className={classes["my-doc-viewer-style"]}
+        config={{
+          header: {
+            disableHeader: true,
+            disableFileName: true,
+            retainURLParams: true,
+          },
+        }}
+        pluginRenderers={DocViewerRenderers}
+        documents={[
+          { uri: file },
+        ]}
+      />
+    );
+  };
   return (
     <>
-      {type && (type === "pdf")
-        ? (
-          <div className={classes.PDFViewer} ref={pdfWrapper}>
-            <Document
-              file={(file)}
-              onLoadSuccess={onDocumentLoadSuccess}
-            >
-              <Page pageNumber={pageNumber} width={initialWidth} />
-            </Document>
-            {totalPages && (
-              <div className={classes.PaginationWrap}>
-                <Pagination count={totalPages} shape="rounded" onChange={handleChange} />
-              </div>
-            )}
-          </div>
-        )
-        : (
-          <FileViewer
-            fileType={type}
-            filePath={file}
-            onError={onError}
-          />
-        )}
+      {renderDocumentView()}
     </>
   );
 };
