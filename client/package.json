@@ -25,6 +25,7 @@
     "jwt-decode": "^3.1.1",
     "lodash": "^4.17.20",
     "moment": "^2.27.0",
+    "moment-timezone": "^0.5.33",
     "notistack": "^1.0.1",
     "nprogress": "^0.2.0",
     "prop-types": "^15.7.2",
