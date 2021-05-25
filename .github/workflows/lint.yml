@@ -41,7 +41,7 @@ jobs:
           LINTER_RULES_PATH: /client/
           JAVASCRIPT_ES_CONFIG_FILE: .eslintrc
           FILTER_REGEX_INCLUDE: .*src/.*
-          FILTER_REGEX_EXCLUDE: .*test/.*
+          FILTER_REGEX_EXCLUDE: .*test/.*,packages-lock.json,yarn.lock
           VALIDATE_ARM: false
           VALIDATE_JAVASCRIPT_STANDARD: false
           VALIDATE_JSCPD: false
