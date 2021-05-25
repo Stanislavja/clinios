@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
+import Checkbox from "@material-ui/core/Checkbox";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 import { makeStyles } from "@material-ui/core/styles";
@@ -22,19 +24,23 @@ import { Image } from "./components";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(4),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     boxShadow: "0 15px 35px 0 rgb(60 66 87 / 8%), 0 5px 15px 0 rgb(0 0 0 / 12%)",
     padding: theme.spacing(2),
   },
+  marginTop: {
+    marginTop: theme.spacing(16),
+  },
   Logo: {
     textAlign: "center",
     marginTop: theme.spacing(2),
     "& img": {
-      width: "100%",
       maxWidth: 180,
+      width: 170,
+      height: 65,
+      objectFit: "contain",
     },
     "& p": {
       fontSize: "16px",
@@ -86,6 +92,7 @@ const PatientLogin = () => {
   const [email, setEmail] = useState("");
   const [clientId, setClientId] = useState(null);
   const [password, setPassword] = useState("");
+  const [isChecked, setIsChecked] = useState(false);
   const [apiErrors, setApiErrors] = useState([]);
 
   useEffect(() => {
@@ -114,9 +121,10 @@ const PatientLogin = () => {
   }, [clientCode]);
 
   const onFormSubmit = async () => {
-    if (email !== "") {
+    if (isChecked && email !== "") {
       localStorage.username = email;
       localStorage.password = password;
+      localStorage.rememberme = isChecked;
     }
 
     try {
@@ -135,7 +143,8 @@ const PatientLogin = () => {
   };
 
   useEffect(() => {
-    if (localStorage.username !== "") {
+    if (localStorage.rememberme && localStorage.username !== "") {
+      setIsChecked(true);
       setEmail(localStorage.username);
       setPassword(localStorage.password);
     }
@@ -144,98 +153,111 @@ const PatientLogin = () => {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.Logo}>
-        <Image
-          lassName="clientLogo"
-          src={`${process.env.REACT_APP_API_URL}static/client/c${clientId}_logo.png`}
-          alt="Client Logo"
-        />
-      </div>
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon className={classes.lockIcon} />
-        </Avatar>
-        <Typography
-          component="h1"
-          variant="h2"
-          className={classes.pageTitle}
-        >
-          Patient Sign in
-        </Typography>
-
-        <Error errors={apiErrors} />
-
-        <form
-          className={clsx({
-            [classes.form]: true, // always apply
-            [classes.withErrors]: errors.length > 0, // only when isLoading === true
-          })}
-          noValidate
-          onSubmit={handleSubmit(onFormSubmit)}
-        >
-          <TextField
-            disabled={errors.length > 0}
-            value={email}
-            type="email"
-            variant="outlined"
-            margin="normal"
-            inputRef={register({
-              required: "You must provide the email address!",
-              pattern: {
-                // eslint-disable-next-line max-len, no-useless-escape
-                value: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                message: "You must provide a valid email address!",
-              },
-            })}
-            error={!!errors.email}
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            fullWidth
-            autoFocus
-            required
-            onChange={(event) => setEmail(event.target.value)}
-            helperText={errors?.email?.message}
+      <Grid className={classes.marginTop}>
+        <div className={classes.Logo}>
+          <Image
+            lassName="clientLogo"
+            src={`${process.env.REACT_APP_API_URL}static/client/c${clientId}_logo.png`}
+            alt="Client Logo"
           />
-          <TextField
-            disabled={errors.length > 0}
-            value={password}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange={(event) => setPassword(event.target.value)}
-          />
-          <Button
-            disabled={!email || !password || errors.length > 0}
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            type="submit"
+        </div>
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon className={classes.lockIcon} />
+          </Avatar>
+          <Typography
+            component="h1"
+            variant="h2"
+            className={classes.pageTitle}
           >
-            Sign In
-          </Button>
-        </form>
-        <Grid container className={classes.meta}>
-          <Grid item xs={6}>
-            <Link href={`/signup/${clientCode}`} variant="body2">
-              Don&apos;t have an account? Register.
-            </Link>
+            Patient Sign in
+          </Typography>
+
+          <Error errors={apiErrors} />
+
+          <form
+            className={clsx({
+              [classes.form]: true, // always apply
+              [classes.withErrors]: errors.length > 0, // only when isLoading === true
+            })}
+            noValidate
+            onSubmit={handleSubmit(onFormSubmit)}
+          >
+            <TextField
+              disabled={errors.length > 0}
+              value={email}
+              type="email"
+              variant="outlined"
+              margin="normal"
+              inputRef={register({
+                required: "You must provide the email address!",
+                pattern: {
+                  // eslint-disable-next-line max-len, no-useless-escape
+                  value: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                  message: "You must provide a valid email address!",
+                },
+              })}
+              error={!!errors.email}
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              fullWidth
+              autoFocus
+              required
+              onChange={(event) => setEmail(event.target.value)}
+              helperText={errors?.email?.message}
+            />
+            <TextField
+              disabled={errors.length > 0}
+              value={password}
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              onChange={(event) => setPassword(event.target.value)}
+            />
+            <FormControlLabel
+              control={(
+                <Checkbox
+                  value="remember"
+                  color="primary"
+                  checked={isChecked}
+                  onChange={(event) => setIsChecked(event.target.checked)}
+                />
+              )}
+              label="Remember me"
+            />
+            <Button
+              disabled={!email || !password || errors.length > 0}
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              type="submit"
+            >
+              Sign In
+            </Button>
+          </form>
+          <Grid container className={classes.meta}>
+            <Grid item xs={6}>
+              <Link href={`/signup/${clientCode}`} variant="body2">
+                Don&apos;t have an account? Register.
+              </Link>
+            </Grid>
+            <Grid item xs={6} className={classes.forgotPass}>
+              <Link href={`/forgot/${clientCode}`} variant="body2">
+                Forgot your password? Reset.
+              </Link>
+            </Grid>
           </Grid>
-          <Grid item xs={6} className={classes.forgotPass}>
-            <Link href={`/forgot/${clientCode}`} variant="body2">
-              Forgot your password? Reset.
-            </Link>
-          </Grid>
-        </Grid>
-      </div>
+        </div>
+      </Grid>
     </Container>
   );
 };

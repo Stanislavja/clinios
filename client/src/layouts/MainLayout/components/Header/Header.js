@@ -12,7 +12,7 @@ import MenuIcon from "@material-ui/icons/MenuOutlined";
 import PropTypes from "prop-types";
 import { Link as RouterLink, useHistory } from "react-router-dom";
 
-import Logo from "../../../../assets/img/Logo.png";
+import Logo from "../../../../assets/img/Logo.svg";
 import useAuth from "../../../../hooks/useAuth";
 
 
