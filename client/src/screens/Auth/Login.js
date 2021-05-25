@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -59,10 +59,10 @@ const Login = () => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const { login } = useAuth();
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [isChecked, setIsChecked] = React.useState(false);
-  const [errors, setErrors] = React.useState([]);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isChecked, setIsChecked] = useState(false);
+  const [apiErrors, setApiErrors] = useState([]);
 
   const onFormSubmit = async (event) => {
     event.preventDefault();
@@ -75,14 +75,16 @@ const Login = () => {
 
     try {
       await login(email.trim(), password.trim()); // Call AuthProvider login
-      // enqueueSnackbar("Successfully logged in!", {
-      //  variant: "success",
-      // });
     } catch (error) {
+      console.error(error);
       enqueueSnackbar("Unable to login", {
         variant: "error",
       });
-      setErrors(error.message);
+      setApiErrors([
+        {
+          msg: error.message,
+        },
+      ]);
     }
   };
 
@@ -110,7 +112,7 @@ const Login = () => {
           >
             Physician Login
           </Typography>
-          <Error errors={errors} />
+          <Error errors={apiErrors} />
 
           <form
             className={classes.form}

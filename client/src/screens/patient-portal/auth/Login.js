@@ -129,9 +129,6 @@ const PatientLogin = () => {
 
     try {
       await patientLogin(clientId, email.trim(), password.trim()); // Call AuthProvider login
-      // enqueueSnackbar("Successfully logged in!", {
-      //  variant: "success",
-      // });
     } catch (error) {
       console.error(error);
       enqueueSnackbar("Unable to login", {
