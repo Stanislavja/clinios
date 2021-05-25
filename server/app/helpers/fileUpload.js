@@ -32,10 +32,8 @@ const upload = multer({
     if (
       file.mimetype === "application/pdf" ||
       file.mimetype === "application/msword" ||
-      file.mimetype === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
-      file.mimetype === "text/plain" ||
-      file.mimetype === "image/png" || 
-      file.mimetype === "image/jpeg"
+      file.mimetype === "text/*" ||
+      file.mimetype === "image/png"
     ) {
       cb(null, true);
     } else {
@@ -55,4 +53,5 @@ const removeFile = (file) => {
     console.log(file.path, "removed successfully!");
   });
 };
+
 module.exports = { documentUpload, removeFile };
