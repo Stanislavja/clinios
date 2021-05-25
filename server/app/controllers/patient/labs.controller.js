@@ -65,7 +65,7 @@ const createLabs = async (req, res) => {
     }
 
     let { patient_id } = req.query;
-    const uploadedFilename = req.file.originalname;
+    const uploadedFilename = req.file.originalname.replace(/\s/g, '_');
 
     if (typeof patient_id === "undefined") {
       patient_id = req.user_id;
