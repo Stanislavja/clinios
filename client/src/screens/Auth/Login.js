@@ -57,9 +57,9 @@ const Login = () => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const { login } = useAuth();
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [isChecked, setIsChecked] = React.useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isChecked, setIsChecked] = useState(false);
   const [apiErrors, setApiErrors] = useState([]);
 
   const onFormSubmit = async (event) => {
