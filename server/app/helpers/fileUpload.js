@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     const fileName = `pid${req.body.patient_id}_${file.originalname
       .split(" ")
-      .join("-")}`;
+      .join("_")}`;
     cb(null, fileName);
   },
 });
