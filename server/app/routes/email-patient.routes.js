@@ -1,5 +1,5 @@
 const express = require("express");
-const { authJwt } = require("../middlewares");
+const { authJwt, authorization } = require("../middlewares");
 const validation = require("../helpers/validations/patient.js");
 const patientEmailController = require("../controllers/email-patient.controller.js");
 
@@ -12,17 +12,17 @@ router.get(
 );
 router.post(
   "/email/history",
-  [authJwt.verifyToken, validation.validate("createEmailHistory")],
+  [authJwt.verifyToken, validation.validate("createEmailHistory"), authorization.isReadOnly],
   patientEmailController.createEmailHistory
 );
 router.put(
   "/email/history",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   patientEmailController.updateEmailHistory
 );
 router.delete(
   "/email/history/:date",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   patientEmailController.deleteHistory
 );
 module.exports = router;

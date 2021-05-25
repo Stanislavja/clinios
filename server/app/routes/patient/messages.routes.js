@@ -1,5 +1,5 @@
 const express = require("express");
-const { authJwt } = require("../../middlewares");
+const { authJwt, authorization } = require("../../middlewares");
 const messagesController = require("../../controllers/patient/messages.controller");
 
 const router = express.Router();
@@ -16,17 +16,17 @@ router.get(
 );
 router.post(
   "/client-portal/messages",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   messagesController.createMessage
 );
 router.put(
   "/client-portal/messages/:messageId",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   messagesController.updateMessage
 );
 router.delete(
   "/client-portal/messages/:messageId",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   messagesController.deleteMessage
 );
 router.get(

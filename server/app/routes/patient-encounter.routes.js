@@ -1,5 +1,5 @@
 const express = require("express");
-const { authJwt } = require("../middlewares");
+const { authJwt, authorization } = require("../middlewares");
 const PatientEncounter = require("../controllers/patient-encounters.controller.js");
 
 const router = express.Router();
@@ -12,17 +12,17 @@ router.get(
 );
 router.post(
   "/patient/:patient_id/encounters",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   PatientEncounter.createEncounter
 );
 router.put(
   "/patient/:patient_id/encounters/:id",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   PatientEncounter.updateEncounter
 );
 router.delete(
   "/patient/:patient_id/encounters/:id",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   PatientEncounter.deleteEncounter
 );
 router.get(
@@ -89,7 +89,7 @@ router.get(
 );
 router.post(
   "/patient/:patient_id/encounters/:encounter_id/plan/new-prescriptions",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   PatientEncounter.createNewPrescription
 );
 router.get(
@@ -114,7 +114,7 @@ router.get(
 );
 router.delete(
   "/patient/:patient_id/encounters/:encounter_id/new-lab/test-ordered",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   PatientEncounter.deleteOrderedTests
 );
 router.get(
@@ -139,7 +139,7 @@ router.post(
 );
 router.post(
   "/patient/:patient_id/encounters/:encounter_id/icd",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   PatientEncounter.createEncounter_ICD
 );
 router.get(
@@ -169,7 +169,7 @@ router.get(
 );
 router.post(
   "/patient/:patient_id/encounters/:encounter_id/billing/payment",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   PatientEncounter.createBillingPayment
 );
 

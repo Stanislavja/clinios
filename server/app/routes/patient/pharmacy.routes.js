@@ -1,5 +1,5 @@
 const express = require("express");
-const { authJwt } = require("../../middlewares");
+const { authJwt, authorization } = require("../../middlewares");
 const pharmacyController = require("../../controllers/patient/pharmacy.controller");
 
 const router = express.Router();
@@ -11,7 +11,7 @@ router.get(
 );
 router.put(
   "/client-portal/pharmacy/:id",
-  [authJwt.verifyToken],
+  [authJwt.verifyToken, authorization.isReadOnly],
   pharmacyController.updatePharmacy
 );
 router.post(

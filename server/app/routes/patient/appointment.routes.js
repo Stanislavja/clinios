@@ -1,42 +1,47 @@
 const express = require("express");
-const { authJwt } = require("../../middlewares");
-const encountersController = require("../../controllers/patient/appointment.controller");
+const { authJwt, authorization } = require("../../middlewares");
+const appointmentsController = require("../../controllers/patient/appointment.controller");
 
 const router = express.Router();
 
 router.get(
   "/client-portal/practitioners",
   [authJwt.verifyToken],
-  encountersController.getAllPractitioner
+  appointmentsController.getAllPractitioner
 );
 
 router.get(
   "/client-portal/practitioner-dates",
   [authJwt.verifyToken],
-  encountersController.getPractitionerDates
+  appointmentsController.getPractitionerDates
 );
 
 router.get(
   "/client-portal/booked-appointments",
   [authJwt.verifyToken],
-  encountersController.getBookedAppointments
+  appointmentsController.getBookedAppointments
 );
 
 router.post(
   "/client-portal/appointment-types",
   [authJwt.verifyToken],
-  encountersController.getAppointmentTypes
+  appointmentsController.getAppointmentTypes
 );
 
 router.post(
   "/client-portal/appointment",
-  [authJwt.verifyToken],
-  encountersController.createAppointment
+  [authJwt.verifyToken, authorization.isReadOnly],
+  appointmentsController.createAppointment
 );
 router.put(
   "/client-portal/appointment/:id",
-  [authJwt.verifyToken],
-  encountersController.updateAppointment
+  [authJwt.verifyToken, authorization.isReadOnly],
+  appointmentsController.updateAppointment
+);
+router.delete(
+  "/client-portal/appointment/:id",
+  [authJwt.verifyToken, authorization.isReadOnly],
+  appointmentsController.cancelRequestRescheduleAppointment
 );
 
 module.exports = router;

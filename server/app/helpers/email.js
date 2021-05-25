@@ -37,7 +37,7 @@ const signUpConfirmationTemplate = (user, url) => {
   <p>To confirm your email address click or copy the following link:</p>
   <a href=${url}>${url}</a>
 
-  <p>–-AvonEMR</p>
+  <p>–-AvonEHR</p>
   `;
 
   return { from, to, subject, html };

@@ -303,7 +303,7 @@ const Appointments = () => {
           start_dt: `${moment(userSelection.date).format("YYYY-MM-DD")} ${userSelection.time.time_start}`,
           end_dt: `${moment(userSelection.date).format("YYYY-MM-DD")} ${userSelection.time.time_end}`,
           patient_id: user?.id,
-          reschedule: isRescheduleAppointment,
+          reschedule_id: location?.state?.appointment?.id || null,
           appointment_type_id: userSelection.appointmentType,
         },
       };
