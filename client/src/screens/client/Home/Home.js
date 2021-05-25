@@ -305,7 +305,7 @@ export default function Home() {
 
         </Grid>
       </Grid>
-      <Grid container spacing={8}>
+      <Grid container spacing={6}>
         <Grid item md={7} xs={12}>
           <Calendar
             events={events}

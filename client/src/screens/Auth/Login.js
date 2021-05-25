@@ -14,13 +14,12 @@ import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useSnackbar } from "notistack";
 
-import Logo from "../../assets/img/Logo.png";
+import Logo from "../../assets/img/Logo.svg";
 import Error from "../../components/common/Error";
 import useAuth from "../../hooks/useAuth";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(2),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -50,6 +49,9 @@ const useStyles = makeStyles((theme) => ({
   },
   Logo: {
     maxWidth: "180px",
+    width: 170,
+    height: 65,
+    objectFit: "contain",
   },
 }));
 
