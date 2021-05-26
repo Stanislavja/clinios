@@ -1,6 +1,4 @@
-import React, {
-  useState, useMemo, useCallback, useEffect,
-} from "react";
+import React, { useState } from "react";
 
 import { makeStyles, Container, CssBaseline } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
@@ -37,17 +35,16 @@ export default function Drugs() {
   const [searchTerm, setSearchTerm] = useState("");
   const [favorite, setFavorite] = useState(false);
   const [searchResult, setSearchResult] = useState([]);
-  const payload = useMemo(() => ({ checkBox: favorite }), [favorite]);
+  const payload = {
+    searchTerm,
+    checkBox: favorite,
+  };
 
-  const fetchSearchDrugs = useCallback((searchTermValue) => {
-    DrugsService.search({ ...payload, searchTerm: searchTermValue }).then((res) => {
+  const fetchSearchDrugs = () => {
+    DrugsService.search(payload).then((res) => {
       setSearchResult(res.data.data);
     });
-  }, [payload]);
-
-  useEffect(() => {
-    fetchSearchDrugs();
-  }, [fetchSearchDrugs]);
+  };
 
   const textChangeHandler = (e) => {
     setSearchTerm(e.target.value);
@@ -74,7 +71,6 @@ export default function Drugs() {
                 This page is used to manage drugs information.
               </Typography>
               <Drugsform
-                searchTerm={searchTerm}
                 fetchSearchDrugs={fetchSearchDrugs}
                 textChangeHandler={textChangeHandler}
                 checkBoxChangeHandler={checkBoxChangeHandler}
