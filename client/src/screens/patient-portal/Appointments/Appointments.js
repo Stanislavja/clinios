@@ -134,7 +134,6 @@ const Appointments = () => {
     PatientPortalService.getAppointmentTypesByPractitionerId(reqBody).then((res) => {
       setAppointmentTypes(res.data);
     });
-    fetchPractitionersAvailableDates(practitionerId);
   }, [fetchPractitionersAvailableDates]);
 
   const userSelectionHandler = (type, value) => {
@@ -213,6 +212,7 @@ const Appointments = () => {
     const practitionerId = userSelection.practitioner;
     if (practitionerId && !isReschedule) {
       fetchBookedAppointments(practitionerId);
+      fetchPractitionersAvailableDates(practitionerId);
     }
   }, [userSelection.practitioner]);
 
@@ -381,7 +381,8 @@ const Appointments = () => {
         timeIntervalSlots = [...timeIntervalSlots, ...slots];
       });
       setTimeSlots([...timeIntervalSlots]);
-      calendarSelectionHandler(userSelection.date, timeIntervalSlots);
+      // Fix for invalid date:: default selection
+      calendarSelectionHandler(userSelection.date || tomorrowDate, timeIntervalSlots);
     }
   }, [practitionerDateTimes, appointmentLength]);
 
