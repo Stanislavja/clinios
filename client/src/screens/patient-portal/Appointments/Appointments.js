@@ -134,7 +134,7 @@ const Appointments = () => {
     PatientPortalService.getAppointmentTypesByPractitionerId(reqBody).then((res) => {
       setAppointmentTypes(res.data);
     });
-  }, [fetchPractitionersAvailableDates]);
+  }, []);
 
   const userSelectionHandler = (type, value) => {
     setUserSelection({
