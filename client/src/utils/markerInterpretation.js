@@ -76,7 +76,60 @@ export const getMarkerInterpretation = (marker) => {
        `,
         evidence: "Strong",
       },
+      {
+        condition: "Insulin overdose",
+        prevalance: "Common among patients with diabetes",
+        comment: `Excess insulin in the bloodstream causes cells to absorb too much glucose (sugar) from the blood. It also causes the liver to release less glucose. These two effects together create dangerously low glucose levels in the blood.
+        <br />
+        https://doi.org/10.1016/j.jemermed.2012.11.099
+        https://doi.org/10.1111/bcpt.12957
+        https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3968474/        
+       `,
+        evidence: "Strong",
+      },
     ];
   }
+
+  // Lactate Dehydrogenase (LD or LDH)
+  if (marker === 3006) {
+    data.high = [
+      {
+        condition: "Insulin resistance",
+        prevalence: "Common in general population",
+        comment: `Insulin is released by the pancreas in response to carbohydrates consumed in the diet. In states of insulin resistance, the same amount of insulin does not have the same effect on glucose transport and blood sugar levels, and the pancreas makes extra insulin to make up for it. For a while, this will work and the blood sugar levels will stay normal. Over time, though, the pancreas won't be able to keep up and the blood sugar levels will go up.
+        <br />
+        https://doi.org/10.1111/j.1749-6632.2002.tb04262.x
+        https://www.ncbi.nlm.nih.gov/books/NBK507839/
+        https://doi.org/10.1038/s41598-019-42700-1
+        `,
+        evidence: "Strong",
+      },
+      {
+        condition: "Pancreatitis",
+        prevalance: "Common in general population",
+        comment: `High blood sugar (Hyperglycemia) during acute pancreatitis (AP) can be due to abnormalities in insulin secretion, increase in counterregulatory hormones release, or decrease in glucose utilization by peripheral tissues.
+        <br />
+        https://doi.org/10.1016/j.jpeds.2010.09.066
+        https://doi.org/10.1016/j.sjbs.2018.11.012
+        https://pubmed.ncbi.nlm.nih.gov/12653076/
+        `,
+        evidence: "Strong",
+      },
+    ];
+    data.low = [
+      {
+        condition: "Hypothyroidism",
+        prevalance: "Common in general population",
+        comment: `Hypothyroidism is linked with various hormonal biochemical and nervous system abnormalities, which may contribute to hypoglycemia.
+        <br />
+        https://doi.org/10.4103/2230-8210.126517
+        https://www.thetrp.net/text.asp?2017/14/3/127/216212
+       `,
+        evidence: "Strong",
+      },
+    ];
+  }
+
+  // end
   return data;
 };
