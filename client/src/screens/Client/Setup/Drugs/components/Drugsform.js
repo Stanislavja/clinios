@@ -28,13 +28,12 @@ const Drugsform = ({
   fetchSearchDrugs,
   textChangeHandler,
   checkBoxChangeHandler,
-  searchTerm,
 }) => {
   const classes = useStyles();
 
   const handleKeyUp = (event) => {
     if (event.keyCode === 13) {
-      fetchSearchDrugs(searchTerm);
+      fetchSearchDrugs();
     }
   };
 
@@ -82,7 +81,6 @@ Drugsform.propTypes = {
   fetchSearchDrugs: PropTypes.func.isRequired,
   textChangeHandler: PropTypes.func.isRequired,
   checkBoxChangeHandler: PropTypes.func.isRequired,
-  searchTerm: PropTypes.string.isRequired,
 };
 
 export default Drugsform;

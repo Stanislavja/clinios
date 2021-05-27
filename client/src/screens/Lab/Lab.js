@@ -1,5 +1,5 @@
 import React, {
-  useState, useEffect, useCallback, useMemo,
+  useState, useEffect, useCallback, useMemo, useRef,
 } from "react";
 
 import {
@@ -20,6 +20,7 @@ import Pagination from "@material-ui/lab/Pagination";
 import { mdiOpenInNew } from "@mdi/js";
 import Icon from "@mdi/react";
 import clsx from "clsx";
+import throttle from "lodash/throttle";
 import { useSnackbar } from "notistack";
 import PropTypes from "prop-types";
 import FileViewer from "react-file-viewer";
@@ -35,6 +36,7 @@ import {
   checkFileExtension, labStatusTypeToLabel, labSourceTypeToLabel, dateTimeFormat, calculateAge,
 } from "../../utils/helpers";
 import Interpretation from "./components/Interpretation";
+import LabDocView from "./components/LabDocView";
 import LabHistory from "./components/LabHistory";
 import LabValues from "./components/LabValues";
 import MessageToPatient from "./components/MessageToPatient";
@@ -93,6 +95,23 @@ const useStyles = makeStyles((theme) => ({
     "& button": {
       marginRight: theme.spacing(1),
     },
+  },
+  PDFViewer: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+    marginLeft: theme.spacing(2),
+    display: "grid",
+    gridTemplateColumns: "max-content",
+    justifyContent: "center",
+    alignContent: "center",
+  },
+  PaginationWrap: {
+    display: "flex",
+    justifyContent: "center",
+  },
+  documentPage: {
+    background: "red",
+    textAlign: "center",
   },
   paginationWrap: {
     display: "flex",
@@ -197,7 +216,8 @@ const Lab = (props) => {
   const [pageNumber, setPageNumber] = useState(1);
   const [type, setType] = useState("");
   const [docLoadSuccess, setDocLoadSuccess] = useState(false);
-
+  const [initialWidth, setInitialWidth] = useState(580);
+  const pdfWrapper = useRef(null);
   const updateFields = (lab) => {
     setPatientId(lab.client_id);
     setPatientText(lab.patient_name);
@@ -252,7 +272,9 @@ const Lab = (props) => {
 
   const fetchLabValues = useCallback((labId) => {
     LabService.getLabValues(labId).then((res) => {
-      setLabValues(res.data);
+      if (res?.data?.length > 0) {
+        setLabValues(res.data);
+      }
     });
   }, []);
 
@@ -296,7 +318,9 @@ const Lab = (props) => {
     if (debouncedSearchTerm) {
       if (debouncedSearchTerm.length > 2) {
         API.search(debouncedSearchTerm).then((res) => {
-          setPatientSearchResults(res.data);
+          if (res?.data?.length > 0) {
+            setPatientSearchResults(res.data);
+          }
         });
       }
     }
@@ -350,6 +374,54 @@ const Lab = (props) => {
     gender: labData?.gender,
     functionalRange: labData?.functional_range || 1,
   }), [labData]);
+
+  const setPdfSize = () => {
+    if (pdfWrapper && pdfWrapper.current) {
+      setInitialWidth(pdfWrapper.current.getBoundingClientRect().width);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", throttle(setPdfSize, 3000));
+    setPdfSize();
+    return () => {
+      window.removeEventListener("resize", throttle(setPdfSize, 3000));
+    };
+  }, []);
+
+  const renderDocumentView = () => {
+    if (type && type === "pdf") {
+      return (
+        <div className={classes.PDFViewer} ref={pdfWrapper}>
+          <Document
+            file={(file)}
+            onLoadSuccess={onDocumentLoadSuccess}
+          >
+            <Page pageNumber={pageNumber} width={initialWidth} />
+          </Document>
+          {totalPages && (
+            <div className={docLoadSuccess ? classes.paginationWrap : classes.paginationBottom}>
+              <Pagination count={totalPages} shape="rounded" onChange={handleChange} />
+            </div>
+          )}
+        </div>
+      );
+    }
+    if (type === "docx") {
+      return (
+        <FileViewer
+          fileType={type}
+          filePath={file}
+          onError={onError}
+        />
+      );
+    }
+    return (
+      <LabDocView
+        file={file}
+      />
+    );
+  };
 
   return (
     showGoBack
@@ -447,27 +519,7 @@ const Lab = (props) => {
               <Grid
                 className={classes.borderSection}
               >
-                {type && (type === "pdf")
-                  ? (
-                    <>
-                      <Document
-                        file={(file)}
-                        onLoadSuccess={onDocumentLoadSuccess}
-                      >
-                        <Page pageNumber={pageNumber} />
-                      </Document>
-                      <Grid className={docLoadSuccess ? classes.paginationWrap : classes.paginationBottom}>
-                        <Pagination count={totalPages} shape="rounded" onChange={handleChange} />
-                      </Grid>
-                    </>
-                  )
-                  : (
-                    <FileViewer
-                      fileType={type}
-                      filePath={file}
-                      onError={onError}
-                    />
-                  )}
+                {renderDocumentView()}
               </Grid>
             </Grid>
             <Grid
