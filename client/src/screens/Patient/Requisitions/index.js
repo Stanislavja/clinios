@@ -21,8 +21,8 @@ import { StyledTableRowSm, StyledTableCellSm } from "../../../components/common/
 import useDidMountEffect from "../../../hooks/useDidMountEffect";
 import usePatientContext from "../../../hooks/usePatientContext";
 import { toggleRequisitionDialog } from "../../../providers/Patient/actions";
-import CPTCodesService from "../../../services/proc.service";
 import PatientService from "../../../services/patient.service";
+import CPTCodesService from "../../../services/proc.service";
 
 const useStyles = makeStyles((theme) => ({
   section: {
