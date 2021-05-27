@@ -130,7 +130,7 @@ const EditCptCodeModal = ({
         </DialogTitle>
         <DialogContent className={classes.content}>
           <DialogContentText id="alert-dialog-description">
-            This page is used to edit cpt code
+            This page is used to edit proc code
           </DialogContentText>
           <div className={classes.root}>
             <FormControl component="div" className={classes.formControl}>

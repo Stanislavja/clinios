@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { CssBaseline, makeStyles } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 
-import CPTCodesService from "../../../../services/cpt.service";
+import CPTCodesService from "../../../../services/proc.service";
 import CPTform from "./component/CPTform";
 import CPTtable from "./component/CPTtable";
 

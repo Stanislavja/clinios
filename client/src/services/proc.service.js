@@ -7,16 +7,16 @@ const API_URL = `${process.env.REACT_APP_API_URL}api/v1` || "http://localhost:50
 class CPTCodes {
   getLabCompnayList() {
     return axios
-      .get(`${API_URL}/cpt`, { headers: authHeader() })
+      .get(`${API_URL}/proc`, { headers: authHeader() })
       .then((res) => res.data);
   }
 
   search(data) {
-    return axios.post(`${API_URL}/cpt/search`, data, { headers: authHeader() });
+    return axios.post(`${API_URL}/proc/search`, data, { headers: authHeader() });
   }
 
   updateClientCpt(id, userId, data) {
-    return axios.post(`${API_URL}/cpt/${id}/${userId}`, data, {
+    return axios.post(`${API_URL}/proc/${id}/${userId}`, data, {
       headers: authHeader(),
     });
   }

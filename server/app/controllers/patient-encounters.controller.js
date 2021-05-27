@@ -446,8 +446,7 @@ const createNewPrescription = async (req, res) => {
        values (${patient_id}, '${drug_id}', '${drug_frequency_id}', '${drug_strength_id}', '${moment(
         start_dt
       ).format("YYYY-MM-DD HH:mm:ss")}', '${expires}', '${amount}',
-       '${refills}', '${generic}', '${patient_instructions}', '${pharmacy_instructions}', ${encounter_id}, ${
-        req.client_id
+       '${refills}', '${generic}', '${patient_instructions}', '${pharmacy_instructions}', ${encounter_id}, ${req.client_id
       }, ${req.user_id}, now(), ${req.user_id})`
     );
 
@@ -570,7 +569,7 @@ const getEncounterPlan = async (req, res) => {
         union
         select 2 sort, 'Lab' type, c.name, null, null
         from patient_cpt pc
-        join cpt c on c.id=pc.cpt_id
+        join proc c on c.id=pc.proc_id
         where pc.encounter_id=${encounter_id}
       ) d
       order by sort
@@ -729,7 +728,7 @@ const getOrderedTests = async (req, res) => {
     const dbResponse = await db.query(
       `select c.name, c.id
       from patient_cpt pc
-      join cpt c on c.id=pc.cpt_id
+      join proc c on c.id=pc.proc_id
       where pc.encounter_id=${encounter_id}
       order by c.name
       limit 100`
@@ -752,14 +751,14 @@ const getOrderedTests = async (req, res) => {
 
 const deleteOrderedTests = async (req, res) => {
   const { encounter_id } = req.params;
-  const { cpt_id } = req.body.data;
+  const { proc_id } = req.body.data;
   const db = makeDb(configuration, res);
   try {
     const deleteOrderTestsResponse = await db.query(
       `delete
       from patient_cpt
       where encounter_id=${encounter_id}
-      and cpt_id='${cpt_id}'`
+      and proc_id='${proc_id}'`
     );
 
     if (!deleteOrderTestsResponse.affectedRows) {
@@ -811,10 +810,10 @@ const getNewLabFavorites = async (req, res) => {
   try {
     let $sql;
 
-    $sql = `select c.id, lc.name lab_name, c.name, case when cc.cpt_id<>'' then true end favorite
-    from cpt c
+    $sql = `select c.id, lc.name lab_name, c.name, case when cc.proc_id<>'' then true end favorite
+    from proc c
     join client_cpt cc on cc.client_id=${req.client_id}
-        and cc.cpt_id=c.id
+        and cc.proc_id=c.id
     left join lab_company lc on lc.id=c.lab_company_id \n`;
 
     if (tab !== "All") {
@@ -846,10 +845,10 @@ const getNewLabSearch = async (req, res) => {
   try {
     let $sql;
 
-    $sql = `select c.id, lc.name lab_name, c.name, case when cc.cpt_id<>'' then true end favorite, group_concat(ci.cpt2_id) cpt_items
-    from cpt c left join client_cpt cc on cc.client_id=${req.client_id} and cc.cpt_id=c.id
+    $sql = `select c.id, lc.name lab_name, c.name, case when cc.proc_id<>'' then true end favorite, group_concat(ci.cpt2_id) cpt_items
+    from proc c left join client_cpt cc on cc.client_id=${req.client_id} and cc.proc_id=c.id
     left join lab_company lc on lc.id=c.lab_company_id
-    left join cpt_item ci on ci.cpt_id=c.id
+    left join cpt_item ci on ci.proc_id=c.id
     where c.type='L' /*L=Lab*/
     and c.name like '%${text}%'`;
 
@@ -880,9 +879,9 @@ const getNewLabRequestedLabs = async (req, res) => {
   const db = makeDb(configuration, res);
 
   try {
-    const $sql = `select pc.cpt_id, c.name
+    const $sql = `select pc.proc_id, c.name
     from patient_cpt pc
-    join cpt c on c.id=pc.cpt_id
+    join proc c on c.id=pc.proc_id
     where encounter_id=1
     order by c.name
     limit 100`;
@@ -911,7 +910,7 @@ const getBilling = async (req, res) => {
   try {
     const $sql = `select c.id, c.name, t.amount
     from tran t
-    join cpt c on c.id=t.cpt_id
+    join proc c on c.id=t.proc_id
     where t.encounter_id=${encounter_id}
     order by c.name
     limit 100`;
@@ -969,9 +968,9 @@ const getBillingProcedsures = async (req, res) => {
 
   try {
     const $sql = `select c.id, c.name, t.amount, cc.fee
-    from cpt c
-    join client_cpt cc on cc.cpt_id=c.id
-    left join tran t on t.encounter_id=${encounter_id} and t.cpt_id=cc.cpt_id
+    from proc c
+    join client_cpt cc on cc.proc_id=c.id
+    left join tran t on t.encounter_id=${encounter_id} and t.proc_id=cc.proc_id
     where cc.client_id=1
     and cc.billable=true
     order by c.id

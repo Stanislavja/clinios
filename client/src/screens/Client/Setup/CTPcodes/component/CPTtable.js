@@ -20,7 +20,7 @@ import Proptypes from "prop-types";
 import NumberFormat from "react-number-format";
 
 import useAuth from "../../../../../hooks/useAuth";
-import CPTCodesService from "../../../../../services/cpt.service";
+import CPTCodesService from "../../../../../services/proc.service";
 import CptGroupMembersModal from "./modal/CptGroupMembersModal";
 import EditCptCodeModal from "./modal/EditCptCodeModal";
 
@@ -105,10 +105,10 @@ const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
     const data = [];
     getListOfGroup.map((g) => {
       searchResult.filter((c) => {
-        if (String(c.cpt) === g.trim()) {
+        if (String(c.proc) === g.trim()) {
           const list = {
             id: c.id,
-            description: c.cpt,
+            description: c.proc,
             lab: c.lab_company,
           };
           data.push(list);
@@ -216,7 +216,7 @@ const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
                   {result.id}
                 </TableCell>
                 <TableCell padding="checkbox" align="center">
-                  {result.cpt}
+                  {result.proc}
                 </TableCell>
                 <TableCell padding="checkbox" align="center">
                   {result.lab_company}
@@ -261,7 +261,7 @@ const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
                     aria-label="edit"
                     onClick={() => handleIsOpen(
                       result.id,
-                      result.cpt,
+                      result.proc,
                       result.fee,
                       result.favorite,
                       result.billable,
@@ -303,7 +303,7 @@ CPTtable.propTypes = {
   searchResult: Proptypes.arrayOf(
     Proptypes.shape({
       id: Proptypes.string,
-      cpt: Proptypes.string,
+      proc: Proptypes.string,
       lab_company: Proptypes.string,
       favorite: Proptypes.bool,
       billable: Proptypes.bool,
