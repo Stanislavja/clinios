@@ -96,7 +96,7 @@ NumberFormatCustom.propTypes = {
 const EditCptCodeModal = ({
   isOpen,
   hendleOnClose,
-  cpt_id,
+  procId,
   cpt_description,
   cpt_fee,
   cpt_favorite,
@@ -138,7 +138,7 @@ const EditCptCodeModal = ({
                 <TextField
                   fullWidth
                   label="CPT ID"
-                  value={cpt_id}
+                  value={procId}
                   variant="outlined"
                   size="small"
                   InputLabelProps={{
@@ -268,7 +268,7 @@ const EditCptCodeModal = ({
 EditCptCodeModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   hendleOnClose: PropTypes.func.isRequired,
-  cpt_id: PropTypes.string.isRequired,
+  procId: PropTypes.string.isRequired,
   cpt_description: PropTypes.string.isRequired,
   cpt_fee: PropTypes.string.isRequired,
   cpt_favorite: PropTypes.string.isRequired,
