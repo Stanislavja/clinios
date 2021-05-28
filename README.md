@@ -296,14 +296,14 @@ client/src
 │   │   │   ├── Backup
 │   │   │   │   ├── Backup.js
 │   │   │   │   └── index.js
-│   │   │   ├── CTPcodes
-│   │   │   │   ├── CPTcodes.js
+│   │   │   ├── Procedurecodes
+│   │   │   │   ├── Procedurecodes.js
 │   │   │   │   ├── component
-│   │   │   │   │   ├── CPTform.js
-│   │   │   │   │   ├── CPTtable.js
+│   │   │   │   │   ├── Procedureform.js
+│   │   │   │   │   ├── Proceduretable.js
 │   │   │   │   │   └── modal
-│   │   │   │   │       ├── CptGroupMembersModal.js
-│   │   │   │   │       └── EditCptCodeModal.js
+│   │   │   │   │       ├── ProcedureGroupMembersModal.js
+│   │   │   │   │       └── EditProcedureCodeModal.js
 │   │   │   │   └── index.js
 │   │   │   ├── Configuration
 │   │   │   │   ├── Configuration.js
@@ -554,7 +554,7 @@ client/src
 │   │   ├── email.service.js
 │   │   ├── home.service.js
 │   │   └── myself.service.js
-│   ├── proc.service.js
+│   ├── procedure.service.js
 │   ├── drugs.service.js
 │   ├── email.service.js
 │   ├── icdcodes.service.js
@@ -646,7 +646,7 @@ Our server folder and file structure:
 │   │   ├── login.controller.js
 │   │   ├── myself.controller.js
 │   │   └── password-reset.controller.js
-│   ├── proc.controller.js
+│   ├── procedure.controller.js
 │   ├── drug.controller.js
 │   ├── email-patient.controller.js
 │   ├── forms.controller.js
@@ -720,7 +720,7 @@ Our server folder and file structure:
     │   ├── login.routes.js
     │   ├── myself.routes.js
     │   └── password-reset.routes.js
-    ├── proc.routes.js
+    ├── procedure.routes.js
     ├── drug.routes.js
     ├── email-patient.routes.js
     ├── forms.routes.js

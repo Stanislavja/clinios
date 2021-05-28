@@ -124,7 +124,7 @@ export const client_pages = [
         id: 36,
         icon: CodeIcon,
         title: "CPT Codes",
-        href: "/setup/ctp-codes",
+        href: "/setup/procedure-codes",
       },
       {
         id: 37,

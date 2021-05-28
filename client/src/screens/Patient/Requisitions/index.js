@@ -22,7 +22,7 @@ import useDidMountEffect from "../../../hooks/useDidMountEffect";
 import usePatientContext from "../../../hooks/usePatientContext";
 import { toggleRequisitionDialog } from "../../../providers/Patient/actions";
 import PatientService from "../../../services/patient.service";
-import CPTCodesService from "../../../services/proc.service";
+import CPTCodesService from "../../../services/procedure.service";
 
 const useStyles = makeStyles((theme) => ({
   section: {

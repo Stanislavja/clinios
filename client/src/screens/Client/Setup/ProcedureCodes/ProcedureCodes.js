@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import { CssBaseline, makeStyles } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 
-import CPTCodesService from "../../../../services/proc.service";
-import CPTform from "./component/CPTform";
-import CPTtable from "./component/CPTtable";
+import ProcedureService from "../../../../services/procedure.service";
+import ProcedureForm from "./component/ProcedureForm";
+import ProcedureTable from "./component/ProcedureTable";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CTPcodes() {
+export default function ProcedureCodes() {
   const classes = useStyles();
   const [lebCompanyList, setLabCompanyList] = useState([]);
   const [searchResult, setSearchResult] = useState([]);
@@ -39,7 +39,7 @@ export default function CTPcodes() {
   };
 
   const fetchLabCompanyList = () => {
-    CPTCodesService.getLabCompnayList().then((res) => {
+    ProcedureService.getLabCompnayList().then((res) => {
       setLabCompanyList(res.data);
     });
   };
@@ -49,7 +49,7 @@ export default function CTPcodes() {
   }, []);
 
   const fetchCptCodeSearch = () => {
-    CPTCodesService.search(payload).then((res) => {
+    ProcedureService.search(payload).then((res) => {
       setSearchResult(res.data.data);
     });
   };
@@ -89,9 +89,9 @@ export default function CTPcodes() {
           CPT Codes
         </Typography>
         <Typography component="p" variant="body2" color="textPrimary">
-          This page is used to manage CTP codes
+          This page is used to manage Procedure codes
         </Typography>
-        <CPTform
+        <ProcedureForm
           lebCompanyList={lebCompanyList}
           fetchCptCodeSearch={fetchCptCodeSearch}
           handleChangeOfCptId={handleChangeOfCptId}
@@ -104,7 +104,7 @@ export default function CTPcodes() {
           labCompanyId={labCompanyId}
         />
         {searchResult.length > 0 && (
-          <CPTtable
+          <ProcedureTable
             searchResult={searchResult}
             fetchCptCodeSearch={fetchCptCodeSearch}
           />

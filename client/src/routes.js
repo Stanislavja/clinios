@@ -212,8 +212,8 @@ const routes = [
       },
       {
         exact: true,
-        path: "/setup/ctp-codes",
-        component: lazy(() => import("./screens/Client/Setup/CTPcodes")),
+        path: "/setup/procedure-codes",
+        component: lazy(() => import("./screens/Client/Setup/ProcedureCodes")),
       },
       {
         exact: true,

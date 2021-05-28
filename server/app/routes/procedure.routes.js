@@ -1,6 +1,6 @@
 const express = require("express");
 const { authJwt, authorization } = require("../middlewares");
-const CPTcodes = require("../controllers/proc.controller");
+const CPTcodes = require("../controllers/procedure.controller");
 
 const router = express.Router();
 

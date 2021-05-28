@@ -20,9 +20,9 @@ import Proptypes from "prop-types";
 import NumberFormat from "react-number-format";
 
 import useAuth from "../../../../../hooks/useAuth";
-import CPTCodesService from "../../../../../services/proc.service";
-import CptGroupMembersModal from "./modal/CptGroupMembersModal";
-import EditCptCodeModal from "./modal/EditCptCodeModal";
+import CPTCodesService from "../../../../../services/procedure.service";
+import EditProcedureCodeModal from "./modal/EditProcedureCodeModal";
+import CptGroupMembersModal from "./modal/ProcedureGroupMembersModal";
 
 const useStyles = makeStyles((theme) => ({
   tableContainer: {
@@ -275,7 +275,7 @@ const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
           </TableBody>
         </Table>
       </TableContainer>
-      <EditCptCodeModal
+      <EditProcedureCodeModal
         isOpen={isOpen}
         hendleOnClose={hendleOnClose}
         procId={procId}

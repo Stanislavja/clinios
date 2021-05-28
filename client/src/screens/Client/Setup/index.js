@@ -4,7 +4,7 @@ export { default as ReportFinance } from "./ReportFinance";
 export { default as AppointmentTypesUser } from "./AppointmentTypesUser";
 export { default as Backup } from "./Backup";
 export { default as Configuration } from "./Configuration";
-export { default as CTPcodes } from "./CTPcodes";
+export { default as ProcedureCodes } from "./ProcedureCodes";
 export { default as Drugs } from "./Drugs";
 export { default as Forms } from "./Forms";
 export { default as Handouts } from "./Handouts";
