@@ -21,8 +21,8 @@ export default function ProcedureCodes() {
   const classes = useStyles();
   const [lebCompanyList, setLabCompanyList] = useState([]);
   const [searchResult, setSearchResult] = useState([]);
-  const [procedureId, setCptId] = useState("");
-  const [procedureDescription, setCptDescription] = useState("");
+  const [procedureId, setProcedureId] = useState("");
+  const [procedureDescription, setProcedureDescription] = useState("");
   const [labCompanyId, setLabCompanyId] = useState("");
   const [favorite, setFavorite] = useState("");
   const [billable, setBillable] = useState("");
@@ -48,17 +48,17 @@ export default function ProcedureCodes() {
     fetchLabCompanyList();
   }, []);
 
-  const fetchCptCodeSearch = () => {
+  const fetchProcedureCodeSearch = () => {
     ProcedureService.search(payload).then((res) => {
       setSearchResult(res.data.data);
     });
   };
 
-  const handleChangeOfCptId = (e) => {
-    setCptId(e.target.value);
+  const handleChangeOfProcedureId = (e) => {
+    setProcedureId(e.target.value);
   };
-  const handleChangeOfCptDescription = (e) => {
-    setCptDescription(e.target.value);
+  const handleChangeOfProcedureDescription = (e) => {
+    setProcedureDescription(e.target.value);
   };
   const handleChangeOfLabCompanyId = (e) => {
     setLabCompanyId(e.target.value);
@@ -93,9 +93,9 @@ export default function ProcedureCodes() {
         </Typography>
         <ProcedureForm
           lebCompanyList={lebCompanyList}
-          fetchCptCodeSearch={fetchCptCodeSearch}
-          handleChangeOfCptId={handleChangeOfCptId}
-          handleChangeOfCptDescription={handleChangeOfCptDescription}
+          fetchProcedureCodeSearch={fetchProcedureCodeSearch}
+          handleChangeOfProcedureId={handleChangeOfProcedureId}
+          handleChangeOfProcedureDescription={handleChangeOfProcedureDescription}
           handleChangeOfLabCompanyId={handleChangeOfLabCompanyId}
           handleChangeOfFavorite={handleChangeOfFavorite}
           handleChangeOfBillable={handleChangeOfBillable}
@@ -106,7 +106,7 @@ export default function ProcedureCodes() {
         {searchResult.length > 0 && (
           <ProcedureTable
             searchResult={searchResult}
-            fetchCptCodeSearch={fetchCptCodeSearch}
+            fetchProcedureCodeSearch={fetchProcedureCodeSearch}
           />
         )}
       </div>
