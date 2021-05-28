@@ -40,9 +40,9 @@ const useStyles = makeStyles(() => ({
 const Procedureform = ({
   labCompanyId,
   lebCompanyList,
-  fetchCptCodeSearch,
-  handleChangeOfCptId,
-  handleChangeOfCptDescription,
+  fetchProcedureCodeSearch,
+  handleChangeOfProcedureId,
+  handleChangeOfProcedureDescription,
   handleChangeOfLabCompanyId,
   handleChangeOfFavorite,
   handleChangeOfBillable,
@@ -53,7 +53,7 @@ const Procedureform = ({
 
   const handleKeyUp = (event) => {
     if (event.keyCode === 13) {
-      fetchCptCodeSearch();
+      fetchProcedureCodeSearch();
     }
   };
 
@@ -70,7 +70,7 @@ const Procedureform = ({
             InputLabelProps={{
               shrink: true,
             }}
-            onChange={handleChangeOfCptId}
+            onChange={handleChangeOfProcedureId}
             onKeyUp={handleKeyUp}
           />
         </Grid>
@@ -83,7 +83,7 @@ const Procedureform = ({
             InputLabelProps={{
               shrink: true,
             }}
-            onChange={handleChangeOfCptDescription}
+            onChange={handleChangeOfProcedureDescription}
             onKeyUp={handleKeyUp}
           />
         </Grid>
@@ -176,7 +176,7 @@ const Procedureform = ({
         variant="contained"
         color="primary"
         className={classes.submit}
-        onClick={fetchCptCodeSearch}
+        onClick={fetchProcedureCodeSearch}
       >
         Search
       </Button>
@@ -192,9 +192,9 @@ Procedureform.propTypes = {
       name: Proptypes.string,
     }),
   ).isRequired,
-  fetchCptCodeSearch: Proptypes.func.isRequired,
-  handleChangeOfCptId: Proptypes.func.isRequired,
-  handleChangeOfCptDescription: Proptypes.func.isRequired,
+  fetchProcedureCodeSearch: Proptypes.func.isRequired,
+  handleChangeOfProcedureId: Proptypes.func.isRequired,
+  handleChangeOfProcedureDescription: Proptypes.func.isRequired,
   handleChangeOfLabCompanyId: Proptypes.func.isRequired,
   handleChangeOfFavorite: Proptypes.func.isRequired,
   handleChangeOfBillable: Proptypes.func.isRequired,

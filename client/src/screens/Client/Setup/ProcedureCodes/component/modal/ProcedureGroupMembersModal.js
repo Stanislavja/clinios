@@ -75,7 +75,7 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-const CptGroupMembersModal = ({ isOpen, hendleOnClose, groups }) => {
+const ProcedureGroupMembersModal = ({ isOpen, hendleOnClose, groups }) => {
   const classes = useStyles();
   return (
     <div>
@@ -132,7 +132,7 @@ const CptGroupMembersModal = ({ isOpen, hendleOnClose, groups }) => {
   );
 };
 
-CptGroupMembersModal.propTypes = {
+ProcedureGroupMembersModal.propTypes = {
   isOpen: Proptypes.bool.isRequired,
   hendleOnClose: Proptypes.func.isRequired,
   groups: Proptypes.arrayOf(
@@ -144,4 +144,4 @@ CptGroupMembersModal.propTypes = {
   ).isRequired,
 };
 
-export default CptGroupMembersModal;
+export default ProcedureGroupMembersModal;

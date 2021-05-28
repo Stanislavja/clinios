@@ -22,7 +22,7 @@ import NumberFormat from "react-number-format";
 import useAuth from "../../../../../hooks/useAuth";
 import ProcedureCodesService from "../../../../../services/procedure.service";
 import EditProcedureCodeModal from "./modal/EditProcedureCodeModal";
-import CptGroupMembersModal from "./modal/ProcedureGroupMembersModal";
+import ProcedureGroupMembersModal from "./modal/ProcedureGroupMembersModal";
 
 const useStyles = makeStyles((theme) => ({
   tableContainer: {
@@ -60,7 +60,7 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-const Proceduretable = ({ searchResult, fetchCptCodeSearch }) => {
+const Proceduretable = ({ searchResult, fetchProcedureCodeSearch }) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuth();
@@ -135,8 +135,8 @@ const Proceduretable = ({ searchResult, fetchCptCodeSearch }) => {
     set_procedure_notes(e.target.value);
   };
 
-  const handleEditCptCode = () => {
-    ProcedureCodesService.updateClientCpt(procId, user.id, payload).then(
+  const handleEditProcedureCode = () => {
+    ProcedureCodesService.updateClientProcedure(procId, user.id, payload).then(
       (response) => {
         setTimeout(() => {
           enqueueSnackbar(`${response.data.message}`, {
@@ -152,7 +152,7 @@ const Proceduretable = ({ searchResult, fetchCptCodeSearch }) => {
     );
     setIsOpen(false);
     setTimeout(() => {
-      fetchCptCodeSearch();
+      fetchProcedureCodeSearch();
     }, 200);
   };
 
@@ -288,9 +288,9 @@ const Proceduretable = ({ searchResult, fetchCptCodeSearch }) => {
         handleChangeFavorite={handleChangeFavorite}
         handleChangeBillable={handleChangeBillable}
         handleChangeNotes={handleChangeNotes}
-        handleEditCptCode={handleEditCptCode}
+        handleEditProcedureCode={handleEditProcedureCode}
       />
-      <CptGroupMembersModal
+      <ProcedureGroupMembersModal
         isOpen={groupIsOpen}
         hendleOnClose={hendleGroupOnClose}
         groups={groups}
@@ -314,7 +314,7 @@ Proceduretable.propTypes = {
       updated_name: Proptypes.string,
     }),
   ).isRequired,
-  fetchCptCodeSearch: Proptypes.func.isRequired,
+  fetchProcedureCodeSearch: Proptypes.func.isRequired,
 };
 
 export default Proceduretable;

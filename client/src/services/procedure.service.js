@@ -15,7 +15,7 @@ class ProcedureCodes {
     return axios.post(`${API_URL}/procedure/search`, data, { headers: authHeader() });
   }
 
-  updateClientCpt(id, userId, data) {
+  updateClientProcedure(id, userId, data) {
     return axios.post(`${API_URL}/procedure/${id}/${userId}`, data, {
       headers: authHeader(),
     });
