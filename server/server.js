@@ -51,7 +51,7 @@ app.use(baseAPIPath, require("./app/routes/search.routes"));
 app.use(baseAPIPath, require("./app/routes/icd.routes"));
 app.use(baseAPIPath, require("./app/routes/message-to-patient.routes"));
 app.use(baseAPIPath, require("./app/routes/message-to-user.routes"));
-app.use("/api/v1", require("./app/routes/proc.routes"));
+app.use("/api/v1", require("./app/routes/procedure.routes"));
 app.use("/api/v1", require("./app/routes/schedule.routes"));
 app.use(baseAPIPath, require("./app/routes/users.routes"));
 app.use(baseAPIPath, require("./app/routes/accounting-types.routes"));
