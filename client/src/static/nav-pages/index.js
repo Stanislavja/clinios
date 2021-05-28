@@ -123,7 +123,7 @@ export const client_pages = [
       {
         id: 36,
         icon: CodeIcon,
-        title: "CPT Codes",
+        title: "Procedure Codes",
         href: "/setup/procedure-codes",
       },
       {

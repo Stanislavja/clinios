@@ -97,11 +97,11 @@ const EditCptCodeModal = ({
   isOpen,
   hendleOnClose,
   procId,
-  cpt_description,
-  cpt_fee,
-  cpt_favorite,
-  cpt_billable,
-  cpt_notes,
+  procedure_description,
+  procedure_fee,
+  procedure_favorite,
+  procedure_billable,
+  procedure_notes,
   handleChangeFee,
   handleChangeFavorite,
   handleChangeBillable,
@@ -126,7 +126,7 @@ const EditCptCodeModal = ({
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title" className={classes.title}>
-          Edit CPT Code
+          Edit Procedure Code
         </DialogTitle>
         <DialogContent className={classes.content}>
           <DialogContentText id="alert-dialog-description">
@@ -137,7 +137,7 @@ const EditCptCodeModal = ({
               <Grid item md={3} className={classes.gridMargin}>
                 <TextField
                   fullWidth
-                  label="CPT ID"
+                  label="Procedure ID"
                   value={procId}
                   variant="outlined"
                   size="small"
@@ -153,8 +153,8 @@ const EditCptCodeModal = ({
               <Grid item xs={6} md={9} className={classes.gridMargin}>
                 <TextField
                   fullWidth
-                  label="CPT Description"
-                  value={cpt_description}
+                  label="Procedure Description"
+                  value={procedure_description}
                   variant="outlined"
                   size="small"
                   InputLabelProps={{
@@ -173,7 +173,7 @@ const EditCptCodeModal = ({
                   fullWidth
                   autoFocus
                   label="Fee"
-                  value={cpt_fee || ""}
+                  value={procedure_fee || ""}
                   variant="outlined"
                   size="small"
                   InputProps={{
@@ -192,7 +192,7 @@ const EditCptCodeModal = ({
               <FormControlLabel
                 control={(
                   <Switch
-                    checked={Boolean(cpt_favorite)}
+                    checked={Boolean(procedure_favorite)}
                     color="primary"
                     size="small"
                     name="switchBox"
@@ -206,7 +206,7 @@ const EditCptCodeModal = ({
               <FormControlLabel
                 control={(
                   <Switch
-                    checked={Boolean(cpt_billable)}
+                    checked={Boolean(procedure_billable)}
                     size="small"
                     color="primary"
                     name="switchBox"
@@ -232,7 +232,7 @@ const EditCptCodeModal = ({
                 InputProps={{
                   rows: 8,
                 }}
-                value={cpt_notes}
+                value={procedure_notes}
                 onChange={handleChangeNotes}
                 onKeyUp={handleKeyUp}
               />
@@ -269,11 +269,11 @@ EditCptCodeModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   hendleOnClose: PropTypes.func.isRequired,
   procId: PropTypes.string.isRequired,
-  cpt_description: PropTypes.string.isRequired,
-  cpt_fee: PropTypes.string.isRequired,
-  cpt_favorite: PropTypes.string.isRequired,
-  cpt_billable: PropTypes.string.isRequired,
-  cpt_notes: PropTypes.string.isRequired,
+  procedure_description: PropTypes.string.isRequired,
+  procedure_fee: PropTypes.string.isRequired,
+  procedure_favorite: PropTypes.string.isRequired,
+  procedure_billable: PropTypes.string.isRequired,
+  procedure_notes: PropTypes.string.isRequired,
   handleChangeFee: PropTypes.func.isRequired,
   handleChangeFavorite: PropTypes.func.isRequired,
   handleChangeBillable: PropTypes.func.isRequired,

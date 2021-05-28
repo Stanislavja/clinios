@@ -4,22 +4,22 @@ import authHeader from "./auth-header";
 
 const API_URL = `${process.env.REACT_APP_API_URL}api/v1` || "http://localhost:5000/api/v1";
 
-class CPTCodes {
+class ProcedureCodes {
   getLabCompnayList() {
     return axios
-      .get(`${API_URL}/proc`, { headers: authHeader() })
+      .get(`${API_URL}/procedure`, { headers: authHeader() })
       .then((res) => res.data);
   }
 
   search(data) {
-    return axios.post(`${API_URL}/proc/search`, data, { headers: authHeader() });
+    return axios.post(`${API_URL}/procedure/search`, data, { headers: authHeader() });
   }
 
   updateClientCpt(id, userId, data) {
-    return axios.post(`${API_URL}/proc/${id}/${userId}`, data, {
+    return axios.post(`${API_URL}/procedure/${id}/${userId}`, data, {
       headers: authHeader(),
     });
   }
 }
 
-export default new CPTCodes();
+export default new ProcedureCodes();

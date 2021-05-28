@@ -21,16 +21,16 @@ export default function ProcedureCodes() {
   const classes = useStyles();
   const [lebCompanyList, setLabCompanyList] = useState([]);
   const [searchResult, setSearchResult] = useState([]);
-  const [cptId, setCptId] = useState("");
-  const [cptDescription, setCptDescription] = useState("");
+  const [procedureId, setCptId] = useState("");
+  const [procedureDescription, setCptDescription] = useState("");
   const [labCompanyId, setLabCompanyId] = useState("");
   const [favorite, setFavorite] = useState("");
   const [billable, setBillable] = useState("");
   const [self, setSelf] = useState("");
   const [group, setGroup] = useState("");
   const payload = {
-    cptId,
-    cptDescription,
+    procedureId,
+    procedureDescription,
     labCompanyId,
     favorite,
     billable,
@@ -86,7 +86,7 @@ export default function ProcedureCodes() {
           color="textPrimary"
           className={classes.title}
         >
-          CPT Codes
+          Procedure Codes
         </Typography>
         <Typography component="p" variant="body2" color="textPrimary">
           This page is used to manage Procedure codes

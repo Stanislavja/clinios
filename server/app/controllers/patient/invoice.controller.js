@@ -11,12 +11,12 @@ const getConciergeInvoice = async (req, res) => {
   let $sql;
   try {
     $sql = `select c.name, lc.name, c.price, t.id
-    from patient_cpt pc
-    join proc c on c.id=pc.proc_id
+    from patient_procedure pc
+    join procedure c on c.id=pc.procedure_id
     join lab_company lc on lc.id=c.lab_company_id
     left join tran t on t.patient_id=pc.patient_id
         and t.encounter_id=pc.encounter_id
-        and t.proc_id=pc.proc_id
+        and t.procedure_id=pc.procedure_id
     where pc.encounter_id=1`;
 
     const dbResponse = await db.query($sql);

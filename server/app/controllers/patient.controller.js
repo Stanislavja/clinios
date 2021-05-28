@@ -1194,10 +1194,10 @@ const getDocuments = async (req, res) => {
     let $sql;
 
     $sql = `select l.id, l.created, l.filename, right(l.filename,3) filetype, l.status, l.type, l.lab_dt, l.physician, l.note
-      , group_concat('"', lc.proc_id, '","', c.name, '","', lc.value, '","', lc.range_low, '","', lc.range_high, '"' order by c.name) tests
+      , group_concat('"', lc.procedure_id, '","', c.name, '","', lc.value, '","', lc.range_low, '","', lc.range_high, '"' order by c.name) tests
       from lab l
       left join lab_marker lc on lc.lab_id=l.id
-      left join marker c on c.id=lc.proc_id
+      left join marker c on c.id=lc.procedure_id
       where l.client_id=${req.client_id}
       and l.patient_id=${patient_id} \n`;
 
@@ -1722,18 +1722,18 @@ const getAllTests = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select lc.proc_id marker_id, c.name, date(lc2.lab_dt) lab_dt, lc2.value, lc2.range_high, lc2.range_low, lc2.unit, lc.count from (
-        select lc.proc_id, max(lc2.lab_id) lab_id, count from (
-        select proc_id, max(lab_dt) lab_dt, count( * ) count
+      `select lc.procedure_id marker_id, c.name, date(lc2.lab_dt) lab_dt, lc2.value, lc2.range_high, lc2.range_low, lc2.unit, lc.count from (
+        select lc.procedure_id, max(lc2.lab_id) lab_id, count from (
+        select procedure_id, max(lab_dt) lab_dt, count( * ) count
         from lab_marker
         where patient_id=${patient_id}
-        group by proc_id
+        group by procedure_id
         ) lc
-        left join lab_marker lc2 on lc2.proc_id=lc.proc_id and lc2.lab_dt=lc.lab_dt
-        group by lc.proc_id
+        left join lab_marker lc2 on lc2.procedure_id=lc.procedure_id and lc2.lab_dt=lc.lab_dt
+        group by lc.procedure_id
         ) lc
-        left join lab_marker lc2 on lc2.lab_id=lc.lab_id and lc2.proc_id=lc.proc_id
-        left join marker c on c.id=lc2.proc_id
+        left join lab_marker lc2 on lc2.lab_id=lc.lab_id and lc2.procedure_id=lc.procedure_id
+        left join marker c on c.id=lc2.procedure_id
         order by c.name
         limit 500`
     );
@@ -1851,11 +1851,11 @@ const searchTests = async (req, res) => {
 
   const db = makeDb(configuration, res);
   try {
-    let $sql = `select c.id marker_id, lc.name lab_name, c.name, case when cc.proc_id is not null then true end favorite
-      from proc c
+    let $sql = `select c.id marker_id, lc.name lab_name, c.name, case when cc.procedure_id is not null then true end favorite
+      from procedure c
       left join lab_company lc on lc.id=c.lab_company_id
-      left join client_cpt cc on cc.client_id=${req.client_id}
-      and cc.proc_id=c.id
+      left join client_procedure cc on cc.client_id=${req.client_id}
+      and cc.procedure_id=c.id
       where c.type='L'
       and c.name like '%${text}%'
     `;
@@ -1888,12 +1888,12 @@ const getRecentTests = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select c.id marker_id, lc.name lab_name, c.name, case when cc.proc_id is not null  then true end favorite
-      from patient_cpt pc
-      left join proc c on c.id=pc.proc_id
+      `select c.id marker_id, lc.name lab_name, c.name, case when cc.procedure_id is not null  then true end favorite
+      from patient_procedure pc
+      left join procedure c on c.id=pc.procedure_id
       left join lab_company lc on lc.id=c.lab_company_id
-      left join client_cpt cc on cc.client_id=${req.client_id}
-      and cc.proc_id=c.id
+      left join client_procedure cc on cc.client_id=${req.client_id}
+      and cc.procedure_id=c.id
       order by lc.name, c.name
       limit 20`
     );
@@ -1917,11 +1917,11 @@ const getFavoriteTests = async (req, res) => {
 
   try {
     const dbResponse = await db.query(
-      `select c.id marker_id, lc.name lab_name, c.name, case when cc.proc_id is not null then true end favorite
-      from proc c
+      `select c.id marker_id, lc.name lab_name, c.name, case when cc.procedure_id is not null then true end favorite
+      from procedure c
       left join lab_company lc on lc.id=c.lab_company_id
-      join client_cpt cc on cc.client_id=${req.client_id}
-      and cc.proc_id=c.id
+      join client_procedure cc on cc.client_id=${req.client_id}
+      and cc.procedure_id=c.id
       where c.type='L'
       order by lc.name, c.name
       limit 20`
@@ -2251,8 +2251,8 @@ const getRequisitions = async (req, res) => {
   try {
     const dbResponse = await db.query(
       `select pc.created, pc.id, c.name marker_name, c.id marker_id, lc.name lab_name
-        from patient_cpt pc
-        left join proc c on c.id=pc.proc_id
+        from patient_procedure pc
+        left join procedure c on c.id=pc.procedure_id
         left join lab_company lc on lc.id=c.lab_company_id
         where pc.patient_id=${patient_id}
         and pc.completed_dt is null
@@ -2282,7 +2282,7 @@ const createRequisitions = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const insertResponse = await db.query(
-      `insert into patient_cpt (patient_id, proc_id, client_id, created, created_user_id) 
+      `insert into patient_procedure (patient_id, procedure_id, client_id, created, created_user_id) 
       values (${patient_id}, '${marker_id}', ${req.client_id}, now(), ${req.user_id})`
     );
 
@@ -2307,7 +2307,7 @@ const deleteRequisitions = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const deleteResponse = await db.query(
-      `delete from patient_cpt where id='${id}'`
+      `delete from patient_procedure where id='${id}'`
     );
 
     if (!deleteResponse.affectedRows) {

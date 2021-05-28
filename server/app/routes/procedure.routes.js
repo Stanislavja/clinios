@@ -1,15 +1,15 @@
 const express = require("express");
 const { authJwt, authorization } = require("../middlewares");
-const CPTcodes = require("../controllers/procedure.controller");
+const Procedurecodes = require("../controllers/procedure.controller");
 
 const router = express.Router();
 
-router.get("/proc", [authJwt.verifyToken], CPTcodes.getLabCompnayList);
-router.post("/proc/search", [authJwt.verifyToken], CPTcodes.search);
+router.get("/procedure", [authJwt.verifyToken], Procedurecodes.getLabCompnayList);
+router.post("/procedure/search", [authJwt.verifyToken], Procedurecodes.search);
 router.post(
-  "/proc/:id/:userId",
+  "/procedure/:id/:userId",
   [authJwt.verifyToken, authorization.isReadOnly],
-  CPTcodes.updateClientCpt
+  Procedurecodes.updateClientProcedure
 );
 
 module.exports = router;

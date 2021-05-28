@@ -88,7 +88,7 @@ const CptGroupMembersModal = ({ isOpen, hendleOnClose, groups }) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title" className={classes.title}>
-          CPT Group Members
+          Procedure Group Members
         </DialogTitle>
         <DialogContent className={classes.content}>
           <TableContainer component={Paper} className={classes.tableContainer}>

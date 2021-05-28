@@ -37,7 +37,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const CPTform = ({
+const Procedureform = ({
   labCompanyId,
   lebCompanyList,
   fetchCptCodeSearch,
@@ -64,7 +64,7 @@ const CPTform = ({
           <TextField
             fullWidth
             autoFocus
-            label="CPT ID"
+            label="Procedure ID"
             variant="outlined"
             size="small"
             InputLabelProps={{
@@ -77,7 +77,7 @@ const CPTform = ({
         <Grid item xs={12} md={3} className={classes.gridMargin}>
           <TextField
             fullWidth
-            label="CPT Description"
+            label="Procedure Description"
             variant="outlined"
             size="small"
             InputLabelProps={{
@@ -184,7 +184,7 @@ const CPTform = ({
   );
 };
 
-CPTform.propTypes = {
+Procedureform.propTypes = {
   labCompanyId: Proptypes.string.isRequired,
   lebCompanyList: Proptypes.arrayOf(
     Proptypes.shape({
@@ -202,4 +202,4 @@ CPTform.propTypes = {
   handleChangeOfGroup: Proptypes.func.isRequired,
 };
 
-export default CPTform;
+export default Procedureform;
