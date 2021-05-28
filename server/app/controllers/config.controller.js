@@ -86,7 +86,6 @@ const getHistory = async (req, res) => {
       ,ch.functional_range
       ,ch.ein
       ,ch.npi
-      ,ch.concierge_lab_ordering
       from client_history ch
       where ch.id=${req.client_id}
       order by ch.created desc

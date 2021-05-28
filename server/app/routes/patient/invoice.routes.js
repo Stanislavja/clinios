@@ -7,7 +7,7 @@ const router = express.Router();
 router.get(
   "/client-portal/invoices",
   [authJwt.verifyToken],
-  allergyController.getConciergeInvoice
+  allergyController.getInvoice
 );
 
 module.exports = router;
