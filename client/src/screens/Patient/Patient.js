@@ -279,23 +279,16 @@ const Patient = () => {
       h: 6,
       i: "All Markers",
     };
-    setLayout([
+    const layoutArray = [
       ...firstlayout,
       ...secondlayout,
       ...thirdlayout,
       ...fourthlayout,
       documentslayout,
       testslayout,
-    ]);
-    dispatch(
-      saveLayout([
-        ...firstlayout,
-        ...thirdlayout,
-        ...fourthlayout,
-        documentslayout,
-        testslayout,
-      ]),
-    );
+    ];
+    setLayout(layoutArray);
+    dispatch(saveLayout([layoutArray]));
   };
 
   const updateCardsLayout = () => {
