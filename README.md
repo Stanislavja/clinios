@@ -299,8 +299,8 @@ client/src
 │   │   │   ├── Procedurecodes
 │   │   │   │   ├── Procedurecodes.js
 │   │   │   │   ├── component
-│   │   │   │   │   ├── Procedureform.js
-│   │   │   │   │   ├── Proceduretable.js
+│   │   │   │   │   ├── ProcedureForm.js
+│   │   │   │   │   ├── ProcedureTable.js
 │   │   │   │   │   └── modal
 │   │   │   │   │       ├── ProcedureGroupMembersModal.js
 │   │   │   │   │       └── EditProcedureCodeModal.js

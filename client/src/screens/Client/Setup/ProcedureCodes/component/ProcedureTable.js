@@ -60,7 +60,7 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-const Proceduretable = ({ searchResult, fetchProcedureCodeSearch }) => {
+const ProcedureTable = ({ searchResult, fetchProcedureCodeSearch }) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuth();
@@ -299,7 +299,7 @@ const Proceduretable = ({ searchResult, fetchProcedureCodeSearch }) => {
   );
 };
 
-Proceduretable.propTypes = {
+ProcedureTable.propTypes = {
   searchResult: Proptypes.arrayOf(
     Proptypes.shape({
       id: Proptypes.string,
@@ -317,4 +317,4 @@ Proceduretable.propTypes = {
   fetchProcedureCodeSearch: Proptypes.func.isRequired,
 };
 
-export default Proceduretable;
+export default ProcedureTable;

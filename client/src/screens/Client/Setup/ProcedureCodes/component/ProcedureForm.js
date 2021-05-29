@@ -37,7 +37,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Procedureform = ({
+const ProcedureForm = ({
   labCompanyId,
   labCompanyList,
   fetchProcedureCodeSearch,
@@ -181,7 +181,7 @@ const Procedureform = ({
   );
 };
 
-Procedureform.propTypes = {
+ProcedureForm.propTypes = {
   labCompanyId: Proptypes.string.isRequired,
   labCompanyList: Proptypes.arrayOf(
     Proptypes.shape({
@@ -193,4 +193,4 @@ Procedureform.propTypes = {
   handleInputChange: Proptypes.func.isRequired,
 };
 
-export default Procedureform;
+export default ProcedureForm;
