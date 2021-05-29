@@ -20,9 +20,9 @@ import Proptypes from "prop-types";
 import NumberFormat from "react-number-format";
 
 import useAuth from "../../../../../hooks/useAuth";
-import CPTCodesService from "../../../../../services/cpt.service";
-import CptGroupMembersModal from "./modal/CptGroupMembersModal";
-import EditCptCodeModal from "./modal/EditCptCodeModal";
+import ProcedureCodesService from "../../../../../services/procedure.service";
+import EditProcedureCodeModal from "./modal/EditProcedureCodeModal";
+import ProcedureGroupMembersModal from "./modal/ProcedureGroupMembersModal";
 
 const useStyles = makeStyles((theme) => ({
   tableContainer: {
@@ -60,7 +60,7 @@ const StyledTableRow = withStyles((theme) => ({
   },
 }))(TableRow);
 
-const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
+const ProcedureTable = ({ searchResult, fetchProcedureCodeSearch }) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const { user } = useAuth();
@@ -70,26 +70,26 @@ const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
   const [groups, setGroups] = useState([]);
 
   const [procId, setProcId] = useState("");
-  const [cpt_description, set_cpt_description] = useState("");
-  const [cpt_favorite, set_cpt_favorite] = useState("");
-  const [cpt_fee, set_cpt_fee] = useState("");
-  const [cpt_billable, set_cpt_billable] = useState("");
-  const [cpt_notes, set_cpt_notes] = useState("");
+  const [procedure_description, set_procedure_description] = useState("");
+  const [procedure_favorite, set_procedure_favorite] = useState("");
+  const [procedure_fee, set_procedure_fee] = useState("");
+  const [procedure_billable, set_procedure_billable] = useState("");
+  const [procedure_notes, set_procedure_notes] = useState("");
 
   const payload = {
-    cptId: procId,
-    favorite: cpt_favorite,
-    billable: cpt_billable,
-    fee: cpt_fee,
-    notes: cpt_notes,
+    procedureId: procId,
+    favorite: procedure_favorite,
+    billable: procedure_billable,
+    fee: procedure_fee,
+    notes: procedure_notes,
   };
 
   const handleIsOpen = (id, desc, fee, fav, bill) => {
     setProcId(id);
-    set_cpt_description(desc);
-    set_cpt_fee(fee);
-    set_cpt_favorite(fav);
-    set_cpt_billable(bill);
+    set_procedure_description(desc);
+    set_procedure_fee(fee);
+    set_procedure_favorite(fav);
+    set_procedure_billable(bill);
     setIsOpen(true);
   };
   const hendleOnClose = () => {
@@ -105,10 +105,10 @@ const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
     const data = [];
     getListOfGroup.map((g) => {
       searchResult.filter((c) => {
-        if (String(c.cpt) === g.trim()) {
+        if (String(c.proc) === g.trim()) {
           const list = {
             id: c.id,
-            description: c.cpt,
+            description: c.proc,
             lab: c.lab_company,
           };
           data.push(list);
@@ -122,21 +122,21 @@ const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
   };
 
   const handleChangeFee = (e) => {
-    set_cpt_fee(e.target.value);
+    set_procedure_fee(e.target.value);
   };
   const handleChangeFavorite = (e) => {
-    set_cpt_favorite(e.target.checked);
+    set_procedure_favorite(e.target.checked);
   };
   const handleChangeBillable = (e) => {
-    set_cpt_billable(e.target.checked);
+    set_procedure_billable(e.target.checked);
   };
 
   const handleChangeNotes = (e) => {
-    set_cpt_notes(e.target.value);
+    set_procedure_notes(e.target.value);
   };
 
-  const handleEditCptCode = () => {
-    CPTCodesService.updateClientCpt(procId, user.id, payload).then(
+  const handleEditProcedureCode = () => {
+    ProcedureCodesService.updateClientProcedure(procId, user.id, payload).then(
       (response) => {
         setTimeout(() => {
           enqueueSnackbar(`${response.data.message}`, {
@@ -152,7 +152,7 @@ const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
     );
     setIsOpen(false);
     setTimeout(() => {
-      fetchCptCodeSearch();
+      fetchProcedureCodeSearch();
     }, 200);
   };
 
@@ -170,10 +170,10 @@ const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
           <TableHead>
             <TableRow>
               <StyledTableCell padding="checkbox" align="center">
-                CPT ID
+                Procedure ID
               </StyledTableCell>
               <StyledTableCell padding="checkbox" align="center">
-                CPT Description
+                Procedure Description
               </StyledTableCell>
               <StyledTableCell padding="checkbox" align="center">
                 Lab Company
@@ -216,7 +216,7 @@ const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
                   {result.id}
                 </TableCell>
                 <TableCell padding="checkbox" align="center">
-                  {result.cpt}
+                  {result.proc}
                 </TableCell>
                 <TableCell padding="checkbox" align="center">
                   {result.lab_company}
@@ -242,12 +242,12 @@ const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
                   padding="checkbox"
                   align="center"
                   style={{ cursor: "pointer" }}
-                  onClick={() => handleGroupIsOpen(result.cpt_group)}
+                  onClick={() => handleGroupIsOpen(result.procedure_group)}
                 >
-                  {result.cpt_group
-                    ? String(result.cpt_group).length > 22
-                      ? `${String(result.cpt_group).slice(0, 22)}...`
-                      : String(result.cpt_group)
+                  {result.procedure_group
+                    ? String(result.procedure_group).length > 22
+                      ? `${String(result.procedure_group).slice(0, 22)}...`
+                      : String(result.procedure_group)
                     : ""}
                 </TableCell>
                 <TableCell padding="checkbox" align="center">
@@ -261,7 +261,7 @@ const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
                     aria-label="edit"
                     onClick={() => handleIsOpen(
                       result.id,
-                      result.cpt,
+                      result.proc,
                       result.fee,
                       result.favorite,
                       result.billable,
@@ -275,22 +275,22 @@ const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
           </TableBody>
         </Table>
       </TableContainer>
-      <EditCptCodeModal
+      <EditProcedureCodeModal
         isOpen={isOpen}
         hendleOnClose={hendleOnClose}
         procId={procId}
-        cpt_description={cpt_description}
-        cpt_fee={cpt_fee}
-        cpt_favorite={cpt_favorite}
-        cpt_billable={cpt_billable}
-        cpt_notes={cpt_notes}
+        procedure_description={procedure_description}
+        procedure_fee={procedure_fee}
+        procedure_favorite={procedure_favorite}
+        procedure_billable={procedure_billable}
+        procedure_notes={procedure_notes}
         handleChangeFee={handleChangeFee}
         handleChangeFavorite={handleChangeFavorite}
         handleChangeBillable={handleChangeBillable}
         handleChangeNotes={handleChangeNotes}
-        handleEditCptCode={handleEditCptCode}
+        handleEditProcedureCode={handleEditProcedureCode}
       />
-      <CptGroupMembersModal
+      <ProcedureGroupMembersModal
         isOpen={groupIsOpen}
         hendleOnClose={hendleGroupOnClose}
         groups={groups}
@@ -299,22 +299,22 @@ const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
   );
 };
 
-CPTtable.propTypes = {
+ProcedureTable.propTypes = {
   searchResult: Proptypes.arrayOf(
     Proptypes.shape({
       id: Proptypes.string,
-      cpt: Proptypes.string,
+      proc: Proptypes.string,
       lab_company: Proptypes.string,
       favorite: Proptypes.bool,
       billable: Proptypes.bool,
       fee: Proptypes.number,
       client_name: Proptypes.string,
-      cpt_group: Proptypes.string,
+      procedure_group: Proptypes.string,
       updated: Proptypes.string,
       updated_name: Proptypes.string,
     }),
   ).isRequired,
-  fetchCptCodeSearch: Proptypes.func.isRequired,
+  fetchProcedureCodeSearch: Proptypes.func.isRequired,
 };
 
-export default CPTtable;
+export default ProcedureTable;

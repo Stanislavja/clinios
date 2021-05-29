@@ -21,8 +21,8 @@ import { StyledTableRowSm, StyledTableCellSm } from "../../../components/common/
 import useDidMountEffect from "../../../hooks/useDidMountEffect";
 import usePatientContext from "../../../hooks/usePatientContext";
 import { toggleRequisitionDialog } from "../../../providers/Patient/actions";
-import CPTCodesService from "../../../services/cpt.service";
 import PatientService from "../../../services/patient.service";
+import ProcedureService from "../../../services/procedure.service";
 
 const useStyles = makeStyles((theme) => ({
   section: {
@@ -80,7 +80,7 @@ const Requisitions = (props) => {
   };
 
   const fetchLabCompanyList = useCallback(() => {
-    CPTCodesService.getLabCompnayList().then((res) => {
+    ProcedureService.getLabCompnayList().then((res) => {
       const companyList = res.data;
       const emptyOption = {
         name: "",

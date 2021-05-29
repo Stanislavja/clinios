@@ -9,10 +9,10 @@ const {
 const getPurchaseLabs = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
-    const $sql = `select pc.id patient_cpt_id, c.id cpt_id, c.name cpt_name, c.price, pc.created, lc.name lab_company_name
-    from patient_cpt pc
+    const $sql = `select pc.id patient_procedure_id, c.id procedure_id, c.name procedure_name, c.price, pc.created, lc.name lab_company_name
+    from patient_procedure pc
     left join tranc t on t.id = pc.tranc_id
-    left join cpt c on c.id=pc.cpt_id
+    left join procedure c on c.id=pc.procedure_id
     left join lab_company lc on lc.id=c.lab_company_id
     where pc.patient_id=${req.user_id}
     and pc.tranc_id is null
@@ -81,9 +81,8 @@ const createPurchaseLabs = async (req, res) => {
     const intentData = {
       payment_method: formData.corp_stripe_payment_method_token,
       customer: formData.customer_id,
-      description: `${JSON.stringify(formData.patient_cpt_ids)}; patient_id: ${
-        req.user_id
-      }`,
+      description: `${JSON.stringify(formData.patient_procedure_ids)}; patient_id: ${req.user_id
+        }`,
       amount: Number(formData.amount) * 100, // it accepts cents
       currency: "usd",
       confirmation_method: "manual",
@@ -112,18 +111,18 @@ const createPurchaseLabs = async (req, res) => {
     if (insertResponse.insertId) {
       const trancDetailsData = {
         tranc_id: insertResponse.insertId,
-        // cpt_id: formData.cpt_ids,
+        // procedure_id: formData.procedure_ids,
       };
       if (formData.selectedLabs.length > 0) {
         formData.selectedLabs.map(async (lab) => {
-          trancDetailsData.cpt_id = lab.cpt_id;
-          trancDetailsData.patient_cpt_id = lab.patient_cpt_id;
+          trancDetailsData.procedure_id = lab.procedure_id;
+          trancDetailsData.patient_procedure_id = lab.patient_procedure_id;
           await db.query(`insert into tranc_detail set ?`, [trancDetailsData]);
         });
       }
 
-      await db.query(`update patient_cpt set tranc_id=${insertResponse.insertId} 
-      where id in (${formData.patient_cpt_ids})`); 
+      await db.query(`update patient_procedure set tranc_id=${insertResponse.insertId} 
+      where id in (${formData.patient_procedure_ids})`);
     }
     successMessage.data = insertResponse;
     successMessage.message = "Insert successful";

@@ -142,7 +142,7 @@ const PurchaseLabs = () => {
   };
 
   const calculateTotal = (selectedLabIds) => {
-    const sLabs = labs.filter((lab) => selectedLabIds.includes(lab.patient_cpt_id));
+    const sLabs = labs.filter((lab) => selectedLabIds.includes(lab.patient_procedure_id));
     setSelectedLabs(sLabs);
     const sumOfSelectedLabs = sLabs.reduce((acc, lab) => (acc + lab.price), 0);
     setTotal(sumOfSelectedLabs);
@@ -177,7 +177,7 @@ const PurchaseLabs = () => {
         corp_stripe_payment_method_token: paymentMethodForStripe[0].corp_stripe_payment_method_token,
         customer_id: user.corp_stripe_customer_id,
         amount: total,
-        patient_cpt_ids: selected,
+        patient_procedure_ids: selected,
         selectedLabs,
       },
     };
@@ -193,7 +193,7 @@ const PurchaseLabs = () => {
     });
   };
 
-  const isSelected = (patient_cpt_id) => selected.indexOf(patient_cpt_id) !== -1;
+  const isSelected = (patient_procedure_id) => selected.indexOf(patient_procedure_id) !== -1;
 
   return (
     <>
@@ -262,22 +262,22 @@ const PurchaseLabs = () => {
                       </TableHead>
                       <TableBody>
                         {labs.map((lab) => {
-                          const isChecked = isSelected(lab.patient_cpt_id);
+                          const isChecked = isSelected(lab.patient_procedure_id);
                           return (
                             <StyledTableRow
                               hover
-                              key={lab.patient_cpt_id}
-                              onClick={(event) => handleClick(event, lab.patient_cpt_id)}
+                              key={lab.patient_procedure_id}
+                              onClick={(event) => handleClick(event, lab.patient_procedure_id)}
                               role="checkbox"
                             >
                               <StyledTableCell scope="item">
                                 <Checkbox
-                                  onClick={(event) => handleClick(event, lab.patient_cpt_id)}
+                                  onClick={(event) => handleClick(event, lab.patient_procedure_id)}
                                   className={classes.selectCheckbox}
                                   checked={isChecked}
                                 />
                               </StyledTableCell>
-                              <StyledTableCell scope="item">{lab.cpt_name}</StyledTableCell>
+                              <StyledTableCell scope="item">{lab.procedure_name}</StyledTableCell>
                               <StyledTableCell scope="item">
                                 $
                                 {lab?.price?.toFixed(2)}

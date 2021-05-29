@@ -37,23 +37,17 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const CPTform = ({
+const ProcedureForm = ({
   labCompanyId,
-  lebCompanyList,
-  fetchCptCodeSearch,
-  handleChangeOfCptId,
-  handleChangeOfCptDescription,
-  handleChangeOfLabCompanyId,
-  handleChangeOfFavorite,
-  handleChangeOfBillable,
-  handleChangeOfSelf,
-  handleChangeOfGroup,
+  labCompanyList,
+  fetchProcedureCodeSearch,
+  handleInputChange,
 }) => {
   const classes = useStyles();
 
   const handleKeyUp = (event) => {
     if (event.keyCode === 13) {
-      fetchCptCodeSearch();
+      fetchProcedureCodeSearch();
     }
   };
 
@@ -64,26 +58,28 @@ const CPTform = ({
           <TextField
             fullWidth
             autoFocus
-            label="CPT ID"
+            name="procedureId"
+            label="Procedure ID"
             variant="outlined"
             size="small"
             InputLabelProps={{
               shrink: true,
             }}
-            onChange={handleChangeOfCptId}
+            onChange={handleInputChange}
             onKeyUp={handleKeyUp}
           />
         </Grid>
         <Grid item xs={12} md={3} className={classes.gridMargin}>
           <TextField
             fullWidth
-            label="CPT Description"
+            name="procedureDescription"
+            label="Procedure Description"
             variant="outlined"
             size="small"
             InputLabelProps={{
               shrink: true,
             }}
-            onChange={handleChangeOfCptDescription}
+            onChange={handleInputChange}
             onKeyUp={handleKeyUp}
           />
         </Grid>
@@ -92,9 +88,10 @@ const CPTform = ({
             fullWidth
             id="outlined-select-currency"
             select
+            name="labCompanyId"
             label="Lab Company"
             value={labCompanyId}
-            onChange={handleChangeOfLabCompanyId}
+            onChange={handleInputChange}
             variant="outlined"
             size="small"
             InputLabelProps={{
@@ -105,7 +102,7 @@ const CPTform = ({
             }}
           >
             <option aria-label="None" value="" />
-            {lebCompanyList.map((lab) => (
+            {labCompanyList.map((lab) => (
               <option key={lab.id} value={lab.id}>
                 {lab.name}
               </option>
@@ -117,7 +114,7 @@ const CPTform = ({
         control={(
           <Checkbox
             name="favorite"
-            onChange={handleChangeOfFavorite}
+            onChange={handleInputChange}
             onKeyUp={handleKeyUp}
             color="primary"
             size="small"
@@ -130,7 +127,7 @@ const CPTform = ({
       <FormControlLabel
         control={(
           <Checkbox
-            onChange={handleChangeOfBillable}
+            onChange={handleInputChange}
             onKeyUp={handleKeyUp}
             name="billable"
             color="primary"
@@ -144,7 +141,7 @@ const CPTform = ({
       <FormControlLabel
         control={(
           <Checkbox
-            onChange={handleChangeOfSelf}
+            onChange={handleInputChange}
             onKeyUp={handleKeyUp}
             name="self"
             color="primary"
@@ -158,7 +155,7 @@ const CPTform = ({
       <FormControlLabel
         control={(
           <Checkbox
-            onChange={handleChangeOfGroup}
+            onChange={handleInputChange}
             onKeyUp={handleKeyUp}
             name="group"
             color="primary"
@@ -176,7 +173,7 @@ const CPTform = ({
         variant="contained"
         color="primary"
         className={classes.submit}
-        onClick={fetchCptCodeSearch}
+        onClick={fetchProcedureCodeSearch}
       >
         Search
       </Button>
@@ -184,22 +181,16 @@ const CPTform = ({
   );
 };
 
-CPTform.propTypes = {
+ProcedureForm.propTypes = {
   labCompanyId: Proptypes.string.isRequired,
-  lebCompanyList: Proptypes.arrayOf(
+  labCompanyList: Proptypes.arrayOf(
     Proptypes.shape({
-      id: Proptypes.string,
+      id: Proptypes.number,
       name: Proptypes.string,
     }),
   ).isRequired,
-  fetchCptCodeSearch: Proptypes.func.isRequired,
-  handleChangeOfCptId: Proptypes.func.isRequired,
-  handleChangeOfCptDescription: Proptypes.func.isRequired,
-  handleChangeOfLabCompanyId: Proptypes.func.isRequired,
-  handleChangeOfFavorite: Proptypes.func.isRequired,
-  handleChangeOfBillable: Proptypes.func.isRequired,
-  handleChangeOfSelf: Proptypes.func.isRequired,
-  handleChangeOfGroup: Proptypes.func.isRequired,
+  fetchProcedureCodeSearch: Proptypes.func.isRequired,
+  handleInputChange: Proptypes.func.isRequired,
 };
 
-export default CPTform;
+export default ProcedureForm;
