@@ -39,15 +39,9 @@ const useStyles = makeStyles(() => ({
 
 const Procedureform = ({
   labCompanyId,
-  lebCompanyList,
+  labCompanyList,
   fetchProcedureCodeSearch,
-  handleChangeOfProcedureId,
-  handleChangeOfProcedureDescription,
-  handleChangeOfLabCompanyId,
-  handleChangeOfFavorite,
-  handleChangeOfBillable,
-  handleChangeOfSelf,
-  handleChangeOfGroup,
+  handleInputChange,
 }) => {
   const classes = useStyles();
 
@@ -64,26 +58,28 @@ const Procedureform = ({
           <TextField
             fullWidth
             autoFocus
+            name="procedureId"
             label="Procedure ID"
             variant="outlined"
             size="small"
             InputLabelProps={{
               shrink: true,
             }}
-            onChange={handleChangeOfProcedureId}
+            onChange={handleInputChange}
             onKeyUp={handleKeyUp}
           />
         </Grid>
         <Grid item xs={12} md={3} className={classes.gridMargin}>
           <TextField
             fullWidth
+            name="procedureDescription"
             label="Procedure Description"
             variant="outlined"
             size="small"
             InputLabelProps={{
               shrink: true,
             }}
-            onChange={handleChangeOfProcedureDescription}
+            onChange={handleInputChange}
             onKeyUp={handleKeyUp}
           />
         </Grid>
@@ -92,9 +88,10 @@ const Procedureform = ({
             fullWidth
             id="outlined-select-currency"
             select
+            name="labCompanyId"
             label="Lab Company"
             value={labCompanyId}
-            onChange={handleChangeOfLabCompanyId}
+            onChange={handleInputChange}
             variant="outlined"
             size="small"
             InputLabelProps={{
@@ -105,7 +102,7 @@ const Procedureform = ({
             }}
           >
             <option aria-label="None" value="" />
-            {lebCompanyList.map((lab) => (
+            {labCompanyList.map((lab) => (
               <option key={lab.id} value={lab.id}>
                 {lab.name}
               </option>
@@ -117,7 +114,7 @@ const Procedureform = ({
         control={(
           <Checkbox
             name="favorite"
-            onChange={handleChangeOfFavorite}
+            onChange={handleInputChange}
             onKeyUp={handleKeyUp}
             color="primary"
             size="small"
@@ -130,7 +127,7 @@ const Procedureform = ({
       <FormControlLabel
         control={(
           <Checkbox
-            onChange={handleChangeOfBillable}
+            onChange={handleInputChange}
             onKeyUp={handleKeyUp}
             name="billable"
             color="primary"
@@ -144,7 +141,7 @@ const Procedureform = ({
       <FormControlLabel
         control={(
           <Checkbox
-            onChange={handleChangeOfSelf}
+            onChange={handleInputChange}
             onKeyUp={handleKeyUp}
             name="self"
             color="primary"
@@ -158,7 +155,7 @@ const Procedureform = ({
       <FormControlLabel
         control={(
           <Checkbox
-            onChange={handleChangeOfGroup}
+            onChange={handleInputChange}
             onKeyUp={handleKeyUp}
             name="group"
             color="primary"
@@ -186,20 +183,14 @@ const Procedureform = ({
 
 Procedureform.propTypes = {
   labCompanyId: Proptypes.string.isRequired,
-  lebCompanyList: Proptypes.arrayOf(
+  labCompanyList: Proptypes.arrayOf(
     Proptypes.shape({
-      id: Proptypes.string,
+      id: Proptypes.number,
       name: Proptypes.string,
     }),
   ).isRequired,
   fetchProcedureCodeSearch: Proptypes.func.isRequired,
-  handleChangeOfProcedureId: Proptypes.func.isRequired,
-  handleChangeOfProcedureDescription: Proptypes.func.isRequired,
-  handleChangeOfLabCompanyId: Proptypes.func.isRequired,
-  handleChangeOfFavorite: Proptypes.func.isRequired,
-  handleChangeOfBillable: Proptypes.func.isRequired,
-  handleChangeOfSelf: Proptypes.func.isRequired,
-  handleChangeOfGroup: Proptypes.func.isRequired,
+  handleInputChange: Proptypes.func.isRequired,
 };
 
 export default Procedureform;
