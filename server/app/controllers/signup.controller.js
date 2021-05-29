@@ -64,7 +64,6 @@ exports.signup = async (req, res) => {
   client.calendar_start_time = "8:00";
   client.calendar_end_time = "18:00";
   client.functional_range = true;
-  client.concierge_lab_ordering = false;
 
   const { user } = req.body;
   user.password = bcrypt.hashSync(user.password, 8);

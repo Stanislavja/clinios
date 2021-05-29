@@ -662,7 +662,7 @@ Our server folder and file structure:
 │   │   ├── allergy.controller.js
 │   │   ├── appointment.controller.js
 │   │   ├── billings.controller.js
-│   │   ├── concierge-invoice.controller.js
+│   │   ├── invoice.controller.js
 │   │   ├── encounters.controller.js
 │   │   ├── handouts.controller.js
 │   │   ├── home.controller.js

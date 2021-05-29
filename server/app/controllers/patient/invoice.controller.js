@@ -5,20 +5,19 @@ const {
   status,
 } = require("../../helpers/status");
 
-const getConciergeInvoice = async (req, res) => {
+const getInvoice = async (req, res) => {
   const db = makeDb(configuration, res);
 
   let $sql;
   try {
-    $sql = `select c.name, lc.name, lc.concierge, c.price, t.id
+    $sql = `select c.name, lc.name, c.price, t.id
     from patient_cpt pc
     join cpt c on c.id=pc.cpt_id
     join lab_company lc on lc.id=c.lab_company_id
     left join tran t on t.patient_id=pc.patient_id
         and t.encounter_id=pc.encounter_id
         and t.cpt_id=pc.cpt_id
-    where pc.encounter_id=1
-    and lc.concierge is true`;
+    where pc.encounter_id=1`;
 
     const dbResponse = await db.query($sql);
 
@@ -37,7 +36,7 @@ const getConciergeInvoice = async (req, res) => {
 };
 
 const Invoices = {
-  getConciergeInvoice,
+  getInvoice,
 };
 
 module.exports = Invoices;

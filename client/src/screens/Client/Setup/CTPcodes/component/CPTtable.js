@@ -69,7 +69,7 @@ const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
   const [groupIsOpen, setGroupIsOpen] = useState(false);
   const [groups, setGroups] = useState([]);
 
-  const [cpt_id, set_cpt_id] = useState("");
+  const [procId, setProcId] = useState("");
   const [cpt_description, set_cpt_description] = useState("");
   const [cpt_favorite, set_cpt_favorite] = useState("");
   const [cpt_fee, set_cpt_fee] = useState("");
@@ -77,7 +77,7 @@ const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
   const [cpt_notes, set_cpt_notes] = useState("");
 
   const payload = {
-    cptId: cpt_id,
+    cptId: procId,
     favorite: cpt_favorite,
     billable: cpt_billable,
     fee: cpt_fee,
@@ -85,7 +85,7 @@ const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
   };
 
   const handleIsOpen = (id, desc, fee, fav, bill) => {
-    set_cpt_id(id);
+    setProcId(id);
     set_cpt_description(desc);
     set_cpt_fee(fee);
     set_cpt_favorite(fav);
@@ -136,7 +136,7 @@ const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
   };
 
   const handleEditCptCode = () => {
-    CPTCodesService.updateClientCpt(cpt_id, user.id, payload).then(
+    CPTCodesService.updateClientCpt(procId, user.id, payload).then(
       (response) => {
         setTimeout(() => {
           enqueueSnackbar(`${response.data.message}`, {
@@ -278,7 +278,7 @@ const CPTtable = ({ searchResult, fetchCptCodeSearch }) => {
       <EditCptCodeModal
         isOpen={isOpen}
         hendleOnClose={hendleOnClose}
-        cpt_id={cpt_id}
+        procId={procId}
         cpt_description={cpt_description}
         cpt_fee={cpt_fee}
         cpt_favorite={cpt_favorite}
