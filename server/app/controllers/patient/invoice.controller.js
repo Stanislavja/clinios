@@ -5,7 +5,7 @@ const {
   status,
 } = require("../../helpers/status");
 
-const getConciergeInvoice = async (req, res) => {
+const getInvoice = async (req, res) => {
   const db = makeDb(configuration, res);
 
   let $sql;
@@ -36,7 +36,7 @@ const getConciergeInvoice = async (req, res) => {
 };
 
 const Invoices = {
-  getConciergeInvoice,
+  getInvoice,
 };
 
 module.exports = Invoices;

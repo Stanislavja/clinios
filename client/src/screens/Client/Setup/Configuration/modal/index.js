@@ -126,7 +126,6 @@ export default function ConfigModal({ modal, setModal }) {
                 <StyledTableCell>FunctionalRange</StyledTableCell>
                 <StyledTableCell>EIN</StyledTableCell>
                 <StyledTableCell>NPI</StyledTableCell>
-                <StyledTableCell>Order</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -186,9 +185,6 @@ export default function ConfigModal({ modal, setModal }) {
                   </TableCell>
                   <TableCell component="th" scope="row">
                     {result.npi}
-                  </TableCell>
-                  <TableCell component="th" scope="row">
-                    {result.concierge_lab_ordering}
                   </TableCell>
                 </StyledTableRow>
               ))}
