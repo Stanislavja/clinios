@@ -758,7 +758,7 @@ const deleteOrderedTests = async (req, res) => {
       `delete
       from patient_proc
       where encounter_id=${encounter_id}
-      and proc_id='${proc_id}'`
+      and proc_id='${procedure_id}'`
     );
 
     if (!deleteOrderTestsResponse.affectedRows) {
