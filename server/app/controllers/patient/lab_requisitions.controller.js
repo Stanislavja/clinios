@@ -16,8 +16,8 @@ const getLabRequitions = async (req, res) => {
   try {
     $sql = `select e.id, e.dt, left (group_concat(c.name order by c.name), 100) lab
     from encounter e
-    join patient_procedure pc on pc.encounter_id=e.id
-    join procedure c on c.id=pc.procedure_id
+    join patient_proc pc on pc.encounter_id=e.id
+    join proc c on c.id=pc.proc_id
     where pc.patient_id=${patient_id}
     group by e.id
     order by e.id desc
@@ -51,7 +51,7 @@ const getTestList = async (req, res) => {
     $sql = `select t.id, t.dt, group_concat(c.name separator ", ") tests
     from tranc t
     left join tranc_detail td on td.tranc_id = t.id
-    left join procedure c on c.id = td.procedure_id
+    left join proc c on c.id = td.proc_id
     where t.patient_id = ${patient_id} 
     and t.completed_dt is null
     group by t.id, t.dt`;
@@ -109,8 +109,8 @@ const getProfileTests = async (req, res) => {
   try {
     $sql = `select ci.quest_id, q.name quest_name
     from tranc_detail td
-    join procedure c on c.id = td.procedure_id
-    join procedure_item ci on ci.procedure_id = c.id
+    join proc c on c.id = td.proc_id
+    join proc ci on ci.proc_id = c.id
     join quest q on q.id = ci.quest_id
     where tranc_id = ${testId}
     order by q.name`;

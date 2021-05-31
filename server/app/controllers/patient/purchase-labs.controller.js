@@ -10,9 +10,9 @@ const getPurchaseLabs = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const $sql = `select pc.id patient_procedure_id, c.id procedure_id, c.name procedure_name, c.price, pc.created, lc.name lab_company_name
-    from patient_procedure pc
+    from patient_proc pc
     left join tranc t on t.id = pc.tranc_id
-    left join procedure c on c.id=pc.procedure_id
+    left join proc c on c.id=pc.proc_id
     left join lab_company lc on lc.id=c.lab_company_id
     where pc.patient_id=${req.user_id}
     and pc.tranc_id is null
@@ -121,7 +121,7 @@ const createPurchaseLabs = async (req, res) => {
         });
       }
 
-      await db.query(`update patient_procedure set tranc_id=${insertResponse.insertId} 
+      await db.query(`update patient_proc set tranc_id=${insertResponse.insertId} 
       where id in (${formData.patient_procedure_ids})`);
     }
     successMessage.data = insertResponse;

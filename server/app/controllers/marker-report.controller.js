@@ -56,7 +56,7 @@ const getLabMarkerByLabId = async (req, res) => {
 
   const db = makeDb(configuration, res);
   try {
-    const $sql = `select procedure_id
+    const $sql = `select marker_id
    from lab_marker
    where patient_id=${req.patient_id || patientId}
    and lab_id='${markerId}'
@@ -85,11 +85,11 @@ const getLabMarker = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const $sql = `select c.id, c.name from (
-    select distinct lc.procedure_id
+    select distinct lc.marker_id
     from lab_marker lc
     where lc.patient_id=${req.patient_id || patientId}
     ) lc
-    left join marker c on c.id=lc.procedure_id
+    left join marker c on c.id=lc.marker_id
     order by c.name
     limit 200`;
 
@@ -114,11 +114,11 @@ const getTestGraph = async (req, res) => {
 
   const db = makeDb(configuration, res);
   try {
-    const $sql = `select lc.lab_id, lc.lab_dt, lc.procedure_id marker_id, lc.value, lc.range_low, lc.range_high, lc.unit, l.filename, lc.client_id
+    const $sql = `select lc.lab_id, lc.lab_dt, lc.marker_id, lc.value, lc.range_low, lc.range_high, lc.unit, l.filename, lc.client_id
     from lab_marker lc
     left join lab l on l.id=lc.lab_id
     where lc.patient_id=${req.patient_id || patientId}
-    and lc.procedure_id='${markerId}'
+    and lc.marker_id='${markerId}'
     order by lc.lab_dt, lc.lab_id
     limit 200`;
 
@@ -142,11 +142,11 @@ const getConventionalRange = async (req, res) => {
   const { patientId, markerId } = req.params;
   const db = makeDb(configuration, res);
   try {
-    const $sql = `select lc.lab_id, lc.lab_dt, lc.procedure_id marker_id, lc.value, lc.range_low, lc.range_high, lc.unit, l.filename, lc.client_id
+    const $sql = `select lc.lab_id, lc.lab_dt, lc.marker_id, lc.value, lc.range_low, lc.range_high, lc.unit, l.filename, lc.client_id
     from lab_marker lc
     left join lab l on l.id=lc.lab_id
     where lc.patient_id=${req.patient_id || patientId}
-    and lc.procedure_id='${markerId}'
+    and lc.marker_id='${markerId}'
     order by lc.lab_dt, lc.lab_id
     limit 200`;
 

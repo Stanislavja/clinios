@@ -6,9 +6,9 @@ const mergePatient = async (req, res) => {
   const tables = {
     encounter: "encounter",
     lab: "lab",
-    lab_procedure: "lab procedure",
+    lab_proc: "lab procedure",
     patient_allergy: "patient allergy",
-    patient_procedure: "patient procedure",
+    patient_proc: "patient procedure",
     patient_drug: "patient drug",
     patient_form: "patient form",
     patient_handout: "patient handout",
