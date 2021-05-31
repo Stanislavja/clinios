@@ -110,7 +110,7 @@ const getLabMarker = async (req, res) => {
 };
 
 const getTestGraph = async (req, res) => {
-  const { patientId, labId } = req.params;
+  const { patientId, markerId } = req.params;
 
   const db = makeDb(configuration, res);
   try {
@@ -118,7 +118,7 @@ const getTestGraph = async (req, res) => {
     from lab_marker lc
     left join lab l on l.id=lc.lab_id
     where lc.patient_id=${req.patient_id || patientId}
-    and lc.marker_id='${labId}'
+    and lc.marker_id='${markerId}'
     order by lc.lab_dt, lc.lab_id
     limit 200`;
 
