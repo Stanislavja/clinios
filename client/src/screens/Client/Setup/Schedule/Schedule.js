@@ -84,6 +84,8 @@ const Schedule = () => {
     setIsNewSchedule(true);
     setSelectedScheduleValues({
       user_id: userId,
+      startDateTime: moment.utc().format(),
+      endDateTime: moment.utc().add(3, "M").format(),
       date_start: moment(),
       date_end: `${moment().add(3, "M")}`,
       time_start: "09:00:00",
@@ -92,6 +94,7 @@ const Schedule = () => {
       note: "",
     });
   };
+
   const handleOnEditClick = (id) => {
     setIsOpen(true);
     setIsNewSchedule(false);

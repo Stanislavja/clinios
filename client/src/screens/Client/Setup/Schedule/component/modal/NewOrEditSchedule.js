@@ -23,6 +23,7 @@ import PropTypes from "prop-types";
 
 // import useAuth from "../../../../../../hooks/useAuth";
 import ScheduleService from "../../../../../../services/schedule.service";
+import { changeTimezone } from "../../../../../../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
   gridMargin: {
@@ -106,6 +107,7 @@ const NewOrEditSchedule = ({
 
   /* eslint-disable */
   useEffect(() => {
+    console.log('props.schedule:', props.schedule)
     const tempSchedule = {
       ...props.schedule,
     };
@@ -124,6 +126,20 @@ const NewOrEditSchedule = ({
     }
   }, [schedule]);
 
+  const ianatz = "America/New_York"; // TODO:: hardcoded to test. Will be removed in future.
+  const startDateTimeWithTimeZone = (schedule.date_start && schedule.date_start) ? changeTimezone(
+    new Date(
+      `${moment(schedule.date_start).format("YYYY-MM-DD")} ${moment(schedule.time_start).format("HH:mm:ss")}`,
+    ),
+    ianatz,
+  ) : null;
+  const endDateTimeWithTimeZone = (schedule.date_end && schedule.time_end) ? changeTimezone(
+    new Date(
+      `${moment(schedule.date_end).format("YYYY-MM-DD")} ${moment(schedule.time_end).format("HH:mm:ss")}`,
+    ),
+    ianatz,
+  ) : null;
+
   const payload = {
     data: {
       user_id: schedule.user_id,
@@ -131,6 +147,8 @@ const NewOrEditSchedule = ({
       date_end: schedule.date_end ? moment(schedule.date_end).format("YYYY-MM-DD") : null,
       time_start: schedule.time_start ? moment(schedule.time_start, "HH:mm:ss").format("HH:mm:ss") : null,
       time_end: schedule.time_end ? moment(schedule.time_end, "HH:mm:ss").format("HH:mm:ss") : null,
+      start_date_time: moment(startDateTimeWithTimeZone).format(),
+      end_date_time: moment(endDateTimeWithTimeZone).format(),
       active: schedule.active,
       note: schedule.note ? schedule.note : 0,
       monday: schedule?.monday ? 1 : 0,
@@ -173,6 +191,7 @@ const NewOrEditSchedule = ({
         },
       );
     }
+
     handleOnClose();
     setTimeout(() => {
       fetchScheduleSearch();
