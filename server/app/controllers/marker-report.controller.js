@@ -52,14 +52,14 @@ const getPageTitle = async (req, res) => {
 };
 
 const getLabMarkerByLabId = async (req, res) => {
-  const { patientId, markerId } = req.params;
+  const { patientId, labId } = req.params;
 
   const db = makeDb(configuration, res);
   try {
     const $sql = `select marker_id
    from lab_marker
    where patient_id=${req.patient_id || patientId}
-   and lab_id='${markerId}'
+   and lab_id='${labId}'
    order by line_nbr
    limit 200`;
 

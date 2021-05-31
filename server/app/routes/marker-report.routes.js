@@ -11,12 +11,12 @@ router.get(
   testReports.getPageTitle
 );
 router.get(
-  "/tests/lab-marker/:patientId/:markerId",
+  "/tests/lab-marker/:patientId/:labId",
   [authJwt.verifyToken],
   testReports.getLabMarkerByLabId
 );
 router.get(
-  "/tests/lab-marker/:patientId/lab/:markerId",
+  "/tests/lab-marker/:patientId/lab/:labId",
   [authJwt.verifyToken],
   testReports.getLabMarkerByLabId
 );
