@@ -41,11 +41,11 @@ const search = async (req, res) => {
         , cc.updated, concat(u.firstname, ' ', u.lastname) updated_name
         , group_concat(ci.quest_id order by ci.quest_id separator ", ") procedure_group
         from procedure c
-        left join client_procedure cc on cc.client_id=${req.client_id}
-        and cc.procedure_id=c.id
+        left join client_proc cc on cc.client_id=${req.client_id}
+        and cc.proc_id=c.id
         left join lab_company lc on lc.id=c.lab_company_id
         left join user u on u.id=cc.updated_user_id
-        left join procedure_item ci on ci.procedure_id=c.id
+        left join proc_item ci on ci.proc_id=c.id
         left join client cl on cl.id=c.client_id
         where 1 \n`;
     if (procedureId) {
@@ -100,7 +100,7 @@ const updateClientProcedure = async (req, res) => {
   const { procedureId, favorite, billable, fee, notes } = req.body;
   let $sql;
   try {
-    $sql = `insert into client_procedure (client_id, user_id, procedure_id, favorite, billable, fee, notes, created, created_user_id, updated, updated_user_id )
+    $sql = `insert into client_proc (client_id, user_id, proc_id, favorite, billable, fee, notes, created, created_user_id, updated, updated_user_id )
         values (${req.client_id}, ${req.user_id
       }, '${procedureId}', ${favorite}, ${billable}, ${fee > 0 ? fee : 0
       } /*TODO if fee is "" then set fee to null*/, '${notes}', now(), ${req.user_id

@@ -17,7 +17,7 @@ const getLabBilling = async (req, res) => {
     $sql = `select t.id, t.dt, t.amount, t.completed_dt, left(group_concat(c.name separator ", "), 400) tests
     from tranc t
     left join tranc_detail td on td.tranc_id = t.id
-    left join procedure c on c.id = td.procedure_id
+    left join proc c on c.id = td.proc_id
     where t.patient_id = ${patient_id}
     group by t.id, t.dt, t.amount, t.completed_dt
     order by t.dt desc
