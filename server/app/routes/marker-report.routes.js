@@ -11,12 +11,12 @@ router.get(
   testReports.getPageTitle
 );
 router.get(
-  "/tests/lab-marker/:patientId/:labId",
+  "/tests/lab-marker/:patientId/:markerId",
   [authJwt.verifyToken],
   testReports.getLabMarkerByLabId
 );
 router.get(
-  "/tests/lab-marker/:patientId/lab/:labId",
+  "/tests/lab-marker/:patientId/lab/:markerId",
   [authJwt.verifyToken],
   testReports.getLabMarkerByLabId
 );
@@ -26,7 +26,7 @@ router.get(
   testReports.getLabMarker
 );
 router.get(
-  "/tests/graph/:patientId/:labId",
+  "/tests/graph/:patientId/:markerId",
   [authJwt.verifyToken],
   testReports.getTestGraph
 );

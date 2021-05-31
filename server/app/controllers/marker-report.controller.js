@@ -52,14 +52,14 @@ const getPageTitle = async (req, res) => {
 };
 
 const getLabMarkerByLabId = async (req, res) => {
-  const { patientId, labId } = req.params;
+  const { patientId, markerId } = req.params;
 
   const db = makeDb(configuration, res);
   try {
     const $sql = `select procedure_id
    from lab_marker
    where patient_id=${req.patient_id || patientId}
-   and lab_id='${labId}'
+   and lab_id='${markerId}'
    order by line_nbr
    limit 200`;
 
@@ -110,7 +110,7 @@ const getLabMarker = async (req, res) => {
 };
 
 const getTestGraph = async (req, res) => {
-  const { patientId, labId } = req.params;
+  const { patientId, markerId } = req.params;
 
   const db = makeDb(configuration, res);
   try {
@@ -118,7 +118,7 @@ const getTestGraph = async (req, res) => {
     from lab_marker lc
     left join lab l on l.id=lc.lab_id
     where lc.patient_id=${req.patient_id || patientId}
-    and lc.procedure_id='${labId}'
+    and lc.procedure_id='${markerId}'
     order by lc.lab_dt, lc.lab_id
     limit 200`;
 
