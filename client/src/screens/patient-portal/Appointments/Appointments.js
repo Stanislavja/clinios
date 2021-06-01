@@ -4,7 +4,7 @@ import {
   makeStyles, Grid, TextField, Typography, MenuItem, Button, Box, Collapse,
 } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
-import moment from "moment";
+import moment from "moment-timezone";
 import { useSnackbar } from "notistack";
 import { useHistory, useLocation } from "react-router-dom";
 
@@ -94,6 +94,7 @@ const tomorrowDate = moment().add(1, "days").format("YYYY-MM-DD");
 const oneYear = moment().add(365, "days").format("YYYY-MM-DD");
 
 const Appointments = () => {
+  const userTimeZone = moment.tz.guess(); // like: "America/New_York"
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const history = useHistory();
@@ -377,7 +378,13 @@ const Appointments = () => {
     if (practitionerDateTimes.length && appointmentLength) {
       let timeIntervalSlots = [];
       practitionerDateTimes.forEach((item) => {
-        const slots = makeTimeIntervals(item.time_start, item.time_end, appointmentLength);
+      // const slots = makeTimeIntervals(item.time_start, item.time_end, appointmentLength);
+        const slots = makeTimeIntervals(
+          moment.tz(item.start_date_time, userTimeZone).format("HH:mm"),
+          moment.tz(item.end_date_time, userTimeZone).format("HH:mm"),
+          appointmentLength,
+        );
+
         timeIntervalSlots = [...timeIntervalSlots, ...slots];
       });
       setTimeSlots([...timeIntervalSlots]);
@@ -400,7 +407,12 @@ const Appointments = () => {
       // generating time slots
       let timeIntervalSlots = [];
       practitionerDateTimes.forEach((item) => {
-        const slots = makeTimeIntervals(item.time_start, item.time_end, apptLength);
+        // const slots = makeTimeIntervals(item.time_start, item.time_end, apptLength);
+        const slots = makeTimeIntervals(
+          moment.tz(item.start_date_time, userTimeZone).format("HH:mm"),
+          moment.tz(item.end_date_time, userTimeZone).format("HH:mm"),
+          apptLength,
+        );
         timeIntervalSlots = [...timeIntervalSlots, ...slots];
       });
       setTimeSlots([...timeIntervalSlots]);
