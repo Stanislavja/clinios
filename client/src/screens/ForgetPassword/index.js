@@ -61,7 +61,7 @@ const ForgetPassword = () => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const [email, setEmail] = useState("");
-  const [errors, setErrors] = React.useState([]);
+  const [errors, setErrors] = useState([]);
   const [registrationLink, setRegistrationLink] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const success = useSelector((state) => state.common.success, shallowEqual);

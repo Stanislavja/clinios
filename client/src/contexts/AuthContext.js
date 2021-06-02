@@ -146,9 +146,6 @@ export const AuthProvider = ({ children }) => {
     const response = await axios.post(`${API_BASE}/auth/corporate/login`, { email, password });
     const { accessToken, user } = response.data.data;
     setSession(accessToken);
-    //* Not sure if the corporate need to see the last viewed patient but thought of adding it.
-    const patientId = cookies[`${user.id}-last_viewed_patient_id`];
-    updateLastVisitedPatient(patientId);
     dispatch({
       type: "LOGIN",
       payload: {

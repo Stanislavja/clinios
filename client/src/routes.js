@@ -77,7 +77,7 @@ const routes = [
     guard: ClientPortalGuard,
     layout: DashboardLayout,
     path: "/dashboard",
-    component: lazy(() => import("./screens/Client/Home/Home")),
+    component: lazy(() => import("./screens/Client/Home")),
   },
   {
     exact: true,
