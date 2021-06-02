@@ -127,77 +127,77 @@ const ForgetPassword = () => {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <Grid className={classes.marginTop}>
-      <img src={Logo} alt="Logo" className={classes.Logo} />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon className={classes.lockIcon} />
-        </Avatar>
-        <Typography component="h1" variant="h2" className={classes.pageTitle}>
-          Forgot password
-        </Typography>
-        <Error errors={errors}>
-          {registrationLink && (
-            <Link href="/signup"> Go to user registration</Link>
+        <img src={Logo} alt="Logo" className={classes.Logo} />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon className={classes.lockIcon} />
+          </Avatar>
+          <Typography component="h1" variant="h2" className={classes.pageTitle}>
+            Forgot password
+          </Typography>
+          <Error errors={errors}>
+            {registrationLink && (
+              <Link href="/signup"> Go to user registration</Link>
+            )}
+          </Error>
+          {success && (
+            <Success
+              header="If that account in our system then we have sent an email with instructions
+                to reset your password!"
+              loginText="Sign back in"
+            />
           )}
-        </Error>
-        {success && (
-          <Success
-            header="If that account in our system then we have sent an email with instructions
-              to reset your password!"
-            loginText="Sign back in"
-          />
-        )}
-        {!success && (
-          <>
-            <p>
-              It happens to the best of us. Enter your email and we&apos;ll send you
-              reset instructions.
-            </p>
-            <form
-              className={classes.form}
-              noValidate
-              onSubmit={sendPasswordResetEmail}
-            >
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                onChange={(event) => setEmail(event.target.value)}
-                inputProps={{ maxLength: 255 }}
-                helperText={`${
-                  email.length >= 255
-                    ? "Enter an email between 255 charecter"
-                    : ""
-                }`}
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-                disabled={!email}
+          {!success && (
+            <>
+              <p>
+                It happens to the best of us. Enter your email and we&apos;ll send you
+                reset instructions.
+              </p>
+              <form
+                className={classes.form}
+                noValidate
+                onSubmit={sendPasswordResetEmail}
               >
-                Reset
-              </Button>
-              <Grid container className={classes.meta}>
-                <Grid item xs>
-                  <Link href="/login_client" variant="body2">
-                    Login
-                  </Link>
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  autoFocus
+                  onChange={(event) => setEmail(event.target.value)}
+                  inputProps={{ maxLength: 255 }}
+                  helperText={`${
+                    email.length >= 255
+                      ? "Enter an email between 255 charecter"
+                      : ""
+                  }`}
+                />
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                  disabled={!email}
+                >
+                  Reset
+                </Button>
+                <Grid container className={classes.meta}>
+                  <Grid item xs>
+                    <Link href="/login_client" variant="body2">
+                      Login
+                    </Link>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </form>
-          </>
-        )}
-      </div>
-      <Dimmer isOpen={isLoading} />
+              </form>
+            </>
+          )}
+        </div>
+        <Dimmer isOpen={isLoading} />
       </Grid>
     </Container>
   );
