@@ -13,6 +13,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useSnackbar } from "notistack";
 import { useSelector, shallowEqual } from "react-redux";
 
+import Logo from "../../assets/img/Logo.svg";
 import Dimmer from "../../components/common/Dimmer";
 import Error from "../../components/common/Error";
 import AuthService from "../../services/auth.service";
@@ -21,12 +22,14 @@ import Success from "./Success";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(16),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     boxShadow: "0 15px 35px 0 rgb(60 66 87 / 8%), 0 5px 15px 0 rgb(0 0 0 / 12%)",
     padding: theme.spacing(2),
+  },
+  marginTop: {
+    marginTop: theme.spacing(16),
   },
   avatar: {
     margin: theme.spacing(1),
@@ -54,6 +57,12 @@ const useStyles = makeStyles((theme) => ({
     "& a": {
       color: theme.palette.text.secondary,
     },
+  },
+  Logo: {
+    maxWidth: "180px",
+    width: 170,
+    height: 65,
+    objectFit: "contain",
   },
 }));
 
@@ -117,6 +126,8 @@ const ForgetPassword = () => {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
+      <Grid className={classes.marginTop}>
+      <img src={Logo} alt="Logo" className={classes.Logo} />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon className={classes.lockIcon} />
@@ -187,6 +198,7 @@ const ForgetPassword = () => {
         )}
       </div>
       <Dimmer isOpen={isLoading} />
+      </Grid>
     </Container>
   );
 };
