@@ -145,6 +145,9 @@ const NewTransactionForm = (props) => {
             reloadData();
             setIsLoading(false);
             dispatch(toggleNewTransactionDialog());
+          })
+          .catch(() => {
+            setIsLoading(false);
           });
       } else {
         PatientService.createBilling(patientId, reqBody)
@@ -153,6 +156,9 @@ const NewTransactionForm = (props) => {
             reloadData();
             setIsLoading(false);
             dispatch(toggleNewTransactionDialog());
+          })
+          .catch(() => {
+            setIsLoading(false);
           });
       }
     } else {

@@ -189,18 +189,26 @@ const PaymentMethodsForm = (props) => {
           stripe_payment_method_token: cardData.stripe_payment_method_token,
         },
       };
-      PaymentMethodService.updatePaymentMethod(paymentMethodId, updateFormData).then((response) => {
-        enqueueSnackbar(`${response.message}`, { variant: "success" });
-        reloadData();
-        onClose();
-      });
+      PaymentMethodService.updatePaymentMethod(paymentMethodId, updateFormData)
+        .then((response) => {
+          enqueueSnackbar(`${response.message}`, { variant: "success" });
+          reloadData();
+          onClose();
+        })
+        .catch(() => {
+          setIsLoading(false);
+        });
     } else {
-      PaymentMethodService.createPaymentMethod(reqBody).then((response) => {
-        enqueueSnackbar(`${response.message}`, { variant: "success" });
-        reloadData();
-        setIsLoading(false);
-        onClose();
-      });
+      PaymentMethodService.createPaymentMethod(reqBody)
+        .then((response) => {
+          enqueueSnackbar(`${response.message}`, { variant: "success" });
+          reloadData();
+          setIsLoading(false);
+          onClose();
+        })
+        .catch(() => {
+          setIsLoading(false);
+        });
     }
   };
 
