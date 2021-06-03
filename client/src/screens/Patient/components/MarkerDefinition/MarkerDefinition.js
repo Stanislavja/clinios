@@ -68,7 +68,7 @@ const MarkerDefinition = ({
               </TableRow>
             </TableHead>
             <TableBody>
-              {markerInterpretation?.high.map((item) => (
+              {markerInterpretation?.high.filter((x) => x?.comment.length).map((item) => (
                 <TableRow key={item.condition}>
                   <TableCell>{item.condition}</TableCell>
                   <TableCell
@@ -94,7 +94,7 @@ const MarkerDefinition = ({
               </TableRow>
             </TableHead>
             <TableBody>
-              {markerInterpretation?.low.map((item) => (
+              {markerInterpretation?.low.filter((x) => x?.comment.length).map((item) => (
                 <TableRow key={item.condition}>
                   <TableCell>{item.condition}</TableCell>
                   <TableCell

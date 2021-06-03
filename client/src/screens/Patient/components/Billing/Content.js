@@ -139,7 +139,8 @@ const BillingContent = (props) => {
               <EditIcon />
             </IconButton>
             <IconButton
-              disabled={(item.payment_type === "C" || item.payment_type === "A")}
+            // disabled check added as per CLIN-174
+              disabled={(item.payment_type === "C" || item.payment_type === "CH")}
               onClick={() => openDeleteDialog(item)}
             >
               <DeleteIcon />

@@ -8,21 +8,22 @@ import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useSnackbar } from "notistack";
 
+import Logo from "../../assets/img/Logo.svg";
 import AuthService from "../../services/auth.service";
 import EmailService from "../../services/email.service";
 import PracticeForm from "./components/PracticeForm";
 import Success from "./components/Success";
-
 
 const useStyles = makeStyles((theme) => ({
   pageTitle: {
     marginBottom: theme.spacing(3),
   },
   paper: {
-    marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    boxShadow: "0 15px 35px 0 rgb(60 66 87 / 8%), 0 5px 15px 0 rgb(0 0 0 / 12%)",
+    padding: theme.spacing(2),
   },
   avatar: {
     margin: theme.spacing(1),
@@ -31,6 +32,12 @@ const useStyles = makeStyles((theme) => ({
   },
   lockIcon: {
     fontSize: "40px",
+  },
+  Logo: {
+    maxWidth: "180px",
+    width: 170,
+    height: 65,
+    objectFit: "contain",
   },
 }));
 
@@ -81,6 +88,7 @@ const SignUp = () => {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
+      <img src={Logo} alt="Logo" className={classes.Logo} />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon className={classes.lockIcon} />

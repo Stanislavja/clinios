@@ -26,10 +26,15 @@ import Success from "./Success";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(2),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    boxShadow: "0 15px 35px 0 rgb(60 66 87 / 8%), 0 5px 15px 0 rgb(0 0 0 / 12%)",
+    padding: theme.spacing(2),
+  },
+  marginTop: {
+    marginTop: theme.spacing(8),
   },
   avatar: {
     margin: theme.spacing(1),
@@ -46,7 +51,10 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     marginTop: theme.spacing(2),
     "& img": {
-      width: "100%",
+      maxWidth: 180,
+      width: 170,
+      height: 65,
+      objectFit: "contain",
     },
     "& p": {
       fontSize: "16px",
@@ -176,7 +184,7 @@ const ForgotPassword = () => {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.paper}>
+      <Grid className={classes.marginTop}>
         <div className={classes.Logo}>
           <Image
             lassName="clientLogo"
@@ -184,114 +192,116 @@ const ForgotPassword = () => {
             alt="Client Logo"
           />
         </div>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon className={classes.lockIcon} />
-        </Avatar>
-        <Typography component="h1" variant="h2" className={classes.pageTitle}>
-          Patient Forgot password
-        </Typography>
-        <Error errors={errors} variant="filled">
-          {registrationLink && (
-            <Link href={`/signup/${clientCode}`}> Go to user registration</Link>
-          )}
-        </Error>
-        {success && (
-          <Success
-            header="If that account in our system then we have sent an email with instructions
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon className={classes.lockIcon} />
+          </Avatar>
+          <Typography component="h1" variant="h2" className={classes.pageTitle}>
+            Patient Forgot password
+          </Typography>
+          <Error errors={errors} variant="filled">
+            {registrationLink && (
+              <Link href={`/signup/${clientCode}`}> Go to user registration</Link>
+            )}
+          </Error>
+          {success && (
+            <Success
+              header="If that account in our system then we have sent an email with instructions
               to reset your password!"
-            loginText="Sign back in"
-            client={client}
-          />
-        )}
-        {!success && (
-          <>
-            <p>
-              It happens to the best of us. Enter your email and we&apos;ll send you
-              reset instructions.
-            </p>
-            <form
-              className={clsx({
-                [classes.form]: true, // always apply
-                [classes.withErrors]: errors.length > 0, // only when isLoading === true
-              })}
-              noValidate
-              onSubmit={sendPasswordResetEmail}
-            >
-              <TextField
-                disabled={errors.length > 0}
-                variant="outlined"
-                margin="dense"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                value={email}
-                autoFocus
-                onChange={(event) => setEmail(event.target.value)}
-              />
-              <KeyboardDatePicker
-                disabled={errors.length > 0}
-                className={classes.dateOfBirth}
-                margin="dense"
-                clearable
-                value={dob}
-                placeholder="2018/10/10"
-                onChange={(date) => handleDateChange(date)}
-                format="yyyy-MM-dd"
-                inputVariant="outlined"
-              />
-              <TextField
-                disabled={errors.length > 0}
-                variant="outlined"
-                margin="dense"
-                required
-                fullWidth
-                id="lastname"
-                label="Last name"
-                name="lastname"
-                autoComplete="lastname"
-                value={lastname}
-                autoFocus
-                onChange={(event) => setLastname(event.target.value)}
-              />
-              <TextField
-                disabled={errors.length > 0}
-                variant="outlined"
-                margin="dense"
-                required
-                fullWidth
-                id="zipcode"
-                label="Zipcode"
-                name="zipcode"
-                autoComplete="zipcode"
-                value={postal}
-                autoFocus
-                onChange={(event) => setPostal(event.target.value)}
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-                disabled={!email}
+              loginText="Sign back in"
+              client={client}
+            />
+          )}
+          {!success && (
+            <>
+              <p>
+                It happens to the best of us. Enter your email and we&apos;ll send you
+                reset instructions.
+              </p>
+              <form
+                className={clsx({
+                  [classes.form]: true, // always apply
+                  [classes.withErrors]: errors.length > 0, // only when isLoading === true
+                })}
+                noValidate
+                onSubmit={sendPasswordResetEmail}
               >
-                Reset
-              </Button>
-              <Grid container className={classes.meta}>
-                <Grid item xs>
-                  <Link href={`/login/${clientCode}`} variant="body2">
-                    Already have an account? Sign in.
-                  </Link>
+                <TextField
+                  disabled={errors.length > 0}
+                  variant="outlined"
+                  margin="dense"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  value={email}
+                  autoFocus
+                  onChange={(event) => setEmail(event.target.value)}
+                />
+                <KeyboardDatePicker
+                  disabled={errors.length > 0}
+                  className={classes.dateOfBirth}
+                  margin="dense"
+                  clearable
+                  value={dob}
+                  placeholder="2018/10/10"
+                  onChange={(date) => handleDateChange(date)}
+                  format="yyyy-MM-dd"
+                  inputVariant="outlined"
+                />
+                <TextField
+                  disabled={errors.length > 0}
+                  variant="outlined"
+                  margin="dense"
+                  required
+                  fullWidth
+                  id="lastname"
+                  label="Last name"
+                  name="lastname"
+                  autoComplete="lastname"
+                  value={lastname}
+                  autoFocus
+                  onChange={(event) => setLastname(event.target.value)}
+                />
+                <TextField
+                  disabled={errors.length > 0}
+                  variant="outlined"
+                  margin="dense"
+                  required
+                  fullWidth
+                  id="zipcode"
+                  label="Zipcode"
+                  name="zipcode"
+                  autoComplete="zipcode"
+                  value={postal}
+                  autoFocus
+                  onChange={(event) => setPostal(event.target.value)}
+                />
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                  disabled={!email}
+                >
+                  Reset
+                </Button>
+                <Grid container className={classes.meta}>
+                  <Grid item xs>
+                    <Link href={`/login/${clientCode}`} variant="body2">
+                      Already have an account? Sign in.
+                    </Link>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </form>
-          </>
-        )}
-      </div>
-      <Dimmer isOpen={isLoading} />
+              </form>
+            </>
+          )}
+        </div>
+        <Dimmer isOpen={isLoading} />
+      </Grid>
     </Container>
   );
 };
