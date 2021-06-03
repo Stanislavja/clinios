@@ -41,8 +41,10 @@ const MarkerDefinition = ({
   const markerExplanation = getMarkerDefinition(markerId);
   const markerInterpretation = getMarkerInterpretation(markerId);
 
-  const hasHighData = useMemo(() => Boolean(markerInterpretation?.high.length), [markerInterpretation?.high]);
-  const hasLowData = useMemo(() => Boolean(markerInterpretation?.low.length), [markerInterpretation?.low]);
+  // eslint-disable-next-line max-len
+  const hasHighData = useMemo(() => Boolean(markerInterpretation?.high.filter((x) => x?.comment.length).length), [markerInterpretation?.high]);
+  // eslint-disable-next-line max-len
+  const hasLowData = useMemo(() => Boolean(markerInterpretation?.low.filter((x) => x?.comment.length).length), [markerInterpretation?.low]);
 
   return (
     <Box maxWidth={900}>
