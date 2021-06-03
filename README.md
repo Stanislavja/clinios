@@ -52,8 +52,9 @@ To run:
 2. Use email dr@test.com password 12345678
 3. Use these credentials so you will see the correct demo data.
 
-If you get an error "Client does not support authentication protocol requested by server" then
-    `alter user 'root'@'localhost' identified with mysql_native_password by '12345678'`
+If you get an error "Client does not support authentication protocol requested by server" then run
+    alter user 'root'@'localhost' identified with mysql_native_password by '12345678';
+    flush privileges;
     
 ## Patient Login
 
