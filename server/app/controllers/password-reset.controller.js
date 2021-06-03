@@ -108,7 +108,7 @@ exports.sendPasswordResetEmail = async (req, res) => {
   // Check where user already signed up or not
   const { email } = req.params;
   const userRows = await db.query(
-    "SELECT id, firstname, lastname, email, password, sign_dt, email_confirm_dt, created FROM user WHERE email = ? LIMIT 1",
+    "SELECT id, client_id, firstname, lastname, email, password, sign_dt, email_confirm_dt, created FROM user WHERE email = ? LIMIT 1",
     [email]
   );
   if (userRows.length < 1) {

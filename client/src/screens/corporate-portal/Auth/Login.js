@@ -13,18 +13,26 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import clsx from "clsx";
 import { useSnackbar } from "notistack";
 
+import Logo from "../../../assets/img/Logo.svg";
 import Error from "../../../components/common/Error";
 import useAuth from "../../../hooks/useAuth";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    boxShadow: "0 15px 35px 0 rgb(60 66 87 / 8%), 0 5px 15px 0 rgb(0 0 0 / 12%)",
+    padding: theme.spacing(2),
+  },
+  marginTop: {
+    marginTop: theme.spacing(16),
   },
   Logo: {
-    backgroundColor: "grey",
+    maxWidth: "180px",
+    width: 170,
+    height: 65,
+    objectFit: "contain",
   },
   avatar: {
     margin: theme.spacing(1),
@@ -99,73 +107,76 @@ const PatientLogin = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon className={classes.lockIcon} />
-        </Avatar>
-        <Typography
-          component="h1"
-          variant="h2"
-          className={classes.pageTitle}
-        >
-          Corporate Sign in
-        </Typography>
-
-        <Error errors={errors} />
-
-        <form
-          className={clsx({
-            [classes.form]: true, // always apply
-          })}
-          noValidate
-        >
-          <TextField
-            value={email}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            onChange={(event) => setEmail(event.target.value)}
-          />
-          <TextField
-            value={password}
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange={(event) => setPassword(event.target.value)}
-          />
-          <Button
-            disabled={!email || !password}
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={(event) => onFormSubmit(event)}
+      <Grid className={classes.marginTop}>
+        <CssBaseline />
+        <img src={Logo} alt="Logo" className={classes.Logo} />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon className={classes.lockIcon} />
+          </Avatar>
+          <Typography
+            component="h1"
+            variant="h2"
+            className={classes.pageTitle}
           >
-            Sign In
-          </Button>
-        </form>
-        <Grid container className={classes.meta}>
-          <Grid item xs={6} />
-          <Grid item xs={6} className={classes.forgotPass}>
-            <Link href="/corp/forgot-password" variant="body2">
-              Forgot your password? Reset.
-            </Link>
+            Corporate Sign in
+          </Typography>
+
+          <Error errors={errors} />
+
+          <form
+            className={clsx({
+              [classes.form]: true, // always apply
+            })}
+            noValidate
+          >
+            <TextField
+              value={email}
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              onChange={(event) => setEmail(event.target.value)}
+            />
+            <TextField
+              value={password}
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              onChange={(event) => setPassword(event.target.value)}
+            />
+            <Button
+              disabled={!email || !password}
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={(event) => onFormSubmit(event)}
+            >
+              Sign In
+            </Button>
+          </form>
+          <Grid container className={classes.meta}>
+            <Grid item xs={6} />
+            <Grid item xs={6} className={classes.forgotPass}>
+              <Link href="/corp/forgot-password" variant="body2">
+                Forgot your password? Reset.
+              </Link>
+            </Grid>
           </Grid>
-        </Grid>
-      </div>
+        </div>
+      </Grid>
     </Container>
   );
 };
