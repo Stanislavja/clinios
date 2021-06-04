@@ -128,7 +128,7 @@ const createPaymentMethod = async (req, res) => {
 const updatePaymentMethod = async (req, res) => {
   const { id } = req.params;
   const formData = req.body.data;
-  //formData.updated_user_id = req.user_id; 
+  // formData.updated_user_id = req.user_id; 
   formData.patient_id = req.user_id;
   formData.updated = new Date();
 

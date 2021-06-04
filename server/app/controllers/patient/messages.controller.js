@@ -73,11 +73,16 @@ const getUsers = async (req, res) => {
 };
 
 const createMessage = async (req, res) => {
-  const { user_id_to, subject, message } = req.body.data;
+  const formData = req.body.data;
+  formData.client_id = req.client_id;
+  formData.user_id_to = req.user_id;
+  formData.status = 'O'
+  formData.created = new Date();
+
   const db = makeDb(configuration, res);
   try {
     const insertResponse = await db.query(
-      `insert into message (client_id, user_id_to, patient_id_from, subject, message,  status, created) values (${req.client_id}, ${user_id_to}, ${req.user_id}, '${subject}', '${message}', 'O', now())`
+      `insert into message set ?`, [formData]
     );
     if (!insertResponse.affectedRows) {
       errorMessage.message = "Insert not successful";
