@@ -72,7 +72,6 @@ export default function Home() {
     setCaseStatus(event.target.value);
   };
 
-
   const fetchSupports = useCallback(() => {
     const formData = {
       data: {
