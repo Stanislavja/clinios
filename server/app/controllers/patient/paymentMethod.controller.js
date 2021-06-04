@@ -128,7 +128,7 @@ const createPaymentMethod = async (req, res) => {
 const updatePaymentMethod = async (req, res) => {
   const { id } = req.params;
   const formData = req.body.data;
-  formData.updated_user_id = req.user_id;
+  //formData.updated_user_id = req.user_id; 
   formData.patient_id = req.user_id;
   formData.updated = new Date();
 
@@ -217,15 +217,15 @@ const deletePaymentMethod = async (req, res) => {
 
   try {
     const paymentOnTran = await db.query(
-      `select 1 from tran where payment_method_id=${id} limit 1`
+      `select 1 from tran where payment_method_id=? limit 1`, [id]
     );
     const paymentOnTranc = await db.query(
-      `select 1 from tranc where payment_method_id=${id} limit 1`
+      `select 1 from tranc where payment_method_id=? limit 1`, [id]
     );
 
     if (paymentOnTran.length > 0 || paymentOnTranc.length > 0) {
       const updateResponse = await db.query(
-        `update payment_method set status='D' where id=${id} and patient_id=${req.user_id}`
+        `update payment_method set status='D' where id=? and patient_id=${req.user_id}`, [id]
       );
       if (!updateResponse) {
         errorMessage.message = "None found";
@@ -234,7 +234,7 @@ const deletePaymentMethod = async (req, res) => {
       successMessage.data = updateResponse;
     } else {
       const dbResponse = await db.query(
-        `delete from payment_method where id=${id} and patient_id=${req.user_id}`
+        `delete from payment_method where id=? and patient_id=${req.user_id}`, [id]
       );
       if (!dbResponse) {
         errorMessage.message = "None found";
