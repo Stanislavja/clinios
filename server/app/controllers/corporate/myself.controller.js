@@ -13,8 +13,7 @@ const getProfile = async (req, res) => {
   try {
     const dbResponse = await db.query(
       `select firstname, lastname, email, title, created, email_forward_user_id, phone, status
-      from user 
-      where id=${req.params.userId}`
+      from user where id=${req.params.userId}`
     );
 
     if (!dbResponse || dbResponse === 0) {
