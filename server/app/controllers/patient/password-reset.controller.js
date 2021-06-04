@@ -106,7 +106,8 @@ exports.sendPasswordResetEmail = async (req, res) => {
 
     // update user table for password reset token and expires time
     const patientUpdate = await db.query(
-      `UPDATE patient SET reset_password_token='${token}', reset_password_expires='${token_expires}', updated= now() WHERE id =${patient.id}`
+      `UPDATE patient SET reset_password_token='${token}', reset_password_expires='${token_expires}', updated= now() 
+        WHERE id =${patient.id}`
     );
     if (patientUpdate.affectedRows) {
       sendRecoveryEmail(patient, res);
@@ -136,7 +137,8 @@ exports.receiveNewPassword = async (req, res) => {
   // check token expires validity
   const now = moment().format("YYYY-MM-DD HH:mm:ss");
   const patientRows = await db.query(
-    `SELECT id, email, client_id, reset_password_token, reset_password_expires FROM patient WHERE id=${patientId} AND reset_password_token='${token}' AND reset_password_expires > '${now}'`
+    `SELECT id, email, client_id, reset_password_token, reset_password_expires FROM patient WHERE id=${patientId} 
+      AND reset_password_token='${token}' AND reset_password_expires > '${now}'`
   );
   const patient = patientRows[0];
 
@@ -153,7 +155,7 @@ exports.receiveNewPassword = async (req, res) => {
   const hashedPassword = bcrypt.hashSync(password, 8);
 
   const updatePatientResponse = await db.query(
-    `UPDATE patient SET password='${hashedPassword}', reset_password_token=NULL, reset_password_expires=NULL, updated= now() WHERE id =${patient.id}`
+    `UPDATE patient SET password=?, reset_password_token=NULL, reset_password_expires=NULL, updated= now() WHERE id =${patient.id}`, [hashedPassword]
   );
 
   if (updatePatientResponse.affectedRows) {

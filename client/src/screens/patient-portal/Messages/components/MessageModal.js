@@ -84,7 +84,6 @@ const MessageModal = (props) => {
     const formData = {
       data: {
         user_id_to: selectedUser,
-        subject,
         message,
       },
     };
