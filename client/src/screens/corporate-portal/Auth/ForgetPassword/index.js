@@ -12,6 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useSnackbar } from "notistack";
 
+import Logo from "../../../../assets/img/Logo.svg";
 import Dimmer from "../../../../components/common/Dimmer";
 import Error from "../../../../components/common/Error";
 import AuthService from "../../../../services/corporate_portal/auth.service";
@@ -20,10 +21,14 @@ import Success from "./Success";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    boxShadow: "0 15px 35px 0 rgb(60 66 87 / 8%), 0 5px 15px 0 rgb(0 0 0 / 12%)",
+    padding: theme.spacing(2),
+  },
+  marginTop: {
+    marginTop: theme.spacing(16),
   },
   avatar: {
     margin: theme.spacing(1),
@@ -116,75 +121,78 @@ const ForgetPassword = () => {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon className={classes.lockIcon} />
-        </Avatar>
-        <Typography component="h1" variant="h2" className={classes.pageTitle}>
-          Forgot password
-        </Typography>
-        <Error errors={errors}>
-          {registrationLink && (
-            <Link href="/signup"> Go to user registration</Link>
+      <Grid className={classes.marginTop}>
+        <img src={Logo} alt="Logo" className={classes.Logo} />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon className={classes.lockIcon} />
+          </Avatar>
+          <Typography component="h1" variant="h2" className={classes.pageTitle}>
+            Forgot password
+          </Typography>
+          <Error errors={errors}>
+            {registrationLink && (
+              <Link href="/signup"> Go to user registration</Link>
+            )}
+          </Error>
+          {success && (
+            <Success
+              header="If that account in our system then we have sent an email with instructions
+                to reset your password!"
+              loginText="Sign back in"
+            />
           )}
-        </Error>
-        {success && (
-          <Success
-            header="If that account in our system then we have sent an email with instructions
-              to reset your password!"
-            loginText="Sign back in"
-          />
-        )}
-        {!success && (
-          <>
-            <p>
-              It happens to the best of us. Enter your email and we&apos;ll send you
-              reset instructions.
-            </p>
-            <form
-              className={classes.form}
-              noValidate
-              onSubmit={sendPasswordResetEmail}
-            >
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                onChange={(event) => setEmail(event.target.value)}
-                inputProps={{ maxLength: 255 }}
-                helperText={`${
-                  email.length >= 255
-                    ? "Enter an email between 255 charecter"
-                    : ""
-                }`}
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-                disabled={!email}
+          {!success && (
+            <>
+              <p>
+                It happens to the best of us. Enter your email and we&apos;ll send you
+                reset instructions.
+              </p>
+              <form
+                className={classes.form}
+                noValidate
+                onSubmit={sendPasswordResetEmail}
               >
-                Reset
-              </Button>
-              <Grid container className={classes.meta}>
-                <Grid item xs>
-                  <Link href="/login_corp" variant="body2">
-                    Login
-                  </Link>
+                <TextField
+                  variant="outlined"
+                  margin="dense"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  autoFocus
+                  onChange={(event) => setEmail(event.target.value)}
+                  inputProps={{ maxLength: 255 }}
+                  helperText={`${
+                    email.length >= 255
+                      ? "Enter an email between 255 charecter"
+                      : ""
+                  }`}
+                />
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                  disabled={!email}
+                >
+                  Reset
+                </Button>
+                <Grid container className={classes.meta}>
+                  <Grid item xs>
+                    <Link href="/login_corp" variant="body2">
+                      Login
+                    </Link>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </form>
-          </>
-        )}
-      </div>
+              </form>
+            </>
+          )}
+        </div>
+      </Grid>
       <Dimmer isOpen={isLoading} />
     </Container>
   );

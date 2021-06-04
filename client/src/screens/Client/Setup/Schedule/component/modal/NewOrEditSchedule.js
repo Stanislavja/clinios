@@ -107,7 +107,6 @@ const NewOrEditSchedule = ({
 
   /* eslint-disable */
   useEffect(() => {
-    console.log('props.schedule:', props.schedule)
     const tempSchedule = {
       ...props.schedule,
     };
