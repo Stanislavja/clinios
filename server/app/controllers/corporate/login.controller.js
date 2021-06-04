@@ -19,11 +19,7 @@ exports.signin = async (req, res) => {
 
   const { email } = req.body;
   const rows = await db.query(
-    `select id, admin, firstname, lastname, password 
-     from user 
-     where email='${email}' 
-     and client_id is null
-     `
+    `select id, admin, firstname, lastname, password from user where email=? and client_id is null`, [email]
   );
 
   const user = rows[0];

@@ -53,10 +53,10 @@ const getPractitionerDates = async (req, res) => {
   try {
     $sql = `select id, user_id, start_date_time, end_date_time, date_start, date_end, time_start, time_end, monday, tuesday, wednesday, thursday, friday, active
     from user_schedule
-    where client_id=${client_id} 
+    where client_id=? 
     and time_start > current_date()`;
 
-    const dbResponse = await db.query($sql);
+    const dbResponse = await db.query($sql, [client_id]);
 
     if (!dbResponse) {
       errorMessage.message = "None found";
@@ -88,11 +88,11 @@ const getBookedAppointments = async (req, res) => {
     $sql = `select start_dt, end_dt, patient_id, user_id
     from user_calendar
     where client_id=${req.client_id}
-    and user_id=${practitioner_id}
+    and user_id=?
     and status in ('A', 'R')
     and start_dt>now()`;
 
-    const dbResponse = await db.query($sql);
+    const dbResponse = await db.query($sql, [practitioner_id]);
 
     if (!dbResponse) {
       errorMessage.message = "None found";
