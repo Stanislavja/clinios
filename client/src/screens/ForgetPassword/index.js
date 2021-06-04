@@ -160,7 +160,7 @@ const ForgetPassword = () => {
               >
                 <TextField
                   variant="outlined"
-                  margin="normal"
+                  margin="dense"
                   required
                   fullWidth
                   id="email"
