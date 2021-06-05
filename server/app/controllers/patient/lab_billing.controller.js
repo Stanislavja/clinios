@@ -18,12 +18,12 @@ const getLabBilling = async (req, res) => {
     from tranc t
     left join tranc_detail td on td.tranc_id = t.id
     left join proc c on c.id = td.proc_id
-    where t.patient_id = ${patient_id}
+    where t.patient_id = ?
     group by t.id, t.dt, t.amount, t.completed_dt
     order by t.dt desc
     `;
 
-    const dbResponse = await db.query($sql);
+    const dbResponse = await db.query($sql, [patient_id]);
 
     if (!dbResponse) {
       errorMessage.message = "None found";
