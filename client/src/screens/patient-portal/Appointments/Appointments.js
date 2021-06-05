@@ -307,7 +307,9 @@ const Appointments = () => {
           reschedule_id: location?.state?.appointment?.id || null,
           appointment_type_id: userSelection.appointmentType,
           // this handles the startDateTime and endDateTime required for timezone conversion
+          // eslint-disable-next-line max-len
           start_date_time: `${moment(userSelection.date).format("YYYY-MM-DD")} ${moment(userSelection.time.time_start, ["HH.mm"]).format("h:mm:ss A")}`,
+          // eslint-disable-next-line max-len
           end_date_time: `${moment(userSelection.date).format("YYYY-MM-DD")} ${moment(userSelection.time.time_end, ["HH.mm"]).format("h:mm:ss A")}`,
         },
       };
