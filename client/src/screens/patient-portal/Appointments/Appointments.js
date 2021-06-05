@@ -306,6 +306,9 @@ const Appointments = () => {
           patient_id: user?.id,
           reschedule_id: location?.state?.appointment?.id || null,
           appointment_type_id: userSelection.appointmentType,
+          // this handles the startDateTime and endDateTime required for timezone conversion
+          start_date_time: `${moment(userSelection.date).format("YYYY-MM-DD")} ${moment(userSelection.time.time_start, ["HH.mm"]).format("h:mm:ss A")}`,
+          end_date_time: `${moment(userSelection.date).format("YYYY-MM-DD")} ${moment(userSelection.time.time_end, ["HH.mm"]).format("h:mm:ss A")}`,
         },
       };
       PatientPortalService[isRescheduleAppointment
