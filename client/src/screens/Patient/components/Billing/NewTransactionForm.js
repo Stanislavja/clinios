@@ -251,6 +251,22 @@ const NewTransactionForm = (props) => {
     }
   }, [formFields.amount]);
 
+  // selecting the first payment method by default for new billing dialog
+  useDidMountEffect(() => {
+    const name = "accountNum";
+    if (selectedBilling === null && (formFields.type === 3 || formFields.type === 4)) {
+      setFormFields({
+        ...formFields,
+        [name]: paymentOptions[0]?.id,
+      });
+    } else if (formFields.type !== 3 || formFields.type !== 4) {
+      setFormFields({
+        ...formFields,
+        [name]: "",
+      });
+    }
+  }, [formFields.type]);
+
   const checkIfRequired = useCallback((field) => {
     if (field === "accountNum") {
       if (formFields.paymentType === "C" || formFields.paymentType === "A") {
