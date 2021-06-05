@@ -8,7 +8,6 @@ const {
 const getAllencounters = async (req, res) => {
   const db = makeDb(configuration, res);
   let { patient_id } = req.query;
-
   if (typeof patient_id === "undefined") {
     patient_id = req.user_id;
   }
@@ -19,11 +18,11 @@ const getAllencounters = async (req, res) => {
     from encounter e
     left join patient p on p.id=e.patient_id
     left join user u on u.id=e.user_id
-    where e.patient_id=${patient_id}
+    where e.patient_id=?
     order by e.dt desc
     limit 100`;
 
-    const dbResponse = await db.query($sql);
+    const dbResponse = await db.query($sql, [patient_id]);
 
     if (!dbResponse) {
       errorMessage.message = "None found";
@@ -48,9 +47,9 @@ const updateEncounter = async (req, res) => {
     set read_dt=now(), updated=now(), updated_user_id=${req.user_id}
     where client_id=${req.client_id}
     and patient_id=${req.user_id}
-    and read_dt is null and id=${encounterId}`;
+    and read_dt is null and id=?`;
 
-    const updateResponse = await db.query($sql);
+    const updateResponse = await db.query($sql, [encounterId]);
 
     if (!updateResponse.affectedRows) {
       errorMessage.message = "Update not successful";

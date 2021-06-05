@@ -20,12 +20,12 @@ const getBillings = async (req, res) => {
     left join payment_method pm on pm.id=t.payment_method_id
     /*left join encounter e on e.id=t.encounter_id
     left join encounter_type et on et.id=e.type_id*/
-    where t.patient_id=${patient_id}
+    where t.patient_id=?
     order by t.dt desc
     limit 100
     `;
 
-    const dbResponse = await db.query($sql);
+    const dbResponse = await db.query($sql, [patient_id]);
 
     if (!dbResponse) {
       errorMessage.message = "None found";
@@ -51,8 +51,8 @@ const getBalance = async (req, res) => {
     const dbResponse = await db.query(
       `select sum(t.amount) amount
        from tran t
-       where t.patient_id=${patient_id}
-      `
+       where t.patient_id=?
+      `, [patient_id]
     );
 
     if (!dbResponse) {
@@ -71,32 +71,15 @@ const getBalance = async (req, res) => {
 };
 
 const createBilling = async (req, res) => {
-  const { dt, type_id, amount, note } = req.body.data;
-  let { client_id, patient_id } = req.body.data;
-
-  if (typeof patient_id === "undefined") {
-    // eslint-disable-next-line prefer-destructuring
-    patient_id = req.user_id;
-  }
-  if (typeof client_id === "undefined") {
-    // eslint-disable-next-line prefer-destructuring
-    client_id = req.client_id;
-  }
-
-  let { payment_type } = req.body.data;
-
   const db = makeDb(configuration, res);
+  const formData = req.body.data;
+  formData.client_id = formData.client_id ? formData.client_id : req.client_id; 
+  formData.patient_id = formData.patient_id ? formData.patient_id : req.user_id;
+  formData.created = new Date();
+  formData.created_user_id = req.user_id;
 
-  if (!payment_type && typeof payment_type !== "undefined") {
-    payment_type = `'${payment_type}'`;
-  } else {
-    payment_type = null;
-  }
   try {
-    const insertResponse = await db.query(
-      `insert into tran (dt, type_id, payment_type, amount, client_id, user_id, patient_id, note, created, created_user_id) values 
-        ('${dt}', ${type_id}, ${payment_type}, ${amount}, ${client_id}, ${req.user_id}, ${patient_id}, '${note}', now(), ${req.user_id})`
-    );
+    const insertResponse = await db.query(`insert into tran set ?`, [formData]);
 
     if (!insertResponse.affectedRows) {
       errorMessage.message = "Insert not successful";
