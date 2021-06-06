@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 
 import {
   Typography, makeStyles, Grid, Box,
+  TableContainer,
   Table,
   TableHead,
   TableBody,
@@ -58,55 +59,59 @@ const MarkerDefinition = ({
           {stringWithoutComments(markerExplanation)}
         </Typography>
         {(showHigh && hasHighData) && (
-          <Table size="small" aria-label="elevated-table" className={classes.mb2}>
-            <TableHead>
-              <TableRow>
-                <TableCell colSpan={3}>Elevated</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Condition</TableCell>
-                <TableCell>Comment</TableCell>
-                <TableCell>Evidence</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {markerInterpretation?.high.filter((x) => x?.comment.length).map((item) => (
-                <TableRow key={item.condition}>
-                  <TableCell>{item.condition}</TableCell>
-                  <TableCell
-                    dangerouslySetInnerHTML={{ __html: urlify(item.comment) }}
-                  />
-                  <TableCell>{item.evidence}</TableCell>
+          <TableContainer>
+            <Table size="small" aria-label="elevated-table" className={classes.mb2}>
+              <TableHead>
+                <TableRow>
+                  <TableCell colSpan={3}>Elevated</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                <TableRow>
+                  <TableCell>Condition</TableCell>
+                  <TableCell>Comment</TableCell>
+                  <TableCell>Evidence</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {markerInterpretation?.high.filter((x) => x?.comment.length).map((item) => (
+                  <TableRow key={item.condition}>
+                    <TableCell>{item.condition}</TableCell>
+                    <TableCell
+                      dangerouslySetInnerHTML={{ __html: urlify(item.comment) }}
+                    />
+                    <TableCell>{item.evidence}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         )}
 
         {(showLow && hasLowData) && (
-          <Table size="small" aria-label="decreased-table">
-            <TableHead>
-              <TableRow>
-                <TableCell colSpan={3}>Decreased</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Condition</TableCell>
-                <TableCell>Comment</TableCell>
-                <TableCell>Evidence</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {markerInterpretation?.low.filter((x) => x?.comment.length).map((item) => (
-                <TableRow key={item.condition}>
-                  <TableCell>{item.condition}</TableCell>
-                  <TableCell
-                    dangerouslySetInnerHTML={{ __html: urlify(item.comment) }}
-                  />
-                  <TableCell>{item.evidence}</TableCell>
+          <TableContainer>
+            <Table size="small" aria-label="decreased-table">
+              <TableHead>
+                <TableRow>
+                  <TableCell colSpan={3}>Decreased</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                <TableRow>
+                  <TableCell>Condition</TableCell>
+                  <TableCell>Comment</TableCell>
+                  <TableCell>Evidence</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {markerInterpretation?.low.filter((x) => x?.comment.length).map((item) => (
+                  <TableRow key={item.condition}>
+                    <TableCell>{item.condition}</TableCell>
+                    <TableCell
+                      dangerouslySetInnerHTML={{ __html: urlify(item.comment) }}
+                    />
+                    <TableCell>{item.evidence}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         )}
       </Grid>
     </Box>

@@ -306,6 +306,11 @@ const Appointments = () => {
           patient_id: user?.id,
           reschedule_id: location?.state?.appointment?.id || null,
           appointment_type_id: userSelection.appointmentType,
+          // this handles the startDateTime and endDateTime required for timezone conversion
+          // eslint-disable-next-line max-len
+          start_date_time: `${moment(userSelection.date).format("YYYY-MM-DD")} ${moment(userSelection.time.time_start, ["HH.mm"]).format("h:mm:ss A")}`,
+          // eslint-disable-next-line max-len
+          end_date_time: `${moment(userSelection.date).format("YYYY-MM-DD")} ${moment(userSelection.time.time_end, ["HH.mm"]).format("h:mm:ss A")}`,
         },
       };
       PatientPortalService[isRescheduleAppointment
@@ -378,12 +383,12 @@ const Appointments = () => {
     if (practitionerDateTimes.length && appointmentLength) {
       let timeIntervalSlots = [];
       practitionerDateTimes.forEach((item) => {
-      // const slots = makeTimeIntervals(item.time_start, item.time_end, appointmentLength);
-        const slots = makeTimeIntervals(
+        // const slots = makeTimeIntervals(item.time_start, item.time_end, appointmentLength);
+        const slots = item?.start_date_time ? makeTimeIntervals(
           moment.tz(item.start_date_time, userTimeZone).format("HH:mm"),
           moment.tz(item.end_date_time, userTimeZone).format("HH:mm"),
           appointmentLength,
-        );
+        ) : makeTimeIntervals(item.time_start, item.time_end, appointmentLength);
 
         timeIntervalSlots = [...timeIntervalSlots, ...slots];
       });
@@ -408,11 +413,11 @@ const Appointments = () => {
       let timeIntervalSlots = [];
       practitionerDateTimes.forEach((item) => {
         // const slots = makeTimeIntervals(item.time_start, item.time_end, apptLength);
-        const slots = makeTimeIntervals(
+        const slots = item?.start_date_time ? makeTimeIntervals(
           moment.tz(item.start_date_time, userTimeZone).format("HH:mm"),
           moment.tz(item.end_date_time, userTimeZone).format("HH:mm"),
           apptLength,
-        );
+        ) : makeTimeIntervals(item.time_start, item.time_end, apptLength);
         timeIntervalSlots = [...timeIntervalSlots, ...slots];
       });
       setTimeSlots([...timeIntervalSlots]);
