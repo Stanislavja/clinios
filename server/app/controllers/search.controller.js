@@ -3,7 +3,7 @@ const { errorMessage, successMessage, status } = require("../helpers/status");
 
 const getResult = async (req, res) => {
   const db = makeDb(configuration, res);
-  console.log("req.body", req.body);
+  // console.log("req.body", req.body);
 
   const { query } = req.query;
   let $sql;
