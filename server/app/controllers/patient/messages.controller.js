@@ -26,11 +26,11 @@ const getAllMessages = async (req, res) => {
     left join user u2 on u2.id=m.user_id_to
     left join patient p on p.id=m.patient_id_from
     left join patient p2 on p2.id=m.patient_id_to
-    where (patient_id_from=${patient_id} or patient_id_to=${patient_id})
+    where (patient_id_from=? or patient_id_to=?)
     order by m.created desc
     limit 50`;
 
-    const dbResponse = await db.query($sql);
+    const dbResponse = await db.query($sql, [patient_id, patient_id]);
 
     if (!dbResponse) {
       errorMessage.message = "None found";
@@ -76,6 +76,7 @@ const createMessage = async (req, res) => {
   const formData = req.body.data;
   formData.client_id = req.client_id;
   formData.user_id_to = req.user_id;
+  formData.patient_id_from = req.user_id;
   formData.status = 'O'
   formData.created = new Date();
 
@@ -101,23 +102,16 @@ const createMessage = async (req, res) => {
 };
 
 const updateMessage = async (req, res) => {
-  const { messageId } = req.params;
-  let { msgStatus } = req.body.data;
-  const { user_id_to, subject, message } = req.body.data;
-
   const db = makeDb(configuration, res);
-
-  if (typeof msgStatus !== "undefined") {
-    msgStatus = `'${msgStatus}'`;
-  } else {
-    msgStatus = null;
-  }
+  const { messageId } = req.params;
+  const formData = req.body.data;
+  formData.updated = new Date();
+  formData.updated_user_id = req.user_id;
 
   try {
-    let $sql = `update message set user_id_to=${user_id_to}, subject='${subject}', message='${message}', status=${msgStatus}, read_dt=now() `;
-    $sql += `, updated=now(), updated_user_id=${req.user_id} where id=${messageId}`;
+    const $sql = `update message set ? where id=?`;
 
-    const updateResponse = await db.query($sql);
+    const updateResponse = await db.query($sql, [formData, messageId]);
 
     if (!updateResponse.affectedRows) {
       errorMessage.message = "Update not successful";
@@ -140,16 +134,8 @@ const deleteMessage = async (req, res) => {
   const { messageId } = req.params;
   const db = makeDb(configuration, res);
   try {
-    await db.query(`
-      delete 
-      from message_history 
-      where id=${messageId}
-    `);
-    const deleteResponse = await db.query(`
-      delete 
-      from message 
-      where id=${messageId}
-    `);
+    await db.query(`delete from message_history where id=?`, [messageId]);
+    const deleteResponse = await db.query(`delete from message where id=?`, [messageId]);
 
     if (!deleteResponse.affectedRows) {
       errorMessage.message = "Deletion not successful";

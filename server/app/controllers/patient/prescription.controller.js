@@ -21,11 +21,11 @@ const getPrescription = async (req, res) => {
     from patient_drug pd
     join drug d on d.id=pd.drug_id
     join drug_strength ds on ds.id=pd.drug_strength_id
-    where pd.patient_id=${patient_id}
+    where pd.patient_id=? 
     order by pd.created desc
     limit 100`;
 
-    const dbResponse = await db.query($sql);
+    const dbResponse = await db.query($sql, [patient_id]);
 
     if (!dbResponse) {
       errorMessage.message = "None found";

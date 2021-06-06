@@ -21,7 +21,7 @@ const getAlllabs = async (req, res) => {
   try {
     $sql = `select l.created, l.filename, l.status
     from lab l
-    where l.patient_id=${patient_id} `;
+    where l.patient_id=? `;
 
     if (typeof tab !== "undefined" && tab !== "All") {
       if (tab === "Lab") {
@@ -37,7 +37,7 @@ const getAlllabs = async (req, res) => {
 
     $sql += `order by l.created desc limit 200`;
 
-    const dbResponse = await db.query($sql);
+    const dbResponse = await db.query($sql, [patient_id]);
 
     if (!dbResponse) {
       errorMessage.message = "None found";
@@ -76,9 +76,9 @@ const createLabs = async (req, res) => {
       const existingLabDocument = await db.query(
         `select 1
         from lab
-        where patient_id=${patient_id}
+        where patient_id=?
         and filename='${uploadedFilename}'
-        limit 1`
+        limit 1`, [patient_id]
       );
       if (existingLabDocument.length > 0) {
         removeFile(req.file);
@@ -86,9 +86,17 @@ const createLabs = async (req, res) => {
         return res.status(status.error).send(errorMessage);
       }
 
-      const insertResponse = await db.query(
-        `insert into lab (client_id, user_id, patient_id, filename, status, source, created, created_user_id) values (${req.client_id}, ${req.user_id}, ${patient_id}, '${uploadedFilename}', 'R', 'P', now(), ${req.user_id})`
-      );
+      const labData = {};
+      labData.client_id = req.client_id;
+      labData.user_id = req.user_id;
+      labData.patient_id = patient_id;
+      labData.filename = uploadedFilename;
+      labData.status = 'R';
+      labData.source = 'P';
+      labData.created = new Date();
+      labData.created_user_id = req.user_id;
+
+      const insertResponse = await db.query(`insert into lab set ?`, [labData]);
 
       if (!insertResponse.affectedRows) {
         removeFile(req.file);

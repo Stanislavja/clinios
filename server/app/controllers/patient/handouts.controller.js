@@ -27,12 +27,12 @@ const getAllHandouts = async (req, res) => {
     from patient_handout ph
     left join handout h on h.id=ph.handout_id
     left join user u on u.id=ph.created_user_id
-    where ph.client_id=${client_id}
-    and ph.patient_id=${patient_id}
+    where ph.client_id=?
+    and ph.patient_id=?
     order by h.filename
     limit 100`;
 
-    const dbResponse = await db.query($sql);
+    const dbResponse = await db.query($sql, [client_id, patient_id]);
 
     if (!dbResponse) {
       errorMessage.message = "None found";

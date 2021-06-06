@@ -37,7 +37,7 @@ const getPatient = async (req, res) => {
   try {
     const dbResponse = await db.query(
       `select p.id, p.client_id, p.firstname, p.lastname, p.password, p.status, p.stripe_customer_id,
-      p.corp_stripe_customer_id, p.timezone, client.code 
+      p.corp_stripe_customer_id, client.code 
       from patient p 
       join client on p.client_id=client.id 
       where p.id=${req.user_id}

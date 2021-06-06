@@ -24,9 +24,9 @@ const getPharmacy = async (req, res) => {
     from patient p
     left join pharmacy ph on ph.id=p.pharmacy_id
     left join pharmacy ph2 on ph2.id=p.pharmacy2_id
-    where p.id=${patient_id}`;
+    where p.id=?`;
 
-    const dbResponse = await db.query($sql);
+    const dbResponse = await db.query($sql, [patient_id]);
 
     if (!dbResponse) {
       errorMessage.message = "None found";
@@ -51,8 +51,8 @@ const updatePharmacy = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const updateResponse = await db.query(
-      `update patient set ? where id=${id}`,
-      [formData]
+      `update patient set ? where id=?`,
+      [formData, id]
     );
 
     if (!updateResponse.affectedRows) {

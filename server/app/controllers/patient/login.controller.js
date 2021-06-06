@@ -23,9 +23,8 @@ exports.signin = async (req, res) => {
       p.corp_stripe_customer_id, client.code 
       from patient p 
       join client on p.client_id=client.id 
-      where p.client_id=${client_id} 
-      and p.email='${email}'
-     `
+      where p.client_id=? and p.email=?`,
+      [client_id, email]
   );
 
   const patient = rows[0];

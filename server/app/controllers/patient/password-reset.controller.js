@@ -137,8 +137,8 @@ exports.receiveNewPassword = async (req, res) => {
   // check token expires validity
   const now = moment().format("YYYY-MM-DD HH:mm:ss");
   const patientRows = await db.query(
-    `SELECT id, email, client_id, reset_password_token, reset_password_expires FROM patient WHERE id=${patientId} 
-      AND reset_password_token='${token}' AND reset_password_expires > '${now}'`
+    `SELECT id, email, client_id, reset_password_token, reset_password_expires FROM patient WHERE id=? 
+    AND reset_password_token=? AND reset_password_expires > '${now}'`, [patientId, token]
   );
   const patient = patientRows[0];
 
