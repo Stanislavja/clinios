@@ -55,7 +55,7 @@ exports.patientSignup = async (req, res) => {
   delete patient.imgBase64;
 
   const existingPatientRows = await db.query(
-    `SELECT 1 FROM patient WHERE client_id='${patient.client_id}' and  (email='${patient.email}' or ssn='${patient.ssn}') LIMIT 1`
+    `SELECT 1 FROM patient WHERE client_id=? and  (email=? or ssn=?) LIMIT 1`, [patient.client_id, patient.email, patient.ssn]
   );
 
   if (existingPatientRows.length > 0) {
@@ -69,9 +69,9 @@ exports.patientSignup = async (req, res) => {
     return res.status(status.bad).send(errorMessage);
   }
 
-  const $sql = `select id, name, stripe_api_key from client where id=${patient.client_id}`;
+  const $sql = `select id, name, stripe_api_key from client where id=?`;
 
-  const getStripeResponse = await db.query($sql);
+  const getStripeResponse = await db.query($sql, [patient.client_id]);
 
   const stripe = Stripe(getStripeResponse[0].stripe_api_key);
   // Create customer on stripe.com
@@ -146,7 +146,7 @@ exports.getClientForm = async (req, res) => {
   const { clientId } = req.params;
   try {
     const dbResponse = await db.query(
-      `select cf.id, cf.form from client_form cf where cf.client_id=${clientId} and type='S'`
+      `select cf.id, cf.form from client_form cf where cf.client_id=? and type='S'`, [clientId]
     );
     if (!dbResponse) {
       errorMessage.message = "None found";

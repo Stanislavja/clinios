@@ -17,9 +17,9 @@ const getClientPortalHeader = async (req, res) => {
   try {
     const $sql = `select cp.id, cp.header
       from client_portal cp
-      where cp.id =${client_id}`;
+      where cp.id =?`;
 
-    const dbResponse = await db.query($sql);
+    const dbResponse = await db.query($sql, [client_id]);
 
     if (!dbResponse) {
       errorMessage.message = "None found";
@@ -48,11 +48,11 @@ const getClientPortalForms = async (req, res) => {
     const $sql = `select cf.id, cf.title, pf.patient_id, pf.sign_dt
     from client_form cf
     left join patient_form pf on pf.patient_id=cf.id
-    where cf.client_id=${client_id}
+    where cf.client_id=?
     and cf.active is true
     and (pf.patient_id is null or pf.sign_dt is null)`;
 
-    const dbResponse = await db.query($sql);
+    const dbResponse = await db.query($sql, [client_id]);
 
     if (!dbResponse) {
       errorMessage.message = "None found";
@@ -82,11 +82,11 @@ const getUpcomingAppointments = async (req, res) => {
     from user_calendar uc
     join user u on u.id=uc.user_id
     left join appointment_type at on at.id=uc.appointment_type_id
-    where uc.patient_id=${patient_id}
+    where uc.patient_id=?
     and uc.start_dt>now()
     `;
 
-    const dbResponse = await db.query($sql);
+    const dbResponse = await db.query($sql, [patient_id]);
 
     if (!dbResponse) {
       errorMessage.message = "None found";

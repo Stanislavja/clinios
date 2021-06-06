@@ -20,12 +20,12 @@ const getPaymentMethods = async (req, res) => {
     $sql = `select id, patient_id, type, account_number, exp, status, stripe_payment_method_token, corp_stripe_payment_method_token,
       client_id, created, created_user_id, updated, updated_user_id
       from payment_method
-      where patient_id=${patient_id}
+      where patient_id=?
       and (status is null or status <> 'D')
       order by id
     `;
 
-    const dbResponse = await db.query($sql);
+    const dbResponse = await db.query($sql, [patient_id]);
 
     if (!dbResponse) {
       errorMessage.message = "None found";
@@ -58,9 +58,9 @@ const createPaymentMethod = async (req, res) => {
   const db = makeDb(configuration, res);
   const $sql = `select p.id, c.name, c.stripe_api_key from patient p
     left join client c on c.id=p.client_id
-    where p.id=${patient_id}`;
+    where p.id=?`;
 
-  const getStripeResponse = await db.query($sql);
+  const getStripeResponse = await db.query($sql, [patient_id]);
   try {
     // Create payment method for client(Doctor) account
     const stripe = Stripe(getStripeResponse[0].stripe_api_key);
@@ -190,8 +190,8 @@ const updatePaymentMethod = async (req, res) => {
     delete formData.cvc; // Delete cvc as it's not on payment_method table
 
     const updateResponse = await db.query(
-      `update payment_method set ? where patient_id=${req.user_id} and id='${id}'`,
-      formData
+      `update payment_method set ? where patient_id=${req.user_id} and id=?`,
+      [formData, id]
     );
 
     if (!updateResponse.affectedRows) {
