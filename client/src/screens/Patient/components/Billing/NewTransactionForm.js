@@ -373,7 +373,9 @@ const NewTransactionForm = (props) => {
                     id={item.id}
                     name={item.name}
                     value={formFields[item.name]}
-                    required={item.name === "accountNum" ? isPaymentMethodRequired : checkIfRequired(item.name)}
+                    required={
+                      item.name === "accountNum" ? isPaymentMethodRequired : checkIfRequired(item.name)
+                    }
                     fullWidth
                     onChange={(e) => handleInputChnage(e)}
                     disabled={checkIfDisabled}
