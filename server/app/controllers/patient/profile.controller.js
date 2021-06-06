@@ -20,9 +20,9 @@ const getPatient = async (req, res) => {
     $sql = `select p.status, p.id, p.firstname, p.middlename, p.lastname, p.gender, p.phone_home, p.phone_cell, p.phone_work, p.phone_other, p.phone_note, p.ssn
     , p.address, p.address2, p.city, p.postal, p.state, p.country, p.insurance_name, p.insurance_group, p.insurance_member, p.insurance_phone, p.insurance_desc, p.email
     from patient p
-    where p.id=${patient_id}`;
+    where p.id=?`;
 
-    const dbResponse = await db.query($sql);
+    const dbResponse = await db.query($sql, [patient_id]);
 
     if (!dbResponse) {
       errorMessage.message = "None found";
@@ -96,12 +96,12 @@ const getPatientPaymentMethod = async (req, res) => {
   try {
     $sql = `select id, type, account_number, exp, created 
     from payment_method 
-    where patient_id=${patient_id}
+    where patient_id=? 
     and (status is null or status <> 'D')
     order by 1
     `;
 
-    const dbResponse = await db.query($sql);
+    const dbResponse = await db.query($sql, [patient_id]);
     if (!dbResponse) {
       errorMessage.message = "None found";
       return res.status(status.notfound).send(errorMessage);
