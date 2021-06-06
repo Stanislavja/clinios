@@ -397,7 +397,7 @@ const getProviders = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const dbResponse = await db.query(
-      `select u.id, concat(u.firstname, ' ', u.lastname) name, d.count, d.dt
+      `select u.id, concat(u.firstname, ' ', u.lastname) name, u.timezone, d.count, d.dt
         from user u
         left join (
             select d.user_id, sum(d.count) count, min(d.dt) dt from (

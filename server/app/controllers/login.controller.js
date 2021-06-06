@@ -15,9 +15,12 @@ exports.signin = async (req, res) => {
 
   const db = makeDb(configuration, res);
 
-  const rows = await db.query(`SELECT u.id, u.admin, u.client_id, u.firstname, u.lastname, u.email,
-   u.password, u.sign_dt, u.email_confirm_dt, c.name, c.calendar_start_time, c.calendar_end_time FROM user u
-   left join client c on c.id=u.client_id WHERE u.email=?`, [req.body.email]);
+  const rows = await db.query(`select u.id, u.admin, u.client_id, u.firstname, u.lastname, u.email,
+   u.password, u.sign_dt, u.email_confirm_dt, c.name, c.calendar_start_time, c.calendar_end_time
+   from user u
+   left join client c on c.id=u.client_id 
+   where u.email=?
+   and client_id is not null`, [req.body.email]); // client_id is not null to prevent corp logins
 
   const user = rows[0];
   if (!user) {
