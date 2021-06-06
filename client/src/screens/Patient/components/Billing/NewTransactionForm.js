@@ -292,6 +292,14 @@ const NewTransactionForm = (props) => {
     return false;
   }, [selectedBilling]);
 
+  const isPaymentMethodRequired = useMemo(() => {
+    const transactionType = formFields.type;
+    if (transactionType === 3 || transactionType === 4) {
+      return true; // required
+    }
+    return false; // not required
+  }, [formFields.type]);
+
   return (
     <>
       <Alert
@@ -328,7 +336,7 @@ const NewTransactionForm = (props) => {
               onChange={handleDateChange}
               fullWidth
               required
-                // As per CLIN-148 condition-2
+              // As per CLIN-148 condition-2
               disabled={checkIfDisabled || (formFields.type === 3 || formFields.type === 4)}
             />
           </Grid>
@@ -365,7 +373,7 @@ const NewTransactionForm = (props) => {
                     id={item.id}
                     name={item.name}
                     value={formFields[item.name]}
-                    required={checkIfRequired(item.name)}
+                    required={item.name === "accountNum" ? isPaymentMethodRequired : checkIfRequired(item.name)}
                     fullWidth
                     onChange={(e) => handleInputChnage(e)}
                     disabled={checkIfDisabled}
