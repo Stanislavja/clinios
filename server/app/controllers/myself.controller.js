@@ -8,7 +8,7 @@ const getProfile = async (req, res) => {
   const db = makeDb(configuration, res);
   try {
     const dbResponse = await db.query(
-      `select firstname, lastname, email, title, created, email_forward_user_id, phone, status
+      `select firstname, lastname, email, title, created, email_forward_user_id, phone, status, timezone
       from user 
       where id=${req.params.userId}
       `
